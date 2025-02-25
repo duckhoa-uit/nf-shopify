@@ -1,0 +1,35 @@
+@import "tailwindcss" important;
+
+@theme inline {
+  --color-*: initial;
+  --color-background: rgb(var(--color-base-background));
+  --color-foreground: rgb(var(--color-base-foreground));
+  --color-secondary: rgb(var(--color-base-secondary-button));
+  --color-secondary-foreground: rgb(var(--color-base-secondary-button-text));
+  --color-accent: #ec0009;
+
+  --breakpoint-md: 46.875rem;
+  --breakpoint-lg: 61.875rem;
+  --breakpoint-xl: 87.5rem;
+
+  --radius-3: 0.1875rem;
+}
+
+@utility container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 10px;
+  padding-left: 0.625rem;
+  padding-right: 10px;
+  padding-right: 0.625rem;
+
+  &::after,
+  &::before {
+    content: " ";
+    display: table;
+  }
+
+  &::after {
+    clear: both;
+  }
+}

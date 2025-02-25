@@ -1,0 +1,61 @@
+name: CI
+on: [push]
+jobs:
+  lhci:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lighthouse
+        id: lighthouse
+        uses: shopify/lighthouse-ci-action@v1
+        with:
+          # store should be in format: store-name.myshopify.com (without https://)
+          store: ${{ secrets.SHOP_STORE }}
+          password: ${{ secrets.SHOP_PASSWORD }}
+          access_token: ${{ secrets.SHOP_ACCESS_TOKEN }}
+          collection_handle: all
+          lhci_github_app_token: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Format Lighthouse Results
+        if: success()
+        id: format_results
+        run: |
+          echo "LIGHTHOUSE_REPORT<<EOF" >> $GITHUB_ENV
+          echo "🚀 Lighthouse Report for ${{ secrets.SHOP_STORE }}" >> $GITHUB_ENV
+          echo "Performance: $(jq '.categories.performance.score * 100' .lighthouseci/lhr-*.json | head -n1)%" >> $GITHUB_ENV
+          echo "Accessibility: $(jq '.categories.accessibility.score * 100' .lighthouseci/lhr-*.json | head -n1)%" >> $GITHUB_ENV
+          echo "Best Practices: $(jq '.categories["best-practices"].score * 100' .lighthouseci/lhr-*.json | head -n1)%" >> $GITHUB_ENV
+          echo "SEO: $(jq '.categories.seo.score * 100' .lighthouseci/lhr-*.json | head -n1)%" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Send to Slack
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "text": ${{ toJSON(env.LIGHTHOUSE_REPORT) }},
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ${{ toJSON(env.LIGHTHOUSE_REPORT) }}
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  theme-check:
+    name: Theme Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Theme Check
+        uses: shopify/theme-check-action@v2
+        with:
+          token: ${{ github.token }}

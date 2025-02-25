@@ -1,0 +1,222 @@
+{%- liquid
+  assign social_icons = true
+  if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
+    assign social_icons = false
+  endif
+  if section.settings.enable_country_selector or section.settings.enable_language_selector
+    assign language_country_selector = true
+  endif
+  if section.blocks.size > 0
+    assign announcement_bar = true
+  endif
+-%}
+
+{% if social_icons %}
+  {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+<div class="bg-[#F5F5F5] text-[0.8125rem] leading-[0.875rem] text-secondary-foreground hidden lg:block">
+  <div class="page-width">
+    <nav class="w-full flex flex-row justify-between h-[1.875rem] items-center">
+      <div class="italic flex items-center">
+        <div class="">
+          <ul class="">
+            <li>
+              <a class="text-secondary-foreground" href="{{ section.settings.announcement_link }}">
+                {{- section.settings.announcement_text -}}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="nav_right flex justify-end items-center">
+        <div class="flex gap-6 justify-between items-center [&_a]:text-secondary-foreground [&_a]:cursor-pointer">
+
+        <div>
+          <a href="{{ section.settings.category1_link }}">
+            {{- section.settings.category1_text -}}
+          </a>
+        </div>
+        <div>
+          <a href="{{ section.settings.category2_link }}">
+            {{- section.settings.category2_text -}}
+          </a>
+        </div>
+        <div>
+          <a href="{{ section.settings.category3_link }}">
+            {{- section.settings.category3_text -}}
+          </a>
+        </div>
+          <div>
+            <a href="{{ section.settings.blog_link }}">
+              {{- section.settings.blog_text -}}
+            </a>
+          </div>
+          <div>
+            <a href="{{ section.settings.contact_link }}">
+              {{- section.settings.contact_text -}}
+            </a>
+          </div>
+          <div>
+            <a href="{{ section.settings.faq_link }}">
+              {{- section.settings.faq_text -}}
+            </a>
+          </div>
+          <div>
+            {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+              <div class="dropdown">
+                <a
+                  class="dropdown-toggle header_shopchooser"
+                  data-toggle="dropdown"
+                  role="button"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <img
+                    src="{{ section.settings.current_language_flag | img_url }}"
+                    alt="{{ localization.language.iso_code }}"
+                    width="16"
+                    height="11"
+                  >
+                  <span>{{ localization.language.endonym_name }}</span>
+                </a>
+                <ul id="languages" class="min-w-auto dropdown-menu pull-right">
+                  {%- for language in localization.available_languages -%}
+                    <li
+                      {% if language.iso_code == localization.language.iso_code %}
+                        class="active"
+                      {% endif %}
+                    >
+                      <a
+                        href="{{ language.root_url }}"
+                        title="{{ language.endonym_name }}"
+                        rel="alternate"
+                        hreflang="{{ language.iso_code }}"
+                      >
+                        <img
+                          src="{{ language.flag_url | default: section.settings.default_flag | img_url }}"
+                          alt="{{ language.endonym_name }}"
+                          width="16"
+                          height="11"
+                        >
+                        <span>{{ language.endonym_name }}</span>
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "class": "announcement-bar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement Text",
+      "default": "Official outdoor eshop | Fast delivery | Hassle-free returns and exchanges"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Announcement Link"
+    },
+    {
+      "type": "text",
+      "id": "blog_text",
+      "label": "Blog Text",
+      "default": "Blog"
+    },
+    {
+      "type": "url",
+      "id": "blog_link",
+      "label": "Blog Link"
+    },
+    {
+      "type": "text",
+      "id": "faq_text",
+      "label": "FAQ Text",
+      "default": "FAQ"
+    },
+    {
+      "type": "url",
+      "id": "faq_link",
+      "label": "FAQ Link"
+    },
+    {
+      "type": "text",
+      "id": "contact_text",
+      "label": "Contact Text",
+      "default": "Contact"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "Contact Link"
+    },
+    {
+      "type": "text",
+      "id": "category1_text",
+      "label": "Category 1 Text",
+      "default": "Men"
+    },
+    {
+      "type": "url",
+      "id": "category1_link",
+      "label": "Category 1 Link"
+    },
+    {
+      "type": "text",
+      "id": "category2_text",
+      "label": "Category 2 Text",
+      "default": "Women"
+    },
+    {
+      "type": "url",
+      "id": "category2_link",
+      "label": "Category 2 Link"
+    },
+    {
+      "type": "text",
+      "id": "category3_text",
+      "label": "Category 3 Text",
+      "default": "Kids"
+    },
+    {
+      "type": "url",
+      "id": "category3_link",
+      "label": "Category 3 Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "label": "Enable Language Selector",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "current_language_flag",
+      "label": "Current Language Flag"
+    },
+    {
+      "type": "image_picker",
+      "id": "default_flag",
+      "label": "Default Language Flag"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,261 @@
+<div id="auth-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <!-- Modal Backdrop -->
+  <div class="absolute top-0 left-0 right-0 h-full bg-[#0f0f0f] opacity-40"></div>
+
+  <!-- Modal Panel -->
+  <div class="flex min-h-full items-center justify-center p-0 md:p-4 ">
+    <div class="relative w-full md:max-w-md bg-background md:rounded-3">
+      <!-- Close Button -->
+      <button type="button" class="close absolute right-8 top-8 text-secondary-foreground hover:text-foreground size-4">
+        <span class="size-4">
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </span>
+      </button>
+
+      <!-- Login Form -->
+      <div id="customer-login-form" class="p-8 hidden customer">
+        <div class="flex items-center mb-3">
+          <h3 class="text-base font-bold uppercase">Northfinder Account</h3>
+        </div>
+
+        <div class="block">
+          <div class="border-b border-[#E0DFDF]">
+            <nav class="-mb-px flex space-x-6 uppercase" aria-label="Tabs">
+              <a
+                href="#"
+                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline"
+                >Login</a
+              >
+              <a
+                href="#"
+                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline"
+                aria-current="page"
+                >Registration</a
+              >
+            </nav>
+          </div>
+        </div>
+
+        {% form 'customer_login' %}
+          <div class="flex flex-col">
+            <div>
+              <div class="relative mb-3 field">
+                <input
+                  type="email"
+                  name="customer[email]"
+                  id="customer_email"
+                  required
+                  placeholder=" "
+                >
+                <label
+                  for="customer_email"
+                >
+                  E-mail
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <div class="relative mb-4 field">
+                <input
+                  type="password"
+                  name="customer[password]"
+                  id="customer_password"
+                  required
+                  placeholder=" "
+                >
+                <label
+                  for="customer_password"
+                >
+                  Password
+                </label>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="button w-full"
+            >
+              Login
+            </button>
+
+            <button
+              type="button"
+              class="button text-sm w-full mt-[3.125rem] mb-2 p-3 flex items-center justify-between bg-background uppercase text-[#0F0F0F] leading-4"
+            >
+              <img src="{{ 'facebook.svg' | asset_url }}" alt="Facebook" width="16" height="16" class="size-4 mr-2">
+              <span class="flex-1"> Log in via Facebook </span>
+            </button>
+
+            <button
+              type="button"
+              class="button text-sm w-full p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase leading-4"
+            >
+              <img src="{{ 'google.svg' | asset_url }}" alt="Google" width="16" height="16" class="size-4 mr-2">
+              <span class="flex-1"> Log in via Google </span>
+            </button>
+
+            <div class="text-sm text-[#3D3D3D] mt-6 leading-5 text-left">
+              If you have lost your password, continue to the page
+              <a
+                href="#"
+                title="Recover your forgotten password"
+                rel="nofollow"
+                class="text-accent underline"
+                >Forgotten password</a
+              >
+            </div>
+          </div>
+        {% endform %}
+      </div>
+
+      <!-- Register Form -->
+      <div id="customer-register-form" class="p-8 hidden customer">
+        <div class="flex items-center mb-3">
+          <h3 class="text-base font-bold uppercase">Northfinder Account</h3>
+        </div>
+
+        <div class="block">
+          <div class="border-b border-[#E0DFDF]">
+            <nav class="-mb-px flex space-x-6 uppercase" aria-label="Tabs">
+              <a
+                href="#"
+                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline"
+                >Login</a
+              >
+              <a
+                href="#"
+                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline"
+                aria-current="page"
+                >Registration</a
+              >
+            </nav>
+          </div>
+        </div>
+
+        {% form 'create_customer' %}
+          <div class="space-y-3">
+            <div>
+              <div class="relative field">
+                <input
+                  type="text"
+                  name="customer[first_name]"
+                  id="first_name"
+                  placeholder=" "
+                >
+                <label
+                  for="first_name"
+                >
+                  Name
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <div class="relative field">
+                <input
+                  type="text"
+                  name="customer[last_name]"
+                  id="last_name"
+                  placeholder=" "
+                >
+                <label
+                  for="last_name"
+                >
+                  Surname
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <div class="relative field">
+                <input
+                  type="email"
+                  name="customer[email]"
+                  id="email"
+                  required
+                  placeholder=" "
+                >
+                <label
+                  for="email"
+                >
+                  E-mail
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <div class="relative field">
+                <input
+                  type="password"
+                  name="customer[password]"
+                  id="password"
+                  required
+                  placeholder=" "
+                >
+                <label
+                  for="password"
+                >
+                  Password
+                </label>
+              </div>
+            </div>
+
+            <div class="w-full">
+              <div class="flex">
+                <input
+                  type="checkbox"
+                  name="newsletter"
+                  id="newsletter"
+                  value="1"
+                  class="flex size-[1.125rem] items-center justify-center mr-2 cursor-pointer p-2 relative bg-background"
+                >
+                <label
+                  for="newsletter"
+                  class="mt-0 text-foreground text-sm leading-6 text-left flex-1"
+                  >In the future, I would like to receive information by email about current trends, offers and
+                  NORTHFINDER discounts. The subscription can be canceled free of charge at any time.</label
+                >
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full button"
+            >
+              Register
+            </button>
+
+            <button
+              type="button"
+              class="button text-sm w-full mt-[3.125rem] mb-2 p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
+            >
+              <img src="{{ 'facebook.svg' | asset_url }}" alt="Facebook" width="16" height="16" class="size-4 mr-2">
+              <span class="flex-1"> Log in via Facebook </span>
+            </button>
+
+            <button
+              type="button"
+              class="button text-sm w-full p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
+            >
+              <img src="{{ 'google.svg' | asset_url }}" alt="Google" width="16" height="16" class="size-4 mr-2">
+              <span class="flex-1"> Log in via Google </span>
+            </button>
+
+            <div class="mt-6 text-[#9F9F9F] text-sm font-normal leading-6 text-left">
+              As in any online store, you will receive from us all important updates by email (order confirmation,
+              delivery confirmation, return information, recommendations). Be sure to read the
+              <a href="#" target="_blank"> Privacy Policy. </a>
+            </div>
+
+            <div class="mt-4 text-[#9F9F9F] text-sm font-normal leading-6 text-left">
+              This site is protected by reCAPTCHA and the Google
+              <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
+              <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.
+            </div>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>

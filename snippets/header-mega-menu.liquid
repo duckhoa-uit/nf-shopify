@@ -1,0 +1,89 @@
+{% comment %}
+  Renders a megamenu for the header.
+
+  Usage:
+  {% render 'header-mega-menu' %}
+{% endcomment %}
+
+<nav class="header__inline-menu mt-0 px-0 h-full lg:flex lg:items-center lg:justify-center">
+  <ul class="list-menu list-menu--inline h-full" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li>
+        {%- if link.links != blank -%}
+          <header-menu>
+            <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu h-full">
+              <summary
+                id="HeaderMenu-{{ link.handle }}"
+                class="header__menu-item list-menu__item link focus-inset hover:text-accent transition-colors p-3 text-sm h-full"
+              >
+                <span
+                  class="{% if link.child_active %} header__active-menu-item{% endif %} font-semibold text-foreground uppercase"
+                >
+                  {{- link.title | escape -}}
+                </span>
+              </summary>
+              <div
+                id="MegaMenu-Content-{{ forloop.index }}"
+                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient global-settings-popup border-0"
+                tabindex="-1"
+              >
+                <ul
+                  class="mega-menu__list page-width{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}"
+                  role="list"
+                >
+                  {%- for childlink in link.links -%}
+                    <li class="flex flex-col space-y-6 border-r border-[#E0DFDF] last:border-0">
+                      <span
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        {% comment %} href="{{ childlink.url }}" {% endcomment %}
+                        class="text-base font-bold leading-[1.3125rem] cursor-default"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </span>
+                      {%- if childlink.links != blank -%}
+                        <ul class="list-unstyled space-y-3" role="list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                href="{{ grandchildlink.url }}"
+                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %} text-base leading-[1.125rem] p-0 hover:text-accent transition-colors text-[#3D3D3D] tracking-normal"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </details>
+          </header-menu>
+        {%- else -%}
+          <a
+            id="HeaderMenu-{{ link.handle }}"
+            href="{{ link.url }}"
+            class="header__menu-item list-menu__item link link--text focus-inset hover:text-accent transition-colors text-sm p-3 h-full"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span
+              class="{% if link.current %} header__active-menu-item{% endif %} hover:text-accent transition-colors font-semibold text-foreground uppercase"
+            >
+              {{- link.title | escape -}}
+            </span>
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>
