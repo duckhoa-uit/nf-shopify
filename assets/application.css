@@ -289,6 +289,17 @@
   .visible {
     visibility: visible !important;
   }
+  .sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border-width: 0 !important;
+  }
   .absolute {
     position: absolute !important;
   }
@@ -442,6 +453,9 @@
   .mb-5 {
     margin-bottom: calc(var(--spacing) * 5) !important;
   }
+  .mb-6 {
+    margin-bottom: calc(var(--spacing) * 6) !important;
+  }
   .mb-8 {
     margin-bottom: calc(var(--spacing) * 8) !important;
   }
@@ -474,6 +488,9 @@
   }
   .aspect-\[4\/3\] {
     aspect-ratio: 4/3 !important;
+  }
+  .aspect-\[21\/9\] {
+    aspect-ratio: 21/9 !important;
   }
   .aspect-square {
     aspect-ratio: 1 / 1 !important;

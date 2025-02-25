@@ -1,0 +1,119 @@
+.activities-section {
+  width: 100%;
+}
+
+.activities-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.activities-section .activity-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+  height: 100%;
+}
+
+.activities-section .activity-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Grid layout for desktop */
+@media screen and (min-width: 750px) {
+  /* Layout for 5 items using a 6-column grid */
+  .activities-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1rem;
+  }
+
+  .activity-card[data-position="1"] {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+  }
+  .activity-card[data-position="2"] {
+    grid-column: 3 / span 2;
+    grid-row: 1;
+  }
+  .activity-card[data-position="3"] {
+    grid-column: 5 / span 2;
+    grid-row: 1;
+  }
+  .activity-card[data-position="4"] {
+    grid-column: 1 / span 3;
+    grid-row: 2;
+  }
+  .activity-card[data-position="5"] {
+    grid-column: 4 / span 3;
+    grid-row: 2;
+  }
+}
+
+.activities-section .activity-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.activities-section .activity-title {
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.activities-section .activity-button {
+  display: inline-block;
+  background-color: white;
+  color: black;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.1875rem;
+  text-decoration: none;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.activities-section .activity-button:hover {
+  background-color: #f0f0f0;
+}
+
+.activities-section .activity-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.activities-section .activity-card:hover .activity-image {
+  transform: scale(1.05);
+}
+
+@media screen and (max-width: 749px) {
+  .activities-section .activity-content {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .activities-section .activity-title {
+    font-size: 1.25rem;
+  }
+
+  .activities-section .activity-button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+}
