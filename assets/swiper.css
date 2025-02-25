@@ -1,0 +1,45 @@
+.swiper-button-next,
+.swiper-button-prev {
+  background: transparent !important;
+  color: #000 !important;
+  width: 3.125rem !important;
+  height: 3.125rem !important;
+  opacity: 0.8 !important;
+  transition: opacity 0.2s ease-in-out !important;
+}
+
+.swiper-button-next > span,
+.swiper-button-prev > span {
+  line-height: 1 !important;
+}
+
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+  display: none;
+}
+
+.swiper-button-next {
+  right: 0 !important;
+}
+
+.swiper-button-prev {
+  left: 0 !important;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  display: none;
+}
+
+.swiper-horizontal > .swiper-scrollbar {
+  max-width: 66%;
+  position: relative !important;
+  margin-top: 2.25rem;
+  background-color: #e0dfdf;
+  height: 0.125rem !important;
+}
+
+.swiper-horizontal > .swiper-scrollbar .swiper-scrollbar-drag {
+  background: #0f0f0f;
+  cursor: pointer;
+}
