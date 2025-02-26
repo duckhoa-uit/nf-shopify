@@ -66,7 +66,7 @@
       <button
         data-tab="{{ tab.id }}"
         data-tabs-group="{{ tabs_id }}"
-        class="tabs-button flex-1 text-lg font-medium pb-2 border-b-2 transition-colors {% if tab.id == active_tab %}border-black text-black{% else %}border-transparent text-gray-500 hover:text-gray-700{% endif %}"
+        class="tabs-button flex-1 text-lg font-medium pb-2 border-b-2 transition-colors {% if tab.id == active_tab %}border-foreground text-foreground{% else %}border-transparent text-gray-500 hover:text-gray-700{% endif %}"
       >
         {{ tab.title }}
       </button>
@@ -99,12 +99,12 @@
 
             // Deactivate all tabs in this group
             document.querySelectorAll(`.tabs-button[data-tabs-group="${tabsGroup}"]`).forEach((tab) => {
-              tab.classList.remove('border-black', 'text-black');
+              tab.classList.remove('border-foreground', 'text-foreground');
               tab.classList.add('border-transparent', 'text-gray-500');
             });
 
             // Activate clicked tab
-            this.classList.add('border-black', 'text-black');
+            this.classList.add('border-foreground', 'text-foreground');
             this.classList.remove('border-transparent', 'text-gray-500');
 
             // Hide all content in this group

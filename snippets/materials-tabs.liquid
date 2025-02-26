@@ -1,0 +1,112 @@
+{%- comment -%}
+  materials-tabs.liquid - Tabs component for materials section
+
+  Usage:
+  {% render 'materials-tabs', blocks: section.blocks, tabs_id: section.id %}
+
+  Where blocks are the section blocks of type 'material'
+{%- endcomment -%}
+
+{%- liquid
+  # Set unique identifier for this tabs instance
+  assign tabs_id = tabs_id | default: 'tabs_' | append: 'now' | date: '%s'
+
+  # Find the active tab (first one by default)
+  assign active_tab_index = 1
+-%}
+
+<div class="w-full mx-auto">
+  {%- comment -%} Tabs Header {%- endcomment -%}
+  <div class="flex mb-8 w-full border-b border-[#e0dfdf]" id="{{ tabs_id }}_header">
+    {%- for block in blocks -%}
+      {%- if block.type == 'material' -%}
+        {%- assign tab_index = forloop.index -%}
+        <button
+          data-tab="{{ tab_index }}"
+          data-tabs-group="{{ tabs_id }}"
+          class="tabs-button text-base font-normal leading-5 pb-4 mr-9 {% if tab_index == active_tab_index %}text-accent border-foreground{% else %}text-gray-500{% endif %}"
+        >
+          {{ block.settings.material_name }}
+        </button>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} Tab Contents {%- endcomment -%}
+  {%- for block in blocks -%}
+    {%- if block.type == 'material' -%}
+      {%- assign tab_index = forloop.index -%}
+      <div
+        id="{{ tabs_id }}_{{ tab_index }}"
+        class="tabs-content w-full {% if tab_index != active_tab_index %}hidden{% endif %}"
+        data-tabs-group="{{ tabs_id }}"
+      >
+        {% render 'material-content', block: block %}
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function setupMaterialsTabs() {
+      const tabsGroup = '{{ tabs_id }}';
+      const tabButtons = document.querySelectorAll(`.tabs-button[data-tabs-group="${tabsGroup}"]`);
+
+      tabButtons.forEach((button) => {
+        button.addEventListener('click', function () {
+          const tabId = this.getAttribute('data-tab');
+
+          // Deactivate all tabs in this group
+          document.querySelectorAll(`.tabs-button[data-tabs-group="${tabsGroup}"]`).forEach((tab) => {
+            tab.classList.remove('text-accent', 'border-foreground');
+            tab.classList.add('text-gray-500');
+          });
+
+          // Activate clicked tab
+          this.classList.add('text-accent', 'border-foreground');
+          this.classList.remove('text-gray-500');
+
+          // Fade out all content in this group
+          document.querySelectorAll(`.tabs-content[data-tabs-group="${tabsGroup}"]`).forEach((content) => {
+            if (!content.classList.contains('hidden')) {
+              content.classList.add('fade-out');
+              setTimeout(() => {
+                content.classList.add('hidden');
+                content.classList.remove('fade-out');
+
+                // Fade in the selected content
+                const selectedContent = document.getElementById(`${tabsGroup}_${tabId}`);
+                selectedContent.classList.remove('hidden');
+                selectedContent.classList.add('fade-in');
+                setTimeout(() => {
+                  selectedContent.classList.remove('fade-in');
+                }, 150);
+              }, 150);
+            }
+          });
+
+          // If all tabs are already hidden, just show the selected one with fade in
+          const visibleTabs = document.querySelectorAll(`.tabs-content[data-tabs-group="${tabsGroup}"]:not(.hidden)`);
+          if (visibleTabs.length === 0) {
+            const selectedContent = document.getElementById(`${tabsGroup}_${tabId}`);
+            selectedContent.classList.remove('hidden');
+            selectedContent.classList.add('fade-in');
+            setTimeout(() => {
+              selectedContent.classList.remove('fade-in');
+            }, 150);
+          }
+        });
+      });
+    }
+
+    // Setup tabs on page load
+    setupMaterialsTabs();
+
+    // Re-setup tabs after Shopify section loads/changes (for editor support)
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', setupMaterialsTabs);
+      document.addEventListener('shopify:section:select', setupMaterialsTabs);
+    }
+  });
+</script>
