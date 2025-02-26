@@ -1,0 +1,117 @@
+{% comment %}
+  Renders a product card in the Northfinder style
+
+  Accepts:
+  - card_product: {Object} Product Liquid object (required)
+  - section_id: {String} The ID of the section that contains this card (required)
+  - show_vendor: {Boolean} Show the product vendor. Default: false
+  - show_rating: {Boolean} Show the product rating. Default: false
+  - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+
+  Usage:
+  {% render 'card-product-northfinder', card_product: product, section_id: section.id %}
+{% endcomment %}
+
+{%- if card_product and card_product != empty -%}
+  <div class="card-wrapper h-full">
+    <div class="flex flex-col h-full relative transition-transform duration-300 hover:-translate-y-1">
+      {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
+        <div class="absolute top-2.5 left-2.5 bg-red-600 text-white font-bold px-2 py-1 rounded z-20">
+          {%- assign savings = card_product.compare_at_price
+            | minus: card_product.price
+            | times: 100
+            | divided_by: card_product.compare_at_price
+            | round
+          -%}
+          -{{ savings }}%
+        </div>
+      {%- endif -%}
+
+      {%- if card_product.featured_media -%}
+        <div class="relative overflow-hidden mb-4">
+          <a href="{{ card_product.url }}" class="card-product-northfinder__link">
+            <img
+              srcset="
+                {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
+              "
+              src="{{ card_product.featured_media | image_url: width: 533 }}"
+              sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
+              alt="{{ card_product.featured_media.alt | escape }}"
+              class="w-full h-auto object-cover transition-transform duration-500 ease-in-out hover:scale-105"
+              {% unless lazy_load == false %}
+                loading="lazy"
+              {% endunless %}
+              width="{{ card_product.featured_media.width }}"
+              height="{{ card_product.featured_media.height }}"
+            >
+          </a>
+        </div>
+
+        {%- if card_product.has_only_default_variant == false or card_product.variants.size > 1 -%}
+          <div class="flex gap-1.5 absolute bottom-2.5 left-2.5">
+            {%- for variant in card_product.variants limit: 3 -%}
+              {%- if variant.featured_media -%}
+                <a
+                  href="{{ card_product.url }}?variant={{ variant.id }}"
+                  class="w-7 h-7 rounded-full border border-gray-200 overflow-hidden"
+                >
+                  <img
+                    src="{{ variant.featured_media | image_url: width: 50 }}"
+                    alt="{{ variant.title }}"
+                    width="30"
+                    height="30"
+                    loading="lazy"
+                  >
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+
+      <div class="flex flex-col gap-2 py-2">
+        <a href="{{ card_product.url }}" class="card-product-northfinder__title-link">
+          <h3 class="text-sm font-semibold leading-tight">{{ card_product.title | escape }}</h3>
+        </a>
+
+        {%- if card_product.type != blank -%}
+          <div class="text-xs text-gray-500 lowercase">{{ card_product.type | escape }}</div>
+        {%- endif -%}
+
+        <div class="flex gap-2 items-center font-semibold">
+          {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
+            <span class="line-through text-gray-500">{{ card_product.compare_at_price | money }}</span>
+            <span class="text-red-600">{{ card_product.price | money }}</span>
+          {%- else -%}
+            <span class="text-gray-700">{{ card_product.price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        {%- if card_product.available -%}
+          <div class="text-xs text-gray-700">In Stock</div>
+        {%- else -%}
+          <div class="text-xs text-red-600">Sold Out</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- else -%}
+  <div class="card-wrapper product-card-northfinder">
+    <div class="card-product-northfinder relative">
+      <div class="card-product-northfinder__media">
+        {{ 'product-apparel-2' | placeholder_svg_tag: 'card-product-northfinder__image placeholder-svg' }}
+      </div>
+      <div class="card-product-northfinder__content">
+        <h3 class="card-product-northfinder__title">{{ 'onboarding.product_title' | t }}</h3>
+        <div class="card-product-northfinder__type">Product Type</div>
+        <div class="card-product-northfinder__price">
+          <span class="card-product-northfinder__price-regular">$29.99</span>
+        </div>
+        <div class="card-product-northfinder__availability">In Stock</div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
