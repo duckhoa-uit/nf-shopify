@@ -17,19 +17,25 @@
 
 <div class="w-full mx-auto">
   {%- comment -%} Tabs Header {%- endcomment -%}
-  <div class="flex mb-6 w-full border-b border-[#e0dfdf]" id="{{ tabs_id }}_header">
-    {%- for block in blocks -%}
-      {%- if block.type == 'material' -%}
-        {%- assign tab_index = forloop.index -%}
-        <button
-          data-tab="{{ tab_index }}"
-          data-tabs-group="{{ tabs_id }}"
-          class="tabs-button font-normal leading-5 pb-4 mr-9 {% if tab_index == active_tab_index %}text-accent border-foreground{% else %}text-gray-500{% endif %}"
-        >
-          {{ block.settings.material_name }}
-        </button>
-      {%- endif -%}
-    {%- endfor -%}
+  <div
+    class="overflow-x-auto overflow-y-hidden scrollbar-hide mb-6 w-full border-b border-[#e0dfdf]"
+    id="{{ tabs_id }}_header"
+  >
+    <div class="flex whitespace-nowrap">
+      {%- for block in blocks -%}
+        {%- if block.type == 'material' -%}
+          {%- assign tab_index = forloop.index -%}
+          <button
+            id="{{ tabs_id }}_tab_{{ tab_index }}"
+            data-tab="{{ tab_index }}"
+            data-tabs-group="{{ tabs_id }}"
+            class="tabs-button font-semmibold leading-5 pb-4 mr-9 whitespace-nowrap {% if tab_index == active_tab_index %}text-accent border-foreground{% else %}text-foreground{% endif %}"
+          >
+            {{ block.settings.material_name }}
+          </button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
   </div>
 
   {%- comment -%} Tab Contents {%- endcomment -%}
@@ -67,6 +73,19 @@
           this.classList.add('text-accent', 'border-foreground');
           this.classList.remove('text-gray-500');
 
+          // Scroll tab into view if it's not fully visible
+          const tabsContainer = document.getElementById(`${tabsGroup}_header`);
+          if (tabsContainer) {
+            const tabRect = this.getBoundingClientRect();
+            const containerRect = tabsContainer.getBoundingClientRect();
+
+            // Check if tab is not fully visible
+            if (tabRect.left < containerRect.left || tabRect.right > containerRect.right) {
+              // Scroll the tab into view with some padding
+              this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+          }
+
           // Fade out all content in this group
           document.querySelectorAll(`.tabs-content[data-tabs-group="${tabsGroup}"]`).forEach((content) => {
             if (!content.classList.contains('hidden')) {
@@ -102,6 +121,25 @@
 
     // Setup tabs on page load
     setupMaterialsTabs();
+
+    // Scroll active tab into view on page load
+    setTimeout(() => {
+      const tabsGroup = '{{ tabs_id }}';
+      const activeTab = document.querySelector(`.tabs-button[data-tabs-group="${tabsGroup}"].text-accent`);
+      if (activeTab) {
+        const tabsContainer = document.getElementById(`${tabsGroup}_header`);
+        if (tabsContainer) {
+          const tabRect = activeTab.getBoundingClientRect();
+          const containerRect = tabsContainer.getBoundingClientRect();
+
+          // Check if tab is not fully visible
+          if (tabRect.left < containerRect.left || tabRect.right > containerRect.right) {
+            // Scroll the tab into view with some padding
+            activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+        }
+      }
+    }, 100);
 
     // Re-setup tabs after Shopify section loads/changes (for editor support)
     if (typeof Shopify !== 'undefined' && Shopify.designMode) {
