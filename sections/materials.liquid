@@ -1,0 +1,158 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'materials.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} isolate gradient materials-section">
+  <div class="section-{{ section.id }}-padding">
+    <div class="page-width">
+      {%- if section.settings.title != blank -%}
+        <div class="section-header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          <h2 class="font-extrabold text-2xl leading-7 text-[#0F0F0F] uppercase mb-10">
+            {{ section.settings.title }}
+          </h2>
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        {% render 'materials-tabs', blocks: section.blocks, tabs_id: section.id %}
+      {%- else -%}
+        <div class="placeholder-container">
+          <div class="placeholder">
+            <div class="placeholder-content">
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              <h4>Materials Section</h4>
+              <p>Add material blocks to create tabs showcasing different materials</p>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Materials",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "MATERIALS",
+      "label": "Heading"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Single Material",
+      "type": "material",
+      "settings": [
+        {
+          "type": "text",
+          "id": "material_name",
+          "default": "PERTEX® SHIELD",
+          "label": "Material name",
+          "info": "This will be displayed as the tab title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Material image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "ULTIMATE PROTECTION FOR THE MOUNTAINS",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "default": "<p>The ultralight and powerful Pertex® Shield material excels in its ability to protect against adverse weather and at the same time offers excellent comfort during active movement. It is one of the best membranes on the outdoor clothing market.</p>",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "default": "READ MORE",
+          "label": "Button text",
+          "info": "Button will be displayed even if URL is not provided"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Materials",
+      "blocks": [
+        {
+          "type": "material",
+          "settings": {
+            "material_name": "PERTEX® SHIELD",
+            "title": "ULTIMATE PROTECTION FOR THE MOUNTAINS",
+            "description": "<p>The ultralight and powerful Pertex® Shield material excels in its ability to protect against adverse weather and at the same time offers excellent comfort during active movement. It is one of the best membranes on the outdoor clothing market.</p>",
+            "button_text": "READ MORE"
+          }
+        },
+        {
+          "type": "material",
+          "settings": {
+            "material_name": "POLARTEC® ALPHA®",
+            "title": "ACTIVE INSULATION FOR OUTDOOR ACTIVITIES",
+            "description": "<p>Active insulation is a popular partner for outdoor enthusiasts. The more intensively you exercise, the more it \"works\" in your favor. In addition, it allows you to lighten your equipment load by some extra grams.</p>",
+            "button_text": "READ MORE"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
