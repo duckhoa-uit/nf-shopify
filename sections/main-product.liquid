@@ -718,6 +718,31 @@
       endif
     -%}
 
+   {% assign breadcrumbs = '<a href="/">Home</a>' %}
+{% assign current_collection = product.collections.first %}
+
+{% if current_collection %}
+  {% assign breadcrumb_list = "" %}
+  {% assign parent_collection = current_collection.metafields.custom.parent_collection %}
+
+  {% for i in (1..5) %}  {%- comment -%} Limit recursion depth to 5 levels {%- endcomment -%}
+    {% if parent_collection %}
+      {% assign parent = collections[parent_collection] %}
+      {% if parent %}
+        {% assign breadcrumb_list = '<a href="' | append: parent.url | append: '">' | append: parent.title | append: '</a> > ' | append: breadcrumb_list %}
+        {% assign parent_collection = parent.metafields.custom.parent_collection %}
+      {% else %}
+        {% assign parent_collection = blank %}
+      {% endif %}
+    {% else %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {{ breadcrumbs }} > {{ breadcrumb_list }} <a href="{{ current_collection.url }}">{{ current_collection.title }}</a> > {{ product.title }}
+{% endif %}
+    
+
     <script type="application/ld+json">
       {{ product | structured_data }}
     </script>
