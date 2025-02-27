@@ -1147,6 +1147,13 @@
       color: #999 !important;
     }
   }
+  .group-hover\:text-accent {
+    &:is(:where(.group):hover *) {
+      @media (hover: hover) {
+        color: #ec0009 !important;
+      }
+    }
+  }
   .after\:hidden {
     &::after {
       content: var(--tw-content);
