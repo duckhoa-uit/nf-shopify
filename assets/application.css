@@ -136,6 +136,7 @@
     --color-secondary-foreground: rgb(var(--color-base-secondary-button-text));
     --color-accent: #ec0009;
     --radius-3: 0.1875rem;
+    --font-archivo-expanded: "Archivo SemiExpanded", sans-serif;
   }
 }
 @layer base {
@@ -286,6 +287,9 @@
   .pointer-events-none {
     pointer-events: none !important;
   }
+  .collapse {
+    visibility: collapse !important;
+  }
   .visible {
     visibility: visible !important;
   }
@@ -309,6 +313,9 @@
   }
   .top-0 {
     top: calc(var(--spacing) * 0) !important;
+  }
+  .top-1 {
+    top: calc(var(--spacing) * 1) !important;
   }
   .top-1\/2 {
     top: calc(1/2 * 100%) !important;
@@ -436,6 +443,9 @@
   .mb-0 {
     margin-bottom: calc(var(--spacing) * 0) !important;
   }
+  .mb-1 {
+    margin-bottom: calc(var(--spacing) * 1) !important;
+  }
   .mb-1\.5 {
     margin-bottom: calc(var(--spacing) * 1.5) !important;
   }
@@ -460,9 +470,6 @@
   .mb-10 {
     margin-bottom: calc(var(--spacing) * 10) !important;
   }
-  .ml-4 {
-    margin-left: calc(var(--spacing) * 4) !important;
-  }
   .block {
     display: block !important;
   }
@@ -486,6 +493,9 @@
   }
   .inline-flex {
     display: inline-flex !important;
+  }
+  .list-item {
+    display: list-item !important;
   }
   .table {
     display: table !important;
@@ -592,15 +602,19 @@
   .flex-1 {
     flex: 1 !important;
   }
+  .border-collapse {
+    border-collapse: collapse !important;
+  }
+  .-translate-y-1 {
+    --tw-translate-y: calc(var(--spacing) * -1) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
   .-translate-y-1\/2 {
     --tw-translate-y: calc(calc(1/2 * 100%) * -1) !important;
     translate: var(--tw-translate-x) var(--tw-translate-y) !important;
   }
   .-rotate-90 {
     rotate: calc(90deg * -1) !important;
-  }
-  .rotate-90 {
-    rotate: 90deg !important;
   }
   .transform {
     transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y) !important;
@@ -640,6 +654,9 @@
   }
   .justify-end {
     justify-content: flex-end !important;
+  }
+  .gap-0 {
+    gap: calc(var(--spacing) * 0) !important;
   }
   .gap-0\.5 {
     gap: calc(var(--spacing) * 0.5) !important;
@@ -773,6 +790,9 @@
   .bg-background {
     background-color: rgb(var(--color-base-background)) !important;
   }
+  .bg-foreground {
+    background-color: rgb(var(--color-base-foreground)) !important;
+  }
   .bg-foreground\/10 {
     background-color: color-mix(in oklab, rgb(var(--color-base-foreground)) 10%, transparent) !important;
   }
@@ -783,6 +803,10 @@
     --tw-gradient-position: to top in oklab !important;
     background-image: linear-gradient(var(--tw-gradient-stops)) !important;
   }
+  .from-foreground {
+    --tw-gradient-from: rgb(var(--color-base-foreground)) !important;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
+  }
   .from-foreground\/70 {
     --tw-gradient-from: color-mix(in oklab, rgb(var(--color-base-foreground)) 70%, transparent) !important;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
@@ -790,12 +814,6 @@
   .to-transparent {
     --tw-gradient-to: transparent !important;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
-  }
-  .fill-accent {
-    fill: #ec0009 !important;
-  }
-  .stroke-2 {
-    stroke-width: 2 !important;
   }
   .object-cover {
     object-fit: cover !important;
@@ -845,6 +863,9 @@
   .py-0 {
     padding-block: calc(var(--spacing) * 0) !important;
   }
+  .py-1 {
+    padding-block: calc(var(--spacing) * 1) !important;
+  }
   .py-1\.5 {
     padding-block: calc(var(--spacing) * 1.5) !important;
   }
@@ -875,9 +896,6 @@
   .pr-8 {
     padding-right: calc(var(--spacing) * 8) !important;
   }
-  .pr-16 {
-    padding-right: calc(var(--spacing) * 16) !important;
-  }
   .pr-\[4\.25rem\] {
     padding-right: 4.25rem !important;
   }
@@ -896,9 +914,6 @@
   .pl-0 {
     padding-left: calc(var(--spacing) * 0) !important;
   }
-  .pl-1 {
-    padding-left: calc(var(--spacing) * 1) !important;
-  }
   .pl-2 {
     padding-left: calc(var(--spacing) * 2) !important;
   }
@@ -907,6 +922,9 @@
   }
   .text-left {
     text-align: left !important;
+  }
+  .font-archivo-expanded {
+    font-family: "Archivo SemiExpanded", sans-serif !important;
   }
   .text-2xl {
     font-size: var(--text-2xl) !important;
@@ -956,10 +974,6 @@
   .leading-\[0\.875rem\] {
     --tw-leading: 0.875rem !important;
     line-height: 0.875rem !important;
-  }
-  .leading-\[1\.5\] {
-    --tw-leading: 1.5 !important;
-    line-height: 1.5 !important;
   }
   .leading-\[1\.125rem\] {
     --tw-leading: 1.125rem !important;
@@ -1072,6 +1086,10 @@
   }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
+  }
+  .backdrop-filter {
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,) !important;
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,) !important;
   }
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter !important;
@@ -1584,6 +1602,42 @@
   inherits: false;
 }
 @property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-sepia {
   syntax: "*";
   inherits: false;
 }
