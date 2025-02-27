@@ -733,7 +733,7 @@
             {% assign breadcrumb_list = '<a href="'
               | append: parent.url
               | append: '">'
-              | append: parent.title
+              | append: parent.metafields.custom.display_name
               | append: '</a> > '
               | append: breadcrumb_list
             %}
