@@ -79,63 +79,63 @@
   <div
     class="video-section isolate{% unless section.settings.full_width %} page-width{% endunless %} section-{{ section.id }}-padding relative"
   >
-    <div
-      class="banner__content banner__content--{{ section.settings.desktop_content_position }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} absolute bottom-0 left-0 w-full md:h-1/2 pointer-events-none flex flex-col items-center justify-center from-foreground/70 to-transparent bg-gradient-to-t z-10"
-    >
-      <div class="banner__box content-container content-container--full-width-mobile bg-transparent flex flex-col items-start md:items-center justify-end p-4 pt-11 md:pt-0 md:pb-10 lg:pb-20 h-full">
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
-            {%- when 'heading' -%}
-              <h2
-                class="banner__heading inline-richtext {{ block.settings.heading_size }} text-base leading-[1.3125rem] md:text-[2rem] md:leading-[2.625rem] font-extrabold text-left md:text-center w-full mb-2 md:mb-4"
-                style="color: white"
-                {{ block.shopify_attributes }}
-              >
-                {{ block.settings.heading }}
-              </h2>
-            {%- when 'text' -%}
-              <div
-                class="banner__text rte {{ block.settings.text_style }} text-sm leading-5 md:leading-4 mb-3 md:mb-6 w-full md:max-w-[520px]"
-                style="color: white"
-                {{ block.shopify_attributes }}
-              >
-                <p>{{ block.settings.text }}</p>
-              </div>
-            {%- when 'buttons' -%}
-              <div
-                class="banner__buttons{% if block.settings.button_label_1 != blank and block.settings.button_label_2 != blank %} banner__buttons--multiple{% endif %}"
-                {{ block.shopify_attributes }}
-              >
-                {%- if block.settings.button_label_1 != blank -%}
-                  <a
-                    {% if block.settings.button_link_1 == blank %}
-                      role="link" aria-disabled="true"
-                    {% else %}
-                      href="{{ block.settings.button_link_1 }}"
-                    {% endif %}
-                    class="button{% if block.settings.button_style_secondary_1 %} button--secondary{% else %} button--primary{% endif %} font-semibold text-sm leading-4 px-3 py-2 md:px-[5.625rem] md:py-3 bg-background text-foreground after:hidden"
-                  >
-                    {{- block.settings.button_label_1 | escape -}}
-                  </a>
-                {%- endif -%}
-                {%- if block.settings.button_label_2 != blank -%}
-                  <a
-                    {% if block.settings.button_link_2 == blank %}
-                      role="link" aria-disabled="true"
-                    {% else %}
-                      href="{{ block.settings.button_link_2 }}"
-                    {% endif %}
-                    class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %} font-semibold leading-4 text-sm px-6 py-3"
-                  >
-                    {{- block.settings.button_label_2 | escape -}}
-                  </a>
-                {%- endif -%}
-              </div>
-          {%- endcase -%}
-        {%- endfor -%}
-      </div>
-    </div>
     <div class="relative z-1 h-full pointer-events-auto">
+      <div
+        class="banner__content banner__content--{{ section.settings.desktop_content_position }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} absolute bottom-0 left-0 w-full md:h-1/2 pointer-events-none flex flex-col items-center justify-center from-foreground/70 to-transparent bg-gradient-to-t z-10"
+      >
+        <div class="banner__box content-container content-container--full-width-mobile bg-transparent flex flex-col items-start md:items-center justify-end p-4 pt-11 md:pt-0 md:pb-10 lg:pb-20 h-full">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'heading' -%}
+                <h2
+                  class="banner__heading inline-richtext {{ block.settings.heading_size }} text-base leading-[1.3125rem] md:text-[2rem] md:leading-[2.625rem] font-extrabold text-left md:text-center w-full mb-2 md:mb-4"
+                  style="color: white"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ block.settings.heading }}
+                </h2>
+              {%- when 'text' -%}
+                <div
+                  class="banner__text rte {{ block.settings.text_style }} text-sm leading-5 md:leading-4 mb-3 md:mb-6 w-full md:max-w-[520px]"
+                  style="color: white"
+                  {{ block.shopify_attributes }}
+                >
+                  <p>{{ block.settings.text }}</p>
+                </div>
+              {%- when 'buttons' -%}
+                <div
+                  class="banner__buttons{% if block.settings.button_label_1 != blank and block.settings.button_label_2 != blank %} banner__buttons--multiple{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  {%- if block.settings.button_label_1 != blank -%}
+                    <a
+                      {% if block.settings.button_link_1 == blank %}
+                        role="link" aria-disabled="true"
+                      {% else %}
+                        href="{{ block.settings.button_link_1 }}"
+                      {% endif %}
+                      class="button{% if block.settings.button_style_secondary_1 %} button--secondary{% else %} button--primary{% endif %} font-semibold text-sm leading-4 px-3 py-2 md:px-[5.625rem] md:py-3 bg-background text-foreground after:hidden"
+                    >
+                      {{- block.settings.button_label_1 | escape -}}
+                    </a>
+                  {%- endif -%}
+                  {%- if block.settings.button_label_2 != blank -%}
+                    <a
+                      {% if block.settings.button_link_2 == blank %}
+                        role="link" aria-disabled="true"
+                      {% else %}
+                        href="{{ block.settings.button_link_2 }}"
+                      {% endif %}
+                      class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %} font-semibold leading-4 text-sm px-6 py-3"
+                    >
+                      {{- block.settings.button_label_2 | escape -}}
+                    </a>
+                  {%- endif -%}
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
       <deferred-media
         class="video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} w-full aspect-2/3 md:aspect-2/1"
         data-media-id="{{ video_id }}"
