@@ -747,7 +747,7 @@
       {% endfor %}
 
       {{ breadcrumbs }} > {{ breadcrumb_list }}
-      <a href="{{ current_collection.url }}">{{ current_collection.title }}</a> > {{ product.title }}
+      <a href="{{ current_collection.url }}">{{ current_collection.metafields.custom.display_name }}</a> > {{ product.title }}
     {% endif %}
 
     {% if product.metafields.features != blank %}
