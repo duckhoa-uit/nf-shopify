@@ -14,10 +14,10 @@
             <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu h-full">
               <summary
                 id="HeaderMenu-{{ link.handle }}"
-                class="header__menu-item list-menu__item link focus-inset hover:text-accent transition-colors p-3 text-sm h-full"
+                class="header__menu-item list-menu__item link focus-inset group transition-colors p-3 text-sm h-full"
               >
                 <span
-                  class="{% if link.child_active %} header__active-menu-item{% endif %} font-semibold text-foreground uppercase"
+                  class="{% if link.child_active %} header__active-menu-item{% endif %} group-hover:text-accent font-semibold text-foreground uppercase"
                 >
                   {{- link.title | escape -}}
                 </span>

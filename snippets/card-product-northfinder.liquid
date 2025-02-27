@@ -68,7 +68,7 @@
 
         {%- if card_product.has_only_default_variant == false or card_product.variants.size > 1 -%}
           <div class="grid mb-0 grid-cols-5 h-[3.75rem] w-fit gap-0.5">
-            {%- for variant in card_product.variants limit: 6 -%}
+            {%- for variant in card_product.variants limit: 5 -%}
               {%- if variant.featured_media -%}
                 <a
                   href="{{ card_product.url }}?variant={{ variant.id }}"
@@ -77,6 +77,20 @@
                   <img
                     src="{{ variant.featured_media | image_url: width: 50 }}"
                     alt="{{ variant.title }}"
+                    width="60"
+                    height="60"
+                    loading="lazy"
+                    class="size-[3.75rem] object-cover"
+                  >
+                </a>
+              {%- else -%}
+                <a
+                  href="{{ card_product.url }}?variant={{ variant.id }}"
+                  class="size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors"
+                >
+                  <img
+                    src="{{ card_product.featured_media | image_url: width: 50 }}"
+                    alt="{{ card_product.title }}"
                     width="60"
                     height="60"
                     loading="lazy"
