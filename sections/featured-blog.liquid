@@ -7,7 +7,6 @@
 
 <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
 
-
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -30,7 +29,7 @@
   endif
 -%}
 <div class="featured_blog color-{{ section.settings.color_scheme }} gradient{% if section.settings.heading == blank %} no-heading{% endif %}">
-  <div class="page-width-desktop isolate{% if posts_displayed < 3 %} page-width-tablet{% endif %} section-{{ section.id }}-padding">
+  <div class="page-width isolate{% if posts_displayed < 3 %} page-width-tablet{% endif %} section-{{ section.id }}-padding">
     {%- unless section.settings.heading == blank -%}
       <div class="title-wrapper-with-link{% if posts_displayed > 2 %} title-wrapper--self-padded-tablet-down{% else %} title-wrapper--self-padded-mobile{% endif %} title-wrapper--no-top-margin">
         <h2
@@ -43,15 +42,14 @@
           {{ section.settings.heading }}
         </h2>
 
-        {%- if section.settings.blog != blank
-          and section.settings.show_view_all
-          and section.settings.post_limit < section.settings.blog.articles_count
-        -%}
+        {% comment %} and section.settings.post_limit < section.settings.blog.articles_count {% endcomment %}
+        {%- if section.settings.blog != blank -%}
           <a
             href="{{ section.settings.blog.url }}"
-            class="link underlined-link large-up-hide{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} flex items-center gap-2 text-foreground text-base font-semibold leading-4 uppercase"
           >
-            {{ 'sections.featured_blog.view_all' | t }}
+            {{ 'sections.featured_blog.view_all' | t -}}
+            <span class="svg-wrapper -rotate-90 size-3">{{ 'icon-caret.svg' | inline_asset_content }}</span>
           </a>
         {%- endif -%}
       </div>
@@ -60,7 +58,7 @@
     <div class="swiper w-full pb-9{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
       <div
         id="Slider-{{ section.id }}"
-        class="swiper-wrapper blog__posts articles-wrapper contains-card contains-card--article {% if posts_displayed > 2 %}slider--tablet{% else %}slider--mobile{% endif %}"
+        class="swiper-wrapper "
       >
         {%- if section.settings.blog != blank and section.settings.blog.articles_count > 0 -%}
           {%- for article in section.settings.blog.articles limit: section.settings.post_limit -%}
@@ -142,6 +140,7 @@
           {%- endfor -%}
         {%- endif -%}
       </div>
+      <div class="swiper-scrollbar"></div>
     </div>
 
     {%- if section.settings.show_view_all and section.settings.post_limit < section.settings.blog.articles_count -%}
@@ -193,6 +192,9 @@
           1024: {
             slidesPerView: 3,
           },
+        },
+        scrollbar: {
+          el: '.swiper-scrollbar',
         },
       });
     }
