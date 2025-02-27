@@ -32,7 +32,7 @@
             data-position="{{ forloop.index }}"
           >
             {%- if block.settings.image != blank -%}
-              <div class="relative overflow-hidden h-full aspect-[4/3]">
+              <div class="relative overflow-hidden h-full aspect-video">
                 <img
                   srcset="
                     {%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
