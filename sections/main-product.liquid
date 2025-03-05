@@ -784,33 +784,6 @@
       endif
     -%}
 
- <!-- Product test  -->
-   <div class="product-parameters">
-  <h2>Product Params 2</h2>
-<ul>
-    {% assign features = product.metafields.custom_features %}
-
-    {% for feature in features %}
-      {% assign feature_name = feature | first %}
-      {% assign feature_options = feature.last.value %}
-
-      {% if feature_options != blank %}
-        <li>
-          <strong>{{ feature_name | replace: "_", " " | capitalize }}:</strong>
-          
-          {% assign option_details = "" %}
-          {% for option in feature_options %}
-            {% assign option_details = option_details | append: option.name | append: ", " %}
-          {% endfor %}
-          
-          {{ option_details }}
-        </li>
-      {% endif %}
-    {% endfor %}
-  </ul>
-</div>
-
- <!-- Product test -->
     
     {% if product.metafields.features != blank %}
       <div class="product-info">
