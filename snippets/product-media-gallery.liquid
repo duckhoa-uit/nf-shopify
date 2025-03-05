@@ -33,13 +33,7 @@
     assign hide_mobile_slider = true
   endif
 
-  if section.settings.media_size == 'large'
-    assign media_width = 0.65
-  elsif section.settings.media_size == 'medium'
-    assign media_width = 0.55
-  elsif section.settings.media_size == 'small'
-    assign media_width = 0.45
-  endif
+  assign media_width = 0.65
 -%}
 
 <media-gallery
@@ -58,7 +52,7 @@
     </a>
     <ul
       id="Slider-Gallery-{{ section.id }}"
-      class="product__media-list contains-media dawn-grid grid--peek list-unstyled slider slider--mobile"
+      class="product__media-list contains-media dawn-grid grid--1-col grid--2-col-tablet grid--peek list-unstyled slider slider--mobile"
       role="list"
     >
       {%- if product.selected_or_first_available_variant.featured_media != null -%}
@@ -73,8 +67,6 @@
             media: featured_media,
             media_count: media_count,
             position: media_position,
-            desktop_layout: section.settings.gallery_layout,
-            mobile_layout: section.settings.mobile_thumbnails,
             loop: section.settings.enable_video_looping,
             modal_id: section.id,
             xr_button: true,
@@ -111,8 +103,6 @@
               media: media,
               media_count: media_count,
               position: media_position,
-              desktop_layout: section.settings.gallery_layout,
-              mobile_layout: section.settings.mobile_thumbnails,
               loop: section.settings.enable_video_looping,
               modal_id: section.id,
               xr_button: true,

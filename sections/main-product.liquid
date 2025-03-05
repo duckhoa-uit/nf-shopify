@@ -308,8 +308,8 @@
 
   {% render 'breadcrumb' %}
   <div class="page-width">
-    <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} dawn-grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
-      <div class="grid__item product__media-wrapper">
+    <div class="product grid grid-cols-1{% if product.media.size > 0 %} md:grid-cols-2 lg:grid-cols-3{% else %} product--no-media{% endif %}">
+      <div class="product__media-wrapper col-span-1 md:col-span-1 lg:col-span-2">
         <!-- Discount badge -->
         {% if product.compare_at_price > product.price %}
           <div class="product-discount-badge">
@@ -327,7 +327,7 @@
 
         {% render 'product-media-gallery', variant_images: variant_images %}
       </div>
-      <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="product__info-wrapper col-span-1 md:col-span-1 lg:col-span-1 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
           id="ProductInfo-{{ section.id }}"
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
@@ -1765,50 +1765,6 @@
     { "type": "header", "content": "t:sections.main-product.settings.header.content" },
     {
       "type": "select",
-      "id": "media_position",
-      "options": [
-        { "value": "left", "label": "t:sections.main-product.settings.media_position.options__1.label" },
-        { "value": "right", "label": "t:sections.main-product.settings.media_position.options__2.label" }
-      ],
-      "default": "left",
-      "label": "t:sections.main-product.settings.media_position.label",
-      "info": "t:sections.main-product.settings.media_position.info"
-    },
-    {
-      "type": "select",
-      "id": "media_size",
-      "options": [
-        { "value": "small", "label": "t:sections.main-product.settings.media_size.options__1.label" },
-        { "value": "medium", "label": "t:sections.main-product.settings.media_size.options__2.label" },
-        { "value": "large", "label": "t:sections.main-product.settings.media_size.options__3.label" }
-      ],
-      "default": "large",
-      "label": "t:sections.main-product.settings.media_size.label",
-      "info": "t:sections.main-product.settings.media_size.info"
-    },
-    {
-      "type": "select",
-      "id": "gallery_layout",
-      "options": [
-        { "value": "stacked", "label": "t:sections.main-product.settings.gallery_layout.options__1.label" },
-        { "value": "thumbnail_slider", "label": "t:sections.main-product.settings.gallery_layout.options__2.label" },
-        { "value": "thumbnail", "label": "t:sections.main-product.settings.gallery_layout.options__3.label" }
-      ],
-      "default": "thumbnail",
-      "label": "t:sections.main-product.settings.gallery_layout.label"
-    },
-    {
-      "type": "select",
-      "id": "mobile_thumbnails",
-      "options": [
-        { "value": "show", "label": "t:sections.main-product.settings.mobile_thumbnails.options__1.label" },
-        { "value": "hide", "label": "t:sections.main-product.settings.mobile_thumbnails.options__2.label" }
-      ],
-      "default": "hide",
-      "label": "t:sections.main-product.settings.mobile_thumbnails.label"
-    },
-    {
-      "type": "select",
       "id": "image_zoom",
       "options": [
         { "value": "none", "label": "t:sections.main-product.settings.image_zoom.options__1.label" },
@@ -1826,16 +1782,6 @@
       "label": "t:sections.main-product.settings.enable_sticky_info.label"
     },
     { "type": "header", "content": "t:sections.main-product.settings.header_mobile.content" },
-    {
-      "type": "select",
-      "id": "mobile_media_position",
-      "options": [
-        { "value": "above_title", "label": "t:sections.main-product.settings.mobile_media_position.options__1.label" },
-        { "value": "below_title", "label": "t:sections.main-product.settings.mobile_media_position.options__2.label" }
-      ],
-      "default": "below_title",
-      "label": "t:sections.main-product.settings.mobile_media_position.label"
-    },
     { "type": "header", "content": "t:sections.all.padding.section_padding_heading" },
     {
       "type": "range",
