@@ -785,26 +785,24 @@
     -%}
 
  <!-- Product test  -->
-    <div class="product-parameters">
-  <h2>Parameters 2</h2>
+   <div class="product-parameters">
+  <h2>Product Params 2</h2>
   <ul>
     {% assign features = product.metafields.custom_features %}
 
     {% for feature in features %}
       {% assign feature_name = feature | first %}
-      {% assign feature_options = feature.last.value %}
+      {% assign feature_values = feature.last.value %}
 
-      {% if feature_options %}
+      {% if feature_values %}
         <li>
-          <strong>{{ feature_name | replace: "_options", "" | capitalize }}:</strong>
-          {% for option in feature_options %}
-            {% if option.active %}
-              <div class="feature-item">
-       
-                <span>{{ option.name }}</span>
-              </div>
-            {% endif %}
-          {% endfor %}
+          <strong>{{ feature_name | replace: "_", " " | capitalize }}:</strong>
+
+          {% if feature_values.size > 1 %}
+            {{ feature_values | join: ", " }}
+          {% else %}
+            {{ feature_values }}
+          {% endif %}
         </li>
       {% endif %}
     {% endfor %}
