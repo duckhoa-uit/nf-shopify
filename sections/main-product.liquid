@@ -803,6 +803,7 @@
             {% assign option_details = option_details | append: option.name | append: ", " %}
           {% endfor %}
           
+          {{ option_details }}
         </li>
       {% endif %}
     {% endfor %}
