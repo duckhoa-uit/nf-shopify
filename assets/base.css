@@ -239,6 +239,10 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
   background-color: rgba(var(--color-base-foreground), 0.2);
 }
 
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
 .text-body {
   font-size: 1.5rem;
   letter-spacing: 0.06rem;
@@ -262,7 +266,6 @@ h5,
   font-family: var(--font-heading-family);
   font-style: var(--font-heading-style);
   font-weight: var(--font-heading-weight);
-  /* letter-spacing: calc(var(--font-heading-scale) * 0.06rem); */
   color: rgb(var(--color-base-foreground));
   line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale)));
   word-break: break-word;
@@ -899,7 +902,7 @@ summary::-webkit-details-marker {
 }
 
 /* component-grid */
-.dawn-grid{
+.dawn-grid {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 2rem;
@@ -910,7 +913,7 @@ summary::-webkit-details-marker {
 }
 
 @media screen and (min-width: 750px) {
-  .dawn-grid{
+  .dawn-grid {
     column-gap: var(--grid-desktop-horizontal-spacing);
     row-gap: var(--grid-desktop-vertical-spacing);
   }
@@ -934,7 +937,7 @@ summary::-webkit-details-marker {
   }
 }
 
-.grid--gapless.dawn-grid{
+.grid--gapless.dawn-grid {
   column-gap: 0;
   row-gap: 0;
 }
@@ -3104,7 +3107,7 @@ details-disclosure > details {
 
 /* check for flexbox gap in older Safari versions */
 @supports not (inset: 10px) {
-  .dawn-grid{
+  .dawn-grid {
     margin-left: calc(-1 * var(--grid-mobile-horizontal-spacing));
   }
 
@@ -3114,7 +3117,7 @@ details-disclosure > details {
   }
 
   @media screen and (min-width: 750px) {
-    .dawn-grid{
+    .dawn-grid {
       margin-left: calc(-1 * var(--grid-desktop-horizontal-spacing));
     }
 
@@ -3684,5 +3687,14 @@ details-disclosure > details {
   font-style: normal;
   font-display: swap;
   src: url("https://cdn.shopify.com/s/files/1/0695/1269/1902/files/Archivo_SemiExpanded_SemiBold.woff?v=1740632395")
+    format("woff");
+}
+
+@font-face {
+  font-family: "Archivo SemiExpanded";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("https://cdn.shopify.com/s/files/1/0695/1269/1902/files/Archivo_SemiExpanded.woff?v=1741196567")
     format("woff");
 }
