@@ -51,8 +51,10 @@
     }
 
     .northfinder-product-page .product-title {
-      font-size: 1.75rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      line-height: 2.125rem;
+      margin:0;
+      font-weight: bold;
     }
 
     .northfinder-product-page .product-code {
@@ -63,21 +65,21 @@
 
     .northfinder-product-page .price-wrapper {
       display: flex;
+      flex-direction: column;
       align-items: baseline;
       flex-wrap: wrap;
-      margin-bottom: 1rem;
     }
 
     .northfinder-product-page .current-price {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-right: 0.75rem;
+      font-size: 1.3125rem;
+      font-weight: 500;
+      line-height: 1.5rem;
+      color: #0F0F0F;
     }
 
     .northfinder-product-page .original-price {
-      font-size: 1.25rem;
       text-decoration: line-through;
-      color: #999;
+      color: #0F0F0F;
       margin-right: 0.5rem;
     }
 
@@ -273,6 +275,12 @@
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+  {% comment %} FIXME: debug purpose, remove after finish building {% endcomment %}
+  <script>
+    console.log({{ product | json }});
+  </script>
+
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
@@ -310,21 +318,6 @@
   <div class="page-width">
     <div class="product grid grid-cols-1{% if product.media.size > 0 %} md:grid-cols-2 lg:grid-cols-3{% else %} product--no-media{% endif %}">
       <div class="product__media-wrapper col-span-1 md:col-span-1 lg:col-span-2">
-        <!-- Discount badge -->
-        {% if product.compare_at_price > product.price %}
-          <div class="product-discount-badge">
-            -
-            {{-
-              product.compare_at_price
-              | minus: product.price
-              | times: 100.0
-              | divided_by: product.compare_at_price
-              | round
-            -}}
-            %
-          </div>
-        {% endif %}
-
         {% render 'product-media-gallery', variant_images: variant_images %}
       </div>
       <div class="product__info-wrapper col-span-1 md:col-span-1 lg:col-span-1 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
@@ -333,6 +326,26 @@
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
+
+          <!-- Discount badge -->
+          {% if product.compare_at_price > product.price %}
+            <div class="product-discount-badge">
+              -
+              {{-
+                product.compare_at_price
+                | minus: product.price
+                | times: 100.0
+                | divided_by: product.compare_at_price
+                | round
+              -}}
+              %
+            </div>
+          {% endif %}
+          {% comment %} TODO: update this meta {% endcomment %}
+          <meta itemprop="gtin13" content="8584153431420">
+          <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope="">
+            <meta itemprop="name" content="Northfinder">
+          </div>
 
           {%- for block in section.blocks -%}
             {%- case block.type -%}
@@ -348,59 +361,78 @@
               {%- when 'title' -%}
                 <div class="product__title" {{ block.shopify_attributes }}>
                   <h1 class="product-title">{{ product.title | escape }}</h1>
-                  {% if product.metafields.custom.product_code or product.sku %}
-                    <div class="product-code">
-                      Product codes: {{ product.metafields.custom.product_code | default: product.sku }}
+                  {% if product.metafields.custom.catalog_code or product.metafields.custom.reference_code %}
+                    <div class="text-[#3D3D3D] text-sm leading-4 mt-1 mb-4">
+                      Product codes: <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span> /
+                      <span id="product-reference" itemprop="sku">{{ product.metafields.custom.reference_code }}</span>
                     </div>
                   {% endif %}
                 </div>
               {%- when 'price' -%}
+                {% comment %}
+                  <div itemprop="offers" itemscope="" itemtype="https://schema.org/Offer">
+                    <div id="moc_price" itemprop="price" content="149.9">
+                      <meta itemprop="priceCurrency" content="EUR">
+                      <div class="price-row">149,90 €</div>
+                      <link itemprop="availability" href="https://schema.org/InStock">
+                      <span id="old_price_display_moc">
+                        <span class="price">209,90 €</span> - original recommended price
+                      </span>
+                    </div>
+                    <meta
+                      itemprop="url"
+                      content="https://northfinder.com/en/7761-bu-48101skp-womens-ski-touring-active-jacket-polartec-alpha-direct-krizna.html"
+                    >
+                  </div>
+                {% endcomment %}
+
                 <div
                   id="price-{{ section.id }}"
                   role="status"
-                  class="product-price-container"
+                  class="product-price-container font-archivo-expanded m-0"
                   {{ block.shopify_attributes }}
                 >
                   <div class="price-wrapper">
                     <span class="current-price">{{ product.price | money }}</span>
                     {% if product.compare_at_price > product.price %}
-                      <span class="original-price">{{ product.compare_at_price | money }}</span>
-                      <span class="price-label">- original recommended price</span>
+                      <div class="flex items-center mt-2 text-sm text-[#3D3D3D] font-archivo-expanded leading-4">
+                        <span class="original-price">{{ product.compare_at_price | money }}cc</span>
+                        <span class="price-label">- original recommended price</span>
+                      </div>
                     {% endif %}
                   </div>
-                  {%- render 'price',
-                    product: product,
-                    use_variant: true,
-                    show_badges: true,
-                    price_class: 'price--large'
-                  -%}
+                  {% comment %} {%- render 'price', product: product, use_variant: true, show_badges: true -%} {% endcomment %}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
                   </div>
                 {%- endif -%}
-                {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
-                  <div class="product__tax caption rte">
-                    {%- if cart.duties_included and cart.taxes_included -%}
-                      {{ 'products.product.duties_and_taxes_included' | t }}
-                    {%- elsif cart.taxes_included -%}
-                      {{ 'products.product.taxes_included' | t }}
-                    {%- elsif cart.duties_included -%}
-                      {{ 'products.product.duties_included' | t }}
-                    {%- endif -%}
-                    {%- if shop.shipping_policy.body != blank -%}
-                      {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                    {%- endif -%}
+                {% comment %}
+                  {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
+                    <div class="product__tax caption rte">
+                      {%- if cart.duties_included and cart.taxes_included -%}
+                        {{ 'products.product.duties_and_taxes_included' | t }}
+                      {%- elsif cart.taxes_included -%}
+                        {{ 'products.product.taxes_included' | t }}
+                      {%- elsif cart.duties_included -%}
+                        {{ 'products.product.duties_included' | t }}
+                      {%- endif -%}
+                      {%- if shop.shipping_policy.body != blank -%}
+                        {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {% endcomment %}
+                {% comment %}
+                  <div {{ block.shopify_attributes }}>
+                    {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+                    {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
+                      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                      {{ form | payment_terms }}
+                    {%- endform -%}
                   </div>
-                {%- endif -%}
-                <div {{ block.shopify_attributes }}>
-                  {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
-                  {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
-                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                    {{ form | payment_terms }}
-                  {%- endform -%}
-                </div>
+                {% endcomment %}
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'inventory' -%}
@@ -784,7 +816,6 @@
       endif
     -%}
 
-    
     {% if product.metafields.features != blank %}
       <div class="product-info">
         <h3>Product Params</h3>
