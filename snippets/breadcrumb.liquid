@@ -1,6 +1,14 @@
 <div class="breadcrumb-container page-width">
   <nav class="breadcrumb" role="navigation" aria-label="breadcrumbs">
     <ol class="breadcrumb__list">
+      <li class="breadcrumb__back-button">
+        <a href="javascript:history.back()" aria-label="Go back" class="breadcrumb__link text-[#0F0F0F] flex items-center gap-2">
+          <span class="svg-wrapper size-3 rotate-180">{{ 'icon-arrow.svg' | inline_asset_content }}</span>
+          <span>Back</span>
+        </a>
+        <span class="breadcrumb__divider">|</span>
+      </li>
+
       <li class="breadcrumb__item">
         <a class="breadcrumb__link" href="{{ routes.root_url }}">Home</a>
         <span class="breadcrumb__divider" aria-hidden="true">›</span>
@@ -85,7 +93,7 @@
   }
 
   .breadcrumb {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
   }
 
   .breadcrumb__list {
@@ -101,14 +109,28 @@
     align-items: center;
   }
 
+  .breadcrumb__back-button {
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumb__back-button svg {
+    /* margin-right: 0.5rem; */
+  }
+
+  .breadcrumb__divider {
+    color: var(--color-foreground-30);
+    margin: 0 1rem;
+  }
+
   .breadcrumb__link {
     color: #666;
-    text-decoration: none;
+    text-decoration: underline;
   }
 
   .breadcrumb__link:hover {
     color: #000;
-    text-decoration: underline;
+    text-decoration: none;
   }
 
   .breadcrumb__divider {
@@ -117,7 +139,5 @@
   }
 
   .breadcrumb__item--current .breadcrumb__text {
-    font-weight: 600;
-    color: #000;
   }
 </style>
