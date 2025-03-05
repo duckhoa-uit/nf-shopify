@@ -794,19 +794,21 @@
       {% assign feature_name = feature | first %}
       {% assign feature_values = feature.last.value %}
 
-      {% if feature_values %}
+ {% if feature_values %}
         <li>
           <strong>{{ feature_name | replace: "_", " " | capitalize }}:</strong>
 
-         {% for option in feature_values %}
+          {% assign option_names = "" %}
+          {% for option in feature_values %}
             {% if option.active %}
-              <div class="feature-item">
-                <span>{{ option.name }}</span>
-              </div>
+              {% assign option_names = option_names | append: option.name | append: ", " %}
             {% endif %}
           {% endfor %}
+
+          {{ option_names | rstrip: ", " }}
         </li>
       {% endif %}
+      
     {% endfor %}
   </ul>
 </div>
