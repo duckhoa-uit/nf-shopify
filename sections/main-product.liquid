@@ -15,6 +15,7 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+  {{ 'read-more-less.css' | asset_url | stylesheet_tag }}
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
@@ -275,11 +276,6 @@
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-
-  {% comment %} FIXME: debug purpose, remove after finish building {% endcomment %}
-  <script>
-    console.log({{ product | json }});
-  </script>
 
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
@@ -578,7 +574,7 @@
                         <div class="main-element-header">
                           {% if element.icon %}
                             <img
-                              src="{{ element.icon }}"
+                              src="{{ element.icon | asset_url }}"
                               alt="{{ element.title }}"
                               class="main-element-icon"
                               width="40"
@@ -876,7 +872,7 @@
               {% for field in product.metafields.custom.main_elements.value %}
                 {% assign name = field.name %}
                 {% assign logo = field.logo %}
-                {% assign description = field.description %}
+                {% assign description = field.description | metafield_text %}
 
                 <div class="w-full flex items-start">
                   <div class="min-w-12 mr-4 size-12">
@@ -891,9 +887,15 @@
                     <div class="flex flex-col">
                       <h2 class="text-base font-semibold mb-2">{{ name }}</h2>
                       <div class="text-[0.9375rem] text-[#0F0F0F] leading-6">
-                        {{ description | metafield_text }}
+                        <div class="desc">
+                          {%
+                            render 'text-truncation',
+                            text: description,
+                            id: name
+                          %}
+                        </div>
                       </div>
-                      {% comment %} TODO: add read more {% endcomment %}
+                      {% comment %} TODO: add read more/less functionality {% endcomment %}
                       {% comment %}
                         <span class="read-more">
                           <span class="read-more-text active">Read more</span>
