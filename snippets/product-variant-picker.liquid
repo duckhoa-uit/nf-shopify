@@ -12,6 +12,7 @@
   <variant-selects
     id="variant-selects-{{ section.id }}"
     data-section="{{ section.id }}"
+    class="mt-3"
     {{ block.shopify_attributes }}
   >
     {%- for option in product.options_with_values -%}
@@ -27,7 +28,39 @@
           endif
         endif
       -%}
-      {%- if picker_type == 'swatch' -%}
+      <script>
+        console.log({{ option | json }}, picker_type);
+      </script>
+      {%- if option.name == 'Size' -%}
+        <fieldset class="js product-form__input product-form__input--pill product-form__input--pill-size">
+          <legend class="form__label">{{ option.name }}</legend>
+          <div class="grid grid-cols-5 gap-5">
+            {% render 'product-variant-options',
+              product: product,
+              option: option,
+              block: block,
+              picker_type: picker_type
+            %}
+          </div>
+        </fieldset>
+      {%- elsif option.name == 'Color' -%}
+        <fieldset class="js product-form__input product-form__input--swatch product-form__input--pill-color">
+          <legend class="form__label">
+            {{ option.name }}:
+            <span data-selected-value>
+              {{- option.selected_value -}}
+            </span>
+          </legend>
+          <div class="grid grid-cols-5 gap-5">
+            {% render 'product-variant-options',
+              product: product,
+              option: option,
+              block: block,
+              picker_type: picker_type
+            %}
+          </div>
+        </fieldset>
+      {%- elsif picker_type == 'swatch' -%}
         <fieldset class="js product-form__input product-form__input--swatch">
           <legend class="form__label">
             {{ option.name }}:
