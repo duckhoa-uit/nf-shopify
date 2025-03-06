@@ -267,7 +267,7 @@ h5,
   font-style: var(--font-heading-style);
   font-weight: var(--font-heading-weight);
   color: rgb(var(--color-base-foreground));
-  line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale)));
+  line-height: 1.5;
   word-break: break-word;
 }
 
@@ -299,37 +299,37 @@ h5,
 
 h1,
 .h1 {
-  font-size: calc(var(--font-heading-scale) * 3rem);
+  font-size: calc(var(--font-heading-scale) * 1.875rem);
 }
 
 @media only screen and (min-width: 750px) {
   h1,
   .h1 {
-    font-size: calc(var(--font-heading-scale) * 4rem);
+    font-size: calc(var(--font-heading-scale) * 2.5rem);
   }
 }
 
 h2,
 .h2 {
-  font-size: calc(var(--font-heading-scale) * 2rem);
+  font-size: calc(var(--font-heading-scale) * 1.25rem);
 }
 
 @media only screen and (min-width: 750px) {
   h2,
   .h2 {
-    font-size: calc(var(--font-heading-scale) * 2.4rem);
+    font-size: calc(var(--font-heading-scale) * 1.5rem);
   }
 }
 
 h3,
 .h3 {
-  font-size: calc(var(--font-heading-scale) * 1.7rem);
+  font-size: calc(var(--font-heading-scale) * 1.0625rem);
 }
 
 @media only screen and (min-width: 750px) {
   h3,
   .h3 {
-    font-size: calc(var(--font-heading-scale) * 1.8rem);
+    font-size: calc(var(--font-heading-scale) * 1.125rem);
   }
 }
 
@@ -337,18 +337,18 @@ h4,
 .h4 {
   font-family: var(--font-heading-family);
   font-style: var(--font-heading-style);
-  font-size: calc(var(--font-heading-scale) * 1.5rem);
+  font-size: calc(var(--font-heading-scale) * 0.9375rem);
 }
 
 h5,
 .h5 {
-  font-size: calc(var(--font-heading-scale) * 1.2rem);
+  font-size: calc(var(--font-heading-scale) * 0.75rem);
 }
 
 @media only screen and (min-width: 750px) {
   h5,
   .h5 {
-    font-size: calc(var(--font-heading-scale) * 1.3rem);
+    font-size: calc(var(--font-heading-scale) * 0.8125rem);
   }
 }
 
@@ -2979,10 +2979,11 @@ details-disclosure > details {
   border: 1px solid transparent;
   border-radius: var(--badge-corner-radius);
   display: inline-block;
-  font-size: 1.2rem;
+  font-size: 0.75rem;
+  font-weight: 500;
   letter-spacing: 0.0625rem;
   line-height: 1;
-  padding: 0.5rem 1.3rem 0.6rem 1.3rem;
+  padding: 0.5rem 0.75rem;
   text-align: center;
   background-color: rgb(var(--color-base-badge-background));
   border-color: rgba(var(--color-base-badge-border), var(--alpha-badge-border));
@@ -3697,4 +3698,12 @@ details-disclosure > details {
   font-display: swap;
   src: url("https://cdn.shopify.com/s/files/1/0695/1269/1902/files/Archivo_SemiExpanded.woff?v=1741196567")
     format("woff");
+}
+@font-face {
+  font-family: "Archivo SemiExpanded";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("https://cdn.shopify.com/s/files/1/0695/1269/1902/files/Archivo_SemiExpanded_Medium.ttf?v=1741236404")
+    format("truetype");
 }

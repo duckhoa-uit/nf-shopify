@@ -20,7 +20,7 @@
 }
 
 .accordion {
-  margin-top: 2.5rem;
+  margin-top: 1.25rem;
   margin-bottom: 0;
   border-top: 0.0625rem solid rgba(var(--color-base-foreground), 0.08);
   border-bottom: 0.0625rem solid rgba(var(--color-base-foreground), 0.08);
@@ -32,6 +32,9 @@
   min-height: 1.6rem;
   margin: 0;
   word-break: break-word;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 600;
 }
 
 .accordion .svg-wrapper {
@@ -51,8 +54,13 @@
   word-break: break-word;
   overflow-x: auto;
   padding: 0 0.6rem;
+  color: #0f0f0f;
 }
 
 .accordion__content img {
   max-width: 100%;
+}
+
+.accordion__content p {
+  line-height: 1.5;
 }
