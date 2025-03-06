@@ -392,7 +392,7 @@
                   class="product-price-container font-archivo-expanded m-0"
                   {{ block.shopify_attributes }}
                 >
-                  <div class="price-wrapper">
+                  {% comment %} <div class="price-wrapper">
                     <span class="current-price">{{ product.price | money }}</span>
                     {% if product.compare_at_price > product.price %}
                       <div class="flex items-center mt-2 text-sm text-[#3D3D3D] font-archivo-expanded leading-4">
@@ -400,8 +400,8 @@
                         <span class="price-label">- original recommended price</span>
                       </div>
                     {% endif %}
-                  </div>
-                  {% comment %} {%- render 'price', product: product, use_variant: true, show_badges: true -%} {% endcomment %}
+                  </div> {% endcomment %}
+                  {%- render 'price', product: product, use_variant: true, show_badges: true -%}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
