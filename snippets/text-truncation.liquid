@@ -1,0 +1,75 @@
+{% comment %}
+  text-truncation.liquid - Reusable snippet for text truncation with read more/less functionality
+
+  Parameters:
+  - text: The text content to be truncated
+  - id: A unique ID for this text block (must be unique per page)
+{% endcomment %}
+
+{% assign words = text | split: ' ' %}
+{% assign word_count = words | size %}
+{% assign truncated = false %}
+
+{% if word_count > 15 %}
+  {% assign truncated = true %}
+  {% assign truncated_words = words | slice: 0, 15 | join: ' ' %}
+{% endif %}
+
+<div class="truncated-text-container">
+  {% if truncated %}
+    <div class="truncated-text" id="truncated-{{ id }}">
+      {{ truncated_words }}...
+      <button class="read-more-btn" onclick="toggleText('{{ id }}')">
+        Read more
+        <span class="*:rotate-90 *:inline *:ml-1 *:size-3">
+          {{- 'icon-chevron.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </div>
+    <div class="full-text" id="full-{{ id }}" style="display: none;">
+      {{ text }}
+      <button class="read-less-btn" onclick="toggleText('{{ id }}')">
+        Read less
+        <span class="*:-rotate-90 *:inline *:ml-1 *:size-3">
+          {{- 'icon-chevron.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </div>
+  {% else %}
+    <div class="full-text">
+      {{ text }}
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  function toggleText(textId) {
+    const truncatedElement = document.getElementById('truncated-' + textId);
+    const fullElement = document.getElementById('full-' + textId);
+
+    if (truncatedElement.style.display === 'none') {
+      truncatedElement.style.display = 'block';
+      fullElement.style.display = 'none';
+    } else {
+      truncatedElement.style.display = 'none';
+      fullElement.style.display = 'block';
+    }
+  }
+</script>
+<style>
+  .truncated-text-container {
+    margin-bottom: 15px;
+  }
+  .read-more-btn,
+  .read-less-btn {
+    display: block;
+    color: #0f0f0f;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 0.875rem;
+  }
+</style>
