@@ -1,0 +1,187 @@
+{% comment %}
+  Renders product's benefits
+
+  Accepts:
+  - product: {Object} Product Liquid object (optional)
+
+  Usage:
+  {% render 'product-benefit', product: product %}
+{% endcomment %}
+
+<div class="mt-12 flex flex-col w-full">
+  <h5 class="text-lg my-2 text-[#0F0F0F] font-bold leading-7">Benefits</h5>
+  <ul class="flex flex-col w-full" id="product-benefits-list">
+    <li class="break-inside-avoid mb-9 ml-8">
+      <img
+        class="absolute left-0 size-4"
+        width="16"
+        height="16"
+        src="{{ 'BREATHABILITY.svg' | asset_url }}"
+        loading="lazy"
+      >
+      <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
+        Breathability
+        <span class="font-medium">({{ product.metafields.custom.breathability.value.level }}/5)</span>
+      </div>
+      {% capture breathability_descriptions %}
+        {% case product.metafields.custom.breathability.value.level %}
+          {% when 1 %}The clothing is very breathable, over the entire covered area 1
+          {% when 2 %}The clothing is very breathable, over the entire covered area 2
+          {% when 3 %}The clothing is very breathable, over the entire covered area 3
+          {% when 4 %}The clothing is very breathable, over the entire covered area 4
+          {% when 5 %}The clothing is very breathable, over the entire covered area 5
+          {% else %}No breathability information available
+        {% endcase %}
+      {% endcapture %}
+
+      <div class="text-[#3D3D3D] text-sm leading-4 my-2">
+        {{ breathability_descriptions | strip }}
+      </div>
+      {% render 'benefit-indicator', input: product.metafields.custom.breathability.value.level %}
+    </li>
+    <li class="break-inside-avoid mb-9 ml-8">
+      <img
+        class="absolute left-0 size-4"
+        width="16"
+        height="16"
+        src="{{ 'ELASTICITY.svg' | asset_url }}"
+        loading="lazy"
+      >
+      <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
+        Elasticity
+        <span class="font-medium">({{ product.metafields.custom.elasticity.value.level }}/5)</span>
+      </div>
+      {% capture elasticity_descriptions %}
+        {% case product.metafields.custom.elasticity.value.level %}
+          {% when 1 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 1
+          {% when 2 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 2
+          {% when 3 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 3
+          {% when 4 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 4
+          {% when 5 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 5
+          {% else %}No elasticity information available
+        {% endcase %}
+      {% endcapture %}
+
+      <div class="text-[#3D3D3D] text-sm leading-4 my-2">
+        {{ elasticity_descriptions | strip }}
+      </div>
+      {% render 'benefit-indicator', input: product.metafields.custom.elasticity.value.level %}
+    </li>
+    <li class="break-inside-avoid mb-9 ml-8">
+      <img
+        class="absolute left-0 size-4"
+        width="16"
+        height="16"
+        src="{{ 'WINDPROOFNESS.svg' | asset_url }}"
+        loading="lazy"
+      >
+      <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
+        Windproofness
+        <span class="font-medium">({{ product.metafields.custom.windproofness.value.level }}/5)</span>
+      </div>
+      {% comment %}
+        Breathability level descriptions in one place for easy maintenance
+      {% endcomment %}
+      {% capture windproofness_descriptions %}
+        {% case product.metafields.custom.windproofness.value.level %}
+          {% when 1 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 1
+          {% when 2 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 2
+          {% when 3 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 3
+          {% when 4 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 4
+          {% when 5 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 5
+          {% else %}No windproofness information available
+        {% endcase %}
+      {% endcapture %}
+
+      <div class="text-[#3D3D3D] text-sm leading-4 my-2">
+        {{ windproofness_descriptions | strip }}
+      </div>
+      {% render 'benefit-indicator', input: product.metafields.custom.windproofness.value.level %}
+    </li>
+    <li class="break-inside-avoid mb-9 ml-8">
+      <img
+        class="absolute left-0 size-4"
+        width="16"
+        height="16"
+        src="{{ 'WARMTH.svg' | asset_url }}"
+        loading="lazy"
+      >
+      <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
+        Warmth
+        <span class="font-medium">({{ product.metafields.custom.warmth.value.level }}/5)</span>
+      </div>
+      {% comment %}
+        Warmth level descriptions in one place for easy maintenance
+      {% endcomment %}
+      {% capture warmth_descriptions %}
+        {% case product.metafields.custom.warmth.value.level %}
+          {% when 1 %}The clothing is very breathable, over the entire covered area 1
+          {% when 2 %}The clothing is very breathable, over the entire covered area 2
+          {% when 3 %}The clothing is very breathable, over the entire covered area 3
+          {% when 4 %}The clothing is very breathable, over the entire covered area 4
+          {% when 5 %}The clothing is very breathable, over the entire covered area 5
+          {% else %}No warmth information available
+        {% endcase %}
+      {% endcapture %}
+
+      <div class="text-[#3D3D3D] text-sm leading-4 my-2">
+        {{ warmth_descriptions | strip }}
+      </div>
+      {% render 'benefit-indicator', input: product.metafields.custom.warmth.value.level %}
+    </li>
+    <li class="break-inside-avoid mb-9 ml-8">
+      <button id="show-more-benefits" class="text-[#0F0F0F] text-base leading-7 underline cursor-pointer">
+        Show all benefits
+        <span class="*:rotate-90 *:inline *:ml-1 *:size-3">
+          {{- 'icon-chevron.svg' | inline_asset_content -}}
+        </span>
+      </button>
+      <button
+        id="show-less-benefits"
+        class="text-[#0F0F0F] text-base leading-7 underline cursor-pointer"
+        style="display: none;"
+      >
+        Show less benefits
+        <span class="*:-rotate-90 *:inline *:ml-1 *:size-3">
+          {{- 'icon-chevron.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </li>
+  </ul>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const benefitsList = document.getElementById('product-benefits-list');
+    const benefitItems = benefitsList.querySelectorAll('li:not(:last-child)');
+    const showMoreBtn = document.getElementById('show-more-benefits');
+    const showLessBtn = document.getElementById('show-less-benefits');
+
+    // Function to show only the first 2 benefits
+    function showLessBenefits() {
+      benefitItems.forEach((item, index) => {
+        if (index >= 2) {
+          item.style.display = 'none';
+        }
+      });
+      showMoreBtn.style.display = 'block';
+      showLessBtn.style.display = 'none';
+    }
+
+    // Function to show all benefits
+    function showAllBenefits() {
+      benefitItems.forEach((item) => {
+        item.style.display = 'block';
+      });
+      showMoreBtn.style.display = 'none';
+      showLessBtn.style.display = 'block';
+    }
+
+    // Add click event listeners
+    showMoreBtn.addEventListener('click', showAllBenefits);
+    showLessBtn.addEventListener('click', showLessBenefits);
+
+    // Initialize with only 2 benefits shown
+    showLessBenefits();
+  });
+</script>
