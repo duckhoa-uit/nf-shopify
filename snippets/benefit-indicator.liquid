@@ -1,0 +1,18 @@
+{% comment %}
+  Progress Indicator
+  Accepts an integer value between 1-5 as 'input'
+  Displays a horizontal bar with colored portion representing value/5
+{% endcomment %}
+
+{% assign percentage = input | times: 20 %}
+
+<div class="relative w-full h-0.5 bg-[#E0DFDF] rounded-md overflow-visible my-5">
+  <div
+    class="relative h-full bg-linear-to-r from-[#0F0F0F] to-[#EC0009] rounded-l-md"
+    style="width: {{ percentage }}%;"
+  >
+    <div
+      class="absolute -right-2 -top-2 w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-black"
+    ></div>
+  </div>
+</div>
