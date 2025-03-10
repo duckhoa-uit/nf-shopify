@@ -310,10 +310,10 @@
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
 
   <script>
-    console.log({{ product.metafields.custom.warmth.value | json }});
+    console.log({{ product.metafields.custom.main_elements.value | json }});
   </script>
   <script>
-    console.log({{ product.metafields.custom.warmth | json }});
+    console.log({{ product.metafields.custom.main_elements.value.size | json }});
   </script>
 
   {% render 'breadcrumb' %}
