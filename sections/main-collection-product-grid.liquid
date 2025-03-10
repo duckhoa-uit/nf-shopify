@@ -38,19 +38,7 @@
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {%- paginate collection.products by section.settings.products_per_page -%}
-    {% comment %} Breadcrumbs {% endcomment %}
-    <div class="breadcrumbs page-width">
-      <div class="frame">
-        <a href="{{ routes.root_url }}" class="breadcrumb-link">{{ 'general.breadcrumbs.home' | t }}</a>
-        <span class="breadcrumb-separator">
-          <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 1L5 5L1 9" stroke="#CCCCCC" stroke-width="1"/>
-          </svg>
-        </span>
-        <span class="breadcrumb-current">{{ collection.title }}</span>
-      </div>
-    </div>
-
+    {% comment %} Collection Header with Title and Description Only {% endcomment %}
     <div class="collection-header page-width">
       <h1 class="collection-title">{{ collection.title }}</h1>
       <div class="collection-description">
@@ -59,6 +47,35 @@
         {% endif %}
       </div>
     </div>
+
+    {% comment %} Scrollable Child Collections {% endcomment %}
+    {%- if collection.collections != blank and collection.collections.size > 0 -%}
+      <div class="child-collections-wrapper page-width">
+        <div class="child-collections-scroll">
+          <ul class="child-collections-list">
+            {%- for child_collection in collection.collections -%}
+              <li class="child-collection-item">
+                <a href="{{ child_collection.url }}" class="child-collection-link">
+                  {%- if child_collection.image -%}
+                    <div class="child-collection-image-wrapper">
+                      <img
+                        src="{{ child_collection.image | img_url: '180x180', crop: 'center' }}"
+                        alt="{{ child_collection.title | escape }}"
+                        class="child-collection-image"
+                        width="90"
+                        height="90"
+                        loading="lazy"
+                      >
+                    </div>
+                  {%- endif -%}
+                  <span class="child-collection-title">{{ child_collection.title }}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+    {%- endif -%}
 
     <div class="page-width">
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
