@@ -281,7 +281,20 @@ class FacetFiltersForm extends HTMLElement {
           if (key.includes("-GTE") && Number(value) === priceRange.defaultMin) continue;
           if (key.includes("-LTE") && Number(value) === priceRange.defaultMax) continue;
         }
-        params.append(key, value);
+
+        // Handle metaobject filter parameters
+        if (key.startsWith("filter.v.meta.")) {
+          const filterGroup = key.split(".").pop();
+          const existingValue = params.get(`filter.v.meta.${filterGroup}`);
+          if (existingValue) {
+            // If we already have values for this filter group, append the new value
+            params.set(`filter.v.meta.${filterGroup}`, `${existingValue},${value}`);
+          } else {
+            params.append(key, value);
+          }
+        } else {
+          params.append(key, value);
+        }
       }
     }
 
