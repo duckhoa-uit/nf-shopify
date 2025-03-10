@@ -83,15 +83,15 @@
 
       <div class="filter-controls">
         <div class="filter-toggle">
-          <button class="filter-toggle-btn" aria-expanded="false" aria-controls="main-collection-filters">
+          <button class="filter-toggle-btn" aria-expanded="true" aria-controls="main-collection-filters">
             <span class="filter-icon">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 2.5H14" stroke="#EC0009" stroke-width="1.5"/>
-                <path d="M0 7H14" stroke="#EC0009" stroke-width="1.5"/>
-                <path d="M0 11.5H14" stroke="#EC0009" stroke-width="1.5"/>
+                <path d="M0 2.5H14" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M0 7H14" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M0 11.5H14" stroke="currentColor" stroke-width="1.5"/>
               </svg>
             </span>
-            <span class="filter-text">{{ 'products.facets.filter_button' | t }}</span>
+            <span class="filter-text">{{ 'products.facets.hide_filters' | t }}</span>
           </button>
         </div>
 
@@ -303,25 +303,59 @@
     // Filter toggle functionality
     const filterToggleBtn = document.querySelector('.filter-toggle-btn');
     const filtersWrapper = document.querySelector('.facets-wrapper');
-    const filterSidebar = document.querySelector('.filter-sidebar');
 
     if (filterToggleBtn && filtersWrapper) {
-      // On mobile, toggle visibility with the class
       const handleFilterToggle = function() {
         const expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !expanded);
+        const newExpanded = !expanded;
+        this.setAttribute('aria-expanded', newExpanded);
 
-        // For mobile screens
-        if (window.innerWidth <= 990) {
-          filtersWrapper.classList.toggle('visible');
+        // Toggle filter visibility
+        filtersWrapper.classList.toggle('visible', newExpanded);
+        filtersWrapper.closest('.filter-sidebar').classList.toggle('hidden', !newExpanded);
+        document.querySelector('.product-grid-wrapper').classList.toggle('full-width', !newExpanded);
+
+        // Update button text
+        this.querySelector('.filter-text').textContent = newExpanded
+          ? {{ 'products.facets.hide_filters' | t | json }}
+          : {{ 'products.facets.filter_button' | t | json }};
+
+        // Update icon rotation
+        const filterIcon = this.querySelector('.filter-icon');
+        if (filterIcon) {
+          filterIcon.style.transform = newExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
         }
-
-        this.querySelector('.filter-text').textContent = expanded
-          ? {{ 'products.facets.filter_button' | t | json }}
-          : {{ 'products.facets.hide_filters' | t | json }};
       };
 
+      // Initialize filter state
+      const initializeFilters = function() {
+        const expanded = filterToggleBtn.getAttribute('aria-expanded') === 'true';
+        filtersWrapper.classList.toggle('visible', expanded);
+        filtersWrapper.closest('.filter-sidebar').classList.toggle('hidden', !expanded);
+        document.querySelector('.product-grid-wrapper').classList.toggle('full-width', !expanded);
+      };
+
+      // Initialize on load
+      initializeFilters();
+
       filterToggleBtn.addEventListener('click', handleFilterToggle);
+
+      // Handle window resize
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          if (window.innerWidth >= 990) {
+            filtersWrapper.classList.remove('visible');
+            filterToggleBtn.setAttribute('aria-expanded', 'false');
+            filterToggleBtn.querySelector('.filter-text').textContent = {{ 'products.facets.filter_button' | t | json }};
+            const filterIcon = filterToggleBtn.querySelector('.filter-icon');
+            if (filterIcon) {
+              filterIcon.style.transform = 'rotate(0deg)';
+            }
+          }
+        }, 200);
+      });
     }
 
     // View more functionality (if not handled by pagination already)
