@@ -108,6 +108,10 @@
             {%- endif -%}
 
             <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
+
+            {% comment %} Metaobject-based filters {% endcomment %}
+            {% render 'metaobject-filters' %}
+
             {% comment %} Filters for both horizontal and vertical filter {% endcomment %}
             {%- for filter in results.filters -%}
               {% liquid
