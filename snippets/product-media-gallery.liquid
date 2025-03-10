@@ -64,6 +64,22 @@
           class="product__media-item grid__item slider__slide is-active{% if single_media_visible %} product__media-item--single{% endif %}{% if featured_media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
           data-media-id="{{ section.id }}-{{ featured_media.id }}"
         >
+          {%- if product.metafields.custom.main_elements != blank -%}
+            {%- assign elements = product.metafields.custom.main_elements.value -%}
+            {%- assign first_element = elements | first -%}
+            {% assign name = first_element.name %}
+            {% assign logo = first_element.logo %}
+
+            <div class="absolute top-0 left-0 p-1.5 z-10">
+              <img
+                src="{{ logo | image_url: width: 48 }}"
+                title="{{ name }}"
+                alt="{{ name }}"
+                width="48"
+                height="48"
+              >
+            </div>
+          {%- endif -%}
           {%- assign media_position = 1 -%}
           {% render 'product-thumbnail',
             media: featured_media,
@@ -91,7 +107,7 @@
         {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
           <li
             id="Slide-{{ section.id }}-{{ media.id }}"
-            class="product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == nil and forloop.index == 1 %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+            class="{% if forloop.first %} relative{% endif %} product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == nil and forloop.index == 1 %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
             data-media-id="{{ section.id }}-{{ media.id }}"
           >
             {%- liquid
