@@ -135,25 +135,33 @@
 .mobile-facets__sort .select__select:focus-visible {
   outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
   outline-offset: 0.3rem;
-  box-shadow: 0 0 0 0.3rem rgb(var(--color-base-background)), 0 0 0.5rem 0.4rem rgba(var(--color-base-foreground), 0.3);
+  box-shadow:
+    0 0 0 0.3rem rgb(var(--color-base-background)),
+    0 0 0.5rem 0.4rem rgba(var(--color-base-foreground), 0.3);
 }
 
 .mobile-facets__sort .select__select.focused {
   outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
   outline-offset: 0.3rem;
-  box-shadow: 0 0 0 0.3rem rgb(var(--color-base-background)), 0 0 0.5rem 0.4rem rgba(var(--color-base-foreground), 0.3);
+  box-shadow:
+    0 0 0 0.3rem rgb(var(--color-base-background)),
+    0 0 0.5rem 0.4rem rgba(var(--color-base-foreground), 0.3);
 }
 
 .facet-filters__sort:focus-visible {
   outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
   outline-offset: 1rem;
-  box-shadow: 0 0 0 1rem rgb(var(--color-base-background)), 0 0 0.2rem 1.2rem rgba(var(--color-base-foreground), 0.3);
+  box-shadow:
+    0 0 0 1rem rgb(var(--color-base-background)),
+    0 0 0.2rem 1.2rem rgba(var(--color-base-foreground), 0.3);
 }
 
 .facet-filters__sort.focused {
   outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
   outline-offset: 1rem;
-  box-shadow: 0 0 0 1rem rgb(var(--color-base-background)), 0 0 0.2rem 1.2rem rgba(var(--color-base-foreground), 0.3);
+  box-shadow:
+    0 0 0 1rem rgb(var(--color-base-background)),
+    0 0 0.2rem 1.2rem rgba(var(--color-base-foreground), 0.3);
 }
 
 .facets {
@@ -393,7 +401,9 @@
 .facets-layout-grid--image .facets__label.active:has(:focus-visible) {
   outline-color: rgb(var(--color-base-foreground));
   outline-width: 0.0625rem;
-  box-shadow: 0 0 0 0.3rem rgb(var(--color-base-background)), 0 0 0 0.5rem rgba(var(--color-base-foreground), 0.5),
+  box-shadow:
+    0 0 0 0.3rem rgb(var(--color-base-background)),
+    0 0 0 0.5rem rgba(var(--color-base-foreground), 0.5),
     0 0 0.7rem 0.0625rem rgba(var(--color-base-foreground), 0.25);
 }
 
@@ -408,7 +418,7 @@
 }
 
 .facets-layout-grid--image .facets__label.disabled .facets__image-wrapper:before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -437,7 +447,7 @@
 /* End of image filter specific styles */
 
 .list-menu__item label,
-.list-menu__item input[type='checkbox'] {
+.list-menu__item input[type="checkbox"] {
   cursor: pointer;
 }
 
@@ -476,7 +486,7 @@
 
 /* End disabled state */
 
-.facets-layout-list--text input[type='checkbox'] {
+.facets-layout-list--text input[type="checkbox"] {
   position: absolute;
   opacity: 1;
   width: 1.6rem;
@@ -488,8 +498,8 @@
   -webkit-appearance: none;
 }
 
-.facets-layout-grid input[type='checkbox'],
-.facets-layout-list--swatch input[type='checkbox'] {
+.facets-layout-grid input[type="checkbox"],
+.facets-layout-list--swatch input[type="checkbox"] {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -524,7 +534,7 @@
   height: 0.7rem;
 }
 
-.facet-checkbox > input[type='checkbox']:checked ~ .svg-wrapper > .icon-checkmark {
+.facet-checkbox > input[type="checkbox"]:checked ~ .svg-wrapper > .icon-checkmark {
   visibility: visible;
 }
 
@@ -534,31 +544,170 @@
     border: 0.0625rem solid rgb(var(--color-base-background));
   }
 
-  .facet-checkbox > input[type='checkbox']:checked ~ .svg-wrapper > .icon-checkmark {
+  .facet-checkbox > input[type="checkbox"]:checked ~ .svg-wrapper > .icon-checkmark {
     border: none;
   }
 }
 
+/* Price filter styles */
 .facets__price {
   display: flex;
+  flex-direction: column;
   padding: 2rem;
+  gap: 1.5rem;
 }
 
-.facets__price .field + .field-currency {
-  margin-left: 2rem;
+/* Price inputs container */
+.price-filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
 }
 
-.facets__price .field {
+.price-inputs-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+.price-field {
+  position: relative;
+  flex: 1;
+}
+
+.price-input {
+  width: 100%;
+  height: 40px;
+  padding: 0.8rem 2rem 0.8rem 0.8rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  font-size: 1rem;
+  text-align: right;
+  font-weight: 500;
+  color: #0f0f0f;
+  background-color: #fff;
+}
+
+.price-input:focus {
+  outline: none;
+  border-color: #0f0f0f;
+}
+
+.price-currency {
+  position: absolute;
+  right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  font-weight: 500;
+  color: #0f0f0f;
+  pointer-events: none;
+}
+
+/* Price Slider */
+.price-slider-container {
+  width: 100%;
+  padding: 0 0.5rem;
+  margin: 1rem 0;
+}
+
+.price-slider {
+  position: relative;
+  height: 16px;
+  width: 100%;
+}
+
+.price-slider-track {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 2px;
+  background-color: #e0e0e0;
+}
+
+.price-slider-range {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2px;
+  background-color: #ec0009;
+  z-index: 1;
+}
+
+.price-slider-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #0f0f0f;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+.price-slider-thumb:hover {
+  transform: translateY(-50%) scale(1.2);
+}
+
+.price-slider-thumb-min {
+  left: 0;
+}
+
+.price-slider-thumb-max {
+  right: 0;
+}
+
+/* Discount filter */
+.discount-filter {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.discount-filter-label {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.facets__price .field-currency {
-  align-self: center;
-  margin-right: 0.6rem;
+.discount-filter-text {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #0f0f0f;
 }
 
-.facets__price .field__label {
-  left: 1.5rem;
+.discount-filter-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+  position: relative;
+  background-color: #fff;
+  margin: 0;
+}
+
+.discount-filter-checkbox:checked {
+  border-color: #0f0f0f;
+}
+
+.discount-filter-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #0f0f0f;
 }
 
 button.facets__button {
@@ -677,13 +826,17 @@ a.active-facets__button.focused {
 }
 
 a.active-facets__button:focus-visible .active-facets__button-inner {
-  box-shadow: 0 0 0 0.0625rem rgba(var(--color-base-foreground), 0.2), 0 0 0 0.2rem rgb(var(--color-base-background)),
+  box-shadow:
+    0 0 0 0.0625rem rgba(var(--color-base-foreground), 0.2),
+    0 0 0 0.2rem rgb(var(--color-base-background)),
     0 0 0 0.4rem rgb(var(--color-base-foreground));
   outline: none;
 }
 
 a.active-facets__button.focused .active-facets__button-inner {
-  box-shadow: 0 0 0 0.0625rem rgba(var(--color-base-foreground), 0.2), 0 0 0 0.2rem rgb(var(--color-base-background)),
+  box-shadow:
+    0 0 0 0.0625rem rgba(var(--color-base-foreground), 0.2),
+    0 0 0 0.2rem rgb(var(--color-base-background)),
     0 0 0 0.4rem rgb(var(--color-base-foreground));
   outline: none;
 }
@@ -978,7 +1131,9 @@ details.menu-opening .mobile-facets__close .svg-wrapper {
 }
 
 .js details[open] > .mobile-facets__submenu {
-  transition: transform 0.4s cubic-bezier(0.29, 0.63, 0.44, 1), visibility 0.4s cubic-bezier(0.29, 0.63, 0.44, 1);
+  transition:
+    transform 0.4s cubic-bezier(0.29, 0.63, 0.44, 1),
+    visibility 0.4s cubic-bezier(0.29, 0.63, 0.44, 1);
 }
 
 .js details[open].menu-opening > .mobile-facets__submenu {
@@ -1036,7 +1191,7 @@ input.mobile-facets__checkbox {
   height: 9px;
 }
 
-.mobile-facets__label > input[type='checkbox']:checked ~ .icon-checkmark {
+.mobile-facets__label > input[type="checkbox"]:checked ~ .icon-checkmark {
   visibility: visible;
 }
 
@@ -1200,7 +1355,7 @@ input.mobile-facets__checkbox {
     margin-bottom: 1.5rem;
   }
 
-  .facets-vertical .facet-checkbox input[type='checkbox'] {
+  .facets-vertical .facet-checkbox input[type="checkbox"] {
     z-index: 0;
   }
 

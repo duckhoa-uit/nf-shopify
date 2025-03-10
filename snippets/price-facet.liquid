@@ -1,45 +1,57 @@
-<span class="field-currency">{{ cart.currency.symbol }}</span>
+<div class="price-filter-container">
+  <div class="price-inputs-container">
+    <div class="field price-field">
+      <input
+        class="field__input price-input"
+        name="{{ filter.min_value.param_name }}"
+        id="{{ id_prefix }}{{ filter.label | escape }}-GTE"
+        value="{{ filter.min_value.value | default: 0 | money_without_currency }}"
+        type="text"
+        inputmode="decimal"
+        placeholder="0.00"
+        data-pattern="\d| |,|\."
+        data-min="0"
+        data-max="{{ filter.range_max | money_without_currency }}"
+      >
+      <span class="price-currency">{{ cart.currency.symbol }}</span>
+    </div>
 
-<div class="field">
-  <input
-    class="field__input"
-    name="{{ filter.min_value.param_name }}"
-    id="{{ id_prefix }}{{ filter.label | escape }}-GTE"
-    {%- if filter.min_value.value -%}
-      value="{{ filter.min_value.value | money_without_currency }}"
-    {%- endif -%}
-    type="text"
-    inputmode="decimal"
-    placeholder="0"
-    data-pattern="\d| |,|\."
-    data-min="0"
-    data-max="{{ filter.range_max | money_without_currency }}"
-  >
-  <label class="field__label" for="{{ id_prefix }}{{ filter.label | escape }}-GTE">
-    {{- 'products.facets.from' | t -}}
-  </label>
-</div>
+    <div class="field price-field">
+      <input
+        class="field__input price-input"
+        name="{{ filter.max_value.param_name }}"
+        id="{{ id_prefix }}{{ filter.label | escape }}-LTE"
+        value="{{ filter.max_value.value | default: filter.range_max | money_without_currency }}"
+        type="text"
+        inputmode="decimal"
+        placeholder="{{ filter.range_max | money_without_currency }}"
+        data-pattern="\d| |,|\."
+        data-min="0"
+        data-max="{{ filter.range_max | money_without_currency }}"
+      >
+      <span class="price-currency">{{ cart.currency.symbol }}</span>
+    </div>
+  </div>
 
-{%- if filter_type != 'vertical' -%}
-  <span class="field-currency">{{ cart.currency.symbol }}</span>
-{%- endif -%}
+  <div class="price-slider-container">
+    <div class="price-slider">
+      <div class="price-slider-track"></div>
+      <div class="price-slider-range"></div>
+      <div class="price-slider-thumb price-slider-thumb-min"></div>
+      <div class="price-slider-thumb price-slider-thumb-max"></div>
+    </div>
+  </div>
 
-<div class="field">
-  <input
-    class="field__input"
-    name="{{ filter.max_value.param_name }}"
-    id="{{ id_prefix }}{{ filter.label | escape }}-LTE"
-    {%- if filter.max_value.value -%}
-      value="{{ filter.max_value.value | money_without_currency }}"
-    {%- endif -%}
-    type="text"
-    inputmode="decimal"
-    placeholder="{{ filter.range_max | money_without_currency }}"
-    data-pattern="\d| |,|\."
-    data-min="0"
-    data-max="{{ filter.range_max | money_without_currency }}"
-  >
-  <label class="field__label" for="{{ id_prefix }}{{ filter.label | escape }}-LTE">
-    {{- 'products.facets.to' | t -}}
-  </label>
+  <div class="discount-filter">
+    <label for="discount-filter-checkbox" class="discount-filter-label">
+      <span class="discount-filter-text">SHOW ONLY DISCOUNTED PRODUCTS</span>
+      <input
+        type="checkbox"
+        id="discount-filter-checkbox"
+        name="filter.v.price.discount"
+        class="discount-filter-checkbox"
+        value="true"
+      >
+    </label>
+  </div>
 </div>
