@@ -862,12 +862,13 @@
     {% assign arr_values = metafield | last %}  
 
     <li>
-      <strong>{{ key | replace: "_", " " | capitalize }}:</strong>
+      <strong>{{ key | replace: "_", " " | upcase }}:</strong>
 
       {% if arr_values.value[0] != blank %}
-        {% for item in arr_values.value %}
-          {{ item.name }}{% unless forloop.last %}, {% endunless %}
-        {% endfor %}
+         {% assign items = arr_values.value | map: 'name' | join: ', ' %}
+                    <span class="text-[#3D3D3D] text-sm">
+                      {{ items }}
+                    </span>
       {% endif %}
     </li>
   {% endfor %}
