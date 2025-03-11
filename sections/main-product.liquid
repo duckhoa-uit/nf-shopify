@@ -856,22 +856,24 @@
           <div class="product-info flex flex-col">
             <h3 class="text-lg font-bold leading-7 mb-4">Parameters</h3>
             <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
+              
               {% comment %} Loop through all metafields in the "features" namespace {% endcomment %}
-  {% for metafield in product.metafields.features %}
-    {% assign key = metafield | first %}   {% comment %} Metafield key (e.g., "gender", "activities") {% endcomment %}
-    {% assign arr_values = metafield | last %}  
-      {% if arr_values.value != blank %}
-          <li class="leading-6">
-            <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">{{ key | replace: "_", " " | upcase }}:</strong>
-            
-             {% assign items = arr_values.value | map: 'name' | join: ', ' %}
-              <span class="text-[#3D3D3D] text-sm">
-                {{ items }}
-              </span>
-         
-          </li>
-       {% endif %}
-  {% endfor %}
+              {% for metafield in product.metafields.features %}
+                {% assign key = metafield | first %}   {% comment %} Metafield key (e.g., "gender", "activities") {% endcomment %}
+                {% assign arr_values = metafield | last %}  
+                  {% if arr_values.value != blank %}
+                      <li class="leading-6">
+                        <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">{{ key | replace: "_", " " | upcase }}:</strong>
+                        
+                         {% assign items = arr_values.value | map: 'name' | join: ', ' %}
+                          <span class="text-[#3D3D3D] text-sm">
+                            {{ items }}
+                          </span>
+                     
+                      </li>
+                   {% endif %}
+              {% endfor %}
+              
               {% comment %}
                 {%- if product.metafields.features.gender.value != blank -%}
                   <li class="leading-6">
