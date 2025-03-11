@@ -860,17 +860,17 @@
   {% for metafield in product.metafields.features %}
     {% assign key = metafield | first %}   {% comment %} Metafield key (e.g., "gender", "activities") {% endcomment %}
     {% assign arr_values = metafield | last %}  
-
-    <li>
-      <strong>{{ key | replace: "_", " " | upcase }}:</strong>
-
       {% if arr_values.value != blank %}
-         {% assign items = arr_values.value | map: 'name' | join: ', ' %}
-                    <span class="text-[#3D3D3D] text-sm">
-                      {{ items }}
-                    </span>
-      {% endif %}
-    </li>
+          <li class="leading-6">
+            <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">{{ key | replace: "_", " " | upcase }}:</strong>
+            
+             {% assign items = arr_values.value | map: 'name' | join: ', ' %}
+              <span class="text-[#3D3D3D] text-sm">
+                {{ items }}
+              </span>
+         
+          </li>
+       {% endif %}
   {% endfor %}
               {% comment %}
                 {%- if product.metafields.features.gender.value != blank -%}
