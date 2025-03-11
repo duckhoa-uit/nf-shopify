@@ -39,14 +39,14 @@
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {%- paginate collection.products by section.settings.products_per_page -%}
     {% comment %} Collection Header with Title and Description Only {% endcomment %}
-    <div class="collection-header page-width">
+    {% comment %} <div class="collection-header page-width">
       <h1 class="collection-title">{{ collection.title }}</h1>
       <div class="collection-description">
         {% if collection.description != blank %}
           {{ collection.description }}
         {% endif %}
       </div>
-    </div>
+    </div> {% endcomment %}
 
     {% comment %} Scrollable Child Collections {% endcomment %}
     {%- if collection.collections != blank and collection.collections.size > 0 -%}
