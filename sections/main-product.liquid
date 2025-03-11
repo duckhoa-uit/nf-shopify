@@ -851,28 +851,46 @@
           </div>
         </div>
 
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
           <div class="product-info flex flex-col">
             <h3 class="text-lg font-bold leading-7 mb-4">Parameters</h3>
             <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
-              {%- if product.metafields.features.gender.value != blank -%}
-                <li class="leading-6">
-                  <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">Gender:</strong>
-                  {% assign items = product.metafields.features.gender.value | map: 'name' | join: ', ' %}
-                  <span class="text-[#3D3D3D] text-sm">
-                    {{ items }}
-                  </span>
-                </li>
-              {%- endif %}
-              {%- if product.metafields.features.activities.value != blank -%}
-                <li class="leading-6">
-                  <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">Activity:</strong>
-                  {% assign items = product.metafields.features.activities.value | map: 'name' | join: ', ' %}
-                  <span class="text-[#3D3D3D] text-sm">
-                    {{ items }}
-                  </span>
-                </li>
-              {%- endif %}
+              {% comment %} Loop through all metafields in the "features" namespace {% endcomment %}
+  {% for metafield in product.metafields.features %}
+    {% assign key = metafield | first %}   {% comment %} Metafield key (e.g., "gender", "activities") {% endcomment %}
+    {% assign arr_values = metafield | last %}  
+
+    <li>
+      <strong>{{ key | replace: "_", " " | capitalize }}:</strong>
+
+      {% if arr_values.value[0] != blank %}
+        {% for item in arr_values.value %}
+          {{ item.name }}{% unless forloop.last %}, {% endunless %}
+        {% endfor %}
+      {% endif %}
+    </li>
+  {% endfor %}
+              {% comment %}
+                {%- if product.metafields.features.gender.value != blank -%}
+                  <li class="leading-6">
+                    <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">Gender:</strong>
+                    {% assign items = product.metafields.features.gender.value | map: 'name' | join: ', ' %}
+                    <span class="text-[#3D3D3D] text-sm">
+                      {{ items }}
+                    </span>
+                  </li>
+                {%- endif %}
+                {%- if product.metafields.features.activities.value != blank -%}
+                  <li class="leading-6">
+                    <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">Activity:</strong>
+                    {% assign items = product.metafields.features.activities.value | map: 'name' | join: ', ' %}
+                    <span class="text-[#3D3D3D] text-sm">
+                      {{ items }}
+                    </span>
+                  </li>
+                {%- endif %}
+              {% endcomment %}
             </ul>
           </div>
           <div class="product-info flex flex-col">
