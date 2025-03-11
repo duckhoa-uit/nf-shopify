@@ -864,7 +864,7 @@
     <li>
       <strong>{{ key | replace: "_", " " | upcase }}:</strong>
 
-      {% if arr_values.value[0] != blank %}
+      {% if arr_values.value != blank %}
          {% assign items = arr_values.value | map: 'name' | join: ', ' %}
                     <span class="text-[#3D3D3D] text-sm">
                       {{ items }}
