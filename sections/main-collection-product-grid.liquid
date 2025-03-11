@@ -39,14 +39,16 @@
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {%- paginate collection.products by section.settings.products_per_page -%}
     {% comment %} Collection Header with Title and Description Only {% endcomment %}
-    {% comment %} <div class="collection-header page-width">
-      <h1 class="collection-title">{{ collection.title }}</h1>
-      <div class="collection-description">
-        {% if collection.description != blank %}
-          {{ collection.description }}
-        {% endif %}
+    {% comment %}
+      <div class="collection-header page-width">
+        <h1 class="collection-title">{{ collection.title }}</h1>
+        <div class="collection-description">
+          {% if collection.description != blank %}
+            {{ collection.description }}
+          {% endif %}
+        </div>
       </div>
-    </div> {% endcomment %}
+    {% endcomment %}
 
     {% comment %} Scrollable Child Collections {% endcomment %}
     {%- if collection.collections != blank and collection.collections.size > 0 -%}
@@ -146,35 +148,6 @@
         {%- endif -%}
       </div>
 
-      <div class="active-filters">
-        {%- if section.settings.enable_filtering -%}
-          <div id="active-filters" class="active-filters-list">
-            {%- if collection.filters.size > 0 -%}
-              {%- for filter in collection.filters -%}
-                {%- if filter.active_values.size > 0 -%}
-                  {%- for active_value in filter.active_values -%}
-                    <div class="active-filter-tag">
-                      <span>{{ filter.label }}: {{ active_value.label }}</span>
-                      <a
-                        href="{{ active_value.url_to_remove }}"
-                        class="active-filter-remove"
-                        aria-label="{{ 'products.facets.remove_filter' | t: value: active_value.label }}"
-                      >
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M1 1L11 11M1 11L11 1" stroke="#0F0F0F" stroke-width="1"/>
-                        </svg>
-                      </a>
-                    </div>
-                  {%- endfor -%}
-                {%- endif -%}
-              {%- endfor -%}
-              <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="clear-all-filters">
-                {{- 'products.facets.clear_all' | t -}}
-              </a>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
-      </div>
 
       <div class="collection-container">
         <!-- Filter Sidebar -->
@@ -228,7 +201,7 @@
                 <ul
                   id="product-grid"
                   data-id="{{ section.id }}"
-                  class="product-grid grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop"
+                  class="dawn-grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop"
                 >
                   {% assign skip_card_product_styles = false %}
                   {%- for product in collection.products -%}

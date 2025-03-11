@@ -8,10 +8,13 @@
 {%- liquid
   # Simulate metaobject filters since they are created in admin
   assign size_filter = 'Size'
-  assign size_values = 'XS,S,M,L,XL,XXL' | split: ','
+  assign size_values = shop.metaobjects['shopify--size'].values
 
   assign color_filter = 'Color'
-  assign color_values = 'Black,Blue,Green,Red,White,Yellow' | split: ','
+  assign color_values = shop.metaobjects['shopify--color-pattern'].values
+
+  assign activities_filter = 'Activities'
+  assign activities_values = shop.metaobjects.product_feature.activities.values
 
   assign material_filter = 'Material'
   assign material_values = 'Cotton,Polyester,Nylon,Wool,Down' | split: ','
@@ -22,6 +25,10 @@
   assign activity_filter = 'Activity'
   assign activity_values = 'Hiking,Skiing,Running,Climbing,Casual' | split: ','
 -%}
+
+<script>console.log({{ shop.metaobjects.product_feature_preset | json }});</script>
+<script>console.log({{ shop.metaobjects.product_feature_preset.pink | json }});</script>
+
 
 {% comment %} Size Filter {% endcomment %}
 <details
@@ -39,25 +46,19 @@
     </div>
   </summary>
   <div class="parent-display {% if filter_type == 'horizontal' %}facets__display{% else %}facets__display-vertical{% endif %}">
-    <div class="{% if filter_type == 'horizontal' %}facets__header{% else %}facets__header-vertical{% endif %}">
-      <span class="facets__selected">{{ size_values.size }} options available</span>
-    </div>
     <fieldset class="facets-wrap parent-wrap">
       <ul class="facets-layout facets-layout-list facets__list list-unstyled" role="list">
-        {%- for value in size_values -%}
+        {%- for size in size_values -%}
+          {%- assign product_count = size.referenced_by | size -%}
           <li class="list-menu__item facets__item">
             <label class="facets__label">
               <input
                 type="checkbox"
                 name="filter.v.meta.size"
-                value="{{ value | handleize }}"
+                value="{{ size.label | handleize }}"
                 id="Filter-size-{{ forloop.index }}"
               >
-              {{- 'square.svg' | inline_asset_content -}}
-              <div class="svg-wrapper">
-                {{- 'icon-checkmark.svg' | inline_asset_content -}}
-              </div>
-              <span class="facet-checkbox__text">{{ value }}</span>
+              <span class="facet-checkbox__text">{{ size.label }} ({{ product_count }})</span>
             </label>
           </li>
         {%- endfor -%}
@@ -79,32 +80,51 @@
     </div>
   </summary>
   <div class="parent-display {% if filter_type == 'horizontal' %}facets__display{% else %}facets__display-vertical{% endif %}">
-    <div class="{% if filter_type == 'horizontal' %}facets__header{% else %}facets__header-vertical{% endif %}">
-      <span class="facets__selected">{{ color_values.size }} options available</span>
-      {%- if filter_type != 'vertical' -%}
-        <facet-remove>
-          <a href="#" class="facets__reset link underlined-link">
-            {{ 'products.facets.reset' | t }}
-          </a>
-        </facet-remove>
-      {%- endif -%}
-    </div>
     <fieldset class="facets-wrap parent-wrap">
       <ul class="facets-layout facets-layout-list facets__list list-unstyled" role="list">
-        {%- for value in color_values -%}
+        {%- for color in color_values -%}
           <li class="list-menu__item facets__item">
             <label class="facets__label">
               <input
                 type="checkbox"
-                name="filter.v.meta.color"
-                value="{{ value | handleize }}"
+                name="filter.v.meta.shopify--color-pattern"
+                value="{{ color.label | handleize }}"
                 id="Filter-color-{{ forloop.index }}"
               >
-              {{- 'square.svg' | inline_asset_content -}}
-              <div class="svg-wrapper">
-                {{- 'icon-checkmark.svg' | inline_asset_content -}}
-              </div>
-              <span class="facet-checkbox__text">{{ value }}</span>
+              <span class="facet-checkbox__text">{{ color.label }}</span>
+            </label>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </fieldset>
+  </div>
+</details>
+
+{% comment %} Color Filter {% endcomment %}
+<details
+  id="Details-metaobject-activities-{{ section.id }}"
+  class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
+  data-index="activities"
+>
+  <summary class="facets__summary caption-large focus-offset">
+    <div>
+      <span>{{ activities_filter }}</span>
+      {{- 'icon-caret.svg' | inline_asset_content -}}
+    </div>
+  </summary>
+  <div class="parent-display {% if filter_type == 'horizontal' %}facets__display{% else %}facets__display-vertical{% endif %}">
+    <fieldset class="facets-wrap parent-wrap">
+      <ul class="facets-layout facets-layout-list facets__list list-unstyled" role="list">
+        {%- for activity in activities_values -%}
+          <li class="list-menu__item facets__item">
+            <label class="facets__label">
+              <input
+                type="checkbox"
+                name="filter.v.meta.features.activities"
+                value="{{ activity | handleize }}"
+                id="Filter-activities-{{ forloop.index }}"
+              >
+              <span class="facet-checkbox__text">{{ activity }}</span>
             </label>
           </li>
         {%- endfor -%}
@@ -126,16 +146,6 @@
     </div>
   </summary>
   <div class="parent-display {% if filter_type == 'horizontal' %}facets__display{% else %}facets__display-vertical{% endif %}">
-    <div class="{% if filter_type == 'horizontal' %}facets__header{% else %}facets__header-vertical{% endif %}">
-      <span class="facets__selected">{{ material_values.size }} options available</span>
-      {%- if filter_type != 'vertical' -%}
-        <facet-remove>
-          <a href="#" class="facets__reset link underlined-link">
-            {{ 'products.facets.reset' | t }}
-          </a>
-        </facet-remove>
-      {%- endif -%}
-    </div>
     <fieldset class="facets-wrap parent-wrap">
       <ul class="facets-layout facets-layout-list facets__list list-unstyled" role="list">
         {%- for value in material_values -%}
@@ -147,10 +157,6 @@
                 value="{{ value | handleize }}"
                 id="Filter-material-{{ forloop.index }}"
               >
-              {{- 'square.svg' | inline_asset_content -}}
-              <div class="svg-wrapper">
-                {{- 'icon-checkmark.svg' | inline_asset_content -}}
-              </div>
               <span class="facet-checkbox__text">{{ value }}</span>
             </label>
           </li>
@@ -173,16 +179,6 @@
     </div>
   </summary>
   <div class="parent-display {% if filter_type == 'horizontal' %}facets__display{% else %}facets__display-vertical{% endif %}">
-    <div class="{% if filter_type == 'horizontal' %}facets__header{% else %}facets__header-vertical{% endif %}">
-      <span class="facets__selected">{{ features_values.size }} options available</span>
-      {%- if filter_type != 'vertical' -%}
-        <facet-remove>
-          <a href="#" class="facets__reset link underlined-link">
-            {{ 'products.facets.reset' | t }}
-          </a>
-        </facet-remove>
-      {%- endif -%}
-    </div>
     <fieldset class="facets-wrap parent-wrap">
       <ul class="facets-layout facets-layout-list facets__list list-unstyled" role="list">
         {%- for value in features_values -%}
@@ -194,10 +190,6 @@
                 value="{{ value | handleize }}"
                 id="Filter-features-{{ forloop.index }}"
               >
-              {{- 'square.svg' | inline_asset_content -}}
-              <div class="svg-wrapper">
-                {{- 'icon-checkmark.svg' | inline_asset_content -}}
-              </div>
               <span class="facet-checkbox__text">{{ value }}</span>
             </label>
           </li>
@@ -220,16 +212,6 @@
     </div>
   </summary>
   <div class="parent-display {% if filter_type == 'horizontal' %}facets__display{% else %}facets__display-vertical{% endif %}">
-    <div class="{% if filter_type == 'horizontal' %}facets__header{% else %}facets__header-vertical{% endif %}">
-      <span class="facets__selected">{{ activity_values.size }} options available</span>
-      {%- if filter_type != 'vertical' -%}
-        <facet-remove>
-          <a href="#" class="facets__reset link underlined-link">
-            {{ 'products.facets.reset' | t }}
-          </a>
-        </facet-remove>
-      {%- endif -%}
-    </div>
     <fieldset class="facets-wrap parent-wrap">
       <ul class="facets-layout facets-layout-list facets__list list-unstyled" role="list">
         {%- for value in activity_values -%}
@@ -241,10 +223,6 @@
                 value="{{ value | handleize }}"
                 id="Filter-activity-{{ forloop.index }}"
               >
-              {{- 'square.svg' | inline_asset_content -}}
-              <div class="svg-wrapper">
-                {{- 'icon-checkmark.svg' | inline_asset_content -}}
-              </div>
               <span class="facet-checkbox__text">{{ value }}</span>
             </label>
           </li>
