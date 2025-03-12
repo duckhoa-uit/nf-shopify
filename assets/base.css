@@ -1856,10 +1856,30 @@ details[open] > .share-button__fallback {
   resize: none;
 }
 
+input[type="checkbox"]:focus {
+  outline: none;
+}
+
 input[type="checkbox"] {
   display: inline-block;
   width: auto;
-  margin-right: 0.5rem;
+  border: 1px solid #e9e9e9;
+  padding: 0.5rem 0.5rem;
+  position: relative;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 0.1875rem;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #0f0f0f;
+  border-color: #0f0f0f;
+  color: #fff;
+}
+
+input[type="checkbox"]:checked + label a {
+  font-weight: 600;
 }
 
 /* Form global */

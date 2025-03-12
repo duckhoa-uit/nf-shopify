@@ -15,6 +15,7 @@
 {{ 'component-show-more.css' | asset_url | stylesheet_tag }}
 {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
 {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
   assign sort_by = results.sort_by | default: results.default_sort_by
@@ -135,17 +136,13 @@
             <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
 
             {% comment %} Metaobject-based filters {% endcomment %}
-            {% render 'metaobject-filters' %}
+            {% comment %} {% render 'metaobject-filters' %} {% endcomment %}
 
             <script>
-              console.log({{ results | json }});
+              console.log({{ results.filters | first| json }});
             </script>
             {% comment %} Filters for both horizontal and vertical filter {% endcomment %}
             {%- for filter in results.filters -%}
-              <script>
-                console.log({{ filter | json }});
-              </script>
-
               {% liquid
                 assign total_active_values = total_active_values | plus: filter.active_values.size
                 assign presentation = filter.presentation | default: default_presentation
@@ -163,32 +160,24 @@
                 {% when 'boolean', 'list' %}
                   <details
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
-                    class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
+                    class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter accordion"
                     data-index="{{ forloop.index }}"
                     {% if filter_type == 'vertical' and forloop.index == 1 %}
                       open
                     {% endif %}
                   >
-                    <summary
-                      class="facets__summary caption-large focus-offset"
-                      aria-label="{{ filter.label | escape }} ({{ 'products.facets.filters_selected.one' | t: count: filter.active_values.size }})"
-                    >
-                      <div>
-                        <span class="facets__summary-label">
+                    <summary class="py-4">
+                      <div class="summary__title">
+                        <h2 class="h4 accordion__title inline-richtext">
                           {{- filter.label | escape }}
                           {%- if filter_type == 'vertical' -%}
                             <span class="facets__selected{% if filter.active_values.size == 0 %} hidden{% endif %}">
                               ({{ filter.active_values.size }})</span
                             >
                           {%- endif -%}
-                        </span>
-                        {%- if filter_type == 'vertical' and filter.operator == 'AND' -%}
-                          <span class="facets__and-helptext">
-                            {{ 'products.facets.filter_and_operator_subtitle' | t }}
-                          </span>
-                        {%- endif -%}
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </h2>
                       </div>
+                      {{- 'icon-caret.svg' | inline_asset_content -}}
                     </summary>
                     <div
                       id="Facet-{{ forloop.index }}-{{ section.id }}"
@@ -288,7 +277,7 @@
                                     {% endif %}
                                   >
 
-                                  {%- if presentation == 'image' -%}
+                                  {% comment %} {%- if presentation == 'image' -%}
                                     <div class="facets__image-wrapper">
                                       {%- if value.image -%}
                                         {{
@@ -304,7 +293,7 @@
                                     <div class="svg-wrapper">
                                       {{- 'icon-checkmark.svg' | inline_asset_content -}}
                                     </div>
-                                  {%- endif -%}
+                                  {%- endif -%} {% endcomment %}
 
                                   {{ text_value }}
                                 </label>
@@ -334,17 +323,17 @@
                 {% when 'price_range' %}
                   <details
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
-                    class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
+                    class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter accordion"
                     data-index="{{ forloop.index }}"
                     {% if filter_type == 'vertical' and forloop.index == 1 %}
                       open
                     {% endif %}
                   >
-                    <summary class="facets__summary caption-large focus-offset">
-                      <div>
-                        <span>{{ filter.label | escape }}</span>
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                    <summary class="py-4">
+                      <div class="summary__title">
+                        <h2 class="h4 accordion__title inline-richtext">{{ filter.label | escape }}</h2>
                       </div>
+                      {{- 'icon-caret.svg' | inline_asset_content -}}
                     </summary>
                     <div
                       id="Facet-{{ forloop.index }}-{{ section.id }}"
@@ -659,7 +648,7 @@
                                       {% endif %}
                                     >
 
-                                    {%- if presentation == 'image' -%}
+                                    {% comment %} {%- if presentation == 'image' -%}
                                       <div class="facets__image-wrapper">
                                         {%- if value.image -%}
                                           {{
@@ -673,7 +662,7 @@
                                       <span class="mobile-facets__highlight"></span>
                                       {{- 'square.svg' | inline_asset_content -}}
                                       {{- 'icon-checkmark.svg' | inline_asset_content -}}
-                                    {%- endif %}
+                                    {%- endif %} {% endcomment %}
 
                                     {{ text_value }}
                                   </label>
