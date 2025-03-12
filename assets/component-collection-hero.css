@@ -21,6 +21,9 @@
 
 .collection-hero__text-wrapper {
   flex-basis: 100%;
+  display: flex;
+  align-items: flex-end;
+  margin-top: 1.5rem;
 }
 
 @media screen and (min-width: 750px) {
@@ -36,28 +39,24 @@
 }
 
 .collection-hero__title {
-  margin: 2.5rem 0;
-  font-family: "Archivo SemiExpanded", sans-serif;
   font-weight: 800;
-  font-size: 32px;
-  line-height: 1em;
+  font-size: 2rem;
+  line-height: 1.875rem;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  color: #0f0f0f;
+  margin-right: 0.5rem;
 }
 
 .collection-hero__title + .collection-hero__description {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
   font-size: 1rem;
-  line-height: calc(1 + 0.5 / var(--font-body-scale));
+  color: #4d4d4d;
+  line-height: 1.3125rem;
 }
 
 @media screen and (min-width: 750px) {
-  .collection-hero__title + .collection-hero__description {
+  /* .collection-hero__title + .collection-hero__description {
     font-size: 1.8rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
+  } */
 
   .collection-hero__description {
     max-width: 66.67%;
