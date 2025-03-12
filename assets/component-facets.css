@@ -410,7 +410,50 @@
   align-items: center;
 }
 
-/* Price currency */
+/* Price filter styles */
+.facets__price {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Price inputs container */
+.price-filter-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.price-inputs-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+.price-field {
+  position: relative;
+  flex: 1;
+}
+
+.price-input {
+  width: 100%;
+  height: 40px;
+  padding: 0.8rem 2rem 0.8rem 0.8rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  font-size: 1rem;
+  text-align: right;
+  font-weight: 500;
+  color: #0f0f0f;
+  background-color: #fff;
+}
+
+.price-input:focus {
+  outline: none;
+  border-color: #0f0f0f;
+}
+
 .price-currency {
   position: absolute;
   right: 0.8rem;
@@ -420,4 +463,107 @@
   font-weight: 500;
   color: #0f0f0f;
   pointer-events: none;
+}
+
+/* Price Slider */
+.price-slider-container {
+  width: 100%;
+  padding: 0 0.5rem;
+  margin: 1rem 0;
+}
+
+.price-slider {
+  position: relative;
+  height: 16px;
+  width: 100%;
+}
+
+.price-slider-track {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 2px;
+  background-color: #e0e0e0;
+}
+
+.price-slider-range {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2px;
+  background-color: #ec0009;
+  z-index: 1;
+}
+
+.price-slider-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #0f0f0f;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+.price-slider-thumb:hover {
+  transform: translateY(-50%) scale(1.2);
+}
+
+.price-slider-thumb-min {
+  left: 0;
+}
+
+.price-slider-thumb-max {
+  right: 0;
+}
+
+/* Discount filter */
+.discount-filter {
+  width: 100%;
+}
+
+.discount-filter-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.discount-filter-text {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #0f0f0f;
+}
+
+.discount-filter-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+  position: relative;
+  background-color: #fff;
+  margin: 0;
+}
+
+.discount-filter-checkbox:checked {
+  border-color: #0f0f0f;
+}
+
+.discount-filter-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #0f0f0f;
 }
