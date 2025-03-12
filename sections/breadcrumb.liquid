@@ -1,16 +1,22 @@
+{{ 'component-breadcrumb.css' | asset_url | stylesheet_tag }}
+
 <div class="breadcrumb-container page-width">
   <nav class="breadcrumb" role="navigation" aria-label="breadcrumbs">
     <ol class="breadcrumb__list">
       <li class="breadcrumb__back-button">
-        <a href="javascript:history.back()" aria-label="Go back" class="breadcrumb__link text-[#0F0F0F] flex items-center gap-2">
+        <a
+          href="javascript:history.back()"
+          aria-label="Go back"
+          class="breadcrumb__link text-[#0F0F0F] flex items-center gap-2"
+        >
           <span class="svg-wrapper size-3 rotate-180">{{ 'icon-arrow.svg' | inline_asset_content }}</span>
-          <span>Back</span>
+          <span>{{ section.settings.back_text }}</span>
         </a>
         <span class="breadcrumb__divider">|</span>
       </li>
 
       <li class="breadcrumb__item">
-        <a class="breadcrumb__link" href="{{ routes.root_url }}">Home</a>
+        <a class="breadcrumb__link" href="{{ routes.root_url }}">{{ section.settings.home_text }}</a>
         <span class="breadcrumb__divider" aria-hidden="true">›</span>
       </li>
 
@@ -86,6 +92,51 @@
   </nav>
 </div>
 
+{% schema %}
+{
+  "name": "Breadcrumb",
+  "settings": [
+    {
+      "type": "text",
+      "id": "back_text",
+      "label": "Back button text",
+      "default": "Back"
+    },
+    {
+      "type": "text",
+      "id": "home_text",
+      "label": "Home link text",
+      "default": "Home"
+    },
+    {
+      "type": "select",
+      "id": "divider_style",
+      "label": "Divider style",
+      "options": [
+        {
+          "value": "arrow",
+          "label": "Arrow (›)"
+        },
+        {
+          "value": "slash",
+          "label": "Slash (/)"
+        },
+        {
+          "value": "bullet",
+          "label": "Bullet (•)"
+        }
+      ],
+      "default": "arrow"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Breadcrumb"
+    }
+  ]
+}
+{% endschema %}
+
 <style>
   .breadcrumb-container {
     margin-bottom: 1.5rem;
@@ -114,10 +165,6 @@
     align-items: center;
   }
 
-  .breadcrumb__back-button svg {
-    /* margin-right: 0.5rem; */
-  }
-
   .breadcrumb__divider {
     color: var(--color-foreground-30);
     margin: 0 1rem;
@@ -136,8 +183,5 @@
   .breadcrumb__divider {
     margin: 0 0.5rem;
     color: #999;
-  }
-
-  .breadcrumb__item--current .breadcrumb__text {
   }
 </style>
