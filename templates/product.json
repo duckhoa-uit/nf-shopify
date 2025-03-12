@@ -9,6 +9,14 @@
  */
 {
   "sections": {
+    "breadcrumb_xxkgrk": {
+      "type": "breadcrumb",
+      "settings": {
+        "back_text": "Back",
+        "home_text": "Home",
+        "divider_style": "arrow"
+      }
+    },
     "main": {
       "type": "main-product",
       "blocks": {
@@ -140,8 +148,15 @@
     },
     "recent-products": {
       "type": "recent-products",
-      "settings": {}
+      "settings": {
+        "heading": "Recently Viewed"
+      }
     }
   },
-  "order": ["main", "related-products", "recent-products"]
+  "order": [
+    "breadcrumb_xxkgrk",
+    "main",
+    "related-products",
+    "recent-products"
+  ]
 }
