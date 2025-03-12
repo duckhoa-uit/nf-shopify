@@ -55,9 +55,14 @@
               </h2>
             {%- endif -%}
             {% comment %} Pills are right below the title for filter type vertical {% endcomment %}
+            {% assign total_active_values = 0 %}
+            {%- for filter in results.filters -%}
+              {% assign filter_active_values = filter.active_values.size %}
+              {% assign total_active_values = total_active_values | plus: filter_active_values %}
+            {%- endfor -%}
             {%- if filter_type == 'vertical' -%}
               <div class="active-facets active-facets-desktop">
-                <div class="active-facets-vertical-filter">
+                <div class="active-facets-vertical-filter mb-4">
                   {%- unless results.filters == empty -%}
                     <h2
                       class="facets__heading facets__heading--vertical "
@@ -76,21 +81,15 @@
                         {%- for active_value in filter.active_values -%}
                           <facet-remove>
                             <div class="active-filter-tag">
-                              <span>{{ filter.label }}: {{ active_value.label }}</span>
+                              <span>{{ active_value.label }}</span>
                               <a
                                 href="{{ active_value.url_to_remove }}"
                                 class="active-filter-remove"
                                 aria-label="{{ 'products.facets.remove_filter' | t: value: active_value.label }}"
                               >
-                                <svg
-                                  width="12"
-                                  height="12"
-                                  viewBox="0 0 12 12"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path d="M1 1L11 11M1 11L11 1" stroke="#0F0F0F" stroke-width="1"/>
-                                </svg>
+                                <span class="svg-wrapper size-3">
+                                  {{- 'icon-close.svg' | inline_asset_content -}}
+                                </span>
                               </a>
                             </div>
                           </facet-remove>
@@ -109,15 +108,9 @@
                                   class="active-filter-remove"
                                   aria-label="{{ 'products.facets.remove_filter' | t: value: filter.label }}"
                                 >
-                                  <svg
-                                    width="12"
-                                    height="12"
-                                    viewBox="0 0 12 12"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path d="M1 1L11 11M1 11L11 1" stroke="#0F0F0F" stroke-width="1"/>
-                                  </svg>
+                                  <span class="svg-wrapper size-3">
+                                    {{- 'icon-close.svg' | inline_asset_content -}}
+                                  </span>
                                 </a>
                               </div>
                             </facet-remove>
@@ -135,12 +128,6 @@
 
             <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
 
-            {% comment %} Metaobject-based filters {% endcomment %}
-            {% comment %} {% render 'metaobject-filters' %} {% endcomment %}
-
-            <script>
-              console.log({{ results.filters | first| json }});
-            </script>
             {% comment %} Filters for both horizontal and vertical filter {% endcomment %}
             {%- for filter in results.filters -%}
               {% liquid
@@ -168,13 +155,15 @@
                   >
                     <summary class="py-4">
                       <div class="summary__title">
-                        <h2 class="h4 accordion__title inline-richtext">
+                        <h2 class="h4 accordion__title inline-richtext uppercase">
                           {{- filter.label | escape }}
-                          {%- if filter_type == 'vertical' -%}
-                            <span class="facets__selected{% if filter.active_values.size == 0 %} hidden{% endif %}">
-                              ({{ filter.active_values.size }})</span
-                            >
-                          {%- endif -%}
+                          {% comment %}
+                            {%- if filter_type == 'vertical' -%}
+                              <span class="facets__selected{% if filter.active_values.size == 0 %} hidden{% endif %}">
+                                ({{ filter.active_values.size }})</span
+                              >
+                            {%- endif -%}
+                          {% endcomment %}
                         </h2>
                       </div>
                       {{- 'icon-caret.svg' | inline_asset_content -}}
@@ -202,7 +191,7 @@
                           </facet-remove>
                         </div>
                       {%- endif -%}
-                      <fieldset class="facets-wrap parent-wrap {% if filter_type == 'vertical' %} facets-wrap-vertical{% endif %}">
+                      <fieldset class="facets-wrap parent-wrap mb-5 {% if filter_type == 'vertical' %} facets-wrap-vertical{% endif %}">
                         <legend class="visually-hidden">{{ filter.label | escape }}</legend>
                         {%- liquid
                           assign sorted_values = filter.values
@@ -214,7 +203,7 @@
                           endif
                         -%}
                         <ul
-                          class="{{ visual_layout_class }}{% if filter_type == 'vertical' %} facets__list--vertical{% else %} facets__list{% endif %} list-unstyled"
+                          class="{{ visual_layout_class }}{% if filter_type == 'vertical' %} facets__list--vertical flex flex-col space-y-[0.625rem]{% else %} facets__list{% endif %} list-unstyled"
                           role="list"
                         >
                           {%- for value in sorted_values -%}
@@ -226,12 +215,14 @@
                               endif
                             %}
                             {%- capture label_class -%}
-                            facets__label facet-checkbox{% if is_disabled %} disabled{% endif %}{% if value.active %} active{% endif %}
+                            w-full flex items-center facets__label facet-checkbox{% if is_disabled %} disabled{% endif %}{% if value.active %} active{% endif %}
                             {%- endcapture -%}
 
                             {%- capture text_value -%}
-                              <span class="facet-checkbox__text" aria-hidden="true">
-                                <span class="facet-checkbox__text-label">{{- value.label | escape }}</span> ({{- value.count -}})
+                              <span class="facet-checkbox__text w-full flex items-center justify-between" aria-hidden="true">
+                                <div class="facet-checkbox__text-label text-[0.9375rem] text-foreground leading-[1.125rem] {% if value.active %} font-semibold{% endif %}">{{- value.label | escape }}</div>
+                                <div class="text-[#656666] text-[0.9375rem] font-normal text-right leading-[1.125rem]">
+                                ({{- value.count -}})</div>
                               </span>
                               <span class="visually-hidden">
                                 {{- value.label | escape }} (
@@ -244,7 +235,7 @@
                               </span>
                             {%- endcapture -%}
 
-                            <li class="list-menu__item facets__item{% if forloop.index > show_more_number and filter_type == 'vertical' %} show-more-item hidden{% endif %}">
+                            <li class="list-menu__item facets__item w-full leading-5 {% if forloop.index > show_more_number and filter_type == 'vertical' %} show-more-item hidden{% endif %}">
                               {%- if presentation == 'swatch' -%}
                                 <div class="{{ label_class }}">
                                   <div class="swatch-input-wrapper">
@@ -266,6 +257,7 @@
                                 <label for="{{ input_id }}" class="{{ label_class }}">
                                   <input
                                     type="checkbox"
+                                    class="mr-2"
                                     name="{{ value.param_name }}"
                                     value="{{ value.value }}"
                                     id="{{ input_id }}"
@@ -277,23 +269,25 @@
                                     {% endif %}
                                   >
 
-                                  {% comment %} {%- if presentation == 'image' -%}
-                                    <div class="facets__image-wrapper">
-                                      {%- if value.image -%}
-                                        {{
-                                          value.image
-                                          | image_url: width: 300
-                                          | image_tag: class: 'facets__image', alt: value.alt
-                                        }}
-                                      {%- endif -%}
-                                    </div>
-                                  {%- else -%}
-                                    {{- 'square.svg' | inline_asset_content -}}
+                                  {% comment %}
+                                    {%- if presentation == 'image' -%}
+                                      <div class="facets__image-wrapper">
+                                        {%- if value.image -%}
+                                          {{
+                                            value.image
+                                            | image_url: width: 300
+                                            | image_tag: class: 'facets__image', alt: value.alt
+                                          }}
+                                        {%- endif -%}
+                                      </div>
+                                    {%- else -%}
+                                      {{- 'square.svg' | inline_asset_content -}}
 
-                                    <div class="svg-wrapper">
-                                      {{- 'icon-checkmark.svg' | inline_asset_content -}}
-                                    </div>
-                                  {%- endif -%} {% endcomment %}
+                                      <div class="svg-wrapper">
+                                        {{- 'icon-checkmark.svg' | inline_asset_content -}}
+                                      </div>
+                                    {%- endif -%}
+                                  {% endcomment %}
 
                                   {{ text_value }}
                                 </label>
@@ -340,10 +334,6 @@
                       class="{% if filter_type == 'horizontal' %}facets__display{% else %}facets__display-vertical{% endif %}"
                     >
                       <div class="{% if filter_type == 'horizontal' %}facets__header{% else %}facets__header-vertical{% endif %}">
-                        {%- assign max_price_amount = filter.range_max | money | strip_html | escape -%}
-                        <span class="facets__selected">
-                          {{- 'products.facets.max_price' | t: price: max_price_amount -}}
-                        </span>
                         {%- if filter_type != 'vertical' -%}
                           <facet-remove>
                             <a href="{{ filter.url_to_remove }}" class="facets__reset link underlined-link">
@@ -600,7 +590,7 @@
                               {%- endcapture -%}
 
                               {%- capture text_value -%}
-                                <span class="facet-checkbox__text" aria-hidden="true">
+                                <span class="facet-checkbox__text w-full" aria-hidden="true">
                                   <span class="facet-checkbox__text-label">{{- value.label | escape }}</span> ({{- value.count -}})
                                 </span>
                                 <span class="visually-hidden">
@@ -648,21 +638,23 @@
                                       {% endif %}
                                     >
 
-                                    {% comment %} {%- if presentation == 'image' -%}
-                                      <div class="facets__image-wrapper">
-                                        {%- if value.image -%}
-                                          {{
-                                            value.image
-                                            | image_url: width: 300
-                                            | image_tag: class: 'facets__image', alt: value.alt
-                                          }}
-                                        {%- endif -%}
-                                      </div>
-                                    {%- else -%}
-                                      <span class="mobile-facets__highlight"></span>
-                                      {{- 'square.svg' | inline_asset_content -}}
-                                      {{- 'icon-checkmark.svg' | inline_asset_content -}}
-                                    {%- endif %} {% endcomment %}
+                                    {% comment %}
+                                      {%- if presentation == 'image' -%}
+                                        <div class="facets__image-wrapper">
+                                          {%- if value.image -%}
+                                            {{
+                                              value.image
+                                              | image_url: width: 300
+                                              | image_tag: class: 'facets__image', alt: value.alt
+                                            }}
+                                          {%- endif -%}
+                                        </div>
+                                      {%- else -%}
+                                        <span class="mobile-facets__highlight"></span>
+                                        {{- 'square.svg' | inline_asset_content -}}
+                                        {{- 'icon-checkmark.svg' | inline_asset_content -}}
+                                      {%- endif %}
+                                    {% endcomment %}
 
                                     {{ text_value }}
                                   </label>
