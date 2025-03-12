@@ -149,7 +149,7 @@
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
                     class="js-filter accordion"
                     data-index="{{ forloop.index }}"
-                    {% if filter_type == 'vertical' and forloop.index == 1 %}
+                    {% if filter_type == 'vertical' and forloop.index == 1 or filter.active_values.size > 0 %}
                       open
                     {% endif %}
                   >
@@ -319,7 +319,7 @@
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
                     class="js-filter accordion"
                     data-index="{{ forloop.index }}"
-                    {% if filter_type == 'vertical' and forloop.index == 1 %}
+                    {% if filter_type == 'vertical' and forloop.index == 1 or filter.active_values.size > 0 %}
                       open
                     {% endif %}
                   >
