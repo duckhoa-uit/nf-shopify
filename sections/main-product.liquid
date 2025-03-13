@@ -40,13 +40,12 @@
 
     /* Northfinder specific styles */
     .northfinder-product-page .product-discount-badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background-color: #e74c3c;
+      background-color: #EC0009;
       color: white;
-      padding: 0.25rem 0.5rem;
-      font-weight: bold;
+      padding: 0.375rem 0.5rem;
+      font-size: 0.875rem;
+      line-height: 1rem;
+      font-weight: 500;
       z-index: 1;
     }
 
@@ -324,20 +323,31 @@
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
-          <!-- Discount badge -->
-          {% if product.compare_at_price > product.price %}
-            <div class="product-discount-badge">
-              -
-              {{-
-                product.compare_at_price
-                | minus: product.price
-                | times: 100.0
-                | divided_by: product.compare_at_price
-                | round
-              -}}
-              %
+          <div class="flex items-center justify-between">
+            <!-- Discount badge -->
+            <div>
+              {% if product.compare_at_price > product.price %}
+                <div class="product-discount-badge">
+                  -
+                  {{-
+                    product.compare_at_price
+                    | minus: product.price
+                    | times: 100.0
+                    | divided_by: product.compare_at_price
+                    | round
+                  -}}
+                  %
+                </div>
+              {% endif %}
             </div>
-          {% endif %}
+            <button
+              type="button"
+              class=" bg-[#F5F5F5] size-10 rounded-full flex items-center justify-center"
+              aria-label="Add to wishlist"
+            >
+              <span class="svg-wrapper size-5">{{ 'icon-heart.svg' | inline_asset_content }}</span>
+            </button>
+          </div>
           {% comment %} TODO: update this meta {% endcomment %}
           <meta itemprop="gtin13" content="8584153431420">
           <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope="">
