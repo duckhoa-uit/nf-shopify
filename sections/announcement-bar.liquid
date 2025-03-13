@@ -31,22 +31,21 @@
       </div>
       <div class="nav_right flex justify-end items-center">
         <div class="flex gap-6 justify-between items-center [&_a]:text-secondary-foreground [&_a]:cursor-pointer">
-
-        <div>
-          <a href="{{ section.settings.category1_link }}">
-            {{- section.settings.category1_text -}}
-          </a>
-        </div>
-        <div>
-          <a href="{{ section.settings.category2_link }}">
-            {{- section.settings.category2_text -}}
-          </a>
-        </div>
-        <div>
-          <a href="{{ section.settings.category3_link }}">
-            {{- section.settings.category3_text -}}
-          </a>
-        </div>
+          {% comment %} <div>
+            <a href="{{ section.settings.category1_link }}">
+              {{- section.settings.category1_text -}}
+            </a>
+          </div>
+          <div>
+            <a href="{{ section.settings.category2_link }}">
+              {{- section.settings.category2_text -}}
+            </a>
+          </div>
+          <div>
+            <a href="{{ section.settings.category3_link }}">
+              {{- section.settings.category3_text -}}
+            </a>
+          </div> {% endcomment %}
           <div>
             <a href="{{ section.settings.blog_link }}">
               {{- section.settings.blog_text -}}
@@ -61,6 +60,12 @@
             <a href="{{ section.settings.faq_link }}">
               {{- section.settings.faq_text -}}
             </a>
+          </div>
+          <div>
+            <a data-auth-trigger="register">Register</a>
+          </div>
+          <div>
+            <a data-auth-trigger="login">Login</a>
           </div>
           <div>
             {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
