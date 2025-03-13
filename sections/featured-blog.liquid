@@ -55,7 +55,7 @@
       </div>
     {%- endunless -%}
 
-    <div class="swiper w-full pb-9{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <div class="swiper w-full{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
       <div
         id="Slider-{{ section.id }}"
         class="swiper-wrapper "
