@@ -15,7 +15,31 @@
     class="mt-3"
     {{ block.shopify_attributes }}
   >
-    {%- for option in product.options_with_values -%}
+    {%- liquid
+      assign sorted_options = ''
+      for option in product.options_with_values
+        if option.name == 'Color'
+          assign sorted_options = sorted_options | append: option.name | append: ','
+        endif
+      endfor
+
+      for option in product.options_with_values
+        if option.name == 'Size'
+          assign sorted_options = sorted_options | append: option.name | append: ','
+        endif
+      endfor
+
+      for option in product.options_with_values
+        unless option.name == 'Color' or option.name == 'Size'
+          assign sorted_options = sorted_options | append: option.name | append: ','
+        endunless
+      endfor
+
+      assign sorted_options = sorted_options | split: ','
+    -%}
+
+    {%- for option_name in sorted_options -%}
+      {%- assign option = product.options_with_values | where: 'name', option_name | first -%}
       {%- liquid
         assign swatch_count = option.values | map: 'swatch' | compact | size
         assign picker_type = block.settings.picker_type
