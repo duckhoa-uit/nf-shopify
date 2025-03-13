@@ -36,26 +36,21 @@
 }
 {% endschema %}
 
-<div class="simple_infobox">
-  <div class="container mx-auto px-4">
-    <div class="flex flex-col md:flex-row items-center justify-between py-8">
-      <div class="left_side md:w-1/2 mb-4 md:mb-0">
-        <h2 class="title text-2xl md:text-3xl font-bold mb-2 text-vscode-descriptionForeground">
-          {{ section.settings.title }}
-        </h2>
-        <p class="infobox_subtitle text-lg md:text-xl text-vscode-descriptionForeground">
-          {{ section.settings.subtitle }}
-        </p>
-      </div>
-
-      <div class="right_side md:w-1/2 text-right">
-        <a
-          href="{{ section.settings.button_url }}"
-          class="button_text inline-block bg-amber-600 text-white px-6 py-3 rounded hover:bg-amber-700 transition-colors"
-        >
-          {{ section.settings.button_text }}
-        </a>
-      </div>
+<div class="simple_infobox bg-[#F5F5F5] py-3 my-1.5">
+  <div class="container mx-auto px-4 hidden md:flex items-center">
+    <div class="flex flex-col items-center text-center flex-1">
+      <h2 class="font-archivo font-medium text-[15px] leading-[1.067em] text-black mb-1">
+        {{ section.settings.title }}
+      </h2>
+      <p class="infobox_subtitle font-archivo text-[13px] leading-[1.077em] text-[#4D4D4D]">
+        {{ section.settings.subtitle }}
+      </p>
     </div>
+    <a
+      href="{{ section.settings.button_url }}"
+      class="button_text inline-flex items-center px-4 py-[10px] border border-[#CCCCCC] rounded-3 text-sm font-medium leading-[0.875rem] uppercase text-[#000] transition-colors hover:border-[#000]"
+    >
+      {{ section.settings.button_text }}
+    </a>
   </div>
 </div>
