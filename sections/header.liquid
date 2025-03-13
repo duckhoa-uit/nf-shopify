@@ -156,8 +156,8 @@
     <div class="header__icons flex items-center">
       {% render 'header-search', input_id: 'Search-In-Modal' %}
 
-      <a href="{{ routes.cart_url }}" class="header__icon px-3 link focus-inset hidden lg:flex">
-        <span class="svg-wrapper size-5">{{ 'icon-currency.svg' | inline_asset_content }}</span>
+      <a href="{{ routes.cart_url }}" class="header__icon link px-3 focus-inset hidden lg:flex ">
+        <span class="svg-wrapper [&_svg]:size-[1.625rem]">{{ 'icon-currency.svg' | inline_asset_content }}</span>
       </a>
 
       <a href="{{ routes.cart_url }}" class="header__icon px-3 link focus-inset hidden lg:flex">
