@@ -97,10 +97,11 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border: 1px solid rgba(var(--color-base-foreground), 0.1);
   background: transparent;
   cursor: pointer;
   transition: all 0.2s ease;
+  margin-left: 1rem;
+  color: #000
 }
 
 .filter-toggle-btn:hover {
@@ -149,12 +150,12 @@
   display: flex;
   grid-column: 2;
   grid-row: 1;
-  padding-left: 2.5rem;
+  padding-left: 1.5625rem;
 }
 
 @media screen and (min-width: 990px) {
   .facet-filters {
-    padding-left: 3rem;
+    padding-left: 1rem;
   }
 }
 
@@ -220,12 +221,13 @@
   background-color: transparent;
   border: 0;
   border-radius: 0;
-  font-size: 1.4rem;
+  font-size: 0.9375rem;
   height: auto;
-  line-height: calc(1 + 0.5 / var(--font-body-scale));
+  line-height: 1rem;
   margin: 0;
   padding-left: 0;
   padding-right: 1.75rem;
+  color: #000
 }
 
 .facet-filters__sort + .icon-caret {
@@ -262,19 +264,21 @@
 }
 
 .facet-filters__sort:focus-visible {
-  outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
-  outline-offset: 1rem;
+  outline: none;
+  /* outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
+  outline-offset: 0.625rem;
   box-shadow:
-    0 0 0 1rem rgb(var(--color-base-background)),
-    0 0 0.2rem 1.2rem rgba(var(--color-base-foreground), 0.3);
+    0 0 0 0.625rem rgb(var(--color-base-background)),
+    0 0 0.125rem 0.75rem rgba(var(--color-base-foreground), 0.3); */
 }
 
 .facet-filters__sort.focused {
-  outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
-  outline-offset: 1rem;
+  outline: none;
+  /* outline: 0.125rem solid rgba(var(--color-base-foreground), 0.5);
+  outline-offset: 0.625rem;
   box-shadow:
-    0 0 0 1rem rgb(var(--color-base-background)),
-    0 0 0.2rem 1.2rem rgba(var(--color-base-foreground), 0.3);
+    0 0 0 0.625rem rgb(var(--color-base-background)),
+    0 0 0.125rem 0.75rem rgba(var(--color-base-foreground), 0.3); */
 }
 
 .facets {
