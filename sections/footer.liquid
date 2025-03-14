@@ -61,7 +61,7 @@
             endif
           -%}
           <div
-            class="footer__blocks-wrapper grid gap-[0.625rem] grid-cols-2 lg:grid-cols-4  {{ footer_grid_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            class="footer__blocks-wrapper grid gap-[0.625rem] grid-cols-1 md:grid-cols-2 lg:grid-cols-4  {{ footer_grid_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
             {% if settings.animations_reveal_on_scroll %}
               data-cascade
             {% endif %}
