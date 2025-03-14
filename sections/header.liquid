@@ -115,7 +115,7 @@
     {%- if request.page_type == 'index' -%}
       <h1 class="header__heading justify-self-start">
     {%- endif -%}
-    <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+    <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset pl-0">
       {%- if settings.logo != blank -%}
         <div class="header__heading-logo-wrapper">
           {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
