@@ -19,17 +19,46 @@
         src="{{ 'BREATHABILITY.svg' | asset_url }}"
         loading="lazy"
       >
+
+      {% capture breathability_json %}{{ product.metafields.features.breathability.value | json }}{% endcapture %}
+      {% assign breathability_name = '' %}
+      {% if breathability_json contains 'extremely high' %}
+        {% assign breathability_name = 'extremely high' %}
+      {% elsif breathability_json contains 'high' %}
+        {% assign breathability_name = 'high' %}
+      {% elsif breathability_json contains 'medium high' %}
+        {% assign breathability_name = 'medium high' %}
+      {% elsif breathability_json contains 'low' %}
+        {% assign breathability_name = 'low' %}
+      {% elsif breathability_json contains 'very low' %}
+        {% assign breathability_name = 'very low' %}
+      {% endif %}
+
+      {% assign breathability_level_map = 0 %}
+      {% if breathability_json contains '"level":' %}
+        {% assign breathability_level_map = product.metafields.features.breathability.value.level %}
+      {% else %}
+        {% case breathability_name %}
+          {% when 'very low' %}{% assign breathability_level_map = 1 %}
+          {% when 'low' %}{% assign breathability_level_map = 2 %}
+          {% when 'medium high' %}{% assign breathability_level_map = 3 %}
+          {% when 'high' %}{% assign breathability_level_map = 4 %}
+          {% when 'extremely high' %}{% assign breathability_level_map = 5 %}
+        {% endcase %}
+      {% endif %}
+
       <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
         Breathability
-        <span class="font-medium">({{ product.metafields.custom.breathability.value.level }}/5)</span>
+        <span class="font-medium">({{ breathability_level_map }}/5)</span>
       </div>
+
       {% capture breathability_descriptions %}
-        {% case product.metafields.custom.breathability.value.level %}
-          {% when 1 %}The clothing is very breathable, over the entire covered area 1
-          {% when 2 %}The clothing is very breathable, over the entire covered area 2
-          {% when 3 %}The clothing is very breathable, over the entire covered area 3
-          {% when 4 %}The clothing is very breathable, over the entire covered area 4
-          {% when 5 %}The clothing is very breathable, over the entire covered area 5
+        {% case breathability_level_map %}
+          {% when 1 %}The material offers minimal breathability, suitable for casual use
+          {% when 2 %}The material provides basic breathability, allowing some air circulation
+          {% when 3 %}The material offers good breathability, ensuring comfortable air flow during activity
+          {% when 4 %}The material delivers excellent breathability with enhanced moisture-wicking properties
+          {% when 5 %}The material features superior breathability, ideal for high-intensity activities
           {% else %}No breathability information available
         {% endcase %}
       {% endcapture %}
@@ -37,8 +66,9 @@
       <div class="text-[#3D3D3D] text-sm leading-4 my-2">
         {{ breathability_descriptions | strip }}
       </div>
-      {% render 'benefit-indicator', input: product.metafields.custom.breathability.value.level %}
+      {% render 'benefit-indicator', input: breathability_level_map %}
     </li>
+
     <li class="break-inside-avoid mb-9 ml-8">
       <img
         class="absolute left-0 size-4"
@@ -47,17 +77,42 @@
         src="{{ 'ELASTICITY.svg' | asset_url }}"
         loading="lazy"
       >
+
+      {% capture elasticity_json %}{{ product.metafields.features.elasticity.value | json }}{% endcapture %}
+      {% assign elasticity_name = 'extremely high' %}
+      {% if elasticity_json contains 'extremely high' %}
+        {% assign elasticity_name = 'extremely high' %}
+      {% elsif elasticity_json contains 'high' %}
+        {% assign elasticity_name = 'high' %}
+      {% elsif elasticity_json contains 'medium high' %}
+        {% assign elasticity_name = 'medium high' %}
+      {% elsif elasticity_json contains 'low' %}
+        {% assign elasticity_name = 'low' %}
+      {% elsif elasticity_json contains 'very low' %}
+        {% assign elasticity_name = 'very low' %}
+      {% endif %}
+
+      {% assign elasticity_level_map = 0 %}
+      {% case elasticity_name %}
+        {% when 'very low' %}{% assign elasticity_level_map = 1 %}
+        {% when 'low' %}{% assign elasticity_level_map = 2 %}
+        {% when 'medium high' %}{% assign elasticity_level_map = 3 %}
+        {% when 'high' %}{% assign elasticity_level_map = 4 %}
+        {% when 'extremely high' %}{% assign elasticity_level_map = 5 %}
+      {% endcase %}
+
       <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
         Elasticity
-        <span class="font-medium">({{ product.metafields.custom.elasticity.value.level }}/5)</span>
+        <span class="font-medium">({{ elasticity_level_map }}/5)</span>
       </div>
+
       {% capture elasticity_descriptions %}
-        {% case product.metafields.custom.elasticity.value.level %}
-          {% when 1 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 1
-          {% when 2 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 2
-          {% when 3 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 3
-          {% when 4 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 4
-          {% when 5 %}The material is elastic in four directions (4-Way Stretch), providing excellent elasticity for perfect movement flexibility 5
+        {% case elasticity_level_map %}
+          {% when 1 %}The material has minimal stretch properties, best suited for structured garments
+          {% when 2 %}The material has limited stretch properties, providing basic movement flexibility
+          {% when 3 %}The material offers good stretch properties, allowing comfortable range of motion
+          {% when 4 %}The material provides excellent stretch properties with enhanced movement flexibility
+          {% when 5 %}The material features superior 4-way stretch properties, offering maximum flexibility and comfort
           {% else %}No elasticity information available
         {% endcase %}
       {% endcapture %}
@@ -65,7 +120,7 @@
       <div class="text-[#3D3D3D] text-sm leading-4 my-2">
         {{ elasticity_descriptions | strip }}
       </div>
-      {% render 'benefit-indicator', input: product.metafields.custom.elasticity.value.level %}
+      {% render 'benefit-indicator', input: elasticity_level_map %}
     </li>
     <li class="break-inside-avoid mb-9 ml-8">
       <img
@@ -75,20 +130,46 @@
         src="{{ 'WINDPROOFNESS.svg' | asset_url }}"
         loading="lazy"
       >
+
+      {% capture windproofness_json %}{{ product.metafields.features.windproofness.value | json }}{% endcapture %}
+      {% assign windproofness_name = '' %}
+      {% if windproofness_json contains 'extremely high' %}
+        {% assign windproofness_name = 'extremely high' %}
+      {% elsif windproofness_json contains 'high' %}
+        {% assign windproofness_name = 'high' %}
+      {% elsif windproofness_json contains 'medium high' %}
+        {% assign windproofness_name = 'medium high' %}
+      {% elsif windproofness_json contains 'low' %}
+        {% assign windproofness_name = 'low' %}
+      {% elsif windproofness_json contains 'very low' %}
+        {% assign windproofness_name = 'very low' %}
+      {% endif %}
+
+      {% assign windproofness_level_map = 0 %}
+      {% if windproofness_json contains '"level":' %}
+        {% assign windproofness_level_map = product.metafields.features.windproofness.value.level %}
+      {% else %}
+        {% case windproofness_name %}
+          {% when 'very low' %}{% assign windproofness_level_map = 1 %}
+          {% when 'low' %}{% assign windproofness_level_map = 2 %}
+          {% when 'medium high' %}{% assign windproofness_level_map = 3 %}
+          {% when 'high' %}{% assign windproofness_level_map = 4 %}
+          {% when 'extremely high' %}{% assign windproofness_level_map = 5 %}
+        {% endcase %}
+      {% endif %}
+
       <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
         Windproofness
-        <span class="font-medium">({{ product.metafields.custom.windproofness.value.level }}/5)</span>
+        <span class="font-medium">({{ windproofness_level_map }}/5)</span>
       </div>
-      {% comment %}
-        Breathability level descriptions in one place for easy maintenance
-      {% endcomment %}
+
       {% capture windproofness_descriptions %}
-        {% case product.metafields.custom.windproofness.value.level %}
-          {% when 1 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 1
-          {% when 2 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 2
-          {% when 3 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 3
-          {% when 4 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 4
-          {% when 5 %}Protects against moderate wind, partial wind resistance is ensured by weaving density 5
+        {% case windproofness_level_map %}
+          {% when 1 %}Provides minimal protection against light breezes
+          {% when 2 %}Offers basic protection against everyday wind conditions
+          {% when 3 %}Provides good protection in moderate wind conditions
+          {% when 4 %}Delivers strong protection in windy conditions with specialized materials
+          {% when 5 %}Offers superior protection against strong winds with advanced wind-blocking technology
           {% else %}No windproofness information available
         {% endcase %}
       {% endcapture %}
@@ -96,7 +177,7 @@
       <div class="text-[#3D3D3D] text-sm leading-4 my-2">
         {{ windproofness_descriptions | strip }}
       </div>
-      {% render 'benefit-indicator', input: product.metafields.custom.windproofness.value.level %}
+      {% render 'benefit-indicator', input: windproofness_level_map %}
     </li>
     <li class="break-inside-avoid mb-9 ml-8">
       <img
@@ -106,20 +187,46 @@
         src="{{ 'WARMTH.svg' | asset_url }}"
         loading="lazy"
       >
+
+      {% capture warmth_json %}{{ product.metafields.features.warmth.value | json }}{% endcapture %}
+      {% assign warmth_name = '' %}
+      {% if warmth_json contains 'extremely high' %}
+        {% assign warmth_name = 'extremely high' %}
+      {% elsif warmth_json contains 'high' %}
+        {% assign warmth_name = 'high' %}
+      {% elsif warmth_json contains 'medium high' %}
+        {% assign warmth_name = 'medium high' %}
+      {% elsif warmth_json contains 'low' %}
+        {% assign warmth_name = 'low' %}
+      {% elsif warmth_json contains 'very low' %}
+        {% assign warmth_name = 'very low' %}
+      {% endif %}
+
+      {% assign warmth_level_map = 0 %}
+      {% if warmth_json contains '"level":' %}
+        {% assign warmth_level_map = product.metafields.features.warmth.value.level %}
+      {% else %}
+        {% case warmth_name %}
+          {% when 'very low' %}{% assign warmth_level_map = 1 %}
+          {% when 'low' %}{% assign warmth_level_map = 2 %}
+          {% when 'medium high' %}{% assign warmth_level_map = 3 %}
+          {% when 'high' %}{% assign warmth_level_map = 4 %}
+          {% when 'extremely high' %}{% assign warmth_level_map = 5 %}
+        {% endcase %}
+      {% endif %}
+
       <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
         Warmth
-        <span class="font-medium">({{ product.metafields.custom.warmth.value.level }}/5)</span>
+        <span class="font-medium">({{ warmth_level_map }}/5)</span>
       </div>
-      {% comment %}
-        Warmth level descriptions in one place for easy maintenance
-      {% endcomment %}
+
       {% capture warmth_descriptions %}
-        {% case product.metafields.custom.warmth.value.level %}
-          {% when 1 %}The clothing is very breathable, over the entire covered area 1
-          {% when 2 %}The clothing is very breathable, over the entire covered area 2
-          {% when 3 %}The clothing is very breathable, over the entire covered area 3
-          {% when 4 %}The clothing is very breathable, over the entire covered area 4
-          {% when 5 %}The clothing is very breathable, over the entire covered area 5
+        {% case warmth_level_map %}
+          {% when 1 %}The material provides minimal insulation, best for mild conditions or high activity
+          {% when 2 %}The material offers light insulation, suitable for cool weather activities
+          {% when 3 %}The material provides moderate insulation, ideal for everyday cold weather use
+          {% when 4 %}The material provides good insulation, keeping you warm in cold conditions
+          {% when 5 %}The material offers superior insulation, designed for extreme cold weather protection
           {% else %}No warmth information available
         {% endcase %}
       {% endcapture %}
@@ -127,7 +234,7 @@
       <div class="text-[#3D3D3D] text-sm leading-4 my-2">
         {{ warmth_descriptions | strip }}
       </div>
-      {% render 'benefit-indicator', input: product.metafields.custom.warmth.value.level %}
+      {% render 'benefit-indicator', input: warmth_level_map %}
     </li>
     <li class="break-inside-avoid mb-9 ml-8">
       <button id="show-more-benefits" class="text-[#0F0F0F] text-base leading-7 underline cursor-pointer">
