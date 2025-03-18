@@ -21,28 +21,141 @@
       </li>
 
       {% if template contains 'product' %}
-        {% if product.collections.first %}
-          {% assign current_collection = product.collections.first %}
+        {% comment %}
+          Fallback approach: display collections in a sensible order using title patterns
+          1. Look for collections with hierarchical naming patterns (e.g., "Parent - Child")
+          2. Otherwise, sort by complexity of name (more complex names likely more specific)
+        {% endcomment %}
 
-          {% if current_collection.metafields.custom.parent_collection %}
-            {% assign parent_collection = collections[current_collection.metafields.custom.parent_collection] %}
+        {% if product.collections.size > 0 %}
+          {% assign collections_to_display = "" %}
+          {% assign most_specific_collection = product.collections.first %}
 
-            {% if parent_collection %}
-              <li class="breadcrumb__item">
-                <a class="breadcrumb__link" href="{{ parent_collection.url }}">
-                  {{ parent_collection.metafields.custom.display_name | default: parent_collection.title }}
-                </a>
-                <span class="breadcrumb__divider" aria-hidden="true">›</span>
-              </li>
+          {% comment %} First pass - find collections with most specific titles {% endcomment %}
+          {% for collection in product.collections %}
+            {% if collection.title contains "-" or collection.title contains ":" %}
+              {% assign collections_to_display = collections_to_display | append: collection.id | append: "," %}
             {% endif %}
+
+            {% comment %} Find the most specific collection by title length/complexity {% endcomment %}
+            {% if collection.title.size > most_specific_collection.title.size %}
+              {% assign most_specific_collection = collection %}
+            {% endif %}
+          {% endfor %}
+
+          {% comment %} Second pass - if no structured titles, use the most specific one {% endcomment %}
+          {% if collections_to_display == "" and most_specific_collection %}
+            {% assign collections_to_display = most_specific_collection.id %}
           {% endif %}
 
-          <li class="breadcrumb__item">
-            <a class="breadcrumb__link" href="{{ current_collection.url }}">
-              {{ current_collection.metafields.custom.display_name | default: current_collection.title }}
-            </a>
-            <span class="breadcrumb__divider" aria-hidden="true">›</span>
-          </li>
+          {% if collections_to_display != "" %}
+            {% assign collection_ids = collections_to_display | split: "," %}
+
+            {% for collection_id in collection_ids %}
+              {% if collection_id != blank %}
+                {% assign current_collection = collections[collection_id] %}
+                {% if current_collection and current_collection.url != blank and current_collection.title != blank %}
+                  <li class="breadcrumb__item">
+                    <a class="breadcrumb__link" href="{{ current_collection.url }}">
+                      {{ current_collection.metafields.custom.display_name | default: current_collection.title }}
+                    </a>
+                    <span class="breadcrumb__divider" aria-hidden="true">›</span>
+                  </li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endif %}
+
+        {% comment %} Find the best collection to use for breadcrumb {% endcomment %}
+        {% assign best_collection = false %}
+        {% assign deepest_path = 0 %}
+
+        {% for collection in product.collections %}
+          {% if collection.handle != blank and collection.title != blank %}
+            {% assign path_depth = 1 %}
+            {% assign current = collection %}
+            {% assign path_valid = true %}
+            {% assign visited_collections = collection.id | append: ',' %}
+
+            {% comment %} Check how deep this collection's hierarchy goes {% endcomment %}
+            {% for i in (1..10) %}
+              {% if current.metafields.custom.parent_collection and path_valid %}
+                {% assign parent_handle = current.metafields.custom.parent_collection %}
+                {% assign parent = collections[parent_handle] %}
+
+                {% if parent and parent.id and parent.title != blank %}
+                  {% if visited_collections contains parent.id %}
+                    {% assign path_valid = false %}
+                  {% else %}
+                    {% assign path_depth = path_depth | plus: 1 %}
+                    {% assign visited_collections = visited_collections | append: parent.id | append: ',' %}
+                    {% assign current = parent %}
+                  {% endif %}
+                {% else %}
+                  {% break %}
+                {% endif %}
+              {% else %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+
+            {% if path_valid and path_depth > deepest_path %}
+              {% assign deepest_path = path_depth %}
+              {% assign best_collection = collection %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+        {% if best_collection %}
+          {% comment %} Build breadcrumb path from the collection with deepest hierarchy {% endcomment %}
+          {% assign breadcrumb_items = '' %}
+          {% assign current = best_collection %}
+          {% assign visited_collections = best_collection.id | append: ',' %}
+
+          {% comment %} Add the current collection first {% endcomment %}
+          {% capture breadcrumb_item %}
+            <li class="breadcrumb__item">
+              <a class="breadcrumb__link" href="{{ current.url }}">
+                {{ current.metafields.custom.display_name | default: current.title }}
+              </a>
+              <span class="breadcrumb__divider" aria-hidden="true">›</span>
+            </li>
+          {% endcapture %}
+          {% assign breadcrumb_items = breadcrumb_item %}
+
+          {% comment %} Then add all parent collections in reverse order {% endcomment %}
+          {% for i in (1..10) %}
+            {% if current.metafields.custom.parent_collection %}
+              {% assign parent_handle = current.metafields.custom.parent_collection %}
+              {% assign parent = collections[parent_handle] %}
+
+              {% if parent and parent.id and parent.title != blank %}
+                {% if visited_collections contains parent.id %}
+                  {% break %}
+                {% else %}
+                  {% capture breadcrumb_item %}
+                    <li class="breadcrumb__item">
+                      <a class="breadcrumb__link" href="{{ parent.url }}">
+                        {{ parent.metafields.custom.display_name | default: parent.title }}
+                      </a>
+                      <span class="breadcrumb__divider" aria-hidden="true">›</span>
+                    </li>
+                  {% endcapture %}
+
+                  {% assign breadcrumb_items = breadcrumb_item | append: breadcrumb_items %}
+                  {% assign visited_collections = visited_collections | append: parent.id | append: ',' %}
+                  {% assign current = parent %}
+                {% endif %}
+              {% else %}
+                {% break %}
+              {% endif %}
+            {% else %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+
+          {{ breadcrumb_items }}
         {% endif %}
 
         <li class="breadcrumb__item breadcrumb__item--current">
