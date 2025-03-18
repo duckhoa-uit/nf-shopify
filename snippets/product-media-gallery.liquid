@@ -236,6 +236,7 @@
 
       // Get the initial active color
       const activeColor = gallery.dataset.activeColor;
+      console.log("Initial active color from data attribute:", activeColor);
 
       // Process and filter media based on active color
       function processMedia() {
@@ -244,6 +245,8 @@
           return;
         }
 
+        console.log("Processing media with active color:", gallery.dataset.activeColor);
+
         // Get and format all media URLs
         const allMediaUrls = {{ product.media | json }}.map(media => {
           let url = media.src.replace(/\/files\//, '/');
@@ -251,14 +254,18 @@
                  !url.startsWith('http') ? `https://${url}` : url;
         });
 
+        console.log("All media URLs:", allMediaUrls);
+
         // Filter URLs by active color
         let urlsToUse = allMediaUrls;
-        if (activeColor) {
+        if (gallery.dataset.activeColor) {
           const filteredUrls = allMediaUrls.filter(url => {
             const parsed = window.parseImageUrl(url);
-            return parsed.color.toLowerCase() === activeColor.toLowerCase();
+            console.log("Parsed URL:", url, "Color:", parsed.color, "Matching with:", gallery.dataset.activeColor);
+            return parsed.color.toLowerCase() === gallery.dataset.activeColor.toLowerCase();
           });
 
+          console.log("Filtered URLs by color:", filteredUrls);
           if (filteredUrls.length > 0) {
             urlsToUse = filteredUrls;
           }
@@ -375,9 +382,13 @@
 
       // Handle color change
       function handleColorChange(newColor) {
+        console.log("Color change requested:", newColor, "Current color:", gallery.dataset.activeColor);
         if (newColor !== gallery.dataset.activeColor) {
+          console.log("Updating active color to:", newColor);
           gallery.dataset.activeColor = newColor;
           processMedia();
+        } else {
+          console.log("No color change needed, already set to:", newColor);
         }
       }
 
@@ -391,6 +402,53 @@
               handleColorChange(newColor);
             });
           });
+
+        // Listen for Shopify's variant change event
+        document.addEventListener('variant:changed', function(event) {
+          if (event.detail.variant) {
+            // Extract color from variant
+            const colorPosition = {{ product.options_with_values | json }}
+              .findIndex(option => option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour');
+
+            let newColor = '';
+            if (colorPosition >= 0 && event.detail.variant.options) {
+              newColor = event.detail.variant.options[colorPosition];
+            } else if (event.detail.variant.title) {
+              newColor = event.detail.variant.title.split('/')[0].trim();
+            }
+
+            if (newColor) {
+              handleColorChange(newColor.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, ''));
+            }
+          }
+        });
+
+        // Listen for variant selectors change
+        const variantSelectors = document.querySelectorAll('.product-form__input select, .product-form__input input[type="radio"]');
+        variantSelectors.forEach(selector => {
+          selector.addEventListener('change', function() {
+            // Use a small delay to ensure variant has been updated
+            setTimeout(() => {
+              const variant = window.currentVariant;
+              if (variant) {
+                // Extract color from variant
+                const colorPosition = {{ product.options_with_values | json }}
+                  .findIndex(option => option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour');
+
+                let newColor = '';
+                if (colorPosition >= 0 && variant.options) {
+                  newColor = variant.options[colorPosition];
+                } else if (variant.title) {
+                  newColor = variant.title.split('/')[0].trim();
+                }
+
+                if (newColor) {
+                  handleColorChange(newColor.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, ''));
+                }
+              }
+            }, 100);
+          });
+        });
 
         // Monitor URL changes for variant updates
         let currentUrl = window.location.href;
@@ -425,6 +483,36 @@
       // Start processing media and set up listeners
       processMedia();
       setupEventListeners();
+
+      // Directly hook into Shopify's variant change mechanism
+      // This ensures we capture all variant changes regardless of how they're triggered
+      const originalOnVariantChange = window.onVariantChange;
+      window.onVariantChange = function(variant) {
+        console.log("Shopify variant change detected:", variant);
+
+        // Extract color from variant
+        if (variant) {
+          const colorPosition = {{ product.options_with_values | json }}
+            .findIndex(option => option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour');
+
+          let newColor = '';
+          if (colorPosition >= 0 && variant.options) {
+            newColor = variant.options[colorPosition];
+          } else if (variant.title) {
+            newColor = variant.title.split('/')[0].trim();
+          }
+
+          if (newColor) {
+            console.log("Color from Shopify variant change:", newColor);
+            handleColorChange(newColor.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, ''));
+          }
+        }
+
+        // Call the original handler if it exists
+        if (typeof originalOnVariantChange === 'function') {
+          originalOnVariantChange(variant);
+        }
+      };
     });
   </script>
 
