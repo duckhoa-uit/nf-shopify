@@ -26,8 +26,8 @@
     assign single_media_visible = true
   endif
 
-  # Get first available variant color
-  assign first_variant = product.variants | first
+  # Get currently selected or first available variant
+  assign first_variant = product.selected_or_first_available_variant
   assign active_color = first_variant.option_values | where: "name", "Color" | first
 
   if active_color == blank
@@ -37,120 +37,58 @@
   # Try different approaches to get color
   if active_color == blank
     # Try options directly
-    assign color_option = first_variant.options | where: "name", "Color" | first
-    if color_option == blank
-      assign color_option = first_variant.options | where: "name", "Colour" | first
+    assign color_position = -1
+    assign option_index = 0
+    for option in product.options_with_values
+      if option.name == 'Color' or option.name == 'Colour'
+        assign color_position = option_index
+        break
+      endif
+      assign option_index = option_index | plus: 1
+    endfor
+
+    if color_position >= 0
+      assign active_color_value = first_variant.options[color_position] | downcase | replace: ' ', '-'
     endif
-    if color_option != blank
-      assign active_color = color_option
-    endif
+  else
+    assign active_color_value = active_color.value | downcase | replace: ' ', '-'
   endif
 
   # If still blank, try selected options
-  if active_color == blank
+  if active_color_value == blank
     assign selected_options = first_variant.selected_options
     for option in selected_options
       if option.name == 'Color' or option.name == 'Colour'
-        assign active_color = option
+        assign active_color_value = option.value | downcase | replace: ' ', '-'
         break
       endif
     endfor
   endif
 
-  # Get color value and clean it
-  assign active_color_value = ''
-  if active_color != blank
-    assign active_color_value = active_color.value | downcase | replace: ' ', '-'
-    # Clean up the color value - remove size or any extra info after '/'
-    if active_color_value contains '/'
-      assign active_color_value = active_color_value | split: '/' | first
-    endif
-    # Remove trailing dash if present
-    if active_color_value contains '-'
-      assign active_color_value = active_color_value | replace: '-', ' ' | strip | replace: ' ', '-'
-    endif
-  else
-    # Fallback to first variant title
+  # If still blank, fallback to first variant title
+  if active_color_value == blank
     assign active_color_value = first_variant.title | downcase | split: '/' | first | replace: ' ', '-'
-    # Remove trailing dash if present
-    if active_color_value contains '-'
-      assign active_color_value = active_color_value | replace: '-', ' ' | strip | replace: ' ', '-'
-    endif
   endif
 
-  # Initialize arrays for filtered media
-  assign filtered_media_objects = array
-  assign filtered_media = ''
+  # Clean up the color value
+  if active_color_value contains '/'
+    assign active_color_value = active_color_value | split: '/' | first
+  endif
+  # Remove trailing dash if present
+  if active_color_value contains '-'
+    assign active_color_value = active_color_value | replace: '-', ' ' | strip | replace: ' ', '-'
+  endif
 
+  # Initialize media string with all media URLs
+  assign all_media = ''
   for media in product.media
-    assign media_src = media.src | downcase
-    # Extract filename from URL
-    assign filename = media_src | split: '?' | first | split: '/' | last
-    assign filename_without_ext = filename | split: '.' | first
-
-    # Check if filename contains NF-no pattern
-    if filename_without_ext contains 'NF-no'
-      # Extract color from filename
-      assign parts = filename_without_ext | split: '-'
-      assign nf_index = -1
-      for part in parts
-        if part == 'NF'
-          assign nf_index = forloop.index0
-          break
-        endif
-      endfor
-
-      if nf_index >= 0
-        assign color_start_index = nf_index | plus: 3
-        assign type_index = -1
-        for part in parts offset:color_start_index
-          if part == 'D' or part == 'M' or part == 'B' or part == 'BV' or part == 'H'
-            assign type_index = forloop.index0 | plus: color_start_index
-            break
-          endif
-        endfor
-
-        assign color = ''
-        if type_index >= 0
-          # Join parts between color_start_index and type_index
-          for i in (color_start_index..type_index)
-            if i < type_index
-              if color == blank
-                assign color = parts[i]
-              else
-                assign color = color | append: '-' | append: parts[i]
-              endif
-            endif
-          endfor
-        else
-          # Join remaining parts if no type found
-          for i in (color_start_index..parts.size)
-            if color == blank
-              assign color = parts[i]
-            else
-              assign color = color | append: '-' | append: parts[i]
-            endif
-          endfor
-        endif
-
-        # Compare extracted color with active color
-        if color == active_color_value
-          assign filtered_media_objects = filtered_media_objects | concat: media
-          assign filtered_media = filtered_media | append: media.src | append: ','
-        endif
-      endif
-    endif
+    assign all_media = all_media | append: media.src | append: ','
   endfor
 
-  # If no filtered media found, use all media
-  if filtered_media_objects.size == 0
-    assign filtered_media_objects = product.media
-    for media in product.media
-      assign filtered_media = filtered_media | append: media.src | append: ','
-    endfor
-  endif
+  # Clean up media string
+  assign all_media = all_media | strip
 
-  assign media_count = filtered_media_objects.size
+  assign media_count = product.media.size
   if section.settings.hide_variants and media_count > 1 and variant_images.size > 0
     assign media_count = media_count | minus: variant_images.size | plus: 1
   endif
@@ -164,13 +102,17 @@
   endif
 
   assign media_width = 0.65
-
-  # Create filtered_media string for data attribute
-  assign filtered_media = ''
-  for media in filtered_media_objects
-    assign filtered_media = filtered_media | append: media.src | append: ','
-  endfor
 -%}
+
+<style>
+  .loading-media {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .loading-media.loaded {
+    opacity: 1;
+  }
+</style>
 
 <media-gallery
   id="MediaGallery-{{ section.id }}"
@@ -183,7 +125,7 @@
   data-active-color="{{ active_color_value }}"
 >
   <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
-  <div class="swiper product-swiper md:hidden">
+  <div class="swiper product-swiper md:hidden loading-media">
     <a class="skip-to-content-link button visually-hidden quick-add-hidden" href="#ProductInfo-{{ section.id }}">
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>
@@ -191,14 +133,16 @@
       id="Slider-Gallery-{{ section.id }}"
       class="swiper-wrapper product__media-list contains-media"
       role="list"
-      data-media-urls="{{ filtered_media | escape }}"
+      data-media-count="{{ product.media.size }}"
+      data-media-urls="{{ all_media | escape }}"
+      data-active-color="{{ active_color_value }}"
       aria-live="polite"
     ></div>
     <div class="swiper-pagination"></div>
   </div>
 
-  <div class="hidden md:grid grid-cols-2 gap-4">
-    {%- for media in filtered_media_objects -%}
+  <div id="desktop-gallery" class="hidden md:grid grid-cols-2 gap-4 loading-media">
+    {%- for media in product.media -%}
       <div
         id="Grid-{{ section.id }}-{{ media.id }}"
         class="product__media-item{% if forloop.first %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %} scroll-trigger animate--fade-in"
@@ -218,49 +162,43 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const gallery = document.querySelector('#MediaGallery-{{ section.id }}');
-      const sliderWrapper = document.querySelector('#Slider-Gallery-{{ section.id }}');
-      const grid = document.querySelector('.md\\:grid');
+    // Function to create media item element
+    function createMediaItem(url, index) {
+      const allMedia = {{ product.media | json }};
 
-      // Get all media URLs
-      const allMediaUrls = {{ product.media | json }}.map(media => media.src);
+      // Convert URL to match media object URL format
+      const mediaObject = allMedia.find(media => {
+        const urlParts = url.split('/');
+        const mediaParts = media.src.split('/');
+        const urlFilename = urlParts[urlParts.length - 1].split('?')[0];
+        const mediaFilename = mediaParts[mediaParts.length - 1].split('?')[0];
 
-      // Filter media URLs by color using parseImageUrl
-      const filteredUrls = allMediaUrls.filter(url => {
-        const parsed = window.parseImageUrl(url);
-        return parsed.color.toLowerCase() === '{{ active_color_value }}'.toLowerCase();
+        const urlBase = urlFilename.split('.')[0];
+        const mediaBase = mediaFilename.split('.')[0];
+
+        return urlBase === mediaBase;
       });
 
-      // Function to create media item element
-      function createMediaItem(url, index) {
-        const mediaObject = {{ product.media | json }}.find(media => media.src === url);
-        if (!mediaObject) return null;
-
+      if (!mediaObject) {
+        // Create a fallback media item if no match is found
         const div = document.createElement('div');
-        div.id = `Slide-{{ section.id }}-${mediaObject.id}`;
-        div.className = `swiper-slide product__media-item${index === 0 ? ' is-active' : ''}${mediaObject.media_type !== 'image' ? ' product__media-item--full' : ''} scroll-trigger animate--fade-in`;
-        div.setAttribute('data-media-id', `{{ section.id }}-${mediaObject.id}`);
+        div.id = `Slide-{{ section.id }}-${index}`;
+        div.className = `swiper-slide product__media-item${index === 0 ? ' is-active' : ''} scroll-trigger animate--fade-in`;
+        div.setAttribute('data-media-id', `{{ section.id }}-${index}`);
 
-        // Create product thumbnail wrapper
         const wrapper = document.createElement('div');
         wrapper.className = 'product__media media relative w-full h-0';
         wrapper.style.cssText = '--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;';
 
-        // Create image container for proper positioning
         const imageContainer = document.createElement('div');
         imageContainer.className = 'absolute inset-0 w-full h-full';
 
-        // Create image
         const img = document.createElement('img');
-        const fullUrl = url.startsWith('//') ? `https:${url}` : url.startsWith('/') ? `https://{{ shop.domain }}${url}` : url;
-        img.src = fullUrl;
-        img.alt = mediaObject.alt || '';
-        img.id = `ProductMedia-{{ section.id }}-${mediaObject.id}`;
+        img.src = url.startsWith('//') ? `https:${url}` : url;
+        img.alt = '';
+        img.id = `ProductMedia-{{ section.id }}-${index}`;
         img.className = 'media-item w-full h-full object-cover';
         img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
-        img.width = mediaObject.width;
-        img.height = mediaObject.height;
 
         imageContainer.appendChild(img);
         wrapper.appendChild(imageContainer);
@@ -268,79 +206,309 @@
         return div;
       }
 
-      // Get and sort media URLs
-      const mediaUrls = filteredUrls;
-      const sortedUrls = window.sortImagesByDisplayRules(mediaUrls);
+      const div = document.createElement('div');
+      div.id = `Slide-{{ section.id }}-${mediaObject.id}`;
+      div.className = `swiper-slide product__media-item${index === 0 ? ' is-active' : ''}${mediaObject.media_type !== 'image' ? ' product__media-item--full' : ''} scroll-trigger animate--fade-in`;
+      div.setAttribute('data-media-id', `{{ section.id }}-${mediaObject.id}`);
 
-      // Function to update gallery with new color
-      window.updateGalleryColor = function(newColor) {
-        // Get all media URLs
-        const allMediaUrls = {{ product.media | json }}.map(media => media.src);
+      const wrapper = document.createElement('div');
+      wrapper.className = 'product__media media relative w-full h-0';
+      wrapper.style.cssText = '--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;';
 
-        // Filter media by color
-        const filteredUrls = allMediaUrls.filter(url => {
-          const parsed = window.parseImageUrl(url);
-          return parsed.color.toLowerCase() === newColor.toLowerCase();
+      const imageContainer = document.createElement('div');
+      imageContainer.className = 'absolute inset-0 w-full h-full';
+
+      const img = document.createElement('img');
+      const imgSrc = mediaObject.src.startsWith('//') ? `https:${mediaObject.src}` : mediaObject.src;
+      img.src = imgSrc;
+      img.alt = mediaObject.alt || '';
+      img.id = `ProductMedia-{{ section.id }}-${mediaObject.id}`;
+      img.className = 'media-item w-full h-full object-cover';
+      img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+      img.width = mediaObject.width;
+      img.height = mediaObject.height;
+
+      imageContainer.appendChild(img);
+      wrapper.appendChild(imageContainer);
+      div.appendChild(wrapper);
+      return div;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      console.log('DOMContentLoaded fired');
+
+      // Initial setup
+      const gallery = document.querySelector('#MediaGallery-{{ section.id }}');
+      const sliderWrapper = document.querySelector('#Slider-Gallery-{{ section.id }}');
+      const grid = document.querySelector('#desktop-gallery');
+      const mobileGallery = document.querySelector('.product-swiper');
+
+      // Hide galleries until content is ready
+      mobileGallery.classList.remove('loaded');
+      grid.classList.remove('loaded');
+
+      // Get initial media URLs from data attribute
+      let initialMediaUrls = sliderWrapper.dataset.mediaUrls
+        .split(',')
+        .filter(url => url && url.trim() !== '')
+        .map(url => {
+          // Remove any "files/" prefix if present
+          url = url.replace(/\/files\//, '/');
+          // Ensure proper URL formatting
+          if (url.startsWith('//')) return `https:${url}`;
+          if (!url.startsWith('http')) return `https:${url.startsWith('//') ? '' : '//'}${url}`;
+          return url;
         });
 
-        // Sort filtered URLs
-        const sortedFilteredUrls = window.sortImagesByDisplayRules(filteredUrls);
+      // Get the initial active color
+      const activeColor = gallery.dataset.activeColor;
+      console.log('Initial active color:', activeColor);
 
-        // Update mobile slider
-        const sliderWrapper = document.querySelector('#Slider-Gallery-{{ section.id }}');
-        sliderWrapper.innerHTML = '';
-        sortedFilteredUrls.forEach((url, index) => {
-          const mediaItem = createMediaItem(url, index);
-          if (mediaItem) sliderWrapper.appendChild(mediaItem);
-        });
+      // Wait for product-utils.js to load before filtering
+      function waitForProductUtils() {
+        if (window.parseImageUrl) {
+          // Filter URLs by active color using parseImageUrl
+          if (activeColor && initialMediaUrls.length > 0) {
+            console.log('Filtering URLs for color:', activeColor);
+            const filteredUrls = initialMediaUrls.filter(url => {
+              const parsed = window.parseImageUrl(url);
+              console.log('Parsed URL:', url, 'Color:', parsed.color);
+              return parsed.color.toLowerCase() === activeColor.toLowerCase();
+            });
 
-        // Update desktop grid
-        const grid = document.querySelector('.md\\:grid');
-        grid.innerHTML = '';
-        sortedFilteredUrls.forEach((url, index) => {
-          const mediaItem = createMediaItem(url, index);
-          if (mediaItem) grid.appendChild(mediaItem);
-        });
+            console.log('Filtered URLs:', filteredUrls);
 
-        // Reinitialize Swiper
-        if (window.productSwiper) {
-          window.productSwiper.destroy();
-        }
-        initSwiper();
-      };
-
-      // Initial population of media items
-      sortedUrls.forEach((url, index) => {
-        const mediaItem = createMediaItem(url, index);
-        if (mediaItem) sliderWrapper.appendChild(mediaItem);
-      });
-
-      sortedUrls.forEach((url, index) => {
-        const mediaItem = createMediaItem(url, index);
-        if (mediaItem) grid.appendChild(mediaItem);
-      });
-
-      // Initialize Swiper
-      function initSwiper() {
-        window.productSwiper = new Swiper('.product-swiper', {
-          slidesPerView: 1,
-          spaceBetween: 0,
-          pagination: {
-            el: '.swiper-pagination',
-            type: 'bullets',
-            clickable: true
+            // Only use filtered URLs if we found matches
+            if (filteredUrls.length > 0) {
+              initialMediaUrls = filteredUrls;
+            }
           }
+
+          // If no URLs found, fallback to all media
+          if (initialMediaUrls.length === 0) {
+            initialMediaUrls = {{ product.media | json }}.map(media => {
+              let url = media.src.replace(/\/files\//, '/');
+              if (url.startsWith('//')) return `https:${url}`;
+              if (!url.startsWith('http')) return `https:${url.startsWith('//') ? '' : '//'}${url}`;
+              return url;
+            });
+          }
+
+          console.log('Initial media URLs after filtering:', initialMediaUrls);
+
+          const sortedInitialUrls = window.sortImagesByDisplayRules(initialMediaUrls);
+          console.log('Sorted initial URLs:', sortedInitialUrls);
+
+          updateGalleryContent(sortedInitialUrls);
+        } else {
+          // If product-utils.js hasn't loaded yet, wait and try again
+          setTimeout(waitForProductUtils, 50);
+        }
+      }
+
+      // Function to update gallery content
+      function updateGalleryContent(urls) {
+        // Clear existing content
+        sliderWrapper.innerHTML = '';
+        grid.innerHTML = '';
+
+        // Populate mobile slider and desktop grid
+        if (urls.length > 0) {
+          urls.forEach((url, index) => {
+            const mediaItem = createMediaItem(url, index);
+            if (mediaItem) {
+              sliderWrapper.appendChild(mediaItem.cloneNode(true));
+              grid.appendChild(mediaItem);
+            }
+          });
+        }
+
+        // Initialize Swiper
+        if (typeof Swiper !== 'undefined') {
+          if (window.productSwiper) {
+            window.productSwiper.destroy();
+          }
+          initSwiper();
+        }
+
+        // Show galleries after content is ready
+        requestAnimationFrame(() => {
+          mobileGallery.classList.add('loaded');
+          grid.classList.add('loaded');
         });
       }
 
-      // Initialize Swiper on load
-      if (typeof Swiper === 'undefined') {
-        const swiperScript = document.querySelector('script[src*="swiper-bundle.min.js"]');
-        swiperScript.addEventListener('load', initSwiper);
-      } else {
-        initSwiper();
+      // Start waiting for product-utils.js
+      waitForProductUtils();
+
+      // Directly monitor variant selectors
+      const radioButtons = document.querySelectorAll('input[type="radio"][name^="Color"], input[type="radio"][name^="Colour"]');
+      console.log('Found color radio buttons:', radioButtons.length);
+
+      radioButtons.forEach(radio => {
+        radio.addEventListener('change', function(e) {
+          console.group('Color Radio Change');
+          console.log('Radio changed:', e.target.value);
+          const newColor = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, '');
+
+          // Update the gallery
+          updateGalleryByColor(newColor);
+          console.groupEnd();
+        });
+      });
+
+      // Also listen for URL changes which indicate variant changes
+      let currentUrl = window.location.href;
+      setInterval(() => {
+        if (currentUrl !== window.location.href) {
+          console.group('URL Change Detected');
+          console.log('Old URL:', currentUrl);
+          console.log('New URL:', window.location.href);
+          currentUrl = window.location.href;
+
+          // Extract variant from URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const variantId = urlParams.get('variant');
+
+          if (variantId) {
+            console.log('Variant ID from URL:', variantId);
+            // Find the variant
+            const variants = {{ product.variants | json }};
+            const variant = variants.find(v => v.id.toString() === variantId);
+
+            if (variant) {
+              console.log('Found variant from URL:', variant);
+              handleVariantChange(variant);
+            }
+          }
+          console.groupEnd();
+        }
+      }, 300);
+
+      // Function to update gallery by color
+      function updateGalleryByColor(newColor) {
+        console.group('Updating Gallery by Color');
+        console.log('New color:', newColor);
+
+        const currentColor = gallery.dataset.activeColor;
+        console.log('Current color:', currentColor);
+
+        if (newColor !== currentColor) {
+          console.log('Color changed, updating gallery');
+          gallery.dataset.activeColor = newColor;
+
+          // Get all media URLs
+          const allMediaUrls = {{ product.media | json }}.map(media => {
+            let url = media.src.replace(/\/files\//, '/');
+            if (url.startsWith('//')) return `https:${url}`;
+            if (!url.startsWith('http')) return `https:${url.startsWith('//') ? '' : '//'}${url}`;
+            return url;
+          });
+
+          console.log('All media URLs:', allMediaUrls);
+
+          // Filter media by color
+          const filteredUrls = allMediaUrls.filter(url => {
+            const parsed = window.parseImageUrl(url);
+            console.log('Parsing URL:', url, 'Found color:', parsed.color);
+            return parsed.color.toLowerCase() === newColor.toLowerCase();
+          });
+
+          console.log('Filtered URLs:', filteredUrls);
+
+          // If no filtered URLs found, use all URLs
+          const urlsToUse = filteredUrls.length > 0 ? filteredUrls : allMediaUrls;
+          console.log('URLs to use:', urlsToUse);
+
+          // Sort filtered URLs
+          const sortedUrls = window.sortImagesByDisplayRules(urlsToUse);
+          console.log('Sorted URLs:', sortedUrls);
+
+          // Update gallery content
+          updateGalleryContent(sortedUrls);
+        }
+
+        console.groupEnd();
+      }
+
+      // Function to handle variant changes
+      function handleVariantChange(variant) {
+        console.group('Handling Variant Change');
+        console.log('Variant:', variant);
+
+        // Get color from variant
+        let newColor = '';
+        const colorPosition = {{ product.options_with_values | json }}.findIndex(option =>
+          option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour'
+        );
+
+        if (colorPosition >= 0 && variant.options) {
+          newColor = variant.options[colorPosition];
+        }
+
+        if (!newColor && variant.title) {
+          newColor = variant.title.split('/')[0].trim();
+        }
+
+        if (newColor) {
+          newColor = newColor.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, '');
+          console.log('New color:', newColor);
+
+          const currentColor = gallery.dataset.activeColor;
+          console.log('Current color:', currentColor);
+
+          if (newColor !== currentColor) {
+            console.log('Updating gallery color');
+            gallery.dataset.activeColor = newColor;
+
+            // Get all media URLs
+            const allMediaUrls = {{ product.media | json }}.map(media => {
+              let url = media.src.replace(/\/files\//, '/');
+              if (url.startsWith('//')) return `https:${url}`;
+              if (!url.startsWith('http')) return `https:${url.startsWith('//') ? '' : '//'}${url}`;
+              return url;
+            });
+
+            console.log('All media URLs:', allMediaUrls);
+
+            // Filter media by color
+            const filteredUrls = allMediaUrls.filter(url => {
+              const parsed = window.parseImageUrl(url);
+              console.log('Parsing URL:', url, 'Found color:', parsed.color);
+              return parsed.color.toLowerCase() === newColor.toLowerCase();
+            });
+
+            console.log('Filtered URLs:', filteredUrls);
+
+            // If no filtered URLs found, use all URLs
+            const urlsToUse = filteredUrls.length > 0 ? filteredUrls : allMediaUrls;
+            console.log('URLs to use:', urlsToUse);
+
+            // Sort filtered URLs
+            const sortedUrls = window.sortImagesByDisplayRules(urlsToUse);
+            console.log('Sorted URLs:', sortedUrls);
+
+            // Update gallery content
+            updateGalleryContent(sortedUrls);
+          }
+        }
+
+        console.groupEnd();
       }
     });
+
+    // Function to initialize Swiper
+    function initSwiper() {
+      window.productSwiper = new Swiper('.product-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        pagination: {
+          el: '.swiper-pagination',
+          type: 'bullets',
+          clickable: true
+        }
+      });
+    }
   </script>
 
   {% comment %} {%- liquid
@@ -376,10 +544,10 @@
         data-media-urls="{{ filtered_media | escape }}"
       >
         {%- for media in filtered_media_objects -%}
-          <li
-            id="Slide-Thumbnails-{{ section.id }}-{{ forloop.index }}"
+            <li
+              id="Slide-Thumbnails-{{ section.id }}-{{ forloop.index }}"
             class="thumbnail-list__item slider__slide{% if section.settings.hide_variants and variant_images contains media %} thumbnail-list_item--variant{% endif %}"
-            data-target="{{ section.id }}-{{ media.id }}"
+              data-target="{{ section.id }}-{{ media.id }}"
             data-media-position="{{ forloop.index }}"
             >
               {%- if media.media_type == 'model' -%}
