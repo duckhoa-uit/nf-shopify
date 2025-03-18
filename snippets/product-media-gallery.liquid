@@ -235,8 +235,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-      console.log('DOMContentLoaded fired');
-
       // Initial setup
       const gallery = document.querySelector('#MediaGallery-{{ section.id }}');
       const sliderWrapper = document.querySelector('#Slider-Gallery-{{ section.id }}');
@@ -252,9 +250,7 @@
         .split(',')
         .filter(url => url && url.trim() !== '')
         .map(url => {
-          // Remove any "files/" prefix if present
           url = url.replace(/\/files\//, '/');
-          // Ensure proper URL formatting
           if (url.startsWith('//')) return `https:${url}`;
           if (!url.startsWith('http')) return `https:${url.startsWith('//') ? '' : '//'}${url}`;
           return url;
@@ -262,21 +258,16 @@
 
       // Get the initial active color
       const activeColor = gallery.dataset.activeColor;
-      console.log('Initial active color:', activeColor);
 
       // Wait for product-utils.js to load before filtering
       function waitForProductUtils() {
         if (window.parseImageUrl) {
           // Filter URLs by active color using parseImageUrl
           if (activeColor && initialMediaUrls.length > 0) {
-            console.log('Filtering URLs for color:', activeColor);
             const filteredUrls = initialMediaUrls.filter(url => {
               const parsed = window.parseImageUrl(url);
-              console.log('Parsed URL:', url, 'Color:', parsed.color);
               return parsed.color.toLowerCase() === activeColor.toLowerCase();
             });
-
-            console.log('Filtered URLs:', filteredUrls);
 
             // Only use filtered URLs if we found matches
             if (filteredUrls.length > 0) {
@@ -294,14 +285,9 @@
             });
           }
 
-          console.log('Initial media URLs after filtering:', initialMediaUrls);
-
           const sortedInitialUrls = window.sortImagesByDisplayRules(initialMediaUrls);
-          console.log('Sorted initial URLs:', sortedInitialUrls);
-
           updateGalleryContent(sortedInitialUrls);
         } else {
-          // If product-utils.js hasn't loaded yet, wait and try again
           setTimeout(waitForProductUtils, 50);
         }
       }
@@ -341,63 +327,37 @@
       // Start waiting for product-utils.js
       waitForProductUtils();
 
-      // Directly monitor variant selectors
+      // Monitor color radio buttons
       const radioButtons = document.querySelectorAll('input[type="radio"][name^="Color"], input[type="radio"][name^="Colour"]');
-      console.log('Found color radio buttons:', radioButtons.length);
-
       radioButtons.forEach(radio => {
         radio.addEventListener('change', function(e) {
-          console.group('Color Radio Change');
-          console.log('Radio changed:', e.target.value);
           const newColor = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, '');
-
-          // Update the gallery
           updateGalleryByColor(newColor);
-          console.groupEnd();
         });
       });
 
-      // Also listen for URL changes which indicate variant changes
+      // Monitor URL changes for variant updates
       let currentUrl = window.location.href;
       setInterval(() => {
         if (currentUrl !== window.location.href) {
-          console.group('URL Change Detected');
-          console.log('Old URL:', currentUrl);
-          console.log('New URL:', window.location.href);
           currentUrl = window.location.href;
-
-          // Extract variant from URL
           const urlParams = new URLSearchParams(window.location.search);
           const variantId = urlParams.get('variant');
 
           if (variantId) {
-            console.log('Variant ID from URL:', variantId);
-            // Find the variant
             const variants = {{ product.variants | json }};
             const variant = variants.find(v => v.id.toString() === variantId);
-
-            if (variant) {
-              console.log('Found variant from URL:', variant);
-              handleVariantChange(variant);
-            }
+            if (variant) handleVariantChange(variant);
           }
-          console.groupEnd();
         }
       }, 300);
 
       // Function to update gallery by color
       function updateGalleryByColor(newColor) {
-        console.group('Updating Gallery by Color');
-        console.log('New color:', newColor);
-
         const currentColor = gallery.dataset.activeColor;
-        console.log('Current color:', currentColor);
-
         if (newColor !== currentColor) {
-          console.log('Color changed, updating gallery');
           gallery.dataset.activeColor = newColor;
 
-          // Get all media URLs
           const allMediaUrls = {{ product.media | json }}.map(media => {
             let url = media.src.replace(/\/files\//, '/');
             if (url.startsWith('//')) return `https:${url}`;
@@ -405,38 +365,19 @@
             return url;
           });
 
-          console.log('All media URLs:', allMediaUrls);
-
-          // Filter media by color
           const filteredUrls = allMediaUrls.filter(url => {
             const parsed = window.parseImageUrl(url);
-            console.log('Parsing URL:', url, 'Found color:', parsed.color);
             return parsed.color.toLowerCase() === newColor.toLowerCase();
           });
 
-          console.log('Filtered URLs:', filteredUrls);
-
-          // If no filtered URLs found, use all URLs
           const urlsToUse = filteredUrls.length > 0 ? filteredUrls : allMediaUrls;
-          console.log('URLs to use:', urlsToUse);
-
-          // Sort filtered URLs
           const sortedUrls = window.sortImagesByDisplayRules(urlsToUse);
-          console.log('Sorted URLs:', sortedUrls);
-
-          // Update gallery content
           updateGalleryContent(sortedUrls);
         }
-
-        console.groupEnd();
       }
 
       // Function to handle variant changes
       function handleVariantChange(variant) {
-        console.group('Handling Variant Change');
-        console.log('Variant:', variant);
-
-        // Get color from variant
         let newColor = '';
         const colorPosition = {{ product.options_with_values | json }}.findIndex(option =>
           option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour'
@@ -452,48 +393,8 @@
 
         if (newColor) {
           newColor = newColor.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, '');
-          console.log('New color:', newColor);
-
-          const currentColor = gallery.dataset.activeColor;
-          console.log('Current color:', currentColor);
-
-          if (newColor !== currentColor) {
-            console.log('Updating gallery color');
-            gallery.dataset.activeColor = newColor;
-
-            // Get all media URLs
-            const allMediaUrls = {{ product.media | json }}.map(media => {
-              let url = media.src.replace(/\/files\//, '/');
-              if (url.startsWith('//')) return `https:${url}`;
-              if (!url.startsWith('http')) return `https:${url.startsWith('//') ? '' : '//'}${url}`;
-              return url;
-            });
-
-            console.log('All media URLs:', allMediaUrls);
-
-            // Filter media by color
-            const filteredUrls = allMediaUrls.filter(url => {
-              const parsed = window.parseImageUrl(url);
-              console.log('Parsing URL:', url, 'Found color:', parsed.color);
-              return parsed.color.toLowerCase() === newColor.toLowerCase();
-            });
-
-            console.log('Filtered URLs:', filteredUrls);
-
-            // If no filtered URLs found, use all URLs
-            const urlsToUse = filteredUrls.length > 0 ? filteredUrls : allMediaUrls;
-            console.log('URLs to use:', urlsToUse);
-
-            // Sort filtered URLs
-            const sortedUrls = window.sortImagesByDisplayRules(urlsToUse);
-            console.log('Sorted URLs:', sortedUrls);
-
-            // Update gallery content
-            updateGalleryContent(sortedUrls);
-          }
+          updateGalleryByColor(newColor);
         }
-
-        console.groupEnd();
       }
     });
 
