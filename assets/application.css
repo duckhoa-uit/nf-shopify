@@ -374,6 +374,21 @@
   .col-span-1 {
     grid-column: span 1 / span 1 !important;
   }
+  .\!container {
+    margin-right: auto !important;
+    margin-left: auto !important;
+    padding-left: 10px !important;
+    padding-left: 0.625rem !important;
+    padding-right: 10px !important;
+    padding-right: 0.625rem !important;
+    &::after, &::before {
+      content: " " !important;
+      display: table !important;
+    }
+    &::after {
+      clear: both !important;
+    }
+  }
   .container {
     margin-right: auto !important;
     margin-left: auto !important;
@@ -387,6 +402,24 @@
     }
     &::after {
       clear: both !important;
+    }
+  }
+  .\!container {
+    width: 100% !important;
+    @media (width >= 40rem) {
+      max-width: 40rem !important;
+    }
+    @media (width >= 46.875rem) {
+      max-width: 46.875rem !important;
+    }
+    @media (width >= 61.875rem) {
+      max-width: 61.875rem !important;
+    }
+    @media (width >= 87.5rem) {
+      max-width: 87.5rem !important;
+    }
+    @media (width >= 96rem) {
+      max-width: 96rem !important;
     }
   }
   .container {
