@@ -3,7 +3,7 @@
  * @param {string} url - The image/video URL to parse
  * @returns {Object} - An object containing product, color, and image_type
  */
-function parseImageUrl(url) {
+window.parseImageUrl = function (url) {
   // Initialize result with default values
   const result = {
     product: "",
@@ -128,18 +128,18 @@ function parseImageUrl(url) {
   }
 
   return result;
-}
+};
 
 /**
  * Sorts a list of image/video URLs according to the display rules
  * @param {Array<string>} imageUrls - List of image/video URLs
  * @returns {Array<string>} - Sorted list of image/video URLs
  */
-function sortImagesByDisplayRules(imageUrls) {
+window.sortImagesByDisplayRules = function (imageUrls) {
   // Parse all images
   const parsedImages = imageUrls.map((url) => ({
     url,
-    ...parseImageUrl(url),
+    ...window.parseImageUrl(url),
   }));
 
   // Group images by product and color
@@ -188,6 +188,4 @@ function sortImagesByDisplayRules(imageUrls) {
   });
 
   return sortedImages;
-}
-
-export { parseImageUrl, sortImagesByDisplayRules };
+};
