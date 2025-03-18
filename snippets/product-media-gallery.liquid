@@ -28,10 +28,10 @@
 
   # Get currently selected or first available variant
   assign first_variant = product.selected_or_first_available_variant
-  assign active_color = first_variant.option_values | where: "name", "Color" | first
+  assign active_color = first_variant.option_values | where: 'name', 'Color' | first
 
   if active_color == blank
-    assign active_color = first_variant.option_values | where: "name", "Colour" | first
+    assign active_color = first_variant.option_values | where: 'name', 'Colour' | first
   endif
 
   # Try different approaches to get color
@@ -148,7 +148,8 @@
         class="product__media-item{% if forloop.first %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %} scroll-trigger animate--fade-in"
         data-media-id="{{ section.id }}-{{ media.id }}"
       >
-        {% render 'product-thumbnail',
+        {%
+          render 'product-thumbnail',
           media: media,
           position: forloop.index,
           loop: section.settings.enable_video_looping,
@@ -165,77 +166,65 @@
     // Function to create media item element
     function createMediaItem(url, index) {
       const allMedia = {{ product.media | json }};
+      let mediaObject = null;
 
-      // Convert URL to match media object URL format
-      const mediaObject = allMedia.find(media => {
-        const urlParts = url.split('/');
-        const mediaParts = media.src.split('/');
-        const urlFilename = urlParts[urlParts.length - 1].split('?')[0];
-        const mediaFilename = mediaParts[mediaParts.length - 1].split('?')[0];
-
-        const urlBase = urlFilename.split('.')[0];
-        const mediaBase = mediaFilename.split('.')[0];
-
-        return urlBase === mediaBase;
-      });
-
-      if (!mediaObject) {
-        // Create a fallback media item if no match is found
-        const div = document.createElement('div');
-        div.id = `Slide-{{ section.id }}-${index}`;
-        div.className = `swiper-slide product__media-item${index === 0 ? ' is-active' : ''} scroll-trigger animate--fade-in`;
-        div.setAttribute('data-media-id', `{{ section.id }}-${index}`);
-
-        const wrapper = document.createElement('div');
-        wrapper.className = 'product__media media relative w-full h-0';
-        wrapper.style.cssText = '--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;';
-
-        const imageContainer = document.createElement('div');
-        imageContainer.className = 'absolute inset-0 w-full h-full';
-
-        const img = document.createElement('img');
-        img.src = url.startsWith('//') ? `https:${url}` : url;
-        img.alt = '';
-        img.id = `ProductMedia-{{ section.id }}-${index}`;
-        img.className = 'media-item w-full h-full object-cover';
-        img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
-
-        imageContainer.appendChild(img);
-        wrapper.appendChild(imageContainer);
-        div.appendChild(wrapper);
-        return div;
+      // Find matching media object by comparing filenames
+      for (const media of allMedia) {
+        const urlFilename = url.split('/').pop().split('?')[0].split('.')[0];
+        const mediaFilename = media.src.split('/').pop().split('?')[0].split('.')[0];
+        if (urlFilename === mediaFilename) {
+          mediaObject = media;
+          break;
+        }
       }
 
+      // Create container div
       const div = document.createElement('div');
-      div.id = `Slide-{{ section.id }}-${mediaObject.id}`;
-      div.className = `swiper-slide product__media-item${index === 0 ? ' is-active' : ''}${mediaObject.media_type !== 'image' ? ' product__media-item--full' : ''} scroll-trigger animate--fade-in`;
-      div.setAttribute('data-media-id', `{{ section.id }}-${mediaObject.id}`);
+      div.className = `swiper-slide product__media-item${index === 0 ? ' is-active' : ''} scroll-trigger animate--fade-in`;
 
+      // Set attributes based on whether we found a media object or not
+      const mediaId = mediaObject ? mediaObject.id : index;
+      div.id = `Slide-{{ section.id }}-${mediaId}`;
+      div.setAttribute('data-media-id', `{{ section.id }}-${mediaId}`);
+
+      if (mediaObject && mediaObject.media_type !== 'image') {
+        div.classList.add('product__media-item--full');
+      }
+
+      // Create media wrapper
       const wrapper = document.createElement('div');
       wrapper.className = 'product__media media relative w-full h-0';
       wrapper.style.cssText = '--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;';
 
+      // Create image container
       const imageContainer = document.createElement('div');
       imageContainer.className = 'absolute inset-0 w-full h-full';
 
+      // Create the image element
       const img = document.createElement('img');
-      const imgSrc = mediaObject.src.startsWith('//') ? `https:${mediaObject.src}` : mediaObject.src;
-      img.src = imgSrc;
-      img.alt = mediaObject.alt || '';
-      img.id = `ProductMedia-{{ section.id }}-${mediaObject.id}`;
+      img.src = mediaObject ?
+                (mediaObject.src.startsWith('//') ? `https:${mediaObject.src}` : mediaObject.src) :
+                (url.startsWith('//') ? `https:${url}` : url);
+      img.alt = mediaObject ? mediaObject.alt || '' : '';
+      img.id = `ProductMedia-{{ section.id }}-${mediaId}`;
       img.className = 'media-item w-full h-full object-cover';
       img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
-      img.width = mediaObject.width;
-      img.height = mediaObject.height;
 
+      if (mediaObject) {
+        img.width = mediaObject.width;
+        img.height = mediaObject.height;
+      }
+
+      // Assemble the elements
       imageContainer.appendChild(img);
       wrapper.appendChild(imageContainer);
       div.appendChild(wrapper);
+
       return div;
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-      // Initial setup
+      // DOM elements
       const gallery = document.querySelector('#MediaGallery-{{ section.id }}');
       const sliderWrapper = document.querySelector('#Slider-Gallery-{{ section.id }}');
       const grid = document.querySelector('#desktop-gallery');
@@ -245,295 +234,324 @@
       mobileGallery.classList.remove('loaded');
       grid.classList.remove('loaded');
 
-      // Get initial media URLs from data attribute
-      let initialMediaUrls = sliderWrapper.dataset.mediaUrls
-        .split(',')
-        .filter(url => url && url.trim() !== '')
-        .map(url => {
-          url = url.replace(/\/files\//, '/');
-          if (url.startsWith('//')) return `https:${url}`;
-          if (!url.startsWith('http')) return `https:${url.startsWith('//') ? '' : '//'}${url}`;
-          return url;
-        });
-
       // Get the initial active color
       const activeColor = gallery.dataset.activeColor;
 
-      // Wait for product-utils.js to load before filtering
-      function waitForProductUtils() {
-        if (window.parseImageUrl) {
-          // Filter URLs by active color using parseImageUrl
-          if (activeColor && initialMediaUrls.length > 0) {
-            const filteredUrls = initialMediaUrls.filter(url => {
-              const parsed = window.parseImageUrl(url);
-              return parsed.color.toLowerCase() === activeColor.toLowerCase();
-            });
-
-            // Only use filtered URLs if we found matches
-            if (filteredUrls.length > 0) {
-              initialMediaUrls = filteredUrls;
-            }
-          }
-
-          // If no URLs found, fallback to all media
-          if (initialMediaUrls.length === 0) {
-            initialMediaUrls = {{ product.media | json }}.map(media => {
-              let url = media.src.replace(/\/files\//, '/');
-              if (url.startsWith('//')) return `https:${url}`;
-              if (!url.startsWith('http')) return `https:${url.startsWith('//') ? '' : '//'}${url}`;
-              return url;
-            });
-          }
-
-          const sortedInitialUrls = window.sortImagesByDisplayRules(initialMediaUrls);
-          updateGalleryContent(sortedInitialUrls);
-        } else {
-          setTimeout(waitForProductUtils, 50);
+      // Process and filter media based on active color
+      function processMedia() {
+        if (!window.parseImageUrl) {
+          setTimeout(processMedia, 50);
+          return;
         }
+
+        // Get and format all media URLs
+        const allMediaUrls = {{ product.media | json }}.map(media => {
+          let url = media.src.replace(/\/files\//, '/');
+          return url.startsWith('//') ? `https:${url}` :
+                 !url.startsWith('http') ? `https://${url}` : url;
+        });
+
+        // Filter URLs by active color
+        let urlsToUse = allMediaUrls;
+        if (activeColor) {
+          const filteredUrls = allMediaUrls.filter(url => {
+            const parsed = window.parseImageUrl(url);
+            return parsed.color.toLowerCase() === activeColor.toLowerCase();
+          });
+
+          if (filteredUrls.length > 0) {
+            urlsToUse = filteredUrls;
+          }
+        }
+
+        // Sort and update gallery
+        updateGallery(window.sortImagesByDisplayRules(urlsToUse));
       }
 
-      // Function to update gallery content
-      function updateGalleryContent(urls) {
-        // Clear existing content
+      // Update gallery with the given URLs
+      function updateGallery(urls) {
         sliderWrapper.innerHTML = '';
         grid.innerHTML = '';
 
-        // Populate mobile slider and desktop grid
-        if (urls.length > 0) {
-          urls.forEach((url, index) => {
+        // Ensure we have at least some URLs to display
+        if (urls.length === 0) {
+          const allMediaUrls = {{ product.media | json }}.map(media => {
+            let url = media.src.replace(/\/files\//, '/');
+            return url.startsWith('//') ? `https:${url}` :
+                  !url.startsWith('http') ? `https://${url}` : url;
+          });
+          urls = allMediaUrls.length > 0 ? [allMediaUrls[0]] : [];
+        }
+
+        // Create at least 2 slides for proper pagination
+        const slidesToCreate = urls.length === 1 ? [urls[0], urls[0]] : urls;
+
+        if (slidesToCreate.length > 0) {
+          slidesToCreate.forEach((url, index) => {
             const mediaItem = createMediaItem(url, index);
             if (mediaItem) {
               sliderWrapper.appendChild(mediaItem.cloneNode(true));
-              grid.appendChild(mediaItem);
+
+              // Only add to grid once if it's a duplicate
+              if (index === 0 || url !== slidesToCreate[0]) {
+                grid.appendChild(mediaItem);
+              }
             }
           });
         }
 
-        // Initialize Swiper
-        if (typeof Swiper !== 'undefined') {
-          if (window.productSwiper) {
-            window.productSwiper.destroy();
-          }
-          initSwiper();
+        // Ensure pagination container exists
+        let paginationContainer = document.querySelector('.product-swiper .swiper-pagination');
+        if (!paginationContainer) {
+          paginationContainer = document.createElement('div');
+          paginationContainer.className = 'swiper-pagination';
+          paginationContainer.style.display = 'flex';
+          mobileGallery.appendChild(paginationContainer);
         }
 
-        // Show galleries after content is ready
+        // Initialize Swiper
+        initSwiper();
+
+        // Show galleries
         requestAnimationFrame(() => {
           mobileGallery.classList.add('loaded');
           grid.classList.add('loaded');
         });
       }
 
-      // Start waiting for product-utils.js
-      waitForProductUtils();
-
-      // Monitor color radio buttons
-      const radioButtons = document.querySelectorAll('input[type="radio"][name^="Color"], input[type="radio"][name^="Colour"]');
-      radioButtons.forEach(radio => {
-        radio.addEventListener('change', function(e) {
-          const newColor = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, '');
-          updateGalleryByColor(newColor);
-        });
-      });
-
-      // Monitor URL changes for variant updates
-      let currentUrl = window.location.href;
-      setInterval(() => {
-        if (currentUrl !== window.location.href) {
-          currentUrl = window.location.href;
-          const urlParams = new URLSearchParams(window.location.search);
-          const variantId = urlParams.get('variant');
-
-          if (variantId) {
-            const variants = {{ product.variants | json }};
-            const variant = variants.find(v => v.id.toString() === variantId);
-            if (variant) handleVariantChange(variant);
+      // Initialize Swiper separately to ensure it only runs when ready
+      function initSwiper() {
+        // Only initialize if Swiper is loaded and DOM is ready
+        if (typeof Swiper !== 'undefined') {
+          // Destroy previous instance if it exists
+          if (window.productSwiper) {
+            window.productSwiper.destroy();
           }
-        }
-      }, 300);
 
-      // Function to update gallery by color
-      function updateGalleryByColor(newColor) {
-        const currentColor = gallery.dataset.activeColor;
-        if (newColor !== currentColor) {
+          // Create new Swiper instance
+          window.productSwiper = new Swiper('.product-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            pagination: {
+              el: '.swiper-pagination',
+              type: 'bullets',
+              clickable: true,
+              renderBullet: function (index, className) {
+                return '<span class="' + className + '"></span>';
+              },
+              // Force pagination visibility even with one slide
+              dynamicBullets: false,
+              dynamicMainBullets: 1
+            },
+            // Show pagination even for a single slide
+            watchOverflow: false,
+            on: {
+              init: function () {
+                // Force pagination container to be visible
+                const pagination = document.querySelector('.swiper-pagination');
+                if (pagination) {
+                  pagination.style.display = 'flex';
+                  // Remove lock class if it exists
+                  pagination.classList.remove('swiper-pagination-lock');
+                }
+              },
+              slideChange: function() {
+                // Also ensure pagination stays visible after slide change
+                const pagination = document.querySelector('.swiper-pagination');
+                if (pagination) {
+                  pagination.style.display = 'flex';
+                  pagination.classList.remove('swiper-pagination-lock');
+                }
+              }
+            }
+          });
+        } else {
+          // If Swiper isn't loaded yet, wait for it
+          document.querySelector('script[src*="swiper-bundle.min.js"]')?.addEventListener('load', function() {
+            initSwiper();
+          });
+        }
+      }
+
+      // Handle color change
+      function handleColorChange(newColor) {
+        if (newColor !== gallery.dataset.activeColor) {
           gallery.dataset.activeColor = newColor;
-
-          const allMediaUrls = {{ product.media | json }}.map(media => {
-            let url = media.src.replace(/\/files\//, '/');
-            if (url.startsWith('//')) return `https:${url}`;
-            if (!url.startsWith('http')) return `https:${url.startsWith('//') ? '' : '//'}${url}`;
-            return url;
-          });
-
-          const filteredUrls = allMediaUrls.filter(url => {
-            const parsed = window.parseImageUrl(url);
-            return parsed.color.toLowerCase() === newColor.toLowerCase();
-          });
-
-          const urlsToUse = filteredUrls.length > 0 ? filteredUrls : allMediaUrls;
-          const sortedUrls = window.sortImagesByDisplayRules(urlsToUse);
-          updateGalleryContent(sortedUrls);
+          processMedia();
         }
       }
 
-      // Function to handle variant changes
-      function handleVariantChange(variant) {
-        let newColor = '';
-        const colorPosition = {{ product.options_with_values | json }}.findIndex(option =>
-          option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour'
-        );
+      // Set up event listeners
+      function setupEventListeners() {
+        // Listen for radio button changes
+        document.querySelectorAll('input[type="radio"][name^="Color"], input[type="radio"][name^="Colour"]')
+          .forEach(radio => {
+            radio.addEventListener('change', e => {
+              const newColor = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, '');
+              handleColorChange(newColor);
+            });
+          });
 
-        if (colorPosition >= 0 && variant.options) {
-          newColor = variant.options[colorPosition];
-        }
+        // Monitor URL changes for variant updates
+        let currentUrl = window.location.href;
+        setInterval(() => {
+          if (currentUrl !== window.location.href) {
+            currentUrl = window.location.href;
+            const variantId = new URLSearchParams(window.location.search).get('variant');
 
-        if (!newColor && variant.title) {
-          newColor = variant.title.split('/')[0].trim();
-        }
+            if (variantId) {
+              const variants = {{ product.variants | json }};
+              const variant = variants.find(v => v.id.toString() === variantId);
 
-        if (newColor) {
-          newColor = newColor.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, '');
-          updateGalleryByColor(newColor);
-        }
+              if (variant) {
+                // Extract color from variant
+                const colorPosition = {{ product.options_with_values | json }}
+                  .findIndex(option => option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour');
+
+                let color = colorPosition >= 0 && variant.options ? variant.options[colorPosition] : '';
+                if (!color && variant.title) {
+                  color = variant.title.split('/')[0].trim();
+                }
+
+                if (color) {
+                  handleColorChange(color.toLowerCase().replace(/\s+/g, '-').replace(/-+$/, ''));
+                }
+              }
+            }
+          }
+        }, 300);
       }
+
+      // Start processing media and set up listeners
+      processMedia();
+      setupEventListeners();
     });
-
-    // Function to initialize Swiper
-    function initSwiper() {
-      window.productSwiper = new Swiper('.product-swiper', {
-        slidesPerView: 1,
-        spaceBetween: 0,
-        pagination: {
-          el: '.swiper-pagination',
-          type: 'bullets',
-          clickable: true
-        }
-      });
-    }
   </script>
 
-  {% comment %} {%- liquid
-    assign is_not_limited_to_single_item = false
-    if limit == null or limit > 1
-      assign is_not_limited_to_single_item = true
-    endif
-  -%}
-  {%- if is_not_limited_to_single_item
-    and media_count > 1
-    and section.settings.gallery_layout contains 'thumbnail'
-    or section.settings.mobile_thumbnails == 'show'
-  -%}
-    <slider-component
-      id="GalleryThumbnails-{{ section.id }}"
-      class="thumbnail-slider slider-mobile-gutter quick-add-hidden{% unless section.settings.gallery_layout contains 'thumbnail' %} medium-hide large-up-hide{% endunless %}{% if section.settings.mobile_thumbnails != 'show' %} small-hide{% endif %}{% if media_count <= 3 %} thumbnail-slider--no-slide{% endif %}"
-    >
-      <button
-        type="button"
-        class="slider-button slider-button--prev{% if media_count <= 3 %} small-hide{% endif %}{% if media_count <= 4 %} medium-hide large-up-hide{% endif %}"
-        name="previous"
-        aria-label="{{ 'general.slider.previous_slide' | t }}"
-        aria-controls="GalleryThumbnails-{{ section.id }}"
-        data-step="3"
+  {% comment %}
+    {%- liquid
+      assign is_not_limited_to_single_item = false
+      if limit == null or limit > 1
+        assign is_not_limited_to_single_item = true
+      endif
+    -%}
+    {%- if is_not_limited_to_single_item
+      and media_count > 1
+      and section.settings.gallery_layout contains 'thumbnail'
+      or section.settings.mobile_thumbnails == 'show'
+    -%}
+      <slider-component
+        id="GalleryThumbnails-{{ section.id }}"
+        class="thumbnail-slider slider-mobile-gutter quick-add-hidden{% unless section.settings.gallery_layout contains 'thumbnail' %} medium-hide large-up-hide{% endunless %}{% if section.settings.mobile_thumbnails != 'show' %} small-hide{% endif %}{% if media_count <= 3 %} thumbnail-slider--no-slide{% endif %}"
       >
-        <span class="svg-wrapper">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </button>
-      <ul
-        id="Slider-Thumbnails-{{ section.id }}"
-        class="thumbnail-list list-unstyled slider slider--mobile{% if section.settings.gallery_layout == 'thumbnail_slider' %} slider--tablet-up{% endif %}"
-        data-media-urls="{{ filtered_media | escape }}"
-      >
-        {%- for media in filtered_media_objects -%}
-            <li
-              id="Slide-Thumbnails-{{ section.id }}-{{ forloop.index }}"
-            class="thumbnail-list__item slider__slide{% if section.settings.hide_variants and variant_images contains media %} thumbnail-list_item--variant{% endif %}"
-              data-target="{{ section.id }}-{{ media.id }}"
-            data-media-position="{{ forloop.index }}"
-            >
-              {%- if media.media_type == 'model' -%}
-                <span class="thumbnail__badge" aria-hidden="true">
-                  <span class="svg-wrapper">
-                    {{- 'icon-3d-model.svg' | inline_asset_content -}}
-                  </span>
-                </span>
-              {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
-                <span class="thumbnail__badge" aria-hidden="true">
-                  <span class="svg-wrapper">
-                    {{- 'icon-play.svg' | inline_asset_content -}}
-                  </span>
-                </span>
-              {%- endif -%}
-              {%- capture thumbnail_id -%}
-                Thumbnail-{{ section.id }}-{{ forloop.index }}
-              {%- endcapture -%}
-              <button
-                class="thumbnail global-media-settings global-media-settings--no-shadow"
-              aria-label="{%- if media.media_type == 'image' -%}{{ 'products.product.media.load_image' | t: index: forloop.index }}{%- elsif media.media_type == 'model' -%}{{ 'products.product.media.load_model' | t: index: forloop.index }}{%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}{{ 'products.product.media.load_video' | t: index: forloop.index }}{%- endif -%}"
-              {% if forloop.first %}aria-current="true"{% endif %}
-                aria-controls="GalleryViewer-{{ section.id }}"
-                aria-describedby="{{ thumbnail_id }}"
+        <button
+          type="button"
+          class="slider-button slider-button--prev{% if media_count <= 3 %} small-hide{% endif %}{% if media_count <= 4 %} medium-hide large-up-hide{% endif %}"
+          name="previous"
+          aria-label="{{ 'general.slider.previous_slide' | t }}"
+          aria-controls="GalleryThumbnails-{{ section.id }}"
+          data-step="3"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </button>
+        <ul
+          id="Slider-Thumbnails-{{ section.id }}"
+          class="thumbnail-list list-unstyled slider slider--mobile{% if section.settings.gallery_layout == 'thumbnail_slider' %} slider--tablet-up{% endif %}"
+          data-media-urls="{{ filtered_media | escape }}"
+        >
+          {%- for media in filtered_media_objects -%}
+              <li
+                id="Slide-Thumbnails-{{ section.id }}-{{ forloop.index }}"
+              class="thumbnail-list__item slider__slide{% if section.settings.hide_variants and variant_images contains media %} thumbnail-list_item--variant{% endif %}"
+                data-target="{{ section.id }}-{{ media.id }}"
+              data-media-position="{{ forloop.index }}"
               >
-                {{
-                  media.preview_image
-                  | image_url: width: 416
-                  | image_tag:
-                    loading: 'lazy',
-                    sizes: sizes,
-                    widths: '54, 74, 104, 162, 208, 324, 416',
-                    id: thumbnail_id,
-                    alt: media.alt
-                  | escape
-                }}
-              </button>
-            </li>
-        {%- endfor -%}
-      </ul>
-      <button
-        type="button"
-        class="slider-button slider-button--next{% if media_count <= 3 %} small-hide{% endif %}{% if media_count <= 4 %} medium-hide large-up-hide{% endif %}"
-        name="next"
-        aria-label="{{ 'general.slider.next_slide' | t }}"
-        aria-controls="GalleryThumbnails-{{ section.id }}"
-        data-step="3"
-      >
-        <span class="svg-wrapper">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </button>
+                {%- if media.media_type == 'model' -%}
+                  <span class="thumbnail__badge" aria-hidden="true">
+                    <span class="svg-wrapper">
+                      {{- 'icon-3d-model.svg' | inline_asset_content -}}
+                    </span>
+                  </span>
+                {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
+                  <span class="thumbnail__badge" aria-hidden="true">
+                    <span class="svg-wrapper">
+                      {{- 'icon-play.svg' | inline_asset_content -}}
+                    </span>
+                  </span>
+                {%- endif -%}
+                {%- capture thumbnail_id -%}
+                  Thumbnail-{{ section.id }}-{{ forloop.index }}
+                {%- endcapture -%}
+                <button
+                  class="thumbnail global-media-settings global-media-settings--no-shadow"
+                aria-label="{%- if media.media_type == 'image' -%}{{ 'products.product.media.load_image' | t: index: forloop.index }}{%- elsif media.media_type == 'model' -%}{{ 'products.product.media.load_model' | t: index: forloop.index }}{%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}{{ 'products.product.media.load_video' | t: index: forloop.index }}{%- endif -%}"
+                {% if forloop.first %}aria-current="true"{% endif %}
+                  aria-controls="GalleryViewer-{{ section.id }}"
+                  aria-describedby="{{ thumbnail_id }}"
+                >
+                  {{
+                    media.preview_image
+                    | image_url: width: 416
+                    | image_tag:
+                      loading: 'lazy',
+                      sizes: sizes,
+                      widths: '54, 74, 104, 162, 208, 324, 416',
+                      id: thumbnail_id,
+                      alt: media.alt
+                    | escape
+                  }}
+                </button>
+              </li>
+          {%- endfor -%}
+        </ul>
+        <button
+          type="button"
+          class="slider-button slider-button--next{% if media_count <= 3 %} small-hide{% endif %}{% if media_count <= 4 %} medium-hide large-up-hide{% endif %}"
+          name="next"
+          aria-label="{{ 'general.slider.next_slide' | t }}"
+          aria-controls="GalleryThumbnails-{{ section.id }}"
+          data-step="3"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </button>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          const thumbnailList = document.querySelector('#Slider-Thumbnails-{{ section.id }}');
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const thumbnailList = document.querySelector('#Slider-Thumbnails-{{ section.id }}');
 
-          // Get and sort media URLs
-          const mediaUrls = thumbnailList.dataset.mediaUrls.split(',').filter(url => url);
-          const sortedUrls = window.sortImagesByDisplayRules(mediaUrls);
+            // Get and sort media URLs
+            const mediaUrls = thumbnailList.dataset.mediaUrls.split(',').filter(url => url);
+            const sortedUrls = window.sortImagesByDisplayRules(mediaUrls);
 
-          // Reorder thumbnails based on sorted URLs
-          const items = Array.from(thumbnailList.children);
-          const sortedItems = [];
+            // Reorder thumbnails based on sorted URLs
+            const items = Array.from(thumbnailList.children);
+            const sortedItems = [];
 
-          sortedUrls.forEach(url => {
-            const item = items.find(item => {
-              const img = item.querySelector('img');
-              return img && (img.src === url || img.srcset.includes(url));
+            sortedUrls.forEach(url => {
+              const item = items.find(item => {
+                const img = item.querySelector('img');
+                return img && (img.src === url || img.srcset.includes(url));
+              });
+              if (item) sortedItems.push(item);
             });
-            if (item) sortedItems.push(item);
-          });
 
-          // Clear and re-append in sorted order
-          while (thumbnailList.firstChild) {
-            thumbnailList.removeChild(thumbnailList.firstChild);
-          }
-          sortedItems.forEach((item, index) => {
-            // Update position attributes
-            item.dataset.mediaPosition = index + 1;
-            item.id = `Slide-Thumbnails-{{ section.id }}-${index + 1}`;
-            thumbnailList.appendChild(item);
+            // Clear and re-append in sorted order
+            while (thumbnailList.firstChild) {
+              thumbnailList.removeChild(thumbnailList.firstChild);
+            }
+            sortedItems.forEach((item, index) => {
+              // Update position attributes
+              item.dataset.mediaPosition = index + 1;
+              item.id = `Slide-Thumbnails-{{ section.id }}-${index + 1}`;
+              thumbnailList.appendChild(item);
+            });
           });
-        });
-      </script>
-    </slider-component>
-  {%- endif -%} {% endcomment %}
+        </script>
+      </slider-component>
+    {%- endif -%}
+  {% endcomment %}
 </media-gallery>
