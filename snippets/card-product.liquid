@@ -12,6 +12,9 @@
   {% render 'card-product', card_product: product, section_id: section.id %}
 {% endcomment %}
 
+<script>
+  console.log({{ card_product | json }});
+</script>
 {%- if card_product and card_product != empty -%}
   <div class="card-wrapper h-full">
     <div class="flex flex-col h-full relative">
@@ -67,34 +70,80 @@
         </div>
 
         {%- if card_product.has_only_default_variant == false or card_product.variants.size > 1 -%}
-          <div class="grid mb-0 grid-cols-5 h-[3.75rem] w-fit gap-0.5">
-            {%- for variant in card_product.variants limit: 5 -%}
-              {%- if variant.featured_media -%}
+          {%- comment -%} Group variants by color (option1) {%- endcomment -%}
+          {%- assign unique_colors = '' -%}
+
+          {%- for variant in card_product.variants -%}
+            {%- assign color = variant.option1 -%}
+            {%- unless unique_colors contains color -%}
+              {%- assign unique_colors = unique_colors | append: ',' | append: color -%}
+            {%- endunless -%}
+          {%- endfor -%}
+
+          {%- assign unique_colors = unique_colors | remove_first: ',' | split: ',' -%}
+
+          <div class="grid mb-0 grid-cols-5 w-fit gap-0.5">
+            {%- for color in unique_colors -%}
+              {%- comment -%} Find first variant with this color {%- endcomment -%}
+              {%- assign color_variant = null -%}
+              {%- for variant in card_product.variants -%}
+                {%- if variant.option1 == color -%}
+                  {%- assign color_variant = variant -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- if color_variant -%}
+                {%- assign variant_image = null -%}
+
+                {%- comment -%} Try to find matching image in variant.featured_image {%- endcomment -%}
+                {%- if color_variant.featured_image -%}
+                  {%- assign variant_image = color_variant.featured_image -%}
+                {%- else -%}
+                  {%- comment -%} Try to find matching image in product.media or product.images {%- endcomment -%}
+                  {%- for media in card_product.media -%}
+                    {%- if media.alt contains color or media.alt contains color_variant.title -%}
+                      {%- assign variant_image = media -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  {%- unless variant_image -%}
+                    {%- for image in card_product.images -%}
+                      {%- if image.alt contains color or image.alt contains color_variant.title -%}
+                        {%- assign variant_image = image -%}
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endunless -%}
+
+                  {%- comment -%} Fallback to the first image that appears to match the color {%- endcomment -%}
+                  {%- unless variant_image -%}
+                    {%- for media in card_product.media -%}
+                      {%- if media.alt contains color or media.src contains color -%}
+                        {%- assign variant_image = media -%}
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endunless -%}
+
+                  {%- comment -%} Final fallback to featured_image {%- endcomment -%}
+                  {%- unless variant_image -%}
+                    {%- assign variant_image = card_product.featured_media -%}
+                  {%- endunless -%}
+                {%- endif -%}
+
                 <a
-                  href="{{ card_product.url }}?variant={{ variant.id }}"
-                  class="size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors"
+                  href="{{ card_product.url }}?variant={{ color_variant.id }}"
+                  class="size-9 xl:size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors"
                 >
                   <img
-                    src="{{ variant.featured_media | image_url: width: 50 }}"
-                    alt="{{ variant.title }}"
+                    src="{{ variant_image | image_url: width: 80 }}"
+                    alt="{{ color }}"
                     width="60"
                     height="60"
                     loading="lazy"
-                    class="size-[3.75rem] object-cover"
-                  >
-                </a>
-              {%- else -%}
-                <a
-                  href="{{ card_product.url }}?variant={{ variant.id }}"
-                  class="size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors"
-                >
-                  <img
-                    src="{{ card_product.featured_media | image_url: width: 50 }}"
-                    alt="{{ card_product.title }}"
-                    width="60"
-                    height="60"
-                    loading="lazy"
-                    class="size-[3.75rem] object-cover"
+                    class="w-full h-full object-cover"
                   >
                 </a>
               {%- endif -%}
