@@ -9,7 +9,8 @@
   {% render 'cart-notification' %}
 {% endcomment %}
 
-<cart-notification>
+<cart-notification style="display: none;">
+  <div class="layer_cart_overlay"></div>
   <div class="cart-notification-wrapper{% if desktop_menu_type != 'drawer' %} page-width{% endif %}">
     <div
       id="cart-notification"
@@ -18,43 +19,43 @@
       aria-label="{{ 'general.cart.item_added' | t }}"
       role="dialog"
       tabindex="-1"
+      style="display: none;"
     >
-      <div class="cart-notification__header">
-        <h2 class="cart-notification__heading caption-large text-body">
-          {{- 'icon-checkmark.svg' | inline_asset_content -}}
-          {{ 'general.cart.item_added' | t }}
-        </h2>
+      <div class="cart-notification__header" style="display: none;">
+        <div class="cart-notification__success" style="display: none;">
+          <div class="cart-notification__checkmark" style="display: none;">
+            {{- 'icon-checkmark.svg' | inline_asset_content -}}
+          </div>
+          <h2 class="cart-notification__heading" style="display: none;">
+            {{ 'general.cart.item_added' | t }}
+          </h2>
+        </div>
         <button
           type="button"
-          class="cart-notification__close modal__close-button link link--text focus-inset"
+          class="cart-notification__close modal__close-button"
           aria-label="{{ 'accessibility.close' | t }}"
+          style="display: none;"
         >
-          <span class="svg-wrapper">
+          <span class="svg-wrapper" style="display: none;">
             {{- 'icon-close.svg' | inline_asset_content -}}
           </span>
         </button>
       </div>
-      <div id="cart-notification-product" class="cart-notification-product"></div>
-      <div class="cart-notification__links">
+      <div id="cart-notification-product" class="cart-notification-product" style="display: none;"></div>
+      <div class="cart-notification__divider" style="display: none;"></div>
+      <div class="cart-notification__links" style="display: none;">
         <a
           href="{{ routes.cart_url }}"
           id="cart-notification-button"
-          class="button button--secondary button--full-width"
+          class="button button--primary button--full-width"
+          style="display: none;"
         >
-          {{- 'general.cart.view_empty_cart' | t -}}
+          View Cart
         </a>
-        <form action="{{ routes.cart_url }}" method="post" id="cart-notification-form">
-          <button class="button button--primary button--full-width" name="checkout">
-            {{ 'sections.cart.checkout' | t }}
-          </button>
-        </form>
-        <button type="button" class="link button-label">{{ 'general.continue_shopping' | t }}</button>
+        <button type="button" class="button button--secondary button--full-width continue-shopping" style="display: none;">
+          {{ 'general.continue_shopping' | t }}
+        </button>
       </div>
     </div>
   </div>
 </cart-notification>
-{% style %}
-  .cart-notification {
-    display: none;
-  }
-{% endstyle %}

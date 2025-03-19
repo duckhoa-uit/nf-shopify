@@ -1,37 +1,65 @@
 class CartNotification extends HTMLElement {
   constructor() {
     super();
-
-    this.notification = document.getElementById('cart-notification');
-    this.header = document.querySelector('sticky-header');
+    this.overlay = this.querySelector('.layer_cart_overlay');
+    this.notification = this.querySelector('#cart-notification');
+    this.wrapper = this.querySelector('.cart-notification-wrapper');
+    this.closeButton = this.querySelector('.cart-notification__close');
+    this.continueButton = this.querySelector('.continue-shopping');
     this.onBodyClick = this.handleBodyClick.bind(this);
+    this.bindEvents();
+  }
 
-    this.notification.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
-    this.querySelectorAll('button[type="button"]').forEach((closeButton) =>
-      closeButton.addEventListener('click', this.close.bind(this))
-    );
+  bindEvents() {
+    this.closeButton?.addEventListener('click', this.close.bind(this));
+    this.continueButton?.addEventListener('click', this.close.bind(this));
+    this.overlay?.addEventListener('click', this.close.bind(this));
+
+    document.addEventListener('keyup', (event) => {
+      if (event.code === 'Escape') this.close();
+    });
   }
 
   open() {
-    this.notification.classList.add('animate', 'active');
+    if (!this.notification || !this.wrapper || !this.overlay) return;
 
-    this.notification.addEventListener(
-      'transitionend',
-      () => {
-        this.notification.focus();
-        trapFocus(this.notification);
-      },
-      { once: true }
-    );
+    // Remove inline styles
+    this.style.display = 'block';
+    this.notification.style.display = 'block';
 
-    document.body.addEventListener('click', this.onBodyClick);
+    // Show all children elements
+    const elements = this.querySelectorAll('[style*="display: none"]');
+    elements.forEach(el => el.style.display = '');
+
+    // Add active classes
+    this.notification.classList.add('active');
+    this.wrapper.classList.add('active');
+    this.overlay.classList.add('active');
+
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('click', this.onBodyClick);
   }
 
   close() {
-    this.notification.classList.remove('active');
-    document.body.removeEventListener('click', this.onBodyClick);
+    if (!this.notification || !this.wrapper || !this.overlay) return;
 
-    removeTrapFocus(this.activeElement);
+    this.notification.classList.remove('active');
+    this.wrapper.classList.remove("active");
+    this.overlay.classList.remove("active");
+
+    document.body.style.overflow = "";
+    document.removeEventListener("click", this.onBodyClick);
+
+    // Reset inline styles to hide everything
+    setTimeout(() => {
+      this.style.display = "none";
+      this.notification.style.display = "none";
+
+      const elements = this.querySelectorAll(
+        ".cart-notification__header, .cart-notification__success, .cart-notification__checkmark, .cart-notification__heading, .cart-notification__close, .cart-notification-product, .cart-notification__links, .button",
+      );
+      elements.forEach((el) => (el.style.display = "none"));
+    }, 100);
   }
 
   renderContents(parsedState) {
@@ -68,15 +96,19 @@ class CartNotification extends HTMLElement {
 
   handleBodyClick(evt) {
     const target = evt.target;
-    if (target !== this.notification && !target.closest('cart-notification')) {
-      const disclosure = target.closest('details-disclosure, header-menu');
-      this.activeElement = disclosure ? disclosure.querySelector('summary') : null;
+    if (target !== this.notification && !this.notification.contains(target) &&
+        target !== this.closeButton && !this.closeButton.contains(target)) {
       this.close();
     }
   }
 
   setActiveElement(element) {
     this.activeElement = element;
+  }
+
+  continueShopping(event) {
+    event.preventDefault();
+    this.close();
   }
 }
 

@@ -1,51 +1,60 @@
 {%- if cart != empty -%}
   {%- for item in cart.items -%}
-    <div id="cart-notification-product-{{ item.key }}" class="cart-item">
+    <div id="cart-notification-product-{{ item.key }}" class="cart-notification__item">
       {%- if item.image -%}
-        <div class="cart-notification-product__image global-media-settings">
+        <div class="cart-notification__item-image">
           <img
             src="{{ item.image | image_url: width: 140 }}"
             alt="{{ item.image.alt | escape }}"
-            width="70"
-            height="{{ 70 | divided_by: item.image.aspect_ratio | ceil }}"
+            width="80"
+            height="{{ 80 | divided_by: item.image.aspect_ratio | ceil }}"
             loading="lazy"
           >
         </div>
       {%- endif -%}
-      <div>
-        {%- if settings.show_vendor -%}
-          <p class="caption-with-letter-spacing light">{{ item.product.vendor }}</p>
-        {%- endif -%}
-        <h3 class="cart-notification-product__name h4">{{ item.product.title | escape }}</h3>
-        <dl>
+      <div class="cart-notification__item-details">
+        <h3 class="cart-notification__item-title">{{ item.product.title | escape }}</h3>
+        <div class="cart-notification__item-info">
           {%- unless item.product.has_only_default_variant -%}
             {%- for option in item.options_with_values -%}
-              <div class="product-option">
-                <dt>{{ option.name }}:</dt>
-                <dd>{{ option.value }}</dd>
+              <div class="cart-notification__item-property">
+                <span class="cart-notification__item-property-name">{{ option.name }}:</span>
+                <span class="cart-notification__item-property-value">{{ option.value }}</span>
               </div>
             {%- endfor -%}
           {%- endunless -%}
           {%- for property in item.properties -%}
             {%- assign property_first_char = property.first | slice: 0 -%}
             {%- if property.last != blank and property_first_char != '_' -%}
-              <div class="product-option">
-                <dt>{{ property.first }}:</dt>
-                <dd>
+              <div class="cart-notification__item-property">
+                <span class="cart-notification__item-property-name">{{ property.first }}:</span>
+                <span class="cart-notification__item-property-value">
                   {%- if property.last contains '/uploads/' -%}
-                    <a href="{{ property.last }}" class="link" target="_blank">
+                    <a href="{{ property.last }}" target="_blank">
                       {{ property.last | split: '/' | last }}
                     </a>
                   {%- else -%}
                     {{ property.last }}
                   {%- endif -%}
-                </dd>
+                </span>
               </div>
             {%- endif -%}
           {%- endfor -%}
-        </dl>
+
+          <div class="cart-notification__item-property">
+            <span class="cart-notification__item-property-name">Quantity:</span>
+            <span class="cart-notification__item-property-value">{{ item.quantity }}</span>
+          </div>
+
+          <div class="cart-notification__item-property">
+            <span class="cart-notification__item-property-name">Price:</span>
+            <span class="cart-notification__item-price">{{ item.final_line_price | money }}</span>
+          </div>
+        </div>
         {%- if item.selling_plan_allocation != null -%}
-          <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+          <div class="cart-notification__item-property">
+            <span class="cart-notification__item-property-value">{{ item.selling_plan_allocation.selling_plan.name }}</span>
+          </div>
         {%- endif -%}
       </div>
     </div>
