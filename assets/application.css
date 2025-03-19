@@ -740,6 +740,12 @@
   .flex-1 {
     flex: 1 !important;
   }
+  .flex-shrink {
+    flex-shrink: 1 !important;
+  }
+  .flex-grow {
+    flex-grow: 1 !important;
+  }
   .border-collapse {
     border-collapse: collapse !important;
   }
@@ -1425,6 +1431,10 @@
     --tw-ease: var(--ease-in-out) !important;
     transition-timing-function: var(--ease-in-out) !important;
   }
+  .ease-out {
+    --tw-ease: var(--ease-out) !important;
+    transition-timing-function: var(--ease-out) !important;
+  }
   .backface-hidden {
     backface-visibility: hidden !important;
   }
@@ -1898,6 +1908,12 @@
     & svg {
       width: calc(var(--spacing) * 4) !important;
       height: calc(var(--spacing) * 4) !important;
+    }
+  }
+  .\[\&_svg\]\:size-5 {
+    & svg {
+      width: calc(var(--spacing) * 5) !important;
+      height: calc(var(--spacing) * 5) !important;
     }
   }
   .\[\&_svg\]\:size-\[1\.625rem\] {
