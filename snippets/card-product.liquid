@@ -81,9 +81,17 @@
           {%- endfor -%}
 
           {%- assign unique_colors = unique_colors | remove_first: ',' | split: ',' -%}
+          {%- assign colors_count = unique_colors.size -%}
+          {%- assign display_count = colors_count -%}
+          {%- assign remaining_count = 0 -%}
+
+          {%- if colors_count > 5 -%}
+            {%- assign display_count = 4 -%}
+            {%- assign remaining_count = colors_count | minus: display_count -%}
+          {%- endif -%}
 
           <div class="grid mb-0 grid-cols-5 w-fit gap-0.5">
-            {%- for color in unique_colors -%}
+            {%- for color in unique_colors limit: display_count -%}
               {%- comment -%} Find first variant with this color {%- endcomment -%}
               {%- assign color_variant = null -%}
               {%- for variant in card_product.variants -%}
@@ -148,6 +156,15 @@
                 </a>
               {%- endif -%}
             {%- endfor -%}
+
+            {%- if remaining_count > 0 -%}
+              <a
+                href="{{ card_product.url }}"
+                class="size-9 xl:size-[3.75rem] rounded-full border border-[#E5E5E5] bg-white flex items-center justify-center text-center text-[#4D4D4D] font-medium"
+              >
+                +{{ remaining_count }}
+              </a>
+            {%- endif -%}
           </div>
         {%- endif -%}
       {%- endif -%}
