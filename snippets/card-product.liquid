@@ -42,6 +42,7 @@
         <div class="relative overflow-hidden mb-3">
           <a href="{{ card_product.url }}" class="card-product-northfinder__link">
             <img
+              id="main-image-{{ card_product.id }}"
               srcset="
                 {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
                 {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
@@ -57,6 +58,8 @@
               {% endunless %}
               width="{{ card_product.featured_media.width }}"
               height="{{ card_product.featured_media.height }}"
+              data-original-src="{{ card_product.featured_media | image_url: width: 533 }}"
+              data-original-srcset="{%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}{%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}{%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}{{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w"
             >
           </a>
 
@@ -143,7 +146,11 @@
 
                 <a
                   href="{{ card_product.url }}?variant={{ color_variant.id }}"
-                  class="size-9 xl:size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors"
+                  class="size-9 xl:size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors variant-swatch"
+                  data-variant-id="{{ color_variant.id }}"
+                  data-product-id="{{ card_product.id }}"
+                  data-variant-image="{{ variant_image | image_url: width: 533 }}"
+                  data-variant-image-srcset="{%- if variant_image.width >= 360 -%}{{ variant_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if variant_image.width >= 533 -%}{{ variant_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if variant_image.width >= 720 -%}{{ variant_image | image_url: width: 720 }} 720w,{%- endif -%}{{ variant_image | image_url }} {{ variant_image.width }}w"
                 >
                   <img
                     src="{{ variant_image | image_url: width: 80 }}"
@@ -202,3 +209,36 @@
     </div>
   </div>
 {%- endif -%}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const variantSwatches = document.querySelectorAll('.variant-swatch');
+
+    variantSwatches.forEach(swatch => {
+      const productId = swatch.dataset.productId;
+      const variantImage = swatch.dataset.variantImage;
+      const variantImageSrcset = swatch.dataset.variantImageSrcset;
+      const mainImage = document.getElementById(`main-image-${productId}`);
+
+      if (mainImage) {
+        swatch.addEventListener('mouseenter', function() {
+          // Store original src and srcset if not already stored
+          if (!mainImage.dataset.tempSrc) {
+            mainImage.dataset.tempSrc = mainImage.src;
+            mainImage.dataset.tempSrcset = mainImage.srcset;
+          }
+
+          // Change to variant image
+          mainImage.src = variantImage;
+          mainImage.srcset = variantImageSrcset;
+        });
+
+        swatch.addEventListener('mouseleave', function() {
+          // Restore original image
+          mainImage.src = mainImage.dataset.originalSrc;
+          mainImage.srcset = mainImage.dataset.originalSrcset;
+        });
+      }
+    });
+  });
+</script>
