@@ -29,10 +29,15 @@
 <cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
   <div class="page-width">
     <div class="nf-cart-header">
-      <h1 class="title title--primary">{{ 'sections.cart.title' | t }}</h1>
-      <a href="{{ routes.all_products_collection_url }}" class="underlined-link">
-        {{- 'general.continue_shopping' | t -}}
-      </a>
+      <h1 class="title title--primary font-archivo-expanded font-extrabold text-2xl leading-7 my-0 uppercase">
+        {{ 'sections.cart.title' | t }}
+      </h1>
+      {% comment %}
+        <a href="{{ routes.all_products_collection_url }}" class="underlined-link">
+          {{- 'general.continue_shopping' | t -}}
+        </a>
+      {% endcomment %}
+      <h2 class="nf-cart-summary__title my-0">{{ 'sections.cart.summary' | t | default: 'Sumár' }}</h2>
     </div>
 
     <div class="cart__warnings">
@@ -53,12 +58,14 @@
       <div class="nf-cart-wrapper">
         <div class="nf-cart-main">
           {% if cart != empty %}
-            {% if section.settings.show_promo_banner %}
-              <div class="nf-promo-banner">
-                <div class="nf-promo-banner__icon">i</div>
-                <p class="nf-promo-banner__text">{{ section.settings.promo_banner_text }}</p>
-              </div>
-            {% endif %}
+            {% comment %}
+              {% if section.settings.show_promo_banner %}
+                <div class="nf-promo-banner">
+                  <div class="nf-promo-banner__icon">i</div>
+                  <p class="nf-promo-banner__text">{{ section.settings.promo_banner_text }}</p>
+                </div>
+              {% endif %}
+            {% endcomment %}
 
             <div class="cart__items" id="main-cart-items" data-id="{{ section.id }}">
               <div class="js-contents">
@@ -82,7 +89,17 @@
                                   <div class="nf-tag nf-tag--new">Novinka</div>
                                 {% endif %}
                                 {% if item.original_price != item.final_price %}
-                                  <div class="nf-tag nf-tag--sale">-{{ item.original_price | minus: item.final_price | times: 100.0 | divided_by: item.original_price | round }}%</div>
+                                  <div class="nf-tag nf-tag--sale">
+                                    -
+                                    {{-
+                                      item.original_price
+                                      | minus: item.final_price
+                                      | times: 100.0
+                                      | divided_by: item.original_price
+                                      | round
+                                    -}}
+                                    %
+                                  </div>
                                 {% endif %}
                               </div>
                             {% endif %}
@@ -90,14 +107,18 @@
 
                           <div class="nf-cart-item__content">
                             <div class="nf-cart-item__info">
-                              <a href="{{ item.url }}" class="nf-cart-item__name">{{ item.product.title | escape }}</a>
-                              <div class="nf-cart-item__price">
-                                {%- if item.original_price != item.final_price -%}
-                                  <span class="nf-cart-item__price-regular">{{- item.original_price | money -}}</span>
-                                  <span class="nf-cart-item__price-sale">{{ item.final_price | money }}</span>
-                                {%- else -%}
-                                  <span class="nf-cart-item__price-regular">{{ item.original_price | money }}</span>
-                                {%- endif -%}
+                              <div class="flex items-start justify-between">
+                                <a href="{{ item.url }}" class="nf-cart-item__name">
+                                  {{- item.product.title | escape -}}
+                                </a>
+                                <div class="nf-cart-item__price">
+                                  {%- if item.original_price != item.final_price -%}
+                                    <span class="nf-cart-item__price-regular">{{- item.original_price | money -}}</span>
+                                    <span class="nf-cart-item__price-sale">{{ item.final_price | money }}</span>
+                                  {%- else -%}
+                                    <span class="nf-cart-item__price-regular">{{ item.original_price | money }}</span>
+                                  {%- endif -%}
+                                </div>
                               </div>
 
                               {% if item.product.description != blank %}
@@ -112,7 +133,13 @@
                                     <div class="nf-cart-item__variant-item">
                                       <span class="nf-cart-item__variant-label">{{ option.name }}:</span>
                                       <span class="nf-cart-item__variant-value">{{ option.value }}</span>
-                                      <svg class="nf-cart-item__variant-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                                      <svg
+                                        class="nf-cart-item__variant-arrow"
+                                        width="10"
+                                        height="6"
+                                        viewBox="0 0 10 6"
+                                        fill="none"
+                                      >
                                         <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1"/>
                                       </svg>
                                     </div>
@@ -120,64 +147,48 @@
                                 {%- endif -%}
 
                                 <div class="nf-cart-item__variant-item">
-                                  <span class="nf-cart-item__variant-label">{{ 'products.product.quantity.label' | t }}:</span>
+                                  <span class="nf-cart-item__variant-label">
+                                    {{- 'products.product.quantity.label' | t }}:</span
+                                  >
                                   <span class="nf-cart-item__variant-value">{{ item.quantity }}</span>
-                                  <svg class="nf-cart-item__variant-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                                  <svg
+                                    class="nf-cart-item__variant-arrow"
+                                    width="10"
+                                    height="6"
+                                    viewBox="0 0 10 6"
+                                    fill="none"
+                                  >
                                     <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1"/>
                                   </svg>
                                 </div>
                               </div>
 
-                              <div class="nf-cart-item__actions">
-                                <button type="button" class="nf-cart-item__action-btn nf-cart-item__action-btn--wishlist">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                    <path d="M8 15L7.19 14.2734C3.4 10.8984 1 8.78125 1 6.2C1 4.08333 2.65833 2.5 4.7 2.5C5.87 2.5 6.99167 3.06667 7.6 3.93333C8.20833 3.06667 9.33 2.5 10.5 2.5C12.5417 2.5 14.2 4.08333 14.2 6.2C14.2 8.78125 11.8 10.8984 8.01 14.2812L8 15Z" fill="#EC0009"/>
-                                  </svg>
-                                  <span>{{ 'products.product.add_to_wishlist' | t | default: 'Na zoznam prianí' }}</span>
+                              <div class="nf-cart-item__actions text-[#3D3D3D] flex items-center">
+                                <button
+                                  type="button"
+                                  class="nf-cart-item__action-btn nf-cart-item__action-btn--wishlist"
+                                >
+                                  <span class="svg-wrapper size-4">{{ 'icon-heart.svg' | inline_asset_content }}</span>
+                                  <span class="underline">
+                                    {{- 'products.product.add_to_wishlist' | t | default: 'Na zoznam prianí' -}}
+                                  </span>
                                 </button>
 
-                                <cart-remove-button id="Remove-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
-                                  <button type="button" class="nf-cart-item__action-btn nf-cart-item__action-btn--remove">
-                                    <span>{{ 'sections.cart.remove' | t | default: 'Vymazať' }}</span>
+                                <span class="border-l border-[#ccc] h-4"></span>
+
+                                <cart-remove-button
+                                  id="Remove-{{ item.index | plus: 1 }}"
+                                  data-index="{{ item.index | plus: 1 }}"
+                                  class=""
+                                >
+                                  <button
+                                    type="button"
+                                    class="nf-cart-item__action-btn nf-cart-item__action-btn--remove"
+                                  >
+                                    <span class="underline">{{ 'sections.cart.remove' | t | default: 'Vymazať' }}</span>
                                   </button>
                                 </cart-remove-button>
                               </div>
-                            </div>
-
-                            <div class="nf-cart-item__delivery">
-                              <div class="nf-cart-item__delivery-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                  <path d="M16 2H1V16H16V2Z" stroke="currentColor" stroke-width="1.5"/>
-                                  <path d="M16 8H20L23 11V16H16V8Z" stroke="currentColor" stroke-width="1.5"/>
-                                  <circle cx="5.5" cy="19.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
-                                  <circle cx="18.5" cy="19.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
-                                </svg>
-                              </div>
-                              <div class="nf-cart-item__delivery-info">
-                                <p class="nf-cart-item__delivery-date">
-                                  {{ 'products.product.delivery_date' | t | default: 'Dodanie: 02.06. - 03.06.' }}
-                                </p>
-                                {% if section.settings.free_shipping_threshold > 0 %}
-                                  {% assign remaining_amount = section.settings.free_shipping_threshold | minus: cart.total_price | divided_by: 100.0 %}
-                                  {% if remaining_amount > 0 %}
-                                    <p class="nf-cart-item__delivery-message">
-                                      {{ 'products.product.free_shipping_message' | t: amount: remaining_amount | money | default: 'Pre dopravu zdarma nakúp ešte za ' | append: remaining_amount | money }}
-                                    </p>
-                                  {% endif %}
-                                {% endif %}
-                              </div>
-                            </div>
-
-                            <div class="nf-cart-item__returns">
-                              <div class="nf-cart-item__returns-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                  <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="1.5"/>
-                                  <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="1.5"/>
-                                </svg>
-                              </div>
-                              <p class="nf-cart-item__returns-text">
-                                {{ 'products.product.returns' | t | default: 'Vrátenie zdarma do 60 dní.' }}
-                              </p>
                             </div>
                           </div>
                         </div>
@@ -190,14 +201,18 @@
 
             {% if section.settings.show_related_products %}
               <div class="nf-related-products">
-                <h2 class="nf-related-products__title">{{ 'products.product.related_products' | t | default: 'Mohlo by sa vám páčiť' }}</h2>
+                <h2 class="nf-related-products__title">
+                  {{ 'products.product.related_products' | t | default: 'Mohlo by sa vám páčiť' }}
+                </h2>
                 <!-- Related products content would go here - this requires product recommendations -->
               </div>
             {% endif %}
 
             {% if section.settings.show_wishlist_link %}
               <div class="nf-wishlist-link">
-                <h2 class="nf-wishlist-link__title">{{ 'products.product.wishlist' | t | default: 'Zoznam prianí' }}</h2>
+                <h2 class="nf-wishlist-link__title">
+                  {{ 'products.product.wishlist' | t | default: 'Zoznam prianí' }}
+                </h2>
                 <!-- Wishlist content would go here -->
               </div>
             {% endif %}
@@ -206,11 +221,11 @@
 
         <div class="nf-cart-sidebar">
           <div class="nf-cart-summary">
-            <h2 class="nf-cart-summary__title">{{ 'sections.cart.summary' | t | default: 'Sumár' }}</h2>
-
             <ul class="nf-cart-summary__list">
               <li class="nf-cart-summary__item">
-                <span class="nf-cart-summary__label">{{ 'cart.summary.subtotal_excluding_tax' | t | default: 'Cena produktov bez DPH' }}</span>
+                <span class="nf-cart-summary__label">
+                  {{- 'cart.summary.subtotal_excluding_tax' | t | default: 'Cena produktov bez DPH' -}}
+                </span>
                 <span class="nf-cart-summary__value">{{ cart.total_price | minus: cart.total_tax | money }}</span>
               </li>
 
@@ -220,7 +235,9 @@
               </li>
 
               <li class="nf-cart-summary__item">
-                <span class="nf-cart-summary__label">{{ 'cart.summary.subtotal' | t | default: 'Cena produktov s DPH' }}</span>
+                <span class="nf-cart-summary__label">
+                  {{- 'cart.summary.subtotal' | t | default: 'Cena produktov s DPH' -}}
+                </span>
                 <span class="nf-cart-summary__value">{{ cart.total_price | money }}</span>
               </li>
 
@@ -229,7 +246,9 @@
                   {{ 'cart.summary.shipping' | t | default: 'Poštové náklady' }}
                   <span class="nf-cart-summary__info-icon">?</span>
                 </span>
-                <span class="nf-cart-summary__value">{{ 'cart.summary.calculated_at_checkout' | t | default: '0 €' }}</span>
+                <span class="nf-cart-summary__value">
+                  {{- 'cart.summary.calculated_at_checkout' | t | default: '0 €' -}}
+                </span>
               </li>
             </ul>
 
@@ -237,49 +256,65 @@
               <span class="nf-cart-summary__total-label">{{ 'cart.summary.total' | t | default: 'Spolu' }}</span>
               <span class="nf-cart-summary__total-value">{{ cart.total_price | money }}</span>
             </div>
+          </div>
 
-            {% if section.settings.show_loyalty_benefits %}
-              <div class="nf-cart-benefits">
-                <h3 class="nf-cart-benefits__title">{{ 'cart.benefits.title' | t | default: 'Benefity pre registrovaných zákazníkov' }}</h3>
-
-                <div class="nf-cart-benefits__loyalty">
-                  <div class="nf-cart-benefits__icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-                      <path d="M8 12L11 15L16 10" stroke="currentColor" stroke-width="1.5"/>
-                    </svg>
-                  </div>
-                  <h4 class="nf-cart-benefits__loyalty-title">{{ 'cart.benefits.loyalty' | t | default: 'Vernostný bonus' }}</h4>
-                  <ul class="nf-cart-benefits__loyalty-list">
-                    <li class="nf-cart-benefits__loyalty-item">
-                      <span class="nf-cart-benefits__loyalty-bullet"></span>
-                      <p>{{ 'cart.benefits.loyalty_text_1' | t | default: 'Registruj sa a získaj za každý nákup vernostný bonus.' }}</p>
-                    </li>
-                    <li class="nf-cart-benefits__loyalty-item">
-                      <span class="nf-cart-benefits__loyalty-bullet"></span>
-                      <p>{{ 'cart.benefits.loyalty_text_2' | t | default: 'Bonus ti pripíšeme na tvoj účet u nás na 15. deň od doručenia zásielky.' }}</p>
-                    </li>
-                    <li class="nf-cart-benefits__loyalty-item">
-                      <span class="nf-cart-benefits__loyalty-bullet"></span>
-                      <p>{{ 'cart.benefits.loyalty_text_3' | t | default: 'Ten si môžeš odrátať z nasledujúceho nákupu, max. však vo výške 25% z jeho hodnoty.' }}</p>
-                    </li>
-                    <li class="nf-cart-benefits__loyalty-item">
-                      <span class="nf-cart-benefits__loyalty-bullet"></span>
-                      <p>{{ 'cart.benefits.loyalty_text_4' | t | default: 'Bonus odporúčame využiť v priebehu ďalších 150 dní.' }}</p>
-                    </li>
-                  </ul>
-                </div>
+          {% comment %}
+            <div class="nf-cart-coupon">
+              <h3 class="nf-cart-coupon__title">{{ 'cart.coupon.title' | t | default: 'Zľavový kupón / Darčekový poukaz' }}</h3>
+              <div class="nf-cart-coupon__form">
+                <input type="text" class="nf-cart-coupon__input" placeholder="{{ 'cart.coupon.placeholder' | t | default: 'Kód' }}">
+                <button type="button" class="nf-cart-coupon__button">{{ 'cart.coupon.apply' | t | default: 'Úplatniť' }}</button>
               </div>
-            {% endif %}
-          </div>
-
-          <div class="nf-cart-coupon">
-            <h3 class="nf-cart-coupon__title">{{ 'cart.coupon.title' | t | default: 'Zľavový kupón / Darčekový poukaz' }}</h3>
-            <div class="nf-cart-coupon__form">
-              <input type="text" class="nf-cart-coupon__input" placeholder="{{ 'cart.coupon.placeholder' | t | default: 'Kód' }}">
-              <button type="button" class="nf-cart-coupon__button">{{ 'cart.coupon.apply' | t | default: 'Úplatniť' }}</button>
             </div>
-          </div>
+          {% endcomment %}
+
+          {% comment %}
+            <div class="nf-cart-item__delivery">
+              <div class="nf-cart-item__delivery-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M16 2H1V16H16V2Z" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M16 8H20L23 11V16H16V8Z" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="5.5" cy="19.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="18.5" cy="19.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <div class="nf-cart-item__delivery-info">
+                <p class="nf-cart-item__delivery-date">
+                  {{ 'products.product.delivery_date' | t | default: 'Dodanie: 02.06. - 03.06.' }}
+                </p>
+                {% if section.settings.free_shipping_threshold > 0 %}
+                  {% assign remaining_amount = section.settings.free_shipping_threshold
+                    | minus: cart.total_price
+                    | divided_by: 100.0
+                  %}
+                  {% if remaining_amount > 0 %}
+                    <p class="nf-cart-item__delivery-message">
+                      {{
+                        'products.product.free_shipping_message'
+                        | t: amount: remaining_amount
+                        | money
+                        | default: 'Pre dopravu zdarma nakúp ešte za '
+                        | append: remaining_amount
+                        | money
+                      }}
+                    </p>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="nf-cart-item__returns">
+              <div class="nf-cart-item__returns-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <p class="nf-cart-item__returns-text">
+                {{ 'products.product.returns' | t | default: 'Vrátenie zdarma do 60 dní.' }}
+              </p>
+            </div>
+          {% endcomment %}
 
           <div class="nf-cart-checkout">
             <button type="submit" class="nf-cart-checkout__button" name="checkout" form="cart">
@@ -296,6 +331,67 @@
               </a>
             {% endif %}
           </div>
+
+          {% if section.settings.show_loyalty_benefits %}
+            <div class="nf-cart-benefits">
+              <h3 class="nf-cart-benefits__title">
+                {{ 'cart.benefits.title' | t | default: 'Benefity pre registrovaných zákazníkov' }}
+              </h3>
+
+              <div class="nf-cart-benefits__loyalty">
+                <div class="nf-cart-benefits__icon flex items-center gap-1">
+                  <span class="svg-wrapper [&_svg]:size-[1.125rem]">
+                    {{- 'icon-currency.svg' | inline_asset_content -}}
+                  </span>
+                  <h4 class="nf-cart-benefits__loyalty-title">
+                    {{ 'cart.benefits.loyalty' | t | default: 'Vernostný bonus' }}
+                  </h4>
+                </div>
+                <ul class="nf-cart-benefits__loyalty-list">
+                  <li class="nf-cart-benefits__loyalty-item">
+                    <span class="nf-cart-benefits__loyalty-bullet"></span>
+                    <p>
+                      {{
+                        'cart.benefits.loyalty_text_1'
+                        | t
+                        | default: 'Registruj sa a získaj za každý nákup vernostný bonus.'
+                      }}
+                    </p>
+                  </li>
+                  <li class="nf-cart-benefits__loyalty-item">
+                    <span class="nf-cart-benefits__loyalty-bullet"></span>
+                    <p>
+                      {{
+                        'cart.benefits.loyalty_text_2'
+                        | t
+                        | default: 'Bonus ti pripíšeme na tvoj účet u nás na 15. deň od doručenia zásielky.'
+                      }}
+                    </p>
+                  </li>
+                  <li class="nf-cart-benefits__loyalty-item">
+                    <span class="nf-cart-benefits__loyalty-bullet"></span>
+                    <p>
+                      {{
+                        'cart.benefits.loyalty_text_3'
+                        | t
+                        | default: 'Ten si môžeš odrátať z nasledujúceho nákupu, max. však vo výške 25% z jeho hodnoty.'
+                      }}
+                    </p>
+                  </li>
+                  <li class="nf-cart-benefits__loyalty-item">
+                    <span class="nf-cart-benefits__loyalty-bullet"></span>
+                    <p>
+                      {{
+                        'cart.benefits.loyalty_text_4'
+                        | t
+                        | default: 'Bonus odporúčame využiť v priebehu ďalších 150 dní.'
+                      }}
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          {% endif %}
         </div>
       </div>
 
@@ -339,13 +435,13 @@
       "type": "checkbox",
       "id": "show_related_products",
       "label": "Show related products",
-      "default": true
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "show_wishlist_link",
       "label": "Show wishlist link",
-      "default": true
+      "default": false
     },
     {
       "type": "checkbox",
