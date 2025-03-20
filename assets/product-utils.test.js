@@ -186,6 +186,54 @@ describe("parseImageUrl", () => {
       image_type: "main",
     });
   });
+
+  test("parses NF-bu format with details images", () => {
+    const result = parseImageUrl(
+      "men-039-s-waterproof-multisport-jacket-stowable-2l-northkit--NF-bu-32682sii-black-D_1.jpg",
+    );
+    expect(result).toEqual({
+      product: "NF-bu-32682sii",
+      color: "black",
+      image_type: "details",
+      sequence: 1,
+    });
+  });
+
+  test("parses NF-bu format with different file extensions", () => {
+    const result = parseImageUrl(
+      "men-039-s-waterproof-multisport-jacket-stowable-2l-northkit--NF-bu-32682sii-brightred-D_1.png",
+    );
+    expect(result).toEqual({
+      product: "NF-bu-32682sii",
+      color: "brightred",
+      image_type: "details",
+      sequence: 1,
+    });
+  });
+
+  test("parses NF-bu format with high sequence numbers", () => {
+    const result = parseImageUrl(
+      "men-039-s-waterproof-multisport-jacket-stowable-2l-northkit--NF-bu-32682sii-black-D_10.jpg",
+    );
+    expect(result).toEqual({
+      product: "NF-bu-32682sii",
+      color: "black",
+      image_type: "details",
+      sequence: 10,
+    });
+  });
+
+  test("parses NF-bu format with complex color names", () => {
+    const result = parseImageUrl(
+      "men-039-s-waterproof-multisport-jacket-stowable-2l-northkit--NF-bu-32682sii-macawgreen2-D_1.png",
+    );
+    expect(result).toEqual({
+      product: "NF-bu-32682sii",
+      color: "macawgreen2",
+      image_type: "details",
+      sequence: 1,
+    });
+  });
 });
 
 describe("sortImagesByDisplayRules", () => {
