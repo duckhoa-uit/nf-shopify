@@ -76,19 +76,21 @@ window.parseImageUrl = function (url) {
     return result;
   }
 
-  // Handle new format (e.g., ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_1.jpg)
+  // Handle new formats (NF-no and NF-bu)
   const parts = nameWithoutExt.split("-");
   const nfIndex = parts.findIndex((part) => part === "NF");
 
-  if (nfIndex !== -1 && parts[nfIndex + 1] === "no") {
-    // Extract product code
-    const productCode = parts[nfIndex + 2];
-    if (!productCode) {
+  if (nfIndex !== -1) {
+    // Extract product code (includes the prefix)
+    const prefix = parts[nfIndex + 1];
+    const code = parts[nfIndex + 2];
+    if (!code) {
       return result;
     }
 
-    // Set product code with prefix
-    result.product = `NF-no-${productCode}`;
+    // Set product code (prefix is part of the code)
+    const productCode = `${prefix}-${code}`;
+    result.product = `NF-${productCode}`;
 
     // Extract color (join all parts between product code and type code)
     const typeIndex = parts.findIndex(
