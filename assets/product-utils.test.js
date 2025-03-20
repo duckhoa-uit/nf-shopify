@@ -234,6 +234,42 @@ describe("parseImageUrl", () => {
       sequence: 1,
     });
   });
+
+  test("parses NF-mi format with underscore in color name", () => {
+    const result = parseImageUrl("men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-gray_seda-D_1.jpg");
+    expect(result).toEqual({
+      product: "NF-mi-3267-1or",
+      color: "gray_seda",
+      image_type: "details",
+      sequence: 1,
+    });
+  });
+
+  test("parses NF-mi format with dashed product code", () => {
+    const result = parseImageUrl("men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-flamescarlet-D_2.jpg");
+    expect(result).toEqual({
+      product: "NF-mi-3267-1or",
+      color: "flamescarlet",
+      image_type: "details",
+      sequence: 2,
+    });
+  });
+
+  test("sorts images by sequence within same product and color", () => {
+    const urls = [
+      "men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-gray_seda-D_2.jpg",
+      "men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-gray_seda-D_1.jpg",
+      "men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-black-D_2.jpg",
+      "men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-black-D_1.jpg",
+    ];
+
+    const sorted = sortImagesByDisplayRules(urls);
+
+    expect(sorted[0]).toContain("gray_seda-D_1");
+    expect(sorted[1]).toContain("gray_seda-D_2");
+    expect(sorted[2]).toContain("black-D_1");
+    expect(sorted[3]).toContain("black-D_2");
+  });
 });
 
 describe("sortImagesByDisplayRules", () => {

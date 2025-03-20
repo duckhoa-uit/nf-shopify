@@ -81,29 +81,32 @@ window.parseImageUrl = function (url) {
   const nfIndex = parts.findIndex((part) => part === "NF");
 
   if (nfIndex !== -1) {
-    // Extract product code (includes the prefix)
+    // Extract product code (includes the prefix and additional parts)
     const prefix = parts[nfIndex + 1];
-    const code = parts[nfIndex + 2];
+    const productParts = parts.slice(nfIndex + 2);
+
+    // Find the index where the color/type section starts
+    const typeIndex = productParts.findIndex((part) =>
+      ["H", "D", "M", "B", "BV", "X"].some((code) => part.startsWith(code) && (part === code || part.includes("_"))),
+    );
+
+    // Extract product code parts up to the color
+    const colorStartIndex = typeIndex === -1 ? productParts.length - 1 : typeIndex - 1;
+    const code = productParts.slice(0, colorStartIndex).join("-");
+
     if (!code) {
       return result;
     }
 
-    // Set product code (prefix is part of the code)
-    const productCode = `${prefix}-${code}`;
-    result.product = `NF-${productCode}`;
+    // Set product code
+    result.product = `NF-${prefix}-${code}`;
 
-    // Extract color (join all parts between product code and type code)
-    const typeIndex = parts.findIndex(
-      (part, index) =>
-        index > nfIndex + 2 &&
-        ["H", "D", "M", "B", "BV", "X"].some((code) => part.startsWith(code) && (part === code || part.includes("_"))),
-    );
-
+    // Extract color (everything between product code and type code)
     if (typeIndex !== -1) {
-      result.color = parts.slice(nfIndex + 3, typeIndex).join("-");
+      result.color = productParts[colorStartIndex];
 
       // Extract type code and sequence
-      const [type, seq] = parts[typeIndex].split("_");
+      const [type, seq] = productParts[typeIndex].split("_");
       switch (type) {
         case "D":
           result.image_type = "details";
@@ -125,7 +128,7 @@ window.parseImageUrl = function (url) {
       }
     } else {
       // If no type code found, use the last part as color
-      result.color = parts.slice(nfIndex + 3).join("-");
+      result.color = productParts[productParts.length - 1];
     }
   }
 
