@@ -57,15 +57,17 @@
 <cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
   <div class="page-width">
     <div class="nf-cart-header">
-      <h1 class="title title--primary font-archivo-expanded font-extrabold text-2xl leading-7 my-0 uppercase">
-        {{ 'sections.cart.title' | t }}
-      </h1>
-      {% comment %}
-        <a href="{{ routes.all_products_collection_url }}" class="underlined-link">
-          {{- 'general.continue_shopping' | t -}}
-        </a>
-      {% endcomment %}
-      <h2 class="nf-cart-summary__title my-0">{{ 'sections.cart.summary' | t | default: 'Sumár' }}</h2>
+      {% if cart != empty %}
+        <h1 class="title title--primary font-archivo-expanded font-extrabold text-2xl leading-7 my-0 uppercase">
+          {{ 'sections.cart.title' | t }}
+        </h1>
+        {% comment %}
+          <a href="{{ routes.all_products_collection_url }}" class="underlined-link">
+            {{- 'general.continue_shopping' | t -}}
+          </a>
+        {% endcomment %}
+        <h2 class="nf-cart-summary__title my-0">{{ 'sections.cart.summary' | t | default: 'Sumár' }}</h2>
+      {% endif %}
     </div>
 
     <div class="cart__warnings">
