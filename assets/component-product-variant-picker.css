@@ -171,7 +171,12 @@ variant-selects {
 
 .product-form__input--swatch .swatch-input__input + .swatch-input__label {
   --swatch-input--size: 3.6rem;
+  margin: 0.7rem 1.2rem 0.2rem 0;
+}
 
+/* Make color swatches larger for better visibility of product images */
+.product-form__input--pill-color .swatch-input__input + .swatch-input__label {
+  --swatch-input--size: 5rem;
   margin: 0.7rem 1.2rem 0.2rem 0;
 }
 
@@ -179,5 +184,25 @@ variant-selects {
   .product-form__input--swatch .swatch-input__input + .swatch-input__label {
     --swatch-input--size: 2.8rem;
   }
+
+  .product-form__input--pill-color .swatch-input__input + .swatch-input__label {
+    --swatch-input--size: 4rem;
+  }
 }
+
+/* Style for color option container */
+.color-option-with-thumbnail {
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Responsive grid adjustments */
+@media screen and (max-width: 749px) {
+  .product-form__input--pill-color .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
 /* End custom styles for Swatch display type */
