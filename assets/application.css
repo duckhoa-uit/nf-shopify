@@ -464,6 +464,9 @@
   .mt-\[3\.125rem\] {
     margin-top: 3.125rem !important;
   }
+  .mr-1 {
+    margin-right: calc(var(--spacing) * 1) !important;
+  }
   .mr-2 {
     margin-right: calc(var(--spacing) * 2) !important;
   }
@@ -1353,10 +1356,19 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
     transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
   }
+  .transition-opacity {
+    transition-property: opacity !important;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
+    transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
+  }
   .transition-transform {
     transition-property: transform, translate, scale, rotate !important;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
     transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
+  }
+  .duration-200 {
+    --tw-duration: 200ms !important;
+    transition-duration: 200ms !important;
   }
   .duration-300 {
     --tw-duration: 300ms !important;
@@ -1531,6 +1543,13 @@
     &:hover {
       @media (hover: hover) {
         text-decoration-line: none !important;
+      }
+    }
+  }
+  .hover\:opacity-80 {
+    &:hover {
+      @media (hover: hover) {
+        opacity: 80% !important;
       }
     }
   }

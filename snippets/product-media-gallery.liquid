@@ -118,6 +118,37 @@
   .loading-media.loaded {
     opacity: 1;
   }
+  #gallery-toggle-btn {
+    padding: 12px 24px;
+    background-color: #FFFFFF;
+    color: #0F0F0F;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.14;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  #gallery-toggle-btn:hover {
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+  #gallery-toggle-container {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: absolute;
+    z-index: 2;
+    right: 1rem;
+    bottom: 1rem;
+  }
+  #gallery-toggle-container.visible {
+    opacity: 1;
+  }
 </style>
 
 <media-gallery
@@ -147,7 +178,7 @@
     <div class="swiper-pagination"></div>
   </div>
 
-  <div id="desktop-gallery" class="hidden md:grid grid-cols-2 gap-4 loading-media">
+  <div id="desktop-gallery" class="hidden md:grid grid-cols-2 gap-4 loading-media relative">
     {%- for media in product.media -%}
       <div
         id="Grid-{{ section.id }}-{{ media.id }}"
@@ -166,6 +197,13 @@
         %}
       </div>
     {%- endfor -%}
+  </div>
+
+  <!-- See More/Less Button -->
+  <div id="gallery-toggle-container" class="hidden md:flex justify-end">
+    <button id="gallery-toggle-btn">
+      VIEW MORE
+    </button>
   </div>
 
   <script>
@@ -195,7 +233,7 @@
       const div = document.createElement('div');
       div.className = `swiper-slide product__media-item${index === 0 ? ' is-active' : ''} scroll-trigger animate--fade-in`;
 
-      // Set attributes based on whether we found a media object or not
+      // Set attributes based on whethe r we found a media object or not
       const mediaId = mediaObject ? mediaObject.id : `generated-${index}`;
       div.id = `Slide-{{ section.id }}-${mediaId}`;
       div.setAttribute('data-media-id', `{{ section.id }}-${mediaId}`);
@@ -347,18 +385,63 @@
         // Create at least 2 slides for proper pagination
         const slidesToCreate = urls.length === 1 ? [urls[0], urls[0]] : urls;
 
+        // Create all items but only show first 6 by default
+        window.isGalleryExpanded = window.isGalleryExpanded || false;
+        const toggleBtn = document.getElementById('gallery-toggle-btn');
+        const toggleContainer = document.getElementById('gallery-toggle-container');
+
+        // Set button text based on current expanded state
+        if (toggleBtn) {
+          toggleBtn.textContent = window.isGalleryExpanded ? 'VIEW LESS' : 'VIEW MORE';
+        }
+
         if (slidesToCreate.length > 0) {
           slidesToCreate.forEach((url, index) => {
             const mediaItem = createMediaItem(url, index);
             if (mediaItem) {
               sliderWrapper.appendChild(mediaItem.cloneNode(true));
 
-              // Only add to grid once if it's a duplicate
+              // Add to grid with visibility control
               if (index === 0 || url !== slidesToCreate[0]) {
+                // Add display class based on index and current expanded state
+                if (index >= 6) {
+                  if (!window.isGalleryExpanded) {
+                    mediaItem.classList.add('hidden');
+                  }
+                  mediaItem.classList.add('expandable-item');
+                }
                 grid.appendChild(mediaItem);
               }
             }
           });
+
+          // Only show toggle button if we have more than 6 items
+          if (slidesToCreate.length > 6) {
+            toggleContainer.classList.remove('hidden');
+
+            // Replace button with clone to remove any existing event listeners
+            const newBtn = toggleBtn.cloneNode(true);
+            toggleBtn.parentNode.replaceChild(newBtn, toggleBtn);
+
+            // Set up toggle button functionality
+            newBtn.addEventListener('click', function() {
+              window.isGalleryExpanded = !window.isGalleryExpanded;
+              const expandableItems = grid.querySelectorAll('.expandable-item');
+
+              expandableItems.forEach(item => {
+                if (window.isGalleryExpanded) {
+                  item.classList.remove('hidden');
+                } else {
+                  item.classList.add('hidden');
+                }
+              });
+
+              // Update button text
+              newBtn.textContent = window.isGalleryExpanded ? 'VIEW LESS' : 'VIEW MORE';
+            });
+          } else {
+            toggleContainer.classList.add('hidden');
+          }
         }
 
         // Ensure pagination container exists
@@ -377,6 +460,11 @@
         requestAnimationFrame(() => {
           mobileGallery.classList.add('loaded');
           grid.classList.add('loaded');
+
+          // Show toggle button container if needed
+          if (toggleContainer && slidesToCreate.length > 6) {
+            toggleContainer.classList.add('visible');
+          }
         });
       }
 
@@ -453,6 +541,20 @@
 
         if (newColor !== gallery.dataset.activeColor) {
           gallery.dataset.activeColor = newColor;
+
+          // Reset expanded state when color changes
+          const toggleBtn = document.getElementById('gallery-toggle-btn');
+          if (toggleBtn) {
+            toggleBtn.textContent = 'VIEW MORE';
+            window.isGalleryExpanded = false;
+          }
+
+          // Hide toggle container until new content loads
+          const toggleContainer = document.getElementById('gallery-toggle-container');
+          if (toggleContainer) {
+            toggleContainer.classList.remove('visible');
+          }
+
           processMedia();
         }
       }
