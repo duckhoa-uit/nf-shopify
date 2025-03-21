@@ -72,12 +72,13 @@
               {{- option.selected_value -}}
             </span>
           </legend>
-          <div class="grid grid-cols-5 gap-5">
+          <div class="grid grid-cols-5 gap-5" data-color-thumbnails>
             {% render 'product-variant-options',
               product: product,
               option: option,
               block: block,
-              picker_type: picker_type
+              picker_type: picker_type,
+              show_thumbnails: true
             %}
           </div>
         </fieldset>
@@ -146,3 +147,10 @@
     </script>
   </variant-selects>
 {%- endunless -%}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // No additional JavaScript needed for color thumbnails
+    // as they are now part of the swatch element itself
+  });
+</script>

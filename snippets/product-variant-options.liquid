@@ -85,19 +85,53 @@
         <span class="visually-hidden">{{ value | escape }}</span>
         {{ label_unavailable }}
       {%- endcapture -%}
-    {%
-      render 'swatch-input',
-      id: input_id,
-      name: input_name,
-      value: value | escape,
-      swatch: value.swatch,
-      product_form_id: product_form_id,
-      checked: value.selected,
-      visually_disabled: option_disabled,
-      shape: block.settings.swatch_shape,
-      help_text: help_text,
-      additional_props: input_dataset
-    %}
+
+    {%- if show_thumbnails -%}
+      {%- liquid
+        assign thumbnail_url = ''
+        assign color_value = value | downcase | strip | replace: ' ', '-' | replace: "'", "" | replace: ".", "" | replace: ",", ""
+
+        # Try to find an image for this color from product media
+        for media in product.media
+          assign media_src = media.src | default: ''
+          if media_src contains color_value
+            assign thumbnail_url = media.preview_image | image_url: width: 80
+            break
+          endif
+        endfor
+      -%}
+
+      <div class="color-option-with-thumbnail">
+        {%
+          render 'swatch-input',
+          id: input_id,
+          name: input_name,
+          value: value | escape,
+          swatch: value.swatch,
+          product_form_id: product_form_id,
+          checked: value.selected,
+          visually_disabled: option_disabled,
+          shape: block.settings.swatch_shape,
+          help_text: help_text,
+          additional_props: input_dataset,
+          thumbnail_url: thumbnail_url
+        %}
+      </div>
+    {%- else -%}
+      {%
+        render 'swatch-input',
+        id: input_id,
+        name: input_name,
+        value: value | escape,
+        swatch: value.swatch,
+        product_form_id: product_form_id,
+        checked: value.selected,
+        visually_disabled: option_disabled,
+        shape: block.settings.swatch_shape,
+        help_text: help_text,
+        additional_props: input_dataset
+      %}
+    {%- endif -%}
   {%- elsif picker_type == 'swatch' -%}
     {%- capture help_text -%}
         <span class="visually-hidden">{{ value | escape }}</span>

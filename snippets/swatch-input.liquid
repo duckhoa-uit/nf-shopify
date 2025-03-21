@@ -13,6 +13,7 @@
   - shape: {String} swatch shape. Accepts 'square', defaults to circle (optional)
   - help_text: {String} additional content to render inside the label (optional)
   - additional_props: {String} (optional) additional properties to attach to the input
+  - thumbnail_url: {String} (optional) URL for the thumbnail image
 
   Usage:
    {% render 'swatch-input',
@@ -41,12 +42,15 @@
   {% if additional_props %}
     {{ additional_props }}
   {% endif %}
+  {% if thumbnail_url != blank %}
+    data-thumbnail-url="{{ thumbnail_url }}"
+  {% endif %}
 >
 <label
   for="{{ id }}"
   title="{{ value }}"
   class="swatch-input__label{% if shape == 'square' %} swatch-input__label--square{% endif %}"
 >
-  {% render 'swatch', swatch: swatch, shape: shape %}
+  {% render 'swatch', swatch: swatch, shape: shape, thumbnail_url: thumbnail_url %}
   {{ help_text }}
 </label>
