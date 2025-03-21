@@ -320,7 +320,7 @@
       <div class="product__info-wrapper col-span-1 md:col-span-1 lg:col-span-1 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
           id="ProductInfo-{{ section.id }}"
-          class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
+          class="product__info-container"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
@@ -853,7 +853,7 @@
     <div class="mt-10 flex flex-col w-full pb-12">
       <h2 id="description_and_parameters" class="py-3 text-2xl font-bold leading-[1.5]">Description and Parameters</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
-        <div class="[&_ul]:list-disc [&_ul]:pl-5 *:text-[#0F0F0F] *:text-[0.9375rem]">
+        <div class="[&_ul]:list-disc [&_ul]:pl-5 *:text-[#0F0F0F] *:text-[0.9375rem] [&_iframe]:max-w-full">
           <div class="">{{ product.description }}</div>
           <div class="py-6 md:py-12">
             {{ product.metafields.custom.short_description | metafield_tag }}
@@ -1907,12 +1907,6 @@
       "default": "lightbox",
       "label": "t:sections.main-product.settings.image_zoom.label",
       "info": "t:sections.main-product.settings.image_zoom.info"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_sticky_info",
-      "default": true,
-      "label": "t:sections.main-product.settings.enable_sticky_info.label"
     },
     { "type": "header", "content": "t:sections.main-product.settings.header_mobile.content" },
     { "type": "header", "content": "t:sections.all.padding.section_padding_heading" },
