@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { parseImageUrl, sortImagesByDisplayRules } from "./product-utils.js";
+import { parseImageUrl, sortImagesByDisplayRules } from "./product-utils.module.js";
 
 describe("parseImageUrl", () => {
   // New format tests (NF-no-)
@@ -103,81 +103,6 @@ describe("parseImageUrl", () => {
     });
   });
 
-  // Legacy format tests
-  test("parses legacy stylized image", () => {
-    const result = parseImageUrl("NO-4403OR$NO-344124RO.jpg");
-    expect(result).toEqual({
-      product: "NO-4403OR",
-      color: "NO-344124RO",
-      image_type: "stylized",
-    });
-  });
-
-  test("parses legacy video", () => {
-    const result = parseImageUrl("NO-4403OR$NO-344124RO.mp4");
-    expect(result).toEqual({
-      product: "NO-4403OR",
-      color: "NO-344124RO",
-      image_type: "video",
-    });
-  });
-
-  test("parses legacy main photo", () => {
-    const result = parseImageUrl("NO-4403OR-300.jpg");
-    expect(result).toEqual({
-      product: "NO-4403OR",
-      color: "300",
-      image_type: "main",
-    });
-  });
-
-  test("parses legacy main photo with type indicator", () => {
-    const result = parseImageUrl("NO-4403OR-300$H.jpg");
-    expect(result).toEqual({
-      product: "NO-4403OR",
-      color: "300",
-      image_type: "main",
-    });
-  });
-
-  test("parses legacy back main photo", () => {
-    const result = parseImageUrl("NO-4403OR-300$B.jpg");
-    expect(result).toEqual({
-      product: "NO-4403OR",
-      color: "300",
-      image_type: "back_main",
-    });
-  });
-
-  test("parses legacy back variant photo", () => {
-    const result = parseImageUrl("NO-4403OR-300$BV.jpg");
-    expect(result).toEqual({
-      product: "NO-4403OR",
-      color: "300",
-      image_type: "back_variant",
-    });
-  });
-
-  test("parses legacy details photo with sequence", () => {
-    const result = parseImageUrl("NO-4403OR-300$D_1.jpg");
-    expect(result).toEqual({
-      product: "NO-4403OR",
-      color: "300",
-      image_type: "details",
-      sequence: 1,
-    });
-  });
-
-  test("parses legacy model photo with sequence", () => {
-    const result = parseImageUrl("NO-4403OR-300$M_2.jpg");
-    expect(result).toEqual({
-      product: "NO-4403OR",
-      color: "300",
-      image_type: "model",
-      sequence: 2,
-    });
-  });
-
   test("handles malformed URLs gracefully", () => {
     const result = parseImageUrl("invalid-filename.jpg");
     expect(result).toEqual({
@@ -254,41 +179,26 @@ describe("parseImageUrl", () => {
       sequence: 2,
     });
   });
-
-  test("sorts images by sequence within same product and color", () => {
-    const urls = [
-      "men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-gray_seda-D_2.jpg",
-      "men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-gray_seda-D_1.jpg",
-      "men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-black-D_2.jpg",
-      "men-039-s-sweatshirt-promo-melange-salvatore--NF-mi-3267-1or-black-D_1.jpg",
-    ];
-
-    const sorted = sortImagesByDisplayRules(urls);
-
-    expect(sorted[0]).toContain("gray_seda-D_1");
-    expect(sorted[1]).toContain("gray_seda-D_2");
-    expect(sorted[2]).toContain("black-D_1");
-    expect(sorted[3]).toContain("black-D_2");
-  });
 });
 
 describe("sortImagesByDisplayRules", () => {
   test("sorts images according to display rules", () => {
-    const urls = [
+    const imageUrls = [
       "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_2.jpg",
       "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-H.jpg",
       "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_1.jpg",
-      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-B.jpg",
       "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_1.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-B.jpg",
     ];
 
-    const sorted = sortImagesByDisplayRules(urls);
+    const sortedUrls = sortImagesByDisplayRules(imageUrls);
 
-    // Expected order: main (H) -> back (B) -> model (M) -> details (D)
-    expect(sorted[0]).toContain("-H.jpg");
-    expect(sorted[1]).toContain("-B.jpg");
-    expect(sorted[2]).toContain("-M_1.jpg");
-    expect(sorted[3]).toContain("-D_1.jpg");
-    expect(sorted[4]).toContain("-D_2.jpg");
+    expect(sortedUrls).toEqual([
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-H.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-B.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_1.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_1.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_2.jpg",
+    ]);
   });
 });

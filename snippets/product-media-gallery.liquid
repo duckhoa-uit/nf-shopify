@@ -15,7 +15,11 @@
 {{ 'swiper.css' | asset_url | stylesheet_tag }}
 {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
-<script src="{{ 'product-utils.js' | asset_url }}" defer></script>
+<script type="module">
+  import { parseImageUrl, sortImagesByDisplayRules } from "{{ 'product-utils.module.js' | asset_url }}";
+  window.parseImageUrl = parseImageUrl;
+  window.sortImagesByDisplayRules = sortImagesByDisplayRules;
+</script>
 
 {%- liquid
   if section.settings.hide_variants and variant_images.size == product.media.size
@@ -224,9 +228,6 @@
         img.height = mediaObject.height;
       }
 
-      // Debug media item creation
-      console.log(`Created media item ${index} with src: ${img.src}`);
-
       // Assemble the elements
       imageContainer.appendChild(img);
       wrapper.appendChild(imageContainer);
@@ -243,14 +244,18 @@
       const grid = document.querySelector('#desktop-gallery');
       const mobileGallery = document.querySelector('.product-swiper');
 
-      // Check if elements exist
+      // Check if elements exist and parseImageUrl is available
       if (!gallery || !sliderWrapper || !grid || !mobileGallery) {
         console.error('Required gallery elements not found, retrying...');
         setTimeout(initProductGallery, 100);
         return;
       }
 
-      console.log('Initializing product gallery');
+      // Ensure parseImageUrl is available
+      if (typeof window.parseImageUrl !== 'function') {
+        setTimeout(initProductGallery, 50);
+        return;
+      }
 
       // Hide galleries until content is ready
       mobileGallery.classList.remove('loaded');
@@ -258,17 +263,13 @@
 
       // Get the initial active color
       const activeColor = gallery.dataset.activeColor;
-      console.log('Initial active color:', activeColor);
 
       // Process and filter media based on active color
       function processMedia() {
         if (!window.parseImageUrl) {
-          console.log('parseImageUrl not available yet, waiting...');
           setTimeout(processMedia, 50);
           return;
         }
-
-        console.log('Processing media with active color:', gallery.dataset.activeColor);
 
         // Get and format all media URLs
         const allMediaUrls = {{ product.media | json }}.map(media => {
@@ -276,8 +277,6 @@
           return url.startsWith('//') ? `https:${url}` :
                  !url.startsWith('http') ? `https://${url}` : url;
         });
-
-        console.log(`Total product images: ${allMediaUrls.length}`);
 
         // Filter URLs by active color
         let urlsToUse = allMediaUrls;
@@ -291,10 +290,6 @@
             const parsedColor = parsed.color.toLowerCase().trim();
             const activeColor = gallery.dataset.activeColor.toLowerCase().trim();
 
-            // Log the parsed result for each URL
-            console.log(`Image URL: ${url}`);
-            console.log(`Parsed as: product=${parsed.product}, color=${parsed.color}, type=${parsed.image_type}`);
-
             // Collect exact and partial matches
             if (parsedColor === activeColor) {
               exactMatches.push(url);
@@ -302,9 +297,6 @@
               partialMatches.push(url);
             }
           });
-
-          console.log(`Found ${exactMatches.length} exact color matches`);
-          console.log(`Found ${partialMatches.length} partial color matches`);
 
           // Prioritize exact matches, fall back to partial matches
           if (exactMatches.length > 0) {
@@ -315,7 +307,6 @@
 
           // If no matches found, try more flexible matching (just try parts of the color name)
           if (urlsToUse.length === 0 && gallery.dataset.activeColor.includes('-')) {
-            console.log('No matches found, trying more flexible matching with color parts');
             const colorParts = gallery.dataset.activeColor.split('-');
 
             for (const part of colorParts) {
@@ -327,7 +318,6 @@
               });
 
               if (flexibleMatches.length > 0) {
-                console.log(`Found ${flexibleMatches.length} matches using color part: ${part}`);
                 urlsToUse = flexibleMatches;
                 break;
               }
@@ -341,14 +331,11 @@
 
       // Update gallery with the given URLs
       function updateGallery(urls) {
-        console.log(`Updating gallery with ${urls.length} filtered URLs`);
-
         sliderWrapper.innerHTML = '';
         grid.innerHTML = '';
 
         // Ensure we have at least some URLs to display
         if (urls.length === 0) {
-          console.warn('No matching images found for color, falling back to first image');
           const allMediaUrls = {{ product.media | json }}.map(media => {
             let url = media.src.replace(/\/files\//, '/');
             return url.startsWith('//') ? `https:${url}` :
@@ -359,7 +346,6 @@
 
         // Create at least 2 slides for proper pagination
         const slidesToCreate = urls.length === 1 ? [urls[0], urls[0]] : urls;
-        console.log(`Creating ${slidesToCreate.length} slides`);
 
         if (slidesToCreate.length > 0) {
           slidesToCreate.forEach((url, index) => {
@@ -464,8 +450,6 @@
         if (newColor.endsWith('-')) {
           newColor = newColor.slice(0, -1);
         }
-
-        console.log(`Setting active color to: "${newColor}" (was "${gallery.dataset.activeColor}")`);
 
         if (newColor !== gallery.dataset.activeColor) {
           gallery.dataset.activeColor = newColor;
@@ -574,13 +558,16 @@
       };
     }
 
-    // Run on DOM ready or immediately if already loaded
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initProductGallery);
-    } else {
-      console.log('DOM already loaded, initializing gallery now');
-      initProductGallery();
+    // Run initialization when DOM and product-utils.js are ready
+    function waitForDependencies() {
+      if (document.readyState === 'loading' || typeof window.parseImageUrl !== 'function') {
+        setTimeout(waitForDependencies, 50);
+      } else {
+        initProductGallery();
+      }
     }
+
+    waitForDependencies();
   </script>
 
   {% comment %}
