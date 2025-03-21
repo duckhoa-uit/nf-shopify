@@ -18,6 +18,34 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* Styles for variant dropdown */
+  .nf-cart-item__variant-selector {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nf-cart-item__variant-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: transparent;
+    border: none;
+    padding-right: 20px;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .nf-cart-item__variant-arrow {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
 {%- endstyle -%}
 
 {%- unless settings.cart_type == 'drawer' -%}
@@ -133,15 +161,6 @@
                                     <div class="nf-cart-item__variant-item">
                                       <span class="nf-cart-item__variant-label">{{ option.name }}:</span>
                                       <span class="nf-cart-item__variant-value">{{ option.value }}</span>
-                                      <svg
-                                        class="nf-cart-item__variant-arrow"
-                                        width="10"
-                                        height="6"
-                                        viewBox="0 0 10 6"
-                                        fill="none"
-                                      >
-                                        <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1"/>
-                                      </svg>
                                     </div>
                                   {%- endfor -%}
                                 {%- endif -%}
@@ -150,16 +169,33 @@
                                   <span class="nf-cart-item__variant-label">
                                     {{- 'products.product.quantity.label' | t }}:</span
                                   >
-                                  <span class="nf-cart-item__variant-value">{{ item.quantity }}</span>
-                                  <svg
-                                    class="nf-cart-item__variant-arrow"
-                                    width="10"
-                                    height="6"
-                                    viewBox="0 0 10 6"
-                                    fill="none"
-                                  >
-                                    <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1"/>
-                                  </svg>
+                                  <div class="nf-cart-item__variant-selector">
+                                    <select
+                                      class="nf-cart-item__variant-select focus:outline-none focus-visible:outline-none focus:ring-0"
+                                      name="updates[{{ item.key }}]"
+                                      data-item-key="{{ item.key }}"
+                                      data-is-quantity="true"
+                                      step="1"
+                                    >
+                                      {%- for i in (1..20) -%}
+                                        <option
+                                          value="{{ i }}"
+                                          {% if i == item.quantity %}selected{% endif %}
+                                        >
+                                          {{ i }}
+                                        </option>
+                                      {%- endfor -%}
+                                    </select>
+                                    <svg
+                                      class="nf-cart-item__variant-arrow"
+                                      width="10"
+                                      height="6"
+                                      viewBox="0 0 10 6"
+                                      fill="none"
+                                    >
+                                      <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1"/>
+                                    </svg>
+                                  </div>
                                 </div>
                               </div>
 
@@ -406,8 +442,33 @@
         {{ 'accessibility.loading' | t }}
       </p>
     </form>
+
+    <div id="main-cart-footer" data-id="{{ section.id }}">
+      <div class="js-contents">
+        {%- if cart != empty -%}
+          <div class="cart__footer">
+            <!-- Cart footer content is handled by cart.js -->
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
   </div>
 </cart-items>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cartForm = document.getElementById('cart');
+
+    // Handle quantity changes
+    const quantitySelects = document.querySelectorAll('.nf-cart-item__variant-select[data-is-quantity="true"]');
+    quantitySelects.forEach(select => {
+      select.addEventListener('change', function() {
+        // Submit the cart form
+        cartForm.submit();
+      });
+    });
+  });
+</script>
 
 {% schema %}
 {
