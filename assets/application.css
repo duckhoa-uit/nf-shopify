@@ -464,9 +464,6 @@
   .mt-\[3\.125rem\] {
     margin-top: 3.125rem !important;
   }
-  .mr-1 {
-    margin-right: calc(var(--spacing) * 1) !important;
-  }
   .mr-2 {
     margin-right: calc(var(--spacing) * 2) !important;
   }
@@ -703,12 +700,6 @@
   }
   .flex-1 {
     flex: 1 !important;
-  }
-  .flex-shrink {
-    flex-shrink: 1 !important;
-  }
-  .flex-grow {
-    flex-grow: 1 !important;
   }
   .border-collapse {
     border-collapse: collapse !important;
@@ -1304,9 +1295,6 @@
   .capitalize {
     text-transform: capitalize !important;
   }
-  .lowercase {
-    text-transform: lowercase !important;
-  }
   .uppercase {
     text-transform: uppercase !important;
   }
@@ -1341,10 +1329,6 @@
     --tw-blur: blur(8px) !important;
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
   }
-  .grayscale {
-    --tw-grayscale: grayscale(100%) !important;
-    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
-  }
   .invert {
     --tw-invert: invert(100%) !important;
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
@@ -1362,19 +1346,10 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
     transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
   }
-  .transition-opacity {
-    transition-property: opacity !important;
-    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
-    transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
-  }
   .transition-transform {
     transition-property: transform, translate, scale, rotate !important;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
     transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
-  }
-  .duration-200 {
-    --tw-duration: 200ms !important;
-    transition-duration: 200ms !important;
   }
   .duration-300 {
     --tw-duration: 300ms !important;
@@ -1394,10 +1369,6 @@
   .outline-none {
     --tw-outline-style: none !important;
     outline-style: none !important;
-  }
-  .select-none {
-    -webkit-user-select: none !important;
-    user-select: none !important;
   }
   .\*\:my-0\.5 {
     :is(& > *) {
@@ -1549,13 +1520,6 @@
     &:hover {
       @media (hover: hover) {
         text-decoration-line: none !important;
-      }
-    }
-  }
-  .hover\:opacity-80 {
-    &:hover {
-      @media (hover: hover) {
-        opacity: 80% !important;
       }
     }
   }
