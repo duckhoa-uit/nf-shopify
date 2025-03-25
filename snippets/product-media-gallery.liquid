@@ -14,7 +14,83 @@
 {{ 'pagination-dots.css' | asset_url | stylesheet_tag }}
 {{ 'swiper.css' | asset_url | stylesheet_tag }}
 {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
+{{ 'lightbox.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .loading-media {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .loading-media.loaded {
+    opacity: 1;
+  }
+  #gallery-toggle-btn {
+    padding: 12px 24px;
+    background-color: #FFFFFF;
+    color: #0F0F0F;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.14;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  #gallery-toggle-btn:hover {
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+  #gallery-toggle-container {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: absolute;
+    z-index: 2;
+    right: 1rem;
+    bottom: 1rem;
+  }
+  #gallery-toggle-container.visible {
+    opacity: 1;
+  }
+  /* Custom close button with icon */
+  .fancybox__button--close {
+    background-color: #F0F0F0;
+    border-radius: 50%;
+    width: 3.75rem;
+    height: 3.75rem;
+    transition: background-color 0.2s ease;
+    position: relative;
+  }
+
+  .fancybox__button--close:hover {
+    background-color: #E0E0E0;
+  }
+
+  .fancybox__button--close svg {
+    display: none;
+  }
+
+  .fancybox__button--close::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1.25rem;
+    height: 1.25rem;
+    background-image: url('{{ 'icon-close.svg' | asset_url }}');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+</style>
+
 <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js" defer></script>
 <script type="module">
   import { parseImageUrl, sortImagesByDisplayRules } from "{{ 'product-utils.module.js' | asset_url }}";
   window.parseImageUrl = parseImageUrl;
@@ -75,7 +151,7 @@
   endif
 
   # Clean up the color value - remove special characters and clean up
-  assign active_color_value = active_color_value | replace: "'", "" | replace: ".", "" | replace: ",", ""
+  assign active_color_value = active_color_value | replace: "'", '' | replace: '.', '' | replace: ',', ''
 
   # Remove trailing dash if present
   if active_color_value contains '-'
@@ -108,48 +184,14 @@
   endif
 
   assign media_width = 0.65
--%}
 
-<style>
-  .loading-media {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .loading-media.loaded {
-    opacity: 1;
-  }
-  #gallery-toggle-btn {
-    padding: 12px 24px;
-    background-color: #FFFFFF;
-    color: #0F0F0F;
-    border: none;
-    border-radius: 3px;
-    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Archivo', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 1.14;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-  }
-  #gallery-toggle-btn:hover {
-    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px);
-  }
-  #gallery-toggle-container {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    position: absolute;
-    z-index: 2;
-    right: 1rem;
-    bottom: 1rem;
-  }
-  #gallery-toggle-container.visible {
-    opacity: 1;
-  }
-</style>
+  # Calculate discount percentage if product is on sale
+  if product.compare_at_price > product.price
+    assign savings_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round
+  else
+    assign savings_percentage = 0
+  endif
+-%}
 
 <media-gallery
   id="MediaGallery-{{ section.id }}"
@@ -199,9 +241,7 @@
 
   <!-- See More/Less Button -->
   <div id="gallery-toggle-container" class="hidden md:flex justify-end">
-    <button id="gallery-toggle-btn">
-      VIEW MORE
-    </button>
+    <button id="gallery-toggle-btn">VIEW MORE</button>
   </div>
 
   <script>
@@ -236,6 +276,14 @@
       div.id = `Slide-{{ section.id }}-${mediaId}`;
       div.setAttribute('data-media-id', `{{ section.id }}-${mediaId}`);
 
+      // Store media object reference for lightbox
+      if (mediaObject) {
+        div.setAttribute('data-media-object', JSON.stringify({
+          id: mediaObject.id,
+          position: mediaObject.position || index
+        }));
+      }
+
       if (mediaObject && mediaObject.media_type !== 'image') {
         div.classList.add('product__media-item--full');
       }
@@ -256,8 +304,15 @@
                 (url.startsWith('//') ? `https:${url}` : url);
       img.alt = mediaObject ? mediaObject.alt || '' : '';
       img.id = `ProductMedia-{{ section.id }}-${mediaId}`;
-      img.className = 'media-item w-full h-full object-cover';
+      img.className = 'media-item w-full h-full object-cover product-lightbox-img';
       img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+
+      // Add click handler for lightbox
+      img.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Pass original media position to ensure correct lightbox ordering
+        openProductLightbox(mediaObject ? mediaObject.position - 1 : index);
+      });
 
       if (mediaObject) {
         img.width = mediaObject.width;
@@ -383,7 +438,7 @@
         // Create at least 2 slides for proper pagination
         const slidesToCreate = urls.length === 1 ? [urls[0], urls[0]] : urls;
 
-        // Create all items but only show first 6 by default
+        // Create all items but only show first 6
         window.isGalleryExpanded = window.isGalleryExpanded || false;
         const toggleBtn = document.getElementById('gallery-toggle-btn');
         const toggleContainer = document.getElementById('gallery-toggle-container');
@@ -453,6 +508,15 @@
 
         // Initialize Swiper
         initSwiper();
+
+        // Add event listeners to mobile gallery images
+        document.querySelectorAll('.product-swiper .swiper-slide img').forEach((img, index) => {
+          img.addEventListener('click', function(e) {
+            e.preventDefault();
+            openProductLightbox(index);
+          });
+          img.style.cursor = 'pointer';
+        });
 
         // Show galleries
         requestAnimationFrame(() => {
@@ -656,6 +720,68 @@
           originalOnVariantChange(variant);
         }
       };
+    }
+
+    // Simple function to open the lightbox
+    function openProductLightbox(startIndex) {
+      // Use complete product.media directly instead of the filtered images
+      const allMedia = {{ product.media | json }};
+
+      // Ensure Fancybox is loaded
+      if (!allMedia || !window.Fancybox) {
+        console.error('Product media or Fancybox not available');
+        return;
+      }
+
+      try {
+        // Close any existing Fancybox instances to prevent duplication
+        if (typeof Fancybox.close === 'function') {
+          Fancybox.close();
+        }
+
+        // Create array of items for Fancybox directly from product.media
+        const items = allMedia.map(media => {
+          const mediaSrc = media.src.startsWith('//') ? `https:${media.src}` :
+                          !media.src.startsWith('http') ? `https://${media.src}` : media.src;
+
+          return {
+            src: mediaSrc,
+            type: 'image',
+            caption: media.alt || ''
+          };
+        });
+
+        // Open Fancybox with a simplified configuration
+        Fancybox.show(items, {
+          startIndex: Math.min(startIndex || 0, items.length - 1),
+          dragToClose: false,
+          backdropClick: "close",
+          Toolbar: {
+            display: ["close"],
+            position: "top"
+          },
+          Thumbs: {
+            autoStart: true,
+            type: "classic",
+            minSlideCount: 2,
+            Carousel: {
+              center: true,
+              fill: true
+            }
+          },
+          Carousel: {
+            friction: 0.8,
+            transition: "slide"
+          },
+          Image: {
+            zoom: false,
+            fit: "contain",
+            click: "close"
+          }
+        });
+      } catch (error) {
+        console.error('Error opening lightbox:', error);
+      }
     }
 
     // Run initialization when DOM and product-utils.js are ready
