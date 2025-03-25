@@ -1,0 +1,64 @@
+/* Product Lightbox styles */
+.product-lightbox-img {
+  cursor: zoom-in;
+}
+
+/* Custom Fancybox styling */
+.fancybox__container {
+  --fancybox-bg: #fff;
+}
+
+.fancybox__content {
+  padding: 0;
+  max-height: 100%;
+}
+
+.fancybox__slide {
+  padding: 0;
+}
+
+.fancybox__caption {
+  display: none;
+}
+
+.fancybox__toolbar {
+  background: transparent;
+}
+
+.fancybox__thumbs {
+  padding: 0.5rem 0 0.75rem;
+  background-color: #ffffff;
+  border-color: transparent;
+}
+
+.fancybox__thumb {
+  opacity: 0.8;
+  border-radius: 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  margin: 0 4px;
+}
+
+.fancybox__thumbs .carousel__slide {
+  padding: 0;
+}
+
+.fancybox__thumbs .carousel__slide.is-nav-selected .fancybox__thumb, .fancybox__thumbs .carousel__slide.is-nav-selected .fancybox__thumb::after {
+  opacity: 1;
+}
+
+.fancybox__thumbs .carousel__slide .fancybox__thumb::after {
+  border-width: 2px;
+  top: 100%;
+  border-color: #ec0009;
+  border-radius: 0;
+}
+
+.fancybox__image {
+  object-fit: contain;
+  max-height: calc(100vh - 150px);
+}
+
+.f-thumbs__track {
+  background-color: #ffffff;
+}
