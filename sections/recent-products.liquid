@@ -1,9 +1,59 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+{{ 'swiper.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+
+{%- style -%}
+  /* Initial styling for swiper slides to prevent layout shift */
+  .recently-viewed-swiper:not(.swiper-initialized) .swiper-wrapper {
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  .recently-viewed-swiper:not(.swiper-initialized) .swiper-slide {
+    flex: 0 0 auto;
+    width: 100%;
+    margin-right: 36px;
+  }
+
+  @media screen and (min-width: 640px) {
+    .recently-viewed-swiper:not(.swiper-initialized) .swiper-slide {
+      width: calc((100% - 36px) / 2.2);
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .recently-viewed-swiper:not(.swiper-initialized) .swiper-slide {
+      width: calc((100% - 72px) / 3.2);
+    }
+  }
+{%- endstyle -%}
+
 <div class="page-width mt-4">
   <h2 class="product-recommendations__heading h2 text-lg font-semibold text-[#0f0f0f] mb-7">{{ section.settings.heading | escape }}</h2>
 
-  <ul class="recently-viewed dawn-grid product-grid grid--4-col-desktop grid--2-col-tablet-down" role="list">
-    <!-- Recently viewed products will appear here -->
-  </ul>
+  <div class="swiper recently-viewed-swiper w-full pb-5">
+    <div class="swiper-wrapper recently-viewed">
+      <!-- Recently viewed products will appear here -->
+    </div>
+    <div class="swiper-scrollbar"></div>
+    <div class="swiper-button-next">
+      <span class="icon">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="56" height="56" rx="28" fill="white"></rect> <path d="M26 40L34 28L26 16" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </span>
+    </div>
+    <div class="swiper-button-prev">
+      <span class="icon">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="56" height="56" rx="28" transform="matrix(-1 0 0 1 56 0)" fill="white"></rect> <path d="M30 40L22 28L30 16" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </span>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -69,7 +119,7 @@
 
     productData.map((item) => {
       recentlyViewedHtml.unshift(`
-    <li class="grid__item">
+    <div class="swiper-slide">
       <div class="card-wrapper h-full">
         <div class="flex flex-col h-full relative">
           <div class="flex items-center gap-2 mb-1.5 h-8">
@@ -124,7 +174,7 @@
           </div>
         </div>
       </div>
-    </li>
+    </div>
    `);
     });
 
@@ -135,6 +185,54 @@
 
   document.addEventListener('DOMContentLoaded', function (event) {
     getRecentlyViewedProducts();
+
+    // Initialize Swiper after products are loaded
+    const initSwiper = function() {
+      const swiperContainer = document.querySelector('.recently-viewed-swiper');
+      if (!swiperContainer) return;
+
+      var mySwiper = new Swiper('.recently-viewed-swiper', {
+        direction: 'horizontal',
+        spaceBetween: 36,
+        grabCursor: true,
+        breakpoints: {
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1,
+          },
+          // when window width is >= 640px
+          640: {
+            slidesPerView: 2.2,
+          },
+          // when window width is >= 1024px
+          1024: {
+            slidesPerView: 3.2,
+          },
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        scrollbar: {
+          el: '.swiper-scrollbar',
+        },
+      });
+    };
+
+    // Check if Swiper is loaded
+    if (typeof Swiper === 'undefined') {
+      // Wait for Swiper to load since we're using defer
+      const swiperScript = document.querySelector('script[src*="swiper-bundle.min.js"]');
+      if (swiperScript) {
+        swiperScript.addEventListener('load', function() {
+          // Allow a small delay for the DOM to update with product data
+          setTimeout(initSwiper, 100);
+        });
+      }
+    } else {
+      // Allow a small delay for the DOM to update with product data
+      setTimeout(initSwiper, 100);
+    }
   });
 </script>
 
