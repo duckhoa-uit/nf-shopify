@@ -16,6 +16,10 @@
       productPrice: '{{ product.price | money_with_currency }}',
       productUrl: '{{ product.url }}',
       productImageAltText: '{{product.featured_media.alt | escape }}',
+      compareAtPrice: '{{ product.compare_at_price | money }}',
+      onSale: {% if product.compare_at_price > product.price %}true{% else %}false{% endif %},
+      isNew: {% if product.tags contains 'new' %}true{% else %}false{% endif %},
+      savings: '{{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round }}',
     };
 
     const productList = [];
@@ -66,32 +70,60 @@
     productData.map((item) => {
       recentlyViewedHtml.unshift(`
     <li class="grid__item">
-     <div class="card-wrapper underline-links-hover">
-      <div class="card card--standard card--media " style="--ratio-percent: 100%;">
-        <div class="card__inner color-background-2 gradient ratio" style="--ratio-percent: 100%;">
-         <div style="position:static" class="card__media">
-         <div class="media media--transparent media--hover-effect">
-    		  <img class="motion-reduce" src="${item.productImg}" width="${item.imgWidth}" height="${item.imgHeight}"  loading="lazy" alt="${item.productImageAltText}"/>
-         </div>
-         </div>
-       </div>
-       <div class="card__content">
-       <div class="card__information">
-       <h3 class="card__heading h5">
-       <a class="full-unstyled-link" href="${item.productUrl}">${item.productTitle}</a></h3>
-         <div class="card-information">
-           <div class="price ">
-             <div class="price__container">
-               <div class="price-item price-item--regular">
-                   ${item.productPrice}
-               </div>
-             </div>
-           </div>
-         </div>
-       </div>
-       </div>
-       </div>
-       </div>
+      <div class="card-wrapper h-full">
+        <div class="flex flex-col h-full relative">
+          <div class="flex items-center gap-2 mb-1.5 h-8">
+            ${item.isNew ? `
+              <div class="bg-background border border-[#CCCCCC] text-[#4D4D4D] font-medium px-2 py-1.5 rounded-3 text-sm uppercase">
+                New
+              </div>
+            ` : ''}
+
+            ${item.onSale ? `
+              <div class="bg-accent text-background font-medium px-2 py-1.5 rounded-3 text-sm">
+                -${item.savings}%
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="relative overflow-hidden mb-3">
+            <a href="${item.productUrl}" class="card-product-northfinder__link">
+              <img
+                srcset="${item.productImg}"
+                src="${item.productImg}"
+                alt="${item.productImageAltText}"
+                class="w-full h-auto object-cover aspect-square transition-transform duration-500 ease-in-out hover:scale-105"
+                loading="lazy"
+                width="${item.imgWidth}"
+                height="${item.imgHeight}"
+              >
+            </a>
+
+            <button
+              type="button"
+              class="absolute top-[0.625rem] right-[0.625rem] z-20 bg-[#F5F5F5] size-10 rounded-full flex items-center justify-center"
+              aria-label="Add to wishlist"
+            >
+              <span class="svg-wrapper size-5">{{ 'icon-heart.svg' | inline_asset_content }}</span>
+            </button>
+          </div>
+
+          <div class="flex flex-col gap-1 pt-3">
+            <a href="${item.productUrl}" class="card-product-northfinder__title-link">
+              <h3 class="text-base font-semibold leading-[1.625rem] text-[#0F0F0F]">${item.productTitle}</h3>
+            </a>
+
+            <div class="flex gap-3 items-center mt-0.5 text-lg font-semibold leading-7">
+              ${item.onSale ? `
+                <span class="line-through text-[#666666]">${item.compareAtPrice}</span>
+                <span class="text-[#0f0f0f]">${item.productPrice}</span>
+              ` : `
+                <span class="text-[#0f0f0f]">${item.productPrice}</span>
+              `}
+            </div>
+          </div>
+        </div>
+      </div>
     </li>
    `);
     });
