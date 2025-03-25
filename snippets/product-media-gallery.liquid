@@ -14,7 +14,7 @@
 {{ 'pagination-dots.css' | asset_url | stylesheet_tag }}
 {{ 'swiper.css' | asset_url | stylesheet_tag }}
 {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
 {{ 'lightbox.css' | asset_url | stylesheet_tag }}
 
 <style>
@@ -56,8 +56,8 @@
   #gallery-toggle-container.visible {
     opacity: 1;
   }
-  /* Custom close button with icon */
-  .fancybox__button--close {
+  /* Custom close button with icon for Fancybox v5 */
+  .f-button.is-close {
     background-color: #F0F0F0;
     border-radius: 50%;
     width: 3.75rem;
@@ -66,15 +66,15 @@
     position: relative;
   }
 
-  .fancybox__button--close:hover {
+  .f-button.is-close:hover {
     background-color: #E0E0E0;
   }
 
-  .fancybox__button--close svg {
+  .f-button.is-close svg {
     display: none;
   }
 
-  .fancybox__button--close::before {
+  .f-button.is-close::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -90,7 +90,7 @@
 </style>
 
 <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" defer></script>
 <script type="module">
   import { parseImageUrl, sortImagesByDisplayRules } from "{{ 'product-utils.module.js' | asset_url }}";
   window.parseImageUrl = parseImageUrl;
@@ -751,31 +751,26 @@
           };
         });
 
-        // Open Fancybox with a simplified configuration
+        // Open Fancybox with a configuration for v5
         Fancybox.show(items, {
           startIndex: Math.min(startIndex || 0, items.length - 1),
           dragToClose: false,
-          backdropClick: "close",
+          closeButton: "inside",
           Toolbar: {
-            display: ["close"],
-            position: "top"
-          },
-          Thumbs: {
-            autoStart: true,
-            type: "classic",
-            minSlideCount: 2,
-            Carousel: {
-              center: true,
-              fill: true
+            display: {
+              left: [],
+              middle: [],
+              right: ["close"]
             }
           },
+          Thumbs: {
+            type: "classic"
+          },
           Carousel: {
-            friction: 0.8,
             transition: "slide"
           },
-          Image: {
+          Images: {
             zoom: false,
-            fit: "contain",
             click: "close"
           }
         });
