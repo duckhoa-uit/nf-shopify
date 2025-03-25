@@ -241,7 +241,7 @@
 
   <!-- See More/Less Button -->
   <div id="gallery-toggle-container" class="hidden md:flex justify-end">
-    <button id="gallery-toggle-btn">VIEW MORE</button>
+    <button id="gallery-toggle-btn">MORE IMAGES</button>
   </div>
 
   <script>
@@ -355,6 +355,9 @@
       // Get the initial active color
       const activeColor = gallery.dataset.activeColor;
 
+      // Create global reference for slidesToCreate
+      window.slidesToCreate = [];
+
       // Process and filter media based on active color
       function processMedia() {
         if (!window.parseImageUrl) {
@@ -436,7 +439,7 @@
         }
 
         // Create at least 2 slides for proper pagination
-        const slidesToCreate = urls.length === 1 ? [urls[0], urls[0]] : urls;
+        window.slidesToCreate = urls.length === 1 ? [urls[0], urls[0]] : urls;
 
         // Create all items but only show first 6
         window.isGalleryExpanded = window.isGalleryExpanded || false;
@@ -445,17 +448,17 @@
 
         // Set button text based on current expanded state
         if (toggleBtn) {
-          toggleBtn.textContent = window.isGalleryExpanded ? 'VIEW LESS' : 'VIEW MORE';
+          toggleBtn.textContent = window.isGalleryExpanded ? 'LESS IMAGES' : 'MORE IMAGES';
         }
 
-        if (slidesToCreate.length > 0) {
-          slidesToCreate.forEach((url, index) => {
+        if (window.slidesToCreate.length > 0) {
+          window.slidesToCreate.forEach((url, index) => {
             const mediaItem = createMediaItem(url, index);
             if (mediaItem) {
               sliderWrapper.appendChild(mediaItem.cloneNode(true));
 
               // Add to grid with visibility control
-              if (index === 0 || url !== slidesToCreate[0]) {
+              if (index === 0 || url !== window.slidesToCreate[0]) {
                 // Add display class based on index and current expanded state
                 if (index >= 6) {
                   if (!window.isGalleryExpanded) {
@@ -469,7 +472,7 @@
           });
 
           // Only show toggle button if we have more than 6 items
-          if (slidesToCreate.length > 6) {
+          if (window.slidesToCreate.length > 6) {
             toggleContainer.classList.remove('hidden');
 
             // Replace button with clone to remove any existing event listeners
@@ -490,7 +493,7 @@
               });
 
               // Update button text
-              newBtn.textContent = window.isGalleryExpanded ? 'VIEW LESS' : 'VIEW MORE';
+              newBtn.textContent = window.isGalleryExpanded ? 'LESS IMAGES' : 'MORE IMAGES';
             });
           } else {
             toggleContainer.classList.add('hidden');
@@ -524,8 +527,13 @@
           grid.classList.add('loaded');
 
           // Show toggle button container if needed
-          if (toggleContainer && slidesToCreate.length > 6) {
+          if (toggleContainer && window.slidesToCreate.length > 6) {
             toggleContainer.classList.add('visible');
+            // Only show on medium screens and up (desktop)
+            if (window.innerWidth < 768) {
+              toggleContainer.classList.add('hidden');
+              toggleContainer.classList.remove('visible');
+            }
           }
         });
       }
@@ -607,7 +615,7 @@
           // Reset expanded state when color changes
           const toggleBtn = document.getElementById('gallery-toggle-btn');
           if (toggleBtn) {
-            toggleBtn.textContent = 'VIEW MORE';
+            toggleBtn.textContent = 'MORE IMAGES';
             window.isGalleryExpanded = false;
           }
 
@@ -694,6 +702,20 @@
       // Start processing media and set up listeners
       processMedia();
       setupEventListeners();
+
+      // Add resize event listener to hide button on mobile
+      window.addEventListener('resize', function() {
+        const toggleContainer = document.getElementById('gallery-toggle-container');
+        if (toggleContainer) {
+          if (window.innerWidth < 768) {
+            toggleContainer.classList.add('hidden');
+            toggleContainer.classList.remove('visible');
+          } else if (window.slidesToCreate && window.slidesToCreate.length > 6) {
+            toggleContainer.classList.remove('hidden');
+            toggleContainer.classList.add('visible');
+          }
+        }
+      });
 
       // Directly hook into Shopify's variant change mechanism
       const originalOnVariantChange = window.onVariantChange;

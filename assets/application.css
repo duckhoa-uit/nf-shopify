@@ -1580,6 +1580,16 @@
       outline-style: none !important;
     }
   }
+  .sm\:hidden {
+    @media (width >= 40rem) {
+      display: none !important;
+    }
+  }
+  .md\:visible {
+    @media (width >= 46.875rem) {
+      visibility: visible !important;
+    }
+  }
   .md\:col-span-1 {
     @media (width >= 46.875rem) {
       grid-column: span 1 / span 1 !important;
