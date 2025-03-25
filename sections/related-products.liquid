@@ -1,6 +1,10 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
+{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+{{ 'swiper.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
@@ -18,6 +22,30 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* Initial styling for swiper slides to prevent layout shift */
+  .related-products-swiper:not(.swiper-initialized) .swiper-wrapper {
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  .related-products-swiper:not(.swiper-initialized) .swiper-slide {
+    flex: 0 0 auto;
+    width: 100%;
+    margin-right: 36px;
+  }
+
+  @media screen and (min-width: 640px) {
+    .related-products-swiper:not(.swiper-initialized) .swiper-slide {
+      width: calc((100% - 36px) / 2.2);
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .related-products-swiper:not(.swiper-initialized) .swiper-slide {
+      width: calc((100% - 72px) / 3.2);
+    }
+  }
 {%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
@@ -31,32 +59,109 @@
       <h2 class="related-products__heading inline-richtext {{ section.settings.heading_size }}">
         {{ section.settings.heading }}
       </h2>
-      <ul
-        class="dawn-grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
-        role="list"
-      >
-        {% assign skip_card_product_styles = false %}
-        {% for recommendation in recommendations.products %}
-          <li class="grid__item">
-            {% render 'card-product',
-              card_product: recommendation,
-              media_aspect_ratio: section.settings.image_ratio,
-              image_shape: section.settings.image_shape,
-              show_secondary_image: section.settings.show_secondary_image,
-              show_vendor: section.settings.show_vendor,
-              show_rating: section.settings.show_rating,
-              skip_styles: skip_card_product_styles
-            %}
-          </li>
-          {%- assign skip_card_product_styles = true -%}
-        {% endfor %}
-      </ul>
+
+      <div class="swiper related-products-swiper w-full pb-5">
+        <div class="swiper-wrapper">
+          {% assign skip_card_product_styles = false %}
+          {% for recommendation in recommendations.products %}
+            <div id="Slide-{{ section.id }}-{{ forloop.index }}" class="swiper-slide">
+              {% render 'card-product',
+                card_product: recommendation,
+                media_aspect_ratio: section.settings.image_ratio,
+                image_shape: section.settings.image_shape,
+                show_secondary_image: section.settings.show_secondary_image,
+                show_vendor: section.settings.show_vendor,
+                show_rating: section.settings.show_rating,
+                skip_styles: skip_card_product_styles
+              %}
+            </div>
+            {%- assign skip_card_product_styles = true -%}
+          {% endfor %}
+        </div>
+        <div class="swiper-scrollbar"></div>
+        <div class="swiper-button-next">
+          <span class="icon">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="56" height="56" rx="28" fill="white"></rect> <path d="M26 40L34 28L26 16" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+          </span>
+        </div>
+        <div class="swiper-button-prev">
+          <span class="icon">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="56" height="56" rx="28" transform="matrix(-1 0 0 1 56 0)" fill="white"></rect> <path d="M30 40L22 28L30 16" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+          </span>
+        </div>
+      </div>
     {% endif %}
   </product-recommendations>
   {% if section.settings.image_shape == 'arch' %}
     {{ 'mask-arch.svg' | inline_asset_content }}
   {%- endif -%}
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const initSwiper = function() {
+      const swiperContainer = document.querySelector('.related-products-swiper');
+      if (!swiperContainer) return;
+
+      var mySwiper = new Swiper('.related-products-swiper', {
+        direction: 'horizontal',
+        spaceBetween: 36,
+        grabCursor: true,
+        breakpoints: {
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1,
+          },
+          // when window width is >= 640px
+          640: {
+            slidesPerView: 2.2,
+          },
+          // when window width is >= 1024px
+          1024: {
+            slidesPerView: 3.2,
+          },
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        scrollbar: {
+          el: '.swiper-scrollbar',
+        },
+      });
+    };
+
+    // Check if Swiper is loaded
+    if (typeof Swiper === 'undefined') {
+      // Wait for Swiper to load since we're using defer
+      const swiperScript = document.querySelector('script[src*="swiper-bundle.min.js"]');
+      if (swiperScript) {
+        swiperScript.addEventListener('load', initSwiper);
+      }
+    } else {
+      initSwiper();
+    }
+
+    // Initialize when product recommendations are loaded
+    const productRecommendations = document.querySelector('product-recommendations');
+    if (productRecommendations) {
+      const observer = new MutationObserver(function(mutations) {
+        if (document.querySelector('.related-products-swiper')) {
+          if (typeof Swiper !== 'undefined') {
+            initSwiper();
+          }
+          observer.disconnect();
+        }
+      });
+
+      observer.observe(productRecommendations, { childList: true, subtree: true });
+    }
+  });
+</script>
 
 {% schema %}
 {
