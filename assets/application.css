@@ -371,8 +371,17 @@
   .z-50 {
     z-index: 50 !important;
   }
+  .order-last {
+    order: 9999 !important;
+  }
   .col-span-1 {
     grid-column: span 1 / span 1 !important;
+  }
+  .row-\[4\] {
+    grid-row: 4 !important;
+  }
+  .row-\[99\] {
+    grid-row: 99 !important;
   }
   .container {
     margin-right: auto !important;
@@ -700,6 +709,9 @@
   }
   .flex-1 {
     flex: 1 !important;
+  }
+  .flex-grow {
+    flex-grow: 1 !important;
   }
   .border-collapse {
     border-collapse: collapse !important;
@@ -1301,6 +1313,9 @@
   .capitalize {
     text-transform: capitalize !important;
   }
+  .lowercase {
+    text-transform: lowercase !important;
+  }
   .uppercase {
     text-transform: uppercase !important;
   }
@@ -1333,6 +1348,10 @@
   }
   .blur {
     --tw-blur: blur(8px) !important;
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
+  }
+  .grayscale {
+    --tw-grayscale: grayscale(100%) !important;
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
   }
   .invert {
@@ -1375,6 +1394,10 @@
   .outline-none {
     --tw-outline-style: none !important;
     outline-style: none !important;
+  }
+  .select-none {
+    -webkit-user-select: none !important;
+    user-select: none !important;
   }
   .\*\:my-0\.5 {
     :is(& > *) {
@@ -1553,9 +1576,24 @@
       outline-style: none !important;
     }
   }
+  .md\:order-none {
+    @media (width >= 46.875rem) {
+      order: 0 !important;
+    }
+  }
   .md\:col-span-1 {
     @media (width >= 46.875rem) {
       grid-column: span 1 / span 1 !important;
+    }
+  }
+  .md\:row-auto {
+    @media (width >= 46.875rem) {
+      grid-row: auto !important;
+    }
+  }
+  .md\:mt-0 {
+    @media (width >= 46.875rem) {
+      margin-top: calc(var(--spacing) * 0) !important;
     }
   }
   .md\:mb-4 {
@@ -1617,6 +1655,11 @@
   .md\:w-3 {
     @media (width >= 46.875rem) {
       width: calc(var(--spacing) * 3) !important;
+    }
+  }
+  .md\:w-fit {
+    @media (width >= 46.875rem) {
+      width: fit-content !important;
     }
   }
   .md\:max-w-\[520px\] {
