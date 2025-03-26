@@ -10,6 +10,24 @@
 
 <div class="mt-12 flex flex-col w-full">
   <h5 class="text-lg my-2 text-[#0F0F0F] font-bold leading-7">Benefits</h5>
+
+  <style>
+    /* Hide benefits beyond first 2 by default to prevent flash */
+    #product-benefits-list li:not(:first-child):not(:nth-child(2)):not(:last-child) {
+      display: none;
+    }
+
+    /* On mobile, always show all benefits */
+    @media (max-width: 768px) {
+      #product-benefits-list li {
+        display: block !important;
+      }
+      #product-benefits-list li:last-child {
+        display: none !important;
+      }
+    }
+  </style>
+
   <ul class="flex flex-col w-full relative" id="product-benefits-list">
     <li class="break-inside-avoid mb-9 ml-8">
       <img
@@ -261,15 +279,22 @@
     const showMoreBtn = document.getElementById('show-more-benefits');
     const showLessBtn = document.getElementById('show-less-benefits');
 
+    // Check if we're on mobile
+    function isMobile() {
+      return window.innerWidth <= 768;
+    }
+
     // Function to show only the first 2 benefits
     function showLessBenefits() {
-      benefitItems.forEach((item, index) => {
-        if (index >= 2) {
-          item.style.display = 'none';
-        }
-      });
-      showMoreBtn.style.display = 'block';
-      showLessBtn.style.display = 'none';
+      if (!isMobile()) {
+        benefitItems.forEach((item, index) => {
+          if (index >= 2) {
+            item.style.display = 'none';
+          }
+        });
+        showMoreBtn.style.display = 'block';
+        showLessBtn.style.display = 'none';
+      }
     }
 
     // Function to show all benefits
@@ -281,11 +306,33 @@
       showLessBtn.style.display = 'block';
     }
 
+    // Handle responsive behavior
+    function handleResponsive() {
+      if (isMobile()) {
+        // On mobile, show all benefits and hide controls
+        benefitItems.forEach((item) => {
+          item.style.display = 'block';
+        });
+        showMoreBtn.style.display = 'none';
+        showLessBtn.style.display = 'none';
+      } else {
+        // On desktop, respect the current state
+        if (showMoreBtn.style.display === 'none') {
+          showAllBenefits();
+        } else {
+          showLessBenefits();
+        }
+      }
+    }
+
     // Add click event listeners
     showMoreBtn.addEventListener('click', showAllBenefits);
     showLessBtn.addEventListener('click', showLessBenefits);
 
-    // Initialize with only 2 benefits shown
-    showLessBenefits();
+    // Handle window resize for responsive behavior
+    window.addEventListener('resize', handleResponsive);
+
+    // Initialize the UI
+    handleResponsive();
   });
 </script>
