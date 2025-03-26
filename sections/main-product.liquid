@@ -49,6 +49,25 @@
       z-index: 1;
     }
 
+    /* Mobile/Desktop visibility control for collapsible tabs */
+    .desktop-only-tabs {
+      display: block;
+    }
+
+    .mobile-only-tabs {
+      display: none;
+    }
+
+    @media screen and (max-width: 768px) {
+      .desktop-only-tabs {
+        display: none;
+      }
+
+      .mobile-only-tabs {
+        display: block;
+      }
+    }
+
     .northfinder-product-page .product-title {
       font-size: 1.5rem;
       line-height: 2.125rem;
@@ -320,7 +339,7 @@
       <div class="product__info-wrapper col-span-1 md:col-span-1 lg:col-span-1 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
           id="ProductInfo-{{ section.id }}"
-          class="product__info-container"
+          class="product__info-container product-info-container"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
@@ -615,7 +634,11 @@
               {%- when 'custom_liquid' -%}
                 {{ block.settings.custom_liquid }}
               {%- when 'collapsible_tab' -%}
-                <div class="product__accordion accordion quick-add-hidden" {{ block.shopify_attributes }}>
+                <div
+                  id="collapsible-tabs-section"
+                  class="product__accordion accordion quick-add-hidden product-tabs-container desktop-only-tabs"
+                  {{ block.shopify_attributes }}
+                >
                   <details id="Details-{{ block.id }}-{{ section.id }}">
                     <summary class="py-4">
                       <div class="summary__title">
@@ -850,82 +873,110 @@
       endif
     -%}
 
-    <div class="mt-10 flex flex-col w-full pb-12">
+    <div class="mt-10 flex flex-col w-full md:pb-12">
       <h2 id="description_and_parameters" class="py-3 text-2xl font-bold leading-[1.5]">Description and Parameters</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+      <div id="description-parameters-grid" class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
         <div class="[&_ul]:list-disc [&_ul]:pl-5 *:text-[#0F0F0F] *:text-[0.9375rem] [&_iframe]:max-w-full [&_p]:leading-[1.5]">
           <div class="">{{ product.description }}</div>
-          <div class="py-6 md:py-12">
-            {{ product.metafields.custom.short_description | metafield_tag }}
-          </div>
+
+          {% if product.metafields.custom.short_description != blank %}
+            <div class="py-6 md:py-12">
+              {{ product.metafields.custom.short_description | metafield_tag }}
+            </div>
+          {% endif %}
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
           {% if product.metafields.features.size > 0 %}
-          <div class="product-info flex flex-col">
-            <h3 class="text-lg font-bold leading-7 mb-4">Parameters</h3>
-            <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
-              {% for metafield in product.metafields.features %}
-                {% assign key = metafield | first %}
-                {% comment %} Metafield key (e.g., "gender", "activities") {% endcomment %}
-                {% assign arr_values = metafield | last %}
-                {% if arr_values.value != blank %}
-                  <li class="leading-6">
-                    <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
-                      {{- key | replace: '_', ' ' | upcase }}:</strong
-                    >
+            <div id="parameters-section" class="product-info flex flex-col">
+              <h3 class="text-lg font-bold leading-7 mb-4">Parameters</h3>
+              <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
+                {% for metafield in product.metafields.features %}
+                  {% assign key = metafield | first %}
+                  {% comment %} Metafield key (e.g., "gender", "activities") {% endcomment %}
+                  {% assign arr_values = metafield | last %}
+                  {% if arr_values.value != blank %}
+                    <li class="leading-6">
+                      <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
+                        {{- key | replace: '_', ' ' | upcase }}:</strong
+                      >
 
-                    {% assign items = arr_values.value | map: 'name' | join: ', ' %}
-                    <span class="text-[#3D3D3D] text-sm">
-                      {{ items }}
-                    </span>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-          </div>
+                      {% assign items = arr_values.value | map: 'name' | join: ', ' %}
+                      <span class="text-[#3D3D3D] text-sm">
+                        {{ items }}
+                      </span>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
           {% endif %}
 
-          <div class="product-info flex flex-col">
+          <div id="main-elements-section" class="product-info flex flex-col">
             {% if product.metafields.custom.main_elements.value != blank %}
-            <h3 class="text-lg font-bold leading-7 mb-4">Main elements</h3>
-            <div class="flex flex-col">
-              {% for field in product.metafields.custom.main_elements.value %}
-                {% assign name = field.name %}
-                {% assign logo = field.logo %}
-                {% assign description = field.description | metafield_text %}
+              <h3 class="text-lg font-bold leading-7 mb-4">Main elements</h3>
+              <div class="flex flex-col main-elements-container">
+                {% for field in product.metafields.custom.main_elements.value %}
+                  {% assign name = field.name %}
+                  {% assign logo = field.logo %}
+                  {% assign description = field.description | metafield_text %}
 
-                <div class="w-full flex items-start">
-                  <div class="min-w-12 mr-4 size-12">
-                    <img
-                      class="block max-w-full h-auto"
-                      width="48"
-                      height="48"
-                      src="{{ logo | image_url: width: 48 }}"
-                    >
-                  </div>
-                  <div class="flex-1">
-                    <div class="flex flex-col">
-                      <h2 class="text-base font-semibold mb-2">{{ name }}</h2>
-                      <div class="text-[0.9375rem] text-[#0F0F0F] leading-6">
-                        <div class="desc">
-                          {% render 'text-truncation', text: description, id: name %}
+                  <div class="w-full flex items-start">
+                    <div class="min-w-12 mr-4 size-12">
+                      <img
+                        class="block max-w-full h-auto"
+                        width="48"
+                        height="48"
+                        src="{{ logo | image_url: width: 48 }}"
+                      >
+                    </div>
+                    <div class="flex-1">
+                      <div class="flex flex-col">
+                        <h2 class="text-base font-semibold mb-2">{{ name }}</h2>
+                        <div class="text-[0.9375rem] text-[#0F0F0F] leading-6">
+                          <div class="desc">
+                            {% render 'text-truncation', text: description, id: name %}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              {% endfor %}
-            </div>
+                {% endfor %}
+              </div>
             {% endif %}
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Mobile-only collapsible tabs, shown below the description/parameters section -->
+    <div class="mobile-only-tabs mt-6">
+      {% for block in section.blocks %}
+        {% if block.type == 'collapsible_tab' %}
+          <div class="product__accordion accordion quick-add-hidden" {{ block.shopify_attributes }}>
+            <details id="Mobile-Details-{{ block.id }}-{{ section.id }}">
+              <summary class="py-4">
+                <div class="summary__title">
+                  {% render 'icon-accordion', icon: block.settings.icon %}
+                  <h2 class="h4 accordion__title inline-richtext">
+                    {{ block.settings.heading | default: block.settings.page.title | escape }}
+                  </h2>
+                </div>
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </summary>
+              <div class="accordion__content rte" id="Mobile-ProductAccordion-{{ block.id }}-{{ section.id }}">
+                {{ block.settings.content }}
+                {{ block.settings.page.content }}
+              </div>
+            </details>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
     <!-- Product Reviews -->
     {% if product.metafields.custom.reviews %}
-      <div class="product-reviews">
+      <div id="product-reviews-section" class="product-reviews">
         <h3 class="reviews-title">Customer Reviews</h3>
         {% for review in product.metafields.custom.reviews.value %}
           <div class="review-item">
