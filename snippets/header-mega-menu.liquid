@@ -14,7 +14,7 @@
             <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu h-full">
               <summary
                 id="HeaderMenu-{{ link.handle }}"
-                class="header__menu-item list-menu__item link focus-inset group transition-colors p-3 text-sm h-full"
+                class="header__menu-item list-menu__item link focus-inset group transition-colors p-3 text-[0.9375rem] h-full"
               >
                 <span
                   class="{% if link.child_active %} header__active-menu-item{% endif %} group-hover:text-accent font-semibold text-foreground uppercase"
@@ -24,7 +24,7 @@
               </summary>
               <div
                 id="MegaMenu-Content-{{ forloop.index }}"
-                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient global-settings-popup border-0"
+                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient global-settings-popup border-0 shadow-[0_20px_40px_#e2e2e2] overflow-hidden"
                 tabindex="-1"
               >
                 <ul
@@ -32,7 +32,7 @@
                   role="list"
                 >
                   {%- for childlink in link.links -%}
-                    <li class="flex flex-col space-y-6 border-r border-[#E0DFDF] last:border-0">
+                    <li class="flex flex-col space-y-[0.625rem] border-r border-[#E0DFDF] last:border-0">
                       <span
                         id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                         {% comment %} href="{{ childlink.url }}" {% endcomment %}
@@ -44,13 +44,13 @@
                         {{ childlink.title | escape }}
                       </span>
                       {%- if childlink.links != blank -%}
-                        <ul class="list-unstyled space-y-3" role="list">
+                        <ul class="list-unstyled space-y-[0.625rem]" role="list">
                           {%- for grandchildlink in childlink.links -%}
                             <li>
                               <a
                                 id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
                                 href="{{ grandchildlink.url }}"
-                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %} text-base leading-[1.125rem] p-0 hover:text-accent transition-colors text-[#3D3D3D] tracking-normal"
+                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %} text-lg leading-[1.25rem] p-0 hover:text-accent transition-colors text-[#3D3D3D] tracking-normal"
                                 {% if grandchildlink.current %}
                                   aria-current="page"
                                 {% endif %}

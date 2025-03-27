@@ -22,53 +22,77 @@
         <div class="">
           <ul class="">
             <li>
+              {% if section.settings.announcement_link != blank %}
               <a class="text-secondary-foreground" href="{{ section.settings.announcement_link }}">
                 {{- section.settings.announcement_text -}}
               </a>
+              {% else %}
+              <span class="text-secondary-foreground">
+                {{- section.settings.announcement_text -}}
+              </span>
+              {% endif %}
             </li>
           </ul>
         </div>
       </div>
       <div class="nav_right flex justify-end items-center">
         <div class="flex gap-6 justify-between items-center [&_a]:text-secondary-foreground [&_a]:cursor-pointer">
-          {% comment %} <div>
-            <a href="{{ section.settings.category1_link }}">
-              {{- section.settings.category1_text -}}
-            </a>
-          </div>
-          <div>
-            <a href="{{ section.settings.category2_link }}">
-              {{- section.settings.category2_text -}}
-            </a>
-          </div>
-          <div>
-            <a href="{{ section.settings.category3_link }}">
-              {{- section.settings.category3_text -}}
-            </a>
-          </div> {% endcomment %}
+          {% comment %}
+            {% if section.settings.category1_link != blank %}
+            <div>
+              <a href="{{ section.settings.category1_link }}">
+                {{- section.settings.category1_text -}}
+              </a>
+            </div>
+            {% endif %}
+            {% if section.settings.category2_link != blank %}
+            <div>
+              <a href="{{ section.settings.category2_link }}">
+                {{- section.settings.category2_text -}}
+              </a>
+            </div>
+            {% endif %}
+            {% if section.settings.category3_link != blank %}
+            <div>
+              <a href="{{ section.settings.category3_link }}">
+                {{- section.settings.category3_text -}}
+              </a>
+            </div>
+            {% endif %}
+          {% endcomment %}
+          {% if section.settings.blog_link != blank %}
           <div>
             <a href="{{ section.settings.blog_link }}">
-              {{- section.settings.blog_text -}}
+              Blog
             </a>
           </div>
+          {% endif %}
+          {% if section.settings.contact_link != blank %}
           <div>
             <a href="{{ section.settings.contact_link }}">
-              {{- section.settings.contact_text -}}
+              Contact
             </a>
           </div>
+          {% endif %}
+          {% if section.settings.faq_link != blank %}
           <div>
             <a href="{{ section.settings.faq_link }}">
-              {{- section.settings.faq_text -}}
+              FAQ
             </a>
           </div>
+          {% endif %}
+          {% if section.settings.show_register %}
           <div>
             <a data-auth-trigger="register">Register</a>
           </div>
+          {% endif %}
+          {% if section.settings.show_login %}
           <div>
             <a data-auth-trigger="login">Login</a>
           </div>
-          <div>
-            {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+          {% endif %}
+          {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+            <div>
               <div class="dropdown">
                 <a
                   class="dropdown-toggle header_shopchooser"
@@ -78,7 +102,7 @@
                   aria-expanded="false"
                 >
                   <img
-                    src="{{ section.settings.current_language_flag | img_url }}"
+                    src="{{ section.settings.current_language_flag | image_url }}"
                     alt="{{ localization.language.iso_code }}"
                     width="16"
                     height="11"
@@ -99,7 +123,7 @@
                         hreflang="{{ language.iso_code }}"
                       >
                         <img
-                          src="{{ language.flag_url | default: section.settings.default_flag | img_url }}"
+                          src="{{ language.flag_url | default: section.settings.default_flag | image_url }}"
                           alt="{{ language.endonym_name }}"
                           width="16"
                           height="11"
@@ -110,8 +134,8 @@
                   {%- endfor -%}
                 </ul>
               </div>
-            {%- endif -%}
-          </div>
+            </div>
+          {%- endif -%}
         </div>
       </div>
     </nav>
@@ -135,32 +159,14 @@
       "label": "Announcement Link"
     },
     {
-      "type": "text",
-      "id": "blog_text",
-      "label": "Blog Text",
-      "default": "Blog"
-    },
-    {
       "type": "url",
       "id": "blog_link",
       "label": "Blog Link"
     },
     {
-      "type": "text",
-      "id": "faq_text",
-      "label": "FAQ Text",
-      "default": "FAQ"
-    },
-    {
       "type": "url",
       "id": "faq_link",
       "label": "FAQ Link"
-    },
-    {
-      "type": "text",
-      "id": "contact_text",
-      "label": "Contact Text",
-      "default": "Contact"
     },
     {
       "type": "url",
@@ -215,6 +221,18 @@
       "type": "image_picker",
       "id": "default_flag",
       "label": "Default Language Flag"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_register",
+      "label": "Show Register Link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_login",
+      "label": "Show Login Link",
+      "default": true
     }
   ],
   "presets": [
