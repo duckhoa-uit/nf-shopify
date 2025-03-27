@@ -13,6 +13,24 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .activity-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  @media screen and (min-width: 750px) {
+    .mobile-only {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .desktop-only {
+      display: none;
+    }
+  }
 {%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} isolate gradient activities-section">
@@ -26,48 +44,51 @@
 
       <div class="activities-grid">
         {%- for block in section.blocks -%}
-          <div
-            class="activity-card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-            {{ block.shopify_attributes }}
-            data-position="{{ forloop.index }}"
-          >
-            {%- if block.settings.image != blank -%}
-              <div class="relative overflow-hidden h-full aspect-video">
-                <img
-                  srcset="
-                    {%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
-                    {%- if block.settings.image.width >= 550 -%}{{ block.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
-                    {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
-                    {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
-                    {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
-                    {%- if block.settings.image.width >= 2200 -%}{{ block.settings.image | image_url: width: 2200 }} 2200w,{%- endif -%}
-                    {%- if block.settings.image.width >= 3000 -%}{{ block.settings.image | image_url: width: 3000 }} 3000w,{%- endif -%}
-                    {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
-                  "
-                  src="{{ block.settings.image | image_url: width: 1500 }}"
-                  sizes="100vw"
-                  alt="{{ block.settings.image.alt | escape }}"
-                  loading="lazy"
-                  width="{{ block.settings.image.width }}"
-                  height="{{ block.settings.image.height }}"
-                  class="activity-image"
-                >
-              </div>
-            {%- else -%}
-              <div class="bg-foreground/10 aspect-[4/3] flex items-center justify-center">
-                {{ 'image' | placeholder_svg_tag: 'w-full h-48 text-foreground/50' }}
-              </div>
-            {%- endif -%}
-
-            <div class="activity-content">
-              <h3 class="activity-title">{{ block.settings.activity_title }}</h3>
-              {%- if block.settings.link_url != blank -%}
-                <a href="{{ block.settings.link_url }}" class="activity-button">
-                  {{ block.settings.button_text | default: 'Explore' }}
-                </a>
+            <div
+              class="activity-card relative{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+              {{ block.shopify_attributes }}
+              data-position="{{ forloop.index }}"
+            >
+              {% if block.settings.link_url != blank %}
+                <a href="{{ block.settings.link_url }}" class="absolute inset-0 z-10 block md:hidden"></a>
+              {% endif %}
+              {%- if block.settings.image != blank -%}
+                <div class="relative overflow-hidden h-full aspect-video">
+                  <img
+                    srcset="
+                      {%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+                      {%- if block.settings.image.width >= 550 -%}{{ block.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
+                      {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+                      {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                      {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                      {%- if block.settings.image.width >= 2200 -%}{{ block.settings.image | image_url: width: 2200 }} 2200w,{%- endif -%}
+                      {%- if block.settings.image.width >= 3000 -%}{{ block.settings.image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                      {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
+                    "
+                    src="{{ block.settings.image | image_url: width: 1500 }}"
+                    sizes="100vw"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    loading="lazy"
+                    width="{{ block.settings.image.width }}"
+                    height="{{ block.settings.image.height }}"
+                    class="activity-image"
+                  >
+                </div>
+              {%- else -%}
+                <div class="bg-foreground/10 aspect-[4/3] flex items-center justify-center">
+                  {{ 'image' | placeholder_svg_tag: 'w-full h-48 text-foreground/50' }}
+                </div>
               {%- endif -%}
+
+              <div class="activity-content">
+                <h3 class="activity-title text-base lg:[1.3125rem]">{{ block.settings.activity_title }}</h3>
+                {%- if block.settings.link_url != blank -%}
+                  <a href="{{ block.settings.link_url }}" class="activity-button hidden md:block">
+                    {{ block.settings.button_text | default: 'Explore' }}
+                  </a>
+                {%- endif -%}
+              </div>
             </div>
-          </div>
         {%- endfor -%}
       </div>
     </div>
