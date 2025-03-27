@@ -759,6 +759,9 @@
   .flex-row {
     flex-direction: row !important;
   }
+  .flex-nowrap {
+    flex-wrap: nowrap !important;
+  }
   .flex-wrap {
     flex-wrap: wrap !important;
   }
@@ -1680,6 +1683,11 @@
   .md\:grid-cols-3 {
     @media (width >= 46.875rem) {
       grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+  }
+  .md\:grid-cols-4 {
+    @media (width >= 46.875rem) {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     }
   }
   .md\:flex-row {
