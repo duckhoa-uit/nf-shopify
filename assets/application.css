@@ -524,6 +524,9 @@
   .mb-12 {
     margin-bottom: calc(var(--spacing) * 12) !important;
   }
+  .mb-\[0\.625rem\] {
+    margin-bottom: 0.625rem !important;
+  }
   .ml-2 {
     margin-left: calc(var(--spacing) * 2) !important;
   }
@@ -631,6 +634,9 @@
   }
   .h-8 {
     height: calc(var(--spacing) * 8) !important;
+  }
+  .h-20 {
+    height: calc(var(--spacing) * 20) !important;
   }
   .h-48 {
     height: calc(var(--spacing) * 48) !important;
@@ -1224,6 +1230,10 @@
     --tw-leading: 1.5 !important;
     line-height: 1.5 !important;
   }
+  .leading-\[1\.25rem\] {
+    --tw-leading: 1.25rem !important;
+    line-height: 1.25rem !important;
+  }
   .leading-\[1\.067em\] {
     --tw-leading: 1.067em !important;
     line-height: 1.067em !important;
@@ -1354,6 +1364,14 @@
   }
   .shadow-2xs {
     --tw-shadow: 0 1px var(--tw-shadow-color, rgb(0 0 0 / 0.05)) !important;
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+  }
+  .shadow-\[0\\_20px_40px_\#e2e2e2\] {
+    --tw-shadow: 0_20px 40px var(--tw-shadow-color, #e2e2e2) !important;
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+  }
+  .shadow-\[0_20px_40px_\#e2e2e2\] {
+    --tw-shadow: 0 20px 40px var(--tw-shadow-color, #e2e2e2) !important;
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
   }
   .outline {
@@ -1775,6 +1793,12 @@
       text-align: center !important;
     }
   }
+  .md\:text-lg {
+    @media (width >= 46.875rem) {
+      font-size: var(--text-lg) !important;
+      line-height: var(--tw-leading, var(--text-lg--line-height)) !important;
+    }
+  }
   .md\:text-\[2rem\] {
     @media (width >= 46.875rem) {
       font-size: 2rem !important;
@@ -1807,6 +1831,11 @@
       margin-right: calc(var(--spacing) * -3) !important;
     }
   }
+  .lg\:mb-6 {
+    @media (width >= 61.875rem) {
+      margin-bottom: calc(var(--spacing) * 6) !important;
+    }
+  }
   .lg\:block {
     @media (width >= 61.875rem) {
       display: block !important;
@@ -1820,6 +1849,11 @@
   .lg\:hidden {
     @media (width >= 61.875rem) {
       display: none !important;
+    }
+  }
+  .lg\:h-\[3\.25rem\] {
+    @media (width >= 61.875rem) {
+      height: 3.25rem !important;
     }
   }
   .lg\:max-w-\[75rem\] {
