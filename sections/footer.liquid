@@ -4,6 +4,7 @@
 {{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
 {{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
 {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   .footer {
@@ -24,6 +25,48 @@
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
+  }
+
+  /* Desktop/Mobile visibility */
+  .desktop-menu {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
+    border-bottom: 1px solid #E0DFDF;
+  }
+
+  @media screen and (min-width: 768px) {
+    .desktop-menu {
+      display: block;
+    }
+
+    .mobile-menu {
+      display: none;
+    }
+  }
+
+  /* Mobile collapsible menu styles */
+  .mobile-menu .footer-block--menu details summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .mobile-menu .icon-caret {
+    height: 0.6rem;
+    transition: transform 0.15s ease;
+  }
+
+  /* Leverage the base.css styling pattern for details[open] */
+  .mobile-menu details[open] > summary .icon-caret {
+    transform: rotate(180deg);
+  }
+
+  .mobile-menu .footer-block__details-content {
+    padding-top: 0.5rem;
   }
 {%- endstyle -%}
 
@@ -76,9 +119,60 @@
                 {% endif %}
               >
                 {%- if block.settings.heading != blank -%}
-                  <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
-                    {{- block.settings.heading -}}
-                  </h2>
+                  {%- if block.type == 'link_list' -%}
+                    <!-- Desktop Menu (Always visible on desktop) -->
+                    <div class="desktop-menu">
+                      <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
+                        {{- block.settings.heading -}}
+                      </h2>
+                      {%- if block.settings.menu != blank -%}
+                        <ul class="footer-block__details-content list-unstyled">
+                          {%- for link in block.settings.menu.links -%}
+                            <li class="my-1.5 leading-7 text-left">
+                              <a
+                                href="{{ link.url }}"
+                                class="text-[#3D3D3D] hover:text-accent text-sm leading-[1.125rem] transition-colors"
+                              >
+                                {{ link.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </div>
+
+                    <!-- Mobile Menu (Collapsible on mobile) -->
+                    <div class="mobile-menu">
+                      <details>
+                        <summary>
+                          <div class="footer-block__heading-wrapper flex justify-between items-center">
+                            <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
+                              {{- block.settings.heading -}}
+                            </h2>
+                            <span class="icon-caret">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                          </div>
+                        </summary>
+                        {%- if block.settings.menu != blank -%}
+                          <ul class="footer-block__details-content list-unstyled">
+                            {%- for link in block.settings.menu.links -%}
+                              <li class="my-1.5 leading-7 text-left">
+                                <a
+                                  href="{{ link.url }}"
+                                  class="text-[#3D3D3D] hover:text-accent text-sm leading-[1.125rem] transition-colors"
+                                >
+                                  {{ link.title | escape }}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </details>
+                    </div>
+                  {%- else -%}
+                    <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
+                      {{- block.settings.heading -}}
+                    </h2>
+                  {%- endif -%}
                 {%- endif -%}
 
                 {%- case block.type -%}
@@ -89,20 +183,7 @@
                       {{ block.settings.subtext }}
                     </div>
                   {%- when 'link_list' -%}
-                    {%- if block.settings.menu != blank -%}
-                      <ul class="footer-block__details-content list-unstyled">
-                        {%- for link in block.settings.menu.links -%}
-                          <li class="my-1.5 leading-7 text-left">
-                            <a
-                              href="{{ link.url }}"
-                              class="text-[#3D3D3D] hover:text-accent text-sm leading-[1.125rem] transition-colors"
-                            >
-                              {{ link.title | escape }}
-                            </a>
-                          </li>
-                        {%- endfor -%}
-                      </ul>
-                    {%- endif -%}
+                    {% comment %}Menu content moved to separate desktop/mobile elements above{% endcomment %}
                   {%- when 'brand_information' -%}
                     <div class="footer-block__brand-info">
                       {%- if settings.brand_image != blank -%}
