@@ -17,49 +17,7 @@
 <div class="color-{{ section.settings.color_scheme }} isolate gradient materials-section">
   <div class="section-{{ section.id }}-padding">
     <div class="page-width">
-      <div class="single-material">
-        {%- if section.settings.image != blank -%}
-          <div class="material-image-container">
-            <img
-              srcset="
-                {%- if section.settings.image.width >= 375 -%}{{ section.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
-                {%- if section.settings.image.width >= 550 -%}{{ section.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
-                {%- if section.settings.image.width >= 750 -%}{{ section.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
-                {%- if section.settings.image.width >= 1100 -%}{{ section.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
-                {%- if section.settings.image.width >= 1500 -%}{{ section.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
-                {{ section.settings.image | image_url }} {{ section.settings.image.width }}w
-              "
-              src="{{ section.settings.image | image_url: width: 1100 }}"
-              sizes="(min-width: 750px) 50vw, 100vw"
-              alt="{{ section.settings.image.alt | escape }}"
-              loading="lazy"
-              width="{{ section.settings.image.width }}"
-              height="{{ section.settings.image.height }}"
-              class="material-image aspect-video"
-            >
-          </div>
-        {%- else -%}
-          <div class="material-image-container bg-foreground/10 flex items-center justify-center aspect-video">
-            {{ 'image' | placeholder_svg_tag: 'w-full h-full text-foreground/50' }}
-          </div>
-        {%- endif -%}
-
-        <div class="material-content">
-          {%- if section.settings.title != blank -%}
-            <h3 class="material-title">{{ section.settings.title }}</h3>
-          {%- endif -%}
-
-          {%- if section.settings.description != blank -%}
-            <div class="material-description">{{ section.settings.description }}</div>
-          {%- endif -%}
-
-          {%- if section.settings.button_text != blank -%}
-            <a href="{{ section.settings.button_url | default: '#' }}" class="material-button">
-              {{ section.settings.button_text }}
-            </a>
-          {%- endif -%}
-        </div>
-      </div>
+      {% render 'material-content', block: section %}
     </div>
   </div>
 </div>
