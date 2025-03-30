@@ -24,7 +24,7 @@
   <div class="section-{{ section.id }}-padding">
     <div class="page-width">
       {%- if section.settings.title != blank -%}
-        <h2 class="text-left font-extrabold font-archivo-expanded text-2xl text-[#0F0F0F] uppercase mb-6 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <h2 class="text-left font-extrabold font-archivo-expanded text-base lg:text-2xl leading-7 text-[#0F0F0F] uppercase mb-3 lg:mb-6 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
           {{ section.settings.title }}
         </h2>
       {%- endif -%}
@@ -86,15 +86,11 @@
         breakpoints: {
           // when window width is >= 320px
           320: {
-            slidesPerView: 1,
-          },
-          // when window width is >= 640px
-          640: {
-            slidesPerView: 2.2,
+            slidesPerView: 2,
           },
           // when window width is >= 1024px
           1024: {
-            slidesPerView: 3.2,
+            slidesPerView: 3,
           },
         },
         navigation: {

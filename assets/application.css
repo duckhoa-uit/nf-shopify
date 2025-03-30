@@ -1834,6 +1834,11 @@
       grid-column: span 2 / span 2 !important;
     }
   }
+  .lg\:mt-6 {
+    @media (width >= 61.875rem) {
+      margin-top: calc(var(--spacing) * 6) !important;
+    }
+  }
   .lg\:-mr-3 {
     @media (width >= 61.875rem) {
       margin-right: calc(var(--spacing) * -3) !important;
@@ -1898,6 +1903,18 @@
     @media (width >= 61.875rem) {
       font-size: var(--text-2xl) !important;
       line-height: var(--tw-leading, var(--text-2xl--line-height)) !important;
+    }
+  }
+  .lg\:text-base {
+    @media (width >= 61.875rem) {
+      font-size: var(--text-base) !important;
+      line-height: var(--tw-leading, var(--text-base--line-height)) !important;
+    }
+  }
+  .lg\:leading-6 {
+    @media (width >= 61.875rem) {
+      --tw-leading: calc(var(--spacing) * 6) !important;
+      line-height: calc(var(--spacing) * 6) !important;
     }
   }
   .xl\:size-\[3\.75rem\] {
@@ -1971,6 +1988,11 @@
   .\[\&_li\]\:text-\[0\.9375rem\] {
     & li {
       font-size: 0.9375rem !important;
+    }
+  }
+  .\[\&_p\]\:m-0 {
+    & p {
+      margin: calc(var(--spacing) * 0) !important;
     }
   }
   .\[\&_p\]\:leading-\[1\.5\] {
