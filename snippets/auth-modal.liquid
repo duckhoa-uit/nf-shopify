@@ -22,21 +22,28 @@
           <div class="border-b border-[#E0DFDF]">
             <nav class="-mb-px flex space-x-6 uppercase" aria-label="Tabs">
               <a
-                href="#"
-                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline"
+                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
+                data-tab="login"
                 >Login</a
               >
               <a
-                href="#"
-                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline"
-                aria-current="page"
+                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
+                data-tab="register"
                 >Register</a
               >
             </nav>
           </div>
         </div>
 
-        {% form 'customer_login' %}
+        <div id="login-messages" class="auth-messages mt-4">
+          {% if form.errors %}
+            <div class="p-4 mb-4 rounded-3 bg-red-50 text-red-800">
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+        </div>
+
+        {% form 'customer_login', return_to: request.path %}
           <div class="flex flex-col">
             <div>
               <div class="relative mb-3 field">
@@ -46,6 +53,11 @@
                   id="customer_email"
                   required
                   placeholder=" "
+                  autocomplete="email"
+                  {% if form.errors contains 'email' %}
+                    aria-invalid="true"
+                    aria-describedby="email-error"
+                  {% endif %}
                 >
                 <label
                   for="customer_email"
@@ -63,6 +75,11 @@
                   id="customer_password"
                   required
                   placeholder=" "
+                  autocomplete="current-password"
+                  {% if form.errors contains 'password' %}
+                    aria-invalid="true"
+                    aria-describedby="password-error"
+                  {% endif %}
                 >
                 <label
                   for="customer_password"
@@ -98,10 +115,10 @@
             <div class="text-sm text-[#3D3D3D] mt-6 leading-5 text-left">
               If you have lost your password, continue to the page
               <a
-                href="#"
+                href="javascript:void(0)"
                 title="Recover your forgotten password"
                 rel="nofollow"
-                class="text-accent underline"
+                class="text-accent underline forgot-password-link"
                 >Forgotten password</a
               >
             </div>
@@ -119,21 +136,28 @@
           <div class="border-b border-[#E0DFDF]">
             <nav class="-mb-px flex space-x-6 uppercase" aria-label="Tabs">
               <a
-                href="#"
-                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline"
+                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
+                data-tab="login"
                 >Login</a
               >
               <a
-                href="#"
-                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline"
-                aria-current="page"
+                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
+                data-tab="register"
                 >Registration</a
               >
             </nav>
           </div>
         </div>
 
-        {% form 'create_customer' %}
+        <div id="register-messages" class="auth-messages mt-4">
+          {% if form.errors %}
+            <div class="p-4 mb-4 rounded-3 bg-red-50 text-red-800">
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+        </div>
+
+        {% form 'create_customer', return_to: request.path %}
           <div class="space-y-3">
             <div>
               <div class="relative field">
@@ -142,6 +166,12 @@
                   name="customer[first_name]"
                   id="first_name"
                   placeholder=" "
+                  autocomplete="given-name"
+                  {% if form.errors contains 'first_name' %}
+                    aria-invalid="true"
+                    aria-describedby="first-name-error"
+                  {% endif %}
+                  value="{{ form.first_name }}"
                 >
                 <label
                   for="first_name"
@@ -158,6 +188,12 @@
                   name="customer[last_name]"
                   id="last_name"
                   placeholder=" "
+                  autocomplete="family-name"
+                  {% if form.errors contains 'last_name' %}
+                    aria-invalid="true"
+                    aria-describedby="last-name-error"
+                  {% endif %}
+                  value="{{ form.last_name }}"
                 >
                 <label
                   for="last_name"
@@ -175,6 +211,12 @@
                   id="email"
                   required
                   placeholder=" "
+                  autocomplete="email"
+                  {% if form.errors contains 'email' %}
+                    aria-invalid="true"
+                    aria-describedby="email-error"
+                  {% endif %}
+                  value="{{ form.email }}"
                 >
                 <label
                   for="email"
@@ -192,6 +234,11 @@
                   id="password"
                   required
                   placeholder=" "
+                  autocomplete="new-password"
+                  {% if form.errors contains 'password' %}
+                    aria-invalid="true"
+                    aria-describedby="password-error"
+                  {% endif %}
                 >
                 <label
                   for="password"
@@ -205,10 +252,13 @@
               <div class="flex">
                 <input
                   type="checkbox"
-                  name="newsletter"
+                  name="customer[accepts_marketing]"
                   id="newsletter"
                   value="1"
                   class="flex size-[1.125rem] items-center justify-center mr-2 cursor-pointer p-2 relative bg-background"
+                  {% if form.accepts_marketing %}
+                    checked
+                  {% endif %}
                 >
                 <label
                   for="newsletter"
@@ -228,7 +278,8 @@
 
             <button
               type="button"
-              class="button text-sm w-full mt-[3.125rem] mb-2 p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
+              aria-label="Add to wishlist"
+              class="wishlist-button button text-sm w-full mt-[3.125rem] mb-2 p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
             >
               <img src="{{ 'facebook.svg' | asset_url }}" alt="Facebook" width="16" height="16" class="size-4 mr-2">
               <span class="flex-1"> Log in via Facebook </span>
@@ -236,7 +287,8 @@
 
             <button
               type="button"
-              class="button text-sm w-full p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
+              aria-label="Add to wishlist"
+              class="wishlist-button button text-sm w-full p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
             >
               <img src="{{ 'google.svg' | asset_url }}" alt="Google" width="16" height="16" class="size-4 mr-2">
               <span class="flex-1"> Log in via Google </span>
@@ -256,6 +308,226 @@
           </div>
         {% endform %}
       </div>
+
+      <!-- Reset Password Form -->
+      <div id="customer-recover-form" class="p-8 hidden customer">
+        <div class="flex items-center mb-3">
+          <h3 class="text-base font-bold uppercase">Forgot your password?</h3>
+        </div>
+
+        <p class="text-base text-black mb-6 leading-6">
+          Enter your email address and we will send you a link to reset your password
+        </p>
+
+        <div id="recover-messages" class="auth-messages mt-4">
+          {% if form.errors %}
+            <div class="p-4 mb-4 rounded-3 bg-red-50 text-red-800">
+              {{ form.errors | default_errors }}
+            </div>
+          {% elsif form.posted_successfully? %}
+            <div class="p-4 mb-4 rounded-3 bg-green-50 text-green-800">
+              We've sent you an email with a link to update your password.
+            </div>
+          {% endif %}
+        </div>
+
+        {% form 'recover_customer_password', return_to: request.path %}
+          <div class="flex flex-col">
+            <div>
+              <div class="relative mb-6 field">
+                <input
+                  type="email"
+                  name="email"
+                  id="recover_email"
+                  required
+                  placeholder=" "
+                  class="w-full border border-[#B8B8B8] rounded-3 px-4 py-3 bg-white"
+                  autocomplete="email"
+                  {% if form.errors contains 'email' %}
+                    aria-invalid="true"
+                    aria-describedby="recover-email-error"
+                  {% endif %}
+                  value="{{ form.email }}"
+                >
+                <label
+                  for="recover_email"
+                  class="text-[#666666]"
+                >
+                  E-mail
+                </label>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="button w-full uppercase text-sm py-3 px-9 bg-black text-white font-semibold text-center rounded-3 mb-6"
+            >
+              Reset Password
+            </button>
+
+            <div class="text-center">
+              <a
+                href="javascript:void(0)"
+                class="text-black font-medium text-sm recovery-cancel"
+              >Back to login</a>
+            </div>
+          </div>
+        {% endform %}
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('auth-modal');
+    const loginForm = document.getElementById('customer-login-form');
+    const registerForm = document.getElementById('customer-register-form');
+    const recoverForm = document.getElementById('customer-recover-form');
+    const closeButton = modal.querySelector('.close');
+    const loginTabs = modal.querySelectorAll('.tab-link');
+    const forgotPasswordLink = loginForm.querySelector('.forgot-password-link');
+    const recoverCancelLink = recoverForm.querySelector('.recovery-cancel');
+
+    // Close modal
+    closeButton.addEventListener('click', function() {
+      modal.classList.add('hidden');
+    });
+
+    // Switch between login and register
+    loginTabs.forEach(function(tab) {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        const tabType = this.getAttribute('data-tab');
+
+        // Update active tab
+        loginTabs.forEach(t => {
+          t.classList.toggle('border-[#0F0F0F]', t === this);
+          t.classList.toggle('border-transparent', t !== this);
+        });
+
+        // Show appropriate form
+        if (tabType === 'login') {
+          loginForm.classList.remove('hidden');
+          registerForm.classList.add('hidden');
+          recoverForm.classList.add('hidden');
+        } else if (tabType === 'register') {
+          loginForm.classList.add('hidden');
+          registerForm.classList.remove('hidden');
+          recoverForm.classList.add('hidden');
+        }
+      });
+    });
+
+    // Forgot password link
+    forgotPasswordLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      loginForm.classList.add('hidden');
+      registerForm.classList.add('hidden');
+      recoverForm.classList.remove('hidden');
+    });
+
+    // Recovery cancel link
+    recoverCancelLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      loginForm.classList.remove('hidden');
+      registerForm.classList.add('hidden');
+      recoverForm.classList.add('hidden');
+
+      // Ensure login tab is active
+      loginTabs.forEach(function(tab) {
+        const isLoginTab = tab.getAttribute('data-tab') === 'login';
+        tab.classList.toggle('border-[#0F0F0F]', isLoginTab);
+        tab.classList.toggle('border-transparent', !isLoginTab);
+      });
+    });
+
+    // Function to show auth modal
+    function showAuthModal(formType = 'login') {
+      modal.classList.remove('hidden');
+
+      // Hide all forms first
+      loginForm.classList.add('hidden');
+      registerForm.classList.add('hidden');
+      recoverForm.classList.add('hidden');
+
+      // Show requested form
+      if (formType === 'login') {
+        loginForm.classList.remove('hidden');
+        // Ensure login tab is active
+        loginTabs.forEach(function(tab) {
+          const isLoginTab = tab.getAttribute('data-tab') === 'login';
+          tab.classList.toggle('border-[#0F0F0F]', isLoginTab);
+          tab.classList.toggle('border-transparent', !isLoginTab);
+        });
+      } else if (formType === 'register') {
+        registerForm.classList.remove('hidden');
+        // Ensure register tab is active
+        loginTabs.forEach(function(tab) {
+          const isRegisterTab = tab.getAttribute('data-tab') === 'register';
+          tab.classList.toggle('border-[#0F0F0F]', isRegisterTab);
+          tab.classList.toggle('border-transparent', !isRegisterTab);
+        });
+      } else if (formType === 'recover') {
+        recoverForm.classList.remove('hidden');
+      }
+    }
+
+    // Handle account and wishlist icon clicks
+    const accountIcon = document.querySelector('.header__icon--account');
+    const wishlistIcon = document.querySelector('.header__icon .icon-wishlist');
+
+    if (accountIcon) {
+      accountIcon.addEventListener('click', function(e) {
+        // Check if user is not logged in
+        {% if customer == null %}
+          e.preventDefault();
+          showAuthModal('login');
+        {% endif %}
+        // If logged in, default link behavior will take them to account page
+      });
+    }
+
+    if (wishlistIcon) {
+      const wishlistParent = wishlistIcon.closest('a');
+      if (wishlistParent) {
+        wishlistParent.addEventListener('click', function(e) {
+          // Check if user is not logged in
+          {% if customer == null %}
+            e.preventDefault();
+            showAuthModal('login');
+          {% endif %}
+          // If logged in, default link behavior will proceed
+        });
+      }
+    }
+
+    // Also handle wishlist buttons on product cards
+    document.querySelectorAll('.wishlist-button').forEach(function(button) {
+      button.addEventListener('click', function(e) {
+        // Check if user is not logged in
+        {% if customer == null %}
+          e.preventDefault();
+          showAuthModal('login');
+        {% endif %}
+        // If logged in, handle wishlist functionality (to be implemented)
+      });
+    });
+
+    // Initialize any auth trigger buttons
+    document.querySelectorAll('[data-auth-trigger]').forEach(function(button) {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const formType = e.currentTarget.getAttribute('data-auth-trigger');
+        showAuthModal(formType);
+      });
+    });
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+      }
+    });
+  });
+</script>
