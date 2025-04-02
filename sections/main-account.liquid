@@ -1,3 +1,4 @@
+{{ 'account.css' | asset_url | stylesheet_tag }}
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
@@ -15,26 +16,73 @@
 {%- endstyle -%}
 
 <div class="customer account section-{{ section.id }}-padding">
-  <div>
-    <h1 class="customer__title">{{ 'customer.account.title' | t }}</h1>
-    <a href="{{ routes.account_logout_url }}">
+  <div class="account-container">
+    <div class="account-header">
+      <a href="{{ routes.all_products_collection_url }}" class="account-back-link flex items-center">
+        <span class="svg-wrapper mr-0 size-5">
+          {{ 'arrow-left.svg' | inline_asset_content }}
+        </span>
+        <span>{{ 'customer.account.back_to_shopping' | t }}</span>
+      </a>
+      <h1 class="account-title">{{ 'customer.account.title' | t }}</h1>
+    </div>
+
+    <div class="account-main">
+      <div class="account-sidebar">
+        <div class="user-info">
+          <div class="user-avatar-wrapper">
+            <div class="user-avatar">
+              {% assign first_letter = customer.name | slice: 0 | upcase %}
+              {{ first_letter }}
+            </div>
+            <button class="avatar-edit-button">+</button>
+          </div>
+          <div class="user-name">{{ customer.name }}</div>
+          <div class="user-address">
+            {% if customer.default_address %}
+              {{ customer.default_address.street }}, {{ customer.default_address.city }}
+            {% endif %}
+          </div>
+        </div>
+
+        <ul class="account-tabs" role="tablist">
+          <li role="presentation">
+            <a href="#orders" role="tab" class="tab-link active" data-tab="orders">{{ 'customer.account.orders' | t }}</a>
+          </li>
+          <li role="presentation">
+            <a href="#addresses" role="tab" class="tab-link" data-tab="addresses">{{ 'customer.account.addresses' | t }}</a>
+          </li>
+          <li role="presentation">
+            <a href="#settings" role="tab" class="tab-link" data-tab="settings">{{ 'customer.account.settings' | t }}</a>
+          </li>
+          <li role="presentation">
+            <a href="#wishlist" role="tab" class="tab-link" data-tab="wishlist">{{ 'customer.account.wishlist' | t }}</a>
+          </li>
+          <li>
+            <a href="#bonus" role="tab" class="tab-link" data-tab="bonus">
+              {{ 'customer.account.loyalty_bonus' | t }}
+              <span class="bonus-pill">48,64 € <span class="bonus-badge">%</span></span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ routes.account_logout_url }}" class="logout-link">
       <span class="svg-wrapper">
-        {{- 'icon-account.svg' | inline_asset_content -}}
+        {{ 'logout.svg' | inline_asset_content }}
       </span>
       {{ 'customer.log_out' | t }}
     </a>
+          </li>
+        </ul>
   </div>
 
-  <div>
-    <div>
-      <h2>{{ 'customer.orders.title' | t }}</h2>
+      <div class="account-content">
+        <!-- Orders Tab -->
+        <div id="orders" class="tab-content active" role="tabpanel">
+          <h2 class="section-title">{{ 'customer.orders.title' | t }}</h2>
 
       {% paginate customer.orders by 20 %}
         {%- if customer.orders.size > 0 -%}
           <table role="table" class="order-history">
-            <caption class="visually-hidden">
-              {{ 'customer.orders.title' | t }}
-            </caption>
             <thead role="rowgroup">
               <tr role="row">
                 <th id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
@@ -98,7 +146,7 @@
                   <li>
                     <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
                       <span class="svg-wrapper">
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                        {{ 'chevron-left.svg' | inline_asset_content }}
                       </span>
                     </a>
                   </li>
@@ -126,7 +174,7 @@
                   <li>
                     <a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">
                       <span class="svg-wrapper">
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                        {{ 'chevron-right.svg' | inline_asset_content }}
                       </span>
                     </a>
                   </li>
@@ -138,17 +186,245 @@
       {% endpaginate %}
     </div>
 
-    <div>
-      <h2>{{ 'customer.account.details' | t }}</h2>
+        <!-- Addresses Tab -->
+        <div id="addresses" class="tab-content" role="tabpanel">
+          <h2 class="section-title">{{ 'customer.addresses.title' | t }}</h2>
 
-      {{ customer.default_address | format_address }}
+          {% paginate customer.addresses by 5 %}
+            <div class="customer-addresses">
+              {% for address in customer.addresses %}
+                <div class="address-card">
+                  {% if address == customer.default_address %}
+                    <div class="default-badge">{{ 'customer.addresses.default' | t }}</div>
+                  {% endif %}
 
-      <a href="{{ routes.account_addresses_url }}">
-        {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
-      </a>
+                  <div>{{ address | format_address }}</div>
+
+                  <div class="address-actions">
+                    <button
+                      type="button"
+                      class="btn-link"
+                      aria-controls="EditAddress_{{ address.id }}"
+                      aria-expanded="false"
+                      data-address-id="{{ address.id }}"
+                    >
+                      {{ 'customer.addresses.edit' | t }}
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn-link"
+                      aria-controls="DeleteAddress_{{ address.id }}"
+                      aria-expanded="false"
+                      data-address-id="{{ address.id }}"
+                    >
+                      {{ 'customer.addresses.delete' | t }}
+                    </button>
+
+                    {% unless address == customer.default_address %}
+                      <form method="post" action="{{ routes.account_addresses_url }}" class="inline">
+                        <input type="hidden" name="_method" value="put">
+                        <input type="hidden" name="address[id]" value="{{ address.id }}">
+                        <input type="hidden" name="address[default]" value="true">
+                        <button type="submit" class="btn-link">{{ 'customer.addresses.set_default' | t }}</button>
+                      </form>
+                    {% endunless %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" id="AddAddress">
+                {{ 'customer.addresses.add' | t }}
+              </button>
+            </div>
+
+            {%- if paginate.pages > 1 -%}
+              <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+                <ul>
+                  {%- if paginate.previous -%}
+                    <li>
+                      <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
+                        <span class="svg-wrapper">
+                          {{ 'chevron-left.svg' | inline_asset_content }}
+                        </span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+
+                  {%- for part in paginate.parts -%}
+                    <li>
+                      {%- if part.is_link -%}
+                        <a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+                          {{- part.title -}}
+                        </a>
+                      {%- else -%}
+                        {%- if part.title == paginate.current_page -%}
+                          <span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+                            {{- part.title -}}
+                          </span>
+                        {%- else -%}
+                          <span>{{ part.title }}</span>
+                        {%- endif -%}
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+
+                  {%- if paginate.next -%}
+                    <li>
+                      <a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">
+                        <span class="svg-wrapper">
+                          {{ 'chevron-right.svg' | inline_asset_content }}
+                        </span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                </ul>
+              </nav>
+            {%- endif -%}
+          {% endpaginate %}
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-content" role="tabpanel">
+          <h2 class="section-title">{{ 'customer.account.settings' | t }}</h2>
+
+          <div class="form-section">
+            <h3 class="form-section-title">{{ 'customer.account.basic_info' | t }}</h3>
+
+            <form id="CustomerInfoForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="CustomerFirstName">{{ 'customer.account.first_name' | t }}</label>
+                  <input type="text" id="CustomerFirstName" name="customer[first_name]" class="form-control" value="{{ customer.first_name }}">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="CustomerLastName">{{ 'customer.account.last_name' | t }}</label>
+                  <input type="text" id="CustomerLastName" name="customer[last_name]" class="form-control" value="{{ customer.last_name }}">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="CustomerBirthdate">{{ 'customer.account.birthdate' | t }}</label>
+                  <input type="text" id="CustomerBirthdate" name="customer[note][birthdate]" class="form-control" placeholder="DD.MM.YYYY">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="CustomerPhone">{{ 'customer.account.phone' | t }}</label>
+                  <input type="tel" id="CustomerPhone" name="customer[phone]" class="form-control" value="{{ customer.phone }}">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="CustomerEmail">{{ 'customer.account.email' | t }}</label>
+                <input type="email" id="CustomerEmail" name="customer[email]" class="form-control" value="{{ customer.email }}">
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">{{ 'customer.account.save' | t }}</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="form-section">
+            <h3 class="form-section-title">{{ 'customer.account.change_password' | t }}</h3>
+
+            <form id="CustomerPasswordForm">
+              <div class="form-group">
+                <label class="form-label" for="CustomerCurrentPassword">{{ 'customer.account.current_password' | t }}</label>
+                <input type="password" id="CustomerCurrentPassword" name="customer[current_password]" class="form-control">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="CustomerNewPassword">{{ 'customer.account.new_password' | t }}</label>
+                  <input type="password" id="CustomerNewPassword" name="customer[password]" class="form-control">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="CustomerConfirmPassword">{{ 'customer.account.confirm_password' | t }}</label>
+                  <input type="password" id="CustomerConfirmPassword" name="customer[password_confirmation]" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">{{ 'customer.account.save' | t }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Wishlist Tab -->
+        <div id="wishlist" class="tab-content" role="tabpanel">
+          <h2 class="section-title">{{ 'customer.account.wishlist' | t }}</h2>
+
+          <div class="wishlist-empty">
+            <p>{{ 'customer.account.wishlist_empty' | t }}</p>
+          </div>
+        </div>
+
+        <!-- Bonus Tab -->
+        <div id="bonus" class="tab-content" role="tabpanel">
+          <h2 class="section-title">{{ 'customer.account.loyalty_bonus' | t }}</h2>
+
+          <div class="bonus-info">
+            <div class="bonus-amount-large">
+              <h3>{{ 'customer.account.available_bonus' | t }}</h3>
+              <p class="bonus-value-large">48,64 €</p>
+            </div>
+
+            <div class="bonus-details">
+              <h4>{{ 'customer.account.bonus_details' | t }}</h4>
+              <ul>
+                <li>{{ 'customer.account.bonus_detail_1' | t }}</li>
+                <li>{{ 'customer.account.bonus_detail_2' | t }}</li>
+                <li>{{ 'customer.account.bonus_detail_3' | t }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Tab functionality
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Remove active class from all tabs
+        tabLinks.forEach(tab => tab.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // Add active class to clicked tab
+        this.classList.add('active');
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+
+        // Update URL hash
+        window.history.replaceState(null, null, '#' + tabId);
+      });
+    });
+
+    // Check URL hash on page load
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+      const activeTab = document.querySelector(`.tab-link[data-tab="${hash}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+</script>
 
 {% schema %}
 {
