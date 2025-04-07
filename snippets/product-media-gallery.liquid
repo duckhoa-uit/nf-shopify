@@ -92,9 +92,11 @@
 <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" defer></script>
 <script type="module">
-  import { parseImageUrl, sortImagesByDisplayRules } from "{{ 'product-utils.module.js' | asset_url }}";
+  import { parseImageUrl, sortImagesByDisplayRules, getNormalizedColorKey, mapReferenceIdToColorInUrl } from "{{ 'product-utils.module.js' | asset_url }}";
   window.parseImageUrl = parseImageUrl;
   window.sortImagesByDisplayRules = sortImagesByDisplayRules;
+  window.getNormalizedColorKey = getNormalizedColorKey;
+  window.mapReferenceIdToColorInUrl = mapReferenceIdToColorInUrl;
 </script>
 
 {%- liquid
@@ -348,6 +350,9 @@
         return;
       }
 
+      // Get color mappings from product metafields if available
+      const colorMappings = {% if product.metafields.custom.color.value %}{{ product.metafields.custom.color.value | json }}{% else %}null{% endif %};
+
       // Hide galleries until content is ready
       mobileGallery.classList.remove('loaded');
       grid.classList.remove('loaded');
@@ -377,12 +382,16 @@
         let exactMatches = [];
         let partialMatches = [];
 
-        if (gallery.dataset.activeColor) {
-          // Check for exact and partial matches
+        if (gallery.dataset.activeColor && colorMappings) {
+          // First try to get normalized color key
+          const normalizedColorKey = window.getNormalizedColorKey(gallery.dataset.activeColor, colorMappings);
+
+          // Then check each image URL - if it has a reference_id, map it to a color name for matching
           allMediaUrls.forEach(url => {
-            const parsed = window.parseImageUrl(url);
+            // Try parsing with color mappings to handle reference_ids
+            const parsed = window.parseImageUrl(url, colorMappings);
             const parsedColor = parsed.color.toLowerCase().trim();
-            const activeColor = gallery.dataset.activeColor.toLowerCase().trim();
+            const activeColor = normalizedColorKey.toLowerCase().trim();
 
             // Collect exact and partial matches
             if (parsedColor === activeColor) {
@@ -400,14 +409,14 @@
           }
 
           // If no matches found, try more flexible matching (just try parts of the color name)
-          if (urlsToUse.length === 0 && gallery.dataset.activeColor.includes('-')) {
-            const colorParts = gallery.dataset.activeColor.split('-');
+          if (urlsToUse.length === 0 && normalizedColorKey.includes('-')) {
+            const colorParts = normalizedColorKey.split('-');
 
             for (const part of colorParts) {
               if (part.length < 3) continue; // Skip very short parts
 
               const flexibleMatches = allMediaUrls.filter(url => {
-                const parsed = window.parseImageUrl(url);
+                const parsed = window.parseImageUrl(url, colorMappings);
                 return parsed.color.toLowerCase().includes(part.toLowerCase());
               });
 
@@ -419,8 +428,8 @@
           }
         }
 
-        // Sort and update gallery
-        updateGallery(window.sortImagesByDisplayRules(urlsToUse));
+        // Sort and update gallery, passing color mappings to the sort function
+        updateGallery(window.sortImagesByDisplayRules(urlsToUse, colorMappings));
       }
 
       // Update gallery with the given URLs
@@ -609,6 +618,11 @@
           newColor = newColor.slice(0, -1);
         }
 
+        // If we have color mappings, try to normalize the color name
+        if (colorMappings) {
+          newColor = window.getNormalizedColorKey(newColor, colorMappings);
+        }
+
         if (newColor !== gallery.dataset.activeColor) {
           gallery.dataset.activeColor = newColor;
 
@@ -748,6 +762,7 @@
     function openProductLightbox(startIndex) {
       // Use complete product.media directly instead of the filtered images
       const allMedia = {{ product.media | json }};
+      const colorMappings = {% if product.metafields.custom.color.value %}{{ product.metafields.custom.color.value | json }}{% else %}null{% endif %};
 
       // Ensure Fancybox is loaded
       if (!allMedia || !window.Fancybox) {
@@ -763,8 +778,13 @@
 
         // Create array of items for Fancybox directly from product.media
         const items = allMedia.map(media => {
-          const mediaSrc = media.src.startsWith('//') ? `https:${media.src}` :
+          let mediaSrc = media.src.startsWith('//') ? `https:${media.src}` :
                           !media.src.startsWith('http') ? `https://${media.src}` : media.src;
+
+          // If we have color mappings, try to map reference_id to color in the URL
+          if (colorMappings && window.mapReferenceIdToColorInUrl) {
+            mediaSrc = window.mapReferenceIdToColorInUrl(mediaSrc, colorMappings);
+          }
 
           return {
             src: mediaSrc,
