@@ -216,7 +216,7 @@
       </h2>
     {%- endif -%}
 
-    <div class="collection__grid-wrapper{% if section.settings.full_width %} collection__grid-wrapper--full-width{% endif %}{% if section.settings.full_width == false %} page-width-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <div class="collection__grid-wrapper{% if section.settings.full_width %} collection__grid-wrapper--full-width{% endif %}{% if section.settings.full_width == false %} page-width-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} -mx-4 md:mx-0 gap-1 md:gap-4">
       <ul
         id="Grid-{{ section.id }}"
         data-id="{{ section.id }}"
