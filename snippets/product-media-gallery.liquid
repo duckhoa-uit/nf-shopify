@@ -383,12 +383,12 @@
         let partialMatches = [];
 
         if (gallery.dataset.activeColor && colorMappings) {
-          // First try to get normalized color key
+          // First try to get normalized color key - this converts reference_id to color name if needed
           const normalizedColorKey = window.getNormalizedColorKey(gallery.dataset.activeColor, colorMappings);
 
-          // Then check each image URL - if it has a reference_id, map it to a color name for matching
+          // Check each URL for matches using the active color
           allMediaUrls.forEach(url => {
-            // Try parsing with color mappings to handle reference_ids
+            // Use parseImageUrl with colorMappings to properly handle reference_ids
             const parsed = window.parseImageUrl(url, colorMappings);
             const parsedColor = parsed.color.toLowerCase().trim();
             const activeColor = normalizedColorKey.toLowerCase().trim();
@@ -398,6 +398,15 @@
               exactMatches.push(url);
             } else if (parsedColor.includes(activeColor) || activeColor.includes(parsedColor)) {
               partialMatches.push(url);
+            }
+
+            // If we didn't find a match but we have reference_id and colorMappings, try direct reference_id matching
+            if (exactMatches.length === 0 && partialMatches.length === 0 && parsed.reference_id && colorMappings) {
+              // Check if the active color is actually a reference_id
+              const activeRefId = parseInt(gallery.dataset.activeColor, 10);
+              if (!isNaN(activeRefId) && parsed.reference_id === activeRefId) {
+                exactMatches.push(url);
+              }
             }
           });
 
@@ -605,26 +614,31 @@
       function handleColorChange(newColor) {
         if (!newColor) return;
 
-        // Clean up the color value
-        newColor = newColor.toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/'/g, '')
-          .replace(/\./g, '')
-          .replace(/,/g, '')
-          .trim();
+        // Check if the color is numeric (reference_id) or string (color name)
+        const isReferenceId = !isNaN(parseInt(newColor, 10));
 
-        // Remove trailing dash if present
-        if (newColor.endsWith('-')) {
-          newColor = newColor.slice(0, -1);
+        if (!isReferenceId) {
+          // Clean up the color value only if it's a color name
+          newColor = newColor.toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/'/g, '')
+            .replace(/\./g, '')
+            .replace(/,/g, '')
+            .trim();
+
+          // Remove trailing dash if present
+          if (newColor.endsWith('-')) {
+            newColor = newColor.slice(0, -1);
+          }
         }
 
-        // If we have color mappings, try to normalize the color name
-        if (colorMappings) {
-          newColor = window.getNormalizedColorKey(newColor, colorMappings);
-        }
+        // For display and filtering, get a normalized color (either the name or reference_id)
+        // We don't convert reference_id to name here to keep the original value
+        let colorForMatching = newColor;
 
-        if (newColor !== gallery.dataset.activeColor) {
-          gallery.dataset.activeColor = newColor;
+        // If we have colorMappings and the active color isn't the same as before, update the gallery
+        if (colorForMatching !== gallery.dataset.activeColor) {
+          gallery.dataset.activeColor = colorForMatching;
 
           // Reset expanded state when color changes
           const toggleBtn = document.getElementById('gallery-toggle-btn');
@@ -778,13 +792,9 @@
 
         // Create array of items for Fancybox directly from product.media
         const items = allMedia.map(media => {
-          let mediaSrc = media.src.startsWith('//') ? `https:${media.src}` :
+          // Use the original media source without mapping reference_id to color name
+          const mediaSrc = media.src.startsWith('//') ? `https:${media.src}` :
                           !media.src.startsWith('http') ? `https://${media.src}` : media.src;
-
-          // If we have color mappings, try to map reference_id to color in the URL
-          if (colorMappings && window.mapReferenceIdToColorInUrl) {
-            mediaSrc = window.mapReferenceIdToColorInUrl(mediaSrc, colorMappings);
-          }
 
           return {
             src: mediaSrc,
