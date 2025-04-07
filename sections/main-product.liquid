@@ -329,6 +329,8 @@
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <script>
     console.log({{ product | json }});
+    console.log({{ product.metafields.custom.color.value  | json }});
+    console.log({{ product.metafields.custom.size.value  | json }});
   </script>
 
   <div class="page-width">
