@@ -19,6 +19,7 @@
 <style>
   header-drawer {
     justify-self: start;
+    grid-area: "burger";
   }
 
   @media screen and (min-width: 990px) {
@@ -111,10 +112,17 @@
       assign social_links = true
     endif
   -%}
-  <header class="header header--dropdown py-0 h-20 lg:h-[3.25rem] page-width{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}">
+  <header class="header header--dropdown py-0 h-[3.125rem] lg:h-[3.25rem] page-width{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}">
+    {%- liquid
+    if section.settings.menu != blank
+      render 'header-drawer'
+    endif
+  -%}
     {%- if request.page_type == 'index' -%}
       <h1 class="header__heading justify-self-start">
     {%- endif -%}
+
+
     <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset pl-0">
       {%- if settings.logo != blank -%}
         <div class="header__heading-logo-wrapper">
@@ -156,18 +164,24 @@
     <div class="header__icons flex items-center">
       {% render 'header-search', input_id: 'Search-In-Modal' %}
 
-      <a href="{{ routes.cart_url }}" class="header__icon link px-3 focus-inset hidden lg:flex ">
+      {%- liquid
+        if section.settings.menu != blank
+          render 'header-search-mobile'
+        endif
+      -%}
+
+      <a href="{{ routes.cart_url }}" class="header__icon link px-3 focus-inset ">
         <span class="svg-wrapper [&_svg]:size-[1.625rem]">{{ 'icon-currency.svg' | inline_asset_content }}</span>
       </a>
 
-      <a href="{{ routes.cart_url }}" class="header__icon px-3 link focus-inset hidden lg:flex">
+      <a href="{{ routes.cart_url }}" class="header__icon px-3 link focus-inset">
         <span class="svg-wrapper size-5">{{ 'icon-heart.svg' | inline_asset_content }}</span>
       </a>
 
       {%- if shop.customer_accounts_enabled -%}
         <a
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-          class="header__icon px-3 header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %} hidden lg:flex"
+          class="header__icon px-3 header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
           rel="nofollow"
         >
           {%- if section.settings.enable_customer_avatar -%}
@@ -219,17 +233,6 @@
           </div>
         {%- endif -%}
       </a>
-
-      {%- liquid
-        if section.settings.menu != blank
-          render 'header-search-mobile'
-        endif
-      -%}
-      {%- liquid
-        if section.settings.menu != blank
-          render 'header-drawer'
-        endif
-      -%}
     </div>
   </header>
 </div>
