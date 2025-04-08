@@ -74,7 +74,7 @@
             id="ProductSubmitButton-{{ section_id }}"
             type="submit"
             name="add"
-            class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %} py-3 uppercase text-sm leading-4 font-semibold rounded-3"
+            class="product-form__submit button button--full-width button--primary py-3 uppercase text-sm leading-4 font-semibold rounded-3"
             {% if product.selected_or_first_available_variant.available == false
               or quantity_rule_soldout
               or product.selected_or_first_available_variant == null
