@@ -2428,8 +2428,8 @@ input[type="checkbox"]:checked + label a {
 
 .header {
   display: grid;
-  grid-template-areas: "heading navigation icons";
-  grid-template-columns: minmax(172px, 1fr) minmax(0, 1fr) auto;
+  grid-template-areas: "burger heading navigation icons";
+  grid-template-columns: 44px minmax(172px, 1fr) minmax(0, 1fr) auto;
   align-items: center;
 }
 
@@ -2444,6 +2444,7 @@ input[type="checkbox"]:checked + label a {
 
 @media screen and (min-width: 990px) {
   .header {
+    grid-template-areas: "heading navigation icons";
     grid-template-columns: 172px 1fr auto;
   }
 
@@ -2583,8 +2584,8 @@ input[type="checkbox"]:checked + label a {
 
 /* Header icons */
 .header__icons {
-  display: flex;
   grid-area: icons;
+  display: flex;
   justify-self: end;
   transition: width 0.3s cubic-bezier(0.52, 0, 0.61, 0.99);
 }
