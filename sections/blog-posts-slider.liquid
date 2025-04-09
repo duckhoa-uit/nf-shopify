@@ -87,9 +87,6 @@
                     <div class="blog-posts-slider__image-overlay"></div>
                   </div>
                   <div class="blog-posts-slider__content">
-                    <h3 class="blog-posts-slider__title">{{ block.settings.custom_title | default: article.title }}</h3>
-                    <div class="blog-posts-slider__excerpt">{{ block.settings.custom_excerpt | default: article.excerpt_or_content | strip_html | truncatewords: 15 }}</div>
-
                     <div class="blog-posts-slider__meta">
                       <div class="blog-posts-slider__date">
                         <svg
@@ -148,7 +145,8 @@
                         <span>{{ article.view_count | default: '349' }}</span>
                       </div>
                     </div>
-
+                    <h3 class="blog-posts-slider__title">{{ block.settings.custom_title | default: article.title }}</h3>
+                    <div class="blog-posts-slider__excerpt">{{ block.settings.custom_excerpt | default: article.excerpt_or_content | strip_html | truncatewords: 15 }}</div>
                     <a href="{{ article.url }}" class="blog-posts-slider__button">
                       {{ 'blogs.article.read_more' | t }}
                     </a>
