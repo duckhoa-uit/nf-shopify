@@ -32,11 +32,11 @@
                   role="list"
                 >
                   {%- for childlink in link.links -%}
-                    <li class="flex flex-col space-y-[0.625rem] border-r border-[#E0DFDF] last:border-0">
+                    <li class="flex flex-col gap-6 border-r border-[#E0DFDF] last:border-0">
                       <span
                         id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                         {% comment %} href="{{ childlink.url }}" {% endcomment %}
-                        class="text-base font-bold leading-[1.3125rem] cursor-default"
+                        class="text-base font-bold leading-[1.3125rem] cursor-default text-black"
                         {% if childlink.current %}
                           aria-current="page"
                         {% endif %}
@@ -44,7 +44,7 @@
                         {{ childlink.title | escape }}
                       </span>
                       {%- if childlink.links != blank -%}
-                        <ul class="list-unstyled flex flex-col gap-y-[0.625rem] items-start" role="list">
+                        <ul class="list-unstyled flex flex-col gap-y-3 items-start" role="list">
                           {%- for grandchildlink in childlink.links -%}
                             <li>
                               <a
