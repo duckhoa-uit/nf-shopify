@@ -816,7 +816,7 @@
                 id="short_description"
                 class="text-[0.9375rem] font-medium text-[#0f0f0f] leading-6 [&_ul]:list-disc [&_ul]:pl-5"
               >
-                {{ product.metafields.custom.short_description | metafield_tag }}
+                {% render 'format-short-description', text: product.metafields.custom.short_description %}
               </div>
               <div class="mt-3 mb-10 flex items-center gap-1">
                 <a
@@ -894,7 +894,7 @@
 
           {% if product.metafields.custom.short_description != blank %}
             <div class="py-6 md:py-12">
-              {{ product.metafields.custom.short_description | metafield_tag }}
+              {% render 'format-short-description', text: product.metafields.custom.short_description %}
             </div>
           {% endif %}
         </div>
