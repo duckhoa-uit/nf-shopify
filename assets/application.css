@@ -19,12 +19,15 @@
     --text-lg--line-height: calc(1.75 / 1.125);
     --text-2xl: 1.5rem;
     --text-2xl--line-height: calc(2 / 1.5);
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: calc(2.5 / 2.25);
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --font-weight-extrabold: 800;
     --tracking-normal: 0em;
+    --tracking-wide: 0.025em;
     --radius-md: 0.375rem;
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --aspect-video: 16 / 9;
@@ -723,6 +726,9 @@
   .items-center {
     align-items: center !important;
   }
+  .items-end {
+    align-items: flex-end !important;
+  }
   .items-start {
     align-items: flex-start !important;
   }
@@ -734,6 +740,9 @@
   }
   .justify-end {
     justify-content: flex-end !important;
+  }
+  .justify-start {
+    justify-content: flex-start !important;
   }
   .gap-0 {
     gap: calc(var(--spacing) * 0) !important;
@@ -1280,6 +1289,10 @@
     --tw-tracking: var(--tracking-normal) !important;
     letter-spacing: var(--tracking-normal) !important;
   }
+  .tracking-wide {
+    --tw-tracking: var(--tracking-wide) !important;
+    letter-spacing: var(--tracking-wide) !important;
+  }
   .whitespace-nowrap {
     white-space: nowrap !important;
   }
@@ -1763,6 +1776,11 @@
       padding: calc(var(--spacing) * 4) !important;
     }
   }
+  .md\:p-10 {
+    @media (width >= 46.875rem) {
+      padding: calc(var(--spacing) * 10) !important;
+    }
+  }
   .md\:px-\[5\.625rem\] {
     @media (width >= 46.875rem) {
       padding-inline: 5.625rem !important;
@@ -1806,6 +1824,12 @@
   .md\:text-center {
     @media (width >= 46.875rem) {
       text-align: center !important;
+    }
+  }
+  .md\:text-4xl {
+    @media (width >= 46.875rem) {
+      font-size: var(--text-4xl) !important;
+      line-height: var(--tw-leading, var(--text-4xl--line-height)) !important;
     }
   }
   .md\:text-\[2rem\] {
