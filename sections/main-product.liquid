@@ -170,6 +170,17 @@
       padding-top: 1.5rem;
     }
 
+    /* Inspiration Banner Styles */
+    .inspiration-banner-section {
+      margin: 3rem 0;
+    }
+
+    .inspiration-banner-section h2 {
+      font-family: 'Archivo SemiExpanded', sans-serif;
+      font-weight: 700;
+      line-height: 1.166em;
+    }
+
     .northfinder-product-page .parameters-title {
       font-size: 1.25rem;
       margin-bottom: 1rem;
@@ -1047,6 +1058,26 @@
         {% endfor %}
       </div>
     {% endif %}
+
+    <!-- Inspiration Banner Section -->
+    <div class="inspiration-banner-section w-full mt-12 mb-12">
+      <h2 class="text-2xl md:text-4xl font-bold text-[#0F0F0F] font-archivo-expanded mb-6">{{ 'sections.main_product.inspiration' | t }}</h2>
+      <div class="inspiration-banner-container">
+        <div
+          class="inspiration-banner-media w-full relative overflow-hidden"
+          style="padding-bottom: 56.25%;" {%- comment -%}16:9 aspect ratio{%- endcomment -%}
+        >
+          <img
+            src="{{ 'product-banner.webp' | asset_url }}"
+            alt="Inspiration"
+            loading="lazy"
+            width="1500"
+            height="844"
+            class="absolute inset-0 w-full h-full object-cover"
+          >
+        </div>
+      </div>
+    </div>
 
     <script type="application/ld+json">
       {{ product | structured_data }}
