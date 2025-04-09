@@ -125,6 +125,14 @@
   .load-more-button:hover {
     opacity: 0.9;
   }
+
+  .no-results-message {
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 1rem;
+    color: #666;
+    display: none;
+  }
 {%- endstyle -%}
 
 <div class="main-blog page-width section-{{ section.id }}-padding">
@@ -135,26 +143,17 @@
   {% if section.settings.enable_search %}
     <div class="blog-search-form">
       <form
-        action="{{ routes.search_url }}"
-        method="get"
+        id="blog-search-form"
         role="search"
+        onsubmit="return false;"
       >
         <div class="blog-search-input">
           <input
             type="search"
+            id="blog-search-input"
             name="q"
             placeholder="{{ 'blogs.main_blog.search_placeholder' | t }}"
             value="{{ search.terms | escape }}"
-          >
-          <input
-            type="hidden"
-            name="type"
-            value="article"
-          >
-          <input
-            type="hidden"
-            name="options[prefix]"
-            value="last"
           >
           <span class="icon">
             <svg
@@ -163,6 +162,8 @@
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              id="blog-search-submit"
+              style="cursor: pointer;"
             >
               <path
                 d="M19 19L14.65 14.65M17 9C17 13.4183 13.4183 17 9 17C4.58172 17 1 13.4183 1 9C1 4.58172 4.58172 1 9 1C13.4183 1 17 4.58172 17 9Z"
@@ -189,6 +190,7 @@
 
   {%- paginate blog.articles by section.settings.posts_per_page -%}
     <div class="blog-articles">
+      <div class="no-results-message">{{ 'blogs.main_blog.no_results' | t }}</div>
       {%- for article in blog.articles -%}
         <div
           class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
@@ -227,10 +229,64 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // Category filtering
+    // Get DOM elements
     const categories = document.querySelectorAll('.blog-category');
     const articles = document.querySelectorAll('.blog-articles__article');
+    const searchForm = document.getElementById('blog-search-form');
+    const searchInput = document.getElementById('blog-search-input');
+    const searchButton = document.getElementById('blog-search-submit');
 
+    // Current filters state
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+    let currentPage = 1;
+
+    // Function to filter articles based on category and search query
+    function filterArticles() {
+      let visibleCount = 0;
+      const noResultsMessage = document.querySelector('.no-results-message');
+      const loadMoreButton = document.getElementById('load-more-button');
+
+      articles.forEach((article) => {
+        let showByCategory = true;
+        let showBySearch = true;
+
+        // Category filtering
+        if (currentCategory !== 'all') {
+          const tags = article.getAttribute('data-tags');
+          showByCategory = tags && tags.includes(currentCategory.toLowerCase());
+        }
+
+        // Search filtering
+        if (currentSearchQuery) {
+          const articleContent = article.textContent.toLowerCase();
+          showBySearch = articleContent.includes(currentSearchQuery.toLowerCase());
+        }
+
+        // Show article only if it passes both filters
+        if (showByCategory && showBySearch) {
+          article.style.display = 'block';
+          visibleCount++;
+        } else {
+          article.style.display = 'none';
+        }
+      });
+
+      // Show/hide no results message
+      if (visibleCount === 0) {
+        noResultsMessage.style.display = 'block';
+        if (loadMoreButton) {
+          loadMoreButton.style.display = 'none';
+        }
+      } else {
+        noResultsMessage.style.display = 'none';
+        if (loadMoreButton && currentPage < 3) {
+          loadMoreButton.style.display = 'flex';
+        }
+      }
+    }
+
+    // Category filtering
     categories.forEach((category) => {
       category.addEventListener('click', function () {
         // Remove active class from all categories
@@ -239,29 +295,36 @@
         // Add active class to clicked category
         this.classList.add('active');
 
-        const selectedCategory = this.getAttribute('data-category');
+        // Update current category
+        currentCategory = this.getAttribute('data-category');
 
-        // Show/hide articles based on category
-        articles.forEach((article) => {
-          if (selectedCategory === 'all') {
-            article.style.display = 'block';
-          } else {
-            const tags = article.getAttribute('data-tags');
-            if (tags && tags.includes(selectedCategory.toLowerCase())) {
-              article.style.display = 'block';
-            } else {
-              article.style.display = 'none';
-            }
-          }
-        });
+        // Apply filters
+        filterArticles();
       });
+    });
+
+    // Search functionality
+    function handleSearch() {
+      currentSearchQuery = searchInput.value.trim();
+      filterArticles();
+    }
+
+    // Search on enter key
+    searchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSearch();
+      }
+    });
+
+    // Search on click
+    searchButton.addEventListener('click', function() {
+      handleSearch();
     });
 
     // Load more functionality
     const loadMoreButton = document.getElementById('load-more-button');
     if (loadMoreButton) {
-      let currentPage = 1;
-
       loadMoreButton.addEventListener('click', function () {
         currentPage++;
         const nextPageUrl = window.location.pathname + '?page=' + currentPage;
@@ -276,7 +339,36 @@
             const articlesContainer = document.querySelector('.blog-articles');
 
             newArticles.forEach((article) => {
-              articlesContainer.appendChild(article.cloneNode(true));
+              const clonedArticle = article.cloneNode(true);
+              articlesContainer.appendChild(clonedArticle);
+
+              // Apply current filters to newly loaded articles
+              if (currentCategory !== 'all' || currentSearchQuery) {
+                // Add the data-tags attribute to the cloned article
+                if (article.hasAttribute('data-tags')) {
+                  clonedArticle.setAttribute('data-tags', article.getAttribute('data-tags'));
+                }
+
+                let showByCategory = true;
+                let showBySearch = true;
+
+                // Category filtering
+                if (currentCategory !== 'all') {
+                  const tags = clonedArticle.getAttribute('data-tags');
+                  showByCategory = tags && tags.includes(currentCategory.toLowerCase());
+                }
+
+                // Search filtering
+                if (currentSearchQuery) {
+                  const articleContent = clonedArticle.textContent.toLowerCase();
+                  showBySearch = articleContent.includes(currentSearchQuery.toLowerCase());
+                }
+
+                // Show article only if it passes both filters
+                if (!(showByCategory && showBySearch)) {
+                  clonedArticle.style.display = 'none';
+                }
+              }
             });
 
             // Hide button after loading a few pages (simulating reaching the end)
