@@ -1,0 +1,245 @@
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+{{ 'collapsible-content.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .faq-section__header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .faq-section__header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .faq-section__heading {
+    font-family: 'Archivo SemiExpanded';
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.17em;
+    color: #0F0F0F;
+    margin-bottom: 0;
+  }
+
+  .faq-section .accordion {
+    margin-top: 0;
+  }
+
+  .faq-section .accordion__title {
+    font-family: 'Archivo';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.56em;
+    color: #000000;
+  }
+
+  .faq-section .view-all-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    margin-top: 1rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .faq-section .view-all-link {
+      margin-top: 0;
+    }
+  }
+
+  .faq-section .view-all-text {
+    font-family: 'Archivo';
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1em;
+    text-transform: uppercase;
+    color: #000000;
+  }
+
+  .faq-section__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .faq-section__content .accordion summary {
+    padding: 1rem 1.5rem;
+  }
+
+  .faq-section__content .accordion:nth-child(2) {
+    border-top: 0.0625rem solid rgba(var(--color-base-foreground), 0.08);
+  }
+
+  @media screen and (min-width: 750px) {
+    .faq-section__content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 3rem;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="faq-section page-width section-{{ section.id }}-padding">
+    <div class="faq-section__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="faq-section__heading">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+
+      {% if section.settings.view_all_link != blank %}
+        <a href="{{ section.settings.view_all_link }}" class="view-all-link">
+          <span class="view-all-text">{{ section.settings.view_all_text | default: 'sections.faq.view_all' | t }}</span>
+          {{- 'icon-chevron.svg' | inline_asset_content -}}
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="faq-section__content">
+      {%- for block in section.blocks -%}
+        <div class="accordion" {{ block.shopify_attributes }}>
+          <details
+            id="Details-{{ block.id }}-{{ section.id }}"
+            {% if section.settings.open_first_item and forloop.first %}
+            open
+            {% endif %}>
+            <summary id="Summary-{{ block.id }}-{{ section.id }}">
+              <h3 class="accordion__title inline-richtext">
+                {{ block.settings.question }}
+              </h3>
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </summary>
+            <div
+              class="accordion__content rte"
+              id="FAQAccordion-{{ block.id }}-{{ section.id }}"
+              role="region"
+              aria-labelledby="Summary-{{ block.id }}-{{ section.id }}">
+              {{ block.settings.answer }}
+            </div>
+          </details>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "FAQ Section",
+    "tag": "section",
+    "class": "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "t:sections.faq.title",
+        "label": "Heading"
+      },
+      {
+        "type": "checkbox",
+        "id": "open_first_item",
+        "default": false,
+        "label": "Open first FAQ item by default"
+      },
+      {
+        "type": "text",
+        "id": "view_all_text",
+        "default": "t:sections.faq.view_all",
+        "label": "View all text"
+      },
+      {
+        "type": "url",
+        "id": "view_all_link",
+        "label": "View all link"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color scheme",
+        "default": "background-1"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 36
+      }
+    ],
+    "blocks": [
+      {
+        "type": "faq_item",
+        "name": "FAQ Item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "question",
+            "default": "t:sections.faq.question_example",
+            "label": "Question"
+          },
+          {
+            "type": "richtext",
+            "id": "answer",
+            "default": "<p>Provide the answer to the question here.</p>",
+            "label": "Answer"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "FAQ Section",
+        "blocks": [
+          {
+            "type": "faq_item"
+          },
+          {
+            "type": "faq_item"
+          },
+          {
+            "type": "faq_item"
+          },
+          {
+            "type": "faq_item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
