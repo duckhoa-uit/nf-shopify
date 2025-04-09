@@ -1,19 +1,67 @@
 {
   "sections": {
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "settings": {
+        "back_text": "Back",
+        "home_text": "Home",
+        "divider_style": "arrow"
+      }
+    },
+    "blog-posts-slider": {
+      "type": "blog-posts-slider",
+      "settings": {
+        "heading": "Blog Northfinder",
+        "blog": "news",
+        "post_limit": 3,
+        "show_view_all": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "main": {
       "type": "main-blog",
       "settings": {
-        "layout": "collage",
+        "layout": "grid",
         "show_image": true,
         "image_height": "medium",
         "show_date": true,
         "show_author": false,
+        "enable_filtering": true,
+        "enable_search": true,
+        "posts_per_page": 8,
+        "enable_load_more": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "blog-videos": {
+      "type": "blog-videos",
+      "settings": {
+        "heading": "Videos",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured Products",
+        "image_ratio": "square",
+        "show_card_overlay": true,
+        "mobile_button_style": "split",
+        "columns_desktop": 2,
+        "full_width": false,
         "padding_top": 36,
         "padding_bottom": 36
       }
     }
   },
   "order": [
-    "main"
+    "breadcrumb",
+    "blog-posts-slider",
+    "main",
+    "blog-videos",
+    "featured-collection"
   ]
 }

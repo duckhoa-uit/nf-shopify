@@ -1,0 +1,166 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .blog-videos-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .blog-videos-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .blog-videos-grid {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+
+  .video-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 3px;
+  }
+
+  .video-card__image {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    position: relative;
+    background-color: #f5f5f5;
+  }
+
+  .video-card__image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .video-card__content {
+    padding: 1rem 0;
+  }
+
+  .video-card__title {
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+{%- endstyle -%}
+
+<div class="blog-videos page-width section-{{ section.id }}-padding">
+  <h2 class="title--primary">
+    {{ section.settings.heading | escape }}
+  </h2>
+
+  <div class="blog-videos-grid">
+    {% for block in section.blocks %}
+      <div class="video-card" {{ block.shopify_attributes }}>
+        <div class="video-card__image">
+          {% if block.settings.video_thumbnail != blank %}
+            <img
+              src="{{ block.settings.video_thumbnail | image_url: width: 535 }}"
+              alt="{{ block.settings.video_title | escape }}"
+              loading="lazy"
+              width="{{ block.settings.video_thumbnail.width }}"
+              height="{{ block.settings.video_thumbnail.height }}">
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        </div>
+        <div class="video-card__content">
+          <h3 class="video-card__title">{{ block.settings.video_title | escape }}</h3>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Blog Videos",
+    "tag": "section",
+    "class": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Videos",
+        "label": "Heading"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 36
+      }
+    ],
+    "blocks": [
+      {
+        "type": "video",
+        "name": "Video",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "video_thumbnail",
+            "label": "Video thumbnail"
+          },
+          {
+            "type": "text",
+            "id": "video_title",
+            "default": "Video title",
+            "label": "Title"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Blog Videos",
+        "blocks": [
+          {
+            "type": "video"
+          },
+          {
+            "type": "video"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
