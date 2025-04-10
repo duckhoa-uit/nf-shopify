@@ -59,7 +59,9 @@
           >
             {{ article.title | escape }}
           </h1>
-          <p class="text-[0.9375rem] leading-[1.375rem] text-[#3d3d3d] lg:text-base lg:leading-6">{{ article.excerpt | strip_html }}</p>
+          <p class="text-[0.9375rem] leading-[1.375rem] text-[#3d3d3d] lg:text-base lg:leading-6">
+            {{ article.excerpt | strip_html }}
+          </p>
         </header>
 
       {%- when 'content' -%}
@@ -275,6 +277,8 @@
       </div>
     </div>
   {%- endif -%}
+
+  {% render 'related-articles' %}
 </article>
 
 <script type="application/ld+json">

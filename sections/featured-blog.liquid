@@ -21,13 +21,7 @@
   }
 {%- endstyle -%}
 
-{%- liquid
-  assign posts_displayed = section.settings.blog.articles_count
-  if section.settings.post_limit <= section.settings.blog.articles_count or section.settings.post_limit <= 4
-    assign posts_exceed_limit = true
-    assign posts_displayed = section.settings.post_limit
-  endif
--%}
+
 <div class="featured_blog color-{{ section.settings.color_scheme }} gradient{% if section.settings.heading == blank %} no-heading{% endif %}">
   <div class="page-width isolate section-{{ section.id }}-padding">
     {%- unless section.settings.heading == blank -%}
@@ -142,7 +136,7 @@
       <div class="swiper-scrollbar"></div>
     </div>
 
-    {%- if section.settings.show_view_all -%}
+    {%- if section.settings.blog != blank and section.settings.show_view_all -%}
       <div
         class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} flex items-center justify-end mt-4"
         {% if settings.animations_reveal_on_scroll %}
