@@ -70,13 +70,7 @@
             {% endfor %}
           </div>
         {% endif %}
-        <div class="article-card__meta">
-          <span class="article-card__date">{{ article.published_at | date: '%d.%m.%Y' }}</span>
-          <span class="article-card__views">
-            <span class="svg-wrapper text-accent size-3">{{ 'icon-eye.svg' | inline_asset_content }}</span>
-            349
-          </span>
-        </div>
+        {% render 'article-meta', article: article %}
 
         <h4 class="article-card__title">
           <a href="{{ article.url }}" class="article-card__title-link">
