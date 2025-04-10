@@ -1,0 +1,157 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-related-articles.css' | asset_url | stylesheet_tag }}
+{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+{{ 'swiper.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+
+{% comment %}
+  Find related articles based on tags - using a direct approach
+{% endcomment %}
+
+{% assign post_limit = 6 %}
+
+<!-- Debug: Current article: {{ article.title }} -->
+<!-- Debug: Current blog: {{ blog.title }} -->
+<!-- Debug: Tags: {{ article.tags | join: ', ' }} -->
+
+{% if article != blank and blog != blank %}
+  <div class="related_articles gradient">
+    <div class="page-width isolate">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-extrabold font-archivo-expanded text-lg lg:text-2xl leading-7 text-[#0F0F0F] uppercase{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          Related Articles
+        </h2>
+
+        {%- if blog != blank -%}
+          <a
+            href="{{ blog.url }}"
+            class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} items-center gap-2 text-foreground text-base font-semibold leading-4 uppercase hidden md:flex"
+          >
+            {{ 'sections.featured_blog.view_all' | t -}}
+            <span class="svg-wrapper -rotate-90 size-3">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="swiper w-full mt-4 lg:mt-6{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <div class="swiper-wrapper">
+          {% assign related_count = 0 %}
+
+          {% comment %} First try to find articles with matching tags {% endcomment %}
+          {% for blog_article in blog.articles %}
+            {% if blog_article.handle != article.handle and related_count < post_limit %}
+              {% assign has_matching_tag = false %}
+
+              {% for tag in article.tags %}
+                {% if blog_article.tags contains tag %}
+                  {% assign has_matching_tag = true %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+
+              {% if has_matching_tag %}
+                {% assign related_count = related_count | plus: 1 %}
+                <!-- Debug: Rendering related article: {{ blog_article.title }} -->
+                <div class="swiper-slide blog__post grid__item article slider__slide slider__slide--full-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+                  {% render 'article-card',
+                    blog: blog,
+                    article: blog_article,
+                    media_aspect_ratio: 1.66,
+                    show_image: true,
+                    show_date: true,
+                    show_author: false,
+                    show_excerpt: true
+                  %}
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          {% comment %} If we didn't find enough related articles, add recent ones {% endcomment %}
+          {% if related_count == 0 %}
+            {% for blog_article in blog.articles limit: post_limit %}
+              {% if blog_article.handle != article.handle %}
+                {% assign related_count = related_count | plus: 1 %}
+                <!-- Debug: Rendering recent article: {{ blog_article.title }} -->
+                <div class="swiper-slide blog__post grid__item article slider__slide slider__slide--full-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+                  {% render 'article-card',
+                    blog: blog,
+                    article: blog_article,
+                    media_aspect_ratio: 1.66,
+                    show_image: true,
+                    show_date: true,
+                    show_author: false,
+                    show_excerpt: true
+                  %}
+                </div>
+              {% endif %}
+              {% if related_count >= post_limit %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+          <!-- Debug: Total articles rendered: {{ related_count }} -->
+        </div>
+        <div class="swiper-scrollbar"></div>
+      </div>
+
+      {%- if blog != blank -%}
+        <div
+          class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} flex items-center justify-end mt-4"
+          {% if settings.animations_reveal_on_scroll %}
+            data-cascade
+          {% endif %}
+        >
+          <a
+            href="{{ blog.url }}"
+            class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} items-center gap-2 text-foreground text-[0.8125rem] font-semibold leading-4 uppercase flex md:hidden"
+          >
+            {{ 'sections.featured_blog.view_all' | t -}}
+            <span class="svg-wrapper -rotate-90 size-3">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Make sure Swiper is loaded
+      if (typeof Swiper === 'undefined') {
+        // Wait for Swiper to load since we're using defer
+        const swiperScript = document.querySelector('script[src*="swiper-bundle.min.js"]');
+        swiperScript.addEventListener('load', initSwiper);
+      } else {
+        initSwiper();
+      }
+
+      function initSwiper() {
+        var mySwiper = new Swiper('.related_articles .swiper', {
+          direction: 'horizontal',
+          spaceBetween: 8,
+          grabCursor: true,
+          breakpoints: {
+            // when window width is >= 320px
+            320: {
+              slidesPerView: 1.1,
+            },
+            // when window width is >= 640px
+            640: {
+              slidesPerView: 2,
+            },
+            // when window width is >= 1024px
+            1024: {
+              slidesPerView: 3,
+            },
+          },
+          scrollbar: {
+            el: '.swiper-scrollbar',
+          },
+        });
+      }
+    });
+  </script>
+{% endif %}
