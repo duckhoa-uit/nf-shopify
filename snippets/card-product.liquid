@@ -12,9 +12,7 @@
   {% render 'card-product', card_product: product, section_id: section.id %}
 {% endcomment %}
 
-<script>
-  console.log({{ card_product | json }});
-</script>
+
 {%- if card_product and card_product != empty -%}
   <div class="card-wrapper h-full">
     <div class="flex flex-col h-full relative">
@@ -84,6 +82,41 @@
           {%- endfor -%}
 
           {%- assign unique_colors = unique_colors | remove_first: ',' | split: ',' -%}
+
+          {%- comment -%} Sort unique_colors by position from metafields.custom.color.value {%- endcomment -%}
+          {%- if card_product.metafields.custom.color.value != blank -%}
+            {%- assign color_positions = '' -%}
+
+            {%- for color in unique_colors -%}
+              {%- assign position = 999 -%}
+              {%- assign color_downcase = color | downcase | strip -%}
+
+              {%- for color_item in card_product.metafields.custom.color.value -%}
+                {%- if color_item.name == color_downcase -%}
+                  {%- assign position = color_item.position -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- assign position_str = position | prepend: '00000' | slice: -5, 5 -%}
+              {%- assign color_positions = color_positions | append: position_str | append: ':' | append: color | append: ',' -%}
+            {%- endfor -%}
+
+            {%- assign sorted_positions = color_positions | split: ',' | sort -%}
+            {%- assign sorted_colors = '' -%}
+
+            {%- for position_color in sorted_positions -%}
+              {%- if position_color != blank -%}
+                {%- assign parts = position_color | split: ':' -%}
+                {%- if parts.size > 1 -%}
+                  {%- assign sorted_colors = sorted_colors | append: ',' | append: parts[1] -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- assign unique_colors = sorted_colors | remove_first: ',' | split: ',' -%}
+          {%- endif -%}
+
           {%- assign colors_count = unique_colors.size -%}
           {%- assign display_count = colors_count -%}
           {%- assign remaining_count = 0 -%}
@@ -106,43 +139,97 @@
 
               {%- if color_variant -%}
                 {%- assign variant_image = null -%}
+                {%- assign color_value = color | downcase | strip | replace: ' ', '-' | replace: "'", "" | replace: ".", "" | replace: ",", "" -%}
+                {%- assign reference_id = '' -%}
 
-                {%- comment -%} Try to find matching image in variant.featured_image {%- endcomment -%}
-                {%- if color_variant.featured_image -%}
-                  {%- assign variant_image = color_variant.featured_image -%}
-                {%- else -%}
-                  {%- comment -%} Try to find matching image in product.media or product.images {%- endcomment -%}
-                  {%- for media in card_product.media -%}
-                    {%- if media.alt contains color or media.alt contains color_variant.title -%}
-                      {%- assign variant_image = media -%}
+                {%- comment -%} Find the reference_id for this color from metafields {%- endcomment -%}
+                {%- if card_product.metafields.custom.color.value != blank -%}
+                  {%- for color_item in card_product.metafields.custom.color.value -%}
+                    {%- if color_item.name == color_value -%}
+                      {%- assign reference_id = color_item.reference_id -%}
                       {%- break -%}
                     {%- endif -%}
                   {%- endfor -%}
+                {%- endif -%}
 
-                  {%- unless variant_image -%}
-                    {%- for image in card_product.images -%}
-                      {%- if image.alt contains color or image.alt contains color_variant.title -%}
-                        {%- assign variant_image = image -%}
-                        {%- break -%}
+                {%- comment -%} Try to find a model image for this color using reference_id {%- endcomment -%}
+                {%- if reference_id != '' -%}
+                  {%- assign lowest_sequence = 999 -%}
+                  {%- assign found_model_image = false -%}
+
+                  {%- comment -%} First look for model images without sequence (just -M) {%- endcomment -%}
+                  {%- for media in card_product.media -%}
+                    {%- assign media_src = media.src | default: '' -%}
+                    {%- assign parsed_url = media_src | split: '/' | last -%}
+
+                    {%- if parsed_url contains reference_id -%}
+                      {%- if parsed_url contains '-M' -%}
+                        {%- unless parsed_url contains '-M_' -%}
+                          {%- assign variant_image = media -%}
+                          {%- assign found_model_image = true -%}
+                          {%- break -%}
+                        {%- endunless -%}
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  {%- comment -%} If no model image without sequence found, look for one with lowest sequence {%- endcomment -%}
+                  {%- unless found_model_image -%}
+                    {%- for media in card_product.media -%}
+                      {%- assign media_src = media.src | default: '' -%}
+                      {%- assign parsed_url = media_src | split: '/' | last -%}
+                      {%- if parsed_url contains reference_id and parsed_url contains '-M_' -%}
+                        {%- assign sequence_part = parsed_url | split: '-M_' | last | split: '.' | first -%}
+                        {%- assign sequence_number = sequence_part | plus: 0 -%}
+
+                        {%- if sequence_number < lowest_sequence -%}
+                          {%- assign lowest_sequence = sequence_number -%}
+                          {%- assign variant_image = media -%}
+                          {%- assign found_model_image = true -%}
+                        {%- endif -%}
                       {%- endif -%}
                     {%- endfor -%}
                   {%- endunless -%}
+                {%- endif -%}
 
-                  {%- comment -%} Fallback to the first image that appears to match the color {%- endcomment -%}
-                  {%- unless variant_image -%}
+                {%- comment -%} Try to find matching image in variant.featured_image if no model image found {%- endcomment -%}
+                {%- unless variant_image -%}
+                  {%- if color_variant.featured_image -%}
+                    {%- assign variant_image = color_variant.featured_image -%}
+                  {%- else -%}
+                    {%- comment -%} Try to find matching image in product.media or product.images {%- endcomment -%}
                     {%- for media in card_product.media -%}
-                      {%- if media.alt contains color or media.src contains color -%}
+                      {%- if media.alt contains color or media.alt contains color_variant.title -%}
                         {%- assign variant_image = media -%}
                         {%- break -%}
                       {%- endif -%}
                     {%- endfor -%}
-                  {%- endunless -%}
 
-                  {%- comment -%} Final fallback to featured_image {%- endcomment -%}
-                  {%- unless variant_image -%}
-                    {%- assign variant_image = card_product.featured_media -%}
-                  {%- endunless -%}
-                {%- endif -%}
+                    {%- unless variant_image -%}
+                      {%- for image in card_product.images -%}
+                        {%- if image.alt contains color or image.alt contains color_variant.title -%}
+                          {%- assign variant_image = image -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endunless -%}
+
+                    {%- comment -%} Fallback to the first image that appears to match the color {%- endcomment -%}
+                    {%- unless variant_image -%}
+                      {%- for media in card_product.media -%}
+                        {%- if media.alt contains color or media.src contains color -%}
+                          {%- assign variant_image = media -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endunless -%}
+
+                    {%- comment -%} Final fallback to featured_image {%- endcomment -%}
+                    {%- unless variant_image -%}
+                      {%- assign variant_image = card_product.featured_media -%}
+                    {%- endunless -%}
+                  {%- endif -%}
+                {%- endunless -%}
 
                 <a
                   href="{{ card_product.url }}?variant={{ color_variant.id }}"
