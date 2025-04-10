@@ -8,69 +8,182 @@
   {% render 'product-benefit', product: product %}
 {% endcomment %}
 
-<div class="mt-12 flex flex-col w-full">
-  <h5 class="text-lg my-2 text-[#0F0F0F] font-bold leading-7">Benefits</h5>
+{% assign benefits_count = 0 %}
+{% assign has_breathability = false %}
+{% assign has_elasticity = false %}
+{% assign has_windproofness = false %}
+{% assign has_warmth = false %}
 
-  <style>
-    /* Hide benefits beyond first 2 by default to prevent flash */
-    #product-benefits-list li:not(:first-child):not(:nth-child(2)):not(:last-child) {
-      display: none;
-    }
+{% capture breathability_json %}{{ product.metafields.features.breathability.value | json }}{% endcapture %}
+{% assign breathability_name = '' %}
+{% if breathability_json contains 'extremely high' %}
+  {% assign breathability_name = 'extremely high' %}
+{% elsif breathability_json contains 'medium high' %}
+  {% assign breathability_name = 'medium high' %}
+{% elsif breathability_json contains 'high' %}
+  {% assign breathability_name = 'high' %}
+{% elsif breathability_json contains 'very low' %}
+  {% assign breathability_name = 'very low' %}
+{% elsif breathability_json contains 'low' %}
+  {% assign breathability_name = 'low' %}
+{% endif %}
 
-    /* On mobile, always show all benefits */
-    @media (max-width: 768px) {
-      #product-benefits-list li {
-        display: block !important;
+{% assign breathability_level_map = 0 %}
+{% case breathability_name %}
+  {% when 'very low' -%}
+    {%- assign breathability_level_map = 1 %}
+  {% when 'low' -%}
+    {%- assign breathability_level_map = 2 %}
+  {% when 'medium high' -%}
+    {%- assign breathability_level_map = 3 %}
+  {% when 'high' -%}
+    {%- assign breathability_level_map = 4 %}
+  {% when 'extremely high' -%}
+    {%- assign breathability_level_map = 5 %}
+{% endcase %}
+
+{% if breathability_level_map > 0 %}
+  {% assign has_breathability = true %}
+  {% assign benefits_count = benefits_count | plus: 1 %}
+{% endif %}
+
+{% capture elasticity_json %}{{ product.metafields.features.elasticity.value | json }}{% endcapture %}
+{% assign elasticity_name = '' %}
+{% if elasticity_json contains 'extremely high' %}
+  {% assign elasticity_name = 'extremely high' %}
+{% elsif elasticity_json contains 'medium high' %}
+  {% assign elasticity_name = 'medium high' %}
+{% elsif elasticity_json contains 'high' %}
+  {% assign elasticity_name = 'high' %}
+{% elsif elasticity_json contains 'very low' %}
+  {% assign elasticity_name = 'very low' %}
+{% elsif elasticity_json contains 'low' %}
+  {% assign elasticity_name = 'low' %}
+{% endif %}
+
+{% assign elasticity_level_map = 0 %}
+{% case elasticity_name %}
+  {% when 'very low' -%}
+    {%- assign elasticity_level_map = 1 %}
+  {% when 'low' -%}
+    {%- assign elasticity_level_map = 2 %}
+  {% when 'medium high' -%}
+    {%- assign elasticity_level_map = 3 %}
+  {% when 'high' -%}
+    {%- assign elasticity_level_map = 4 %}
+  {% when 'extremely high' -%}
+    {%- assign elasticity_level_map = 5 %}
+{% endcase %}
+
+{% if elasticity_level_map > 0 %}
+  {% assign has_elasticity = true %}
+  {% assign benefits_count = benefits_count | plus: 1 %}
+{% endif %}
+
+{% capture windproofness_json %}{{ product.metafields.features.windproofness.value | json }}{% endcapture %}
+{% assign windproofness_name = '' %}
+{% if windproofness_json contains 'extremely high' %}
+  {% assign windproofness_name = 'extremely high' %}
+{% elsif windproofness_json contains 'high' %}
+  {% assign windproofness_name = 'high' %}
+{% elsif windproofness_json contains 'medium high' %}
+  {% assign windproofness_name = 'medium high' %}
+{% elsif windproofness_json contains 'low' %}
+  {% assign windproofness_name = 'low' %}
+{% elsif windproofness_json contains 'very low' %}
+  {% assign windproofness_name = 'very low' %}
+{% endif %}
+
+{% assign windproofness_level_map = 0 %}
+{% case windproofness_name %}
+  {% when 'very low' -%}
+    {%- assign windproofness_level_map = 1 %}
+  {% when 'low' -%}
+    {%- assign windproofness_level_map = 2 %}
+  {% when 'medium high' -%}
+    {%- assign windproofness_level_map = 3 %}
+  {% when 'extremely high' -%}
+    {%- assign windproofness_level_map = 5 %}
+  {% when 'high' -%}
+    {%- assign windproofness_level_map = 4 %}
+{% endcase %}
+
+{% if windproofness_level_map > 0 %}
+  {% assign has_windproofness = true %}
+  {% assign benefits_count = benefits_count | plus: 1 %}
+{% endif %}
+
+{% capture warmth_json %}{{ product.metafields.features.warmth.value | json }}{% endcapture %}
+{% assign warmth_name = '' %}
+{% if warmth_json contains 'extremely high' %}
+  {% assign warmth_name = 'extremely high' %}
+{% elsif warmth_json contains 'medium high' %}
+  {% assign warmth_name = 'medium high' %}
+{% elsif warmth_json contains 'high' %}
+  {% assign warmth_name = 'high' %}
+{% elsif warmth_json contains 'very low' %}
+  {% assign warmth_name = 'very low' %}
+{% elsif warmth_json contains 'low' %}
+  {% assign warmth_name = 'low' %}
+{% endif %}
+
+{% assign warmth_level_map = 0 %}
+{% case warmth_name %}
+  {% when 'very low' -%}
+    {%- assign warmth_level_map = 1 %}
+  {% when 'low' -%}
+    {%- assign warmth_level_map = 2 %}
+  {% when 'medium high' -%}
+    {%- assign warmth_level_map = 3 %}
+  {% when 'high' -%}
+    {%- assign warmth_level_map = 4 %}
+  {% when 'extremely high' -%}
+    {%- assign warmth_level_map = 5 %}
+{% endcase %}
+
+{% if warmth_level_map > 0 %}
+  {% assign has_warmth = true %}
+  {% assign benefits_count = benefits_count | plus: 1 %}
+{% endif %}
+
+{% if benefits_count > 0 %}
+  <div class="mt-12 flex flex-col w-full">
+    <h5 class="text-lg my-2 text-[#0F0F0F] font-bold leading-7">Benefits</h5>
+
+    <style>
+      /* Hide benefits beyond first 2 by default to prevent flash */
+      #product-benefits-list li:not(:first-child):not(:nth-child(2)):not(:last-child) {
+        display: none;
       }
-      #product-benefits-list li:last-child {
-        display: none !important;
+
+      /* On mobile, always show all benefits */
+      @media (max-width: 768px) {
+        #product-benefits-list li {
+          display: block !important;
+        }
+        #product-benefits-list li:last-child {
+          display: none !important;
+        }
       }
-    }
-  </style>
+    </style>
 
-  <ul class="flex flex-col w-full relative" id="product-benefits-list">
-    <li class="break-inside-avoid mb-9 ml-8">
-      <img
-        class="absolute left-0 size-4"
-        width="16"
-        height="16"
-        src="{{ 'BREATHABILITY.svg' | asset_url }}"
-        loading="lazy"
-      >
+    <ul class="flex flex-col w-full relative" id="product-benefits-list">
+      {% if has_breathability %}
+        <li class="break-inside-avoid mb-9 ml-8">
+          <img
+            class="absolute left-0 size-4"
+            width="16"
+            height="16"
+            src="{{ 'BREATHABILITY.svg' | asset_url }}"
+            loading="lazy"
+          >
 
-      {% capture breathability_json %}{{ product.metafields.features.breathability.value | json }}{% endcapture %}
-      {% assign breathability_name = '' %}
-      {% if breathability_json contains 'extremely high' %}
-        {% assign breathability_name = 'extremely high' %}
-      {% elsif breathability_json contains 'high' %}
-        {% assign breathability_name = 'high' %}
-      {% elsif breathability_json contains 'medium high' %}
-        {% assign breathability_name = 'medium high' %}
-      {% elsif breathability_json contains 'low' %}
-        {% assign breathability_name = 'low' %}
-      {% elsif breathability_json contains 'very low' %}
-        {% assign breathability_name = 'very low' %}
-      {% endif %}
+          <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
+            Breathability
+            <span class="font-medium">({{ breathability_level_map }}/5)</span>
+          </div>
 
-      {% assign breathability_level_map = 0 %}
-      {% if breathability_json contains '"level":' %}
-        {% assign breathability_level_map = product.metafields.features.breathability.value.level %}
-      {% else %}
-        {% case breathability_name %}
-          {% when 'very low' %}{% assign breathability_level_map = 1 %}
-          {% when 'low' %}{% assign breathability_level_map = 2 %}
-          {% when 'medium high' %}{% assign breathability_level_map = 3 %}
-          {% when 'high' %}{% assign breathability_level_map = 4 %}
-          {% when 'extremely high' %}{% assign breathability_level_map = 5 %}
-        {% endcase %}
-      {% endif %}
-
-      <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
-        Breathability
-        <span class="font-medium">({{ breathability_level_map }}/5)</span>
-      </div>
-
-      {% capture breathability_descriptions %}
+          {% capture breathability_descriptions %}
         {% case breathability_level_map %}
           {% when 1 %}The material offers minimal breathability, suitable for casual use
           {% when 2 %}The material provides basic breathability, allowing some air circulation
@@ -81,50 +194,29 @@
         {% endcase %}
       {% endcapture %}
 
-      <div class="text-[#3D3D3D] text-sm leading-4 my-2">
-        {{ breathability_descriptions | strip }}
-      </div>
-      {% render 'benefit-indicator', input: breathability_level_map %}
-    </li>
-
-    <li class="break-inside-avoid mb-9 ml-8">
-      <img
-        class="absolute left-0 size-4"
-        width="16"
-        height="16"
-        src="{{ 'ELASTICITY.svg' | asset_url }}"
-        loading="lazy"
-      >
-
-      {% capture elasticity_json %}{{ product.metafields.features.elasticity.value | json }}{% endcapture %}
-      {% assign elasticity_name = 'extremely high' %}
-      {% if elasticity_json contains 'extremely high' %}
-        {% assign elasticity_name = 'extremely high' %}
-      {% elsif elasticity_json contains 'high' %}
-        {% assign elasticity_name = 'high' %}
-      {% elsif elasticity_json contains 'medium high' %}
-        {% assign elasticity_name = 'medium high' %}
-      {% elsif elasticity_json contains 'low' %}
-        {% assign elasticity_name = 'low' %}
-      {% elsif elasticity_json contains 'very low' %}
-        {% assign elasticity_name = 'very low' %}
+          <div class="text-[#3D3D3D] text-sm leading-4 my-2">
+            {{ breathability_descriptions | strip }}
+          </div>
+          {% render 'benefit-indicator', input: breathability_level_map %}
+        </li>
       {% endif %}
 
-      {% assign elasticity_level_map = 0 %}
-      {% case elasticity_name %}
-        {% when 'very low' %}{% assign elasticity_level_map = 1 %}
-        {% when 'low' %}{% assign elasticity_level_map = 2 %}
-        {% when 'medium high' %}{% assign elasticity_level_map = 3 %}
-        {% when 'high' %}{% assign elasticity_level_map = 4 %}
-        {% when 'extremely high' %}{% assign elasticity_level_map = 5 %}
-      {% endcase %}
+      {% if has_elasticity %}
+        <li class="break-inside-avoid mb-9 ml-8">
+          <img
+            class="absolute left-0 size-4"
+            width="16"
+            height="16"
+            src="{{ 'ELASTICITY.svg' | asset_url }}"
+            loading="lazy"
+          >
 
-      <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
-        Elasticity
-        <span class="font-medium">({{ elasticity_level_map }}/5)</span>
-      </div>
+          <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
+            Elasticity
+            <span class="font-medium">({{ elasticity_level_map }}/5)</span>
+          </div>
 
-      {% capture elasticity_descriptions %}
+          {% capture elasticity_descriptions %}
         {% case elasticity_level_map %}
           {% when 1 %}The material has minimal stretch properties, best suited for structured garments
           {% when 2 %}The material has limited stretch properties, providing basic movement flexibility
@@ -135,53 +227,29 @@
         {% endcase %}
       {% endcapture %}
 
-      <div class="text-[#3D3D3D] text-sm leading-4 my-2">
-        {{ elasticity_descriptions | strip }}
-      </div>
-      {% render 'benefit-indicator', input: elasticity_level_map %}
-    </li>
-    <li class="break-inside-avoid mb-9 ml-8">
-      <img
-        class="absolute left-0 size-4"
-        width="16"
-        height="16"
-        src="{{ 'WINDPROOFNESS.svg' | asset_url }}"
-        loading="lazy"
-      >
-
-      {% capture windproofness_json %}{{ product.metafields.features.windproofness.value | json }}{% endcapture %}
-      {% assign windproofness_name = '' %}
-      {% if windproofness_json contains 'extremely high' %}
-        {% assign windproofness_name = 'extremely high' %}
-      {% elsif windproofness_json contains 'high' %}
-        {% assign windproofness_name = 'high' %}
-      {% elsif windproofness_json contains 'medium high' %}
-        {% assign windproofness_name = 'medium high' %}
-      {% elsif windproofness_json contains 'low' %}
-        {% assign windproofness_name = 'low' %}
-      {% elsif windproofness_json contains 'very low' %}
-        {% assign windproofness_name = 'very low' %}
+          <div class="text-[#3D3D3D] text-sm leading-4 my-2">
+            {{ elasticity_descriptions | strip }}
+          </div>
+          {% render 'benefit-indicator', input: elasticity_level_map %}
+        </li>
       {% endif %}
 
-      {% assign windproofness_level_map = 0 %}
-      {% if windproofness_json contains '"level":' %}
-        {% assign windproofness_level_map = product.metafields.features.windproofness.value.level %}
-      {% else %}
-        {% case windproofness_name %}
-          {% when 'very low' %}{% assign windproofness_level_map = 1 %}
-          {% when 'low' %}{% assign windproofness_level_map = 2 %}
-          {% when 'medium high' %}{% assign windproofness_level_map = 3 %}
-          {% when 'high' %}{% assign windproofness_level_map = 4 %}
-          {% when 'extremely high' %}{% assign windproofness_level_map = 5 %}
-        {% endcase %}
-      {% endif %}
+      {% if has_windproofness %}
+        <li class="break-inside-avoid mb-9 ml-8">
+          <img
+            class="absolute left-0 size-4"
+            width="16"
+            height="16"
+            src="{{ 'WINDPROOFNESS.svg' | asset_url }}"
+            loading="lazy"
+          >
 
-      <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
-        Windproofness
-        <span class="font-medium">({{ windproofness_level_map }}/5)</span>
-      </div>
+          <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
+            Windproofness
+            <span class="font-medium">({{ windproofness_level_map }}/5)</span>
+          </div>
 
-      {% capture windproofness_descriptions %}
+          {% capture windproofness_descriptions %}
         {% case windproofness_level_map %}
           {% when 1 %}Provides minimal protection against light breezes
           {% when 2 %}Offers basic protection against everyday wind conditions
@@ -192,53 +260,29 @@
         {% endcase %}
       {% endcapture %}
 
-      <div class="text-[#3D3D3D] text-sm leading-4 my-2">
-        {{ windproofness_descriptions | strip }}
-      </div>
-      {% render 'benefit-indicator', input: windproofness_level_map %}
-    </li>
-    <li class="break-inside-avoid mb-9 ml-8">
-      <img
-        class="absolute left-0 size-4"
-        width="16"
-        height="16"
-        src="{{ 'WARMTH.svg' | asset_url }}"
-        loading="lazy"
-      >
-
-      {% capture warmth_json %}{{ product.metafields.features.warmth.value | json }}{% endcapture %}
-      {% assign warmth_name = '' %}
-      {% if warmth_json contains 'extremely high' %}
-        {% assign warmth_name = 'extremely high' %}
-      {% elsif warmth_json contains 'high' %}
-        {% assign warmth_name = 'high' %}
-      {% elsif warmth_json contains 'medium high' %}
-        {% assign warmth_name = 'medium high' %}
-      {% elsif warmth_json contains 'low' %}
-        {% assign warmth_name = 'low' %}
-      {% elsif warmth_json contains 'very low' %}
-        {% assign warmth_name = 'very low' %}
+          <div class="text-[#3D3D3D] text-sm leading-4 my-2">
+            {{ windproofness_descriptions | strip }}
+          </div>
+          {% render 'benefit-indicator', input: windproofness_level_map %}
+        </li>
       {% endif %}
 
-      {% assign warmth_level_map = 0 %}
-      {% if warmth_json contains '"level":' %}
-        {% assign warmth_level_map = product.metafields.features.warmth.value.level %}
-      {% else %}
-        {% case warmth_name %}
-          {% when 'very low' %}{% assign warmth_level_map = 1 %}
-          {% when 'low' %}{% assign warmth_level_map = 2 %}
-          {% when 'medium high' %}{% assign warmth_level_map = 3 %}
-          {% when 'high' %}{% assign warmth_level_map = 4 %}
-          {% when 'extremely high' %}{% assign warmth_level_map = 5 %}
-        {% endcase %}
-      {% endif %}
+      {% if has_warmth %}
+        <li class="break-inside-avoid mb-9 ml-8">
+          <img
+            class="absolute left-0 size-4"
+            width="16"
+            height="16"
+            src="{{ 'WARMTH.svg' | asset_url }}"
+            loading="lazy"
+          >
 
-      <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
-        Warmth
-        <span class="font-medium">({{ warmth_level_map }}/5)</span>
-      </div>
+          <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
+            Warmth
+            <span class="font-medium">({{ warmth_level_map }}/5)</span>
+          </div>
 
-      {% capture warmth_descriptions %}
+          {% capture warmth_descriptions %}
         {% case warmth_level_map %}
           {% when 1 %}The material provides minimal insulation, best for mild conditions or high activity
           {% when 2 %}The material offers light insulation, suitable for cool weather activities
@@ -249,90 +293,95 @@
         {% endcase %}
       {% endcapture %}
 
-      <div class="text-[#3D3D3D] text-sm leading-4 my-2">
-        {{ warmth_descriptions | strip }}
-      </div>
-      {% render 'benefit-indicator', input: warmth_level_map %}
-    </li>
-    <li class="break-inside-avoid mb-9 ml-8">
-      <button id="show-more-benefits" class="text-[#0F0F0F] text-base leading-7 underline cursor-pointer">
-        Show all benefits
-      </button>
-      <button
-        id="show-less-benefits"
-        class="text-[#0F0F0F] text-base leading-7 underline cursor-pointer"
-        style="display: none;"
-      >
-        Show less benefits
-        <span class="*:-rotate-90 *:inline *:ml-1 *:size-3">
-          {{- 'icon-chevron.svg' | inline_asset_content -}}
-        </span>
-      </button>
-    </li>
-  </ul>
-</div>
+          <div class="text-[#3D3D3D] text-sm leading-4 my-2">
+            {{ warmth_descriptions | strip }}
+          </div>
+          {% render 'benefit-indicator', input: warmth_level_map %}
+        </li>
+      {% endif %}
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const benefitsList = document.getElementById('product-benefits-list');
-    const benefitItems = benefitsList.querySelectorAll('li:not(:last-child)');
-    const showMoreBtn = document.getElementById('show-more-benefits');
-    const showLessBtn = document.getElementById('show-less-benefits');
+      {% if benefits_count > 2 %}
+        <li class="break-inside-avoid mb-9 ml-8">
+          <button id="show-more-benefits" class="text-[#0F0F0F] text-base leading-7 underline cursor-pointer">
+            Show all benefits
+          </button>
+          <button
+            id="show-less-benefits"
+            class="text-[#0F0F0F] text-base leading-7 underline cursor-pointer"
+            style="display: none;"
+          >
+            Show less benefits
+            <span class="*:-rotate-90 *:inline *:ml-1 *:size-3">
+              {{- 'icon-chevron.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
 
-    // Check if we're on mobile
-    function isMobile() {
-      return window.innerWidth <= 768;
-    }
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const benefitsList = document.getElementById('product-benefits-list');
+      const benefitItems = benefitsList.querySelectorAll('li:not(:last-child)');
+      const showMoreBtn = document.getElementById('show-more-benefits');
+      const showLessBtn = document.getElementById('show-less-benefits');
 
-    // Function to show only the first 2 benefits
-    function showLessBenefits() {
-      if (!isMobile()) {
-        benefitItems.forEach((item, index) => {
-          if (index >= 2) {
-            item.style.display = 'none';
-          }
-        });
-        showMoreBtn.style.display = 'block';
-        showLessBtn.style.display = 'none';
+      // Check if we're on mobile
+      function isMobile() {
+        return window.innerWidth <= 768;
       }
-    }
 
-    // Function to show all benefits
-    function showAllBenefits() {
-      benefitItems.forEach((item) => {
-        item.style.display = 'block';
-      });
-      showMoreBtn.style.display = 'none';
-      showLessBtn.style.display = 'block';
-    }
+      // Function to show only the first 2 benefits
+      function showLessBenefits() {
+        if (!isMobile()) {
+          benefitItems.forEach((item, index) => {
+            if (index >= 2) {
+              item.style.display = 'none';
+            }
+          });
+          showMoreBtn.style.display = 'block';
+          showLessBtn.style.display = 'none';
+        }
+      }
 
-    // Handle responsive behavior
-    function handleResponsive() {
-      if (isMobile()) {
-        // On mobile, show all benefits and hide controls
+      // Function to show all benefits
+      function showAllBenefits() {
         benefitItems.forEach((item) => {
           item.style.display = 'block';
         });
         showMoreBtn.style.display = 'none';
-        showLessBtn.style.display = 'none';
-      } else {
-        // On desktop, respect the current state
-        if (showMoreBtn.style.display === 'none') {
-          showAllBenefits();
+        showLessBtn.style.display = 'block';
+      }
+
+      // Handle responsive behavior
+      function handleResponsive() {
+        if (isMobile()) {
+          // On mobile, show all benefits and hide controls
+          benefitItems.forEach((item) => {
+            item.style.display = 'block';
+          });
+          showMoreBtn.style.display = 'none';
+          showLessBtn.style.display = 'none';
         } else {
-          showLessBenefits();
+          // On desktop, respect the current state
+          if (showMoreBtn.style.display === 'none') {
+            showAllBenefits();
+          } else {
+            showLessBenefits();
+          }
         }
       }
-    }
 
-    // Add click event listeners
-    showMoreBtn.addEventListener('click', showAllBenefits);
-    showLessBtn.addEventListener('click', showLessBenefits);
+      // Add click event listeners
+      showMoreBtn.addEventListener('click', showAllBenefits);
+      showLessBtn.addEventListener('click', showLessBenefits);
 
-    // Handle window resize for responsive behavior
-    window.addEventListener('resize', handleResponsive);
+      // Handle window resize for responsive behavior
+      window.addEventListener('resize', handleResponsive);
 
-    // Initialize the UI
-    handleResponsive();
-  });
-</script>
+      // Initialize the UI
+      handleResponsive();
+    });
+  </script>
+{% endif %}
