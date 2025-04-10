@@ -1,6 +1,7 @@
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-article-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-article-meta.css' | asset_url | stylesheet_tag }}
 {{ 'section-blog-posts-slider.css' | asset_url | stylesheet_tag }}
 {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
 {{ 'swiper.css' | asset_url | stylesheet_tag }}
@@ -92,66 +93,7 @@
                     <div class="blog-posts-slider__image-overlay"></div>
                   </div>
                   <div class="blog-posts-slider__content">
-                    <div class="blog-posts-slider__meta">
-                      <div class="blog-posts-slider__date">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M12.6667 2.66667H3.33333C2.59695 2.66667 2 3.26362 2 4.00001V13.3333C2 14.0697 2.59695 14.6667 3.33333 14.6667H12.6667C13.403 14.6667 14 14.0697 14 13.3333V4.00001C14 3.26362 13.403 2.66667 12.6667 2.66667Z"
-                            stroke="#EC0009"
-                            stroke-width="1.33333"
-                            stroke-linecap="round"
-                            stroke-linejoin="round" />
-                          <path
-                            d="M10.6667 1.33333V3.99999"
-                            stroke="#EC0009"
-                            stroke-width="1.33333"
-                            stroke-linecap="round"
-                            stroke-linejoin="round" />
-                          <path
-                            d="M5.33325 1.33333V3.99999"
-                            stroke="#EC0009"
-                            stroke-width="1.33333"
-                            stroke-linecap="round"
-                            stroke-linejoin="round" />
-                          <path
-                            d="M2 6.66667H14"
-                            stroke="#EC0009"
-                            stroke-width="1.33333"
-                            stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        </svg>
-                        <span>{{ article.published_at | date: '%d.%m.%Y' }}</span>
-                      </div>
-                      <div class="blog-posts-slider__views">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M0.666748 8.00001C0.666748 8.00001 3.33341 2.66667 8.00008 2.66667C12.6667 2.66667 15.3334 8.00001 15.3334 8.00001C15.3334 8.00001 12.6667 13.3333 8.00008 13.3333C3.33341 13.3333 0.666748 8.00001 0.666748 8.00001Z"
-                            stroke="#EC0009"
-                            stroke-width="1.33333"
-                            stroke-linecap="round"
-                            stroke-linejoin="round" />
-                          <path
-                            d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
-                            stroke="#EC0009"
-                            stroke-width="1.33333"
-                            stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        </svg>
-                        <span>{{ article.view_count | default: '349' }}</span>
-                      </div>
-                    </div>
+                    {% render 'article-meta', article: article %}
                     <h3 class="blog-posts-slider__title">{{ block.settings.custom_title | default: article.title }}</h3>
                     <div class="blog-posts-slider__excerpt">
                       {{
