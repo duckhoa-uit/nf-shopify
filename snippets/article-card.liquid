@@ -53,7 +53,7 @@
 
             {% if article.tags.size > 0 %}
               <div class="article-card__image-tags">
-                {% for tag in article.tags limit:1 %}
+                {% for tag in article.tags limit: 3 %}
                   <span class="article-card__image-tag">#{{ tag }}</span>
                 {% endfor %}
               </div>
