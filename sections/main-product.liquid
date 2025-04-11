@@ -338,10 +338,17 @@
   {%- endif -%}
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
+
+  {% assign breathability_data = product.metafields.features.breathability.value %}
+  {% assign breathability_name = breathability_data.name %}
+  {% assign breathability_parent = breathability_data.parent %}
   <script>
     console.log({{ product | json }});
-    console.log({{ product.metafields.custom.color.value  | json }});
-    console.log({{ product.metafields.custom.size.value  | json }});
+    console.log({{ product.metafields.features.breathability.value | json }});
+    console.log('Breathability Parent Data:', {{ breathability_parent | json }});
+    console.log({{ product.metafields.features.elasticity.value | json }});
+    console.log({{ product.metafields.features.windproofness.value | json }});
+    console.log({{ product.metafields.features.warmth.value | json }});
   </script>
 
   <div class="page-width">
@@ -888,7 +895,11 @@
 
     <div class="mt-10 flex flex-col w-full md:pb-12">
       <h2 id="description_and_parameters" class="py-3 text-2xl font-bold leading-[1.5]">Description and Parameters</h2>
-      <div id="description-parameters-grid" class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20 relative overflow-hidden transition-all duration-300" style="max-height: 400px;">
+      <div
+        id="description-parameters-grid"
+        class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20 relative overflow-hidden transition-all duration-300"
+        style="max-height: 400px;"
+      >
         <div class="[&_ul]:list-disc [&_ul]:pl-5 *:text-[#0F0F0F] *:text-[0.9375rem] [&_iframe]:max-w-full [&_p]:leading-[1.5]">
           <div class="">{{ product.description }}</div>
 
@@ -961,12 +972,18 @@
         </div>
 
         <!-- Gradient overlay -->
-        <div id="description-gradient-overlay" class="absolute bottom-0 left-0 right-0 h-[120px] bg-gradient-to-b from-transparent to-white pointer-events-none"></div>
+        <div
+          id="description-gradient-overlay"
+          class="absolute bottom-0 left-0 right-0 h-[120px] bg-gradient-to-b from-transparent to-white pointer-events-none"
+        ></div>
       </div>
 
       <!-- Toggle buttons -->
       <div class="flex justify-center mt-4">
-        <button id="description-toggle-button" class="button button--primary flex items-center gap-1 font-semibold text-sm leading-4 uppercase cursor-pointer">
+        <button
+          id="description-toggle-button"
+          class="button button--primary flex items-center gap-1 font-semibold text-sm leading-4 uppercase cursor-pointer"
+        >
           <span id="description-toggle-text" class="toggle-text">Show more</span>
           <span id="description-toggle-icon" class="toggle-icon rotate-90">
             {{- 'icon-chevron.svg' | inline_asset_content -}}
@@ -976,7 +993,7 @@
     </div>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function () {
         const descriptionGrid = document.getElementById('description-parameters-grid');
         const gradientOverlay = document.getElementById('description-gradient-overlay');
         const toggleButton = document.getElementById('description-toggle-button');
@@ -984,7 +1001,7 @@
         const toggleIcon = document.getElementById('description-toggle-icon');
         let isExpanded = false;
 
-        toggleButton.addEventListener('click', function() {
+        toggleButton.addEventListener('click', function () {
           if (isExpanded) {
             // Collapse
             descriptionGrid.style.maxHeight = '400px';
@@ -1061,11 +1078,14 @@
 
     <!-- Inspiration Banner Section -->
     <div class="inspiration-banner-section w-full mt-12 mb-12">
-      <h2 class="text-2xl md:text-4xl font-bold text-[#0F0F0F] font-archivo-expanded mb-6">{{ 'sections.main_product.inspiration' | t }}</h2>
+      <h2 class="text-2xl md:text-4xl font-bold text-[#0F0F0F] font-archivo-expanded mb-6">
+        {{ 'sections.main_product.inspiration' | t }}
+      </h2>
       <div class="inspiration-banner-container">
         <div
           class="inspiration-banner-media w-full relative overflow-hidden"
-          style="padding-bottom: 56.25%;" {%- comment -%}16:9 aspect ratio{%- endcomment -%}
+          style="padding-bottom: 56.25%;"
+          {%- comment -%}16:9 aspect ratio{%- endcomment -%}
         >
           <img
             src="{{ 'product-banner.webp' | asset_url }}"
