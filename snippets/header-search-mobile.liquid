@@ -40,7 +40,7 @@
         {%- else -%}
           <search-form class="search-modal__form">
         {%- endif -%}
-        <form action="{{ routes.search_url }}" method="get" role="search" class="search search-modal__form">
+        <form action="javascript:void(0)" method="get" role="search" class="search search-modal__form">
           <div class="relative flex">
             <input
               class="w-full pl-3 pr-[4.25rem] py-2 text-sm leading-4 bg-[#F0F0F0] rounded-3 border-none focus-visible:outline-none focus-visible:shadow-none outline-none"
@@ -72,7 +72,7 @@
                 {{- 'icon-reset.svg' | inline_asset_content -}}
               </span>
             </button>
-            <button class="field__button top-1/2 -translate-y-1/2 h-8" aria-label="{{ 'general.search.search' | t }}">
+            <button type="button" class="field__button top-1/2 -translate-y-1/2 h-8" aria-label="{{ 'general.search.search' | t }}">
               <span class="svg-wrapper size-4">
                 {{- 'icon-search.svg' | inline_asset_content -}}
               </span>
