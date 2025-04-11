@@ -42,7 +42,8 @@ class PredictiveSearch extends SearchForm {
   }
 
   onFormSubmit(event) {
-    if (!this.getQuery().length || this.querySelector('[aria-selected="true"] a')) event.preventDefault();
+    // Always prevent form submission to avoid redirecting to search page
+    event.preventDefault();
   }
 
   onFormReset(event) {
@@ -150,6 +151,7 @@ class PredictiveSearch extends SearchForm {
   }
 
   getMarkupFromResults(results) {
+    console.log("🚀 ~ PredictiveSearch ~ getMarkupFromResults ~ results:", results)
     // Ensure hyperHTML is available
     if (typeof hyperHTML === 'undefined') {
       console.error('hyperHTML is not defined');
@@ -227,10 +229,20 @@ class PredictiveSearch extends SearchForm {
       return formattedAmount;
     }
 
-    // <div class="nf__predictive-search__results-category-wrapper">
-    //   <span class="nf__predictive-search__results-category active">Men</span>
-    //   <span class="nf__predictive-search__results-category">Women</span>
-    // </div>
+    function formatDate(dateString) {
+      if (!dateString) return '';
+
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+
+      // Format as DD.MM.YYYY
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+
+      return `${day}.${month}.${year}`;
+    }
+
     const html = template`
     <div class="nf__predictive-search-results">
       <div class="nf__predictive-search__results-groups-wrapper" id="predictive-search-results-groups-wrapper">
@@ -249,7 +261,7 @@ class PredictiveSearch extends SearchForm {
                       return hyperHTML.wire(item)`
                         <li class="predictive-search__list-item-collections" role="option">
                           <a href="${item.url}" class="predictive-search__item" tabindex="-1">
-                            <span class="predictive-search__item-heading">${item.title} (123)</span>
+                            <span class="predictive-search__item-heading">${item.title}</span>
                           </a>
                         </li>
                       `;
@@ -260,13 +272,16 @@ class PredictiveSearch extends SearchForm {
                           <a href="${item.url}" class="predictive-search__item" tabindex="-1">
                             <span class="predictive-search__item-heading">${item.title}</span>
                           </a>
-                          <div class="meta">
-                            <span>${item.published_at}</span>
-                            <div class="meta">
+                          <div class="article-meta">
+                            <span class="article-date">${formatDate(item.published_at)}</span>
+                            <div class="article-views">
                               <span class="svg-wrapper">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-accordion icon-eye" viewBox="0 0 20 20"><path d="M9.524 4.8c-2.761.13-5.44 1.82-8.352 4.865a.484.484 0 0 0 0 .67c2.911 3.044 5.59 4.736 8.352 4.865 2.75.13 5.743-1.286 9.298-4.86a.48.48 0 0 0 0-.68c-3.555-3.574-6.549-4.99-9.298-4.86m-.049-1.04c3.177-.15 6.44 1.503 10.081 5.164a1.526 1.526 0 0 1 0 2.152c-3.641 3.66-6.904 5.314-10.08 5.165-3.167-.149-6.085-2.08-9.053-5.185a1.53 1.53 0 0 1 0-2.112C3.391 5.84 6.31 3.907 9.475 3.76"/><path d="M13.58 10a3.564 3.564 0 0 1-3.568 3.559A3.564 3.564 0 0 1 6.443 10a3.564 3.564 0 0 1 3.569-3.558A3.564 3.564 0 0 1 13.581 10m-3.568 2.517A2.524 2.524 0 0 0 12.542 10a2.524 2.524 0 0 0-2.53-2.517A2.524 2.524 0 0 0 7.482 10a2.524 2.524 0 0 0 2.53 2.517"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                  <path d="M9.524 4.8c-2.761.13-5.44 1.82-8.352 4.865a.484.484 0 0 0 0 .67c2.911 3.044 5.59 4.736 8.352 4.865 2.75.13 5.743-1.286 9.298-4.86a.48.48 0 0 0 0-.68c-3.555-3.574-6.549-4.99-9.298-4.86m-.049-1.04c3.177-.15 6.44 1.503 10.081 5.164a1.526 1.526 0 0 1 0 2.152c-3.641 3.66-6.904 5.314-10.08 5.165-3.167-.149-6.085-2.08-9.053-5.185a1.53 1.53 0 0 1 0-2.112C3.391 5.84 6.31 3.907 9.475 3.76" fill="#EC0009"/>
+                                  <path d="M13.58 10a3.564 3.564 0 0 1-3.568 3.559A3.564 3.564 0 0 1 6.443 10a3.564 3.564 0 0 1 3.569-3.558A3.564 3.564 0 0 1 13.581 10m-3.568 2.517A2.524 2.524 0 0 0 12.542 10a2.524 2.524 0 0 0-2.53-2.517A2.524 2.524 0 0 0 7.482 10a2.524 2.524 0 0 0 2.53 2.517" fill="#EC0009"/>
+                                </svg>
                               </span>
-                              <span>${123}</span>
+                              <span>${349}</span>
                             </div>
                           </div>
                         </li>
@@ -306,24 +321,7 @@ class PredictiveSearch extends SearchForm {
             `;
           })
           .filter(Boolean)}
-        <button class="nf__predictive-search__view-all-button">
-          <span class="svg-wrapper">
-            <svg width="20" height="20" class="icon icon-search" viewBox="0 0 20 20" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-              <g clip-path="url(#clip0_2_21225)">
-                <path
-                  d="M9.11258 0C14.1373 0 18.2252 4.08789 18.2252 9.11258C18.2252 11.2861 17.4599 13.284 16.185 14.852L20 18.6669L18.6669 20L14.8519 16.185C13.2841 17.4598 11.2861 18.2252 9.11262 18.2252C4.08789 18.2252 0 14.1373 0 9.11258C0 4.08789 4.08789 0 9.11258 0ZM9.11258 16.3398C13.0977 16.3398 16.3398 13.0977 16.3398 9.11258C16.3398 5.1275 13.0977 1.88535 9.11258 1.88535C5.12746 1.88535 1.88535 5.1275 1.88535 9.11258C1.88535 13.0977 5.1275 16.3398 9.11258 16.3398Z"
-                  fill="currentColor" />
-              </g>
-              <defs>
-                <clipPath id="clip0_2_21225">
-                  <rect width="20" height="20" fill="white" transform="matrix(-1 0 0 1 20 0)" />
-                </clipPath>
-              </defs>
-            </svg>
-          </span>
-          <span>Show all results (123)</span>
-        </button>
+
       </div>
     </div>
   `;
@@ -391,6 +389,21 @@ class PredictiveSearch extends SearchForm {
     this.setAttribute('results', true);
     this.setLiveRegionResults();
     this.open();
+
+    // Add event listeners for category tabs
+    const categoryTabs = this.querySelectorAll('.nf__predictive-search__results-category');
+    if (categoryTabs.length) {
+      categoryTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Remove active class from all tabs
+          categoryTabs.forEach(t => t.classList.remove('active'));
+          // Add active class to clicked tab
+          tab.classList.add('active');
+          // Here you would filter results based on the selected category
+          // For now, we're just toggling the active state
+        });
+      });
+    }
   }
 
   setLiveRegionResults() {
