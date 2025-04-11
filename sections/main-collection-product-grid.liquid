@@ -105,59 +105,39 @@
                           id="SortBy"
                           aria-describedby="a11y-refresh-page-message"
                         >
-                          {%- for option in collection.sort_options -%}
-                            <option
-                              value="{{ option.value | escape }}"
-                              {% if option.value == sort_by %}
-                                selected="selected"
-                              {% endif %}
-                            >
-                              {{ option.name | escape }}
-                            </option>
-                          {%- endfor -%}
-                        </select>
-                        {% comment %} TODO: options below cloned from old site {% endcomment %}
-                        {% comment %}
-                          <select
-                            name="sort_by"
-                            class="select__select"
-                            id="SortBy"
-                            aria-describedby="a11y-refresh-page-message"
+                          <option
+                            value="manual"
+                            {% if collection.sort_by == 'manual' %}
+                              selected="selected"
+                            {% endif %}
                           >
-                            <option
-                              value="manual"
-                              {% if collection.sort_by == 'manual' %}
-                                selected="selected"
-                              {% endif %}
-                            >
-                              Favourites
-                            </option>
-                            <option
-                              value="created-descending"
-                              {% if collection.sort_by == 'created-descending' %}
-                                selected="selected"
-                              {% endif %}
-                            >
-                              New Products
-                            </option>
-                            <option
-                              value="price-ascending"
-                              {% if collection.sort_by == 'price-ascending' %}
-                                selected="selected"
-                              {% endif %}
-                            >
-                              Lowest price
-                            </option>
-                            <option
-                              value="price-descending"
-                              {% if collection.sort_by == 'price-descending' %}
-                                selected="selected"
-                              {% endif %}
-                            >
-                              Highest price
-                            </option>
-                          </select>
-                        {% endcomment %}
+                            Favourites
+                          </option>
+                          <option
+                            value="created-descending"
+                            {% if collection.sort_by == 'created-descending' %}
+                              selected="selected"
+                            {% endif %}
+                          >
+                            New Products
+                          </option>
+                          <option
+                            value="price-ascending"
+                            {% if collection.sort_by == 'price-ascending' %}
+                              selected="selected"
+                            {% endif %}
+                          >
+                            Lowest price
+                          </option>
+                          <option
+                            value="price-descending"
+                            {% if collection.sort_by == 'price-descending' %}
+                              selected="selected"
+                            {% endif %}
+                          >
+                            Highest price
+                          </option>
+                        </select>
                         <span class="svg-wrapper">
                           {{- 'icon-caret.svg' | inline_asset_content -}}
                         </span>
