@@ -36,28 +36,83 @@
         {%- endif -%}
       </div>
 
-      {%- if card_product.featured_media -%}
+      {%- if card_product.media.size > 0 -%}
+        {%- comment -%} Find the first model image for the product {%- endcomment -%}
+        {%- assign model_image = null -%}
+        {%- assign main_image = null -%}
+        {%- assign lowest_sequence = 999 -%}
+        {%- assign found_model_image = false -%}
+
+        {%- comment -%} First look for model images without sequence (just -M) {%- endcomment -%}
+        {%- for media in card_product.media -%}
+          {%- assign media_src = media.src | default: '' -%}
+          {%- assign parsed_url = media_src | split: '/' | last -%}
+
+          {%- comment -%} Find main image (with -H suffix) for hover effect {%- endcomment -%}
+          {%- if parsed_url contains '-H' or parsed_url contains '-H.' -%}
+            {%- assign main_image = media -%}
+
+          {%- endif -%}
+
+          {%- if parsed_url contains '-M' -%}
+            {%- unless parsed_url contains '-M_' -%}
+              {%- assign model_image = media -%}
+              {%- assign found_model_image = true -%}
+              {%- break -%}
+            {%- endunless -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} If no model image without sequence found, look for one with lowest sequence {%- endcomment -%}
+        {%- unless found_model_image -%}
+          {%- for media in card_product.media -%}
+            {%- assign media_src = media.src | default: '' -%}
+            {%- assign parsed_url = media_src | split: '/' | last -%}
+            {%- if parsed_url contains '-M_' -%}
+              {%- assign sequence_part = parsed_url | split: '-M_' | last | split: '.' | first -%}
+              {%- assign sequence_number = sequence_part | plus: 0 -%}
+
+              {%- if sequence_number < lowest_sequence -%}
+                {%- assign lowest_sequence = sequence_number -%}
+                {%- assign model_image = media -%}
+                {%- assign found_model_image = true -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endunless -%}
+
+        {%- comment -%} Fallback to featured_media if no model image found {%- endcomment -%}
+        {%- unless model_image -%}
+          {%- assign model_image = card_product.featured_media -%}
+        {%- endunless -%}
+
+        {%- comment -%} If no main image found, use the first model image as fallback {%- endcomment -%}
+        {%- unless main_image -%}
+          {%- assign main_image = model_image -%}
+
+        {%- endunless -%}
+
         <div class="relative overflow-hidden mb-3">
-          <a href="{{ card_product.url }}" class="card-product-northfinder__link">
+          <a href="{{ card_product.url }}" class="card-product-northfinder__link" data-product-id="{{ card_product.id }}" data-main-image-src="{{ main_image | image_url: width: 533 }}" data-main-image-srcset="{%- if main_image.width >= 360 -%}{{ main_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if main_image.width >= 533 -%}{{ main_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if main_image.width >= 720 -%}{{ main_image | image_url: width: 720 }} 720w,{%- endif -%}{{ main_image | image_url }} {{ main_image.width }}w">
             <img
               id="main-image-{{ card_product.id }}"
               srcset="
-                {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
-                {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
-                {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
-                {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
+                {%- if model_image.width >= 360 -%}{{ model_image | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if model_image.width >= 533 -%}{{ model_image | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if model_image.width >= 720 -%}{{ model_image | image_url: width: 720 }} 720w,{%- endif -%}
+                {{ model_image | image_url }} {{ model_image.width }}w
               "
-              src="{{ card_product.featured_media | image_url: width: 533 }}"
+              src="{{ model_image | image_url: width: 533 }}"
               sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
-              alt="{{ card_product.featured_media.alt | escape }}"
-              class="w-full h-auto object-cover aspect-square transition-transform duration-500 ease-in-out hover:scale-105"
+              alt="{{ model_image.alt | escape }}"
+              class="w-full h-auto object-cover aspect-square transition-opacity duration-300 ease-in-out"
               {% unless lazy_load == false %}
                 loading="lazy"
               {% endunless %}
-              width="{{ card_product.featured_media.width }}"
-              height="{{ card_product.featured_media.height }}"
-              data-original-src="{{ card_product.featured_media | image_url: width: 533 }}"
-              data-original-srcset="{%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}{%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}{%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}{{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w"
+              width="{{ model_image.width }}"
+              height="{{ model_image.height }}"
+              data-original-src="{{ model_image | image_url: width: 533 }}"
+              data-original-srcset="{%- if model_image.width >= 360 -%}{{ model_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if model_image.width >= 533 -%}{{ model_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if model_image.width >= 720 -%}{{ model_image | image_url: width: 720 }} 720w,{%- endif -%}{{ model_image | image_url }} {{ model_image.width }}w"
             >
           </a>
 
@@ -299,22 +354,60 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const variantSwatches = document.querySelectorAll('.variant-swatch');
+    // Find all product cards
+    const productCards = document.querySelectorAll('.card-product-northfinder__link');
 
+    // Add hover effect to product cards
+    productCards.forEach(card => {
+      const productId = card.dataset.productId;
+      if (!productId) return;
+
+      const mainImage = document.getElementById(`main-image-${productId}`);
+      if (!mainImage) return;
+
+      // Store original image data
+      const originalSrc = mainImage.dataset.originalSrc;
+      const originalSrcset = mainImage.dataset.originalSrcset;
+
+      // Get main image data (with -H suffix) from data attributes
+      const mainImageSrc = card.dataset.mainImageSrc;
+      const mainImageSrcset = card.dataset.mainImageSrcset;
+
+      // Add hover event to show main image
+      card.addEventListener('mouseenter', function() {
+
+        if (mainImageSrc && mainImageSrc !== originalSrc) {
+          // Change to main image immediately without transition
+          mainImage.src = mainImageSrc;
+          if (mainImageSrcset) {
+            mainImage.srcset = mainImageSrcset;
+          }
+        }
+      });
+
+      card.addEventListener('mouseleave', function() {
+        // Reset to the original model image
+        if (mainImage.src !== originalSrc) {
+          mainImage.src = originalSrc;
+          mainImage.srcset = originalSrcset;
+        }
+      });
+    });
+
+    // Handle variant swatch hover
+    const variantSwatches = document.querySelectorAll('.variant-swatch');
     variantSwatches.forEach(swatch => {
       const productId = swatch.dataset.productId;
       const variantImage = swatch.dataset.variantImage;
       const variantImageSrcset = swatch.dataset.variantImageSrcset;
       const mainImage = document.getElementById(`main-image-${productId}`);
 
-      if (mainImage) {
-        swatch.addEventListener('mouseenter', function() {
-          // Store original src and srcset if not already stored
-          if (!mainImage.dataset.tempSrc) {
-            mainImage.dataset.tempSrc = mainImage.src;
-            mainImage.dataset.tempSrcset = mainImage.srcset;
-          }
+      if (mainImage && variantImage) {
+        // Store original image data
+        const originalSrc = mainImage.dataset.originalSrc;
+        const originalSrcset = mainImage.dataset.originalSrcset;
 
+        swatch.addEventListener('mouseenter', function() {
           // Change to variant image
           mainImage.src = variantImage;
           mainImage.srcset = variantImageSrcset;
@@ -322,10 +415,48 @@
 
         swatch.addEventListener('mouseleave', function() {
           // Restore original image
-          mainImage.src = mainImage.dataset.originalSrc;
-          mainImage.srcset = mainImage.dataset.originalSrcset;
+          mainImage.src = originalSrc;
+          mainImage.srcset = originalSrcset;
         });
       }
     });
   });
+
+  // Function to parse image URL and determine if it's a model image
+  function parseImageUrl(url) {
+    // Initialize result with default values
+    const result = {
+      product: "",
+      color: "",
+      image_type: "main",
+      sequence: null
+    };
+
+    // Extract filename from URL and remove file extension
+    const filename = url.split("/").pop()?.split("?")[0] || "";
+    const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+
+    // Return default values for malformed URLs or files without proper naming convention
+    if (!nameWithoutExt.includes("-")) {
+      return result;
+    }
+
+    // Check for model image type
+    if (nameWithoutExt.includes("-M")) {
+      result.image_type = "model";
+
+      // Check for sequence number
+      if (nameWithoutExt.includes("-M_")) {
+        const seqPart = nameWithoutExt.split("-M_")[1];
+        if (seqPart) {
+          const seqNum = parseInt(seqPart, 10);
+          if (!isNaN(seqNum)) {
+            result.sequence = seqNum;
+          }
+        }
+      }
+    }
+
+    return result;
+  }
 </script>
