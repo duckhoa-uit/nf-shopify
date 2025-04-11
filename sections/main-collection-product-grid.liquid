@@ -37,8 +37,8 @@
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
-  {%- paginate collection.products by section.settings.products_per_page -%}
-
+  {% assign products_per_page = 24 %}
+  {%- paginate collection.products by products_per_page -%}
     {% comment %} Scrollable Child Collections {% endcomment %}
 
     <div class="page-width">
@@ -82,7 +82,7 @@
               <div class="products-per-page">
                 <label for="ProductsPerPage">{{ 'products.facets.products_per_page' | t }}</label>
                 <div class="select after:border-0 after:shadow-none">
-                  <select name="productsp_per_page" id="ProductsPerPage" class="select__select pl-[5px]">
+                  <select name="products_per_page" id="ProductsPerPage" class="select__select pl-[5px]">
                     <option value="24" selected>24</option>
                     <option value="48">48</option>
                     <option value="120">120</option>
@@ -252,29 +252,26 @@
                   {%- endfor -%}
                 </ul>
 
-                <div class="product-count text-center">
-                  <p>
-                    {% assign viewed_items = paginate.current_offset | plus: paginate.products_per_page %}
+                <div class="product-count">
+                  <p class="product-count-text">
+                    {% assign viewed_items = paginate.current_page | times: products_per_page %}
                     {% if viewed_items > paginate.items %}
                       {% assign viewed_items = paginate.items %}
                     {% endif %}
-                    {{
-                      'products.facets.product_count_status'
-                      | t: viewed_count: viewed_items, total_count: paginate.items
-                    }}
+                    Viewed {{ viewed_items }} of {{ paginate.items }} products
                   </p>
+                  <div class="product-count-progress">
+                    <div
+                      class="product-count-progress-bar"
+                      style="width: {{ viewed_items | times: 100.0 | divided_by: paginate.items }}%"
+                    ></div>
+                  </div>
                 </div>
 
                 {%- if paginate.pages > 1 -%}
-                  <div class="pagination-wrapper">
-                    {% render 'pagination', paginate: paginate, anchor: '' %}
-                  </div>
-
-                  {% if paginate.pages > 1 %}
+                  {% if paginate.next.url %}
                     <div class="view-more-container">
-                      <button class="view-more-button" data-url="{{ paginate.next.url }}">
-                        {{ 'products.general.view_more' | t }}
-                      </button>
+                      <button class="view-more-button" data-url="{{ paginate.next.url }}">VIEW MORE</button>
                     </div>
                   {% endif %}
                 {%- endif -%}
@@ -356,6 +353,10 @@
       viewMoreButton.addEventListener('click', function() {
         const url = this.dataset.url;
         if (url) {
+          // Show loading state
+          viewMoreButton.textContent = 'LOADING...';
+          viewMoreButton.disabled = true;
+
           fetch(url)
             .then(response => response.text())
             .then(html => {
@@ -370,15 +371,34 @@
                 });
               }
 
+              // Update product count and progress bar
+              const productCountElement = document.querySelector('.product-count-text');
+              const productCountProgressBar = document.querySelector('.product-count-progress-bar');
+              const newProductCount = doc.querySelector('.product-count-text');
+              const newProgressBar = doc.querySelector('.product-count-progress-bar');
+
+              if (productCountElement && newProductCount) {
+                productCountElement.innerHTML = newProductCount.innerHTML;
+              }
+
+              if (productCountProgressBar && newProgressBar) {
+                productCountProgressBar.style.width = newProgressBar.style.width;
+              }
+
+              // Check for next page
               const nextPageUrl = doc.querySelector('.view-more-button')?.dataset.url;
               if (nextPageUrl) {
                 viewMoreButton.dataset.url = nextPageUrl;
+                viewMoreButton.textContent = 'VIEW MORE';
+                viewMoreButton.disabled = false;
               } else {
                 viewMoreButton.style.display = 'none';
               }
             })
             .catch(error => {
               console.error('Error loading more products:', error);
+              viewMoreButton.textContent = 'VIEW MORE';
+              viewMoreButton.disabled = false;
             });
         }
       });
