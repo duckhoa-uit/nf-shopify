@@ -792,6 +792,9 @@
   .gap-y-8 {
     row-gap: calc(var(--spacing) * 8) !important;
   }
+  .gap-y-\[0\.625rem\] {
+    row-gap: 0.625rem !important;
+  }
   .justify-self-start {
     justify-self: flex-start !important;
   }
@@ -1390,6 +1393,11 @@
   }
   .transition-colors {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to !important;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
+    transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
+  }
+  .transition-opacity {
+    transition-property: opacity !important;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
     transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
   }
