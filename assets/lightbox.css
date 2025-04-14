@@ -11,10 +11,30 @@
 .fancybox__content {
   padding: 0;
   max-height: 100%;
+  max-width: 640px !important;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .fancybox__slide {
   padding: 0;
+}
+
+/* Set max-width for carousel and footer on desktop */
+.fancybox__carousel,
+.fancybox__footer {
+  max-width: 944px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Full width on tablet and mobile */
+@media screen and (max-width: 990px) {
+  .fancybox__carousel,
+  .fancybox__footer,
+  .fancybox__content {
+    max-width: 100% !important;
+  }
 }
 
 .f-thumb {
@@ -30,7 +50,7 @@
 }
 
 .f-thumbs .is-nav-selected .f-thumb::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
