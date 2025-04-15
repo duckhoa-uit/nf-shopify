@@ -245,7 +245,7 @@
 
                               {%- capture text_value -%}
                               <span class="facet-checkbox__text w-full flex items-center justify-between" aria-hidden="true">
-                                <div class="facet-checkbox__text-label text-[0.9375rem] text-foreground leading-[1.125rem] {% if value.active %} font-semibold{% endif %}">{{- value.label | escape }}</div>
+                                <div class="facet-checkbox__text-label text-[0.9375rem] text-foreground leading-[1.125rem] capitalize {% if value.active %} font-semibold{% endif %}">{{- value.label | escape }}</div>
                                 <div class="text-[#656666] text-[0.9375rem] font-normal text-right leading-[1.125rem]">
                                 ({{- value.count -}})</div>
                               </span>
@@ -640,7 +640,7 @@
 
                                 {%- capture text_value -%}
                                 <span class="facet-checkbox__text w-full" aria-hidden="true">
-                                  <span class="facet-checkbox__text-label">{{- value.label | escape }}</span> ({{- value.count -}})
+                                  <span class="facet-checkbox__text-label capitalize">{{- value.label | escape }}</span> ({{- value.count -}})
                                 </span>
                                 <span class="visually-hidden">
                                   {{- value.label | escape }} (

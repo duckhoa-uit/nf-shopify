@@ -42,11 +42,13 @@
     .northfinder-product-page .product-discount-badge {
       background-color: #EC0009;
       color: white;
-      padding: 0.375rem 0.5rem;
-      font-size: 0.875rem;
-      line-height: 1rem;
-      font-weight: 500;
+      padding: 4px 8px;
+      font-size: 15px;
+      line-height: 16px;
+      font-weight: 700;
       z-index: 1;
+      border-radius: 2px;
+      font-family: 'Archivo', sans-serif;
     }
 
     /* Mobile/Desktop visibility control for collapsible tabs */
@@ -305,6 +307,7 @@
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'scroll-more.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'custom-price-update.js' | asset_url }}" defer="defer"></script>
 
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
@@ -344,11 +347,11 @@
   {% assign breathability_parent = breathability_data.parent %}
   <script>
     console.log({{ product | json }});
-    console.log({{ product.metafields.features.breathability.value | json }});
-    console.log('Breathability Parent Data:', {{ breathability_parent | json }});
-    console.log({{ product.metafields.features.elasticity.value | json }});
-    console.log({{ product.metafields.features.windproofness.value | json }});
-    console.log({{ product.metafields.features.warmth.value | json }});
+    // console.log({{ product.metafields.features.breathability.value | json }});
+    // console.log('Breathability Parent Data:', {{ breathability_parent | json }});
+    // console.log({{ product.metafields.features.elasticity.value | json }});
+    // console.log({{ product.metafields.features.windproofness.value | json }});
+    // console.log({{ product.metafields.features.warmth.value | json }});
   </script>
 
   <div class="page-width">
@@ -367,16 +370,18 @@
             <!-- Discount badge -->
             <div>
               {% if product.compare_at_price > product.price %}
+                {%- assign savings = product.compare_at_price
+                  | minus: product.price
+                  | times: 100.0
+                  | divided_by: product.compare_at_price
+                  | round
+                -%}
                 <div class="product-discount-badge">
-                  -
-                  {{-
-                    product.compare_at_price
-                    | minus: product.price
-                    | times: 100.0
-                    | divided_by: product.compare_at_price
-                    | round
-                  -}}
-                  %
+                  {%- if savings >= 15 -%}
+                    -{{ savings }}%
+                  {%- else -%}
+                    SALE
+                  {%- endif -%}
                 </div>
               {% endif %}
             </div>
@@ -436,21 +441,37 @@
                 <div
                   id="price-{{ section.id }}"
                   role="status"
-                  class="product-price-container font-archivo-expanded m-0"
+                  class="product-price-container m-0"
                   {{ block.shopify_attributes }}
                 >
-                  {% comment %}
-                    <div class="price-wrapper">
-                      <span class="current-price">{{ product.price | money }}</span>
-                      {% if product.compare_at_price > product.price %}
-                        <div class="flex items-center mt-2 text-sm text-[#3D3D3D] font-archivo-expanded leading-4">
-                          <span class="original-price">{{ product.compare_at_price | money }}cc</span>
-                          <span class="price-label">- original recommended price</span>
-                        </div>
+                  {%- liquid
+                    if product.selected_or_first_available_variant
+                      assign current_variant = product.selected_or_first_available_variant
+                    else
+                      assign current_variant = product.variants.first
+                    endif
+                  -%}
+                  <div class="price-wrapper flex flex-col">
+                    <span class="current-price text-[21px] font-medium font-['Archivo_SemiExpanded'] leading-[1.14]">
+                      {% if settings.currency_code_enabled %}
+                        {{ current_variant.price | money_with_currency }}
+                      {% else %}
+                        {{ current_variant.price | money }}
                       {% endif %}
-                    </div>
-                  {% endcomment %}
-                  {%- render 'price', product: product, use_variant: true, show_badges: true -%}
+                    </span>
+                    {% if current_variant.compare_at_price > current_variant.price %}
+                      <div class="flex items-center mt-2">
+                        <span class="original-price text-[14px] font-normal font-['Archivo_SemiExpanded'] text-[#3D3D3D] leading-[1.14]">
+                          {% if settings.currency_code_enabled %}
+                            {{ current_variant.compare_at_price | money_with_currency }}
+                          {% else %}
+                            {{ current_variant.compare_at_price | money }}
+                          {% endif %}
+                        </span>
+                        <span class="price-label text-[14px] font-light font-['Archivo'] text-[#4D4D4D] leading-[1.14] ml-1">- original recommended price</span>
+                      </div>
+                    {% endif %}
+                  </div>
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
