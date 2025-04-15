@@ -354,7 +354,9 @@ class PriceRange extends HTMLElement {
     this.sliderRange = this.querySelector(".price-slider-range");
     this.sliderThumbMin = this.querySelector(".price-slider-thumb-min");
     this.sliderThumbMax = this.querySelector(".price-slider-thumb-max");
+    this.sliderContainer = this.querySelector(".price-slider-container");
     this.discountCheckbox = this.querySelector(".discount-filter-checkbox");
+    this.container = this.closest(".price-filter-container");
 
     this.dragging = false;
     this.activeThumb = null;
@@ -362,15 +364,35 @@ class PriceRange extends HTMLElement {
     this.isInitialLoad = true;
     this.pendingUpdate = false;
 
+    // Get pre-rendered values from data attributes (server-side rendered)
+    const preRenderedMin = this.container ? Number(this.container.getAttribute("data-min-value")) : null;
+    const preRenderedMax = this.container ? Number(this.container.getAttribute("data-max-value")) : null;
+
     // Store default values
     this.defaultMin = Number(this.minInput.getAttribute("data-min") || 0);
-    this.defaultMax = Number(this.maxInput.getAttribute("data-max"));
+    this.defaultMax = Number(this.maxInput.getAttribute("data-max")) || 1000;
 
-    // Get values from inputs (these might be from URL params)
-    const initialMin = Number(this.minInput.value) || this.defaultMin;
-    const initialMax = Number(this.maxInput.value) || this.defaultMax;
+    // Prioritize values in this order: URL params > pre-rendered values > input values > defaults
+    let initialMin = preRenderedMin !== null && !isNaN(preRenderedMin) ? preRenderedMin : this.defaultMin;
+    let initialMax = preRenderedMax !== null && !isNaN(preRenderedMax) ? preRenderedMax : this.defaultMax;
 
-    // Set input values
+    // Check URL params for filter values
+    if (window.location.search) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlMinValue = urlParams.get(this.minInput.name);
+      const urlMaxValue = urlParams.get(this.maxInput.name);
+
+      // If URL params exist, use those values
+      if (urlMinValue !== null && !isNaN(Number(urlMinValue))) initialMin = Number(urlMinValue);
+      if (urlMaxValue !== null && !isNaN(Number(urlMaxValue))) initialMax = Number(urlMaxValue);
+    }
+
+    // Ensure we don't have NaN values
+    if (isNaN(initialMin)) initialMin = this.defaultMin;
+    if (isNaN(initialMax)) initialMax = this.defaultMax;
+    if (isNaN(this.defaultMax)) this.defaultMax = 1000;
+
+    // Set input values immediately
     this.minInput.value = initialMin;
     this.maxInput.value = initialMax;
 
@@ -396,6 +418,18 @@ class PriceRange extends HTMLElement {
 
     // Initialize
     this.setMinAndMaxValues();
+
+    // Make sure we have valid values before initializing the slider
+    if (isNaN(Number(this.minInput.value))) {
+      this.minInput.value = this.defaultMin;
+    }
+
+    if (isNaN(Number(this.maxInput.value))) {
+      this.maxInput.value = this.defaultMax;
+    }
+
+    // We don't need this check anymore since we're setting values correctly in the constructor
+
     this.updateSliderFromInputs();
 
     // Set initial load to false after a delay to allow the page to stabilize
@@ -430,10 +464,8 @@ class PriceRange extends HTMLElement {
     this.setMinAndMaxValues();
     this.updateSliderFromInputs();
 
-    // Only trigger form submission if values have changed from default or we're clearing the filter
-    if (!this.isInitialLoad) {
-      this.triggerFormSubmission();
-    }
+    // Always trigger form submission when user changes input values
+    this.triggerFormSubmission();
   }
 
   triggerFormSubmission() {
@@ -471,13 +503,26 @@ class PriceRange extends HTMLElement {
 
   updateSliderFromInputs() {
     const min = Number(this.minInput.getAttribute("data-min") || 0);
-    const max = Number(this.maxInput.getAttribute("data-max"));
-    const currentMin = Number(this.minInput.value || min);
-    const currentMax = Number(this.maxInput.value || max);
+    const max = Number(this.maxInput.getAttribute("data-max")) || 1000;
+
+    // Get current values directly from the input fields
+    let currentMin = Number(this.minInput.value || min);
+    let currentMax = Number(this.maxInput.value || max);
+
+    // Ensure we don't have NaN values
+    let safeCurrentMin = isNaN(currentMin) ? min : currentMin;
+    let safeCurrentMax = isNaN(currentMax) ? max : currentMax;
+
+    // Make sure min doesn't exceed max and max isn't below min
+    safeCurrentMin = Math.min(safeCurrentMin, safeCurrentMax);
+    safeCurrentMax = Math.max(safeCurrentMin, safeCurrentMax);
+
+    // Make sure we have a valid range to prevent division by zero
+    const range = max - min || 1; // Use 1 as fallback if range is 0
 
     // Calculate percentage positions
-    const minPos = ((currentMin - min) / (max - min)) * 100;
-    const maxPos = ((currentMax - min) / (max - min)) * 100;
+    const minPos = Math.max(0, Math.min(100, ((safeCurrentMin - min) / range) * 100));
+    const maxPos = Math.max(0, Math.min(100, ((safeCurrentMax - min) / range) * 100));
 
     // Update thumb positions
     this.sliderThumbMin.style.left = `${minPos}%`;
@@ -490,6 +535,10 @@ class PriceRange extends HTMLElement {
     // Initialize the slider if it hasn't been initialized yet
     if (!this.initialized) {
       this.initialized = true;
+      // Add initialized class to show the slider
+      if (this.sliderContainer) {
+        this.sliderContainer.classList.add('initialized');
+      }
     }
   }
 
@@ -497,27 +546,37 @@ class PriceRange extends HTMLElement {
     if (this.pendingUpdate) return;
 
     const min = Number(this.minInput.getAttribute("data-min") || 0);
-    const max = Number(this.maxInput.getAttribute("data-max"));
+    const max = Number(this.maxInput.getAttribute("data-max")) || 1000;
     const range = max - min;
+
+    // Ensure position is a valid number
+    position = isNaN(position) ? (isMin ? 0 : 100) : position;
 
     // Calculate the value based on position
     let value = Math.round((position * range) / 100 + min);
 
+    // Ensure value is a valid number
+    if (isNaN(value)) {
+      value = isMin ? min : max;
+    }
+
     // Update the appropriate input
     if (isMin) {
       // Ensure min value doesn't exceed max value
-      value = Math.min(value, Number(this.maxInput.value || max));
+      const maxValue = Number(this.maxInput.value || max);
+      value = Math.min(value, isNaN(maxValue) ? max : maxValue);
       this.minInput.value = value;
     } else {
       // Ensure max value doesn't go below min value
-      value = Math.max(value, Number(this.minInput.value || min));
+      const minValue = Number(this.minInput.value || min);
+      value = Math.max(value, isNaN(minValue) ? min : minValue);
       this.maxInput.value = value;
     }
 
     this.setMinAndMaxValues();
 
-    // Only trigger if not initial load
-    if (!this.isInitialLoad) {
+    // Always trigger form submission when slider is dragged
+    if (this.dragging) {
       this.triggerFormSubmission();
     }
   }
@@ -552,12 +611,17 @@ class PriceRange extends HTMLElement {
   }
 
   updateSliderThumb(position) {
+    if (!this.dragging) return;
+
     // Clamp position between 0 and 100
     position = Math.max(0, Math.min(100, position));
 
     if (this.activeThumb === "min") {
       // Get max position to ensure min thumb doesn't go beyond max thumb
-      const maxPosition = parseFloat(this.sliderThumbMax.style.left || 100);
+      let maxPosition = parseFloat(this.sliderThumbMax.style.left || 100);
+      // Handle NaN
+      if (isNaN(maxPosition)) maxPosition = 100;
+
       position = Math.min(position, maxPosition);
 
       this.sliderThumbMin.style.left = `${position}%`;
@@ -567,7 +631,10 @@ class PriceRange extends HTMLElement {
       this.updateInputsFromSlider(position, true);
     } else if (this.activeThumb === "max") {
       // Get min position to ensure max thumb doesn't go below min thumb
-      const minPosition = parseFloat(this.sliderThumbMin.style.left || 0);
+      let minPosition = parseFloat(this.sliderThumbMin.style.left || 0);
+      // Handle NaN
+      if (isNaN(minPosition)) minPosition = 0;
+
       position = Math.max(position, minPosition);
 
       this.sliderThumbMax.style.left = `${position}%`;
@@ -578,13 +645,21 @@ class PriceRange extends HTMLElement {
   }
 
   onMouseUp() {
-    this.dragging = false;
-    this.activeThumb = null;
+    if (this.dragging) {
+      // Trigger form submission when mouse is released after dragging
+      this.triggerFormSubmission();
+      this.dragging = false;
+      this.activeThumb = null;
+    }
   }
 
   onTouchEnd() {
-    this.dragging = false;
-    this.activeThumb = null;
+    if (this.dragging) {
+      // Trigger form submission when touch ends after dragging
+      this.triggerFormSubmission();
+      this.dragging = false;
+      this.activeThumb = null;
+    }
   }
 }
 
