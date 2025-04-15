@@ -151,7 +151,6 @@ class PredictiveSearch extends SearchForm {
   }
 
   getMarkupFromResults(results) {
-    console.log("🚀 ~ PredictiveSearch ~ getMarkupFromResults ~ results:", results)
     // Ensure hyperHTML is available
     if (typeof hyperHTML === 'undefined') {
       console.error('hyperHTML is not defined');
@@ -297,7 +296,7 @@ class PredictiveSearch extends SearchForm {
                             <h3>${item.title}</h3>
                           </div>
                           <div class="meta">
-                            ${discountPercent ? hyperHTML.wire()`<span class="discount">-${discountPercent}%</span>` : ''}
+                            ${discountPercent ? hyperHTML.wire()`<span class="discount">${discountPercent >= 15 ? `-${Math.round(discountPercent)}%` : 'SALE'}</span>` : ''}
                             <div class="pricing">
                               ${
                                 discountPercent

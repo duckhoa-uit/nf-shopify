@@ -12,7 +12,6 @@
   {% render 'card-product', card_product: product, section_id: section.id %}
 {% endcomment %}
 
-
 {%- if card_product and card_product != empty -%}
   <div class="card-wrapper h-full">
     <div class="flex flex-col h-full relative">
@@ -24,14 +23,18 @@
         {%- endif -%}
 
         {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
-          <div class="bg-accent text-background font-medium px-2 py-1.5 rounded-3 text-sm">
-            {%- assign savings = card_product.compare_at_price
-              | minus: card_product.price
-              | times: 100
-              | divided_by: card_product.compare_at_price
-              | round
-            -%}
-            -{{ savings }}%
+          {%- assign savings = card_product.compare_at_price
+            | minus: card_product.price
+            | times: 100
+            | divided_by: card_product.compare_at_price
+            | round
+          -%}
+          <div class="bg-[#EC0009] text-white font-bold px-2 py-1 rounded-[2px] text-[15px] leading-[16px]">
+            {%- if savings >= 15 -%}
+              -{{ savings }}%
+            {%- else -%}
+              SALE
+            {%- endif -%}
           </div>
         {%- endif -%}
       </div>
@@ -51,7 +54,6 @@
           {%- comment -%} Find main image (with -H suffix) for hover effect {%- endcomment -%}
           {%- if parsed_url contains '-H' or parsed_url contains '-H.' -%}
             {%- assign main_image = media -%}
-
           {%- endif -%}
 
           {%- if parsed_url contains '-M' -%}
@@ -89,11 +91,16 @@
         {%- comment -%} If no main image found, use the first model image as fallback {%- endcomment -%}
         {%- unless main_image -%}
           {%- assign main_image = model_image -%}
-
         {%- endunless -%}
 
         <div class="relative overflow-hidden mb-3">
-          <a href="{{ card_product.url }}" class="card-product-northfinder__link" data-product-id="{{ card_product.id }}" data-main-image-src="{{ main_image | image_url: width: 533 }}" data-main-image-srcset="{%- if main_image.width >= 360 -%}{{ main_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if main_image.width >= 533 -%}{{ main_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if main_image.width >= 720 -%}{{ main_image | image_url: width: 720 }} 720w,{%- endif -%}{{ main_image | image_url }} {{ main_image.width }}w">
+          <a
+            href="{{ card_product.url }}"
+            class="card-product-northfinder__link"
+            data-product-id="{{ card_product.id }}"
+            data-main-image-src="{{ main_image | image_url: width: 533 }}"
+            data-main-image-srcset="{%- if main_image.width >= 360 -%}{{ main_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if main_image.width >= 533 -%}{{ main_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if main_image.width >= 720 -%}{{ main_image | image_url: width: 720 }} 720w,{%- endif -%}{{ main_image | image_url }} {{ main_image.width }}w"
+          >
             <img
               id="main-image-{{ card_product.id }}"
               srcset="
@@ -154,7 +161,12 @@
               {%- endfor -%}
 
               {%- assign position_str = position | prepend: '00000' | slice: -5, 5 -%}
-              {%- assign color_positions = color_positions | append: position_str | append: ':' | append: color | append: ',' -%}
+              {%- assign color_positions = color_positions
+                | append: position_str
+                | append: ':'
+                | append: color
+                | append: ','
+              -%}
             {%- endfor -%}
 
             {%- assign sorted_positions = color_positions | split: ',' | sort -%}
@@ -194,7 +206,14 @@
 
               {%- if color_variant -%}
                 {%- assign variant_image = null -%}
-                {%- assign color_value = color | downcase | strip | replace: ' ', '-' | replace: "'", "" | replace: ".", "" | replace: ",", "" -%}
+                {%- assign color_value = color
+                  | downcase
+                  | strip
+                  | replace: ' ', '-'
+                  | replace: "'", ''
+                  | replace: '.', ''
+                  | replace: ',', ''
+                -%}
                 {%- assign reference_id = '' -%}
 
                 {%- comment -%} Find the reference_id for this color from metafields {%- endcomment -%}
@@ -323,12 +342,12 @@
           <h3 class="text-base font-semibold leading-[1.625rem] text-[#0F0F0F]">{{ card_product.title | escape }}</h3>
         </a>
 
-        <div class="flex gap-3 items-center mt-0.5 text-lg font-semibold leading-7">
+        <div class="flex gap-3 items-center mt-0.5">
           {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
-            <span class="line-through text-[#666666]">{{ card_product.compare_at_price | money }}</span>
-            <span class="text-[#0f0f0f]">{{ card_product.price | money }}</span>
+            <span class="line-through text-[#666666] font-medium font-['Archivo_SemiExpanded'] text-base leading-6">{{ card_product.compare_at_price | money }}</span>
+            <span class="text-[#000000] font-medium font-['Archivo_SemiExpanded'] text-base leading-6">{{ card_product.price | money }}</span>
           {%- else -%}
-            <span class="text-[#0f0f0f]">{{ card_product.price | money }}</span>
+            <span class="text-[#000000] font-medium font-['Archivo_SemiExpanded'] text-base leading-6">{{ card_product.price | money }}</span>
           {%- endif -%}
         </div>
       </div>
@@ -343,8 +362,8 @@
       <div class="card-product-northfinder__content">
         <h3 class="card-product-northfinder__title">{{ 'onboarding.product_title' | t }}</h3>
         <div class="card-product-northfinder__type">Product Type</div>
-        <div class="card-product-northfinder__price">
-          <span class="card-product-northfinder__price-regular">$29.99</span>
+        <div class="flex gap-3 items-center mt-0.5">
+          <span class="text-[#000000] font-medium font-['Archivo_SemiExpanded'] text-base leading-6">$29.99</span>
         </div>
         <div class="card-product-northfinder__availability">In Stock</div>
       </div>
@@ -353,12 +372,12 @@
 {%- endif -%}
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     // Find all product cards
     const productCards = document.querySelectorAll('.card-product-northfinder__link');
 
     // Add hover effect to product cards
-    productCards.forEach(card => {
+    productCards.forEach((card) => {
       const productId = card.dataset.productId;
       if (!productId) return;
 
@@ -374,8 +393,7 @@
       const mainImageSrcset = card.dataset.mainImageSrcset;
 
       // Add hover event to show main image
-      card.addEventListener('mouseenter', function() {
-
+      card.addEventListener('mouseenter', function () {
         if (mainImageSrc && mainImageSrc !== originalSrc) {
           // Change to main image immediately without transition
           mainImage.src = mainImageSrc;
@@ -385,7 +403,7 @@
         }
       });
 
-      card.addEventListener('mouseleave', function() {
+      card.addEventListener('mouseleave', function () {
         // Reset to the original model image
         if (mainImage.src !== originalSrc) {
           mainImage.src = originalSrc;
@@ -396,7 +414,7 @@
 
     // Handle variant swatch hover
     const variantSwatches = document.querySelectorAll('.variant-swatch');
-    variantSwatches.forEach(swatch => {
+    variantSwatches.forEach((swatch) => {
       const productId = swatch.dataset.productId;
       const variantImage = swatch.dataset.variantImage;
       const variantImageSrcset = swatch.dataset.variantImageSrcset;
@@ -407,13 +425,13 @@
         const originalSrc = mainImage.dataset.originalSrc;
         const originalSrcset = mainImage.dataset.originalSrcset;
 
-        swatch.addEventListener('mouseenter', function() {
+        swatch.addEventListener('mouseenter', function () {
           // Change to variant image
           mainImage.src = variantImage;
           mainImage.srcset = variantImageSrcset;
         });
 
-        swatch.addEventListener('mouseleave', function() {
+        swatch.addEventListener('mouseleave', function () {
           // Restore original image
           mainImage.src = originalSrc;
           mainImage.srcset = originalSrcset;
@@ -426,28 +444,28 @@
   function parseImageUrl(url) {
     // Initialize result with default values
     const result = {
-      product: "",
-      color: "",
-      image_type: "main",
-      sequence: null
+      product: '',
+      color: '',
+      image_type: 'main',
+      sequence: null,
     };
 
     // Extract filename from URL and remove file extension
-    const filename = url.split("/").pop()?.split("?")[0] || "";
-    const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+    const filename = url.split('/').pop()?.split('?')[0] || '';
+    const nameWithoutExt = filename.replace(/\.[^/.]+$/, '');
 
     // Return default values for malformed URLs or files without proper naming convention
-    if (!nameWithoutExt.includes("-")) {
+    if (!nameWithoutExt.includes('-')) {
       return result;
     }
 
     // Check for model image type
-    if (nameWithoutExt.includes("-M")) {
-      result.image_type = "model";
+    if (nameWithoutExt.includes('-M')) {
+      result.image_type = 'model';
 
       // Check for sequence number
-      if (nameWithoutExt.includes("-M_")) {
-        const seqPart = nameWithoutExt.split("-M_")[1];
+      if (nameWithoutExt.includes('-M_')) {
+        const seqPart = nameWithoutExt.split('-M_')[1];
         if (seqPart) {
           const seqNum = parseInt(seqPart, 10);
           if (!isNaN(seqNum)) {
