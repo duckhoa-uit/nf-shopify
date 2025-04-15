@@ -47,7 +47,7 @@
         class="tabs-content w-full {% if tab_index != active_tab_index %}hidden{% endif %}"
         data-tabs-group="{{ tabs_id }}"
       >
-        {% render 'material-content', block: block %}
+        {% render 'material-content', block: block, show_title_above_media_on_mobile: block.settings.show_title_above_media_on_mobile %}
       </div>
     {%- endif -%}
   {%- endfor -%}

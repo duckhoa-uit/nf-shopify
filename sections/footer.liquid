@@ -58,6 +58,7 @@
   .mobile-menu .icon-caret {
     height: 0.6rem;
     transition: transform 0.15s ease;
+    transform-origin: center;
   }
 
   /* Leverage the base.css styling pattern for details[open] */
@@ -149,7 +150,7 @@
                             <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
                               {{- block.settings.heading -}}
                             </h2>
-                            <span class="icon-caret">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                            <span class="">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
                           </div>
                         </summary>
                         {%- if block.settings.menu != blank -%}
@@ -279,7 +280,7 @@
                 </div>
               </div>
               <a
-                class="inline-flex my-6 py-[0.625rem] px-5 w-full md:w-fit justify-center items-center gap-2 text-sm text-[#3d3d3d] text-center rounded-3 border border-[#E0E0E0] shadow-2xs"
+                class="hidden md:inline-flex my-6 py-[0.625rem] px-5 w-full md:w-fit justify-center items-center gap-2 text-sm text-[#3d3d3d] text-center rounded-3 border border-[#E0E0E0] shadow-2xs"
                 href="https://northfinder.com/en/stores"
               >
                 <span class="svg-wrapper size-5">{{ 'icon-store.svg' | inline_asset_content }}</span>

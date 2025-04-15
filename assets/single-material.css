@@ -17,7 +17,8 @@
   }
 }
 
-.material-image-container {
+.material-image-container,
+.material-video-container {
   flex: 1;
   overflow: hidden;
 }
@@ -31,6 +32,22 @@
 
 .material-image:hover {
   transform: scale(1.05);
+}
+
+.material-video {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.material-video iframe,
+.material-video video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
 }
 
 .material-content {
@@ -47,6 +64,28 @@
   margin: 0;
   color: #0f0f0f;
   margin-bottom: 0.5rem;
+}
+
+/* Mobile title styling */
+.material-title-mobile {
+  display: block;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Hide desktop title on mobile when showing title above media */
+@media screen and (max-width: 749px) {
+  .title-above-media-mobile .material-title-desktop {
+    display: none;
+  }
+}
+
+/* Hide mobile title on desktop */
+@media screen and (min-width: 750px) {
+  .material-title-mobile {
+    display: none;
+  }
 }
 
 .material-description {

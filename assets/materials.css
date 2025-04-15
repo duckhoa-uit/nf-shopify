@@ -22,7 +22,8 @@
   }
 }
 
-.materials-section .material-image-container {
+.materials-section .material-image-container,
+.materials-section .material-video-container {
   flex: 1;
   overflow: hidden;
 }
@@ -36,6 +37,22 @@
 
 .materials-section .material-image:hover {
   transform: scale(1.05);
+}
+
+.materials-section .material-video {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.materials-section .material-video iframe,
+.materials-section .material-video video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
 }
 
 .materials-section .material-content {
