@@ -4,10 +4,12 @@
   Usage:
   {% render 'header-mega-menu' %}
 {% endcomment %}
-
 <nav class="header__inline-menu mt-0 px-0 h-full lg:flex lg:items-center lg:justify-center">
   <ul class="list-menu list-menu--inline h-full" role="list">
     {%- for link in section.settings.menu.links -%}
+      <script>
+        console.log({{ link.levels | json }});
+      </script>
       <li>
         {%- if link.links != blank -%}
           <header-menu>
@@ -28,41 +30,77 @@
                 tabindex="-1"
               >
                 <ul
-                  class="mega-menu__list page-width{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}"
+                  class="mega-menu__list page-width"
                   role="list"
                 >
-                  {%- for childlink in link.links -%}
-                    <li class="flex flex-col gap-6 border-r border-[#E0DFDF] last:border-0">
-                      <span
-                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
-                        {% comment %} href="{{ childlink.url }}" {% endcomment %}
-                        class="text-base font-bold leading-[1.3125rem] cursor-default text-black"
-                        {% if childlink.current %}
-                          aria-current="page"
-                        {% endif %}
-                      >
-                        {{ childlink.title | escape }}
-                      </span>
-                      {%- if childlink.links != blank -%}
+                  <li class="border-r border-[#E0DFDF]"></li>
+                  {% if link.levels == 1 %}
+                    <li>
+                      {%- if link.links != blank -%}
                         <ul class="list-unstyled flex flex-col gap-y-3 items-start" role="list">
-                          {%- for grandchildlink in childlink.links -%}
+                          {%- for childlink in link.links -%}
                             <li>
                               <a
-                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
-                                href="{{ grandchildlink.url }}"
-                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %} text-lg leading-[1.25rem] p-0 hover:text-accent transition-colors text-[#3D3D3D] tracking-normal"
-                                {% if grandchildlink.current %}
+                                id="HeaderMenu-{{ link.handle }}-{{ link.handle }}-{{ childlink.handle }}"
+                                href="{{ childlink.url }}"
+                                class="mega-menu__link link{% if childlink.current %} mega-menu__link--active{% endif %} text-lg leading-[1.25rem] p-0 hover:text-accent transition-colors text-[#3D3D3D] tracking-normal"
+                                {% if childlink.current %}
                                   aria-current="page"
                                 {% endif %}
                               >
-                                {{ grandchildlink.title | escape }}
+                                {{ childlink.title | escape }}
                               </a>
                             </li>
                           {%- endfor -%}
                         </ul>
                       {%- endif -%}
                     </li>
-                  {%- endfor -%}
+                  {% else %}
+                    {%- for childlink in link.links -%}
+                      <li class="flex flex-col gap-6 border-r border-[#E0DFDF] last:border-0">
+                        {%- if childlink.links == blank and childlink.url != blank -%}
+                          <a
+                            id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                            href="{{ childlink.url }}"
+                            class="text-base font-bold leading-[1.3125rem] text-black hover:text-accent transition-colors"
+                            {% if childlink.current %}
+                              aria-current="page"
+                            {% endif %}
+                          >
+                            {{ childlink.title | escape }}
+                          </a>
+                        {%- else -%}
+                          <span
+                            id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                            class="text-base font-bold leading-[1.3125rem] cursor-default text-black"
+                            {% if childlink.current %}
+                              aria-current="page"
+                            {% endif %}
+                          >
+                            {{ childlink.title | escape }}
+                          </span>
+                        {%- endif -%}
+                        {%- if childlink.links != blank -%}
+                          <ul class="list-unstyled flex flex-col gap-y-3 items-start" role="list">
+                            {%- for grandchildlink in childlink.links -%}
+                              <li>
+                                <a
+                                  id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                  href="{{ grandchildlink.url }}"
+                                  class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %} text-lg leading-[1.25rem] p-0 hover:text-accent transition-colors text-[#3D3D3D] tracking-normal"
+                                  {% if grandchildlink.current %}
+                                    aria-current="page"
+                                  {% endif %}
+                                >
+                                  {{ grandchildlink.title | escape }}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+                  {% endif %}
                 </ul>
               </div>
             </details>
