@@ -39,18 +39,37 @@
 }
 
 .swiper .swiper-scrollbar {
-  max-width: 100% !important;
+  max-width: 66% !important;
   left: 0 !important;
-  margin: 2.25rem 0 0 0 !important;
+  right: 0 !important;
+  margin: 2.25rem auto 0 auto !important;
   width: 100%;
+}
+
+/* Full width on tablet and mobile */
+@media screen and (max-width: 990px) {
+  .swiper .swiper-scrollbar {
+    max-width: 100% !important;
+    margin: 2.25rem 0 0 0 !important;
+  }
 }
 
 .swiper-horizontal > .swiper-scrollbar {
   max-width: 66%;
   position: relative !important;
-  margin-top: 2.25rem;
+  margin: 2.25rem auto 0 auto !important;
   background-color: #e0dfdf;
   height: 0.125rem !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+/* Full width on tablet and mobile */
+@media screen and (max-width: 990px) {
+  .swiper-horizontal > .swiper-scrollbar {
+    max-width: 100% !important;
+    margin: 2.25rem 0 0 0 !important;
+  }
 }
 
 .swiper-horizontal > .swiper-scrollbar .swiper-scrollbar-drag {
