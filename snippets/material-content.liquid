@@ -1,5 +1,60 @@
-<div class="single-material">
-  {%- if block.settings.image != blank -%}
+{%- liquid
+  assign show_title_above_media_on_mobile = show_title_above_media_on_mobile | default: false
+-%}
+
+<div class="single-material{% if show_title_above_media_on_mobile %} title-above-media-mobile{% endif %}">
+  {%- if show_title_above_media_on_mobile and block.settings.title != blank -%}
+    <h3 class="material-title material-title-mobile text-sm mb-2">{{ block.settings.title }}</h3>
+  {%- endif -%}
+
+  {%- if block.settings.video_url != blank -%}
+    <div class="material-video-container aspect-video">
+      {%- assign video_id = block.settings.video_url | split: '/' | last -%}
+      {%- if block.settings.video_url contains 'youtube.com' or block.settings.video_url contains 'youtu.be' -%}
+        {%- # Extract YouTube ID -%}
+        {%- if block.settings.video_url contains 'v=' -%}
+          {%- assign video_id = block.settings.video_url | split: 'v=' | last | split: '&' | first -%}
+        {%- elsif block.settings.video_url contains 'youtu.be/' -%}
+          {%- assign video_id = block.settings.video_url | split: 'youtu.be/' | last -%}
+        {%- endif -%}
+        <div class="material-video youtube-video">
+          <iframe
+            src="https://www.youtube.com/embed/{{ video_id }}?rel=0&showinfo=0&controls=1"
+            frameborder="0"
+            allowfullscreen
+            loading="lazy"
+            title="{{ block.settings.title | escape }}"
+            class="w-full h-full">
+          </iframe>
+        </div>
+      {%- elsif block.settings.video_url contains 'vimeo.com' -%}
+        {%- # Extract Vimeo ID -%}
+        {%- assign video_id = block.settings.video_url | split: '/' | last -%}
+        <div class="material-video vimeo-video">
+          <iframe
+            src="https://player.vimeo.com/video/{{ video_id }}?title=0&byline=0&portrait=0"
+            frameborder="0"
+            allowfullscreen
+            loading="lazy"
+            title="{{ block.settings.title | escape }}"
+            class="w-full h-full">
+          </iframe>
+        </div>
+      {%- else -%}
+        <div class="material-video generic-video">
+          <video
+            controls
+            class="w-full h-full"
+            preload="metadata"
+            poster="{{ block.settings.image | image_url: width: 1100 }}"
+          >
+            <source src="{{ block.settings.video_url }}" type="video/mp4"><!-- Direct URL used for MP4 videos -->
+            {{ 'video.no_support' | t }}
+          </video>
+        </div>
+      {%- endif -%}
+    </div>
+  {%- elsif block.settings.image != blank -%}
     <div class="material-image-container">
       <img
         srcset="
@@ -27,8 +82,9 @@
 
   <div class="material-content">
     {%- if block.settings.title != blank -%}
-      <h3 class="material-title text-sm lg:text-2xl mb-2 lg:mb-6">{{ block.settings.title }}</h3>
+      <h3 class="material-title {% if show_title_above_media_on_mobile %}material-title-desktop{% endif %} text-sm lg:text-2xl mb-2 lg:mb-6">{{ block.settings.title }}</h3>
     {%- endif -%}
+
 
     {%- if block.settings.description != blank -%}
       <div class="material-description [&_p]:m-0 leading-5 text-sm lg:leading-6 lg:text-base">{{ block.settings.description }}</div>
