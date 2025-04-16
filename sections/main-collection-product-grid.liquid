@@ -37,8 +37,24 @@
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
-  {% assign products_per_page = 24 %}
+  {% liquid
+    assign products_per_page = 24
+    if request.parameters.products_per_page
+      assign products_per_page = request.parameters.products_per_page | plus: 0
+    endif
+  %}
+
+  <div style="display: none;" data-debug-info="Products per page: {{ products_per_page }}"></div>
+  <script>
+    console.log('Products per page from Liquid: {{ products_per_page }}');
+    console.log('URL parameters:', {{ request.parameters | json }});
+  </script>
+
   {%- paginate collection.products by products_per_page -%}
+    <div style="display: none;" data-debug-paginate="Items per page: {{ paginate.page_size }}"></div>
+    <script>
+      console.log('Paginate object - items per page:', {{ paginate.page_size }});
+    </script>
     {% comment %} Scrollable Child Collections {% endcomment %}
 
     <div class="page-width">
@@ -84,17 +100,26 @@
           {%- if section.settings.enable_sorting -%}
             <div class="sorting-container">
               <div class="products-per-page">
-                <label for="ProductsPerPage">{{ 'products.facets.products_per_page' | t }}</label>
-                <div class="select after:border-0 after:shadow-none">
-                  <select name="products_per_page" id="ProductsPerPage" class="select__select pl-[5px]">
-                    <option value="24" selected>24</option>
-                    <option value="48">48</option>
-                    <option value="120">120</option>
-                  </select>
-                  <span class="svg-wrapper">
-                    {{- 'icon-caret.svg' | inline_asset_content -}}
-                  </span>
-                </div>
+                <form method="get" action="{{ collection.url }}" id="ProductsPerPageForm">
+                  <label for="ProductsPerPage">{{ 'products.facets.products_per_page' | t }}</label>
+                  <div class="select after:border-0 after:shadow-none">
+                    <select name="products_per_page" id="ProductsPerPage" class="select__select pl-[5px]" onchange="document.getElementById('ProductsPerPageForm').submit();">
+                      <option value="24" {% if products_per_page == 24 %}selected{% endif %}>24</option>
+                      <option value="48" {% if products_per_page == 48 %}selected{% endif %}>48</option>
+                      <option value="120" {% if products_per_page == 120 %}selected{% endif %}>120</option>
+                    </select>
+                    <span class="svg-wrapper">
+                      {{- 'icon-caret.svg' | inline_asset_content -}}
+                    </span>
+                  </div>
+
+                  {% comment %} Preserve other URL parameters {% endcomment %}
+                  {% for param in request.parameters %}
+                    {% if param[0] != 'products_per_page' and param[0] != 'page' %}
+                      <input type="hidden" name="{{ param[0] }}" value="{{ param[1] }}">
+                    {% endif %}
+                  {% endfor %}
+                </form>
               </div>
 
               <facet-filters-form class="facets small-hide">
@@ -351,6 +376,8 @@
         }, 200);
       });
     }
+
+    // No JavaScript needed for products per page - using form submit
 
     // Child collections scroll functionality
     const childCollectionsScroll = document.querySelector('.child-collections-scroll');
