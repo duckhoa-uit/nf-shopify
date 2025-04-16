@@ -11,9 +11,86 @@
   endif
 -%}
 
+{%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+  {{ 'component-localization-form.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'custom-language-selector.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
 {% if social_icons %}
   {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
 {% endif %}
+
+<style>
+  /* Custom styles for announcement bar localization */
+  .announcement-bar-section .localization-form {
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Custom language selector styles */
+  .language-selector-wrapper {
+    position: relative;
+  }
+
+  .custom-language-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .language-flag {
+    display: block;
+    border: 1px solid #e0e0e0;
+  }
+
+  .custom-language-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 50;
+    min-width: 180px;
+    margin-top: 5px;
+  }
+
+  .custom-language-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .custom-language-item {
+    padding: 0;
+  }
+
+  .custom-language-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s;
+  }
+
+  .custom-language-link:hover {
+    background-color: #f5f5f5;
+  }
+
+  .custom-language-link[aria-current="true"] {
+    background-color: #f0f0f0;
+  }
+
+  .language-name {
+    margin-left: 8px;
+    font-size: 14px;
+  }
+</style>
 
 <div class="bg-[#F5F5F5] text-[0.8125rem] leading-[0.875rem] text-secondary-foreground hidden lg:block">
   <div class="page-width">
@@ -92,48 +169,17 @@
           </div>
           {% endif %}
           {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-            <div>
-              <div class="dropdown">
-                <a
-                  class="dropdown-toggle header_shopchooser"
-                  data-toggle="dropdown"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <img
-                    src="{{ section.settings.current_language_flag | image_url }}"
-                    alt="{{ localization.language.iso_code }}"
-                    width="16"
-                    height="11"
-                  >
-                  <span>{{ localization.language.endonym_name }}</span>
-                </a>
-                <ul id="languages" class="min-w-auto dropdown-menu pull-right">
-                  {%- for language in localization.available_languages -%}
-                    <li
-                      {% if language.iso_code == localization.language.iso_code %}
-                        class="active"
-                      {% endif %}
-                    >
-                      <a
-                        href="{{ language.root_url }}"
-                        title="{{ language.endonym_name }}"
-                        rel="alternate"
-                        hreflang="{{ language.iso_code }}"
-                      >
-                        <img
-                          src="{{ language.flag_url | default: section.settings.default_flag | image_url }}"
-                          alt="{{ language.endonym_name }}"
-                          width="16"
-                          height="11"
-                        >
-                        <span>{{ language.endonym_name }}</span>
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              </div>
+            <div class="language-selector-wrapper">
+              <localization-form>
+                {%- form 'localization', id: 'AnnouncementBarLanguageForm', class: 'localization-form' -%}
+                  <div>
+                    <h2 class="visually-hidden" id="AnnouncementBarLanguageLabel">
+                      {{ 'localization.language_label' | t }}
+                    </h2>
+                    {%- render 'custom-language-selector', localPosition: 'AnnouncementBarLanguage' -%}
+                  </div>
+                {%- endform -%}
+              </localization-form>
             </div>
           {%- endif -%}
         </div>
@@ -212,16 +258,7 @@
       "label": "Enable Language Selector",
       "default": true
     },
-    {
-      "type": "image_picker",
-      "id": "current_language_flag",
-      "label": "Current Language Flag"
-    },
-    {
-      "type": "image_picker",
-      "id": "default_flag",
-      "label": "Default Language Flag"
-    },
+
     {
       "type": "checkbox",
       "id": "show_register",
