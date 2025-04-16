@@ -307,7 +307,6 @@
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'scroll-more.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'custom-price-update.js' | asset_url }}" defer="defer"></script>
 
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
@@ -394,12 +393,6 @@
               <span class="svg-wrapper size-5">{{ 'icon-heart.svg' | inline_asset_content }}</span>
             </button>
           </div>
-          {% comment %} TODO: update this meta {% endcomment %}
-          <meta itemprop="gtin13" content="8584153431420">
-          <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope="">
-            <meta itemprop="name" content="Northfinder">
-          </div>
-
           {%- for block in section.blocks -%}
             {%- case block.type -%}
               {%- when '@app' -%}
@@ -422,23 +415,6 @@
                   {% endif %}
                 </div>
               {%- when 'price' -%}
-                {% comment %}
-                  <div itemprop="offers" itemscope="" itemtype="https://schema.org/Offer">
-                    <div id="moc_price" itemprop="price" content="149.9">
-                      <meta itemprop="priceCurrency" content="EUR">
-                      <div class="price-row">149,90 €</div>
-                      <link itemprop="availability" href="https://schema.org/InStock">
-                      <span id="old_price_display_moc">
-                        <span class="price">209,90 €</span> - original recommended price
-                      </span>
-                    </div>
-                    <meta
-                      itemprop="url"
-                      content="https://northfinder.com/en/7761-bu-48101skp-womens-ski-touring-active-jacket-polartec-alpha-direct-krizna.html"
-                    >
-                  </div>
-                {% endcomment %}
-
                 <div
                   id="price-{{ section.id }}"
                   role="status"
@@ -453,7 +429,13 @@
                     endif
                   -%}
                   <div class="price-wrapper flex flex-col">
-                    <span class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]">
+                    <span class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]"
+                      {% if settings.currency_code_enabled %}
+                        data-format="{{ shop.money_with_currency_format }}"
+                      {% else %}
+                        data-format="{{ shop.money_format }}"
+                      {% endif %}
+                    >
                       {% if settings.currency_code_enabled %}
                         {{ current_variant.price | money_with_currency }}
                       {% else %}
