@@ -1,0 +1,58 @@
+{% comment %}
+  Renders a product inspiration banner section
+
+  Accepts:
+  - title: {String} The title to display (optional, defaults to 'Inspiration')
+  - image: {Object} The image to display (optional, defaults to product-banner.webp)
+  - image_alt: {String} Alt text for the image (optional, defaults to 'Inspiration')
+  - margin_top: {String} Top margin class (optional, defaults to 'mt-12')
+  - margin_bottom: {String} Bottom margin class (optional, defaults to 'mb-12')
+
+  Usage:
+  {% render 'product-inspiration-banner',
+    title: section.settings.inspiration_title,
+    image: section.settings.inspiration_image,
+    image_alt: section.settings.inspiration_alt
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign title = title | default: 'sections.main_product.inspiration' | t
+  assign image_alt = image_alt | default: 'Inspiration'
+  assign margin_top = margin_top | default: 'mt-12'
+  assign margin_bottom = margin_bottom | default: 'mb-12'
+-%}
+
+<!-- Inspiration Banner Section -->
+<div class="inspiration-banner-section w-full {{ margin_top }} {{ margin_bottom }}">
+  <h2 class="text-base lg:text-2xl font-semibold text-[#0F0F0F] mb-6">
+    {{ title }}
+  </h2>
+  <div class="inspiration-banner-container">
+    <div
+      class="inspiration-banner-media w-full relative overflow-hidden"
+      style="padding-bottom: 56.25%;"
+      {%- comment -%}16:9 aspect ratio{%- endcomment -%}
+    >
+      {% if image %}
+        <img
+          src="{{ image | image_url: width: 1500 }}"
+          alt="{{ image_alt }}"
+          loading="lazy"
+          width="1500"
+          height="844"
+          class="absolute inset-0 w-full h-full object-cover"
+        >
+      {% else %}
+        <img
+          src="{{ 'product-banner.webp' | asset_url }}"
+          alt="{{ image_alt }}"
+          loading="lazy"
+          width="1500"
+          height="844"
+          class="absolute inset-0 w-full h-full object-cover"
+        >
+      {% endif %}
+    </div>
+  </div>
+</div>

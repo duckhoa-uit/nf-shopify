@@ -1,14 +1,14 @@
 /* swatch-input lives in its own file for reusability of the swatch in other areas than the product form context */
 .swatch-input__input + .swatch-input__label {
   --swatch-input--border-radius: 50%;
+  --swatch-input--size: 3.2rem; /* Adjusted size to match Figma design */
   display: inline-block;
   max-width: 100%;
-  border-radius: var(--swatch-input--border-radius);
   cursor: pointer;
-  outline-offset: 0.2rem;
+  /* outline-offset: 0.2rem;
   outline-color: transparent;
-  outline-style: solid;
-  transition-property: outline-color, outline-width, box-shadow;
+  outline-style: solid; */
+  transition-property: outline-color, outline-width, box-shadow, border-color;
   transition-duration: var(--duration-short);
   transition-timing-function: ease;
   forced-color-adjust: none;
@@ -18,35 +18,53 @@
   --swatch-input--border-radius: 0.2rem;
 }
 
-/* Active state */
+/* Active state - red border for active swatch as per Figma */
 .swatch-input__input:active + .swatch-input__label,
 .swatch-input__input:checked + .swatch-input__label {
-  outline: 0.0625rem solid rgb(var(--color-base-foreground));
+  outline: none;
+}
+
+.swatch-input__input:checked + .swatch-input__label > .swatch {
+  border-bottom: 0.125rem solid #e30613; /* Red border for active swatch */
 }
 
 /* Hover state */
 .swatch-input__input + .swatch-input__label:hover,
 .swatch-input__input:hover + .swatch-input__label {
-  outline: 0.2rem solid rgba(var(--color-base-foreground), 0.4);
+  outline: none;
+}
+
+.swatch-input__input:hover:not(:checked) + .swatch-input__label > .swatch {
+  border-bottom: 0.125rem solid #e30613; /* Red border for active swatch */
 }
 
 /* Focus visible */
 .swatch-input__input:focus-visible + .swatch-input__label {
-  outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
-  box-shadow: 0 0 0 0.2rem rgb(var(--color-base-background)), 0 0 0.0625rem 0.5rem rgba(var(--color-base-foreground), 0.25);
+  outline: none;
+  box-shadow: none;
+}
+
+.swatch-input__input:focus-visible:not(:checked) + .swatch-input__label > .swatch {
+  border-color: rgba(var(--color-base-foreground), 0.7);
+  box-shadow: 0 0 0 0.2rem rgba(var(--color-base-foreground), 0.1);
 }
 
 /* Active and focused */
 .swatch-input__input:active:focus-visible + .swatch-input__label,
 .swatch-input__input:checked:focus-visible + .swatch-input__label {
-  outline: 0.0625rem solid rgb(var(--color-base-foreground));
-  box-shadow: 0 0 0 0.2rem rgb(var(--color-base-background)), 0 0 0.0625rem 0.4rem rgba(var(--color-base-foreground), 0.25);
+  outline: none;
+  box-shadow: none;
+}
+
+.swatch-input__input:checked:focus-visible + .swatch-input__label > .swatch {
+  /* box-shadow: 0 0 0 0.2rem rgba(227, 6, 19, 0.2); Red shadow for active and focused */
 }
 
 /* Visually disabled */
 .swatch-input__input.visually-disabled:not(:active):not(:checked) + .swatch-input__label {
   transition: none;
 }
+
 .swatch-input__input.visually-disabled:not(:active):not(:checked) + .swatch-input__label:hover {
   outline: none;
 }
@@ -54,6 +72,7 @@
 /* Actually disabled */
 .swatch-input__input:disabled + .swatch-input__label {
   pointer-events: none;
+  opacity: 0.6;
 }
 
 /* Overrides for swatch snippet when used inside disabled swatch-input */
@@ -63,25 +82,26 @@
   overflow: hidden;
 }
 
-/* Disabled styles */
-.swatch-input__input:disabled + .swatch-input__label > .swatch,
-.swatch-input__input.visually-disabled + .swatch-input__label > .swatch {
-  opacity: 0.4;
+/* Color thumbnails container styling */
+.color-option-with-thumbnail {
+  display: inline-block;
+  text-align: center;
 }
 
-/* Display crossed out line over swatch when input is disabled */
-.swatch-input__input:disabled + .swatch-input__label > .swatch::after,
-.swatch-input__input.visually-disabled + .swatch-input__label > .swatch::after {
-  /* Diagonal of a square = length of the side * sqrt(2)  */
-  --diagonal--size: calc(var(--swatch-input--size) * 1.414);
-  --crossed-line--size: 0.0625rem;
-  content: '';
-  position: absolute;
-  bottom: calc(var(--crossed-line--size) * -0.5);
-  left: 0;
-  width: var(--diagonal--size);
-  height: var(--crossed-line--size);
-  background-color: rgb(var(--color-base-foreground));
-  transform: rotate(-45deg);
-  transform-origin: left;
+/* Product variant color grid styling */
+/* .product-form__input--pill-color .grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-start;
+} */
+
+@media screen and (max-width: 749px) {
+  .swatch-input__input + .swatch-input__label {
+    --swatch-input--size: 2.8rem; /* Slightly smaller on mobile */
+  }
+
+  .color-option-with-thumbnail {
+    margin: 0 0.3rem;
+  }
 }

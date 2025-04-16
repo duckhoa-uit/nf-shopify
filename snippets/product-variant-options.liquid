@@ -239,7 +239,7 @@
               endif
             -%}
 
-            <div class="color-option-with-thumbnail">
+            <div class="color-option-with-thumbnail" data-color-name="{{ value }}">
               {%
                 render 'swatch-input',
                 id: input_id,
@@ -428,7 +428,7 @@
           endif
         -%}
 
-        <div class="color-option-with-thumbnail">
+        <div class="color-option-with-thumbnail" data-color-name="{{ value }}">
           {%
             render 'swatch-input',
             id: input_id,
