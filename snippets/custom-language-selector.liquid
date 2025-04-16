@@ -1,0 +1,54 @@
+{%- comment -%}
+  Renders a custom language picker with flags for the localization form
+
+  Accepts:
+    - localPosition: pass in the position in which the form is coming up to create specific IDs
+{%- endcomment -%}
+
+<div class="custom-language-disclosure">
+  <button
+    type="button"
+    class="custom-language-button"
+    aria-expanded="false"
+    aria-controls="{{ localPosition }}List"
+    aria-describedby="{{ localPosition }}Label"
+  >
+    <img 
+      src="{{ 'flag-' | append: localization.language.iso_code | downcase | append: '.png' | asset_url }}" 
+      alt="{{ localization.language.endonym_name }}"
+      width="24"
+      height="16"
+      class="language-flag"
+    >
+  </button>
+  <div class="custom-language-dropdown" hidden>
+    <ul id="{{ localPosition }}List" role="list" class="custom-language-list">
+      {%- for language in localization.available_languages -%}
+        <li class="custom-language-item" tabindex="-1">
+          <a
+            class="custom-language-link"
+            href="#"
+            hreflang="{{ language.iso_code }}"
+            lang="{{ language.iso_code }}"
+            {% if language.iso_code == localization.language.iso_code %}
+              aria-current="true"
+            {% endif %}
+            data-value="{{ language.iso_code }}"
+          >
+            <img 
+              src="{{ 'flag-' | append: language.iso_code | downcase | append: '.png' | asset_url }}" 
+              alt="{{ language.endonym_name }}"
+              width="24"
+              height="16"
+              class="language-flag"
+            >
+            <span class="language-name">
+              {{ language.endonym_name }}
+            </span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+<input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
