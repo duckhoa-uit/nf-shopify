@@ -347,6 +347,7 @@
   {% assign breathability_parent = breathability_data.parent %}
   <script>
     console.log({{ product | json }});
+    console.log({{ product.metafields.custom.color.value | json }});
     // console.log({{ product.metafields.features.breathability.value | json }});
     // console.log('Breathability Parent Data:', {{ breathability_parent | json }});
     // console.log({{ product.metafields.features.elasticity.value | json }});
