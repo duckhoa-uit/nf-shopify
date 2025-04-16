@@ -652,26 +652,41 @@
         }
 
         // Sort and update gallery, passing color mappings to the sort function
-        updateGallery(window.sortImagesByDisplayRules(urlsToUse, colorMappings));
+        // The function now returns objects with url and hidden properties
+        const sortedImages = window.sortImagesByDisplayRules(urlsToUse, colorMappings);
+        updateGallery(sortedImages);
       }
 
-      // Update gallery with the given URLs
-      function updateGallery(urls) {
+      // Update gallery with the given URLs or image objects
+      function updateGallery(images) {
         sliderWrapper.innerHTML = '';
         grid.innerHTML = '';
 
-        // Ensure we have at least some URLs to display
-        if (urls.length === 0) {
+        // Ensure we have at least some images to display
+        if (images.length === 0) {
           const allMediaUrls = {{ product.media | json }}.map(media => {
             let url = media.src.replace(/\/files\//, '/');
-            return url.startsWith('//') ? `https:${url}` :
-                  !url.startsWith('http') ? `https://${url}` : url;
+            return {
+              url: url.startsWith('//') ? `https:${url}` :
+                   !url.startsWith('http') ? `https://${url}` : url,
+              hidden: false
+            };
           });
-          urls = allMediaUrls.length > 0 ? [allMediaUrls[0]] : [];
+          images = allMediaUrls.length > 0 ? [allMediaUrls[0]] : [];
         }
 
+        // Normalize the images array to ensure all items have url and hidden properties
+        const normalizedImages = images.map(item => {
+          if (typeof item === 'string') {
+            // Handle legacy format (just URL strings)
+            return { url: item, hidden: false };
+          }
+          return item; // Already in the correct format
+        });
+
         // Create at least 2 slides for proper pagination
-        window.slidesToCreate = urls.length === 1 ? [urls[0], urls[0]] : urls;
+        window.slidesToCreate = normalizedImages.length === 1 ?
+          [normalizedImages[0], normalizedImages[0]] : normalizedImages;
 
         // Create all items but only show first 6
         window.isGalleryExpanded = window.isGalleryExpanded || false;
@@ -684,20 +699,24 @@
         }
 
         if (window.slidesToCreate.length > 0) {
-          window.slidesToCreate.forEach((url, index) => {
-            const mediaItem = createMediaItem(url, index);
+          window.slidesToCreate.forEach((imageObj, index) => {
+            const mediaItem = createMediaItem(imageObj.url, index);
             if (mediaItem) {
+              // Add to mobile slider - all images are visible in the slider
               sliderWrapper.appendChild(mediaItem.cloneNode(true));
 
-              // Add to grid with visibility control
-              if (index === 0 || url !== window.slidesToCreate[0]) {
-                // Add display class based on index and current expanded state
-                if (index >= 6) {
-                  if (!window.isGalleryExpanded) {
-                    mediaItem.classList.add('hidden');
-                  }
+              // Add to desktop grid with visibility control
+              if (index === 0 || imageObj.url !== window.slidesToCreate[0].url) {
+                // Apply hidden class based on the hidden property from sorting
+                if (imageObj.hidden && !window.isGalleryExpanded) {
+                  mediaItem.classList.add('hidden');
+                }
+
+                // Mark expandable items for toggle functionality
+                if (imageObj.hidden) {
                   mediaItem.classList.add('expandable-item');
                 }
+
                 grid.appendChild(mediaItem);
               }
             }
