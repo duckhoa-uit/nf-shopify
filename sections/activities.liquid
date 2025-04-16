@@ -50,7 +50,7 @@
               data-position="{{ forloop.index }}"
             >
               {% if block.settings.link_url != blank %}
-                <a href="{{ block.settings.link_url }}" class="absolute inset-0 z-10 block md:hidden"></a>
+                <a href="{{ block.settings.link_url }}" class="absolute inset-0 z-10 block cursor-pointer"></a>
               {% endif %}
               {%- if block.settings.image != blank -%}
                 <div class="relative overflow-hidden h-full aspect-video">
@@ -81,9 +81,9 @@
               {%- endif -%}
 
               <div class="activity-content">
-                <h3 class="activity-title text-base lg:[1.3125rem]">{{ block.settings.activity_title }}</h3>
+                <h3 class="activity-title text-base lg:text-[1.3125rem]">{{ block.settings.activity_title }}</h3>
                 {%- if block.settings.link_url != blank -%}
-                  <a href="{{ block.settings.link_url }}" class="activity-button hidden md:block">
+                  <a href="{{ block.settings.link_url }}" class="activity-button hidden md:block" onclick="event.stopPropagation();">
                     {{ block.settings.button_text | default: 'Explore' }}
                   </a>
                 {%- endif -%}

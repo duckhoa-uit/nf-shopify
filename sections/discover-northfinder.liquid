@@ -58,18 +58,18 @@
               </div>
             {%- endif -%}
 
-            <div class="p-6 absolute left-0 bottom-0 w-full">
+            <div class="px-3 py-4 md:p-6 absolute left-0 bottom-0 w-full">
               <div class="flex flex-wrap gap-1.5">
                   <a
                     href="{{ block.settings.men_collection.url | default: '#' }}"
-                    class="inline-block px-5 py-[10px] bg-background text-foreground base leading-7 font-medium rounded-3 hover:bg-foreground hover:text-background transition-colors"
+                    class="inline-block px-3 py-2 text-[13px] md:text-[15px] md:px-5 md:py-[10px] bg-background text-foreground base leading-4 font-medium rounded-3 hover:bg-foreground hover:text-background transition-colors"
                   >
                     {{ 'general.discover_northfinder.for_men' | t }}
                   </a>
 
                   <a
                     href="{{ block.settings.women_collection.url | default: '#' }}"
-                    class="inline-block px-5 py-[10px] bg-background text-foreground base leading-7 font-medium rounded-3 hover:bg-foreground hover:text-background transition-colors"
+                    class="inline-block px-3 py-2 text-[13px] md:text-[15px] md:px-5 md:py-[10px] bg-background text-foreground base leading-4 font-medium rounded-3 hover:bg-foreground hover:text-background transition-colors"
                   >
                     {{ 'general.discover_northfinder.for_women' | t }}
                   </a>
