@@ -352,6 +352,9 @@
   .my-\[2\.1875rem\] {
     margin-block: 2.1875rem !important;
   }
+  .-mt-3 {
+    margin-top: calc(var(--spacing) * -3) !important;
+  }
   .mt-0 {
     margin-top: calc(var(--spacing) * 0) !important;
   }
@@ -447,6 +450,9 @@
   }
   .ml-8 {
     margin-left: calc(var(--spacing) * 8) !important;
+  }
+  .ml-auto {
+    margin-left: auto !important;
   }
   .\!grid {
     display: grid !important;
@@ -615,9 +621,6 @@
   .w-\[2\.625rem\] {
     width: 2.625rem !important;
   }
-  .w-\[200px\] {
-    width: 200px !important;
-  }
   .w-\[600px\] {
     width: 600px !important;
   }
@@ -629,9 +632,6 @@
   }
   .max-w-\[100px\] {
     max-width: 100px !important;
-  }
-  .max-w-\[110px\] {
-    max-width: 110px !important;
   }
   .max-w-\[350px\] {
     max-width: 350px !important;
@@ -648,29 +648,17 @@
   .min-w-12 {
     min-width: calc(var(--spacing) * 12) !important;
   }
-  .min-w-\[110px\] {
-    min-width: 110px !important;
-  }
   .min-w-auto {
     min-width: auto !important;
   }
   .flex-1 {
     flex: 1 !important;
   }
-  .flex-1\/2 {
-    flex: calc(1/2 * 100%) !important;
-  }
-  .flex-shrink {
-    flex-shrink: 1 !important;
-  }
   .flex-grow {
     flex-grow: 1 !important;
   }
   .border-collapse {
     border-collapse: collapse !important;
-  }
-  .origin-center {
-    transform-origin: center !important;
   }
   .-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1/2 * 100%) * -1) !important;
@@ -1139,9 +1127,6 @@
   .pl-\[5px\] {
     padding-left: 5px !important;
   }
-  .pl-\[200px\] {
-    padding-left: 200px !important;
-  }
   .text-center {
     text-align: center !important;
   }
@@ -1376,6 +1361,12 @@
   .underline {
     text-decoration-line: underline !important;
   }
+  .underline-offset-1 {
+    text-underline-offset: 1px !important;
+  }
+  .underline-offset-2 {
+    text-underline-offset: 2px !important;
+  }
   .opacity-40 {
     opacity: 40% !important;
   }
@@ -1608,6 +1599,13 @@
     &:hover {
       @media (hover: hover) {
         text-decoration-line: none !important;
+      }
+    }
+  }
+  .hover\:underline {
+    &:hover {
+      @media (hover: hover) {
+        text-decoration-line: underline !important;
       }
     }
   }

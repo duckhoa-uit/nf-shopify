@@ -45,38 +45,42 @@
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
 
-      <div class="flex items-center justify-between mt-6 mb-12">
-        <div>
-          {%- if collection.collections != blank and collection.collections.size > 0 -%}
-            <div class="child-collections-wrapper page-width">
+      <div class="collection-header-controls mt-6 mb-12">
+        {%- liquid
+          assign has_children = false
+
+          for child in collections
+            if child.metafields.custom.parent_collection.value.handle == collection.handle or child.metafields.custom.parent_collection.value.id == collection.id
+              assign has_children = true
+              break
+            endif
+          endfor
+        -%}
+
+        <div class="collection-header-left">
+          {%- if has_children -%}
+            <div class="child-collections-wrapper">
               <div class="child-collections-scroll">
-                <ul class="child-collections-list">
-                  {%- for child_collection in collection.collections -%}
-                    <li class="child-collection-item">
-                      <a href="{{ child_collection.url }}" class="child-collection-link">
-                        {%- if child_collection.image -%}
-                          <div class="child-collection-image-wrapper">
-                            <img
-                              src="{{ child_collection.image | img_url: '180x180', crop: 'center' }}"
-                              alt="{{ child_collection.title | escape }}"
-                              class="child-collection-image"
-                              width="90"
-                              height="90"
-                              loading="lazy"
-                            >
-                          </div>
-                        {%- endif -%}
-                        <span class="child-collection-title">{{ child_collection.title }}</span>
+                <div class="child-collections-list">
+                  <a href="{{ collection.url }}" class="child-collection-link {% if request.path == collection.url %}active{% endif %}">
+                    <span class="child-collection-title">All</span>
+                  </a>
+
+                  {%- for child_collection in collections -%}
+                    {%- if child_collection.metafields.custom.parent_collection.value.handle == collection.handle or child_collection.metafields.custom.parent_collection.value.id == collection.id -%}
+                      <a href="{{ child_collection.url }}" class="child-collection-link {% if request.path == child_collection.url %}active{% endif %}">
+                        <span class="child-collection-title">{{ child_collection.metafields.custom.display_name | default: child_collection.title }}</span>
                       </a>
-                    </li>
+                    {%- endif -%}
                   {%- endfor -%}
-                </ul>
+                </div>
               </div>
             </div>
           {%- endif -%}
         </div>
 
-        <div class="filter-controls">
+        <div class="collection-header-right">
+          <div class="filter-controls">
           {%- if section.settings.enable_sorting -%}
             <div class="sorting-container">
               <div class="products-per-page">
@@ -165,6 +169,7 @@
               <span class="filter-text">{{ 'products.facets.hide_filters' | t }}</span>
             </button>
           </div>
+        </div>
         </div>
       </div>
 
@@ -345,6 +350,71 @@
           }
         }, 200);
       });
+    }
+
+    // Child collections scroll functionality
+    const childCollectionsScroll = document.querySelector('.child-collections-scroll');
+    if (childCollectionsScroll) {
+      // Check if scrolling is needed
+      const checkScrollable = function() {
+        const isScrollable = childCollectionsScroll.scrollWidth > childCollectionsScroll.clientWidth;
+        childCollectionsScroll.classList.toggle('scrollable', isScrollable);
+        childCollectionsScroll.classList.toggle('grabbable', isScrollable);
+      };
+
+      // Check on load
+      checkScrollable();
+
+      // Check on resize
+      window.addEventListener('resize', function() {
+        checkScrollable();
+      });
+
+      // Grab to scroll functionality
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      childCollectionsScroll.addEventListener('mousedown', (e) => {
+        isDown = true;
+        childCollectionsScroll.classList.add('grabbing');
+        startX = e.pageX - childCollectionsScroll.offsetLeft;
+        scrollLeft = childCollectionsScroll.scrollLeft;
+        e.preventDefault(); // Prevent text selection during drag
+      });
+
+      childCollectionsScroll.addEventListener('mouseleave', () => {
+        isDown = false;
+        childCollectionsScroll.classList.remove('grabbing');
+      });
+
+      childCollectionsScroll.addEventListener('mouseup', () => {
+        isDown = false;
+        childCollectionsScroll.classList.remove('grabbing');
+      });
+
+      childCollectionsScroll.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const x = e.pageX - childCollectionsScroll.offsetLeft;
+        const walk = (x - startX) * 1.5; // Scroll speed multiplier
+        childCollectionsScroll.scrollLeft = scrollLeft - walk;
+      });
+
+      // Touch events for mobile
+      let touchStartX;
+
+      childCollectionsScroll.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].pageX - childCollectionsScroll.offsetLeft;
+        scrollLeft = childCollectionsScroll.scrollLeft;
+      }, { passive: true });
+
+      childCollectionsScroll.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 1) return; // Ignore multi-touch
+        const x = e.touches[0].pageX - childCollectionsScroll.offsetLeft;
+        const walk = (x - touchStartX) * 1.5;
+        childCollectionsScroll.scrollLeft = scrollLeft - walk;
+        e.preventDefault(); // Prevent page scrolling while dragging
+      }, { passive: false });
     }
 
     // View more functionality (if not handled by pagination already)

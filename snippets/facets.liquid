@@ -322,20 +322,22 @@
                           </ul>
                         </fieldset>
                         {%- if filter.values.size > show_more_number and filter_type == 'vertical' -%}
-                          <show-more-button>
-                            <button
-                              class="button-show-more link underlined-link"
-                              id="Show-More-{{ forloop.index }}-{{ section.id }}"
-                              type="button"
-                            >
-                              <span class="label-show-more label-text"
-                                ><span aria-hidden="true">+ </span>{{ 'products.facets.show_more' | t -}}
-                              </span>
-                              <span class="label-show-less label-text hidden"
-                                ><span aria-hidden="true">- </span>{{ 'products.facets.show_less' | t -}}
-                              </span>
-                            </button>
-                          </show-more-button>
+                          <div class="w-full flex justify-end">
+                            <show-more-button class="-mt-3 ml-auto">
+                              <button
+                                class="button-show-more mt-0 ml-auto hover:underline cursor-pointer underline-offset-2"
+                                id="Show-More-{{ forloop.index }}-{{ section.id }}"
+                                type="button"
+                              >
+                                <span class="label-show-more label-text"
+                                  ><span aria-hidden="true">+ </span>{{ 'products.facets.show_more' | t -}}
+                                </span>
+                                <span class="label-show-less label-text hidden"
+                                  ><span aria-hidden="true">- </span>{{ 'products.facets.show_less' | t -}}
+                                </span>
+                              </button>
+                            </show-more-button>
+                          </div>
                         {%- endif %}
                       </div>
                     </details>
