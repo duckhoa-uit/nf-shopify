@@ -453,7 +453,7 @@
                     endif
                   -%}
                   <div class="price-wrapper flex flex-col">
-                    <span class="current-price text-[21px] font-medium font-['Archivo_SemiExpanded'] leading-[1.14]">
+                    <span class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]">
                       {% if settings.currency_code_enabled %}
                         {{ current_variant.price | money_with_currency }}
                       {% else %}
@@ -462,7 +462,7 @@
                     </span>
                     {% if current_variant.compare_at_price > current_variant.price %}
                       <div class="flex items-center mt-2">
-                        <span class="original-price text-[14px] font-normal font-['Archivo_SemiExpanded'] text-[#3D3D3D] leading-[1.14]">
+                        <span class="original-price text-[14px] font-normal font-archivo-expanded text-[#3D3D3D] leading-[1.14]">
                           {% if settings.currency_code_enabled %}
                             {{ current_variant.compare_at_price | money_with_currency }}
                           {% else %}

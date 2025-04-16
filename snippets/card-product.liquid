@@ -390,10 +390,16 @@
 
         <div class="flex gap-3 items-center mt-0.5">
           {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
-            <span class="line-through text-[#666666] font-medium font-['Archivo_SemiExpanded'] text-base leading-6">{{ card_product.compare_at_price | money }}</span>
-            <span class="text-[#000000] font-medium font-['Archivo_SemiExpanded'] text-base leading-6">{{ card_product.price | money }}</span>
+            <span class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">
+              {{- card_product.compare_at_price | money -}}
+            </span>
+            <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+              {{- card_product.price | money -}}
+            </span>
           {%- else -%}
-            <span class="text-[#000000] font-medium font-['Archivo_SemiExpanded'] text-base leading-6">{{ card_product.price | money }}</span>
+            <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+              {{- card_product.price | money -}}
+            </span>
           {%- endif -%}
         </div>
       </div>
@@ -409,7 +415,7 @@
         <h3 class="card-product-northfinder__title">{{ 'onboarding.product_title' | t }}</h3>
         <div class="card-product-northfinder__type">Product Type</div>
         <div class="flex gap-3 items-center mt-0.5">
-          <span class="text-[#000000] font-medium font-['Archivo_SemiExpanded'] text-base leading-6">$29.99</span>
+          <span class="text-black font-medium font-archivo-expanded text-base leading-6">$29.99</span>
         </div>
         <div class="card-product-northfinder__availability">In Stock</div>
       </div>
