@@ -19,7 +19,7 @@
 -%}
 
 <span
-  class="swatch{% if shape == 'square' %} swatch--square{% endif %}{% unless swatch and swatch.value %} swatch--unavailable{% endunless %}"
+  class="swatch{% if shape == 'square' %} swatch--square{% endif %}"
   style="{{ swatch_style }}"
 >
   {%- if thumbnail_url != blank -%}
