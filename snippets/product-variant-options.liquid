@@ -199,13 +199,39 @@
                     endif
                   endfor
                 endunless
+
+                # If still no model image found, try other image types in priority order
+                unless found_model_image
+                  # Define image type priority for fallback
+                  assign image_types = 'H,B,BV,D' | split: ','
+
+                  # Try each image type in priority order
+                  for type in image_types
+                    if thumbnail_url == ''
+                      for media in product.media
+                        assign media_src = media.src | default: ''
+                        assign parsed_url = media_src | split: '/' | last
+
+                        # Check if the image contains both the reference_id and the current image type
+                        assign type_code = '-' | append: type
+                        if parsed_url contains reference_id and parsed_url contains type_code
+                          assign thumbnail_url = media.preview_image | image_url: width: 80
+                          break
+                        endif
+                      endfor
+                    endif
+                  endfor
+                endunless
               endif
 
-              # Fallback to the old method if no model image found
+              # Fallback to the old method if no image found with reference_id
               if thumbnail_url == ''
                 for media in product.media
                   assign media_src = media.src | default: ''
-                  if media_src contains color_value
+                  assign parsed_url = media_src | split: '/' | last
+
+                  # Try to match by color name in the URL
+                  if parsed_url contains color_value
                     assign thumbnail_url = media.preview_image | image_url: width: 80
                     break
                   endif
@@ -362,13 +388,39 @@
                 endif
               endfor
             endunless
+
+            # If still no model image found, try other image types in priority order
+            unless found_model_image
+              # Define image type priority for fallback
+              assign image_types = 'H,B,BV,D' | split: ','
+
+              # Try each image type in priority order
+              for type in image_types
+                if thumbnail_url == ''
+                  for media in product.media
+                    assign media_src = media.src | default: ''
+                    assign parsed_url = media_src | split: '/' | last
+
+                    # Check if the image contains both the reference_id and the current image type
+                    assign type_code = '-' | append: type
+                    if parsed_url contains reference_id and parsed_url contains type_code
+                      assign thumbnail_url = media.preview_image | image_url: width: 80
+                      break
+                    endif
+                  endfor
+                endif
+              endfor
+            endunless
           endif
 
-          # Fallback to the old method if no model image found
+          # Fallback to the old method if no image found with reference_id
           if thumbnail_url == ''
             for media in product.media
               assign media_src = media.src | default: ''
-              if media_src contains color_value
+              assign parsed_url = media_src | split: '/' | last
+
+              # Try to match by color name in the URL
+              if parsed_url contains color_value
                 assign thumbnail_url = media.preview_image | image_url: width: 80
                 break
               endif

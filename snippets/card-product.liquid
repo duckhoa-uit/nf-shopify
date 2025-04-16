@@ -83,6 +83,29 @@
           {%- endfor -%}
         {%- endunless -%}
 
+        {%- comment -%} If still no model image found, try other image types in priority order {%- endcomment -%}
+        {%- unless found_model_image -%}
+          {%- comment -%} Define image type priority for fallback {%- endcomment -%}
+          {%- assign image_types = 'H,B,BV,D' | split: ',' -%}
+
+          {%- comment -%} Try each image type in priority order {%- endcomment -%}
+          {%- for type in image_types -%}
+            {%- if model_image == null -%}
+              {%- for media in card_product.media -%}
+                {%- assign media_src = media.src | default: '' -%}
+                {%- assign parsed_url = media_src | split: '/' | last -%}
+
+                {%- comment -%} Check if the image contains the current image type {%- endcomment -%}
+                {%- assign type_code = '-' | append: type -%}
+                {%- if parsed_url contains type_code -%}
+                  {%- assign model_image = media -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endunless -%}
+
         {%- comment -%} Fallback to featured_media if no model image found {%- endcomment -%}
         {%- unless model_image -%}
           {%- assign model_image = card_product.featured_media -%}
@@ -264,6 +287,29 @@
                       {%- endif -%}
                     {%- endfor -%}
                   {%- endunless -%}
+
+                  {%- comment -%} If still no model image found, try other image types in priority order {%- endcomment -%}
+                  {%- unless found_model_image -%}
+                    {%- comment -%} Define image type priority for fallback {%- endcomment -%}
+                    {%- assign image_types = 'H,B,BV,D' | split: ',' -%}
+
+                    {%- comment -%} Try each image type in priority order {%- endcomment -%}
+                    {%- for type in image_types -%}
+                      {%- if variant_image == null -%}
+                        {%- for media in card_product.media -%}
+                          {%- assign media_src = media.src | default: '' -%}
+                          {%- assign parsed_url = media_src | split: '/' | last -%}
+
+                          {%- comment -%} Check if the image contains both the reference_id and the current image type {%- endcomment -%}
+                          {%- assign type_code = '-' | append: type -%}
+                          {%- if parsed_url contains reference_id and parsed_url contains type_code -%}
+                            {%- assign variant_image = media -%}
+                            {%- break -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endunless -%}
                 {%- endif -%}
 
                 {%- comment -%} Try to find matching image in variant.featured_image if no model image found {%- endcomment -%}
@@ -273,6 +319,16 @@
                   {%- else -%}
                     {%- comment -%} Try to find matching image in product.media or product.images {%- endcomment -%}
                     {%- for media in card_product.media -%}
+                      {%- assign media_src = media.src | default: '' -%}
+                      {%- assign parsed_url = media_src | split: '/' | last -%}
+
+                      {%- comment -%} Try to match by color name in the URL {%- endcomment -%}
+                      {%- if parsed_url contains color_value -%}
+                        {%- assign variant_image = media -%}
+                        {%- break -%}
+                      {%- endif -%}
+
+                      {%- comment -%} Try to match by alt text {%- endcomment -%}
                       {%- if media.alt contains color or media.alt contains color_variant.title -%}
                         {%- assign variant_image = media -%}
                         {%- break -%}
@@ -283,16 +339,6 @@
                       {%- for image in card_product.images -%}
                         {%- if image.alt contains color or image.alt contains color_variant.title -%}
                           {%- assign variant_image = image -%}
-                          {%- break -%}
-                        {%- endif -%}
-                      {%- endfor -%}
-                    {%- endunless -%}
-
-                    {%- comment -%} Fallback to the first image that appears to match the color {%- endcomment -%}
-                    {%- unless variant_image -%}
-                      {%- for media in card_product.media -%}
-                        {%- if media.alt contains color or media.src contains color -%}
-                          {%- assign variant_image = media -%}
                           {%- break -%}
                         {%- endif -%}
                       {%- endfor -%}
