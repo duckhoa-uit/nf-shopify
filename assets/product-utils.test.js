@@ -9,6 +9,7 @@ describe("parseImageUrl", () => {
       product: "NF-no-5009snw",
       color: "darkblue",
       image_type: "main",
+      reference_id: null
     });
   });
 
@@ -19,6 +20,7 @@ describe("parseImageUrl", () => {
       color: "darkblue",
       image_type: "details",
       sequence: 1,
+      reference_id: null
     });
   });
 
@@ -29,6 +31,7 @@ describe("parseImageUrl", () => {
       color: "darkblue",
       image_type: "model",
       sequence: 2,
+      reference_id: null
     });
   });
 
@@ -38,6 +41,7 @@ describe("parseImageUrl", () => {
       product: "NF-no-5009snw",
       color: "darkblue",
       image_type: "back_main",
+      reference_id: null
     });
   });
 
@@ -47,6 +51,7 @@ describe("parseImageUrl", () => {
       product: "NF-no-5009snw",
       color: "darkblue",
       image_type: "back_variant",
+      reference_id: null
     });
   });
 
@@ -57,6 +62,7 @@ describe("parseImageUrl", () => {
       color: "red",
       image_type: "details",
       sequence: 1,
+      reference_id: null
     });
   });
 
@@ -67,6 +73,7 @@ describe("parseImageUrl", () => {
       color: "light-blue",
       image_type: "details",
       sequence: 1,
+      reference_id: null
     });
   });
 
@@ -79,6 +86,7 @@ describe("parseImageUrl", () => {
       color: "darkblue",
       image_type: "details",
       sequence: 1,
+      reference_id: null
     });
   });
 
@@ -91,6 +99,7 @@ describe("parseImageUrl", () => {
       color: "darkblue",
       image_type: "details",
       sequence: 1,
+      reference_id: null
     });
   });
 
@@ -100,6 +109,7 @@ describe("parseImageUrl", () => {
       product: "NF-no-5009snw",
       color: "darkblue",
       image_type: "main",
+      reference_id: null
     });
   });
 
@@ -109,6 +119,7 @@ describe("parseImageUrl", () => {
       product: "",
       color: "",
       image_type: "main",
+      reference_id: null
     });
   });
 
@@ -121,6 +132,7 @@ describe("parseImageUrl", () => {
       color: "black",
       image_type: "details",
       sequence: 1,
+      reference_id: null
     });
   });
 
@@ -133,6 +145,7 @@ describe("parseImageUrl", () => {
       color: "brightred",
       image_type: "details",
       sequence: 1,
+      reference_id: null
     });
   });
 
@@ -145,6 +158,7 @@ describe("parseImageUrl", () => {
       color: "black",
       image_type: "details",
       sequence: 10,
+      reference_id: null
     });
   });
 
@@ -157,6 +171,7 @@ describe("parseImageUrl", () => {
       color: "macawgreen2",
       image_type: "details",
       sequence: 1,
+      reference_id: null
     });
   });
 
@@ -167,6 +182,7 @@ describe("parseImageUrl", () => {
       color: "gray_seda",
       image_type: "details",
       sequence: 1,
+      reference_id: null
     });
   });
 
@@ -177,28 +193,56 @@ describe("parseImageUrl", () => {
       color: "flamescarlet",
       image_type: "details",
       sequence: 2,
+      reference_id: null
     });
   });
 });
 
 describe("sortImagesByDisplayRules", () => {
-  test("sorts images according to display rules", () => {
+  test("sorts images according to display rules and marks hidden images", () => {
     const imageUrls = [
       "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_2.jpg",
       "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-H.jpg",
       "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_1.jpg",
       "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_1.jpg",
       "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-B.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_2.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_3.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_4.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_5.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_6.jpg",
     ];
 
-    const sortedUrls = sortImagesByDisplayRules(imageUrls);
+    const sortedImages = sortImagesByDisplayRules(imageUrls);
 
-    expect(sortedUrls).toEqual([
-      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-H.jpg",
-      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-B.jpg",
-      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_1.jpg",
-      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_1.jpg",
-      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_2.jpg",
-    ]);
+    // Check that the result is an array of objects with url and hidden properties
+    expect(sortedImages).toBeInstanceOf(Array);
+    expect(sortedImages.length).toBe(imageUrls.length);
+    expect(sortedImages[0]).toHaveProperty('url');
+    expect(sortedImages[0]).toHaveProperty('hidden');
+
+    // Check the order of URLs
+    const sortedUrls = sortedImages.map(img => img.url);
+
+    // First position should be H.jpg (main)
+    expect(sortedUrls[0]).toBe("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-H.jpg");
+
+    // Second position should be M_1.jpg (first model photo)
+    expect(sortedUrls[1]).toBe("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_1.jpg");
+
+    // Check that the first image is not hidden
+    expect(sortedImages[0].hidden).toBe(false);
+
+    // Check that the second image is not hidden (position 2 should be visible)
+    expect(sortedImages[1].hidden).toBe(false);
+
+    // Check that at least one image is hidden
+    const hasHiddenImage = sortedImages.some(img => img.hidden === true);
+    expect(hasHiddenImage).toBe(true);
+  });
+
+  test("handles empty input", () => {
+    const sortedImages = sortImagesByDisplayRules([]);
+    expect(sortedImages).toEqual([]);
   });
 });

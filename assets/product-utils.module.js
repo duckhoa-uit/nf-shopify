@@ -202,23 +202,38 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
     groupedImages[key].push(img);
   });
 
-  // Sort each group according to the display rules
+  // Sort each group according to the new display rules
   Object.keys(groupedImages).forEach((key) => {
     groupedImages[key].sort((a, b) => {
       const getDisplayPriority = (img) => {
-        // Main image always first
+        // Position 1: H.jpg (Main product photo)
         if (img.image_type === "main") return 1;
-        // Position 2 priorities
-        if (img.image_type === "video") return 2;
-        if (img.image_type === "back_main" || img.image_type === "back_variant") return 3;
-        // Next positions (models have priority)
+
+        // Position 1 fallback: M_1.jpg (First model photo)
+        if (img.image_type === "model" && img.sequence === 1) return 2;
+
+        // Position 2: video.avi/mp4
+        if (img.image_type === "video") return 3;
+
+        // Position 2 fallback: B.jpg (Back main product photo)
+        if (img.image_type === "back_main") return 4;
+
+        // Position 2 second fallback: M_X.jpg (Any model photo)
+        if (img.image_type === "back_variant" || (img.image_type === "model" && img.sequence !== 1)) return 5;
+
+        // Next positions: Remaining model photos
         if (img.image_type === "model") {
-          return img.sequence ? 40 + img.sequence : 40;
+          return img.sequence ? 10 + img.sequence : 15;
         }
-        // Details last
+
+        // First detail photo
+        if (img.image_type === "details" && img.sequence === 1) return 20;
+
+        // Remaining detail photos
         if (img.image_type === "details") {
-          return img.sequence ? 50 + img.sequence : 50;
+          return img.sequence ? 30 + img.sequence : 35;
         }
+
         // Everything else
         return 100;
       };
@@ -228,12 +243,38 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
 
       return priorityA - priorityB;
     });
+
+    // Show first 6 images, hide the rest
+    const visibleImages = [];
+    const hiddenImages = [];
+
+    groupedImages[key].forEach((img, index) => {
+      // First 6 images are visible
+      if (index < 6) {
+        visibleImages.push(img);
+      } else {
+        // All images after position 6 are hidden
+        hiddenImages.push({
+          ...img,
+          hidden: true
+        });
+      }
+    });
+
+    // Replace the group with the new ordering
+    groupedImages[key] = [...visibleImages, ...hiddenImages];
   });
 
   // Flatten the grouped images, keeping product-color groups together
   const sortedImages = [];
   Object.keys(groupedImages).forEach((key) => {
-    sortedImages.push(...groupedImages[key].map((img) => img.url));
+    sortedImages.push(...groupedImages[key].map((img) => {
+      // Return the URL and hidden status
+      return {
+        url: img.url,
+        hidden: img.hidden || false
+      };
+    }));
   });
 
   return sortedImages;
