@@ -398,5 +398,42 @@
 
     <script src="{{ 'auth-modal.js' | asset_url }}" defer></script>
     <script src="{{ 'product-utils.module.js' | asset_url }}" type="module"></script>
+
+    {% comment %} Wishlist by Code Black Belt integration {% endcomment %}
+    {{ 'wishlist.css' | asset_url | stylesheet_tag }}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Function to hide wishlist counter when it's 0
+        function updateWishlistCounterVisibility() {
+          const counters = document.querySelectorAll('.wishlist-counter');
+          counters.forEach(counter => {
+            if (counter.textContent === '0' || counter.textContent === '') {
+              counter.style.display = 'none';
+            } else {
+              counter.style.display = 'flex';
+            }
+          });
+        }
+
+        // Initial check
+        updateWishlistCounterVisibility();
+
+        // Set up a MutationObserver to watch for changes to the counter
+        const counters = document.querySelectorAll('.wishlist-counter');
+        counters.forEach(counter => {
+          const observer = new MutationObserver(updateWishlistCounterVisibility);
+          observer.observe(counter, { childList: true, characterData: true, subtree: true });
+        });
+
+        // Update counter from customer metafields if available
+        {% if customer %}
+          if (window.wishlistApp && typeof window.wishlistApp.updateCounter === 'function') {
+            window.wishlistApp.updateCounter({{ customer.metafields.wishlist.items | json }});
+            // Run visibility check again after counter update
+            setTimeout(updateWishlistCounterVisibility, 100);
+          }
+        {% endif %}
+      });
+    </script>
   </body>
 </html>

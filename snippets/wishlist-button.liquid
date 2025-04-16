@@ -1,0 +1,34 @@
+{% comment %}
+  Renders a wishlist button for the Wishlist by Code Black Belt app
+  
+  Accepts:
+  - product: {Object} Product Liquid object (required)
+  - variant_id: {Number} Variant ID (optional)
+  - btn_class: {String} Additional CSS classes for the button (optional)
+  - show_icon_only: {Boolean} Whether to show only the icon (optional)
+  
+  Usage:
+  {% render 'wishlist-button', product: product %}
+{% endcomment %}
+
+{%- assign wishlist_btn_class = 'wishlist-button' -%}
+{%- if btn_class -%}
+  {%- assign wishlist_btn_class = wishlist_btn_class | append: ' ' | append: btn_class -%}
+{%- endif -%}
+
+{%- assign variant_id = variant_id | default: product.selected_or_first_available_variant.id -%}
+{%- assign show_icon_only = show_icon_only | default: true -%}
+
+<button 
+  type="button"
+  class="{{ wishlist_btn_class }} cbb-wishlist-button"
+  data-cbb-wishlist-product-id="{{ product.id }}"
+  data-cbb-wishlist-product-handle="{{ product.handle }}"
+  data-cbb-wishlist-variant-id="{{ variant_id }}"
+  aria-label="Add to wishlist"
+>
+  <span class="svg-wrapper size-5 wishlist-icon">{{ 'icon-heart.svg' | inline_asset_content }}</span>
+  {% unless show_icon_only %}
+    <span class="wishlist-button-text">Add to Wishlist</span>
+  {% endunless %}
+</button>

@@ -1,0 +1,32 @@
+{% comment %}
+  Renders the wishlist page content for the Wishlist by Code Black Belt app
+  
+  Usage:
+  {% render 'wishlist-page' %}
+{% endcomment %}
+
+<div class="wishlist-page page-width">
+  <div class="wishlist-page__header">
+    <h1 class="wishlist-page__title font-archivo-expanded font-extrabold text-2xl leading-7 my-0 uppercase">My Wishlist</h1>
+  </div>
+  
+  <div class="cbb-wishlist-container">
+    <div class="cbb-wishlist-empty-state wishlist-page__empty" style="display: none;">
+      <p class="wishlist-page__empty-text">Your wishlist is currently empty.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+        Continue Shopping
+      </a>
+    </div>
+    
+    <div class="cbb-wishlist-products-container wishlist-grid">
+      <!-- Wishlist items will be dynamically inserted here by the app -->
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // The app will automatically populate the wishlist container
+    // This is just a placeholder for any additional custom JavaScript
+  });
+</script>
