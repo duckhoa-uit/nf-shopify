@@ -134,6 +134,9 @@
                       {%- endfor -%}
                       <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="clear-all-filters">
                         {{- 'products.facets.clear_all' | t -}}
+                        <span class="svg-wrapper size-3 ml-2">
+                          {{- 'icon-close.svg' | inline_asset_content -}}
+                        </span>
                       </a>
                     {%- endif -%}
                   </div>

@@ -17,10 +17,21 @@
         {{- collection.title | escape -}}
       </h1>
 
-      {%- if section.settings.show_collection_description and collection.description != blank -%}
-        <div class="collection-hero__description rte truncate max-w-[500px]">
-          <span>/ </span>{{ collection.description | strip_html }}
-        </div>
+      {%- if section.settings.show_collection_description -%}
+        {%- if collection.description != blank -%}
+          <div class="collection-hero__description rte truncate max-w-[500px]">
+            <span>/ </span>{{ collection.description | strip_html }}
+          </div>
+        {%- endif -%}
+        <a
+          href="#collection-description-full"
+          class="read-more-link inline-flex items-center text-[#0f0f0f] text-sm leading-4 underline lg:text-base lg:leading-5"
+        >
+          Read more
+          <span class="rotate-90 ml-2">
+            {{- 'icon-chevron.svg' | inline_asset_content -}}
+          </span>
+        </a>
       {%- endif -%}
     </div>
 
