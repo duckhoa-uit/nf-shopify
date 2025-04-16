@@ -385,13 +385,7 @@
                 </div>
               {% endif %}
             </div>
-            <button
-              type="button"
-              class=" bg-[#F5F5F5] size-10 rounded-full flex items-center justify-center"
-              aria-label="Add to wishlist"
-            >
-              <span class="svg-wrapper size-5">{{ 'icon-heart.svg' | inline_asset_content }}</span>
-            </button>
+            {% render 'wishlist-button', product: product, btn_class: 'bg-[#F5F5F5] size-10 rounded-full flex items-center justify-center' %}
           </div>
           {%- for block in section.blocks -%}
             {%- case block.type -%}

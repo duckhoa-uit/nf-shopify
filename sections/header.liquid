@@ -174,8 +174,9 @@
         <span class="svg-wrapper [&_svg]:size-[1.625rem]">{{ 'icon-currency.svg' | inline_asset_content }}</span>
       </a>
 
-      <a href="{{ routes.cart_url }}" class="header__icon px-3 link focus-inset">
+      <a href="/pages/wishlist" class="header__icon px-3 link focus-inset wishlist-link">
         <span class="svg-wrapper size-5">{{ 'icon-heart.svg' | inline_asset_content }}</span>
+        <span class="wishlist-counter cbb-wishlist-count" style="display: none;">0</span>
       </a>
 
       {%- if shop.customer_accounts_enabled -%}
