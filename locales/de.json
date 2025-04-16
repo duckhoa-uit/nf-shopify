@@ -17,7 +17,11 @@
       "login_form_error": "Falsches Passwort!",
       "login_form_submit": "Eingeben",
       "admin_link_html": "Bist du der Shop-Inhaber? <a href=\"/admin\" class=\"link underlined-link\">Hier einloggen</a>",
-      "powered_by_shopify_html": "Dieser Shop wird unterstützt von {{ shopify }}"
+      "powered_by_shopify_html": "Dieser Shop wird unterstützt von {{ shopify }}",
+      "opening_soon": "Eröffnung in Kürze",
+      "signup_form_email_label": "E-Mail",
+      "signup_form_success": "Wir senden Ihnen kurz vor unserer Eröffnung eine E-Mail!",
+      "password_link": "Mit Passwort einloggen"
     },
     "social": {
       "alt_text": {
@@ -35,18 +39,30 @@
         "youtube": "YouTube",
         "vimeo": "Vimeo",
         "tiktok": "TikTok"
-      }
+      },
+      "share_on_facebook": "Aktie",
+      "share_on_pinterest": "Pin es"
     },
     "continue_shopping": "Weiter shoppen",
     "pagination": {
       "label": "Seitennummerierung",
       "page": "Seite {{ number }}",
       "next": "Nächste Seite",
-      "previous": "Vorherige Seite"
+      "previous": "Vorherige Seite",
+      "current_page": "Seite {{ current }} von {{ total }}"
     },
     "search": {
       "search": "Suchen",
-      "reset": "Suchbegriff zurücksetzen"
+      "reset": "Suchbegriff zurücksetzen",
+      "no_results_html": "Ihre Suche nach \" {{ terms }} \" hat keine Ergebnisse geliefert.",
+      "results_with_count": {
+        "one": "{{ count }} Ergebnis für \" {{ terms }} \"",
+        "other": "{{ count }} Ergebnisse für \" {{ terms }} \""
+      },
+      "title": "Durchsuchen Sie unsere Website",
+      "placeholder": "Suchen",
+      "submit": "Einreichen",
+      "close": "Suche schließen"
     },
     "cart": {
       "view": "Warenkorb ansehen ({{ count }})",
@@ -57,19 +73,60 @@
       "copy_to_clipboard": "Link kopieren",
       "share_url": "Link",
       "success_message": "Link in die Zwischenablage kopiert",
-      "close": "Teilen schließen"
+      "close": "Teilen schließen",
+      "button": "Aktie"
     },
     "slider": {
       "of": "von",
       "next_slide": "Nach rechts schieben",
       "previous_slide": "Nach links schieben",
       "name": "Slider"
+    },
+    "accessibility": {
+      "skip_to_content": "Zum Inhalt springen",
+      "close_modal": "Schließen (Esc)"
+    },
+    "discover_northfinder": {
+      "for_men": "Für Männer",
+      "for_women": "Für Frauen"
+    },
+    "meta": {
+      "tags": "Markiert mit \" {{ tags }} \"",
+      "page": "Seite {{ page }}"
+    },
+    "navigation": {
+      "blog": "Der Blog",
+      "contact": "Kontakt",
+      "faq": "Häufig gestellte Fragen"
+    },
+    "404": {
+      "title": "404 Seite nicht gefunden",
+      "subtext": "Die von Ihnen angeforderte Seite existiert nicht.",
+      "link": "Weiter einkaufen"
+    },
+    "breadcrumbs": {
+      "home": "Heim",
+      "collections": "Sammlungen",
+      "products": "Produkte"
+    },
+    "newsletter_form": {
+      "newsletter_email": "Tragen Sie sich in unsere Mailingliste ein",
+      "email_placeholder": "E-Mail-Adresse",
+      "confirmation": "Vielen Dank, dass Sie sich angemeldet haben",
+      "submit": "Abonnieren"
+    },
+    "filters": {
+      "show_more": "Mehr anzeigen",
+      "show_less": "Weniger anzeigen"
     }
   },
   "newsletter": {
     "label": "E-Mail",
     "success": "Danke für deine Anmeldung",
-    "button_label": "Abonnieren"
+    "button_label": "Abonnieren",
+    "placeholder": "Geben Sie Ihre E-Mail ein",
+    "policy_agreement": "Mit dem Absenden Ihrer E-Mail stimmen Sie der Verarbeitung personenbezogener Daten zu.",
+    "discount_label": "Rabattcoupon für Abonnenten"
   },
   "accessibility": {
     "skip_to_text": "Direkt zum Inhalt",
@@ -93,10 +150,7 @@
     "article": {
       "blog": "Blog",
       "read_more_title": "Weiterlesen: {{ title }}",
-      "comments": {
-        "one": "{{ count }} Kommentar",
-        "other": "{{ count }} Kommentare"
-      },
+      "comments": "Kommentare",
       "moderated": "Bitte beachte, dass Kommentare vor der Veröffentlichung freigegeben werden müssen.",
       "comment_form_title": "Hinterlasse einen Kommentar",
       "name": "Name",
@@ -106,7 +160,36 @@
       "back_to_blog": "Zurück zum Blog",
       "share": "Diesen Artikel teilen",
       "success": "Dein Kommentar wurde erfolgreich gepostet! Vielen Dank!",
-      "success_moderated": "Dein Kommentar wurde erfolgreich gepostet. Da unser Blog moderiert wird, werden wir ihn erst kurze Zeit später veröffentlichen."
+      "success_moderated": "Dein Kommentar wurde erfolgreich gepostet. Da unser Blog moderiert wird, werden wir ihn erst kurze Zeit später veröffentlichen.",
+      "view_all": "Alle ansehen",
+      "all_topics": "Alle Themen",
+      "by_author": "von {{ author }}",
+      "posted_in": "Veröffentlicht in",
+      "read_more": "Mehr lesen"
+    },
+    "main_blog": {
+      "search_placeholder": "Suche nach Artikeln",
+      "all_articles": "Alle Artikel",
+      "view_more": "Mehr anzeigen",
+      "no_results": "Es wurden keine Artikel gefunden, die Ihren Suchkriterien entsprechen.",
+      "categories": {
+        "adventure": "Abenteuer",
+        "tips": "Tipps",
+        "gear": "Gang"
+      }
+    },
+    "comments": {
+      "title": "Hinterlasse einen Kommentar",
+      "email": "E-Mail",
+      "message": "Nachricht",
+      "post": "Kommentar posten",
+      "moderated": "Bitte beachten Sie, dass Kommentare vor der Veröffentlichung genehmigt werden müssen.",
+      "success_moderated": "Ihr Kommentar wurde erfolgreich gepostet. Wir werden ihn in Kürze veröffentlichen, da unser Blog moderiert wird.",
+      "success": "Ihr Kommentar wurde erfolgreich veröffentlicht! Vielen Dank!",
+      "comments_with_count": {
+        "one": "{{ count }} Kommentar",
+        "other": "{{ count }} Kommentare"
+      }
     }
   },
   "onboarding": {
@@ -161,7 +244,9 @@
         "load_image": "Bild {{ index }} in Galerieansicht laden",
         "load_model": "3D-Modell {{ index }} in Galerieansicht laden",
         "load_video": "Video {{ index }} in Galerieansicht abspielen",
-        "image_available": "Bild {{ index }} ist nun in der Galerieansicht verfügbar"
+        "image_available": "Bild {{ index }} ist nun in der Galerieansicht verfügbar",
+        "open_featured_media": "Ausgewählte Medien in der Galerieansicht öffnen",
+        "view_in_space": "In Ihrem Bereich anzeigen"
       },
       "view_full_details": "Vollständige Details anzeigen",
       "shipping_policy_html": "<a href=\"{{ link }}\">Versand</a> wird beim Checkout berechnet",
@@ -186,7 +271,12 @@
       "product_variants": "Produktvarianten",
       "taxes_included": "Inkl. Steuern.",
       "duties_included": "Inkl. Zollgebühren.",
-      "duties_and_taxes_included": "Inkl. Zollgebühren und Steuern."
+      "duties_and_taxes_included": "Inkl. Zollgebühren und Steuern.",
+      "regular_price": "Normaler Preis",
+      "add_to_wishlist": "Zu Favoriten hinzufügen",
+      "related_products": "Das könnte Ihnen auch gefallen",
+      "wishlist": "Wunschliste",
+      "load_video": "Video in der Galerieansicht laden"
     },
     "modal": {
       "label": "Medien-Galerie"
@@ -220,7 +310,15 @@
       "filter_selected_accessibility": "{{ type }} ({{ count }} Filter ausgewählt)",
       "show_more": "Mehr anzeigen",
       "show_less": "Weniger anzeigen",
-      "filter_and_operator_subtitle": "Allen entsprechen"
+      "filter_and_operator_subtitle": "Allen entsprechen",
+      "hide_filters": "Filter ausblenden",
+      "product_count_status": "{{ viewed_count }} von {{ total_count }} Produkten angesehen",
+      "products_per_page": "Zeigen:",
+      "remove_filter": "Filter entfernen {{ value }}"
+    },
+    "general": {
+      "view_more": "Mehr anzeigen",
+      "view_all": "Alle Produkte"
     }
   },
   "templates": {
@@ -312,7 +410,10 @@
       "duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html": "Inkl. Zollgebühren. Steuern, Rabatte und <a href=\"{{ link }}\">Versand</a> werden beim Checkout berechnet.",
       "duties_included_taxes_at_checkout_shipping_at_checkout_without_policy": "Inkl. Zollgebühren. Steuern, Rabatte und Versand werden beim Checkout berechnet.",
       "taxes_at_checkout_shipping_at_checkout_with_policy_html": "Steuern, Rabatte und <a href=\"{{ link }}\">Versand</a> werden beim Checkout berechnet.",
-      "taxes_at_checkout_shipping_at_checkout_without_policy": "Steuern, Rabatte und Versand werden beim Checkout berechnet."
+      "taxes_at_checkout_shipping_at_checkout_without_policy": "Steuern, Rabatte und Versand werden beim Checkout berechnet.",
+      "remove": "Entfernen",
+      "summary": "Zusammenfassung",
+      "item_added": "Artikel zum Warenkorb hinzugefügt"
     },
     "footer": {
       "payment": "Zahlungsmethoden"
@@ -380,6 +481,57 @@
       "min_error": "Dieser Artikel hat ein Minimum von {{ min }}",
       "max_error": "Dieser Artikel hat ein Maximum von {{ max }}",
       "step_error": "Du kannst diesen Artikel nur in Abstufungen von {{ step }} hinzufügen."
+    },
+    "main-blog": {
+      "name": "Hauptblog",
+      "settings": {
+        "header": {
+          "content": "Blog-Post-Einstellungen"
+        },
+        "show_image": {
+          "label": "Ausgewähltes Bild anzeigen"
+        },
+        "image_height": {
+          "label": "Höhe des vorgestellten Bildes",
+          "info": "Legen Sie das Seitenverhältnis des ausgewählten Bildes fest. Diese Einstellung gilt nicht bei Verwendung der Option „An Bild anpassen“.",
+          "options__1": {
+            "label": "An Bild anpassen"
+          },
+          "options__2": {
+            "label": "Klein"
+          },
+          "options__4": {
+            "label": "Groß"
+          }
+        },
+        "show_date": {
+          "label": "Datum anzeigen"
+        },
+        "show_author": {
+          "label": "Autor anzeigen"
+        },
+        "enable_filtering": {
+          "label": "Kategoriefilterung aktivieren"
+        },
+        "enable_search": {
+          "label": "Suchfeld aktivieren"
+        },
+        "posts_per_page": {
+          "label": "Beiträge pro Seite"
+        },
+        "enable_load_more": {
+          "label": "Schaltfläche „Mehr laden“ aktivieren"
+        },
+        "paragraph": {
+          "content": "Um das Layout Ihrer Blogbeiträge zu ändern, bearbeiten Sie Ihre Blogvorlage."
+        }
+      }
+    },
+    "blog_posts_slider": {
+      "add_posts": "Fügen Sie Blogbeiträge hinzu, indem Sie auf die Schaltfläche „Anpassen“ klicken"
+    },
+    "main-cart-items": {
+      "name": "Warenkorbartikel"
     }
   },
   "localization": {
@@ -533,5 +685,8 @@
       "expanded": "Formular für den Empfänger des Geschenkgutscheins erweitert",
       "collapsed": "Formular für den Empfänger des Geschenkgutscheins minimiert"
     }
+  },
+  "video": {
+    "no_support": "Ihr Browser unterstützt das Video-Tag nicht."
   }
 }
