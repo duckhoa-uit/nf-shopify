@@ -4,6 +4,23 @@
   Usage:
   {% render 'header-mega-menu' %}
 {% endcomment %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Add click event listeners to all mega menu summary elements
+    document.querySelectorAll('.mega-menu summary').forEach(function (summary) {
+      summary.addEventListener('click', function (event) {
+        // Find the anchor tag inside the summary
+        const anchor = this.querySelector('a');
+        if (anchor && event.target === anchor) {
+          // If the anchor was clicked directly, navigate to its href
+          window.location.href = anchor.getAttribute('href');
+          // Prevent the details from toggling
+          event.preventDefault();
+        }
+      });
+    });
+  });
+</script>
 <nav class="header__inline-menu mt-0 px-0 h-full lg:flex lg:items-center lg:justify-center">
   <ul class="list-menu list-menu--inline h-full" role="list">
     {%- for link in section.settings.menu.links -%}
@@ -15,11 +32,12 @@
                 id="HeaderMenu-{{ link.handle }}"
                 class="header__menu-item list-menu__item link focus-inset group transition-colors p-3 text-[0.9375rem] h-full"
               >
-                <span
-                  class="{% if link.child_active %} header__active-menu-item{% endif %} group-hover:text-accent font-semibold text-foreground uppercase"
+                <a
+                  href="{{ link.url | default: '#' }}"
+                  class="{% if link.child_active %} header__active-menu-item{% endif %} group-hover:text-accent font-semibold text-foreground uppercase inline-block w-full h-full"
                 >
                   {{- link.title | escape -}}
-                </span>
+                </a>
               </summary>
               <div
                 id="MegaMenu-Content-{{ forloop.index }}"
