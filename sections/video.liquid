@@ -3,8 +3,8 @@
 
 {%- style -%}
   .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
   @media screen and (min-width: 750px) {
@@ -13,22 +13,6 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
-
-  /* Custom video styling */
-  #Deferred-Media-{{ section.id }} {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-  }
-
-  #Deferred-Media-{{ section.id }} iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
 {%- endstyle -%}
 
 {%- liquid
@@ -36,8 +20,6 @@
   assign video_alt = section.settings.video.alt | default: section.settings.description
   assign alt = 'sections.video.load_video' | t: description: video_alt | escape
   assign poster = section.settings.video.preview_image | default: section.settings.cover_image
-
-  # Check if we have a YouTube URL but no Shopify video
 
   if section.settings.video != null
     assign ratio_diff = section.settings.video.aspect_ratio | minus: poster.aspect_ratio | abs
@@ -58,8 +40,8 @@
 
 {%- style -%}
   .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
   @media screen and (min-width: 750px) {
@@ -70,100 +52,118 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  assign video_id = section.settings.video.id | default: section.settings.video_url.id
+  assign video_alt = section.settings.video.alt | default: section.settings.description
+  assign alt = 'sections.video.load_video' | t: description: video_alt | escape
+  assign poster = section.settings.video.preview_image | default: section.settings.cover_image
+
+  if section.settings.video != null
+    assign ratio_diff = section.settings.video.aspect_ratio | minus: poster.aspect_ratio | abs
+    if ratio_diff < 0.01 and ratio_diff > 0
+      assign fix_ratio = true
+    endif
+  endif
+-%}
+
+{%- capture sizes -%}
+  {% if section.settings.full_width -%}
+    100vw
+  {%- else -%}
+    (min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 }}px, (min-width: 750px)
+    calc(100vw - 10rem), 100vw
+  {%- endif %}
+{%- endcapture -%}
+
 <div class="gradient">
   <div
     class="video-section isolate{% unless section.settings.full_width %} page-width{% endunless %} section-{{ section.id }}-padding relative"
   >
     <div class="relative z-1 h-full pointer-events-auto">
-      {% if section.settings.show_banner_content %}
-        <div
-          class="banner__content banner__content--{{ section.settings.desktop_content_position }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} absolute bottom-0 left-0 w-full md:h-1/2 pointer-events-none flex flex-col items-center justify-center from-foreground/70 to-transparent bg-gradient-to-t z-10"
-        >
-          <div class="banner__box content-container content-container--full-width-mobile bg-transparent flex flex-col items-start md:items-center justify-end p-4 pt-11 md:pt-0 md:pb-10 lg:pb-20 h-full">
-            {%- for block in section.blocks -%}
-              {%- case block.type -%}
-                {%- when 'heading' -%}
-                  <h2
-                    class="banner__heading inline-richtext {{ block.settings.heading_size }} text-base leading-[1.3125rem] md:text-[2rem] md:leading-[2.625rem] font-extrabold font-archivo-expanded text-left md:text-center w-full mb-2 md:mb-4"
-                    style="color: white"
-                    {{ block.shopify_attributes }}
-                  >
-                    {{ block.settings.heading }}
-                  </h2>
-                {%- when 'text' -%}
-                  <div
-                    class="banner__text rte {{ block.settings.text_style }} text-sm leading-5 md:leading-4 mb-3 md:mb-6 w-full md:max-w-[520px]"
-                    style="color: white"
-                    {{ block.shopify_attributes }}
-                  >
-                    <p>{{ block.settings.text }}</p>
-                  </div>
-                {%- when 'buttons' -%}
-                  <div
-                    class="banner__buttons{% if block.settings.button_label_1 != blank and block.settings.button_label_2 != blank %} banner__buttons--multiple{% endif %}"
-                    {{ block.shopify_attributes }}
-                  >
-                    {%- if block.settings.button_label_1 != blank -%}
-                      <a
-                        {% if block.settings.button_link_1 == blank %}
-                          role="link" aria-disabled="true"
-                        {% else %}
-                          href="{{ block.settings.button_link_1 }}"
-                        {% endif %}
-                        class="button{% if block.settings.button_style_secondary_1 %} button--secondary{% else %} button--primary{% endif %} font-semibold text-sm leading-4 px-3 py-2 md:px-[5.625rem] md:py-3 bg-background text-foreground after:hidden"
-                      >
-                        {{- block.settings.button_label_1 | escape -}}
-                      </a>
-                    {%- endif -%}
-                    {%- if block.settings.button_label_2 != blank -%}
-                      <a
-                        {% if block.settings.button_link_2 == blank %}
-                          role="link" aria-disabled="true"
-                        {% else %}
-                          href="{{ block.settings.button_link_2 }}"
-                        {% endif %}
-                        class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %} font-semibold leading-4 text-sm px-6 py-3"
-                      >
-                        {{- block.settings.button_label_2 | escape -}}
-                      </a>
-                    {%- endif -%}
-                  </div>
-              {%- endcase -%}
-            {%- endfor -%}
-          </div>
+      <div
+        class="banner__content banner__content--{{ section.settings.desktop_content_position }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} absolute bottom-0 left-0 w-full md:h-1/2 pointer-events-none flex flex-col items-center justify-center from-foreground/70 to-transparent bg-gradient-to-t z-10"
+      >
+        <div class="banner__box content-container content-container--full-width-mobile bg-transparent flex flex-col items-start md:items-center justify-end p-4 pt-11 md:pt-0 md:pb-10 lg:pb-20 h-full">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'heading' -%}
+                <h2
+                  class="banner__heading inline-richtext {{ block.settings.heading_size }} text-base leading-[1.3125rem] md:text-[2rem] md:leading-[2.625rem] font-extrabold font-archivo-expanded text-left md:text-center w-full mb-2 md:mb-4"
+                  style="color: white"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ block.settings.heading }}
+                </h2>
+              {%- when 'text' -%}
+                <div
+                  class="banner__text rte {{ block.settings.text_style }} text-sm leading-5 md:leading-4 mb-3 md:mb-6 w-full md:max-w-[520px]"
+                  style="color: white"
+                  {{ block.shopify_attributes }}
+                >
+                  <p>{{ block.settings.text }}</p>
+                </div>
+              {%- when 'buttons' -%}
+                <div
+                  class="banner__buttons{% if block.settings.button_label_1 != blank and block.settings.button_label_2 != blank %} banner__buttons--multiple{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  {%- if block.settings.button_label_1 != blank -%}
+                    <a
+                      {% if block.settings.button_link_1 == blank %}
+                        role="link" aria-disabled="true"
+                      {% else %}
+                        href="{{ block.settings.button_link_1 }}"
+                      {% endif %}
+                      class="button{% if block.settings.button_style_secondary_1 %} button--secondary{% else %} button--primary{% endif %} font-semibold text-sm leading-4 px-3 py-2 md:px-[5.625rem] md:py-3 bg-background text-foreground after:hidden"
+                    >
+                      {{- block.settings.button_label_1 | escape -}}
+                    </a>
+                  {%- endif -%}
+                  {%- if block.settings.button_label_2 != blank -%}
+                    <a
+                      {% if block.settings.button_link_2 == blank %}
+                        role="link" aria-disabled="true"
+                      {% else %}
+                        href="{{ block.settings.button_link_2 }}"
+                      {% endif %}
+                      class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %} font-semibold leading-4 text-sm px-6 py-3"
+                    >
+                      {{- block.settings.button_label_2 | escape -}}
+                    </a>
+                  {%- endif -%}
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
         </div>
-      {% endif %}
+      </div>
       <deferred-media
-        id="Deferred-Media-{{ section.id }}"
         class="video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} w-full aspect-2/3 md:aspect-2/1"
         data-media-id="{{ video_id }}"
         {% if poster != null %}
           style="--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;"
         {% endif %}
       >
-        {% if section.settings.autoplay_video == false and poster != null %}
-          <button
-            id="Deferred-Poster-Modal-{{ video_id }}"
-            class="video-section__poster media deferred-media__poster media--landscape"
-            type="button"
-            aria-label="{{ alt }}"
-          >
-            {%- if poster != null -%}
-              {{
-                poster
-                | image_url: width: 3840
-                | image_tag: sizes: sizes, widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840', alt: alt
-              }}
-            {%- else -%}
-              {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
-            {%- endif -%}
-            <span class="deferred-media__poster-button motion-reduce size-[3.125rem] md:size-[4.375rem]">
-              <span class="svg-wrapper w-2 h-[0.625rem] md:w-3 md:h-4 text-accent">
-                {{- 'icon-play.svg' | inline_asset_content -}}
-              </span>
+        <button
+          id="Deferred-Poster-Modal-{{ video_id }}"
+          class="video-section__poster media deferred-media__poster media--landscape"
+          type="button"
+          aria-label="{{ alt }}"
+        >
+          {%- if poster != null -%}
+            {{
+              poster
+              | image_url: width: 3840
+              | image_tag: sizes: sizes, widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840', alt: alt
+            }}
+          {%- else -%}
+            {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+          {%- endif -%}
+          <span class="deferred-media__poster-button motion-reduce size-[3.125rem] md:size-[4.375rem]">
+            <span class="svg-wrapper w-2 h-[0.625rem] md:w-3 md:h-4 text-accent">
+              {{- 'icon-play.svg' | inline_asset_content -}}
             </span>
-          </button>
-        {% endif %}
+          </span>
+        </button>
         <template>
           {%- if section.settings.video == null and section.settings.video_url != null -%}
             {%- liquid
@@ -171,15 +171,10 @@
               if section.settings.enable_video_looping
                 assign loop = '&loop=1&playlist=' | append: video_id
               endif
-
-              assign should_autoplay = section.settings.autoplay_video
-              if poster == null
-                assign should_autoplay = true
-              endif
             -%}
             {%- if section.settings.video_url.type == 'youtube' -%}
               <iframe
-                src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1{% if should_autoplay %}&autoplay=1{% endif %}{{ loop }}&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&fs=0&disablekb=1&mute=1&playsinline=1&playlist={{ video_id }}&origin={{ shop.secure_url | json }}&widget_referrer={{ shop.secure_url | json }}&color=white"
+                src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1&autoplay=1{{ loop }}"
                 class="js-youtube"
                 allow="autoplay; encrypted-media"
                 allowfullscreen
@@ -187,7 +182,7 @@
               ></iframe>
             {%- else -%}
               <iframe
-                src="https://player.vimeo.com/video/{{ video_id }}?{% if should_autoplay %}autoplay=1{% endif %}{{ loop }}&controls=0&title=0&byline=0&portrait=0&background=1&muted=1"
+                src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1{{ loop }}"
                 class="js-vimeo"
                 allow="autoplay; encrypted-media"
                 allowfullscreen
@@ -195,331 +190,18 @@
               ></iframe>
             {%- endif -%}
           {%- else -%}
-            {%- liquid
-              assign should_autoplay = section.settings.autoplay_video
-              if poster == null
-                assign should_autoplay = true
-              endif
-            -%}
             {{
               section.settings.video
               | video_tag:
                 image_size: '1100x',
-                autoplay: should_autoplay,
+                autoplay: true,
                 loop: section.settings.enable_video_looping,
                 controls: false,
-                muted: true
+                muted: false
             }}
           {%- endif -%}
         </template>
       </deferred-media>
-
-      {% if section.settings.autoplay_video or poster == null %}
-        <script>
-          // Load YouTube API
-          if (!window.YT) {
-            var tag = document.createElement('script');
-            tag.src = 'https://www.youtube.com/iframe_api';
-            var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-          }
-
-          // Optimized approach to ensure the video autoplays and hides YouTube toolbox
-          (function () {
-            // Function to load the video content from the template
-            function loadDeferredVideo() {
-              // Try to find the deferred media element by ID first
-              let deferredMedia = document.querySelector('#Deferred-Media-{{ section.id }}');
-
-              // If not found by ID, try to find it by data-media-id
-              if (!deferredMedia) {
-                deferredMedia = document.querySelector('deferred-media[data-media-id="{{ video_id }}"]');
-              }
-
-              // If still not found, try to find any deferred-media in this section
-              if (!deferredMedia) {
-                const section = document.querySelector('#shopify-section-{{ section.id }}');
-                if (section) {
-                  deferredMedia = section.querySelector('deferred-media');
-                }
-              }
-
-              if (deferredMedia) {
-                // Check if the template content is still there (not yet loaded)
-                const template = deferredMedia.querySelector('template');
-                if (template) {
-                  // Method 1: Use the DeferredMedia component's loadContent method if available
-                  if (typeof deferredMedia.loadContent === 'function') {
-                    try {
-                      deferredMedia.loadContent(false);
-                      deferredMedia.setAttribute('loaded', true);
-                    } catch (e) {
-                      console.error('Error calling loadContent method:', e);
-                    }
-                  } else {
-                    // Method 2: Try using the built-in deferred-media click handler
-                    try {
-                      const loadTrigger = new CustomEvent('click');
-                      deferredMedia.dispatchEvent(loadTrigger);
-                    } catch (e) {
-                      console.error('Error triggering deferred media click:', e);
-                    }
-                  }
-
-                  // Method 3: Manually extract and append the iframe from the template as a fallback
-                  setTimeout(function () {
-                    // Check if the video still hasn't loaded
-                    if (deferredMedia.querySelector('template')) {
-                      try {
-                        // Get the iframe from the template
-                        const iframe = template.content.querySelector('iframe');
-                        if (iframe) {
-                          // Clone the iframe
-                          const iframeClone = iframe.cloneNode(true);
-                          // Style the iframe to fill the container
-                          iframeClone.style.width = '100%';
-                          iframeClone.style.height = '100%';
-                          iframeClone.style.position = 'absolute';
-                          iframeClone.style.top = '0';
-                          iframeClone.style.left = '0';
-                          iframeClone.style.border = 'none';
-                          // Remove the template
-                          template.remove();
-                          // Append the iframe directly to the deferred-media element
-                          deferredMedia.appendChild(iframeClone);
-                          // Mark as loaded
-                          deferredMedia.setAttribute('loaded', true);
-
-                          // Only add overlay if autoplay is not enabled
-                          {% assign autoplay_setting = section.settings.autoplay_video | json %}
-                          {% assign no_poster = false %}
-                          {% if poster == null %}
-                            {% assign no_poster = true %}
-                          {% endif %}
-                          {% assign no_poster_json = no_poster | json %}
-                          const isAutoplayEnabled = Boolean({{ autoplay_setting }}) || Boolean({{ no_poster_json }});
-                          if (iframeClone.src && iframeClone.src.includes('youtube.com') && !isAutoplayEnabled) {
-                            // Create a full-size overlay to prevent any interactions with the iframe
-                            const fullOverlay = document.createElement('div');
-                            fullOverlay.style.position = 'absolute';
-                            fullOverlay.style.top = '0';
-                            fullOverlay.style.left = '0';
-                            fullOverlay.style.width = '100%';
-                            fullOverlay.style.height = '100%';
-                            fullOverlay.style.zIndex = '10';
-                            fullOverlay.style.backgroundColor = 'transparent';
-
-                            // Create a play/pause button in the center of the overlay
-                            const playPauseButton = document.createElement('button');
-                            playPauseButton.style.position = 'absolute';
-                            playPauseButton.style.top = '50%';
-                            playPauseButton.style.left = '50%';
-                            playPauseButton.style.transform = 'translate(-50%, -50%)';
-                            playPauseButton.style.width = '80px';
-                            playPauseButton.style.height = '80px';
-                            playPauseButton.style.borderRadius = '50%';
-                            playPauseButton.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-                            playPauseButton.style.border = 'none';
-                            playPauseButton.style.cursor = 'pointer';
-                            playPauseButton.style.display = 'none'; // Initially hidden
-                            playPauseButton.innerHTML = `
-                              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
-                                <path d="M8 5v14l11-7z"/>
-                              </svg>
-                            `;
-
-                            // Track video state
-                            let isPlaying = true;
-
-                            // Allow click events to pass through to the video for play/pause functionality
-                            // but block all other interactions
-                            fullOverlay.addEventListener('click', function(e) {
-                              e.stopPropagation();
-
-                              // Send play/pause command to YouTube iframe
-                              try {
-                                const iframe = deferredMedia.querySelector('iframe');
-                                if (iframe && iframe.contentWindow) {
-                                  if (isPlaying) {
-                                    // Pause video
-                                    iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":[]}', '*');
-                                    // Show play button
-                                    playPauseButton.style.display = 'block';
-                                    playPauseButton.innerHTML = `
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
-                                        <path d="M8 5v14l11-7z"/>
-                                      </svg>
-                                    `;
-                                  } else {
-                                    // Play video
-                                    iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":[]}', '*');
-                                    // Hide play button after a short delay
-                                    setTimeout(() => {
-                                      playPauseButton.style.display = 'none';
-                                    }, 500);
-                                  }
-                                  isPlaying = !isPlaying;
-                                }
-                              } catch(e) {
-                                console.error('Error toggling play/pause:', e);
-                              }
-                            });
-
-                            // Add play/pause button to overlay
-                            fullOverlay.appendChild(playPauseButton);
-
-                            deferredMedia.appendChild(fullOverlay);
-                          }
-
-                          console.log('Manually loaded video iframe');
-                        }
-                      } catch (e) {
-                        console.error('Error manually loading iframe:', e);
-                      }
-                    }
-                  }, 500); // Give the first methods some time to work before trying the manual approach
-                }
-              }
-            }
-
-            // Try loading immediately
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-              setTimeout(loadDeferredVideo, 100);
-            } else {
-              // Or wait for DOM to be ready
-              document.addEventListener('DOMContentLoaded', function () {
-                setTimeout(loadDeferredVideo, 100);
-              });
-            }
-
-            // Also try again after a longer delay as a fallback
-            setTimeout(loadDeferredVideo, 1000);
-
-            // Add CSS to hide YouTube hover controls
-            const style = document.createElement('style');
-            style.textContent = `
-              /* Hide YouTube hover controls */
-              .ytp-chrome-top,
-              .ytp-chrome-bottom,
-              .ytp-gradient-top,
-              .ytp-gradient-bottom,
-              .ytp-pause-overlay,
-              .ytp-watermark,
-              .ytp-youtube-button,
-              .ytp-embed,
-              .ytp-title-channel,
-              .ytp-title-text,
-              .ytp-share-button,
-              .ytp-watch-later-button,
-              .ytp-overflow-button,
-              .ytp-large-play-button,
-              .ytp-show-cards-title,
-              .ytp-iv-drawer-toggle,
-              .ytp-menuitem,
-              .ytp-ce-element,
-              .ytp-ce-covering-overlay,
-              .ytp-ce-element-shadow,
-              .ytp-ce-covering-image,
-              .ytp-ce-expanding-image,
-              .ytp-ce-element.ytp-ce-channel.ytp-ce-channel-this,
-              .ytp-ce-element.ytp-ce-video.ytp-ce-element-show,
-              iframe[src*="youtube.com"]::-webkit-scrollbar,
-              .ytp-scroll-min,
-              .ytp-pause-overlay .ytp-pause-overlay-controls,
-              .ytp-cards-button,
-              .ytp-cards-teaser,
-              .ytp-cards-button-icon-default,
-              .ytp-expand-pause-overlay,
-              .ytp-expand,
-              .ytp-title,
-              .ytp-title-enable-channel-logo,
-              .ytp-title-channel-logo,
-              .ytp-chrome-controls,
-              .ytp-button,
-              .ytp-settings-button,
-              .ytp-fullscreen-button,
-              .ytp-miniplayer-button,
-              .ytp-mute-button,
-              .ytp-volume-area,
-              .ytp-time-display,
-              .ytp-prev-button,
-              .ytp-next-button,
-              .ytp-player-content,
-              .ytp-menu-container,
-              .ytp-spinner,
-              .ytp-bezel,
-              .ytp-bezel-text,
-              .ytp-bezel-text-wrapper,
-              .ytp-ad-overlay-container,
-              .ytp-ad-overlay-slot,
-              .ytp-ad-text,
-              .ytp-ad-skip-button,
-              .ytp-ad-preview-container,
-              .ytp-ad-preview-text,
-              .ytp-ad-preview-image,
-              .html5-video-player:not(.ytp-touch-mode) .ytp-chrome-top {
-                display: none !important;
-                opacity: 0 !important;
-                visibility: hidden !important;
-                pointer-events: none !important;
-              }
-
-              /* Force hide hover elements */
-              .html5-video-player:hover .ytp-chrome-top,
-              .html5-video-player:hover .ytp-chrome-bottom,
-              .html5-video-player.ytp-touch-mode .ytp-chrome-top,
-              .html5-video-player.ytp-touch-mode .ytp-chrome-bottom,
-              .html5-video-player:hover .ytp-gradient-top,
-              .html5-video-player:hover .ytp-gradient-bottom,
-              .html5-video-player.ytp-autohide .ytp-chrome-top:not(.ytp-force-visible),
-              .html5-video-player.ytp-autohide .ytp-chrome-bottom:not(.ytp-force-visible) {
-                display: none !important;
-                opacity: 0 !important;
-                visibility: hidden !important;
-                pointer-events: none !important;
-              }
-
-              /* Hide YouTube iframe border and ensure no headers */
-              iframe[src*="youtube.com"] {
-                border: 0 !important;
-              }
-
-              /* Direct iframe style override */
-              #Deferred-Media-{{ section.id }} iframe,
-              deferred-media[data-media-id="{{ video_id }}"] iframe {
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-                border: 0 !important;
-                background-color: #000 !important;
-              }
-
-              /* Hide YouTube header with CSS */
-              #Deferred-Media-{{ section.id }} iframe::before,
-              deferred-media[data-media-id="{{ video_id }}"] iframe::before {
-                content: '' !important;
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: 40px !important; /* Height of YouTube header */
-                background-color: #000 !important;
-                z-index: 9999 !important;
-                pointer-events: none !important;
-              }
-
-              /* Hide YouTube video annotations */
-              .video-annotations,
-              .ytp-iv-video-content {
-                display: none !important;
-              }
-            `;
-            document.head.appendChild(style);
-          })();
-        </script>
-      {% endif %}
     </div>
   </div>
 </div>
@@ -533,20 +215,6 @@
     "groups": ["header", "footer"]
   },
   "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_banner_content",
-      "label": "Show banner content",
-      "default": true,
-      "info": "When enabled, shows the heading, text, and buttons overlay on the video"
-    },
-    {
-      "type": "checkbox",
-      "id": "autoplay_video",
-      "label": "Autoplay video",
-      "default": false,
-      "info": "When enabled, the video will autoplay on page load without requiring user interaction"
-    },
     {
       "type": "select",
       "id": "desktop_content_position",
