@@ -13,6 +13,10 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .hidden {
+    display: none !important;
+  }
 {%- endstyle -%}
 
 {%- liquid
@@ -80,6 +84,7 @@
     class="video-section isolate{% unless section.settings.full_width %} page-width{% endunless %} section-{{ section.id }}-padding relative"
   >
     <div class="relative z-1 h-full pointer-events-auto">
+      {% unless section.settings.hide_banner_content %}
       <div
         class="banner__content banner__content--{{ section.settings.desktop_content_position }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} absolute bottom-0 left-0 w-full md:h-1/2 pointer-events-none flex flex-col items-center justify-center from-foreground/70 to-transparent bg-gradient-to-t z-10"
       >
@@ -136,33 +141,39 @@
           {%- endfor -%}
         </div>
       </div>
+      {% endunless %}
       <deferred-media
         class="video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} w-full aspect-2/3 md:aspect-2/1"
         data-media-id="{{ video_id }}"
+        {% if section.settings.hide_banner_content %}data-autoplay="true"{% endif %}
         {% if poster != null %}
           style="--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;"
         {% endif %}
       >
         <button
           id="Deferred-Poster-Modal-{{ video_id }}"
-          class="video-section__poster media deferred-media__poster media--landscape"
+          class="video-section__poster media deferred-media__poster media--landscape{% if section.settings.hide_banner_content %} hidden{% endif %}"
           type="button"
           aria-label="{{ alt }}"
         >
-          {%- if poster != null -%}
-            {{
-              poster
-              | image_url: width: 3840
-              | image_tag: sizes: sizes, widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840', alt: alt
-            }}
-          {%- else -%}
-            {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+          {%- if section.settings.hide_banner_content != true -%}
+            {%- if poster != null -%}
+              {{
+                poster
+                | image_url: width: 3840
+                | image_tag: sizes: sizes, widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840', alt: alt
+              }}
+            {%- else -%}
+              {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+            {%- endif -%}
           {%- endif -%}
+          {%- if section.settings.hide_banner_content != true -%}
           <span class="deferred-media__poster-button motion-reduce size-[3.125rem] md:size-[4.375rem]">
             <span class="svg-wrapper w-2 h-[0.625rem] md:w-3 md:h-4 text-accent">
               {{- 'icon-play.svg' | inline_asset_content -}}
             </span>
           </span>
+          {%- endif -%}
         </button>
         <template>
           {%- if section.settings.video == null and section.settings.video_url != null -%}
@@ -194,10 +205,10 @@
               section.settings.video
               | video_tag:
                 image_size: '1100x',
-                autoplay: true,
+                autoplay: section.settings.hide_banner_content,
                 loop: section.settings.enable_video_looping,
                 controls: false,
-                muted: false
+                muted: section.settings.hide_banner_content
             }}
           {%- endif -%}
         </template>
@@ -344,6 +355,13 @@
     {
       "type": "header",
       "content": "t:sections.video.settings.header__3.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_banner_content",
+      "label": "Hide banner content",
+      "default": false,
+      "info": "When enabled, banner content will be hidden and video will autoplay"
     },
     {
       "type": "checkbox",
