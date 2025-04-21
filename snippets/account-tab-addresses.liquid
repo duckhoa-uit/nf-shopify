@@ -1,0 +1,78 @@
+{% comment %}
+  Addresses tab content
+
+  Accepts:
+  - customer: The customer object
+{% endcomment %}
+
+<div id="addresses" class="tab-content" role="tabpanel">
+  <div class="address-section">
+    <div class="address-section-header">
+      <h3 class="section-title">{{ 'customer.addresses.billing_address' | t }}</h3>
+      <button type="button" class="button button--small" id="AddBillingAddress">
+        <span class="svg-wrapper">
+          {{ 'icon-plus.svg' | inline_asset_content }}
+        </span>
+        {{ 'customer.addresses.add_new' | t }}
+      </button>
+    </div>
+
+    <div class="address-cards" id="billing-address-cards">
+      {% for address in customer.addresses %}
+        {% unless address == customer.default_address %}
+          {% render 'address-card', address: address, customer: customer, is_default: false %}
+        {% endunless %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="address-section">
+    <div class="address-section-header">
+      <h3 class="section-title">{{ 'customer.addresses.delivery_address' | t }}</h3>
+      <button type="button" class="button button--small" id="AddDeliveryAddress">
+        <span class="svg-wrapper">
+          {{ 'icon-plus.svg' | inline_asset_content }}
+        </span>
+        {{ 'customer.addresses.add_new' | t }}
+      </button>
+    </div>
+
+    <div class="address-cards" id="delivery-address-cards">
+      {% for address in customer.addresses %}
+        {% if address == customer.default_address %}
+          {% render 'address-card', address: address, customer: customer, is_default: true %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Add Address Form Template -->
+  {% render 'address-form' %}
+
+  <!-- Delete Address Confirmation Modal -->
+  <div id="deleteConfirmModal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container modal-small">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ 'customer.addresses.delete' | t }}</h3>
+        <button type="button" class="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-content">
+        <p>{{ 'customer.addresses.delete_confirm' | t }}</p>
+
+        <div class="form-actions">
+          <form id="deleteAddressForm" method="post" action="" class="inline">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" class="button button--secondary" id="confirmDeleteBtn">
+              <span class="btn-text">{{ 'customer.addresses.delete' | t }}</span>
+              <span class="btn-spinner"></span>
+            </button>
+          </form>
+          <button type="button" class="button button--tertiary modal-cancel">
+            {{ 'customer.addresses.cancel' | t }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

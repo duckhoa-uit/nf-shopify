@@ -1,0 +1,171 @@
+{% comment %}
+  Address form component for adding a new address
+
+  Accepts:
+  - form_id: ID for the form (default: 'AddAddressForm')
+  - title: Title for the form (default: 'Add a New Address')
+{% endcomment %}
+
+{%- assign form_id = form_id | default: 'AddAddressForm' -%}
+{%- assign title = title | default: 'customer.addresses.add_new' | t -%}
+
+<template id="AddAddressFormTemplate">
+  {%- form 'customer_address', customer.new_address -%}
+    <div class="address-form">
+      <div class="form-row">
+        <div class="form-group">
+          {%
+            render 'form-field',
+            type: 'text',
+            id: 'AddressFirstName',
+            name: 'address[first_name]',
+            value: form.first_name,
+            label: 'customer.addresses.first_name' | t,
+            required: true,
+            pattern: '[A-Za-z\s]{2,}',
+            title: 'First name should contain at least 2 letters'
+          %}
+        </div>
+
+        <div class="form-group">
+          {%
+            render 'form-field',
+            type: 'text',
+            id: 'AddressLastName',
+            name: 'address[last_name]',
+            value: form.last_name,
+            label: 'customer.addresses.last_name' | t,
+            required: true,
+            pattern: '[A-Za-z\s]{2,}',
+            title: 'Last name should contain at least 2 letters'
+          %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          {%
+            render 'form-field',
+            type: 'text',
+            id: 'AddressCompany',
+            name: 'address[company]',
+            value: form.company,
+            label: 'customer.addresses.company' | t
+          %}
+        </div>
+
+        <div class="form-group">
+          {%
+            render 'form-field',
+            type: 'tel',
+            id: 'AddressPhone',
+            name: 'address[phone]',
+            value: form.phone,
+            label: 'customer.addresses.phone' | t,
+            pattern: '[0-9\+\-\s]{7,}',
+            title: 'Phone number should contain at least 7 digits'
+          %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        {%
+          render 'form-field',
+          type: 'text',
+          id: 'AddressAddress1',
+          name: 'address[address1]',
+          value: form.address1,
+          label: 'customer.addresses.address1' | t,
+          required: true,
+          min_length: '5',
+          title: 'Address should be at least 5 characters long'
+        %}
+      </div>
+
+      <div class="form-group">
+        {%
+          render 'form-field',
+          type: 'text',
+          id: 'AddressAddress2',
+          name: 'address[address2]',
+          value: form.address2,
+          label: 'customer.addresses.address2' | t
+        %}
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          {%
+            render 'form-field',
+            type: 'text',
+            id: 'AddressCity',
+            name: 'address[city]',
+            value: form.city,
+            label: 'customer.addresses.city' | t,
+            required: true,
+            pattern: '[A-Za-z\s\-]{2,}',
+            title: 'City name should contain at least 2 letters'
+          %}
+        </div>
+
+        <div class="form-group">
+          {%
+            render 'form-field',
+            type: 'text',
+            id: 'AddressZip',
+            name: 'address[zip]',
+            value: form.zip,
+            label: 'customer.addresses.zip' | t,
+            required: true,
+            pattern: '[0-9A-Za-z\s\-]{3,10}',
+            title: 'Postal/ZIP code should be 3-10 characters'
+          %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="AddressCountry">{{ 'customer.addresses.country' | t }}</label>
+          <div class="select-wrapper">
+            <select
+              id="AddressCountry"
+              name="address[country]"
+              data-address-country-select
+              data-default="{{ form.country }}"
+            >
+              {{ all_country_option_tags }}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" id="AddressProvinceContainer" style="display:none;">
+          <label for="AddressProvince">{{ 'customer.addresses.province' | t }}</label>
+          <div class="select-wrapper">
+            <select
+              id="AddressProvince"
+              name="address[province]"
+              data-default="{{ form.province }}"
+            ></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox-wrapper">
+          <input type="checkbox" id="address_default_address_new" name="address[default]" value="1">
+          <label for="address_default_address_new">{{ 'customer.addresses.set_default' | t }}</label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="button" id="AddressSubmit">
+          <span class="btn-text">{{ 'customer.addresses.add' | t }}</span>
+          <span class="btn-spinner"></span>
+        </button>
+        <button type="button" class="button button--tertiary modal-cancel">
+          {{ 'customer.addresses.cancel' | t }}
+        </button>
+      </div>
+    </div>
+  {%- endform -%}
+</template>

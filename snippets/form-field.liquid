@@ -1,0 +1,49 @@
+{% comment %}
+  Reusable form field component
+
+  Accepts:
+  - type: Input type (text, email, password, tel, etc.)
+  - id: Input ID
+  - name: Input name
+  - value: Input value
+  - label: Label text
+  - placeholder: Placeholder text (default: " ")
+  - required: Whether the field is required (default: false)
+  - pattern: Validation pattern
+  - title: Validation message
+  - min_length: Minimum length
+  - class: Additional CSS classes
+{% endcomment %}
+
+{%- assign placeholder = placeholder | default: ' ' -%}
+{%- assign required = required | default: false -%}
+
+<div class="field{% if class %} {{ class }}{% endif %}">
+  <input
+    type="{{ type }}"
+    id="{{ id }}"
+    name="{{ name }}"
+    class="field__input"
+    value="{{ value }}"
+    placeholder="{{ placeholder }}"
+    {% if required %}
+      required
+    {% endif %}
+    {% if pattern %}
+      pattern="{{ pattern }}"
+    {% endif %}
+    {% if title %}
+      title="{{ title }}"
+    {% endif %}
+    {% if min_length %}
+      minlength="{{ min_length }}"
+    {% endif %}
+  >
+  <label class="field__label" for="{{ id }}">
+    {% if label contains 'customer.' or label contains 'general.' %}
+      {{ label | t }}
+    {% else %}
+      {{ label }}
+    {% endif %}
+  </label>
+</div>
