@@ -1216,6 +1216,9 @@ deferred-media {
 .button--tertiary {
   --alpha-button-background: 0;
   --alpha-button-border: 0.2;
+  background-color: transparent;
+  color: #0F0F0F;
+  border: 0.0625rem solid #0F0F0F; /* 1px */
 }
 
 .button,
@@ -1350,7 +1353,10 @@ button.shopify-payment-button__button--unbranded {
 }
 
 .button--small {
-  padding: 1.2rem 2.6rem;
+  padding: 0.625rem 1.25rem; /* 10px 20px */
+  min-height: auto;
+  min-width: auto;
+  font-size: 0.8125rem; /* 13px */
 }
 
 /* Shopify Accelerated Checkout */

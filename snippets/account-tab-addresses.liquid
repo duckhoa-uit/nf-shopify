@@ -6,10 +6,30 @@
 {% endcomment %}
 
 <div id="addresses" class="tab-content" role="tabpanel">
+  <!-- Hidden data attributes for translations -->
+  <div style="display: none;">
+    <span data-name-label>{{ 'customer.addresses.name' | t }}</span>
+    <span data-email-label>{{ 'customer.addresses.email' | t }}</span>
+    <span data-phone-label>{{ 'customer.addresses.phone' | t }}</span>
+    <span data-address1-label>{{ 'customer.addresses.address1' | t }}</span>
+    <span data-city-label>{{ 'customer.addresses.city' | t }}</span>
+    <span data-zip-label>{{ 'customer.addresses.zip' | t }}</span>
+    <span data-country-label>{{ 'customer.addresses.country' | t }}</span>
+    <span data-company-label>{{ 'customer.addresses.company' | t }}</span>
+    <!-- Company ID and Tax ID fields removed -->
+    <span data-edit-label>{{ 'customer.addresses.edit' | t }}</span>
+    <span data-delete-label>{{ 'customer.addresses.delete' | t }}</span>
+    <span data-customer-email>{{ customer.email }}</span>
+    <span data-form-error>{{ 'customer.addresses.error' | t }}</span>
+    <span data-address-update-success>{{ 'customer.addresses.update_success' | t }}</span>
+    <span data-add-address-title>{{ 'customer.addresses.add_new' | t }}</span>
+    <span data-edit-icon>{{ 'icon-edit.svg' | inline_asset_content }}</span>
+    <span data-delete-icon>{{ 'icon-trash.svg' | inline_asset_content }}</span>
+  </div>
   <div class="address-section">
     <div class="address-section-header">
       <h3 class="section-title">{{ 'customer.addresses.billing_address' | t }}</h3>
-      <button type="button" class="button button--small" id="AddBillingAddress">
+      <button type="button" class="button" id="AddBillingAddress">
         <span class="svg-wrapper">
           {{ 'icon-plus.svg' | inline_asset_content }}
         </span>
@@ -29,7 +49,7 @@
   <div class="address-section">
     <div class="address-section-header">
       <h3 class="section-title">{{ 'customer.addresses.delivery_address' | t }}</h3>
-      <button type="button" class="button button--small" id="AddDeliveryAddress">
+      <button type="button" class="button" id="AddDeliveryAddress">
         <span class="svg-wrapper">
           {{ 'icon-plus.svg' | inline_asset_content }}
         </span>
@@ -49,30 +69,5 @@
   <!-- Add Address Form Template -->
   {% render 'address-form' %}
 
-  <!-- Delete Address Confirmation Modal -->
-  <div id="deleteConfirmModal" class="modal">
-    <div class="modal-overlay"></div>
-    <div class="modal-container modal-small">
-      <div class="modal-header">
-        <h3 class="modal-title">{{ 'customer.addresses.delete' | t }}</h3>
-        <button type="button" class="modal-close" aria-label="Close">&times;</button>
-      </div>
-      <div class="modal-content">
-        <p>{{ 'customer.addresses.delete_confirm' | t }}</p>
-
-        <div class="form-actions">
-          <form id="deleteAddressForm" method="post" action="" class="inline">
-            <input type="hidden" name="_method" value="delete">
-            <button type="submit" class="button button--secondary" id="confirmDeleteBtn">
-              <span class="btn-text">{{ 'customer.addresses.delete' | t }}</span>
-              <span class="btn-spinner"></span>
-            </button>
-          </form>
-          <button type="button" class="button button--tertiary modal-cancel">
-            {{ 'customer.addresses.cancel' | t }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Address deletion is handled via JavaScript -->
 </div>

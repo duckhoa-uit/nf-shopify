@@ -77,12 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Modal functionality
-  function openModal(modal) {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
+  // Modal functionality for other modals if needed in the future
   function closeModal(modal) {
     modal.classList.remove('active');
     document.body.style.overflow = '';
@@ -108,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Address functionality
-  const deleteConfirmModal = document.getElementById('deleteConfirmModal');
 
   // Add address functionality
   const addAddressButtons = [
@@ -116,6 +110,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('AddDeliveryAddress')
   ];
   const addAddressTemplate = document.getElementById('AddAddressFormTemplate');
+
+  // Check if address sections are empty and show add form automatically
+  const billingAddressCards = document.getElementById('billing-address-cards');
+  const deliveryAddressCards = document.getElementById('delivery-address-cards');
+  const billingAddressEmpty = billingAddressCards && billingAddressCards.children.length === 0;
+  const deliveryAddressEmpty = deliveryAddressCards && deliveryAddressCards.children.length === 0;
 
   function handleAddAddressClick(targetContainer) {
     // Check if add form already exists
@@ -197,6 +197,19 @@ document.addEventListener('DOMContentLoaded', function() {
         handleAddAddressClick(container);
       });
     }
+
+    // Automatically show add form for empty address sections
+    // We use setTimeout to ensure the DOM is fully loaded
+    setTimeout(() => {
+      // Check if billing address section is empty
+      if (billingAddressEmpty) {
+        handleAddAddressClick(billingAddressCards);
+      }
+      // If billing address has form showing and delivery is empty, don't show another form
+      else if (deliveryAddressEmpty && !document.getElementById('NewAddressForm')) {
+        handleAddAddressClick(deliveryAddressCards);
+      }
+    }, 100);
   }
 
   // Edit address functionality
@@ -243,24 +256,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Delete address functionality
   const deleteButtons = document.querySelectorAll('.btn-delete');
-  const deleteAddressForm = document.getElementById('deleteAddressForm');
 
   deleteButtons.forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
       const addressId = this.getAttribute('data-address-id');
+      const addressWrapper = document.querySelector(`.address-wrapper[data-address-id="${addressId}"]`);
 
-      // Set form action
-      if (deleteAddressForm) {
-        deleteAddressForm.action = `{{ routes.account_addresses_url }}/${addressId}`;
+      // Show loading state on the button
+      this.classList.add('loading');
 
-        // Add form submission handler
-        deleteAddressForm.addEventListener('submit', handleFormSubmit);
+      // Instead of using fetch, we'll use the form directly but prevent navigation
+      // Set the form data and action
+      const accountAddressesUrl = '/account/addresses';
+      const formAction = `${accountAddressesUrl}/${addressId}`;
 
-        // Open modal
-        if (deleteConfirmModal) {
-          openModal(deleteConfirmModal);
+      // Create a form data object with the necessary fields
+      const formData = new FormData();
+      formData.append('_method', 'delete');
+      formData.append('form_type', 'customer_address');
+      formData.append('utf8', '✓');
+
+      // Use XMLHttpRequest instead of fetch to avoid redirect issues
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', formAction, true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+      xhr.onload = function() {
+        // Status 200 or 302 (redirect) are both considered successful
+        if (xhr.status >= 200 && xhr.status < 400) {
+          // Remove the address card from the DOM
+          if (addressWrapper) {
+            addressWrapper.remove();
+          }
+        } else {
+          console.error('Error:', xhr.statusText);
+          const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
+          alert(errorMsg);
         }
-      }
+
+        // Remove loading state
+        button.classList.remove('loading');
+      };
+
+      xhr.onerror = function() {
+        console.error('Request error');
+        const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
+        alert(errorMsg);
+        button.classList.remove('loading');
+      };
+
+      // Send the request
+      xhr.send(formData);
     });
   });
 
@@ -365,18 +412,73 @@ document.addEventListener('DOMContentLoaded', function() {
         const successMessageText = document.querySelector('[data-address-update-success]')?.getAttribute('data-address-update-success') || 'Address updated successfully';
         successMessage.textContent = successMessageText;
 
-        // If this is a new address form, remove it
+        // Extract form data for creating/updating address card
+        const addressData = {};
+        const formFields = [
+          'first_name', 'last_name', 'company', 'address1', 'address2',
+          'city', 'country', 'province', 'zip', 'phone'
+        ];
+
+        formFields.forEach(field => {
+          const input = form.querySelector(`[name="address[${field}]"]`);
+          addressData[field] = input ? input.value : '';
+        });
+
+        // Get the address ID (for edit) or generate a temporary one (for new)
+        const addressId = form.querySelector('[name="address[id]"]')?.value ||
+                         ('new_' + Date.now());
+
+        // Determine if this is a billing or delivery address
+        const isBillingAddress = form.closest('#billing-address-cards') !== null ||
+                               formCard?.closest('#billing-address-cards') !== null;
+
+        // If this is a new address form, create a new address card
         if (formCard && formCard.id === 'NewAddressForm') {
-          formCard.remove();
+          // Create a new address wrapper
+          const newAddressWrapper = document.createElement('div');
+          newAddressWrapper.className = 'address-wrapper';
+          newAddressWrapper.setAttribute('data-address-id', addressId);
+
+          // Create the address card HTML
+          const cardHtml = createAddressCardHtml(addressData, addressId);
+          newAddressWrapper.innerHTML = cardHtml;
+
+          // Add the new address card to the appropriate container
+          const container = isBillingAddress ?
+            document.getElementById('billing-address-cards') :
+            document.getElementById('delivery-address-cards');
+
+          if (container) {
+            container.appendChild(newAddressWrapper);
+            // Remove the form
+            formCard.remove();
+
+            // Add event listeners to the new buttons
+            addButtonEventListeners(newAddressWrapper);
+          }
         }
-        // If this is an edit form, hide it and show the card
+        // If this is an edit form, update the existing card
         else if (addressCard && formCard) {
+          // Update the address card content
+          updateAddressCardContent(addressCard, addressData);
+
+          // Hide the form and show the updated card
           formCard.style.display = 'none';
           addressCard.style.display = 'block';
         }
 
-        // Reload the page to show updated addresses
-        window.location.href = window.location.pathname + window.location.hash;
+        // Show success message temporarily
+        const addressSection = form.closest('.address-section');
+        if (addressSection) {
+          const existingMessage = addressSection.querySelector('.success-message');
+          if (existingMessage) {
+            existingMessage.remove();
+          }
+          addressSection.prepend(successMessage);
+          setTimeout(() => {
+            successMessage.remove();
+          }, 3000);
+        }
       } else {
         throw new Error('Form submission failed');
       }
@@ -533,6 +635,207 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.address-form-card, .address-edit-form').forEach(form => {
     addFormValidationListeners(form);
   });
+
+  // Helper function to create HTML for a new address card
+  function createAddressCardHtml(addressData, addressId) {
+    const fullName = `${addressData.first_name} ${addressData.last_name}`.trim();
+    const addressSummary = addressData.address1 ?
+      `${addressData.address1}${addressData.city ? ', ' + addressData.city : ''}` :
+      (addressData.city || 'N/A');
+
+    return `
+      <div class="address-card">
+        <h3 class="address-card-title">
+          ${addressData.company ? addressData.company + ',' : fullName ? fullName + ',' : 'N/A,'}
+        </h3>
+        <p class="address-card-summary">${addressSummary}</p>
+
+        <div class="address-divider"></div>
+
+        <div class="address-details">
+          <div class="address-field">
+            <span class="field-label">${document.querySelector('[data-name-label]')?.getAttribute('data-name-label') || 'Name'}</span>
+            <span class="field-value">${fullName || 'N/A'}</span>
+          </div>
+
+          <div class="address-field">
+            <span class="field-label">${document.querySelector('[data-email-label]')?.getAttribute('data-email-label') || 'Email'}</span>
+            <span class="field-value">${document.querySelector('[data-customer-email]')?.getAttribute('data-customer-email') || 'N/A'}</span>
+          </div>
+
+          <div class="address-field">
+            <span class="field-label">${document.querySelector('[data-phone-label]')?.getAttribute('data-phone-label') || 'Phone'}</span>
+            <span class="field-value">${addressData.phone || 'N/A'}</span>
+          </div>
+
+          <div class="address-field">
+            <span class="field-label">${document.querySelector('[data-address1-label]')?.getAttribute('data-address1-label') || 'Address'}</span>
+            <span class="field-value">${addressData.address1 || 'N/A'}</span>
+          </div>
+
+          <div class="address-field">
+            <span class="field-label">${document.querySelector('[data-city-label]')?.getAttribute('data-city-label') || 'City'}</span>
+            <span class="field-value">${addressData.city || 'N/A'}</span>
+          </div>
+
+          <div class="address-field">
+            <span class="field-label">${document.querySelector('[data-zip-label]')?.getAttribute('data-zip-label') || 'ZIP/Postal Code'}</span>
+            <span class="field-value">${addressData.zip || 'N/A'}</span>
+          </div>
+
+          <div class="address-field">
+            <span class="field-label">${document.querySelector('[data-country-label]')?.getAttribute('data-country-label') || 'Country'}</span>
+            <span class="field-value">${addressData.country || 'N/A'}</span>
+          </div>
+
+          <div class="address-field">
+            <span class="field-label">${document.querySelector('[data-company-label]')?.getAttribute('data-company-label') || 'Company'}</span>
+            <span class="field-value">${addressData.company || 'N/A'}</span>
+          </div>
+
+          <!-- Company ID and Tax ID fields removed -->
+        </div>
+
+        <div class="address-actions">
+          <button
+            type="button"
+            class="button btn-edit"
+            data-address-id="${addressId}"
+          >
+            <span class="svg-wrapper">
+              ${document.querySelector('[data-edit-icon]')?.innerHTML || '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 11.5V14H4.5L11.8733 6.62667L9.37333 4.12667L2 11.5ZM13.8067 4.69333C14.0667 4.43333 14.0667 4.01333 13.8067 3.75333L12.2467 2.19333C11.9867 1.93333 11.5667 1.93333 11.3067 2.19333L10.0867 3.41333L12.5867 5.91333L13.8067 4.69333Z" fill="currentColor"/></svg>'}
+            </span>
+            ${document.querySelector('[data-edit-label]')?.getAttribute('data-edit-label') || 'Edit'}
+          </button>
+
+          <button
+            type="button"
+            class="button button--tertiary btn-delete"
+            data-address-id="${addressId}"
+          >
+            <span class="svg-wrapper">
+              ${document.querySelector('[data-delete-icon]')?.innerHTML || '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.66667 12.6667C4.66667 13.4 5.26667 14 6 14H10C10.7333 14 11.3333 13.4 11.3333 12.6667V4.66667H4.66667V12.6667ZM12 2.66667H9.66667L9 2H7L6.33333 2.66667H4V4H12V2.66667Z" fill="currentColor"/></svg>'}
+            </span>
+            <span class="btn-spinner"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="address-edit-form" id="EditAddress_${addressId}" style="display: none;">
+        <!-- Edit form will be added dynamically when needed -->
+      </div>
+    `;
+  }
+
+  // Helper function to update an existing address card content
+  function updateAddressCardContent(addressCard, addressData) {
+    const fullName = `${addressData.first_name} ${addressData.last_name}`.trim();
+    const addressSummary = addressData.address1 ?
+      `${addressData.address1}${addressData.city ? ', ' + addressData.city : ''}` :
+      (addressData.city || 'N/A');
+
+    // Update title and summary
+    const titleElement = addressCard.querySelector('.address-card-title');
+    if (titleElement) {
+      titleElement.textContent = addressData.company ?
+        `${addressData.company},` :
+        fullName ? `${fullName},` : 'N/A,';
+    }
+
+    const summaryElement = addressCard.querySelector('.address-card-summary');
+    if (summaryElement) {
+      summaryElement.textContent = addressSummary;
+    }
+
+    // Update field values
+    const nameValue = addressCard.querySelector('.address-field:nth-child(1) .field-value');
+    if (nameValue) nameValue.textContent = fullName || 'N/A';
+
+    const phoneValue = addressCard.querySelector('.address-field:nth-child(3) .field-value');
+    if (phoneValue) phoneValue.textContent = addressData.phone || 'N/A';
+
+    const address1Value = addressCard.querySelector('.address-field:nth-child(4) .field-value');
+    if (address1Value) address1Value.textContent = addressData.address1 || 'N/A';
+
+    const cityValue = addressCard.querySelector('.address-field:nth-child(5) .field-value');
+    if (cityValue) cityValue.textContent = addressData.city || 'N/A';
+
+    const zipValue = addressCard.querySelector('.address-field:nth-child(6) .field-value');
+    if (zipValue) zipValue.textContent = addressData.zip || 'N/A';
+
+    const countryValue = addressCard.querySelector('.address-field:nth-child(7) .field-value');
+    if (countryValue) countryValue.textContent = addressData.country || 'N/A';
+
+    const companyValue = addressCard.querySelector('.address-field:nth-child(8) .field-value');
+    if (companyValue) companyValue.textContent = addressData.company || 'N/A';
+
+    // Company ID and Tax ID fields removed
+  }
+
+  // Helper function to add event listeners to buttons in a new address card
+  function addButtonEventListeners(addressWrapper) {
+    // Add edit button event listener
+    const editButton = addressWrapper.querySelector('.btn-edit');
+    if (editButton) {
+      editButton.addEventListener('click', function() {
+        // Since this is a new address, we need to reload the page to get the edit form
+        // This is a limitation since we can't generate the full edit form with proper Shopify bindings
+        window.location.href = window.location.pathname + window.location.hash;
+      });
+    }
+
+    // Add delete button event listener
+    const deleteButton = addressWrapper.querySelector('.btn-delete');
+    if (deleteButton) {
+      deleteButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const addressId = this.getAttribute('data-address-id');
+
+        // For newly added addresses that don't have a real ID yet, just remove the card
+        if (addressId.startsWith('new_')) {
+          const wrapper = this.closest('.address-wrapper');
+          if (wrapper) wrapper.remove();
+          return;
+        }
+
+        // Otherwise use the same delete logic as other addresses
+        this.classList.add('loading');
+
+        const accountAddressesUrl = '/account/addresses';
+        const formAction = `${accountAddressesUrl}/${addressId}`;
+
+        const formData = new FormData();
+        formData.append('_method', 'delete');
+        formData.append('form_type', 'customer_address');
+        formData.append('utf8', '✓');
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', formAction, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 400) {
+            const wrapper = this.closest('.address-wrapper');
+            if (wrapper) wrapper.remove();
+          } else {
+            console.error('Error:', xhr.statusText);
+            const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
+            alert(errorMsg);
+          }
+          this.classList.remove('loading');
+        };
+
+        xhr.onerror = () => {
+          console.error('Request error');
+          const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
+          alert(errorMsg);
+          this.classList.remove('loading');
+        };
+
+        xhr.send(formData);
+      });
+    }
+  }
 
   function getProvinces(country) {
     // This is a real implementation with common provinces/states
