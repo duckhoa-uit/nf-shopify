@@ -1,6 +1,6 @@
 {% comment %}
   Address card component
-  
+
   Accepts:
   - address: The address object to display
   - customer: The customer object
@@ -8,56 +8,77 @@
 {% endcomment %}
 
 <div class="address-wrapper" data-address-id="{{ address.id }}">
-  <div class="address-card{% if is_default %} default-address{% endif %}">
+  {% comment %} <div class="address-card{% if is_default %} default-address{% endif %}"> {% endcomment %}
+  <div class="address-card">
     <h3 class="address-card-title">
-      {{ address.first_name }}
-      {{ address.last_name }},
+      {% if address.company != blank %}
+        {{ address.company }},
+      {% elsif address.first_name != blank or address.last_name != blank %}
+        {{ address.first_name }} {{ address.last_name }},
+      {% else %}
+        N/A,
+      {% endif %}
     </h3>
-    <p class="address-card-summary">{{ address.address1 }}, {{ address.city }}</p>
+    <p class="address-card-summary">
+      {% if address.address1 != blank %}
+        {{ address.address1 }}{% if address.city != blank %}, {{ address.city }}{% endif %}
+      {% elsif address.city != blank %}
+        {{ address.city }}
+      {% else %}
+        N/A
+      {% endif %}
+    </p>
 
     <div class="address-divider"></div>
 
     <div class="address-details">
       <div class="address-field">
         <span class="field-label">{{ 'customer.addresses.name' | t }}</span>
-        <span class="field-value">{{ address.first_name }} {{ address.last_name }}</span>
+        <span class="field-value">{% if address.first_name != blank or address.last_name != blank %}{{ address.first_name }} {{ address.last_name }}{% else %}N/A{% endif %}</span>
       </div>
 
       <div class="address-field">
         <span class="field-label">{{ 'customer.addresses.email' | t }}</span>
-        <span class="field-value">{{ customer.email }}</span>
+        <span class="field-value">{% if customer.email != blank %}{{ customer.email }}{% else %}N/A{% endif %}</span>
       </div>
 
       <div class="address-field">
         <span class="field-label">{{ 'customer.addresses.phone' | t }}</span>
-        <span class="field-value">{{ address.phone }}</span>
+        <span class="field-value">{% if address.phone != blank %}{{ address.phone }}{% else %}N/A{% endif %}</span>
       </div>
 
       <div class="address-field">
         <span class="field-label">{{ 'customer.addresses.address1' | t }}</span>
-        <span class="field-value">{{ address.address1 }}</span>
+        <span class="field-value">{% if address.address1 != blank %}{{ address.address1 }}{% else %}N/A{% endif %}</span>
       </div>
 
       <div class="address-field">
         <span class="field-label">{{ 'customer.addresses.city' | t }}</span>
-        <span class="field-value">{{ address.city }}</span>
+        <span class="field-value">{% if address.city != blank %}{{ address.city }}{% else %}N/A{% endif %}</span>
       </div>
 
       <div class="address-field">
         <span class="field-label">{{ 'customer.addresses.zip' | t }}</span>
-        <span class="field-value">{{ address.zip }}</span>
+        <span class="field-value">{% if address.zip != blank %}{{ address.zip }}{% else %}N/A{% endif %}</span>
       </div>
 
       <div class="address-field">
         <span class="field-label">{{ 'customer.addresses.country' | t }}</span>
-        <span class="field-value">{{ address.country }}</span>
+        <span class="field-value">{% if address.country != blank %}{{ address.country }}{% else %}N/A{% endif %}</span>
       </div>
+
+      <div class="address-field">
+        <span class="field-label">{{ 'customer.addresses.company' | t }}</span>
+        <span class="field-value">{% if address.company != blank %}{{ address.company }}{% else %}N/A{% endif %}</span>
+      </div>
+
+      {% comment %} Removed Company ID and Tax ID fields {% endcomment %}
     </div>
 
     <div class="address-actions">
       <button
         type="button"
-        class="btn-edit"
+        class="button btn-edit"
         aria-controls="EditAddress_{{ address.id }}"
         aria-expanded="false"
         data-address-id="{{ address.id }}"
@@ -70,28 +91,28 @@
 
       <button
         type="button"
-        class="btn-delete"
-        aria-controls="DeleteAddress_{{ address.id }}"
-        aria-expanded="false"
+        class="button button--tertiary btn-delete"
         data-address-id="{{ address.id }}"
       >
         <span class="svg-wrapper">
           {{ 'icon-trash.svg' | inline_asset_content }}
         </span>
+        <span class="btn-spinner"></span>
       </button>
 
-      {% unless is_default %}
+      {% comment %} TODO: disable for now {% endcomment %}
+      {% comment %} {% unless is_default %}
         <form method="post" action="{{ routes.account_addresses_url }}/{{ address.id }}" class="inline">
           <input type="hidden" name="form_type" value="customer_address">
           <input type="hidden" name="utf8" value="✓">
           <input type="hidden" name="_method" value="put">
           <input type="hidden" name="address[id]" value="{{ address.id }}">
           <input type="hidden" name="address[default]" value="true">
-          <button type="submit" class="button button--tertiary button--small btn-default">
+          <button type="submit" class="button button--tertiary button--small">
             {{ 'customer.addresses.set_default' | t }}
           </button>
         </form>
-      {% endunless %}
+      {% endunless %} {% endcomment %}
     </div>
   </div>
 
@@ -149,6 +170,8 @@
             %}
           </div>
         </div>
+
+        {% comment %} Removed Company ID and Tax ID fields {% endcomment %}
 
         <div class="form-group">
           {% render 'form-field',
@@ -228,7 +251,7 @@
           </div>
         </div>
 
-        {% if is_default %}
+        {% comment %} {% if is_default %}
           <div class="form-group">
             <div class="default-address-message">
               <p>{{ 'customer.addresses.default' | t }}</p>
@@ -241,7 +264,7 @@
               <label for="address_default_address_{{ address.id }}">{{ 'customer.addresses.set_default' | t }}</label>
             </div>
           </div>
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         <div class="form-actions">
           <button type="submit" class="button">
