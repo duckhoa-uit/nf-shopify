@@ -1,0 +1,24 @@
+{% comment %}
+  Account Settings tab content
+  
+  Accepts:
+  - No specific parameters
+{% endcomment %}
+
+<div id="account-settings" class="tab-content" role="tabpanel">
+  <h2 class="section-title">{{ 'customer.account.settings' | t }}</h2>
+
+  <div class="form-section">
+    <h3 class="form-section-title">{{ 'customer.account.account_settings' | t }}</h3>
+
+    <div class="form-group">
+      <p>{{ 'customer.account.settings_description' | t }}</p>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-primary" id="DeleteAccountBtn">
+        {{ 'customer.account.delete_account' | t }}
+      </button>
+    </div>
+  </div>
+</div>

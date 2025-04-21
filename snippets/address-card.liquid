@@ -1,0 +1,258 @@
+{% comment %}
+  Address card component
+  
+  Accepts:
+  - address: The address object to display
+  - customer: The customer object
+  - is_default: Whether this is the default address
+{% endcomment %}
+
+<div class="address-wrapper" data-address-id="{{ address.id }}">
+  <div class="address-card{% if is_default %} default-address{% endif %}">
+    <h3 class="address-card-title">
+      {{ address.first_name }}
+      {{ address.last_name }},
+    </h3>
+    <p class="address-card-summary">{{ address.address1 }}, {{ address.city }}</p>
+
+    <div class="address-divider"></div>
+
+    <div class="address-details">
+      <div class="address-field">
+        <span class="field-label">{{ 'customer.addresses.name' | t }}</span>
+        <span class="field-value">{{ address.first_name }} {{ address.last_name }}</span>
+      </div>
+
+      <div class="address-field">
+        <span class="field-label">{{ 'customer.addresses.email' | t }}</span>
+        <span class="field-value">{{ customer.email }}</span>
+      </div>
+
+      <div class="address-field">
+        <span class="field-label">{{ 'customer.addresses.phone' | t }}</span>
+        <span class="field-value">{{ address.phone }}</span>
+      </div>
+
+      <div class="address-field">
+        <span class="field-label">{{ 'customer.addresses.address1' | t }}</span>
+        <span class="field-value">{{ address.address1 }}</span>
+      </div>
+
+      <div class="address-field">
+        <span class="field-label">{{ 'customer.addresses.city' | t }}</span>
+        <span class="field-value">{{ address.city }}</span>
+      </div>
+
+      <div class="address-field">
+        <span class="field-label">{{ 'customer.addresses.zip' | t }}</span>
+        <span class="field-value">{{ address.zip }}</span>
+      </div>
+
+      <div class="address-field">
+        <span class="field-label">{{ 'customer.addresses.country' | t }}</span>
+        <span class="field-value">{{ address.country }}</span>
+      </div>
+    </div>
+
+    <div class="address-actions">
+      <button
+        type="button"
+        class="btn-edit"
+        aria-controls="EditAddress_{{ address.id }}"
+        aria-expanded="false"
+        data-address-id="{{ address.id }}"
+      >
+        <span class="svg-wrapper">
+          {{ 'icon-edit.svg' | inline_asset_content }}
+        </span>
+        {{ 'customer.addresses.edit' | t }}
+      </button>
+
+      <button
+        type="button"
+        class="btn-delete"
+        aria-controls="DeleteAddress_{{ address.id }}"
+        aria-expanded="false"
+        data-address-id="{{ address.id }}"
+      >
+        <span class="svg-wrapper">
+          {{ 'icon-trash.svg' | inline_asset_content }}
+        </span>
+      </button>
+
+      {% unless is_default %}
+        <form method="post" action="{{ routes.account_addresses_url }}/{{ address.id }}" class="inline">
+          <input type="hidden" name="form_type" value="customer_address">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="_method" value="put">
+          <input type="hidden" name="address[id]" value="{{ address.id }}">
+          <input type="hidden" name="address[default]" value="true">
+          <button type="submit" class="button button--tertiary button--small btn-default">
+            {{ 'customer.addresses.set_default' | t }}
+          </button>
+        </form>
+      {% endunless %}
+    </div>
+  </div>
+
+  <div class="address-edit-form" id="EditAddress_{{ address.id }}" style="display: none;">
+    {%- form 'customer_address', address -%}
+      <div class="address-form">
+        <div class="form-row">
+          <div class="form-group">
+            {% render 'form-field',
+              type: 'text',
+              id: 'EditAddress_' | append: address.id | append: '_FirstName',
+              name: 'address[first_name]',
+              value: address.first_name,
+              label: 'customer.addresses.first_name' | t,
+              required: true,
+              pattern: '[A-Za-z\s]{2,}',
+              title: 'First name should contain at least 2 letters'
+            %}
+          </div>
+
+          <div class="form-group">
+            {% render 'form-field',
+              type: 'text',
+              id: 'EditAddress_' | append: address.id | append: '_LastName',
+              name: 'address[last_name]',
+              value: address.last_name,
+              label: 'customer.addresses.last_name' | t,
+              required: true,
+              pattern: '[A-Za-z\s]{2,}',
+              title: 'Last name should contain at least 2 letters'
+            %}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            {% render 'form-field',
+              type: 'text',
+              id: 'EditAddress_' | append: address.id | append: '_Company',
+              name: 'address[company]',
+              value: address.company,
+              label: 'customer.addresses.company' | t
+            %}
+          </div>
+
+          <div class="form-group">
+            {% render 'form-field',
+              type: 'tel',
+              id: 'EditAddress_' | append: address.id | append: '_Phone',
+              name: 'address[phone]',
+              value: address.phone,
+              label: 'customer.addresses.phone' | t,
+              pattern: '[0-9\+\-\s]{7,}',
+              title: 'Phone number should contain at least 7 digits'
+            %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          {% render 'form-field',
+            type: 'text',
+            id: 'EditAddress_' | append: address.id | append: '_Address1',
+            name: 'address[address1]',
+            value: address.address1,
+            label: 'customer.addresses.address1' | t,
+            required: true,
+            min_length: '5',
+            title: 'Address should be at least 5 characters long'
+          %}
+        </div>
+
+        <div class="form-group">
+          {% render 'form-field',
+            type: 'text',
+            id: 'EditAddress_' | append: address.id | append: '_Address2',
+            name: 'address[address2]',
+            value: address.address2,
+            label: 'customer.addresses.address2' | t
+          %}
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            {% render 'form-field',
+              type: 'text',
+              id: 'EditAddress_' | append: address.id | append: '_City',
+              name: 'address[city]',
+              value: address.city,
+              label: 'customer.addresses.city' | t,
+              required: true,
+              pattern: '[A-Za-z\s\-]{2,}',
+              title: 'City name should contain at least 2 letters'
+            %}
+          </div>
+
+          <div class="form-group">
+            {% render 'form-field',
+              type: 'text',
+              id: 'EditAddress_' | append: address.id | append: '_Zip',
+              name: 'address[zip]',
+              value: address.zip,
+              label: 'customer.addresses.zip' | t,
+              required: true,
+              pattern: '[0-9A-Za-z\s\-]{3,10}',
+              title: 'Postal/ZIP code should be 3-10 characters'
+            %}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="EditAddress_{{ address.id }}_Country">{{ 'customer.addresses.country' | t }}</label>
+            <div class="select-wrapper">
+              <select
+                id="EditAddress_{{ address.id }}_Country"
+                name="address[country]"
+                data-address-country-select
+                data-default="{{ address.country }}"
+              >
+                {{ all_country_option_tags }}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" id="EditAddress_{{ address.id }}_ProvinceContainer" style="display:none;">
+            <label for="EditAddress_{{ address.id }}_Province">{{ 'customer.addresses.province' | t }}</label>
+            <div class="select-wrapper">
+              <select
+                id="EditAddress_{{ address.id }}_Province"
+                name="address[province]"
+                data-default="{{ address.province }}"
+              ></select>
+            </div>
+          </div>
+        </div>
+
+        {% if is_default %}
+          <div class="form-group">
+            <div class="default-address-message">
+              <p>{{ 'customer.addresses.default' | t }}</p>
+            </div>
+          </div>
+        {% else %}
+          <div class="form-group">
+            <div class="checkbox-wrapper">
+              <input type="checkbox" id="address_default_address_{{ address.id }}" name="address[default]" value="1">
+              <label for="address_default_address_{{ address.id }}">{{ 'customer.addresses.set_default' | t }}</label>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="form-actions">
+          <button type="submit" class="button">
+            <span class="btn-text">{{ 'customer.addresses.update' | t }}</span>
+            <span class="btn-spinner"></span>
+          </button>
+          <button type="button" class="button button--tertiary cancel-edit" data-address-id="{{ address.id }}">
+            {{ 'customer.addresses.cancel' | t }}
+          </button>
+        </div>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
