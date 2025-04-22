@@ -19,9 +19,6 @@
 
       <div class="orders-list">
         {%- for order in customer.orders -%}
-          <script>
-            console.log({{ order.line_items | json }});
-          </script>
           <div class="order-item" data-order-id="{{ order.id }}">
             <div class="order-header" data-order-id="{{ order.id }}">
               <div class="order-number">
@@ -242,7 +239,11 @@
                     </div>
 
                     {% if order.total_discounts > 0 %}
-                      {% assign discount_percentage = order.total_discounts | times: 100 | divided_by: order.subtotal_price | round %}
+                      {% assign discount_percentage = order.total_discounts
+                        | times: 100
+                        | divided_by: order.subtotal_price
+                        | round
+                      %}
                       <div class="price-item discount-row">
                         <span class="price-label">{{ 'customer.orders.discount' | t }}</span>
                         <div class="price-value-with-badge">
@@ -269,7 +270,11 @@
 
               <div class="order-actions">
                 {% if order.financial_status == 'paid' %}
-                  <a href="https://northfinder-1.myshopify.com/apps/pdf-vify/pdf-preview/invoice?shop_domain={{ shop.permanent_domain }}&order_id={{ order.id }}&locale=en" class="order-action-btn btn-invoice" target="_blank">
+                  <a
+                    href="https://northfinder-1.myshopify.com/apps/pdf-vify/pdf-preview/invoice?shop_domain={{ shop.permanent_domain }}&order_id={{ order.id }}&locale=en"
+                    class="order-action-btn btn-invoice"
+                    target="_blank"
+                  >
                     <span class="btn-icon">
                       {{ 'icon-download.svg' | inline_asset_content }}
                     </span>
@@ -277,9 +282,14 @@
                   </a>
                 {% endif %}
 
-                <a href="/cart/{{ order.id }}/reorder" class="order-action-btn btn-reorder">
-                  {{ 'customer.orders.reorder' | t }}
-                </a>
+                <button
+                  type="button"
+                  class="order-action-btn btn-reorder"
+                  data-variants="{% for item in order.line_items %}{{ item.variant_id }}:{{ item.quantity }}{% unless forloop.last %},{% endunless %}{% endfor %}"
+                >
+                  <span class="btn-text">{{ 'customer.orders.reorder' | t }}</span>
+                  <span class="btn-spinner"></span>
+                </button>
               </div>
             </div>
           </div>
