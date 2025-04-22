@@ -385,7 +385,7 @@
                 </div>
               {% endif %}
             </div>
-            {% render 'wishlist-button', product: product, btn_class: 'bg-[#F5F5F5] size-10 rounded-full flex items-center justify-center' %}
+            {% comment %} {% render 'wishlist-button', product: product, btn_class: 'bg-[#F5F5F5] size-10 rounded-full flex items-center justify-center' %} {% endcomment %}
           </div>
           {%- for block in section.blocks -%}
             {%- case block.type -%}
