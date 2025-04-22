@@ -1204,10 +1204,9 @@ button.loading .btn-spinner {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  margin-bottom: 1.5rem;
 }
 
-.order-address h3 {
+.order-details-column h3 {
   font-weight: 700;
   font-size: 1rem;
   margin-bottom: 1rem;
@@ -1223,25 +1222,27 @@ button.loading .btn-spinner {
 .order-pricing {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
   margin-bottom: 1.5rem;
 }
 
 .price-item {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  gap: 20px;
 }
 
 .price-label {
   color: #3d3d3d;
   font-size: 0.9375rem; /* 15px */
   opacity: 0.8;
+  min-width: 6rem;
 }
 
 .price-value {
   font-size: 0.9375rem; /* 15px */
+  font-weight: 700;
   color: rgb(var(--color-base-foreground));
 }
 
@@ -1253,7 +1254,13 @@ button.loading .btn-spinner {
   font-weight: 700;
 }
 
-.discount-percentage {
+.price-value-with-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.discount-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1262,8 +1269,9 @@ button.loading .btn-spinner {
   padding: 0.25rem 0.5rem;
   border-radius: 0.125rem; /* 2px */
   font-weight: 700;
-  font-size: 0.75rem; /* 12px */
-  margin-left: 0.5rem;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1rem;
+  white-space: nowrap;
 }
 
 .order-product {
@@ -1356,7 +1364,6 @@ button.loading .btn-spinner {
   font-size: 0.875rem; /* 14px */
   color: #3d3d3d;
   font-weight: 400;
-  min-width: 5rem;
 }
 
 .meta-value {
@@ -1482,5 +1489,15 @@ button.loading .btn-spinner {
     width: auto;
     right: 1rem;
     bottom: 1.5rem;
+  }
+
+  .price-value-with-badge {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .discount-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
   }
 }

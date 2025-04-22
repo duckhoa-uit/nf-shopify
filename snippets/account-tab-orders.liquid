@@ -7,7 +7,6 @@
 
 <div id="orders" class="tab-content" role="tabpanel">
   <h2 class="section-title">{{ 'customer.orders.title' | t }}</h2>
-
   {% paginate customer.orders by 20 %}
     {%- if customer.orders.size > 0 -%}
       <div class="order-header-labels">
@@ -20,6 +19,9 @@
 
       <div class="orders-list">
         {%- for order in customer.orders -%}
+          <script>
+            console.log({{ order.line_items | json }});
+          </script>
           <div class="order-item" data-order-id="{{ order.id }}">
             <div class="order-header" data-order-id="{{ order.id }}">
               <div class="order-number">
@@ -39,7 +41,7 @@
                   <div class="order-status processing">{{ order.fulfillment_status_label }}</div>
                 {% endif %}
               </div>
-              <div class="order-total">{{ order.total_price | money_with_currency }}</div>
+              <div class="order-total">{{ order.total_price | money }}</div>
             </div>
 
             <div class="order-content">
@@ -236,24 +238,30 @@
                   <div class="order-pricing">
                     <div class="price-item">
                       <span class="price-label">{{ 'customer.orders.original_price' | t }}</span>
-                      <span class="price-value">{{ order.subtotal_price | money_with_currency }}</span>
+                      <span class="price-value">{{ order.subtotal_price | money }}</span>
                     </div>
 
                     {% if order.total_discounts > 0 %}
-                      <div class="price-item">
+                      {% assign discount_percentage = order.total_discounts | times: 100 | divided_by: order.subtotal_price | round %}
+                      <div class="price-item discount-row">
                         <span class="price-label">{{ 'customer.orders.discount' | t }}</span>
-                        <span class="price-value discount">-{{ order.total_discounts | money_with_currency }}</span>
+                        <div class="price-value-with-badge">
+                          <span class="price-value discount">-{{ order.total_discounts | money }}</span>
+                          <span class="discount-badge">-{{ discount_percentage }}%</span>
+                        </div>
                       </div>
                     {% endif %}
 
+                    {% assign purchase_price = order.subtotal_price | minus: order.total_discounts %}
                     <div class="price-item">
-                      <span class="price-label">{{ 'customer.orders.tax' | t }}</span>
-                      <span class="price-value">{{ order.total_tax | money_with_currency }}</span>
+                      <span class="price-label">{{ 'customer.orders.purchase_price' | t }}</span>
+                      <span class="price-value">{{ purchase_price | money }}</span>
                     </div>
 
+                    {% assign vat_amount = order.total_price | minus: purchase_price %}
                     <div class="price-item">
-                      <span class="price-label">{{ 'customer.orders.final_price' | t }}</span>
-                      <span class="price-value final-price">{{ order.total_price | money_with_currency }}</span>
+                      <span class="price-label">{{ 'customer.orders.including_vat' | t }}</span>
+                      <span class="price-value">{{ vat_amount | money }}</span>
                     </div>
                   </div>
                 </div>
@@ -264,8 +272,13 @@
                   {% comment %} Handle both local development and production environments {% endcomment %}
                   {% assign shop_domain = shop.permanent_domain | default: 'northfinder-1.myshopify.com' %}
                   {% assign invoice_url = order.invoice_url %}
-                  {% if invoice_url == blank or invoice_url == nil %}
-                    {% assign invoice_url = 'https://' | append: shop_domain | append: '/account/orders/' | append: order.id | append: '?view=invoice' %}
+                  {% if invoice_url == blank or invoice_url == null %}
+                    {% assign invoice_url = 'https://'
+                      | append: shop_domain
+                      | append: '/account/orders/'
+                      | append: order.id
+                      | append: '?view=invoice'
+                    %}
                   {% endif %}
 
                   <a href="{{ invoice_url }}" class="order-action-btn btn-invoice" target="_blank">
