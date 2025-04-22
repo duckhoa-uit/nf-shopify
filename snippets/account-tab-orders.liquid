@@ -1,6 +1,6 @@
 {% comment %}
   Orders tab content
-  
+
   Accepts:
   - customer: The customer object
 {% endcomment %}
@@ -10,60 +10,280 @@
 
   {% paginate customer.orders by 20 %}
     {%- if customer.orders.size > 0 -%}
-      <table role="table" class="order-history">
-        <thead role="rowgroup">
-          <tr role="row">
-            <th id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
-            <th id="ColumnDate" scope="col" role="columnheader">{{ 'customer.orders.date' | t }}</th>
-            <th id="ColumnPayment" scope="col" role="columnheader">
-              {{ 'customer.orders.payment_status' | t }}
-            </th>
-            <th id="ColumnFulfillment" scope="col" role="columnheader">
-              {{ 'customer.orders.fulfillment_status' | t }}
-            </th>
-            <th id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.orders.total' | t }}</th>
-          </tr>
-        </thead>
-        <tbody role="rowgroup">
-          {%- for order in customer.orders -%}
-            <tr role="row">
-              <td
-                id="RowOrder"
-                role="cell"
-                headers="ColumnOrder"
-                data-label="{{ 'customer.orders.order_number' | t }}"
-              >
+      <div class="order-header-labels">
+        <div>{{ 'customer.orders.order_number' | t }}</div>
+        <div>{{ 'customer.orders.date' | t }}</div>
+        <div>{{ 'customer.orders.quantity' | t }}</div>
+        <div>{{ 'customer.orders.status' | t }}</div>
+        <div class="text-right">{{ 'customer.orders.total' | t }}</div>
+      </div>
+
+      <div class="orders-list">
+        {%- for order in customer.orders -%}
+          <div class="order-item" data-order-id="{{ order.id }}">
+            <div class="order-header" data-order-id="{{ order.id }}">
+              <div class="order-number">
                 <a
                   href="{{ order.customer_url }}"
                   aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
                 >
                   {{ order.name }}
                 </a>
-              </td>
-              <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'customer.orders.date' | t }}">
-                {{ order.created_at | time_tag: format: 'date' }}
-              </td>
-              <td
-                headers="RowOrder ColumnPayment"
-                role="cell"
-                data-label="{{ 'customer.orders.payment_status' | t }}"
-              >
-                {{ order.financial_status_label }}
-              </td>
-              <td
-                headers="RowOrder ColumnFulfillment"
-                role="cell"
-                data-label="{{ 'customer.orders.fulfillment_status' | t }}"
-              >
-                {{ order.fulfillment_status_label }}
-              </td>
-              <td headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'customer.orders.total' | t }}">
-                {{ order.total_net_amount | money_with_currency }}
-              </td>
-            </tr>
-          {%- endfor -%}
-        </tbody>
-      </table>
+              </div>
+              <div class="order-date">{{ order.created_at | date: '%d.%m.%Y' }}</div>
+              <div class="order-quantity">{{ order.line_items.size }}</div>
+              <div>
+                {% if order.fulfillment_status_label == 'Fulfilled' %}
+                  <div class="order-status delivered">{{ 'customer.orders.delivered' | t }}</div>
+                {% else %}
+                  <div class="order-status processing">{{ order.fulfillment_status_label }}</div>
+                {% endif %}
+              </div>
+              <div class="order-total">{{ order.total_price | money_with_currency }}</div>
+            </div>
+
+            <div class="order-content">
+              <div class="order-products">
+                {% for line_item in order.line_items %}
+                  <div class="order-product">
+                    <div class="product-left">
+                      <div class="product-image">
+                        {% if line_item.image %}
+                          <img
+                            src="{{ line_item.image | image_url: width: 100, height: 100, crop: 'center' }}"
+                            alt="{{ line_item.title | escape }}"
+                            width="100"
+                            height="100"
+                            loading="lazy"
+                          >
+                        {% elsif line_item.product.featured_image %}
+                          <img
+                            src="{{ line_item.product.featured_image | image_url: width: 100, height: 100, crop: 'center' }}"
+                            alt="{{ line_item.title | escape }}"
+                            width="100"
+                            height="100"
+                            loading="lazy"
+                          >
+                        {% else %}
+                          {{ 'product-1' | placeholder_svg_tag }}
+                        {% endif %}
+
+                        {% if line_item.original_price > line_item.final_price %}
+                          {% assign discount_percentage = line_item.original_price
+                            | minus: line_item.final_price
+                            | times: 100
+                            | divided_by: line_item.original_price
+                          %}
+                          <div class="sale-badge">-{{ discount_percentage }}%</div>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="product-info">
+                      {% comment %} Extract just the product title without variants {% endcomment %}
+                      {% assign product_title_parts = line_item.title | split: ' - ' %}
+                      <h4 class="text-sm leading-5">{{ product_title_parts[0] }}</h4>
+
+                      <div class="product-meta">
+                        {% comment %} Extract variant options {% endcomment %}
+                        {% assign variant_options = line_item.variant.title | split: ' / ' %}
+
+                        {% comment %} Get product options {% endcomment %}
+                        {% assign product_options = line_item.product.options %}
+
+                        {% comment %} Display size if available {% endcomment %}
+                        <div class="product-meta-item">
+                          <span class="meta-label">{{ 'customer.orders.size' | t }}:</span>
+                          <span class="meta-value">
+                            {% if product_options contains 'Size' and variant_options.size > 0 %}
+                              {% assign size_index = 0 %}
+                              {% for option in product_options %}
+                                {% if option == 'Size' %}
+                                  {% break %}
+                                {% endif %}
+                                {% assign size_index = size_index | plus: 1 %}
+                              {% endfor %}
+                              {{ variant_options[size_index] | default: 'N/A' }}
+                            {% else %}
+                              {% if variant_options.size > 0 %}
+                                {{ variant_options.last | default: 'N/A' }}
+                              {% else %}
+                                N/A
+                              {% endif %}
+                            {% endif %}
+                          </span>
+                        </div>
+
+                        {% comment %} Display color if available {% endcomment %}
+                        <div class="product-meta-item">
+                          <span class="meta-label">{{ 'customer.orders.color' | t }}:</span>
+                          <span class="meta-value">
+                            {% if product_options contains 'Color' and variant_options.size > 0 %}
+                              {% assign color_index = 0 %}
+                              {% for option in product_options %}
+                                {% if option == 'Color' %}
+                                  {% break %}
+                                {% endif %}
+                                {% assign color_index = color_index | plus: 1 %}
+                              {% endfor %}
+                              {{ variant_options[color_index] | default: 'N/A' }}
+                            {% else %}
+                              {% if variant_options.size > 0 and variant_options.first != 'Default Title' %}
+                                {{ variant_options.first | default: 'N/A' }}
+                              {% else %}
+                                N/A
+                              {% endif %}
+                            {% endif %}
+                          </span>
+                        </div>
+
+                        <div class="product-meta-item">
+                          <span class="meta-label">{{ 'customer.orders.quantity' | t }}:</span>
+                          <span class="meta-value">{{ line_item.quantity }}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div></div>
+                    <div></div>
+
+                    <div class="product-price">
+                      {% if line_item.original_price > line_item.final_price %}
+                        <s>{{ line_item.original_price | money }}</s>
+                        <span>{{ line_item.final_price | money }}</span>
+                      {% else %}
+                        <span>{{ line_item.original_price | money }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+
+                <div class="order-toggle-container">
+                  <div class="order-toggle" data-order-toggle>
+                    {{ 'customer.orders.detail' | t }}
+                    <span class="icon svg-wrapper rotate-90">
+                      {{ 'icon-chevron.svg' | inline_asset_content }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="order-details">
+              <div class="order-details-grid">
+                <!-- Column 1: Addresses -->
+                <div class="order-details-column order-addresses-column">
+                  <div class="order-addresses">
+                    <div class="order-address">
+                      <h3>{{ 'customer.orders.billing_address' | t }}</h3>
+                      <p>
+                        {% if order.billing_address %}
+                          {{ order.billing_address.name -}}
+                          <br>
+                          {% if order.billing_address.company != blank %}
+                            {{ order.billing_address.company -}}
+                            <br>
+                          {% endif %}
+                          {{ order.billing_address.street -}}
+                          <br>
+                          {{ order.billing_address.city -}}
+                          <br>
+                          {{ order.billing_address.zip -}}
+                          <br>
+                          {{ order.billing_address.country -}}
+                          <br>
+                          {{ order.billing_address.phone -}}
+                          <br>
+                          {{ order.email }}
+                        {% else %}
+                          {{ 'customer.orders.no_billing_address' | t }}
+                        {% endif %}
+                      </p>
+                    </div>
+
+                    <div class="order-address">
+                      <h3>{{ 'customer.orders.shipping_address' | t }}</h3>
+                      <p>
+                        {% if order.shipping_address %}
+                          {{ order.shipping_address.name -}}
+                          <br>
+                          {% if order.shipping_address.company != blank %}
+                            {{ order.shipping_address.company -}}
+                            <br>
+                          {% endif %}
+                          {{ order.shipping_address.street -}}
+                          <br>
+                          {{ order.shipping_address.city -}}
+                          <br>
+                          {{ order.shipping_address.zip -}}
+                          <br>
+                          {{ order.shipping_address.country -}}
+                          <br>
+                          {{ order.shipping_address.phone -}}
+                          <br>
+                          {{ order.email }}
+                        {% else %}
+                          {{ 'customer.orders.no_shipping_address' | t }}
+                        {% endif %}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Column 3: Pricing -->
+                <div class="order-details-column order-pricing-column">
+                  <h3>{{ 'customer.orders.price_details' | t }}</h3>
+                  <div class="order-pricing">
+                    <div class="price-item">
+                      <span class="price-label">{{ 'customer.orders.original_price' | t }}</span>
+                      <span class="price-value">{{ order.subtotal_price | money_with_currency }}</span>
+                    </div>
+
+                    {% if order.total_discounts > 0 %}
+                      <div class="price-item">
+                        <span class="price-label">{{ 'customer.orders.discount' | t }}</span>
+                        <span class="price-value discount">-{{ order.total_discounts | money_with_currency }}</span>
+                      </div>
+                    {% endif %}
+
+                    <div class="price-item">
+                      <span class="price-label">{{ 'customer.orders.tax' | t }}</span>
+                      <span class="price-value">{{ order.total_tax | money_with_currency }}</span>
+                    </div>
+
+                    <div class="price-item">
+                      <span class="price-label">{{ 'customer.orders.final_price' | t }}</span>
+                      <span class="price-value final-price">{{ order.total_price | money_with_currency }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="order-actions">
+                {% if order.financial_status == 'paid' %}
+                  {% comment %} Handle both local development and production environments {% endcomment %}
+                  {% assign shop_domain = shop.permanent_domain | default: 'northfinder-1.myshopify.com' %}
+                  {% assign invoice_url = order.invoice_url %}
+                  {% if invoice_url == blank or invoice_url == nil %}
+                    {% assign invoice_url = 'https://' | append: shop_domain | append: '/account/orders/' | append: order.id | append: '?view=invoice' %}
+                  {% endif %}
+
+                  <a href="{{ invoice_url }}" class="order-action-btn btn-invoice" target="_blank">
+                    <span class="btn-icon">
+                      {{ 'icon-download.svg' | inline_asset_content }}
+                    </span>
+                    {{ 'customer.orders.download_invoice' | t }}
+                  </a>
+                {% endif %}
+
+                <a href="/cart/{{ order.id }}/reorder" class="order-action-btn btn-reorder">
+                  {{ 'customer.orders.reorder' | t }}
+                </a>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
     {%- else -%}
       <p>{{ 'customer.orders.none' | t }}</p>
     {%- endif -%}

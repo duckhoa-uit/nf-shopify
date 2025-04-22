@@ -498,7 +498,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const countrySelects = document.querySelectorAll('[data-address-country-select]');
 
     countrySelects.forEach(select => {
-      const formId = select.id.replace('Country', '');
+      // Handle both formats: AddressCountry_new and EditAddress_123_Country
+      let formId;
+      if (select.id.includes('_Country')) {
+        // For edit forms: EditAddress_123_Country -> EditAddress_123_
+        formId = select.id.substring(0, select.id.lastIndexOf('_') + 1);
+      } else {
+        // For new forms: AddressCountry_new -> Address_new
+        formId = select.id.replace('Country', '');
+      }
+
       const provinceSelect = document.getElementById(`${formId}Province`);
       const provinceContainer = document.getElementById(`${formId}ProvinceContainer`);
 
@@ -771,6 +780,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Company ID and Tax ID fields removed
   }
+
+  // Order details expand/collapse functionality
+  function initializeOrderToggle() {
+    const orderToggles = document.querySelectorAll('[data-order-toggle]');
+
+    // Add click event to the toggle buttons
+    orderToggles.forEach(toggle => {
+      toggle.addEventListener('click', function() {
+        const orderItem = this.closest('.order-item');
+        const orderDetails = orderItem.querySelector('.order-details');
+
+        // Toggle the active class on the details section and toggle button
+        orderDetails.classList.toggle('active');
+        this.classList.toggle('active');
+      });
+    });
+  }
+
+  // Initialize order toggle functionality
+  initializeOrderToggle();
 
   // Helper function to add event listeners to buttons in a new address card
   function addButtonEventListeners(addressWrapper) {
