@@ -175,56 +175,70 @@
                   <div class="order-addresses">
                     <div class="order-address">
                       <h3>{{ 'customer.orders.billing_address' | t }}</h3>
-                      <p>
-                        {% if order.billing_address %}
-                          {{ order.billing_address.name -}}
-                          <br>
-                          {% if order.billing_address.company != blank %}
-                            {{ order.billing_address.company -}}
-                            <br>
+                      {% if order.billing_address %}
+                        <ul class="address-list">
+                          {% if order.billing_address.name != blank %}
+                            <li>{{ order.billing_address.name }}</li>
                           {% endif %}
-                          {{ order.billing_address.street -}}
-                          <br>
-                          {{ order.billing_address.city -}}
-                          <br>
-                          {{ order.billing_address.zip -}}
-                          <br>
-                          {{ order.billing_address.country -}}
-                          <br>
-                          {{ order.billing_address.phone -}}
-                          <br>
-                          {{ order.email }}
-                        {% else %}
-                          {{ 'customer.orders.no_billing_address' | t }}
-                        {% endif %}
-                      </p>
+                          {% if order.billing_address.company != blank %}
+                            <li>{{ order.billing_address.company }}</li>
+                          {% endif %}
+                          {% if order.email != blank %}
+                            <li>{{ order.email }}</li>
+                          {% endif %}
+                          {% if order.billing_address.phone != blank %}
+                            <li>{{ order.billing_address.phone }}</li>
+                          {% endif %}
+                          {% if order.billing_address.street != blank %}
+                            <li>{{ order.billing_address.street }}</li>
+                          {% endif %}
+                          {% if order.billing_address.city != blank %}
+                            <li>{{ order.billing_address.city }}</li>
+                          {% endif %}
+                          {% if order.billing_address.zip != blank %}
+                            <li>{{ order.billing_address.zip }}</li>
+                          {% endif %}
+                          {% if order.billing_address.country != blank %}
+                            <li>{{ order.billing_address.country }}</li>
+                          {% endif %}
+                        </ul>
+                      {% else %}
+                        <p>{{ 'customer.orders.no_billing_address' | t }}</p>
+                      {% endif %}
                     </div>
 
                     <div class="order-address">
                       <h3>{{ 'customer.orders.shipping_address' | t }}</h3>
-                      <p>
-                        {% if order.shipping_address %}
-                          {{ order.shipping_address.name -}}
-                          <br>
-                          {% if order.shipping_address.company != blank %}
-                            {{ order.shipping_address.company -}}
-                            <br>
+                      {% if order.shipping_address %}
+                        <ul class="address-list">
+                          {% if order.shipping_address.name != blank %}
+                            <li>{{ order.shipping_address.name }}</li>
                           {% endif %}
-                          {{ order.shipping_address.street -}}
-                          <br>
-                          {{ order.shipping_address.city -}}
-                          <br>
-                          {{ order.shipping_address.zip -}}
-                          <br>
-                          {{ order.shipping_address.country -}}
-                          <br>
-                          {{ order.shipping_address.phone -}}
-                          <br>
-                          {{ order.email }}
-                        {% else %}
-                          {{ 'customer.orders.no_shipping_address' | t }}
-                        {% endif %}
-                      </p>
+                          {% if order.shipping_address.company != blank %}
+                            <li>{{ order.shipping_address.company }}</li>
+                          {% endif %}
+                          {% if order.email != blank %}
+                            <li>{{ order.email }}</li>
+                          {% endif %}
+                          {% if order.shipping_address.phone != blank %}
+                            <li>{{ order.shipping_address.phone }}</li>
+                          {% endif %}
+                          {% if order.shipping_address.street != blank %}
+                            <li>{{ order.shipping_address.street }}</li>
+                          {% endif %}
+                          {% if order.shipping_address.city != blank %}
+                            <li>{{ order.shipping_address.city }}</li>
+                          {% endif %}
+                          {% if order.shipping_address.zip != blank %}
+                            <li>{{ order.shipping_address.zip }}</li>
+                          {% endif %}
+                          {% if order.shipping_address.country != blank %}
+                            <li>{{ order.shipping_address.country }}</li>
+                          {% endif %}
+                        </ul>
+                      {% else %}
+                        <p>{{ 'customer.orders.no_shipping_address' | t }}</p>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
