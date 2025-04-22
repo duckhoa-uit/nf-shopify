@@ -1,6 +1,6 @@
 {% comment %}
   Settings tab content (Basic Info and Password Change)
-  
+
   Accepts:
   - customer: The customer object
 {% endcomment %}
@@ -12,7 +12,8 @@
     <form id="CustomerInfoForm">
       <div class="form-row">
         <div class="form-group">
-          {% render 'form-field',
+          {%
+            render 'form-field',
             type: 'text',
             id: 'CustomerFirstName',
             name: 'customer[first_name]',
@@ -23,7 +24,8 @@
         </div>
 
         <div class="form-group">
-          {% render 'form-field',
+          {%
+            render 'form-field',
             type: 'text',
             id: 'CustomerLastName',
             name: 'customer[last_name]',
@@ -36,17 +38,21 @@
 
       <div class="form-row">
         <div class="form-group">
-          {% render 'form-field',
-            type: 'text',
-            id: 'CustomerBirthdate',
-            name: 'customer[note][birthdate]',
-            value: '',
-            label: 'customer.account.birthdate' | t
+          {%
+            render 'form-field',
+            type: 'email',
+            id: 'CustomerEmail',
+            name: 'customer[email]',
+            value: customer.email,
+            label: 'customer.account.email' | t,
+            required: true,
+            class: 'email-field'
           %}
         </div>
 
         <div class="form-group">
-          {% render 'form-field',
+          {%
+            render 'form-field',
             type: 'tel',
             id: 'CustomerPhone',
             name: 'customer[phone]',
@@ -56,16 +62,20 @@
         </div>
       </div>
 
-      <div class="form-group">
-        {% render 'form-field',
-          type: 'email',
-          id: 'CustomerEmail',
-          name: 'customer[email]',
-          value: customer.email,
-          label: 'customer.account.email' | t,
-          required: true,
-          class: 'email-field'
+      <div class="form-group birthdate-field">
+        {%
+          render 'form-field',
+          type: 'text',
+          id: 'CustomerBirthdate',
+          name: 'customer[note][birthdate]',
+          value: '',
+          label: 'customer.account.birthdate' | t,
+          placeholder: 'DD.MM.RRRR',
+          class: 'flatpickr-input'
         %}
+        <div class="date-picker-icon" id="birthdateCalendarIcon">
+          {{- 'icon-calendar.svg' | inline_asset_content -}}
+        </div>
       </div>
 
       <div class="form-actions">
@@ -80,7 +90,8 @@
     <h3 class="form-section-title">{{ 'customer.account.change_password' | t }}</h3>
     <form id="CustomerPasswordForm">
       <div class="form-group">
-        {% render 'form-field',
+        {%
+          render 'form-field',
           type: 'password',
           id: 'CustomerCurrentPassword',
           name: 'customer[current_password]',
@@ -92,7 +103,8 @@
 
       <div class="form-row">
         <div class="form-group">
-          {% render 'form-field',
+          {%
+            render 'form-field',
             type: 'password',
             id: 'CustomerNewPassword',
             name: 'customer[password]',
@@ -103,7 +115,8 @@
         </div>
 
         <div class="form-group">
-          {% render 'form-field',
+          {%
+            render 'form-field',
             type: 'password',
             id: 'CustomerConfirmPassword',
             name: 'customer[password_confirmation]',
