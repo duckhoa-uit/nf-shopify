@@ -269,24 +269,11 @@
 
               <div class="order-actions">
                 {% if order.financial_status == 'paid' %}
-                  {% comment %} Handle both local development and production environments {% endcomment %}
-                  {% assign shop_domain = shop.permanent_domain | default: 'northfinder-1.myshopify.com' %}
-                  {% assign invoice_url = order.invoice_url %}
-                  {% if invoice_url == blank or invoice_url == null %}
-                    {% assign invoice_url = 'https://'
-                      | append: shop_domain
-                      | append: '/account/orders/'
-                      | append: order.id
-                      | append: '?view=invoice'
-                    %}
-                  {% endif %}
-
-                  <a href="{{ invoice_url }}" class="order-action-btn btn-invoice">
+                  <a href="https://northfinder-1.myshopify.com/apps/pdf-vify/pdf-preview/invoice?shop_domain={{ shop.permanent_domain }}&order_id={{ order.id }}&locale=en" class="order-action-btn btn-invoice" target="_blank">
                     <span class="btn-icon">
                       {{ 'icon-download.svg' | inline_asset_content }}
                     </span>
                     <span class="btn-text">{{ 'customer.orders.download_invoice' | t }}</span>
-                    <span class="btn-spinner"></span>
                   </a>
                 {% endif %}
 
