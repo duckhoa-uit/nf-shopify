@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+  <head>
+    <title>
+      {{ 'customer.orders.download_invoice' | t }}
+      -
+      {{ order.name }}
+    </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+      .invoice-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .invoice-header h1 {
+        font-size: 24px;
+        margin-bottom: 5px;
+      }
+      .invoice-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+      }
+      .invoice-info-section {
+        width: 48%;
+      }
+      .invoice-info-section h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+      }
+      .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+      }
+      .invoice-table th {
+        background-color: #f5f5f5;
+        text-align: left;
+        padding: 10px;
+        border-bottom: 2px solid #ddd;
+      }
+      .invoice-table td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      .invoice-table .price {
+        text-align: right;
+      }
+      .invoice-totals {
+        width: 300px;
+        margin-left: auto;
+      }
+      .invoice-totals table {
+        width: 100%;
+      }
+      .invoice-totals td {
+        padding: 5px 0;
+      }
+      .invoice-totals .total-row {
+        font-weight: bold;
+        border-top: 2px solid #ddd;
+        padding-top: 10px;
+      }
+      .invoice-totals .total-label {
+        text-align: left;
+      }
+      .invoice-totals .total-value {
+        text-align: right;
+      }
+      .invoice-footer {
+        margin-top: 50px;
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+      }
+      @media print {
+        body {
+          padding: 0;
+        }
+        .no-print {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-header">
+      <h1>{{ 'customer.orders.download_invoice' | t }}</h1>
+      <p>{{ shop.name }}</p>
+      <p>{{ 'customer.orders.order_number' | t }}: {{ order.name }}</p>
+      <p>{{ 'customer.orders.date' | t }}: {{ order.created_at | date: '%d.%m.%Y' }}</p>
+    </div>
+
+    <div class="invoice-info">
+      <div class="invoice-info-section">
+        <h2>{{ 'customer.orders.billing_address' | t }}</h2>
+        {% if order.billing_address %}
+          <p>
+            {{ order.billing_address.name -}}
+            <br>
+            {{ order.billing_address.address1 -}}
+            <br>
+            {% if order.billing_address.address2 != blank %}
+              {{ order.billing_address.address2 -}}
+              <br>
+            {% endif %}
+            {{ order.billing_address.city }},
+            {% if order.billing_address.province_code %}
+              {{ order.billing_address.province_code }},
+            {% endif %}
+            {{ order.billing_address.zip -}}
+            <br>
+            {{ order.billing_address.country }}
+          </p>
+        {% else %}
+          <p>{{ 'customer.orders.no_billing_address' | t }}</p>
+        {% endif %}
+      </div>
+
+      <div class="invoice-info-section">
+        <h2>{{ 'customer.orders.shipping_address' | t }}</h2>
+        {% if order.shipping_address %}
+          <p>
+            {{ order.shipping_address.name -}}
+            <br>
+            {{ order.shipping_address.address1 -}}
+            <br>
+            {% if order.shipping_address.address2 != blank %}
+              {{ order.shipping_address.address2 -}}
+              <br>
+            {% endif %}
+            {{ order.shipping_address.city }},
+            {% if order.shipping_address.province_code %}
+              {{ order.shipping_address.province_code }},
+            {% endif %}
+            {{ order.shipping_address.zip -}}
+            <br>
+            {{ order.shipping_address.country }}
+          </p>
+        {% else %}
+          <p>{{ 'customer.orders.no_shipping_address' | t }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>{{ 'cart.label.product' | t }}</th>
+          <th>{{ 'products.product.sku' | t }}</th>
+          <th>{{ 'customer.orders.quantity' | t }}</th>
+          <th class="price">{{ 'cart.label.price' | t }}</th>
+          <th class="price">{{ 'customer.orders.total' | t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for line_item in order.line_items %}
+          <tr>
+            <td>
+              {{ line_item.title }}
+              {% if line_item.variant.title != 'Default Title' %}
+                <br>
+                <small>{{ line_item.variant.title }}</small>
+              {% endif %}
+            </td>
+            <td>{{ line_item.sku }}</td>
+            <td>{{ line_item.quantity }}</td>
+            <td class="price">{{ line_item.price | money }}</td>
+            <td class="price">{{ line_item.line_price | money }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="invoice-totals">
+      <table>
+        <tr>
+          <td class="total-label">{{ 'customer.order.subtotal' | t }}:</td>
+          <td class="total-value">{{ order.subtotal_price | money }}</td>
+        </tr>
+
+        {% for discount in order.discounts %}
+          <tr>
+            <td class="total-label">{{ 'customer.orders.discount' | t }} ({{ discount.code }}):</td>
+            <td class="total-value">-{{ discount.amount | money }}</td>
+          </tr>
+        {% endfor %}
+
+        {% for shipping_method in order.shipping_methods %}
+          <tr>
+            <td class="total-label">{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }}):</td>
+            <td class="total-value">{{ shipping_method.price | money }}</td>
+          </tr>
+        {% endfor %}
+
+        {% if order.tax_price > 0 %}
+          <tr>
+            <td class="total-label">{{ 'customer.orders.tax' | t }}:</td>
+            <td class="total-value">{{ order.tax_price | money }}</td>
+          </tr>
+        {% endif %}
+
+        <tr class="total-row">
+          <td class="total-label">{{ 'customer.orders.total' | t }}:</td>
+          <td class="total-value">{{ order.total_price | money }}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="invoice-footer">
+      <p>{{ 'cart.benefits.title' | t }}</p>
+      <p>{{ shop.name }} - {{ shop.address }}</p>
+    </div>
+
+    <div class="no-print" style="margin-top: 30px; text-align: center;">
+      <button
+        onclick="window.print();"
+        style="padding: 10px 20px; background-color: #0F0F0F; color: white; border: none; border-radius: 3px; cursor: pointer;"
+      >
+        {{ 'customer.orders.download_invoice' | t }}
+      </button>
+    </div>
+  </body>
+</html>
