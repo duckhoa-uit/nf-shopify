@@ -281,11 +281,12 @@
                     %}
                   {% endif %}
 
-                  <a href="{{ invoice_url }}" class="order-action-btn btn-invoice" target="_blank">
+                  <a href="{{ invoice_url }}" class="order-action-btn btn-invoice">
                     <span class="btn-icon">
                       {{ 'icon-download.svg' | inline_asset_content }}
                     </span>
-                    {{ 'customer.orders.download_invoice' | t }}
+                    <span class="btn-text">{{ 'customer.orders.download_invoice' | t }}</span>
+                    <span class="btn-spinner"></span>
                   </a>
                 {% endif %}
 

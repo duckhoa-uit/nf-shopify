@@ -1358,6 +1358,7 @@ button.loading .btn-spinner {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  line-height: 1rem;
 }
 
 .meta-label {
@@ -1395,6 +1396,7 @@ button.loading .btn-spinner {
   background-color: #f5f5f5;
   color: rgb(var(--color-base-foreground));
   border: 0.0625rem solid rgb(var(--color-base-foreground));
+  position: relative;
 }
 
 .btn-icon svg {
@@ -1404,6 +1406,33 @@ button.loading .btn-spinner {
 
 .btn-invoice:hover {
   background-color: #ebebeb;
+}
+
+.btn-spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-top: 2px solid rgb(var(--color-base-foreground));
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+.btn-invoice.loading .btn-text {
+  visibility: hidden;
+}
+
+.btn-invoice.loading .btn-spinner {
+  display: block;
 }
 
 .btn-reorder {
