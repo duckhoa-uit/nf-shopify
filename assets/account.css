@@ -310,6 +310,140 @@
   margin-bottom: 1rem;
 }
 
+.birthdate-field {
+  position: relative;
+}
+
+.date-picker-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  cursor: pointer;
+  color: #666;
+}
+
+/* Custom Flatpickr Styles to match Figma design */
+.flatpickr-calendar {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  width: 370px;
+  font-family: var(--font-body-family);
+}
+
+/* Custom birthday calendar styles */
+.birthday-calendar {
+  position: absolute;
+  right: -390px;
+  top: 0;
+  z-index: 100;
+  width: 320px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Custom birthday calendar styles */
+.birthday-calendar {
+  position: absolute;
+  right: -320px;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+}
+
+/* Custom styling for Flatpickr elements */
+.birthday-calendar .flatpickr-day {
+  border-radius: 2px; /* Square days instead of circles */
+  max-width: 40px;
+  height: 40px;
+  line-height: auto;
+  font-size: 11px;
+  margin: 2px;
+  border: none;
+}
+
+/* Style the month navigation buttons */
+.birthday-calendar .flatpickr-prev-month,
+.birthday-calendar .flatpickr-next-month {
+  padding: 6px;
+  fill: #333;
+}
+
+.birthday-calendar .flatpickr-prev-month:hover,
+.birthday-calendar .flatpickr-next-month:hover {
+  fill: var(--color-accent);
+}
+
+/* Style the month dropdown */
+.birthday-calendar .flatpickr-current-month {
+  padding: 6px 0;
+  font-size: 16px;
+}
+
+.birthday-calendar .flatpickr-monthDropdown-months,
+.birthday-calendar .numInputWrapper {
+  font-weight: 500;
+}
+
+.birthday-calendar .flatpickr-monthDropdown-months:hover,
+.birthday-calendar .numInputWrapper:hover {
+  color: var(--color-accent);
+}
+
+.birthday-calendar .flatpickr-weekday {
+  font-size: 11px;
+  color: #252525;
+}
+
+.birthday-calendar .flatpickr-day.selected,
+.birthday-calendar .flatpickr-day.startRange,
+.birthday-calendar .flatpickr-day.endRange,
+.birthday-calendar .flatpickr-day.selected:hover,
+.birthday-calendar .flatpickr-day.startRange:hover,
+.birthday-calendar .flatpickr-day.endRange:hover {
+  background: var(--color-accent); /* Updated active background color */
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.birthday-calendar .flatpickr-day.today {
+  border-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.birthday-calendar .flatpickr-day.today:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid var(--color-accent);
+  z-index: -1;
+  border-radius: 2px;
+}
+
+.birthday-calendar .flatpickr-day.today:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.birthday-calendar .flatpickr-day:hover {
+  background: #f5f5f5;
+  border-color: transparent;
+  border-radius: 2px;
+}
+
 .form-label {
   display: block;
   font-size: 0.9375rem;

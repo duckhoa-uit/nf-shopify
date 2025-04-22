@@ -1,5 +1,6 @@
 {{ 'account.css' | asset_url | stylesheet_tag }}
 {{ 'customer.css' | asset_url | stylesheet_tag }}
+{{ 'flatpickr.min.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -130,7 +131,10 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr" defer="defer"></script>
 <script src="{{ 'account-page.js' | asset_url }}" defer></script>
+<script src="{{ 'account-forms.js' | asset_url }}" defer></script>
+<script src="{{ 'account-tabs.js' | asset_url }}" defer></script>
 <script src="{{ 'order-reorder.js' | asset_url }}" defer></script>
 
 {% schema %}
