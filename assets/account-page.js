@@ -30,38 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Handle form submissions
-  const customerInfoForm = document.getElementById('CustomerInfoForm');
-  if (customerInfoForm) {
-    customerInfoForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      // Here you would typically send the form data to the server
-      // For now, just show an alert
-      const successMsg = document.querySelector('[data-info-update-success]')?.getAttribute('data-info-update-success') || 'Basic information updated successfully!';
-      alert(successMsg);
-    });
-  }
-
-  const customerPasswordForm = document.getElementById('CustomerPasswordForm');
-  if (customerPasswordForm) {
-    customerPasswordForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      // Validate password match
-      const newPassword = document.getElementById('CustomerNewPassword').value;
-      const confirmPassword = document.getElementById('CustomerConfirmPassword').value;
-
-      if (newPassword !== confirmPassword) {
-        const passwordMismatchMsg = document.querySelector('[data-password-mismatch]')?.getAttribute('data-password-mismatch') || 'New password and confirmation do not match!';
-        alert(passwordMismatchMsg);
-        return;
-      }
-
-      // Here you would typically send the form data to the server
-      // For now, just show an alert
-      const passwordUpdateSuccessMsg = document.querySelector('[data-password-update-success]')?.getAttribute('data-password-update-success') || 'Password updated successfully!';
-      alert(passwordUpdateSuccessMsg);
-    });
-  }
+  // Form submissions are now handled by Shopify's native form handling
 
   // Handle delete account button
   const deleteAccountBtn = document.getElementById('DeleteAccountBtn');
