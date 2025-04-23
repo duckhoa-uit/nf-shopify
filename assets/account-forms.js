@@ -3,56 +3,70 @@
  */
 class AccountForms {
   constructor() {
-    this.customerInfoForm = document.getElementById('CustomerInfoForm');
-    this.customerPasswordForm = document.getElementById('CustomerPasswordForm');
     this.deleteAccountBtn = document.getElementById('DeleteAccountBtn');
-    this.birthdateField = document.getElementById('CustomerBirthdate');
-    this.datePickerIcon = document.querySelector('.date-picker-icon');
+    // Birthdate field is commented out
+    // this.birthdateField = document.getElementById('CustomerBirthdate');
+    // this.datePickerIcon = document.querySelector('.date-picker-icon');
+    this.newPasswordField = document.getElementById('CustomerNewPassword');
+    this.confirmPasswordField = document.getElementById('CustomerConfirmPassword');
+    this.passwordForm = document.getElementById('CustomerPasswordForm');
+    this.customerInfoForm = document.getElementById('CustomerInfoForm');
     this.init();
   }
 
   init() {
-    // Set up form submission handlers
-    if (this.customerInfoForm) {
-      this.customerInfoForm.addEventListener('submit', this.handleInfoFormSubmit.bind(this));
-    }
-
-    if (this.customerPasswordForm) {
-      this.customerPasswordForm.addEventListener('submit', this.handlePasswordFormSubmit.bind(this));
-    }
-
     // Set up delete account button
     if (this.deleteAccountBtn) {
       this.deleteAccountBtn.addEventListener('click', this.handleDeleteAccount.bind(this));
     }
 
+    // Birthdate field is commented out
     // Set up date picker for birthdate field
-    if (this.birthdateField) {
-      this.initDatePicker();
+    // if (this.birthdateField) {
+    //   this.initDatePicker();
+    // }
+
+    // Set up password confirmation validation
+    if (this.passwordForm && this.newPasswordField && this.confirmPasswordField) {
+      this.setupPasswordConfirmation();
+    }
+
+    // Set up customer info form submission
+    if (this.customerInfoForm) {
+      this.setupCustomerInfoForm();
     }
   }
 
-  handleInfoFormSubmit(e) {
-    e.preventDefault();
-    // Here you would typically send the form data to the server
-    // For now, just show an alert
-    alert('Basic information updated successfully!');
+  setupPasswordConfirmation() {
+    // Handle password form submission
+    this.passwordForm.addEventListener('submit', (e) => {
+      // Check if passwords match
+      if (this.newPasswordField.value !== this.confirmPasswordField.value) {
+        e.preventDefault();
+        const passwordMismatchMsg = 'New password and confirmation do not match!';
+        alert(passwordMismatchMsg);
+        return;
+      }
+    });
   }
 
-  handlePasswordFormSubmit(e) {
-    e.preventDefault();
-    // Validate password match
-    const newPassword = document.getElementById('CustomerNewPassword').value;
-    const confirmPassword = document.getElementById('CustomerConfirmPassword').value;
+  setupCustomerInfoForm() {
+    // Using Shopify's native form handling for the customer info form
+    // No need to add event listeners as Shopify will handle the form submission
+    // and CAPTCHA verification
 
-    if (newPassword !== confirmPassword) {
-      alert('New password and confirmation do not match!');
-      return;
+    // Just add loading state when the form is submitted
+    if (this.customerInfoForm) {
+      this.customerInfoForm.addEventListener('submit', () => {
+        const submitButton = this.customerInfoForm.querySelector('button[type="submit"]');
+        if (submitButton) {
+          submitButton.classList.add('loading');
+          if (submitButton.querySelector('.btn-spinner')) {
+            submitButton.querySelector('.btn-spinner').style.display = 'inline-block';
+          }
+        }
+      });
     }
-
-    // Here you would typically send the form data to the server
-    // For now, just show an alert
-    alert('Password updated successfully!');
   }
 
   handleDeleteAccount() {
@@ -63,6 +77,8 @@ class AccountForms {
     }
   }
 
+  // Birthdate field is commented out
+  /*
   initDatePicker() {
     if (!this.birthdateField) return;
 
@@ -107,6 +123,7 @@ class AccountForms {
       });
     }
   }
+  */
 }
 
 // Initialize when DOM is loaded

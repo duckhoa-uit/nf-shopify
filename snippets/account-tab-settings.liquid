@@ -9,7 +9,33 @@
   <h2 class="section-title">{{ 'customer.account.basic_info' | t }}</h2>
 
   <div class="form-section">
-    <form id="CustomerInfoForm">
+    {%- form 'customer', customer, id: 'CustomerInfoForm' -%}
+      {%- if form.posted_successfully? -%}
+        <div class="success-message" tabindex="-1" autofocus>
+          {{ 'customer.account.success' | t | default: 'Basic information updated successfully!' }}
+        </div>
+      {%- endif -%}
+
+      {%- if form.errors -%}
+        <div class="form-error-message" role="alert">
+          <h2 class="form-error-heading">{{ 'customer.form_errors.error' | t }}</h2>
+          <ul>
+            {%- for field in form.errors -%}
+              <li>
+                {%- if field == 'form' -%}
+                  {{ form.errors.messages[field] }}
+                {%- else -%}
+                  <a href="#{{ field }}" class="field-error-link">
+                    {{- form.errors.translated_fields[field] | capitalize }}
+                    {{ form.errors.messages[field] -}}
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
       <div class="form-row">
         <div class="form-group">
           {%
@@ -62,33 +88,68 @@
         </div>
       </div>
 
-      <div class="form-group birthdate-field">
-        {%
-          render 'form-field',
-          type: 'text',
-          id: 'CustomerBirthdate',
-          name: 'customer[note][birthdate]',
-          value: '',
-          label: 'customer.account.birthdate' | t,
-          placeholder: 'DD.MM.RRRR',
-          class: 'flatpickr-input'
-        %}
-        <div class="date-picker-icon" id="birthdateCalendarIcon">
-          {{- 'icon-calendar.svg' | inline_asset_content -}}
+      {% comment %}
+        <!-- Birthdate field commented out as requested -->
+        <div class="form-group birthdate-field">
+          {%- assign birth_date = customer.metafields.facts.birth_date | default: '' -%}
+          {%
+            render 'form-field',
+            type: 'text',
+            id: 'CustomerBirthdate',
+            name: 'birthdate',
+            value: birth_date,
+            label: 'customer.account.birthdate' | t,
+            placeholder: 'DD.MM.RRRR',
+            class: 'flatpickr-input'
+          %}
+          <div class="date-picker-icon" id="birthdateCalendarIcon">
+            {{- 'icon-calendar.svg' | inline_asset_content -}}
+          </div>
         </div>
-      </div>
+      {% endcomment %}
 
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">{{ 'customer.account.save' | t }}</button>
+        <button type="submit" class="btn btn-primary">
+          {{ 'customer.account.save' | t }}
+          <span class="btn-spinner"></span>
+        </button>
       </div>
-    </form>
+    {%- endform -%}
   </div>
 
   <div class="form-divider"></div>
 
   <div class="form-section">
     <h3 class="form-section-title">{{ 'customer.account.change_password' | t }}</h3>
-    <form id="CustomerPasswordForm">
+    {%- form 'customer', customer, id: 'CustomerPasswordForm' -%}
+      <input type="hidden" name="form_type" value="customer_password">
+
+      {%- if form.posted_successfully? -%}
+        <div class="success-message" tabindex="-1" autofocus>
+          {{ 'customer.account.password_changed' | t | default: 'Password updated successfully!' }}
+        </div>
+      {%- endif -%}
+
+      {%- if form.errors -%}
+        <div class="form-error-message" role="alert">
+          <h2 class="form-error-heading">{{ 'customer.form_errors.error' | t }}</h2>
+          <ul>
+            {%- for field in form.errors -%}
+              <li>
+                {%- if field == 'form' -%}
+                  {{ form.errors.messages[field] }}
+                {%- else -%}
+                  <a href="#{{ field }}" class="field-error-link">
+                    {{- form.errors.translated_fields[field] | capitalize }}
+                    {{ form.errors.messages[field] -}}
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
       <div class="form-group">
         {%
           render 'form-field',
@@ -128,8 +189,11 @@
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">{{ 'customer.account.save' | t }}</button>
+        <button type="submit" class="btn btn-primary">
+          {{ 'customer.account.save' | t }}
+          <span class="btn-spinner"></span>
+        </button>
       </div>
-    </form>
+    {%- endform -%}
   </div>
 </div>
