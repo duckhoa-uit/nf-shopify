@@ -5,7 +5,8 @@
   - customer: The customer object
 {% endcomment %}
 
-<div id="orders" class="tab-content" role="tabpanel">
+<div id="orders" class="tab-content" role="tabpanel"
+  data-reorder-error="{{ 'customer.orders.reorder_error' | t }}">
   <h2 class="section-title">{{ 'customer.orders.title' | t }}</h2>
   {% paginate customer.orders by 20 %}
     {%- if customer.orders.size > 0 -%}

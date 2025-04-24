@@ -6,6 +6,11 @@
  */
 class OrderReorder {
   constructor() {
+    // Get translation strings from the DOM
+    this.strings = {
+      reorderError: document.getElementById('orders')?.getAttribute('data-reorder-error') || 'Failed to reorder items. Please try again.'
+    };
+
     this.initEventListeners();
   }
 
@@ -57,11 +62,57 @@ class OrderReorder {
 
     } catch (error) {
       console.error('Error reordering items:', error);
-      alert('Failed to reorder items. Please try again.');
+
+      // Show specific error message if available, otherwise show generic message
+      const errorMessage = error.message || this.strings.reorderError;
+
+      // Create and show notification
+      this.showNotification(errorMessage, 'error', button);
 
       // Remove loading state
       button.classList.remove('loading');
       button.removeAttribute('disabled');
+    }
+  }
+
+  /**
+   * Shows a notification message to the user
+   * @param {string} message - The message to display
+   * @param {string} type - The type of notification (error, success, etc.)
+   * @param {HTMLElement} targetElement - The element to position the notification near
+   */
+  showNotification(message, type, targetElement) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `reorder-notification reorder-notification--${type}`;
+    notification.textContent = message;
+
+    // Position the notification near the target element
+    const targetRect = targetElement.getBoundingClientRect();
+    const orderItem = targetElement.closest('.order-item');
+
+    if (orderItem) {
+      // Append to the order item for proper positioning
+      orderItem.style.position = 'relative';
+      orderItem.appendChild(notification);
+
+      // Position the notification
+      notification.style.position = 'absolute';
+      notification.style.bottom = '10px';
+      notification.style.left = '50%';
+      notification.style.transform = 'translateX(-50%)';
+      notification.style.zIndex = '100';
+
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => {
+          notification.remove();
+        }, 500);
+      }, 4000);
+    } else {
+      // Fallback to alert if we can't position properly
+      alert(message);
     }
   }
 
@@ -160,7 +211,13 @@ class OrderReorder {
       });
 
       if (!addResponse.ok) {
-        throw new Error('Failed to add items to cart');
+        // Try to get the detailed error message from the response
+        const errorData = await addResponse.json();
+        if (errorData && errorData.message) {
+          throw new Error(errorData.message);
+        } else {
+          throw new Error('Failed to add items to cart');
+        }
       }
 
       return await addResponse.json();
