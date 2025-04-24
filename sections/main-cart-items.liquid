@@ -105,8 +105,48 @@
                       <li class="nf-cart-item" id="CartItem-{{ item.index | plus: 1 }}">
                         <div class="nf-cart-item__grid">
                           <div class="nf-cart-item__media">
-                            {% if item.image %}
-                              <div class="nf-cart-item__image-container">
+                            <div class="nf-cart-item__image-container">
+                              {% comment %} Extract color value from variant options {% endcomment %}
+                              {% assign color_value = nil %}
+                              {% if item.product.options contains 'Color' and item.variant.title contains '/' %}
+                                {% assign variant_options = item.variant.title | split: ' / ' %}
+                                {% assign color_index = 0 %}
+                                {% for option in item.product.options %}
+                                  {% if option == 'Color' %}
+                                    {% break %}
+                                  {% endif %}
+                                  {% assign color_index = color_index | plus: 1 %}
+                                {% endfor %}
+                                {% assign color_value = variant_options[color_index] | default: nil %}
+                              {% elsif item.variant.title contains '/' %}
+                                {% assign variant_options = item.variant.title | split: ' / ' %}
+                                {% if variant_options.first != 'Default Title' %}
+                                  {% assign color_value = variant_options.first %}
+                                {% endif %}
+                              {% endif %}
+
+                              {% comment %} Try to get color-specific image {% endcomment %}
+                              {% if color_value != blank %}
+                                {% capture variant_image_url %}{% render 'get-variant-color-image',
+                                  product: item.product,
+                                  color_value: color_value,
+                                  width: 300,
+                                  height: 300,
+                                  crop: 'center'
+                                %}{% endcapture %}
+                                {% assign variant_image_url = variant_image_url | strip %}
+                              {% endif %}
+
+                              {% if variant_image_url != blank %}
+                                <img
+                                  src="{{ variant_image_url }}"
+                                  class="nf-cart-item__image"
+                                  alt="{{ item.title | escape }}"
+                                  loading="lazy"
+                                  width="150"
+                                  height="150"
+                                >
+                              {% elsif item.image %}
                                 <img
                                   src="{{ item.image | image_url: width: 300 }}"
                                   class="nf-cart-item__image"
@@ -115,24 +155,25 @@
                                   width="150"
                                   height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
                                 >
-                                {% if item.product.tags contains 'new' or item.product.tags contains 'Novinka' %}
-                                  <div class="nf-tag nf-tag--new">Novinka</div>
-                                {% endif %}
-                                {% if item.original_price != item.final_price %}
-                                  <div class="nf-tag nf-tag--sale">
-                                    -
-                                    {{-
-                                      item.original_price
-                                      | minus: item.final_price
-                                      | times: 100.0
-                                      | divided_by: item.original_price
-                                      | round
-                                    -}}
-                                    %
-                                  </div>
-                                {% endif %}
-                              </div>
-                            {% endif %}
+                              {% endif %}
+
+                              {% if item.product.tags contains 'new' or item.product.tags contains 'Novinka' %}
+                                <div class="nf-tag nf-tag--new">Novinka</div>
+                              {% endif %}
+                              {% if item.original_price != item.final_price %}
+                                <div class="nf-tag nf-tag--sale">
+                                  -
+                                  {{-
+                                    item.original_price
+                                    | minus: item.final_price
+                                    | times: 100.0
+                                    | divided_by: item.original_price
+                                    | round
+                                  -}}
+                                  %
+                                </div>
+                              {% endif %}
+                            </div>
                           </div>
 
                           <div class="nf-cart-item__content">

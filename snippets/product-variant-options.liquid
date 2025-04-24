@@ -122,8 +122,12 @@
               name="{{ input_name | escape }}"
               value="{{ value | escape }}"
               form="{{ product_form_id }}"
-              {% if value.selected %}checked{% endif %}
-              {% if option_disabled %}class="disabled" disabled{% endif %}
+              {% if value.selected %}
+                checked
+              {% endif %}
+              {% if option_disabled %}
+                class="disabled" disabled
+              {% endif %}
               {{ input_dataset }}
             >
             <label for="{{ input_id }}">
@@ -147,96 +151,20 @@
 
           {%- if show_thumbnails -%}
             {%- liquid
-              assign thumbnail_url = ''
-              assign color_value = value | downcase | strip | replace: ' ', '-' | replace: "'", "" | replace: ".", "" | replace: ",", ""
-              assign reference_id = ''
+              assign color_value = value | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
 
-              # Find the reference_id for this color from metafields
-              if product.metafields.custom.color.value != blank
-                for color_item in product.metafields.custom.color.value
-                  if color_item.name == color_value
-                    assign reference_id = color_item.reference_id
-                    break
-                  endif
-                endfor
-              endif
-
-              # Try to find a model image for this color from product media
-              if reference_id != ''
-                assign lowest_sequence = 999
-                assign found_model_image = false
-
-                # First look for model images without sequence (just -M)
-                for media in product.media
-                  assign media_src = media.src | default: ''
-                  assign parsed_url = media_src | split: '/' | last
-
-                  if parsed_url contains reference_id
-                    if parsed_url contains '-M'
-                      unless parsed_url contains '-M_'
-                        assign thumbnail_url = media.preview_image | image_url: width: 80
-                        assign found_model_image = true
-                        break
-                      endunless
-                    endif
-                  endif
-                endfor
-
-                # If no model image without sequence found, look for one with lowest sequence
-                unless found_model_image
-                  for media in product.media
-                    assign media_src = media.src | default: ''
-                    assign parsed_url = media_src | split: '/' | last
-                    if parsed_url contains reference_id and parsed_url contains '-M_'
-                      assign sequence_part = parsed_url | split: '-M_' | last | split: '.' | first
-                      assign sequence_number = sequence_part | plus: 0
-
-                      if sequence_number < lowest_sequence
-                        assign lowest_sequence = sequence_number
-                        assign thumbnail_url = media.preview_image | image_url: width: 80
-                        assign found_model_image = true
-                      endif
-                    endif
-                  endfor
-                endunless
-
-                # If still no model image found, try other image types in priority order
-                unless found_model_image
-                  # Define image type priority for fallback
-                  assign image_types = 'H,B,BV,D' | split: ','
-
-                  # Try each image type in priority order
-                  for type in image_types
-                    if thumbnail_url == ''
-                      for media in product.media
-                        assign media_src = media.src | default: ''
-                        assign parsed_url = media_src | split: '/' | last
-
-                        # Check if the image contains both the reference_id and the current image type
-                        assign type_code = '-' | append: type
-                        if parsed_url contains reference_id and parsed_url contains type_code
-                          assign thumbnail_url = media.preview_image | image_url: width: 80
-                          break
-                        endif
-                      endfor
-                    endif
-                  endfor
-                endunless
-              endif
-
-              # Fallback to the old method if no image found with reference_id
-              if thumbnail_url == ''
-                for media in product.media
-                  assign media_src = media.src | default: ''
-                  assign parsed_url = media_src | split: '/' | last
-
-                  # Try to match by color name in the URL
-                  if parsed_url contains color_value
-                    assign thumbnail_url = media.preview_image | image_url: width: 80
-                    break
-                  endif
-                endfor
-              endif
+              # Use our improved get-variant-color-image snippet to find the image
+            -%}
+            {% capture thumbnail_url %}{% render 'get-variant-color-image',
+              product: product,
+              color_value: color_value,
+              width: 80,
+              height: 80,
+              crop: 'center'
+            %}{% endcapture %}
+            {%- liquid
+              # Clean up any whitespace in the captured URL
+              assign thumbnail_url = thumbnail_url | strip
             -%}
 
             <div class="color-option-with-thumbnail" data-color-name="{{ value }}">
@@ -311,8 +239,12 @@
           name="{{ input_name | escape }}"
           value="{{ value | escape }}"
           form="{{ product_form_id }}"
-          {% if value.selected %}checked{% endif %}
-          {% if option_disabled %}class="disabled" disabled{% endif %}
+          {% if value.selected %}
+            checked
+          {% endif %}
+          {% if option_disabled %}
+            class="disabled" disabled
+          {% endif %}
           {{ input_dataset }}
         >
         <label for="{{ input_id }}">
@@ -336,96 +268,20 @@
 
       {%- if show_thumbnails -%}
         {%- liquid
-          assign thumbnail_url = ''
-          assign color_value = value | downcase | strip | replace: ' ', '-' | replace: "'", "" | replace: ".", "" | replace: ",", ""
-          assign reference_id = ''
+          assign color_value = value | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
 
-          # Find the reference_id for this color from metafields
-          if product.metafields.custom.color.value != blank
-            for color_item in product.metafields.custom.color.value
-              if color_item.name == color_value
-                assign reference_id = color_item.reference_id
-                break
-              endif
-            endfor
-          endif
-
-          # Try to find a model image for this color from product media
-          if reference_id != ''
-            assign lowest_sequence = 999
-            assign found_model_image = false
-
-            # First look for model images without sequence (just -M)
-            for media in product.media
-              assign media_src = media.src | default: ''
-              assign parsed_url = media_src | split: '/' | last
-
-              if parsed_url contains reference_id
-                if parsed_url contains '-M'
-                  unless parsed_url contains '-M_'
-                    assign thumbnail_url = media.preview_image | image_url: width: 80
-                    assign found_model_image = true
-                    break
-                  endunless
-                endif
-              endif
-            endfor
-
-            # If no model image without sequence found, look for one with lowest sequence
-            unless found_model_image
-              for media in product.media
-                assign media_src = media.src | default: ''
-                assign parsed_url = media_src | split: '/' | last
-                if parsed_url contains reference_id and parsed_url contains '-M_'
-                  assign sequence_part = parsed_url | split: '-M_' | last | split: '.' | first
-                  assign sequence_number = sequence_part | plus: 0
-
-                  if sequence_number < lowest_sequence
-                    assign lowest_sequence = sequence_number
-                    assign thumbnail_url = media.preview_image | image_url: width: 80
-                    assign found_model_image = true
-                  endif
-                endif
-              endfor
-            endunless
-
-            # If still no model image found, try other image types in priority order
-            unless found_model_image
-              # Define image type priority for fallback
-              assign image_types = 'H,B,BV,D' | split: ','
-
-              # Try each image type in priority order
-              for type in image_types
-                if thumbnail_url == ''
-                  for media in product.media
-                    assign media_src = media.src | default: ''
-                    assign parsed_url = media_src | split: '/' | last
-
-                    # Check if the image contains both the reference_id and the current image type
-                    assign type_code = '-' | append: type
-                    if parsed_url contains reference_id and parsed_url contains type_code
-                      assign thumbnail_url = media.preview_image | image_url: width: 80
-                      break
-                    endif
-                  endfor
-                endif
-              endfor
-            endunless
-          endif
-
-          # Fallback to the old method if no image found with reference_id
-          if thumbnail_url == ''
-            for media in product.media
-              assign media_src = media.src | default: ''
-              assign parsed_url = media_src | split: '/' | last
-
-              # Try to match by color name in the URL
-              if parsed_url contains color_value
-                assign thumbnail_url = media.preview_image | image_url: width: 80
-                break
-              endif
-            endfor
-          endif
+          # Use our improved get-variant-color-image snippet to find the image
+        -%}
+        {% capture thumbnail_url %}{% render 'get-variant-color-image',
+          product: product,
+          color_value: color_value,
+          width: 80,
+          height: 80,
+          crop: 'center'
+        %}{% endcapture %}
+        {%- liquid
+          # Clean up any whitespace in the captured URL
+          assign thumbnail_url = thumbnail_url | strip
         -%}
 
         <div class="color-option-with-thumbnail" data-color-name="{{ value }}">

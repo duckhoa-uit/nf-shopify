@@ -2,12 +2,69 @@
   {%- for item in cart.items -%}
     <div id="cart-notification-product-{{ item.key }}" class="cart-notification__item">
       {%- if item.image -%}
+        {% comment %} Extract color value from item options {% endcomment %}
+        {% assign color_value = '' %}
+        {% for option in item.options_with_values %}
+          {% if option.name contains 'Color' or option.name contains 'Colour' %}
+            {% assign color_value = option.value %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+
+        {% comment %} Try to get color-specific image {% endcomment %}
+        {% assign variant_image = nil %}
+        {% if color_value != blank %}
+          {% comment %} First try to find the variant image using our reusable approach {% endcomment %}
+          {% for media in item.product.media %}
+            {% assign media_src = media.src | default: '' %}
+            {% assign parsed_url = media_src | split: '/' | last %}
+
+            {% comment %} Use the same logic as in get-variant-color-image.liquid {% endcomment %}
+            {% assign color_value_normalized = color_value | downcase | strip | replace: ' ', '-' | replace: "'", "" | replace: ".", "" | replace: ",", "" %}
+
+            {% comment %} Step 1: Try to find reference ID from metafields {% endcomment %}
+            {% assign reference_id = '' %}
+            {% if item.product.metafields.custom.color.value != blank %}
+              {% for color_item in item.product.metafields.custom.color.value %}
+                {% if color_item.name == color_value_normalized %}
+                  {% assign reference_id = color_item.reference_id %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
+            {% comment %} Step 2: Check if this media matches the reference ID {% endcomment %}
+            {% if reference_id != '' and parsed_url contains reference_id %}
+              {% assign variant_image = media %}
+              {% break %}
+            {% comment %} Step 3: If no reference ID or no match, check if it matches the color name {% endcomment %}
+            {% elsif parsed_url contains color_value_normalized %}
+              {% assign variant_image = media %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+
+          {% comment %} Step 4: If still no image found, try to find any image with a color reference pattern {% endcomment %}
+          {% if variant_image == nil and reference_id != '' %}
+            {% assign reference_pattern = reference_id | slice: 0, 3 %}
+            {% for media in item.product.media %}
+              {% assign media_src = media.src | default: '' %}
+              {% assign parsed_url = media_src | split: '/' | last %}
+
+              {% if parsed_url contains reference_pattern %}
+                {% assign variant_image = media %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endif %}
+
         <div class="cart-notification__item-image">
           <img
-            src="{{ item.image | image_url: width: 140 }}"
+            src="{{ variant_image.preview_image | default: item.image | image_url: width: 140 }}"
             alt="{{ item.image.alt | escape }}"
             width="80"
-            height="{{ 80 | divided_by: item.image.aspect_ratio | ceil }}"
+            height="80"
             loading="lazy"
           >
         </div>

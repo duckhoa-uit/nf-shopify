@@ -5,8 +5,12 @@
   - customer: The customer object
 {% endcomment %}
 
-<div id="orders" class="tab-content" role="tabpanel"
-  data-reorder-error="{{ 'customer.orders.reorder_error' | t }}">
+<div
+  id="orders"
+  class="tab-content"
+  role="tabpanel"
+  data-reorder-error="{{ 'customer.orders.reorder_error' | t }}"
+>
   <h2 class="section-title">{{ 'customer.orders.title' | t }}</h2>
   {% paginate customer.orders by 20 %}
     {%- if customer.orders.size > 0 -%}
@@ -48,7 +52,46 @@
                   <div class="order-product">
                     <div class="product-left">
                       <div class="product-image">
-                        {% if line_item.image %}
+                        {% comment %} Extract color value from variant options {% endcomment %}
+                        {% assign color_value = null %}
+                        {% if line_item.product.options contains 'Color' and line_item.variant.title contains '/' %}
+                          {% assign variant_options = line_item.variant.title | split: ' / ' %}
+                          {% assign color_index = 0 %}
+                          {% for option in line_item.product.options %}
+                            {% if option == 'Color' %}
+                              {% break %}
+                            {% endif %}
+                            {% assign color_index = color_index | plus: 1 %}
+                          {% endfor %}
+                          {% assign color_value = variant_options[color_index] | default: null %}
+                        {% elsif line_item.variant.title contains '/' %}
+                          {% assign variant_options = line_item.variant.title | split: ' / ' %}
+                          {% if variant_options.first != 'Default Title' %}
+                            {% assign color_value = variant_options.first %}
+                          {% endif %}
+                        {% endif %}
+
+                        {% comment %} Try to get color-specific image {% endcomment %}
+                        {% if color_value != blank %}
+                          {% capture variant_image_url %}{% render 'get-variant-color-image',
+                            product: line_item.product,
+                            color_value: color_value,
+                            width: 100,
+                            height: 100,
+                            crop: 'center'
+                          %}{% endcapture %}
+                          {% assign variant_image_url = variant_image_url | strip %}
+                        {% endif %}
+
+                        {% if variant_image_url != blank %}
+                          <img
+                            src="{{ variant_image_url }}"
+                            alt="{{ line_item.title | escape }}"
+                            width="100"
+                            height="100"
+                            loading="lazy"
+                          >
+                        {% elsif line_item.image %}
                           <img
                             src="{{ line_item.image | image_url: width: 100, height: 100, crop: 'center' }}"
                             alt="{{ line_item.title | escape }}"
@@ -82,7 +125,11 @@
                     <div class="product-info">
                       {% comment %} Extract just the product title without variants {% endcomment %}
                       {% assign product_title_parts = line_item.title | split: ' - ' %}
-                      <h4 class="text-sm leading-5">{{ product_title_parts[0] }}</h4>
+                      <h4 class="text-sm leading-5">
+                        <a href="{{ line_item.product.url }}" class="hover:underline text-current">
+                          {{ product_title_parts[0] }}
+                        </a>
+                      </h4>
 
                       <div class="product-meta">
                         {% comment %} Extract variant options {% endcomment %}
