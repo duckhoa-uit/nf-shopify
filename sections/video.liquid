@@ -146,11 +146,6 @@
         class="video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} w-full video-container"
         data-media-id="{{ video_id }}"
         {% if section.settings.hide_banner_content %}data-autoplay="true"{% endif %}
-        {% if poster != null %}
-          style="--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%; --video-fit: {{ section.settings.video_fit }};"
-        {% else %}
-          style="--ratio-percent: {{ section.settings.video_aspect_ratio }}%; --video-fit: {{ section.settings.video_fit }};"
-        {% endif %}
       >
         <button
           id="Deferred-Poster-Modal-{{ video_id }}"
@@ -372,43 +367,10 @@
       "default": false
     },
     {
-      "type": "select",
-      "id": "video_aspect_ratio",
-      "label": "Video aspect ratio",
-      "options": [
-        {
-          "value": "56.25",
-          "label": "16:9 (Widescreen)"
-        },
-        {
-          "value": "75",
-          "label": "4:3 (Standard)"
-        },
-        {
-          "value": "100",
-          "label": "1:1 (Square)"
-        }
-      ],
-      "default": "56.25",
-      "info": "Applies when no cover image is selected"
+      "type": "paragraph",
+      "content": "Video height is fixed at 800px on desktop, 600px on tablet, and 400px on mobile."
     },
-    {
-      "type": "select",
-      "id": "video_fit",
-      "label": "Video scaling",
-      "options": [
-        {
-          "value": "contain",
-          "label": "Fit - maintain aspect ratio"
-        },
-        {
-          "value": "cover",
-          "label": "Fill - may crop video edges"
-        }
-      ],
-      "default": "contain",
-      "info": "How the video should scale within its container"
-    },
+
     {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"
