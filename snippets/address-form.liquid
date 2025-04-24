@@ -22,8 +22,8 @@
             value: form.first_name,
             label: 'customer.addresses.first_name' | t,
             required: true,
-            pattern: '[A-Za-z\s]{2,}',
-            title: 'First name should contain at least 2 letters'
+            min_length: '2',
+            title: 'customer.addresses.first_name_min_length' | t | default: 'First name should contain at least 2 characters'
           %}
         </div>
 
@@ -36,8 +36,8 @@
             value: form.last_name,
             label: 'customer.addresses.last_name' | t,
             required: true,
-            pattern: '[A-Za-z\s]{2,}',
-            title: 'Last name should contain at least 2 letters'
+            min_length: '2',
+            title: 'customer.addresses.last_name_min_length' | t | default: 'Last name should contain at least 2 characters'
           %}
         </div>
       </div>
@@ -63,7 +63,7 @@
             value: form.phone,
             label: 'customer.addresses.phone' | t,
             pattern: '[0-9\+\-\s]{7,}',
-            title: 'Phone number should contain at least 7 digits'
+            title: 'customer.addresses.phone_min_length' | t | default: 'Phone number should contain at least 7 digits'
           %}
         </div>
       </div>
@@ -78,7 +78,7 @@
           label: 'customer.addresses.address1' | t,
           required: true,
           min_length: '5',
-          title: 'Address should be at least 5 characters long'
+          title: 'customer.addresses.address_min_length' | t | default: 'Address should be at least 5 characters long'
         %}
       </div>
 
@@ -103,8 +103,8 @@
             value: form.city,
             label: 'customer.addresses.city' | t,
             required: true,
-            pattern: '[A-Za-z\s\-]{2,}',
-            title: 'City name should contain at least 2 letters'
+            min_length: '2',
+            title: 'customer.addresses.city_min_length' | t | default: 'City name should contain at least 2 characters'
           %}
         </div>
 
@@ -118,17 +118,17 @@
             label: 'customer.addresses.zip' | t,
             required: true,
             pattern: '[0-9A-Za-z\s\-]{3,10}',
-            title: 'Postal/ZIP code should be 3-10 characters'
+            title: 'customer.addresses.zip_min_length' | t | default: 'Postal/ZIP code should be 3-10 characters'
           %}
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label for="AddressCountry_new">{{ 'customer.addresses.country' | t }}</label>
+          <label for="AddressCountryNew">{{ 'customer.addresses.country' | t }}</label>
           <div class="select-wrapper">
             <select
-              id="AddressCountry_new"
+              id="AddressCountryNew"
               name="address[country]"
               data-address-country-select
               data-default="{{ form.country }}"
@@ -138,11 +138,11 @@
           </div>
         </div>
 
-        <div class="form-group" id="AddressProvinceContainer_new" style="display:none;">
-          <label for="AddressProvince_new">{{ 'customer.addresses.province' | t }}</label>
+        <div class="form-group" id="AddressProvinceContainerNew" style="display:none;">
+          <label for="AddressProvinceNew">{{ 'customer.addresses.province' | t }}</label>
           <div class="select-wrapper">
             <select
-              id="AddressProvince_new"
+              id="AddressProvinceNew"
               name="address[province]"
               data-default="{{ form.province }}"
             ></select>
@@ -158,7 +158,7 @@
       </div> {% endcomment %}
 
       <div class="form-actions">
-        <button type="submit" class="button" id="AddressSubmit">
+        <button type="submit" class="button btn" id="AddressSubmit">
           <span class="btn-text">{{ 'customer.addresses.add' | t }}</span>
           <span class="btn-spinner"></span>
         </button>

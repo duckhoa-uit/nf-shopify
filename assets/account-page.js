@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize country/province selectors on page load using Shopify's built-in functionality
+  // Wait for the DOM to be fully loaded
+  setTimeout(() => {
+    setupCountryProvinceSelectors();
+  }, 100);
+
   // Tab functionality
   const tabLinks = document.querySelectorAll('.tab-link');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -72,12 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Address functionality
-
-  // Add address functionality
-  const addAddressButtons = [
-    document.getElementById('AddBillingAddress'),
-    document.getElementById('AddDeliveryAddress')
-  ];
   const addAddressTemplate = document.getElementById('AddAddressFormTemplate');
 
   // Check if address sections are empty and show add form automatically
@@ -115,8 +115,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const addressCardsContainer = targetContainer || document.querySelector('.address-cards');
     addressCardsContainer.appendChild(addressFormCard);
 
-    // Initialize country/province selectors
-    initializeCountryProvinceSelectors();
+    // Wait a moment for the DOM to update before initializing selectors
+    setTimeout(() => {
+      // Initialize country/province selectors using Shopify's built-in functionality
+      setupCountryProvinceSelectors();
+    }, 50);
 
     // Set default country if available
     const countrySelect = addressFormCard.querySelector('select[data-address-country-select]');
@@ -148,45 +151,52 @@ document.addEventListener('DOMContentLoaded', function() {
     addressFormCard.scrollIntoView({ behavior: 'smooth' });
   }
 
-  if (addAddressTemplate) {
-    // Billing Address Add button
-    if (addAddressButtons[0]) {
-      addAddressButtons[0].addEventListener('click', function() {
-        // Use the billing address cards container
-        const container = document.getElementById('billing-address-cards');
-        handleAddAddressClick(container);
-      });
+  // Add address button handlers are also handled by event delegation
+  document.addEventListener('click', function(e) {
+    // Handle add billing address button click
+    if (e.target.closest('#AddBillingAddress')) {
+      const container = document.getElementById('billing-address-cards');
+      handleAddAddressClick(container);
     }
 
-    // Delivery Address Add button
-    if (addAddressButtons[1]) {
-      addAddressButtons[1].addEventListener('click', function() {
-        // Use the delivery address cards container
-        const container = document.getElementById('delivery-address-cards');
-        handleAddAddressClick(container);
-      });
+    // Handle add delivery address button click
+    if (e.target.closest('#AddDeliveryAddress')) {
+      const container = document.getElementById('delivery-address-cards');
+      handleAddAddressClick(container);
     }
 
-    // Automatically show add form for empty address sections
-    // We use setTimeout to ensure the DOM is fully loaded
-    setTimeout(() => {
-      // Check if billing address section is empty
-      if (billingAddressEmpty) {
-        handleAddAddressClick(billingAddressCards);
+    // Handle modal cancel button click
+    if (e.target.closest('.modal-cancel')) {
+      const addressFormCard = e.target.closest('.address-form-card');
+      if (addressFormCard) {
+        addressFormCard.remove();
       }
-      // If billing address has form showing and delivery is empty, don't show another form
-      else if (deliveryAddressEmpty && !document.getElementById('NewAddressForm')) {
-        handleAddAddressClick(deliveryAddressCards);
-      }
-    }, 100);
-  }
+    }
+  });
 
-  // Edit address functionality
-  const editButtons = document.querySelectorAll('.btn-edit');
+  // Automatically show add form for empty address sections
+  // We use setTimeout to ensure the DOM is fully loaded
+  setTimeout(() => {
+    // Check if billing address section is empty
+    if (billingAddressEmpty) {
+      const container = document.getElementById('billing-address-cards');
+      handleAddAddressClick(container);
+    }
+    // If billing address has form showing and delivery is empty, don't show another form
+    else if (deliveryAddressEmpty && !document.getElementById('NewAddressForm')) {
+      const container = document.getElementById('delivery-address-cards');
+      handleAddAddressClick(container);
+    }
+  }, 100);
 
-  editButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const addressId = this.getAttribute('data-address-id');
+  // Use event delegation for edit and delete buttons
+
+  // Add event listener to the address cards container for edit buttons
+  document.addEventListener('click', function(e) {
+    // Handle edit button clicks
+    if (e.target.closest('.btn-edit')) {
+      const button = e.target.closest('.btn-edit');
+      const addressId = button.getAttribute('data-address-id');
       const addressWrapper = document.querySelector(`.address-wrapper[data-address-id="${addressId}"]`);
       const addressCard = addressWrapper.querySelector('.address-card');
       const editForm = addressWrapper.querySelector('.address-edit-form');
@@ -196,8 +206,11 @@ document.addEventListener('DOMContentLoaded', function() {
         addressCard.style.display = 'none';
         editForm.style.display = 'block';
 
-        // Initialize country/province selectors
-        initializeCountryProvinceSelectors();
+        // Wait a moment for the DOM to update before initializing selectors
+        setTimeout(() => {
+          // Initialize country/province selectors using Shopify's built-in functionality
+          setupCountryProvinceSelectors();
+        }, 50);
 
         // Add form submission handler
         const form = editForm.querySelector('form');
@@ -208,32 +221,43 @@ document.addEventListener('DOMContentLoaded', function() {
           // Add validation listeners to form fields
           addFormValidationListeners(editForm);
         }
-
-        // Add cancel button handler
-        const cancelButton = editForm.querySelector('.cancel-edit');
-        if (cancelButton && !cancelButton.hasAttribute('data-handler-attached')) {
-          cancelButton.addEventListener('click', function() {
-            // Hide form and show card
-            editForm.style.display = 'none';
-            addressCard.style.display = 'block';
-          });
-          cancelButton.setAttribute('data-handler-attached', 'true');
-        }
       }
-    });
-  });
+    }
 
-  // Delete address functionality
-  const deleteButtons = document.querySelectorAll('.btn-delete');
+    // Handle cancel button clicks
+    if (e.target.closest('.cancel-edit')) {
+      const button = e.target.closest('.cancel-edit');
+      const addressId = button.getAttribute('data-address-id');
+      const addressWrapper = document.querySelector(`.address-wrapper[data-address-id="${addressId}"]`);
+      const addressCard = addressWrapper.querySelector('.address-card');
+      const editForm = addressWrapper.querySelector('.address-edit-form');
 
-  deleteButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
+      if (addressCard && editForm) {
+        // Hide form and show card
+        editForm.style.display = 'none';
+        addressCard.style.display = 'block';
+      }
+    }
+
+    // Handle delete button clicks
+    if (e.target.closest('.btn-delete')) {
       e.preventDefault();
-      const addressId = this.getAttribute('data-address-id');
+      const button = e.target.closest('.btn-delete');
+      const addressId = button.getAttribute('data-address-id');
       const addressWrapper = document.querySelector(`.address-wrapper[data-address-id="${addressId}"]`);
 
+      // For newly added addresses that don't have a real ID yet, just remove the card
+      if (addressId.startsWith('new_')) {
+        if (addressWrapper) addressWrapper.remove();
+        return;
+      }
+
       // Show loading state on the button
-      this.classList.add('loading');
+      button.classList.add('loading');
+      const spinner = button.querySelector('.btn-spinner');
+      if (spinner) {
+        spinner.style.display = 'inline-block';
+      }
 
       // Instead of using fetch, we'll use the form directly but prevent navigation
       // Set the form data and action
@@ -266,6 +290,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Remove loading state
         button.classList.remove('loading');
+        const spinner = button.querySelector('.btn-spinner');
+        if (spinner) {
+          spinner.style.display = 'none';
+        }
       };
 
       xhr.onerror = function() {
@@ -273,11 +301,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
         alert(errorMsg);
         button.classList.remove('loading');
+        const spinner = button.querySelector('.btn-spinner');
+        if (spinner) {
+          spinner.style.display = 'none';
+        }
       };
 
       // Send the request
       xhr.send(formData);
-    });
+    }
   });
 
   // Set default address functionality is handled by direct links
@@ -290,13 +322,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitButton = form.querySelector('button[type="submit"]');
     const formCard = form.closest('.address-form-card, .address-edit-form');
 
+    console.log('Form submission started:', {
+      formId: form.id,
+      formAction: form.action,
+      formMethod: form.method,
+      formCardId: formCard ? formCard.id : 'null'
+    });
+
+    // Log form data for debugging
+    console.log('Form data:');
+    for (const pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
     // Custom validation
     let isValid = true;
 
     // First name validation
     const firstNameInput = form.querySelector('input[name="address[first_name]"]');
-    if (firstNameInput && !/^[A-Za-z\s]{2,}$/.test(firstNameInput.value)) {
-      const firstNameError = document.querySelector('[data-firstname-error]')?.getAttribute('data-firstname-error') || 'First name should contain at least 2 letters';
+    if (firstNameInput && firstNameInput.value.length < 2) {
+      const firstNameError = 'First name should contain at least 2 characters';
       firstNameInput.setCustomValidity(firstNameError);
       isValid = false;
     } else if (firstNameInput) {
@@ -305,8 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Last name validation
     const lastNameInput = form.querySelector('input[name="address[last_name]"]');
-    if (lastNameInput && !/^[A-Za-z\s]{2,}$/.test(lastNameInput.value)) {
-      const lastNameError = document.querySelector('[data-lastname-error]')?.getAttribute('data-lastname-error') || 'Last name should contain at least 2 letters';
+    if (lastNameInput && lastNameInput.value.length < 2) {
+      const lastNameError = 'Last name should contain at least 2 characters';
       lastNameInput.setCustomValidity(lastNameError);
       isValid = false;
     } else if (lastNameInput) {
@@ -333,8 +378,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // City validation
     const cityInput = form.querySelector('input[name="address[city]"]');
-    if (cityInput && !/^[A-Za-z\s\-]{2,}$/.test(cityInput.value)) {
-      cityInput.setCustomValidity('City name should contain at least 2 letters');
+    if (cityInput && cityInput.value.length < 2) {
+      const cityError = document.querySelector('[data-city-error]')?.getAttribute('data-city-error') || 'City name should contain at least 2 characters';
+      cityInput.setCustomValidity(cityError);
       isValid = false;
     } else if (cityInput) {
       cityInput.setCustomValidity('');
@@ -365,6 +411,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const addressCard = addressWrapper ? addressWrapper.querySelector('.address-card') : null;
 
     // Submit form
+    console.log('Submitting form to:', form.action, 'with method:', form.method || 'POST');
+
     fetch(form.action, {
       method: form.method || 'POST',
       body: formData,
@@ -373,7 +421,24 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     })
     .then(response => {
+      console.log('Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        redirected: response.redirected,
+        url: response.url
+      });
+      // Remove loading state regardless of response status
+      if (submitButton) {
+        submitButton.classList.remove('loading');
+        const spinner = submitButton.querySelector('.btn-spinner');
+        if (spinner) {
+          spinner.style.display = 'none';
+        }
+      }
+
       if (response.ok) {
+        console.log('Form submission successful');
         // Show success message
         const successMessage = document.createElement('div');
         successMessage.className = 'success-message';
@@ -449,84 +514,138 @@ document.addEventListener('DOMContentLoaded', function() {
           }, 3000);
         }
       } else {
-        throw new Error('Form submission failed');
+        console.error('Form submission failed with status:', response.status);
+        throw new Error(`Form submission failed with status: ${response.status}`);
       }
     })
     .catch(error => {
-      console.error('Error:', error);
+      console.error('Error during form submission:', error);
+      console.error('Error stack:', error.stack);
+      console.error('Form details:', {
+        action: form.action,
+        method: form.method,
+        id: form.id,
+        className: form.className
+      });
       const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
       alert(errorMsg);
       if (submitButton) {
         submitButton.classList.remove('loading');
-      }
-    });
-  }
-
-  // Country/province selectors
-  function initializeCountryProvinceSelectors() {
-    const countrySelects = document.querySelectorAll('[data-address-country-select]');
-
-    countrySelects.forEach(select => {
-      // Handle both formats: AddressCountry_new and EditAddress_123_Country
-      let formId;
-      if (select.id.includes('_Country')) {
-        // For edit forms: EditAddress_123_Country -> EditAddress_123_
-        formId = select.id.substring(0, select.id.lastIndexOf('_') + 1);
-      } else {
-        // For new forms: AddressCountry_new -> Address_new
-        formId = select.id.replace('Country', '');
-      }
-
-      const provinceSelect = document.getElementById(`${formId}Province`);
-      const provinceContainer = document.getElementById(`${formId}ProvinceContainer`);
-
-      if (provinceSelect && provinceContainer) {
-        // Set the country to the default value if specified
-        const defaultCountry = select.getAttribute('data-default');
-        if (defaultCountry) {
-          select.value = defaultCountry;
+        const spinner = submitButton.querySelector('.btn-spinner');
+        if (spinner) {
+          spinner.style.display = 'none';
         }
-
-        // Initialize provinces for the current country
-        initializeProvinceSelector(select, provinceSelect, provinceContainer);
-
-        // Update provinces when country changes
-        select.addEventListener('change', function() {
-          initializeProvinceSelector(select, provinceSelect, provinceContainer);
-        });
       }
     });
   }
 
-  function initializeProvinceSelector(countrySelect, provinceSelect, provinceContainer) {
-    const selectedCountry = countrySelect.value;
+  // Country/province selectors using Shopify's built-in functionality
+  function setupCountryProvinceSelectors() {
+    if (Shopify && Shopify.CountryProvinceSelector) {
+      try {
+        // Check if the elements exist before initializing
+        const countryElement = document.getElementById('AddressCountryNew');
+        const provinceElement = document.getElementById('AddressProvinceNew');
+        const containerElement = document.getElementById('AddressProvinceContainerNew');
 
-    // Get provinces for the selected country
-    const provinces = getProvinces(selectedCountry);
+        if (countryElement && provinceElement) {
+          console.log('Initializing new address form selector:', {
+            countryElement: countryElement.id,
+            provinceElement: provinceElement.id,
+            containerElement: containerElement ? containerElement.id : 'null'
+          });
 
-    if (provinces.length > 0) {
-      // Clear existing options
-      provinceSelect.innerHTML = '';
+          // Add change event listener to log provinces
+          countryElement.addEventListener('change', function() {
+            console.log('Country changed to:', this.value);
+            console.log('Province element:', provinceElement);
 
-      // Add new options
-      provinces.forEach(province => {
-        const option = document.createElement('option');
-        option.value = province.code;
-        option.textContent = province.name;
-        provinceSelect.appendChild(option);
-      });
+            // Log the provinces after a short delay to allow them to be populated
+            setTimeout(() => {
+              const provinces = Array.from(provinceElement.options).map(option => ({
+                value: option.value,
+                text: option.text
+              }));
+              console.log('Provinces for', this.value, ':', provinces);
+              console.log('Province container visibility:', containerElement ? containerElement.style.display : 'N/A');
+            }, 100);
+          });
 
-      // Set the province to the default value if specified
-      const defaultProvince = provinceSelect.getAttribute('data-default');
-      if (defaultProvince) {
-        provinceSelect.value = defaultProvince;
+          // Initialize the new address form
+          new Shopify.CountryProvinceSelector('AddressCountryNew', 'AddressProvinceNew', {
+            hideElement: containerElement ? 'AddressProvinceContainerNew' : null,
+          });
+        } else {
+          console.warn('New address form elements not found:', {
+            countryElement: countryElement ? countryElement.id : 'null',
+            provinceElement: provinceElement ? provinceElement.id : 'null',
+            containerElement: containerElement ? containerElement.id : 'null'
+          });
+        }
+      } catch (e) {
+        console.warn('Error initializing new address form selector:', e);
       }
 
-      // Show the province selector
-      provinceContainer.style.display = 'block';
+      // Initialize existing address forms
+      const countrySelects = document.querySelectorAll('[data-address-country-select]');
+      console.log('Found country selects:', countrySelects.length);
+
+      countrySelects.forEach((select) => {
+        try {
+          if (select.id === 'AddressCountryNew') return; // Skip the new form as it's already initialized
+
+          console.log('Processing country select:', select.id);
+          const formId = select.id.match(/EditAddress_(\d+)_Country/);
+          if (formId && formId[1]) {
+            const addressId = formId[1];
+            const provinceId = `EditAddress_${addressId}_Province`;
+            const containerId = `EditAddress_${addressId}_ProvinceContainer`;
+
+            // Check if the province element exists
+            const provinceElement = document.getElementById(provinceId);
+            const containerElement = document.getElementById(containerId);
+
+            console.log('Edit form elements:', {
+              addressId,
+              provinceElement: provinceElement ? provinceElement.id : 'null',
+              containerElement: containerElement ? containerElement.id : 'null'
+            });
+
+            if (provinceElement) {
+              // Add change event listener to log provinces
+              select.addEventListener('change', function() {
+                console.log('Country changed to:', this.value, 'for address ID:', addressId);
+
+                // Log the provinces after a short delay to allow them to be populated
+                setTimeout(() => {
+                  const provinces = Array.from(provinceElement.options).map(option => ({
+                    value: option.value,
+                    text: option.text
+                  }));
+                  console.log('Provinces for', this.value, 'in address', addressId, ':', provinces);
+                  console.log('Province container visibility:', containerElement ? containerElement.style.display : 'N/A');
+                }, 100);
+              });
+
+              new Shopify.CountryProvinceSelector(
+                select.id,
+                provinceId,
+                {
+                  hideElement: containerElement ? containerId : null,
+                }
+              );
+            } else {
+              console.warn('Province element not found for address ID:', addressId);
+            }
+          } else {
+            console.warn('Could not extract address ID from select ID:', select.id);
+          }
+        } catch (e) {
+          console.warn('Error initializing country selector:', e, select.id);
+        }
+      });
     } else {
-      // Hide the province selector if no provinces
-      provinceContainer.style.display = 'none';
+      console.warn('Shopify.CountryProvinceSelector is not available');
     }
   }
 
@@ -538,8 +657,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const firstNameInput = formContainer.querySelector('input[name="address[first_name]"]');
     if (firstNameInput) {
       firstNameInput.addEventListener('input', function() {
-        if (!/^[A-Za-z\s]{2,}$/.test(this.value)) {
-          const firstNameError = document.querySelector('[data-firstname-error]')?.getAttribute('data-firstname-error') || 'First name should contain at least 2 letters';
+        if (this.value.length < 2) {
+          const firstNameError = 'First name should contain at least 2 characters';
           this.setCustomValidity(firstNameError);
         } else {
           this.setCustomValidity('');
@@ -551,8 +670,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const lastNameInput = formContainer.querySelector('input[name="address[last_name]"]');
     if (lastNameInput) {
       lastNameInput.addEventListener('input', function() {
-        if (!/^[A-Za-z\s]{2,}$/.test(this.value)) {
-          const lastNameError = document.querySelector('[data-lastname-error]')?.getAttribute('data-lastname-error') || 'Last name should contain at least 2 letters';
+        if (this.value.length < 2) {
+          const lastNameError = 'Last name should contain at least 2 characters';
           this.setCustomValidity(lastNameError);
         } else {
           this.setCustomValidity('');
@@ -588,8 +707,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const cityInput = formContainer.querySelector('input[name="address[city]"]');
     if (cityInput) {
       cityInput.addEventListener('input', function() {
-        if (!/^[A-Za-z\s\-]{2,}$/.test(this.value)) {
-          this.setCustomValidity('City name should contain at least 2 letters');
+        if (this.value.length < 2) {
+          const cityError = document.querySelector('[data-city-error]')?.getAttribute('data-city-error') || 'City name should contain at least 2 characters';
+          this.setCustomValidity(cityError);
         } else {
           this.setCustomValidity('');
         }
@@ -798,6 +918,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Otherwise use the same delete logic as other addresses
         this.classList.add('loading');
+        const spinner = this.querySelector('.btn-spinner');
+        if (spinner) {
+          spinner.style.display = 'inline-block';
+        }
 
         const accountAddressesUrl = '/account/addresses';
         const formAction = `${accountAddressesUrl}/${addressId}`;
@@ -821,6 +945,10 @@ document.addEventListener('DOMContentLoaded', function() {
             alert(errorMsg);
           }
           this.classList.remove('loading');
+          const spinner = this.querySelector('.btn-spinner');
+          if (spinner) {
+            spinner.style.display = 'none';
+          }
         };
 
         xhr.onerror = () => {
@@ -828,102 +956,18 @@ document.addEventListener('DOMContentLoaded', function() {
           const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
           alert(errorMsg);
           this.classList.remove('loading');
+          const spinner = this.querySelector('.btn-spinner');
+          if (spinner) {
+            spinner.style.display = 'none';
+          }
         };
 
         xhr.send(formData);
       });
     }
+
+    // No need to re-initialize buttons since we're using event delegation
   }
 
-  function getProvinces(country) {
-    // This is a real implementation with common provinces/states
-    const provinces = {
-      'US': [
-        { code: 'AL', name: 'Alabama' },
-        { code: 'AK', name: 'Alaska' },
-        { code: 'AZ', name: 'Arizona' },
-        { code: 'AR', name: 'Arkansas' },
-        { code: 'CA', name: 'California' },
-        { code: 'CO', name: 'Colorado' },
-        { code: 'CT', name: 'Connecticut' },
-        { code: 'DE', name: 'Delaware' },
-        { code: 'DC', name: 'District of Columbia' },
-        { code: 'FL', name: 'Florida' },
-        { code: 'GA', name: 'Georgia' },
-        { code: 'HI', name: 'Hawaii' },
-        { code: 'ID', name: 'Idaho' },
-        { code: 'IL', name: 'Illinois' },
-        { code: 'IN', name: 'Indiana' },
-        { code: 'IA', name: 'Iowa' },
-        { code: 'KS', name: 'Kansas' },
-        { code: 'KY', name: 'Kentucky' },
-        { code: 'LA', name: 'Louisiana' },
-        { code: 'ME', name: 'Maine' },
-        { code: 'MD', name: 'Maryland' },
-        { code: 'MA', name: 'Massachusetts' },
-        { code: 'MI', name: 'Michigan' },
-        { code: 'MN', name: 'Minnesota' },
-        { code: 'MS', name: 'Mississippi' },
-        { code: 'MO', name: 'Missouri' },
-        { code: 'MT', name: 'Montana' },
-        { code: 'NE', name: 'Nebraska' },
-        { code: 'NV', name: 'Nevada' },
-        { code: 'NH', name: 'New Hampshire' },
-        { code: 'NJ', name: 'New Jersey' },
-        { code: 'NM', name: 'New Mexico' },
-        { code: 'NY', name: 'New York' },
-        { code: 'NC', name: 'North Carolina' },
-        { code: 'ND', name: 'North Dakota' },
-        { code: 'OH', name: 'Ohio' },
-        { code: 'OK', name: 'Oklahoma' },
-        { code: 'OR', name: 'Oregon' },
-        { code: 'PA', name: 'Pennsylvania' },
-        { code: 'RI', name: 'Rhode Island' },
-        { code: 'SC', name: 'South Carolina' },
-        { code: 'SD', name: 'South Dakota' },
-        { code: 'TN', name: 'Tennessee' },
-        { code: 'TX', name: 'Texas' },
-        { code: 'UT', name: 'Utah' },
-        { code: 'VT', name: 'Vermont' },
-        { code: 'VA', name: 'Virginia' },
-        { code: 'WA', name: 'Washington' },
-        { code: 'WV', name: 'West Virginia' },
-        { code: 'WI', name: 'Wisconsin' },
-        { code: 'WY', name: 'Wyoming' }
-      ],
-      'CA': [
-        { code: 'AB', name: 'Alberta' },
-        { code: 'BC', name: 'British Columbia' },
-        { code: 'MB', name: 'Manitoba' },
-        { code: 'NB', name: 'New Brunswick' },
-        { code: 'NL', name: 'Newfoundland and Labrador' },
-        { code: 'NT', name: 'Northwest Territories' },
-        { code: 'NS', name: 'Nova Scotia' },
-        { code: 'NU', name: 'Nunavut' },
-        { code: 'ON', name: 'Ontario' },
-        { code: 'PE', name: 'Prince Edward Island' },
-        { code: 'QC', name: 'Quebec' },
-        { code: 'SK', name: 'Saskatchewan' },
-        { code: 'YT', name: 'Yukon' }
-      ],
-      'GB': [
-        { code: 'ENG', name: 'England' },
-        { code: 'NIR', name: 'Northern Ireland' },
-        { code: 'SCT', name: 'Scotland' },
-        { code: 'WLS', name: 'Wales' }
-      ],
-      'AU': [
-        { code: 'ACT', name: 'Australian Capital Territory' },
-        { code: 'NSW', name: 'New South Wales' },
-        { code: 'NT', name: 'Northern Territory' },
-        { code: 'QLD', name: 'Queensland' },
-        { code: 'SA', name: 'South Australia' },
-        { code: 'TAS', name: 'Tasmania' },
-        { code: 'VIC', name: 'Victoria' },
-        { code: 'WA', name: 'Western Australia' }
-      ]
-    };
-
-    return provinces[country] || [];
-  }
+  // We're now using Shopify's built-in CountryProvinceSelector
 });
