@@ -595,6 +595,7 @@
   cursor: pointer;
   min-height: 2.5rem; /* 40px */
   border: none;
+  position: relative; /* Added for spinner positioning */
 }
 
 .btn-primary {
@@ -1609,6 +1610,8 @@ button.loading .btn-spinner {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 0;
 }
 
 @keyframes spin {
@@ -1620,12 +1623,30 @@ button.loading .btn-spinner {
   }
 }
 
+/* Ensure button has proper dimensions for spinner positioning */
+button.loading {
+  position: relative;
+  min-width: 120px; /* Ensure button has enough width for spinner */
+}
+
 .btn-reorder.loading .btn-text {
   visibility: hidden;
 }
 
 .btn-reorder.loading .btn-spinner {
   display: block;
+}
+
+/* Loading state for all buttons */
+.btn.loading .btn-spinner,
+button.loading .btn-spinner {
+  display: inline-block;
+}
+
+/* Hide button text when loading */
+.btn.loading .btn-text,
+button.loading .btn-text {
+  visibility: hidden;
 }
 
 .btn-icon {
