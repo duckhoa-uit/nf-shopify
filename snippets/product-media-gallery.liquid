@@ -618,6 +618,7 @@
             if (exactMatches.length === 0 && partialMatches.length === 0 && parsed.reference_id && colorMappings) {
               // Check if the active color is actually a reference_id
               const activeRefId = parseInt(gallery.dataset.activeColor, 10);
+
               if (!isNaN(activeRefId) && parsed.reference_id === activeRefId) {
                 exactMatches.push(url);
               }
@@ -636,11 +637,14 @@
             const colorParts = normalizedColorKey.split('-');
 
             for (const part of colorParts) {
-              if (part.length < 3) continue; // Skip very short parts
+              if (part.length < 3) {
+                continue; // Skip very short parts
+              }
 
               const flexibleMatches = allMediaUrls.filter(url => {
                 const parsed = window.parseImageUrl(url, colorMappings);
-                return parsed.color.toLowerCase().includes(part.toLowerCase());
+                const isMatch = parsed.color.toLowerCase().includes(part.toLowerCase());
+                return isMatch;
               });
 
               if (flexibleMatches.length > 0) {
@@ -722,8 +726,10 @@
             }
           });
 
-          // Only show toggle button if we have more than 6 items
-          if (window.slidesToCreate.length > 6) {
+          // Only show toggle button if we have hidden images (more than the visible count)
+          const hiddenItemsCount = window.slidesToCreate.filter(item => item.hidden).length;
+
+          if (hiddenItemsCount > 0) {
             toggleContainer.classList.remove('hidden');
 
             // Replace button with clone to remove any existing event listeners
