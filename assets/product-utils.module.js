@@ -58,6 +58,7 @@ export function parseImageUrl(url, colorMappings = null) {
 
       // Check if this is a reference_id (numeric) or color name
       const potentialReferenceId = parseInt(colorParts.join(""), 10);
+
       if (!isNaN(potentialReferenceId)) {
         result.reference_id = potentialReferenceId;
 
@@ -73,25 +74,38 @@ export function parseImageUrl(url, colorMappings = null) {
       }
 
       // Extract type code and sequence
-      const [type, seq] = productParts[typeIndex].split("_");
-      switch (type) {
-        case "D":
-          result.image_type = "details";
-          if (seq) result.sequence = parseInt(seq, 10);
-          break;
-        case "M":
-          result.image_type = "model";
-          if (seq) result.sequence = parseInt(seq, 10);
-          break;
-        case "B":
-          result.image_type = "back_main";
-          break;
-        case "BV":
-          result.image_type = "back_variant";
-          break;
-        case "H":
-        default:
-          result.image_type = "main";
+      const typePart = productParts[typeIndex];
+
+      // Check for BV first (since it's two characters)
+      if (typePart === "BV" || typePart.startsWith("BV_")) {
+        result.image_type = "back_variant";
+        const seq = typePart.split("_")[1];
+        if (seq) result.sequence = parseInt(seq, 10);
+      } else if (typePart === "B" || typePart.startsWith("B_")) {
+        // Handle B (back main) specifically
+        result.image_type = "back_main";
+        const seq = typePart.split("_")[1];
+        if (seq) result.sequence = parseInt(seq, 10);
+      } else {
+        // Handle other single-character codes
+        const [type, seq] = typePart.split("_");
+
+        switch (type) {
+          case "D":
+            result.image_type = "details";
+            if (seq) result.sequence = parseInt(seq, 10);
+            break;
+          case "M":
+            result.image_type = "model";
+            if (seq) result.sequence = parseInt(seq, 10);
+            break;
+          case "H":
+            result.image_type = "main";
+            break;
+          default:
+            // If we can't determine the type, default to main
+            result.image_type = "main";
+        }
       }
     } else {
       // If no type code found, check if the last part is numeric (reference_id) or string (color)
@@ -124,10 +138,13 @@ export function parseImageUrl(url, colorMappings = null) {
  * @returns {string} - Normalized color name
  */
 export function getNormalizedColorKey(colorValue, colorMappings) {
-  if (!colorMappings || !colorValue) return colorValue?.toString() || '';
+  if (!colorMappings || !colorValue) {
+    return colorValue?.toString() || '';
+  }
 
   // If colorValue is a number or numeric string, treat as reference_id
   const refId = parseInt(colorValue, 10);
+
   if (!isNaN(refId)) {
     const mapping = colorMappings.find(m => m.reference_id === refId);
     return mapping ? mapping.name : colorValue.toString();
@@ -136,6 +153,7 @@ export function getNormalizedColorKey(colorValue, colorMappings) {
   // If it's a string, check if it matches any color name
   const mapping = colorMappings.find(m =>
     m.name.toLowerCase() === colorValue.toString().toLowerCase());
+
   return mapping ? mapping.name : colorValue.toString();
 }
 
@@ -186,10 +204,13 @@ export function mapReferenceIdToColorInUrl(url, colorMappings) {
  */
 export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
   // Parse all images
-  const parsedImages = imageUrls.map((url) => ({
-    url,
-    ...parseImageUrl(url, colorMappings),
-  }));
+  const parsedImages = imageUrls.map((url) => {
+    const parsed = parseImageUrl(url, colorMappings);
+    return {
+      url,
+      ...parsed,
+    };
+  });
 
   // Group images by product and color
   const groupedImages = {};
@@ -204,35 +225,49 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
 
   // Sort each group according to the new display rules
   Object.keys(groupedImages).forEach((key) => {
+    // First, check if we have a BV (back variant) image in this group
+    const hasBV = groupedImages[key].some(img => img.image_type === "back_variant");
+    // Check if we have a B (back main) image in this group
+    const hasB = groupedImages[key].some(img => img.image_type === "back_main");
+
     groupedImages[key].sort((a, b) => {
       const getDisplayPriority = (img) => {
         // Position 1: H.jpg (Main product photo)
         if (img.image_type === "main") return 1;
 
-        // Position 1 fallback: M_1.jpg (First model photo)
-        if (img.image_type === "model" && img.sequence === 1) return 2;
+        // Position 2: BV.jpg (Back variant photo)
+        if (img.image_type === "back_variant") return 2;
 
-        // Position 2: video.avi/mp4
-        if (img.image_type === "video") return 3;
+        // Position 2 fallback: If no BV exists, use B.jpg (Back main) in position 2
+        if (!hasBV && img.image_type === "back_main") return 2;
 
-        // Position 2 fallback: B.jpg (Back main product photo)
-        if (img.image_type === "back_main") return 4;
+        // Position 3: M_1.jpg (First model photo)
+        if (img.image_type === "model" && img.sequence === 1) return 3;
 
-        // Position 2 second fallback: M_X.jpg (Any model photo)
-        if (img.image_type === "back_variant" || (img.image_type === "model" && img.sequence !== 1)) return 5;
-
-        // Next positions: Remaining model photos
-        if (img.image_type === "model") {
-          return img.sequence ? 10 + img.sequence : 15;
+        // Position 4-10: M_2.jpg through M_7.jpg (Remaining model photos in sequence order)
+        if (img.image_type === "model" && img.sequence > 1) {
+          return 3 + img.sequence; // This will give 4, 5, 6, etc. for M_2, M_3, M_4...
         }
 
-        // First detail photo
-        if (img.image_type === "details" && img.sequence === 1) return 20;
+        // Position 11: B.jpg (Back main product photo) - only if not used as fallback for BV
+        if (hasBV && img.image_type === "back_main") return 11;
 
-        // Remaining detail photos
-        if (img.image_type === "details") {
-          return img.sequence ? 30 + img.sequence : 35;
+        // Position 12: video.avi/mp4
+        if (img.image_type === "video") return 12;
+
+        // Position 13: D_1.jpg (First detail photo)
+        if (img.image_type === "details" && img.sequence === 1) return 13;
+
+        // Position 14+: D_X.jpg (Remaining detail photos in sequence order)
+        if (img.image_type === "details" && img.sequence > 1) {
+          return 13 + img.sequence; // This will give 14, 15, 16, etc. for D_2, D_3, D_4...
         }
+
+        // Any other detail photos without sequence
+        if (img.image_type === "details") return 20;
+
+        // Any other model photos without sequence
+        if (img.image_type === "model") return 21;
 
         // Everything else
         return 100;
@@ -244,20 +279,28 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
       return priorityA - priorityB;
     });
 
-    // Show first 6 images, hide the rest
+    // Show first 8 images (or fewer if even number), hide the rest
     const visibleImages = [];
     const hiddenImages = [];
 
+    // Determine how many images to show initially (2, 4, 6, or 8)
+    let visibleCount = 8; // Maximum of 8 images
+    if (groupedImages[key].length < 8) {
+      // If we have fewer than 8 images, round down to the nearest even number
+      visibleCount = Math.floor(groupedImages[key].length / 2) * 2;
+    }
+
     groupedImages[key].forEach((img, index) => {
-      // First 6 images are visible
-      if (index < 6) {
+      // First N images are visible (where N is visibleCount)
+      if (index < visibleCount) {
         visibleImages.push(img);
       } else {
-        // All images after position 6 are hidden
-        hiddenImages.push({
+        // All images after position N are hidden
+        const hiddenImg = {
           ...img,
           hidden: true
-        });
+        };
+        hiddenImages.push(hiddenImg);
       }
     });
 
