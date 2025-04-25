@@ -203,8 +203,10 @@
           {% assign parsed_url = media_src | split: '/' | last %}
 
           {% comment %} Track first model image for any color (fallback) {% endcomment %}
-          {% if first_model_image == nil and parsed_url contains '-M' and not parsed_url contains '-M_' %}
-            {% assign first_model_image = media %}
+          {% if first_model_image == nil and parsed_url contains '-M' %}
+            {% unless parsed_url contains '-M_' %}
+              {% assign first_model_image = media %}
+            {% endunless %}
           {% endif %}
 
           {% comment %} Track first image (final fallback) {% endcomment %}
@@ -251,8 +253,10 @@
               {% assign parsed_url = media_src | split: '/' | last %}
 
               {% comment %} Track first model image for any color (fallback) {% endcomment %}
-              {% if first_model_image == nil and parsed_url contains '-M' and not parsed_url contains '-M_' %}
-                {% assign first_model_image = media %}
+              {% if first_model_image == nil and parsed_url contains '-M' %}
+                {% unless parsed_url contains '-M_' %}
+                  {% assign first_model_image = media %}
+                {% endunless %}
               {% endif %}
 
               {% comment %} Track first image (final fallback) {% endcomment %}
@@ -277,8 +281,10 @@
         {% assign parsed_url = media_src | split: '/' | last %}
 
         {% comment %} Track first model image for any color (fallback) {% endcomment %}
-        {% if first_model_image == nil and parsed_url contains '-M' and not parsed_url contains '-M_' %}
-          {% assign first_model_image = media %}
+        {% if first_model_image == nil and parsed_url contains '-M' %}
+          {% unless parsed_url contains '-M_' %}
+            {% assign first_model_image = media %}
+          {% endunless %}
         {% endif %}
 
         {% comment %} Track first image (final fallback) {% endcomment %}
