@@ -107,7 +107,7 @@
                           <div class="nf-cart-item__media">
                             <div class="nf-cart-item__image-container">
                               {% comment %} Extract color value from variant options {% endcomment %}
-                              {% assign color_value = nil %}
+                              {% assign color_value = null %}
                               {% if item.product.options contains 'Color' and item.variant.title contains '/' %}
                                 {% assign variant_options = item.variant.title | split: ' / ' %}
                                 {% assign color_index = 0 %}
@@ -117,7 +117,7 @@
                                   {% endif %}
                                   {% assign color_index = color_index | plus: 1 %}
                                 {% endfor %}
-                                {% assign color_value = variant_options[color_index] | default: nil %}
+                                {% assign color_value = variant_options[color_index] | default: null %}
                               {% elsif item.variant.title contains '/' %}
                                 {% assign variant_options = item.variant.title | split: ' / ' %}
                                 {% if variant_options.first != 'Default Title' %}
@@ -223,7 +223,9 @@
                                       {%- for i in (1..20) -%}
                                         <option
                                           value="{{ i }}"
-                                          {% if i == item.quantity %}selected{% endif %}
+                                          {% if i == item.quantity %}
+                                            selected
+                                          {% endif %}
                                         >
                                           {{ i }}
                                         </option>
@@ -300,100 +302,45 @@
 
         <div class="nf-cart-sidebar">
           <div class="nf-cart-summary">
-            <ul class="nf-cart-summary__list">
-              <li class="nf-cart-summary__item">
-                <span class="nf-cart-summary__label">
-                  {{- 'cart.summary.subtotal_excluding_tax' | t | default: 'Cena produktov bez DPH' -}}
-                </span>
-                <span class="nf-cart-summary__value">{{ cart.total_price | minus: cart.total_tax | money }}</span>
-              </li>
+            {% comment %}
+              <ul class="nf-cart-summary__list">
+                <li class="nf-cart-summary__item">
+                  <span class="nf-cart-summary__label">
+                    {{- 'cart.summary.subtotal_excluding_tax' | t | default: 'Cena produktov bez DPH' -}}
+                  </span>
+                  <span class="nf-cart-summary__value">{{ cart.total_price | minus: cart.total_tax | money }}</span>
+                </li>
 
-              <li class="nf-cart-summary__item">
-                <span class="nf-cart-summary__label">{{ 'cart.summary.tax' | t | default: 'DPH' }}</span>
-                <span class="nf-cart-summary__value">{{ cart.total_tax | money }}</span>
-              </li>
+                <li class="nf-cart-summary__item">
+                  <span class="nf-cart-summary__label">{{ 'cart.summary.tax' | t | default: 'DPH' }}</span>
+                  <span class="nf-cart-summary__value">{{ cart.total_tax | money }}</span>
+                </li>
 
-              <li class="nf-cart-summary__item">
-                <span class="nf-cart-summary__label">
-                  {{- 'cart.summary.subtotal' | t | default: 'Cena produktov s DPH' -}}
-                </span>
-                <span class="nf-cart-summary__value">{{ cart.total_price | money }}</span>
-              </li>
+                <li class="nf-cart-summary__item">
+                  <span class="nf-cart-summary__label">
+                    {{- 'cart.summary.subtotal' | t | default: 'Cena produktov s DPH' -}}
+                  </span>
+                  <span class="nf-cart-summary__value">{{ cart.total_price | money }}</span>
+                </li>
 
-              <li class="nf-cart-summary__item">
-                <span class="nf-cart-summary__label">
-                  {{ 'cart.summary.shipping' | t | default: 'Poštové náklady' }}
-                  <span class="nf-cart-summary__info-icon">?</span>
-                </span>
-                <span class="nf-cart-summary__value">
-                  {{- 'cart.summary.calculated_at_checkout' | t | default: '0 €' -}}
-                </span>
-              </li>
-            </ul>
+                <li class="nf-cart-summary__item">
+                  <span class="nf-cart-summary__label">
+                    {{ 'cart.summary.shipping' | t | default: 'Poštové náklady' }}
+                    <span class="nf-cart-summary__info-icon">?</span>
+                  </span>
+                  <span class="nf-cart-summary__value">
+                    {{- 'cart.summary.calculated_at_checkout' | t | default: '0 €' -}}
+                  </span>
+                </li>
+              </ul>
+            {% endcomment %}
 
             <div class="nf-cart-summary__total">
               <span class="nf-cart-summary__total-label">{{ 'cart.summary.total' | t | default: 'Spolu' }}</span>
               <span class="nf-cart-summary__total-value">{{ cart.total_price | money }}</span>
             </div>
+            <p class="text-sm">Taxes, discounts and shipping calculated at checkout.</p>
           </div>
-
-          {% comment %}
-            <div class="nf-cart-coupon">
-              <h3 class="nf-cart-coupon__title">{{ 'cart.coupon.title' | t | default: 'Zľavový kupón / Darčekový poukaz' }}</h3>
-              <div class="nf-cart-coupon__form">
-                <input type="text" class="nf-cart-coupon__input" placeholder="{{ 'cart.coupon.placeholder' | t | default: 'Kód' }}">
-                <button type="button" class="nf-cart-coupon__button">{{ 'cart.coupon.apply' | t | default: 'Úplatniť' }}</button>
-              </div>
-            </div>
-          {% endcomment %}
-
-          {% comment %}
-            <div class="nf-cart-item__delivery">
-              <div class="nf-cart-item__delivery-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M16 2H1V16H16V2Z" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M16 8H20L23 11V16H16V8Z" stroke="currentColor" stroke-width="1.5"/>
-                  <circle cx="5.5" cy="19.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
-                  <circle cx="18.5" cy="19.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <div class="nf-cart-item__delivery-info">
-                <p class="nf-cart-item__delivery-date">
-                  {{ 'products.product.delivery_date' | t | default: 'Dodanie: 02.06. - 03.06.' }}
-                </p>
-                {% if section.settings.free_shipping_threshold > 0 %}
-                  {% assign remaining_amount = section.settings.free_shipping_threshold
-                    | minus: cart.total_price
-                    | divided_by: 100.0
-                  %}
-                  {% if remaining_amount > 0 %}
-                    <p class="nf-cart-item__delivery-message">
-                      {{
-                        'products.product.free_shipping_message'
-                        | t: amount: remaining_amount
-                        | money
-                        | default: 'Pre dopravu zdarma nakúp ešte za '
-                        | append: remaining_amount
-                        | money
-                      }}
-                    </p>
-                  {% endif %}
-                {% endif %}
-              </div>
-            </div>
-
-            <div class="nf-cart-item__returns">
-              <div class="nf-cart-item__returns-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <p class="nf-cart-item__returns-text">
-                {{ 'products.product.returns' | t | default: 'Vrátenie zdarma do 60 dní.' }}
-              </p>
-            </div>
-          {% endcomment %}
 
           <div class="nf-cart-checkout">
             <button type="submit" class="nf-cart-checkout__button" name="checkout" form="cart">
@@ -499,13 +446,13 @@
 </cart-items>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const cartForm = document.getElementById('cart');
 
     // Handle quantity changes
     const quantitySelects = document.querySelectorAll('.nf-cart-item__variant-select[data-is-quantity="true"]');
-    quantitySelects.forEach(select => {
-      select.addEventListener('change', function() {
+    quantitySelects.forEach((select) => {
+      select.addEventListener('change', function () {
         // Submit the cart form
         cartForm.submit();
       });
