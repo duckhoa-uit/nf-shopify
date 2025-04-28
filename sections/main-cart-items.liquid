@@ -66,7 +66,7 @@
             {{- 'general.continue_shopping' | t -}}
           </a>
         {% endcomment %}
-        <h2 class="nf-cart-summary__title my-0">{{ 'sections.cart.summary' | t | default: 'Sumár' }}</h2>
+        <h2 class="nf-cart-summary__title my-0">{{ 'sections.cart.summary' | t | default: 'Summary' }}</h2>
       {% endif %}
     </div>
 
@@ -158,7 +158,7 @@
                               {% endif %}
 
                               {% if item.product.tags contains 'new' or item.product.tags contains 'Novinka' %}
-                                <div class="nf-tag nf-tag--new">Novinka</div>
+                                <div class="nf-tag nf-tag--new">{{ 'products.product.new' | t | default: 'New' }}</div>
                               {% endif %}
                               {% if item.original_price != item.final_price %}
                                 <div class="nf-tag nf-tag--sale">
@@ -258,7 +258,7 @@
                                     type="button"
                                     class="nf-cart-item__action-btn nf-cart-item__action-btn--remove"
                                   >
-                                    <span class="underline">{{ 'sections.cart.remove' | t | default: 'Vymazať' }}</span>
+                                    <span class="underline">{{ 'sections.cart.remove' | t | default: 'Remove' }}</span>
                                   </button>
                                 </cart-remove-button>
                               </div>
@@ -275,7 +275,7 @@
             {% if section.settings.show_related_products %}
               <div class="nf-related-products">
                 <h2 class="nf-related-products__title">
-                  {{ 'products.product.related_products' | t | default: 'Mohlo by sa vám páčiť' }}
+                  {{ 'products.product.related_products' | t | default: 'You may also like' }}
                 </h2>
                 <!-- Related products content would go here - this requires product recommendations -->
               </div>
@@ -284,7 +284,7 @@
             {% if section.settings.show_wishlist_link %}
               <div class="nf-wishlist-link">
                 <h2 class="nf-wishlist-link__title">
-                  {{ 'products.product.wishlist' | t | default: 'Zoznam prianí' }}
+                  {{ 'products.product.wishlist' | t | default: 'Wishlist' }}
                 </h2>
                 <!-- Wishlist content would go here -->
               </div>
@@ -295,15 +295,15 @@
         <div class="nf-cart-sidebar">
           <div class="nf-cart-summary">
             <div class="nf-cart-summary__total">
-              <span class="nf-cart-summary__total-label">{{ 'cart.summary.total' | t | default: 'Spolu' }}</span>
+              <span class="nf-cart-summary__total-label">{{ 'cart.summary.total' | t | default: 'Total' }}</span>
               <span class="nf-cart-summary__total-value">{{ cart.total_price | money }}</span>
             </div>
-            <p class="text-sm">Taxes, discounts and shipping calculated at checkout.</p>
+            <p class="text-sm">{{ 'cart.general.shipping_at_checkout' | t | default: 'Taxes, discounts and shipping calculated at checkout.' }}</p>
           </div>
 
           <div class="nf-cart-checkout">
             <button type="submit" class="nf-cart-checkout__button" name="checkout" form="cart">
-              {{ 'sections.cart.checkout' | t | default: 'Dokončiť objednávku' }}
+              {{ 'sections.cart.checkout' | t | default: 'Check out' }}
             </button>
 
             {% if section.settings.show_login_button and shop.customer_accounts_enabled and customer == null %}
@@ -312,7 +312,7 @@
                   <path d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z" fill="currentColor"/>
                   <path d="M8 9C5.33333 9 0 10.3333 0 13V16H16V13C16 10.3333 10.6667 9 8 9Z" fill="currentColor"/>
                 </svg>
-                {{ 'customer.login_page.sign_in' | t | default: 'Prihlásiť sa' }}
+                {{ 'customer.login_page.sign_in' | t | default: 'Sign in' }}
               </a>
             {% endif %}
           </div>
@@ -320,7 +320,7 @@
           {% if section.settings.show_loyalty_benefits %}
             <div class="nf-cart-benefits">
               <h3 class="nf-cart-benefits__title">
-                {{ 'cart.benefits.title' | t | default: 'Benefity pre registrovaných zákazníkov' }}
+                {{ 'cart.benefits.title' | t | default: 'Benefits for registered customers' }}
               </h3>
 
               <div class="nf-cart-benefits__loyalty">
@@ -329,7 +329,7 @@
                     {{- 'icon-currency.svg' | inline_asset_content -}}
                   </span>
                   <h4 class="nf-cart-benefits__loyalty-title">
-                    {{ 'cart.benefits.loyalty' | t | default: 'Vernostný bonus' }}
+                    {{ 'cart.benefits.loyalty' | t | default: 'Loyalty bonus' }}
                   </h4>
                 </div>
                 <ul class="nf-cart-benefits__loyalty-list">
@@ -339,7 +339,7 @@
                       {{
                         'cart.benefits.loyalty_text_1'
                         | t
-                        | default: 'Registruj sa a získaj za každý nákup vernostný bonus.'
+                        | default: 'Register and earn a loyalty bonus for every purchase.'
                       }}
                     </p>
                   </li>
@@ -349,7 +349,7 @@
                       {{
                         'cart.benefits.loyalty_text_2'
                         | t
-                        | default: 'Bonus ti pripíšeme na tvoj účet u nás na 15. deň od doručenia zásielky.'
+                        | default: 'The bonus will be credited to your account on the 15th day after delivery.'
                       }}
                     </p>
                   </li>
@@ -359,7 +359,7 @@
                       {{
                         'cart.benefits.loyalty_text_3'
                         | t
-                        | default: 'Ten si môžeš odrátať z nasledujúceho nákupu, max. však vo výške 25% z jeho hodnoty.'
+                        | default: 'You can deduct it from your next purchase, up to 25% of its value.'
                       }}
                     </p>
                   </li>
@@ -369,7 +369,7 @@
                       {{
                         'cart.benefits.loyalty_text_4'
                         | t
-                        | default: 'Bonus odporúčame využiť v priebehu ďalších 150 dní.'
+                        | default: 'We recommend using the bonus within the next 150 days.'
                       }}
                     </p>
                   </li>
@@ -439,7 +439,7 @@
       "type": "text",
       "id": "promo_banner_text",
       "label": "Promotional banner text",
-      "default": "Nakúpte ešte za XY,xy € a získajte 15% zľavu na celý nákup."
+      "default": "Purchase for $XX.xx more and get a 15% discount on your entire order."
     },
     {
       "type": "checkbox",
