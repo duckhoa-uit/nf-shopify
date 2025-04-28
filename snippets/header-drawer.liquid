@@ -124,24 +124,41 @@
           </nav>
 
           <div class="my-[2.1875rem] w-full flex flex-col *:text-[#999] *:my-0.5 *:leading-7 *:text-base">
-            <a href="#">Blog</a>
-            <a href="#">FAQ</a>
+            <a href="#">{{ 'general.navigation.blog' | t | default: 'Blog' }}</a>
+            <a href="#">{{ 'general.navigation.faq' | t | default: 'FAQ' }}</a>
           </div>
 
           <div class="menu-drawer__utility-links mb-5">
             <div class="flex flex-col w-full gap-y-5">
-              <button
-                data-auth-trigger="register"
-                class="button h-[3.125rem] leading-7"
-              >
-                Register
-              </button>
-              <button
-                data-auth-trigger="login"
-                class="button h-[3.125rem] bg-background text-foreground leading-7"
-              >
-                Login
-              </button>
+              {% if customer %}
+                <a
+                  href="{{ routes.account_url }}"
+                  class="button h-[3.125rem] leading-7 flex items-center justify-center"
+                >
+                  <span class="svg-wrapper size-5 mr-2">{{ 'icon-account.svg' | inline_asset_content }}</span>
+                  {{ 'customer.account.title' | t | default: 'Customer Zone' }}
+                </a>
+                <a
+                  href="{{ routes.account_logout_url }}"
+                  class="button h-[3.125rem] bg-background text-foreground leading-7 flex items-center justify-center"
+                >
+                  <span class="svg-wrapper size-5 mr-2">{{ 'icon-logout.svg' | inline_asset_content }}</span>
+                  {{ 'customer.log_out' | t | default: 'Log out' }}
+                </a>
+              {% else %}
+                <button
+                  data-auth-trigger="register"
+                  class="button h-[3.125rem] leading-7"
+                >
+                  {{ 'customer.register.title' | t | default: 'Register' }}
+                </button>
+                <button
+                  data-auth-trigger="login"
+                  class="button h-[3.125rem] bg-background text-foreground leading-7"
+                >
+                  {{ 'customer.login_page.sign_in' | t | default: 'Login' }}
+                </button>
+              {% endif %}
             </div>
             {% comment %}
               {%- if shop.customer_accounts_enabled -%}

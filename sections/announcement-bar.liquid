@@ -158,14 +158,19 @@
             </a>
           </div>
           {% endif %}
-          {% if section.settings.show_register %}
+          {% if section.settings.show_register and customer == null %}
           <div>
-            <a data-auth-trigger="register">Register</a>
+            <a data-auth-trigger="register">{{ 'customer.register.title' | t | default: 'Register' }}</a>
           </div>
           {% endif %}
-          {% if section.settings.show_login %}
+          {% if section.settings.show_login and customer == null %}
           <div>
-            <a data-auth-trigger="login">Login</a>
+            <a data-auth-trigger="login">{{ 'customer.login_page.sign_in' | t | default: 'Login' }}</a>
+          </div>
+          {% endif %}
+          {% if customer != null %}
+          <div>
+            <a href="{{ routes.account_url }}">{{ 'customer.account.title' | t | default: 'Customer Zone' }}</a>
           </div>
           {% endif %}
           {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}

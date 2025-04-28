@@ -15,7 +15,7 @@
       <!-- Login Form -->
       <div id="customer-login-form" class="p-8 hidden customer">
         <div class="flex items-center mb-3">
-          <h3 class="text-base font-bold uppercase">Northfinder Account</h3>
+          <h3 class="text-base font-bold uppercase">{{ 'customer.login_page.title' | t | default: 'Northfinder Account' }}</h3>
         </div>
 
         <div class="block mb-8">
@@ -24,12 +24,12 @@
               <a
                 class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
                 data-tab="login"
-                >Login</a
+                >{{ 'customer.login_page.sign_in' | t | default: 'Login' }}</a
               >
               <a
                 class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
                 data-tab="register"
-                >Register</a
+                >{{ 'customer.register.title' | t | default: 'Register' }}</a
               >
             </nav>
           </div>
@@ -93,7 +93,7 @@
               type="submit"
               class="button w-full uppercase text-sm px-9 py-3"
             >
-              Sign In
+              {{ 'customer.login_page.sign_in' | t | default: 'Sign In' }}
             </button>
 
             <button
@@ -101,7 +101,7 @@
               class="button text-sm w-full mt-[3.125rem] mb-2 p-3 flex items-center justify-between bg-background uppercase text-[#0F0F0F] leading-4"
             >
               <img src="{{ 'facebook.svg' | asset_url }}" alt="Facebook" width="16" height="16" class="size-4 mr-2">
-              <span class="flex-1"> Log in via Facebook </span>
+              <span class="flex-1"> {{ 'customer.login_page.facebook_login' | t | default: 'Log in via Facebook' }} </span>
             </button>
 
             <button
@@ -109,17 +109,17 @@
               class="button text-sm w-full p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase leading-4"
             >
               <img src="{{ 'google.svg' | asset_url }}" alt="Google" width="16" height="16" class="size-4 mr-2">
-              <span class="flex-1"> Log in via Google </span>
+              <span class="flex-1"> {{ 'customer.login_page.google_login' | t | default: 'Log in via Google' }} </span>
             </button>
 
             <div class="text-sm text-[#3D3D3D] mt-6 leading-5 text-left">
-              If you have lost your password, continue to the page
+              {{ 'customer.login_page.forgot_password_message' | t | default: 'If you have lost your password, continue to the page' }}
               <a
                 href="javascript:void(0)"
                 title="Recover your forgotten password"
                 rel="nofollow"
                 class="text-accent underline forgot-password-link"
-                >Forgotten password</a
+                >{{ 'customer.login_page.forgot_password' | t | default: 'Forgotten password' }}</a
               >
             </div>
           </div>
@@ -129,7 +129,7 @@
       <!-- Register Form -->
       <div id="customer-register-form" class="p-8 hidden customer">
         <div class="flex items-center mb-3">
-          <h3 class="text-base font-bold uppercase">Northfinder Account</h3>
+          <h3 class="text-base font-bold uppercase">{{ 'customer.login_page.title' | t | default: 'Northfinder Account' }}</h3>
         </div>
 
         <div class="block">
@@ -138,12 +138,12 @@
               <a
                 class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
                 data-tab="login"
-                >Login</a
+                >{{ 'customer.login_page.sign_in' | t | default: 'Login' }}</a
               >
               <a
                 class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
                 data-tab="register"
-                >Registration</a
+                >{{ 'customer.register.title' | t | default: 'Registration' }}</a
               >
             </nav>
           </div>
@@ -176,7 +176,7 @@
                 <label
                   for="first_name"
                 >
-                  Name
+                  {{ 'customer.register.first_name' | t | default: 'Name' }}
                 </label>
               </div>
             </div>
@@ -198,7 +198,7 @@
                 <label
                   for="last_name"
                 >
-                  Surname
+                  {{ 'customer.register.last_name' | t | default: 'Surname' }}
                 </label>
               </div>
             </div>
@@ -221,7 +221,7 @@
                 <label
                   for="email"
                 >
-                  E-mail
+                  {{ 'customer.login_page.email' | t | default: 'E-mail' }}
                 </label>
               </div>
             </div>
@@ -243,7 +243,7 @@
                 <label
                   for="password"
                 >
-                  Password
+                  {{ 'customer.login_page.password' | t | default: 'Password' }}
                 </label>
               </div>
             </div>
@@ -263,8 +263,7 @@
                 <label
                   for="newsletter"
                   class="mt-0 text-foreground text-sm leading-6 text-left flex-1"
-                  >In the future, I would like to receive information by email about current trends, offers and
-                  NORTHFINDER discounts. The subscription can be canceled free of charge at any time.</label
+                  >{{ 'customer.register.accepts_marketing' | t | default: 'In the future, I would like to receive information by email about current trends, offers and NORTHFINDER discounts. The subscription can be canceled free of charge at any time.' }}</label
                 >
               </div>
             </div>
@@ -273,7 +272,7 @@
               type="submit"
               class="w-full button"
             >
-              Register
+              {{ 'customer.register.submit' | t | default: 'Register' }}
             </button>
 
             <button
@@ -282,7 +281,7 @@
               class="wishlist-button button text-sm w-full mt-[3.125rem] mb-2 p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
             >
               <img src="{{ 'facebook.svg' | asset_url }}" alt="Facebook" width="16" height="16" class="size-4 mr-2">
-              <span class="flex-1"> Log in via Facebook </span>
+              <span class="flex-1"> {{ 'customer.login_page.facebook_login' | t | default: 'Log in via Facebook' }} </span>
             </button>
 
             <button
@@ -291,19 +290,18 @@
               class="wishlist-button button text-sm w-full p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
             >
               <img src="{{ 'google.svg' | asset_url }}" alt="Google" width="16" height="16" class="size-4 mr-2">
-              <span class="flex-1"> Log in via Google </span>
+              <span class="flex-1"> {{ 'customer.login_page.google_login' | t | default: 'Log in via Google' }} </span>
             </button>
 
             <div class="mt-6 text-[#9F9F9F] text-sm font-normal leading-6 text-left">
-              As in any online store, you will receive from us all important updates by email (order confirmation,
-              delivery confirmation, return information, recommendations). Be sure to read the
-              <a href="#" target="_blank"> Privacy Policy. </a>
+              {{ 'customer.register.privacy_policy_message' | t | default: 'As in any online store, you will receive from us all important updates by email (order confirmation, delivery confirmation, return information, recommendations). Be sure to read the' }}
+              <a href="#" target="_blank"> {{ 'customer.register.privacy_policy' | t | default: 'Privacy Policy.' }} </a>
             </div>
 
             <div class="mt-4 text-[#9F9F9F] text-sm font-normal leading-6 text-left">
-              This site is protected by reCAPTCHA and the Google
-              <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and
-              <a href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.
+              {{ 'customer.register.recaptcha_message' | t | default: 'This site is protected by reCAPTCHA and the Google' }}
+              <a href="https://policies.google.com/privacy" target="_blank">{{ 'customer.register.privacy_policy' | t | default: 'Privacy Policy' }}</a> {{ 'customer.register.and' | t | default: 'and' }}
+              <a href="https://policies.google.com/terms" target="_blank">{{ 'customer.register.terms_of_service' | t | default: 'Terms of Service' }}</a> {{ 'customer.register.apply' | t | default: 'apply.' }}
             </div>
           </div>
         {% endform %}
@@ -312,11 +310,11 @@
       <!-- Reset Password Form -->
       <div id="customer-recover-form" class="p-8 hidden customer">
         <div class="flex items-center mb-3">
-          <h3 class="text-base font-bold uppercase">Forgot your password?</h3>
+          <h3 class="text-base font-bold uppercase">{{ 'customer.recover_password.title' | t | default: 'Forgot your password?' }}</h3>
         </div>
 
         <p class="text-base text-black mb-6 leading-6">
-          Enter your email address and we will send you a link to reset your password
+          {{ 'customer.recover_password.subtext' | t | default: 'Enter your email address and we will send you a link to reset your password' }}
         </p>
 
         <div id="recover-messages" class="auth-messages mt-4">
@@ -326,7 +324,7 @@
             </div>
           {% elsif form.posted_successfully? %}
             <div class="p-4 mb-4 rounded-3 bg-green-50 text-green-800">
-              We've sent you an email with a link to update your password.
+              {{ 'customer.recover_password.success' | t | default: "We've sent you an email with a link to update your password." }}
             </div>
           {% endif %}
         </div>
@@ -353,7 +351,7 @@
                   for="recover_email"
                   class="text-[#666666]"
                 >
-                  E-mail
+                  {{ 'customer.login_page.email' | t | default: 'E-mail' }}
                 </label>
               </div>
             </div>
@@ -362,14 +360,14 @@
               type="submit"
               class="button w-full uppercase text-sm py-3 px-9 bg-black text-white font-semibold text-center rounded-3 mb-6"
             >
-              Reset Password
+              {{ 'customer.recover_password.submit' | t | default: 'Reset Password' }}
             </button>
 
             <div class="text-center">
               <a
                 href="javascript:void(0)"
                 class="text-black font-medium text-sm recovery-cancel"
-              >Back to login</a>
+              >{{ 'customer.recover_password.cancel' | t | default: 'Back to login' }}</a>
             </div>
           </div>
         {% endform %}
