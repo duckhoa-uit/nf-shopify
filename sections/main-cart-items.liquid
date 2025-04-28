@@ -245,15 +245,7 @@
                               </div>
 
                               <div class="nf-cart-item__actions text-[#3D3D3D] flex items-center">
-                                <button
-                                  type="button"
-                                  class="nf-cart-item__action-btn nf-cart-item__action-btn--wishlist"
-                                >
-                                  <span class="svg-wrapper size-4">{{ 'icon-heart.svg' | inline_asset_content }}</span>
-                                  <span class="underline">
-                                    {{- 'products.product.add_to_wishlist' | t | default: 'Na zoznam prianí' -}}
-                                  </span>
-                                </button>
+                                <!-- Save for Later button will be injected here by save-for-later.js -->
 
                                 <span class="border-l border-[#ccc] h-4"></span>
 
@@ -302,39 +294,6 @@
 
         <div class="nf-cart-sidebar">
           <div class="nf-cart-summary">
-            {% comment %}
-              <ul class="nf-cart-summary__list">
-                <li class="nf-cart-summary__item">
-                  <span class="nf-cart-summary__label">
-                    {{- 'cart.summary.subtotal_excluding_tax' | t | default: 'Cena produktov bez DPH' -}}
-                  </span>
-                  <span class="nf-cart-summary__value">{{ cart.total_price | minus: cart.total_tax | money }}</span>
-                </li>
-
-                <li class="nf-cart-summary__item">
-                  <span class="nf-cart-summary__label">{{ 'cart.summary.tax' | t | default: 'DPH' }}</span>
-                  <span class="nf-cart-summary__value">{{ cart.total_tax | money }}</span>
-                </li>
-
-                <li class="nf-cart-summary__item">
-                  <span class="nf-cart-summary__label">
-                    {{- 'cart.summary.subtotal' | t | default: 'Cena produktov s DPH' -}}
-                  </span>
-                  <span class="nf-cart-summary__value">{{ cart.total_price | money }}</span>
-                </li>
-
-                <li class="nf-cart-summary__item">
-                  <span class="nf-cart-summary__label">
-                    {{ 'cart.summary.shipping' | t | default: 'Poštové náklady' }}
-                    <span class="nf-cart-summary__info-icon">?</span>
-                  </span>
-                  <span class="nf-cart-summary__value">
-                    {{- 'cart.summary.calculated_at_checkout' | t | default: '0 €' -}}
-                  </span>
-                </li>
-              </ul>
-            {% endcomment %}
-
             <div class="nf-cart-summary__total">
               <span class="nf-cart-summary__total-label">{{ 'cart.summary.total' | t | default: 'Spolu' }}</span>
               <span class="nf-cart-summary__total-value">{{ cart.total_price | money }}</span>
