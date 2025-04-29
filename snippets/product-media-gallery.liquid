@@ -526,8 +526,8 @@
       // Add click handler for lightbox
       img.addEventListener('click', function(e) {
         e.preventDefault();
-        // Pass original media position to ensure correct lightbox ordering
-        openProductLightbox(mediaObject ? mediaObject.position - 1 : index);
+        // Pass the index in the filtered and sorted images
+        openProductLightbox(index);
       });
 
       if (mediaObject) {
@@ -584,9 +584,9 @@
           return;
         }
 
-        // Get and format all media URLs
+        // Get and format all media URLs - keep the original format without replacing /files/
         const allMediaUrls = {{ product.media | json }}.map(media => {
-          let url = media.src.replace(/\/files\//, '/');
+          let url = media.src;
           return url.startsWith('//') ? `https:${url}` :
                  !url.startsWith('http') ? `https://${url}` : url;
         });
@@ -669,7 +669,7 @@
         // Ensure we have at least some images to display
         if (images.length === 0) {
           const allMediaUrls = {{ product.media | json }}.map(media => {
-            let url = media.src.replace(/\/files\//, '/');
+            let url = media.src;
             return {
               url: url.startsWith('//') ? `https:${url}` :
                    !url.startsWith('http') ? `https://${url}` : url,
@@ -773,6 +773,7 @@
         document.querySelectorAll('.product-swiper .swiper-slide img').forEach((img, index) => {
           img.addEventListener('click', function(e) {
             e.preventDefault();
+            // Use the index in the filtered and sorted images
             openProductLightbox(index);
           });
           img.style.cursor = 'pointer';
@@ -1011,11 +1012,19 @@
       };
     }
 
-    // Simple function to open the lightbox
+    // Function to open the lightbox with filtered and sorted images
     function openProductLightbox(startIndex) {
-      // Use complete product.media directly instead of the filtered images
+      // Get the gallery element
+      const gallery = document.querySelector('#MediaGallery-{{ section.id }}');
+      if (!gallery) {
+        console.error('Gallery element not found');
+        return;
+      }
+
+      // Get all media and color mappings
       const allMedia = {{ product.media | json }};
       const colorMappings = {% if product.metafields.custom.color.value %}{{ product.metafields.custom.color.value | json }}{% else %}null{% endif %};
+      const activeColor = gallery.dataset.activeColor;
 
       // Ensure Fancybox is loaded
       if (!allMedia || !window.Fancybox) {
@@ -1029,22 +1038,131 @@
           Fancybox.close();
         }
 
-        // Create array of items for Fancybox directly from product.media
-        const items = allMedia.map(media => {
-          // Use the original media source without mapping reference_id to color name
-          const mediaSrc = media.src.startsWith('//') ? `https:${media.src}` :
-                          !media.src.startsWith('http') ? `https://${media.src}` : media.src;
+        // Format all media URLs - keep the original format without replacing /files/
+        const allMediaUrls = allMedia.map(media => {
+          let url = media.src;
+          return url.startsWith('//') ? `https:${url}` :
+                 !url.startsWith('http') ? `https://${url}` : url;
+        });
 
+        // Filter URLs by active color - using the same logic as the main gallery
+        let urlsToUse = allMediaUrls;
+        let exactMatches = [];
+        let partialMatches = [];
+
+        if (activeColor && colorMappings) {
+          // First try to get normalized color key - this converts reference_id to color name if needed
+          const normalizedColorKey = window.getNormalizedColorKey(activeColor, colorMappings);
+
+          // Check each URL for matches using the active color
+          allMediaUrls.forEach(url => {
+            // Use parseImageUrl with colorMappings to properly handle reference_ids
+            const parsed = window.parseImageUrl(url, colorMappings);
+            const parsedColor = parsed.color.toLowerCase().trim();
+            const activeColorNormalized = normalizedColorKey.toLowerCase().trim();
+
+            // Collect exact and partial matches
+            if (parsedColor === activeColorNormalized) {
+              exactMatches.push(url);
+            } else if (parsedColor.includes(activeColorNormalized) || activeColorNormalized.includes(parsedColor)) {
+              partialMatches.push(url);
+            }
+
+            // If we didn't find a match but we have reference_id and colorMappings, try direct reference_id matching
+            if (exactMatches.length === 0 && partialMatches.length === 0 && parsed.reference_id && colorMappings) {
+              // Check if the active color is actually a reference_id
+              const activeRefId = parseInt(activeColor, 10);
+
+              if (!isNaN(activeRefId) && parsed.reference_id === activeRefId) {
+                exactMatches.push(url);
+              }
+            }
+          });
+
+          // Prioritize exact matches, fall back to partial matches
+          if (exactMatches.length > 0) {
+            urlsToUse = exactMatches;
+          } else if (partialMatches.length > 0) {
+            urlsToUse = partialMatches;
+          }
+
+          // If no matches found, try more flexible matching (just try parts of the color name)
+          if (urlsToUse.length === 0 && normalizedColorKey.includes('-')) {
+            const colorParts = normalizedColorKey.split('-');
+
+            for (const part of colorParts) {
+              if (part.length < 3) {
+                continue; // Skip very short parts
+              }
+
+              const flexibleMatches = allMediaUrls.filter(url => {
+                const parsed = window.parseImageUrl(url, colorMappings);
+                const isMatch = parsed.color.toLowerCase().includes(part.toLowerCase());
+                return isMatch;
+              });
+
+              if (flexibleMatches.length > 0) {
+                urlsToUse = flexibleMatches;
+                break;
+              }
+            }
+          }
+        }
+
+        // Get the current images from the gallery instead of sorting again
+        // This ensures the Fancybox shows images in the exact same order as the gallery
+        const galleryImages = [];
+
+        // Get all visible images from the desktop gallery
+        const desktopGallery = document.querySelector('#desktop-gallery');
+        if (desktopGallery) {
+          const imageElements = desktopGallery.querySelectorAll('img.product-lightbox-img');
+          imageElements.forEach(img => {
+            galleryImages.push({
+              url: img.src,
+              hidden: img.closest('.product__media-item').classList.contains('hidden')
+            });
+          });
+        }
+
+        // If desktop gallery is not available, try mobile gallery
+        if (galleryImages.length === 0) {
+          const mobileGallery = document.querySelector('.product-swiper');
+          if (mobileGallery) {
+            const imageElements = mobileGallery.querySelectorAll('.swiper-slide img');
+            imageElements.forEach(img => {
+              galleryImages.push({
+                url: img.src,
+                hidden: false // Mobile gallery doesn't have hidden images
+              });
+            });
+          }
+        }
+
+        // If we couldn't get images from the gallery, fall back to sorting
+        const sortedImages = galleryImages.length > 0 ?
+          galleryImages :
+          window.sortImagesByDisplayRules(urlsToUse, colorMappings);
+
+        // Create array of items for Fancybox from the sorted images
+        // Use all images, not just visible ones
+        const items = sortedImages.map(img => {
           return {
-            src: mediaSrc,
+            src: img.url,
             type: 'image',
-            caption: media.alt || ''
+            caption: '' // We don't have alt text for the sorted images
           };
         });
 
+        // Make sure we're using the correct startIndex
+        // If no startIndex is provided, default to 0
+        const adjustedStartIndex = (startIndex !== undefined && startIndex !== null)
+          ? Math.min(Math.max(0, startIndex), items.length - 1)
+          : 0;
+
         // Open Fancybox with a configuration for v5
         Fancybox.show(items, {
-          startIndex: Math.min(startIndex || 0, items.length - 1),
+          startIndex: Math.min(adjustedStartIndex, items.length - 1),
           dragToClose: false,
           closeButton: false,
           Toolbar: false,
