@@ -10,7 +10,9 @@ export function parseImageUrl(url, colorMappings = null) {
     product: "",
     color: "",
     image_type: "main",
-    reference_id: null
+    reference_id: null,
+    // Add a unique identifier based on the URL to differentiate between images with the same type/sequence
+    unique_id: url.split('?v=')[1] || Math.random().toString(36).substring(2, 10)
   };
 
   // Extract filename from URL and remove file extension
@@ -101,6 +103,22 @@ export function parseImageUrl(url, colorMappings = null) {
             break;
           case "H":
             result.image_type = "main";
+            // Check if there's a sequence number in the filename (like H_1)
+            if (seq) {
+              result.sequence = parseInt(seq, 10);
+            } else {
+              // Check if there's a sequence number at the end of the filename (like H.jpg vs H_1.jpg)
+              // This handles cases where the image is named like product-color-H_1.jpg
+              const filenameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+              const parts = filenameWithoutExt.split("-");
+              const lastPart = parts[parts.length - 1];
+
+              // If the last part is H_1, extract the sequence
+              if (lastPart && lastPart.startsWith("H_")) {
+                const seqNum = lastPart.split("_")[1];
+                if (seqNum) result.sequence = parseInt(seqNum, 10);
+              }
+            }
             break;
           default:
             // If we can't determine the type, default to main
@@ -217,6 +235,7 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
 
   parsedImages.forEach((img) => {
     const key = `${img.product}-${img.color}`;
+
     if (!groupedImages[key]) {
       groupedImages[key] = [];
     }
@@ -227,13 +246,16 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
   Object.keys(groupedImages).forEach((key) => {
     // First, check if we have a BV (back variant) image in this group
     const hasBV = groupedImages[key].some(img => img.image_type === "back_variant");
-    // Check if we have a B (back main) image in this group
-    const hasB = groupedImages[key].some(img => img.image_type === "back_main");
 
     groupedImages[key].sort((a, b) => {
       const getDisplayPriority = (img) => {
-        // Position 1: H.jpg (Main product photo)
-        if (img.image_type === "main") return 1;
+        // Position 1: H.jpg (Main product photo without sequence)
+        if (img.image_type === "main" && !img.sequence) return 1;
+
+        // Position 1+: H_1.jpg, H_2.jpg, etc. (Main product photos with sequence)
+        if (img.image_type === "main" && img.sequence) {
+          return 1 + (img.sequence * 0.1); // This will give 1.1, 1.2, etc. for H_1, H_2...
+        }
 
         // Position 2: BV.jpg (Back variant photo)
         if (img.image_type === "back_variant") return 2;
@@ -276,6 +298,60 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
       const priorityA = getDisplayPriority(a);
       const priorityB = getDisplayPriority(b);
 
+      // If priorities are the same, use the unique_id as a tiebreaker to ensure consistent ordering
+      if (priorityA === priorityB) {
+        // For main images with the same priority, check if one has H_1 suffix in the filename
+        if (a.image_type === 'main' && b.image_type === 'main') {
+          // Extract the filename without extension
+          const filenameA = a.url.split('/').pop().split('?')[0].replace(/\.[^/.]+$/, "");
+          const filenameB = b.url.split('/').pop().split('?')[0].replace(/\.[^/.]+$/, "");
+
+          // Check if filename contains H_1 or ends with -H_1
+          const hasH1SuffixA = filenameA.includes('H_1') || filenameA.endsWith('-H_1');
+          const hasH1SuffixB = filenameB.includes('H_1') || filenameB.endsWith('-H_1');
+
+          // Also check for H vs H_1 pattern - look for -H at the end or followed by a dot
+          const hasHSuffixA = (filenameA.endsWith('-H') || filenameA.includes('-H.')) && !filenameA.includes('H_');
+          const hasHSuffixB = (filenameB.endsWith('-H') || filenameB.includes('-H.')) && !filenameB.includes('H_');
+
+          // Extract the last part of the filename to check for H suffix more precisely
+          const lastPartA = filenameA.split('-').pop();
+          const lastPartB = filenameB.split('-').pop();
+          const isExactHSuffixA = lastPartA === 'H';
+          const isExactHSuffixB = lastPartB === 'H';
+
+          // Prefer H_1 over any other
+          if (hasH1SuffixA && !hasH1SuffixB) {
+            return -1;
+          }
+          if (!hasH1SuffixA && hasH1SuffixB) {
+            return 1;
+          }
+
+          // If neither has H_1, prefer exact H suffix over others
+          if (isExactHSuffixA && !isExactHSuffixB) {
+            return -1;
+          }
+          if (!isExactHSuffixA && isExactHSuffixB) {
+            return 1;
+          }
+
+          // If neither has exact H suffix, try the more general H pattern
+          if (hasHSuffixA && !hasHSuffixB) {
+            return -1;
+          }
+          if (!hasHSuffixA && hasHSuffixB) {
+            return 1;
+          }
+
+          // If both or neither have H_1 suffix, use the unique_id
+          return a.unique_id.localeCompare(b.unique_id);
+        }
+
+        // For other image types, just use the unique_id
+        return a.unique_id.localeCompare(b.unique_id);
+      }
+
       return priorityA - priorityB;
     });
 
@@ -310,14 +386,61 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
 
   // Flatten the grouped images, keeping product-color groups together
   const sortedImages = [];
+  const seenUrls = new Set(); // Track URLs we've already added to prevent duplicates
+
   Object.keys(groupedImages).forEach((key) => {
-    sortedImages.push(...groupedImages[key].map((img) => {
-      // Return the URL and hidden status
-      return {
-        url: img.url,
-        hidden: img.hidden || false
-      };
-    }));
+    groupedImages[key].forEach((img) => {
+      // Parse the image to get its type
+      const parsed = parseImageUrl(img.url, colorMappings);
+
+      // Special handling for main (H) images to prevent duplicates
+      let isDuplicate = seenUrls.has(img.url);
+
+      // For main images, also check if we already have another main image with the same product and color
+      if (!isDuplicate && parsed.image_type === "main") {
+        // Check if we already have a main image for this product-color
+        const mainImageKey = `main-${parsed.product}-${parsed.color}`;
+        const hasMainImage = seenUrls.has(mainImageKey);
+
+        if (hasMainImage) {
+          // If this is H_1, it might be better than a plain H
+          const filename = img.url.split('/').pop().split('?')[0].replace(/\.[^/.]+$/, "");
+          const lastPart = filename.split('-').pop();
+          const isExactHSuffix = lastPart === 'H';
+          const hasH1Suffix = filename.includes('H_1') || filename.endsWith('-H_1');
+
+          if (hasH1Suffix) {
+            // This is an H_1 image, which we prefer - find and remove the existing main image
+            const existingMainIndex = sortedImages.findIndex(item => {
+              const itemParsed = parseImageUrl(item.url, colorMappings);
+              return itemParsed.image_type === "main" &&
+                     itemParsed.product === parsed.product &&
+                     itemParsed.color === parsed.color;
+            });
+
+            if (existingMainIndex !== -1) {
+              sortedImages.splice(existingMainIndex, 1);
+            }
+          } else if (!isExactHSuffix) {
+            // This is not an H_1 or exact H image, so skip it
+            isDuplicate = true;
+          }
+        }
+
+        // Mark that we have a main image for this product-color
+        seenUrls.add(mainImageKey);
+      }
+
+      // Only add the image if it's not a duplicate
+      if (!isDuplicate) {
+        seenUrls.add(img.url);
+        // Return the URL and hidden status
+        sortedImages.push({
+          url: img.url,
+          hidden: img.hidden || false
+        });
+      }
+    });
   });
 
   return sortedImages;
