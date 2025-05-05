@@ -46,6 +46,36 @@
               <div class="order-total">{{ order.total_price | money }}</div>
             </div>
 
+            <!-- Mobile order header -->
+            <div class="order-header-mobile">
+              <div class="order-header-mobile-row">
+                <div class="order-header-mobile-label font-normal">{{ 'customer.orders.order_number' | t }}:</div>
+                <div class="order-header-mobile-value font-bold">{{ order.name }}</div>
+
+                <div class="order-header-mobile-status">
+                  {% if order.fulfillment_status_label == 'Fulfilled' %}
+                    <div class="order-status delivered">{{ 'customer.orders.delivered' | t }}</div>
+                  {% else %}
+                    <div class="order-status processing">{{ order.fulfillment_status_label }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="order-header-mobile">
+              <div class="order-header-mobile-row">
+                <div class="order-header-mobile-label">{{ 'customer.orders.date' | t }}:</div>
+                <div class="order-header-mobile-value">{{ order.created_at | date: '%d.%m.%Y' }}</div>
+              </div>
+              <div class="order-header-mobile-row mt-2">
+                <div class="order-header-mobile-label">{{ 'customer.orders.quantity' | t }}:</div>
+                <div class="order-header-mobile-value">{{ order.line_items.size }}</div>
+              </div>
+              <div class="order-header-mobile-row mt-2">
+                <div class="order-header-mobile-label">{{ 'customer.orders.total' | t }}:</div>
+                <div class="order-header-mobile-value">{{ order.total_price | money }}</div>
+              </div>
+            </div>
+
             <div class="order-content">
               <div class="order-products">
                 {% for line_item in order.line_items %}
@@ -187,6 +217,16 @@
                         <div class="product-meta-item">
                           <span class="meta-label">{{ 'customer.orders.quantity' | t }}:</span>
                           <span class="meta-value">{{ line_item.quantity }}</span>
+                        </div>
+                        <div class="product-meta-item">
+                          <span class="meta-value">
+                            {% if line_item.original_price > line_item.final_price %}
+                              <s>{{ line_item.original_price | money }}</s>
+                              <span>{{ line_item.final_price | money }}</span>
+                            {% else %}
+                              <span>{{ line_item.original_price | money }}</span>
+                            {% endif %}
+                          </span>
                         </div>
                       </div>
                     </div>
