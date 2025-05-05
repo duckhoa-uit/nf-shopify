@@ -1196,6 +1196,15 @@ button.loading .btn-spinner {
   padding: 0 2rem;
 }
 
+@media screen and (max-width: 767px) {
+  .order-item {
+    padding: 0 1rem;
+  }
+  .order-details {
+    margin: 0 -1rem;
+  }
+}
+
 /* Reorder notification styling */
 .reorder-notification {
   padding: 0.75rem 1.5rem;
@@ -1209,15 +1218,15 @@ button.loading .btn-spinner {
 }
 
 .reorder-notification--error {
-  background-color: #FEE2E2;
-  color: #B91C1C;
-  border: 1px solid #FCA5A5;
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
 }
 
 .reorder-notification--success {
-  background-color: #D1FAE5;
-  color: #065F46;
-  border: 1px solid #6EE7B7;
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
 }
 
 .reorder-notification.fade-out {
@@ -1225,13 +1234,25 @@ button.loading .btn-spinner {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 @keyframes fadeOut {
-  from { opacity: 1; transform: translateX(-50%) translateY(0); }
-  to { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
 }
 
 .order-header {
@@ -1291,6 +1312,14 @@ button.loading .btn-spinner {
   background-color: rgba(var(--color), 0.06);
   border: 0.0625rem solid rgba(var(--color), 0.3);
   color: rgba(var(--color), 1);
+}
+
+@media screen and (max-width: 767px) {
+  .order-status {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
 }
 
 .order-status.processing {
@@ -1376,7 +1405,6 @@ button.loading .btn-spinner {
 
 .order-details.active {
   display: block;
-  margin-bottom: 24px;
 }
 
 .order-details-column {
@@ -1590,6 +1618,16 @@ button.loading .btn-spinner {
   justify-content: flex-start;
 }
 
+@media screen and (max-width: 767px) {
+  .order-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .order-action-btn{
+    width: 100%;
+  }
+}
+
 .order-action-btn {
   display: flex;
   align-items: center;
@@ -1597,6 +1635,7 @@ button.loading .btn-spinner {
   padding: 0.625rem 1.25rem;
   border-radius: 0.1875rem; /* 3px */
   font-size: 0.8125rem; /* 13px */
+  line-height: 1rem;
   font-weight: 600;
   text-transform: uppercase;
   cursor: pointer;
@@ -1708,10 +1747,51 @@ button.loading .btn-text {
   left: 0.5rem;
 }
 
+/* Mobile order header */
+.order-header-mobile {
+  display: none;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed rgba(var(--color-base-foreground), 0.1);
+  position: relative;
+}
+
+.order-header-mobile-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.order-header-mobile-label {
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(var(--color-base-foreground), 0.8);
+  line-height: 1rem;
+}
+
+.order-header-mobile-value {
+  font-weight: 500;
+  font-size: 14px;
+  color: rgb(var(--color-base-foreground));
+  line-height: 1rem;
+}
+
+.order-header-mobile-status {
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
 @media screen and (max-width: 767px) {
+  .order-content {
+    border-top: none;
+  }
+
   .order-header {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+    display: none;
+  }
+
+  .order-header-mobile {
+    display: block;
   }
 
   .order-header-labels {
@@ -1719,8 +1799,8 @@ button.loading .btn-text {
   }
 
   .order-product {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    grid-template-columns: 100px 1fr;
+    /* gap: 1rem; */
   }
 
   .product-left {
@@ -1729,12 +1809,13 @@ button.loading .btn-text {
   }
 
   .product-info {
-    grid-column: 1;
+    grid-column: 2;
     margin-top: 1rem;
     order: 3;
   }
 
   .product-price {
+    display:none;
     grid-column: 1;
     text-align: left;
     margin-top: 0;
@@ -1756,7 +1837,7 @@ button.loading .btn-text {
   }
 
   .order-toggle-container {
-    margin-top: -2.5rem;
+    /* margin-top: -2.5rem; */
   }
 
   .order-toggle {
