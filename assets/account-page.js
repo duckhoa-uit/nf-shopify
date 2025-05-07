@@ -100,13 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
     addressFormCard.className = 'address-form-card';
     addressFormCard.id = 'NewAddressForm';
 
-    // Set form title
-    const formTitle = document.createElement('h3');
-    formTitle.className = 'address-form-title';
-    const addAddressTitle = document.querySelector('[data-add-address-title]')?.getAttribute('data-add-address-title') || 'Add a New Address';
-    formTitle.textContent = addAddressTitle;
-    addressFormCard.appendChild(formTitle);
-
     // Clone template content into the card
     const templateContent = addAddressTemplate.content.cloneNode(true);
     addressFormCard.appendChild(templateContent);
@@ -321,12 +314,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const formData = new FormData(form);
     const submitButton = form.querySelector('button[type="submit"]');
     const formCard = form.closest('.address-form-card, .address-edit-form');
+    const addressId = form.querySelector('[name="address[id]"]')?.value;
 
     console.log('Form submission started:', {
       formId: form.id,
       formAction: form.action,
       formMethod: form.method,
-      formCardId: formCard ? formCard.id : 'null'
+      formCardId: formCard ? formCard.id : 'null',
+      addressId: addressId
     });
 
     // Log form data for debugging
@@ -404,15 +399,85 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show loading state
     if (submitButton) {
       submitButton.classList.add('loading');
+      const spinner = submitButton.querySelector('.btn-spinner');
+      if (spinner) {
+        spinner.style.display = 'inline-block';
+      }
     }
 
     // For edit forms, find the address card
     const addressWrapper = form.closest('.address-wrapper');
     const addressCard = addressWrapper ? addressWrapper.querySelector('.address-card') : null;
 
-    // Submit form
+    // Check if this is a newly added address (ID starts with 'new_')
+    const isNewlyAddedAddress = addressId && addressId.startsWith('new_');
+
+    // Extract form data for creating/updating address card
+    const addressData = {};
+    const formFields = [
+      'first_name', 'last_name', 'company', 'address1', 'address2',
+      'city', 'country', 'province', 'zip', 'phone'
+    ];
+
+    formFields.forEach(field => {
+      const input = form.querySelector(`[name="address[${field}]"]`);
+      addressData[field] = input ? input.value : '';
+    });
+
+    // For newly added addresses that are being edited, we need to handle the form submission differently
+    if (isNewlyAddedAddress && formCard && formCard.id.startsWith('EditAddress_')) {
+      console.log('Handling edit for newly added address');
+
+      // Update the address card content
+      if (addressCard) {
+        updateAddressCardContent(addressCard, addressData);
+      }
+
+      // Hide the form and show the updated card
+      formCard.style.display = 'none';
+      if (addressCard) {
+        addressCard.style.display = 'block';
+      }
+
+      // Show success message
+      const successMessage = document.createElement('div');
+      successMessage.className = 'success-message';
+      const successMessageText = document.querySelector('[data-address-update-success]')?.getAttribute('data-address-update-success') || 'Address updated successfully';
+      successMessage.textContent = successMessageText;
+
+      // Show success message temporarily
+      const addressSection = form.closest('.address-section');
+      if (addressSection) {
+        const existingMessage = addressSection.querySelector('.success-message');
+        if (existingMessage) {
+          existingMessage.remove();
+        }
+        addressSection.prepend(successMessage);
+        setTimeout(() => {
+          successMessage.remove();
+        }, 3000);
+      }
+
+      // Remove loading state
+      if (submitButton) {
+        submitButton.classList.remove('loading');
+        const spinner = submitButton.querySelector('.btn-spinner');
+        if (spinner) {
+          spinner.style.display = 'none';
+        }
+      }
+
+      return; // Exit early, no need to submit to server
+    }
+
+    // For regular forms, submit to server
     console.log('Submitting form to:', form.action, 'with method:', form.method || 'POST');
 
+    // Determine if this is a billing or delivery address
+    const isBillingAddress = form.closest('#billing-address-cards') !== null ||
+                           formCard?.closest('#billing-address-cards') !== null;
+
+    // For normal forms, use the standard fetch approach
     fetch(form.action, {
       method: form.method || 'POST',
       body: formData,
@@ -446,35 +511,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const successMessageText = document.querySelector('[data-address-update-success]')?.getAttribute('data-address-update-success') || 'Address updated successfully';
         successMessage.textContent = successMessageText;
 
-        // Extract form data for creating/updating address card
-        const addressData = {};
-        const formFields = [
-          'first_name', 'last_name', 'company', 'address1', 'address2',
-          'city', 'country', 'province', 'zip', 'phone'
-        ];
-
-        formFields.forEach(field => {
-          const input = form.querySelector(`[name="address[${field}]"]`);
-          addressData[field] = input ? input.value : '';
-        });
-
-        // Get the address ID (for edit) or generate a temporary one (for new)
-        const addressId = form.querySelector('[name="address[id]"]')?.value ||
-                         ('new_' + Date.now());
-
-        // Determine if this is a billing or delivery address
-        const isBillingAddress = form.closest('#billing-address-cards') !== null ||
-                               formCard?.closest('#billing-address-cards') !== null;
-
         // If this is a new address form, create a new address card
         if (formCard && formCard.id === 'NewAddressForm') {
           // Create a new address wrapper
           const newAddressWrapper = document.createElement('div');
           newAddressWrapper.className = 'address-wrapper';
-          newAddressWrapper.setAttribute('data-address-id', addressId);
+          newAddressWrapper.setAttribute('data-address-id', addressId || ('new_' + Date.now()));
 
           // Create the address card HTML
-          const cardHtml = createAddressCardHtml(addressData, addressId);
+          const cardHtml = createAddressCardHtml(addressData, addressId || ('new_' + Date.now()));
           newAddressWrapper.innerHTML = cardHtml;
 
           // Add the new address card to the appropriate container
@@ -798,6 +843,8 @@ document.addEventListener('DOMContentLoaded', function() {
           <button
             type="button"
             class="button btn-edit"
+            aria-controls="EditAddress_${addressId}"
+            aria-expanded="false"
             data-address-id="${addressId}"
           >
             <span class="svg-wrapper">
@@ -820,7 +867,201 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
 
       <div class="address-edit-form" id="EditAddress_${addressId}" style="display: none;">
-        <!-- Edit form will be added dynamically when needed -->
+        <form class="address-form" data-address-form method="post" action="/account/addresses">
+          <input type="hidden" name="form_type" value="customer_address">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="address[id]" value="${addressId}">
+
+          <div class="address-form">
+            <div class="form-row">
+              <div class="form-group">
+                <div class="field">
+                  <input
+                    type="text"
+                    id="EditAddress_${addressId}_FirstName"
+                    name="address[first_name]"
+                    class="field__input"
+                    value="${addressData.first_name || ''}"
+                    placeholder=" "
+                    required
+                    minlength="2"
+                    title="First name should contain at least 2 characters"
+                  >
+                  <label class="field__label" for="EditAddress_${addressId}_FirstName">
+                    ${document.querySelector('[data-name-label]')?.getAttribute('data-name-label')?.split(' ')[0] || 'First Name'}
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="field">
+                  <input
+                    type="text"
+                    id="EditAddress_${addressId}_LastName"
+                    name="address[last_name]"
+                    class="field__input"
+                    value="${addressData.last_name || ''}"
+                    placeholder=" "
+                    required
+                    minlength="2"
+                    title="Last name should contain at least 2 characters"
+                  >
+                  <label class="field__label" for="EditAddress_${addressId}_LastName">
+                    ${document.querySelector('[data-name-label]')?.getAttribute('data-name-label')?.split(' ')[1] || 'Last Name'}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <div class="field">
+                  <input
+                    type="text"
+                    id="EditAddress_${addressId}_Company"
+                    name="address[company]"
+                    class="field__input"
+                    value="${addressData.company || ''}"
+                    placeholder=" "
+                  >
+                  <label class="field__label" for="EditAddress_${addressId}_Company">
+                    ${document.querySelector('[data-company-label]')?.getAttribute('data-company-label') || 'Company'}
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="field">
+                  <input
+                    type="tel"
+                    id="EditAddress_${addressId}_Phone"
+                    name="address[phone]"
+                    class="field__input"
+                    value="${addressData.phone || ''}"
+                    placeholder=" "
+                    pattern="[0-9\\+\\-\\s]{7,}"
+                    title="Phone number should contain at least 7 digits"
+                  >
+                  <label class="field__label" for="EditAddress_${addressId}_Phone">
+                    ${document.querySelector('[data-phone-label]')?.getAttribute('data-phone-label') || 'Phone'}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="field">
+                <input
+                  type="text"
+                  id="EditAddress_${addressId}_Address1"
+                  name="address[address1]"
+                  class="field__input"
+                  value="${addressData.address1 || ''}"
+                  placeholder=" "
+                  required
+                  minlength="5"
+                  title="Address should be at least 5 characters long"
+                >
+                <label class="field__label" for="EditAddress_${addressId}_Address1">
+                  ${document.querySelector('[data-address1-label]')?.getAttribute('data-address1-label') || 'Address'}
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="field">
+                <input
+                  type="text"
+                  id="EditAddress_${addressId}_Address2"
+                  name="address[address2]"
+                  class="field__input"
+                  value="${addressData.address2 || ''}"
+                  placeholder=" "
+                >
+                <label class="field__label" for="EditAddress_${addressId}_Address2">
+                  Address 2
+                </label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <div class="field">
+                  <input
+                    type="text"
+                    id="EditAddress_${addressId}_City"
+                    name="address[city]"
+                    class="field__input"
+                    value="${addressData.city || ''}"
+                    placeholder=" "
+                    required
+                    minlength="2"
+                    title="City name should contain at least 2 characters"
+                  >
+                  <label class="field__label" for="EditAddress_${addressId}_City">
+                    ${document.querySelector('[data-city-label]')?.getAttribute('data-city-label') || 'City'}
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="field">
+                  <input
+                    type="text"
+                    id="EditAddress_${addressId}_Zip"
+                    name="address[zip]"
+                    class="field__input"
+                    value="${addressData.zip || ''}"
+                    placeholder=" "
+                    required
+                    pattern="[0-9A-Za-z\\s\\-]{3,10}"
+                    title="Postal/ZIP code should be 3-10 characters"
+                  >
+                  <label class="field__label" for="EditAddress_${addressId}_Zip">
+                    ${document.querySelector('[data-zip-label]')?.getAttribute('data-zip-label') || 'Postal/ZIP code'}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="EditAddress_${addressId}_Country">${document.querySelector('[data-country-label]')?.getAttribute('data-country-label') || 'Country'}</label>
+                <div class="select-wrapper">
+                  <select
+                    id="EditAddress_${addressId}_Country"
+                    name="address[country]"
+                    data-address-country-select
+                    data-default="${addressData.country || ''}"
+                  >
+                    ${document.getElementById('AddressCountryNew')?.innerHTML || ''}
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" id="EditAddress_${addressId}_ProvinceContainer" style="display:none;">
+                <label for="EditAddress_${addressId}_Province">Province</label>
+                <div class="select-wrapper">
+                  <select
+                    id="EditAddress_${addressId}_Province"
+                    name="address[province]"
+                    data-default="${addressData.province || ''}"
+                  ></select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="button btn">
+                <span class="btn-text">Update</span>
+                <span class="btn-spinner"></span>
+              </button>
+              <button type="button" class="button button--tertiary cancel-edit" data-address-id="${addressId}">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     `;
   }
@@ -896,9 +1137,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const editButton = addressWrapper.querySelector('.btn-edit');
     if (editButton) {
       editButton.addEventListener('click', function() {
-        // Since this is a new address, we need to reload the page to get the edit form
-        // This is a limitation since we can't generate the full edit form with proper Shopify bindings
-        window.location.href = window.location.pathname + window.location.hash;
+        // We don't need the addressId variable here, but we keep the attribute for consistency
+        const addressCard = addressWrapper.querySelector('.address-card');
+        const editForm = addressWrapper.querySelector('.address-edit-form');
+
+        if (addressCard && editForm) {
+          // Toggle visibility
+          addressCard.style.display = 'none';
+          editForm.style.display = 'block';
+
+          // Wait a moment for the DOM to update before initializing selectors
+          setTimeout(() => {
+            // Initialize country/province selectors using Shopify's built-in functionality
+            setupCountryProvinceSelectors();
+          }, 50);
+
+          // Add form submission handler
+          const form = editForm.querySelector('form');
+          if (form && !form.hasAttribute('data-handler-attached')) {
+            form.addEventListener('submit', handleFormSubmit);
+            form.setAttribute('data-handler-attached', 'true');
+
+            // Add validation listeners to form fields
+            addFormValidationListeners(editForm);
+          }
+        }
       });
     }
 
@@ -966,7 +1229,21 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
 
-    // No need to re-initialize buttons since we're using event delegation
+    // Add cancel button event listener for the edit form
+    const cancelButton = addressWrapper.querySelector('.cancel-edit');
+    if (cancelButton) {
+      cancelButton.addEventListener('click', function() {
+        // We don't need the addressId variable here, but we keep the attribute for consistency
+        const addressCard = addressWrapper.querySelector('.address-card');
+        const editForm = addressWrapper.querySelector('.address-edit-form');
+
+        if (addressCard && editForm) {
+          // Hide form and show card
+          editForm.style.display = 'none';
+          addressCard.style.display = 'block';
+        }
+      });
+    }
   }
 
   // We're now using Shopify's built-in CountryProvinceSelector
