@@ -1,4 +1,6 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -25,142 +27,620 @@
     }
   }
 
-  @media screen and (min-width: 990px) {
-    .blog-videos-grid {
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
+  .article-video-card-wrapper {
+    height: 100%;
   }
 
-  .video-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 3px;
+  .article-video-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
-  .video-card__image {
+  .article-video-card__image-wrapper {
+    width: 100%;
+  }
+
+  .video-embed {
     width: 100%;
     height: 0;
     padding-bottom: 56.25%;
     position: relative;
     background-color: #f5f5f5;
+    border-radius: 3px;
+    overflow: hidden;
   }
 
-  .video-card__image img {
+  .video-embed iframe {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
   }
 
-  .video-card__content {
+  .article-video-card__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     padding: 1rem 0;
   }
 
-  .video-card__title {
+  .article-video-card__excerpt {
+    flex: 1;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .article-video-card__title {
     font-weight: 500;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
   }
+
+  .article-video-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .article-video-card__tag {
+    color: #EC0009;
+    font-size: 0.875rem;
+  }
+
+  .blog-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #d1d0d0;
+    padding-bottom: 1rem;
+  }
+
+  .blog-category {
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .blog-category.active {
+    color: #EC0009;
+  }
+
+  .blog-category.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #EC0009;
+  }
+
+  .no-results-message {
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 1rem;
+    color: #666;
+    display: none;
+  }
+
+  .load-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .load-more-button {
+    background-color: #0F0F0F;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 3px;
+    padding: 12px 60px;
+    font-family: Archivo, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.14;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    min-width: 200px;
+    min-height: 48px;
+  }
+
+  .load-more-button:hover:not([disabled]) {
+    opacity: 0.9;
+  }
+
+  .load-more-button.loading {
+    background-color: #333333;
+  }
+
+  .load-more-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .loading-spinner {
+    animation: spin 1s linear infinite;
+    height: 20px;
+    width: 20px;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 {%- endstyle -%}
 
 <div class="blog-videos page-width section-{{ section.id }}-padding">
-  <h2 class="title--primary">
+  <h2 class="text-left font-extrabold font-archivo-expanded text-base lg:text-2xl leading-7 text-[#0F0F0F] uppercase mb-3 md:mb-6">
     {{ section.settings.heading | escape }}
   </h2>
 
-  <div class="blog-videos-grid">
-    {% for block in section.blocks %}
-      <div class="video-card" {{ block.shopify_attributes }}>
-        <div class="video-card__image">
-          {% if block.settings.video_thumbnail != blank %}
-            <img
-              src="{{ block.settings.video_thumbnail | image_url: width: 535 }}"
-              alt="{{ block.settings.video_title | escape }}"
-              loading="lazy"
-              width="{{ block.settings.video_thumbnail.width }}"
-              height="{{ block.settings.video_thumbnail.height }}">
-          {% else %}
-            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+  {% if section.settings.enable_filtering %}
+    <div class="blog-categories">
+      <div class="blog-category active" data-category="all">{{ 'blogs.main_blog.all_articles' | t }}</div>
+
+      {% comment %}Get unique tags from all articles{% endcomment %}
+      {%- assign all_tags = '' -%}
+      {%- for article in blogs.video.articles -%}
+        {%- for tag in article.tags -%}
+          {%- assign all_tags = all_tags | append: ',' | append: tag | downcase -%}
+        {%- endfor -%}
+      {%- endfor -%}
+
+      {% comment %}Convert to array and remove duplicates{% endcomment %}
+      {%- assign tag_array = all_tags | remove_first: ',' | split: ',' -%}
+      {%- assign unique_tags = '' -%}
+
+      {%- for tag in tag_array -%}
+        {%- unless unique_tags contains tag -%}
+          {%- assign unique_tags = unique_tags | append: ',' | append: tag -%}
+          <div class="blog-category" data-category="{{ tag }}">#{{ tag }}</div>
+        {%- endunless -%}
+      {%- endfor -%}
+
+      {% comment %}Fallback to predefined categories if no tags found{% endcomment %}
+      {% if unique_tags == '' %}
+        <div class="blog-category" data-category="skialp">#{{ 'blogs.main_blog.categories.skialp' | t }}</div>
+        <div class="blog-category" data-category="adventure">#{{ 'blogs.main_blog.categories.adventure' | t }}</div>
+        <div class="blog-category" data-category="tips">#{{ 'blogs.main_blog.categories.tips' | t }}</div>
+        <div class="blog-category" data-category="gear">#{{ 'blogs.main_blog.categories.gear' | t }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {%- paginate blogs.video.articles by section.settings.posts_per_page -%}
+    <div class="blog-videos-grid">
+      <div class="no-results-message">{{ 'blogs.main_blog.no_results' | t }}</div>
+      {%- for article in blogs.video.articles -%}
+        <div
+          class="blog-videos-grid__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {% if settings.animations_reveal_on_scroll %}
+            data-cascade
+            style="--animation-order: {{ forloop.index }};"
           {% endif %}
+          {% if article.tags.size > 0 %}
+            data-tags="{{ article.tags | join: ' ' | downcase }}"
+          {% endif %}
+        >
+          <div class="article-video-card-wrapper card-wrapper">
+            <div class="article-video-card">
+              <div class="article-video-card__image-wrapper">
+                <div class="video-embed">
+                  {% if article.metafields.custom.video_thumbnail != blank %}
+                    {% assign video_url = article.metafields.custom.video_thumbnail %}
+                    {% assign video_id = '' %}
+
+                    {%- # Extract YouTube ID -%}
+                    {%- if video_url contains 'youtube.com' -%}
+                      {%- if video_url contains 'v=' -%}
+                        {%- assign video_id = video_url | split: 'v=' | last | split: '&' | first -%}
+                      {%- elsif video_url contains 'embed/' -%}
+                        {%- assign video_id = video_url | split: 'embed/' | last | split: '?' | first -%}
+                      {%- endif -%}
+                    {%- elsif video_url contains 'youtu.be/' -%}
+                      {%- assign video_id = video_url | split: 'youtu.be/' | last | split: '?' | first -%}
+                    {%- endif -%}
+
+                    {% if video_id != '' %}
+                      <iframe
+                        src="https://www.youtube.com/embed/{{ video_id }}?rel=0&showinfo=0&controls=1"
+                        frameborder="0"
+                        allowfullscreen
+                        loading="lazy"
+                        title="{{ article.title | escape }}"
+                        class="w-full h-full"
+                      >
+                      </iframe>
+                    {% else %}
+                      <iframe
+                        src="{{ video_url }}"
+                        title="{{ article.title | escape }}"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        loading="lazy"
+                        class="w-full h-full"
+                      >
+                      </iframe>
+                    {% endif %}
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {% endif %}
+                </div>
+                {% comment %} {% if article.tags.size > 0 %}
+                  <div class="article-card__image-tags">
+                    {% for tag in article.tags limit: 3 %}
+                      <span class="article-card__image-tag">#{{ tag }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %} {% endcomment %}
+              </div>
+
+              <div class="article-video-card__content">
+                {% if article.tags.size > 0 %}
+                  <div class="article-card__tags">
+                    {% for tag in article.tags %}
+                      <span class="article-card__tag">#{{ tag }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <h4 class="article-video-card__title">
+                  <a href="{{ article.url }}" class="article-video-card__title-link">
+                    {{ article.title | escape }}
+                  </a>
+                </h4>
+
+                <div class="article-video-card__excerpt">
+                  {%- if article.excerpt.size > 0 -%}
+                    {{ article.excerpt | strip_html }}
+                  {%- else -%}
+                    {{ article.content | strip_html }}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="video-card__content">
-          <h3 class="video-card__title">{{ block.settings.video_title | escape }}</h3>
-        </div>
+      {%- endfor -%}
+    </div>
+
+    {% if section.settings.enable_load_more %}
+      <div class="load-more-container">
+        <button class="load-more-button" id="load-more-button" {% if paginate.pages <= 1 %}disabled{% endif %}>
+          <span class="load-more-text">{{ 'blogs.main_blog.view_more' | t }}</span>
+          <span class="loading-spinner" style="display: none;">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </span>
+        </button>
       </div>
-    {% endfor %}
-  </div>
+    {% else %}
+      {%- if paginate.pages > 1 -%}
+        {%- render 'pagination', paginate: paginate -%}
+      {%- endif -%}
+    {% endif %}
+  {%- endpaginate -%}
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Get DOM elements
+    const categories = document.querySelectorAll('.blog-category');
+    const articles = document.querySelectorAll('.blog-videos-grid__article');
+
+    // Fix YouTube iframes if needed
+    function fixYouTubeEmbeds() {
+      const iframes = document.querySelectorAll('.video-embed iframe');
+      iframes.forEach((iframe) => {
+        const src = iframe.getAttribute('src');
+        if (src && (src.includes('youtube.com') || src.includes('youtu.be'))) {
+          // Check if it's already an embed URL
+          if (!src.includes('youtube.com/embed/')) {
+            let videoId = '';
+
+            // Extract video ID from various YouTube URL formats
+            if (src.includes('youtube.com')) {
+              if (src.includes('v=')) {
+                videoId = src.split('v=')[1].split('&')[0];
+              } else if (src.includes('embed/')) {
+                videoId = src.split('embed/')[1].split('?')[0];
+              }
+            } else if (src.includes('youtu.be/')) {
+              videoId = src.split('youtu.be/')[1].split('?')[0];
+            }
+
+            if (videoId) {
+              iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?rel=0&showinfo=0&controls=1`);
+            }
+          }
+        }
+      });
+    }
+
+    // Run the fix on page load
+    fixYouTubeEmbeds();
+
+    // Debug function to check available tags in articles
+    function debugAvailableTags() {
+      const allTags = new Set();
+      articles.forEach((article) => {
+        const tags = article.getAttribute('data-tags') || '';
+        if (tags) {
+          tags.split(' ').forEach((tag) => allTags.add(tag));
+        }
+      });
+      console.log('Available tags in articles:', Array.from(allTags));
+
+      // Log category tabs
+      const categoryTabs = [];
+      categories.forEach((category) => {
+        categoryTabs.push(category.getAttribute('data-category'));
+      });
+      console.log('Category tabs:', categoryTabs);
+    }
+
+    // Run debug on page load
+    debugAvailableTags();
+
+    // Current filters state
+    let currentCategory = 'all';
+    let currentPage = 1;
+
+    // Function to filter articles based on category
+    function filterArticles() {
+      let visibleCount = 0;
+      const noResultsMessage = document.querySelector('.no-results-message');
+      const loadMoreButton = document.getElementById('load-more-button');
+
+      // For debugging - log the current category and available articles
+      console.log('Filtering by category:', currentCategory);
+      console.log('Available articles:', articles.length);
+
+      articles.forEach((article) => {
+        let showByCategory = true;
+
+        // Category filtering
+        if (currentCategory !== 'all') {
+          const tags = article.getAttribute('data-tags') || '';
+          console.log('Article tags:', tags);
+
+          // Check if the article has the selected category tag
+          // Use word boundaries to ensure exact tag match
+          const tagPattern = new RegExp('\\b' + currentCategory.toLowerCase() + '\\b');
+          showByCategory = tagPattern.test(tags);
+        }
+
+        // Show article only if it passes the filter
+        if (showByCategory) {
+          article.style.display = 'block';
+          visibleCount++;
+        } else {
+          article.style.display = 'none';
+        }
+      });
+
+      console.log('Visible articles after filtering:', visibleCount);
+
+      // Show/hide no results message
+      if (visibleCount === 0) {
+        noResultsMessage.style.display = 'block';
+        if (loadMoreButton) {
+          loadMoreButton.style.display = 'none';
+        }
+      } else {
+        noResultsMessage.style.display = 'none';
+        if (loadMoreButton && currentPage < 3) {
+          loadMoreButton.style.display = 'flex';
+        }
+      }
+    }
+
+    // Category filtering
+    categories.forEach((category) => {
+      category.addEventListener('click', function (event) {
+        // Prevent default behavior
+        event.preventDefault();
+
+        console.log('Category clicked:', this.getAttribute('data-category'));
+
+        // Remove active class from all categories
+        categories.forEach((cat) => cat.classList.remove('active'));
+
+        // Add active class to clicked category
+        this.classList.add('active');
+
+        // Update current category
+        currentCategory = this.getAttribute('data-category');
+        console.log('Current category set to:', currentCategory);
+
+        // Apply filters
+        filterArticles();
+      });
+    });
+
+    // Load more functionality
+    const loadMoreButton = document.getElementById('load-more-button');
+    const loadMoreText = loadMoreButton ? loadMoreButton.querySelector('.load-more-text') : null;
+    const loadingSpinner = loadMoreButton ? loadMoreButton.querySelector('.loading-spinner') : null;
+
+    if (loadMoreButton) {
+      // Check if button should be disabled initially
+      if (loadMoreButton.hasAttribute('disabled')) {
+        loadMoreButton.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+
+      loadMoreButton.addEventListener('click', function () {
+        // Don't do anything if button is disabled
+        if (loadMoreButton.hasAttribute('disabled')) {
+          return;
+        }
+
+        // Show loading state
+        if (loadMoreText) loadMoreText.style.display = 'none';
+        if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
+        loadMoreButton.classList.add('loading');
+
+        currentPage++;
+        const nextPageUrl = window.location.pathname + '?page=' + currentPage;
+
+        fetch(nextPageUrl)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
+          .then((html) => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newArticles = doc.querySelectorAll('.blog-videos-grid__article');
+            const articlesContainer = document.querySelector('.blog-videos-grid');
+
+            // Check if we got any new articles
+            if (newArticles.length === 0) {
+              console.log('No more articles to load');
+              // Hide the button completely
+              loadMoreButton.style.display = 'none';
+              return;
+            }
+
+            // Add new articles to the grid
+            newArticles.forEach((article) => {
+              const clonedArticle = article.cloneNode(true);
+              articlesContainer.appendChild(clonedArticle);
+
+              // Apply current filters to newly loaded articles
+              if (currentCategory !== 'all') {
+                // Add the data-tags attribute to the cloned article
+                if (article.hasAttribute('data-tags')) {
+                  clonedArticle.setAttribute('data-tags', article.getAttribute('data-tags'));
+                }
+
+                let showByCategory = true;
+
+                // Category filtering
+                if (currentCategory !== 'all') {
+                  const tags = clonedArticle.getAttribute('data-tags') || '';
+                  // Use word boundaries to ensure exact tag match
+                  const tagPattern = new RegExp('\\b' + currentCategory.toLowerCase() + '\\b');
+                  showByCategory = tagPattern.test(tags);
+                }
+
+                // Show article only if it passes the filter
+                if (!showByCategory) {
+                  clonedArticle.style.display = 'none';
+                }
+              }
+            });
+
+            // Fix YouTube embeds in newly loaded content
+            fixYouTubeEmbeds();
+
+            // Reset loading state
+            if (loadMoreText) loadMoreText.style.display = 'inline';
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            loadMoreButton.classList.remove('loading');
+
+            // Check if we've reached the last page
+            const paginationInfo = doc.querySelector('.pagination');
+            if (!paginationInfo || currentPage >= 3) {
+              // Hide the button completely
+              loadMoreButton.style.display = 'none';
+            }
+          })
+          .catch((error) => {
+            console.error('Error loading more articles:', error);
+
+            // Hide the button on error
+            loadMoreButton.style.display = 'none';
+          });
+      });
+    }
+  });
+</script>
+
 {% schema %}
-  {
-    "name": "Blog Videos",
-    "tag": "section",
-    "class": "section",
-    "settings": [
-      {
-        "type": "text",
-        "id": "heading",
-        "default": "Videos",
-        "label": "Heading"
-      },
-      {
-        "type": "header",
-        "content": "t:sections.all.padding.section_padding_heading"
-      },
-      {
-        "type": "range",
-        "id": "padding_top",
-        "min": 0,
-        "max": 100,
-        "step": 4,
-        "unit": "px",
-        "label": "t:sections.all.padding.padding_top",
-        "default": 36
-      },
-      {
-        "type": "range",
-        "id": "padding_bottom",
-        "min": 0,
-        "max": 100,
-        "step": 4,
-        "unit": "px",
-        "label": "t:sections.all.padding.padding_bottom",
-        "default": 36
-      }
-    ],
-    "blocks": [
-      {
-        "type": "video",
-        "name": "Video",
-        "settings": [
-          {
-            "type": "image_picker",
-            "id": "video_thumbnail",
-            "label": "Video thumbnail"
-          },
-          {
-            "type": "text",
-            "id": "video_title",
-            "default": "Video title",
-            "label": "Title"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Blog Videos",
-        "blocks": [
-          {
-            "type": "video"
-          },
-          {
-            "type": "video"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Blog Videos",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Videos",
+      "label": "Heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "t:sections.main-blog.settings.enable_filtering.label"
+    },
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 4,
+      "label": "t:sections.main-blog.settings.posts_per_page.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_load_more",
+      "default": true,
+      "label": "t:sections.main-blog.settings.enable_load_more.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Videos"
+    }
+  ]
+}
 {% endschema %}
