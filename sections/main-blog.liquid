@@ -330,14 +330,27 @@
         const nextPageUrl = window.location.pathname + '?page=' + currentPage;
 
         fetch(nextPageUrl)
-          .then((response) => response.text())
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
           .then((html) => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const newArticles = doc.querySelectorAll('.blog-articles__article');
-
             const articlesContainer = document.querySelector('.blog-articles');
 
+            // Check if we got any new articles
+            if (newArticles.length === 0) {
+              console.log('No more articles to load');
+              // Hide the button completely
+              loadMoreButton.style.display = 'none';
+              return;
+            }
+
+            // Add new articles to the grid
             newArticles.forEach((article) => {
               const clonedArticle = article.cloneNode(true);
               articlesContainer.appendChild(clonedArticle);
@@ -371,10 +384,18 @@
               }
             });
 
-            // Hide button after loading a few pages (simulating reaching the end)
-            if (currentPage >= 3) {
+            // Check if we've reached the last page
+            const paginationInfo = doc.querySelector('.pagination');
+            if (!paginationInfo || currentPage >= 3) {
+              // Hide the button completely
               loadMoreButton.style.display = 'none';
             }
+          })
+          .catch((error) => {
+            console.error('Error loading more articles:', error);
+
+            // Hide the button on error
+            loadMoreButton.style.display = 'none';
           });
       });
     }
