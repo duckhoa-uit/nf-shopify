@@ -34,7 +34,7 @@
               >
                 <a
                   href="{{ link.url | default: '#' }}"
-                  class="{% if link.child_active %} header__active-menu-item{% endif %} group-hover:text-accent font-semibold text-foreground uppercase inline-block w-full h-full"
+                  class="{% if link.child_active %} header__active-menu-item{% endif %} group-hover:text-accent font-semibold text-foreground uppercase inline-block w-full h-full leading-7"
                 >
                   {{- link.title | escape -}}
                 </a>
