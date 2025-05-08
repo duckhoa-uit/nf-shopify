@@ -27,6 +27,7 @@
 /* Core message styles from Dawn */
 .newsletter-form__message.form__message {
   justify-content: center;
+  color: rgb(var(--color-base-background));
 }
 
 /* Animation classes */
@@ -42,5 +43,41 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Loading state styles */
+.newsletter-submit-button {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.newsletter-submit-button.is-loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.newsletter-submit-button.is-success {
+  background-color: #4CAF50; /* Green background for success */
+  opacity: 1;
+  pointer-events: none;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -44,11 +44,25 @@
   text-transform: uppercase;
 }
 
+.article-card__image-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.article-card__image-link:hover img {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
 .article-card__image img {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
 .article-card__content {
