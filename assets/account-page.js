@@ -442,7 +442,8 @@ document.addEventListener('DOMContentLoaded', function() {
       // Show success message
       const successMessage = document.createElement('div');
       successMessage.className = 'success-message';
-      const successMessageText = document.querySelector('[data-address-update-success]')?.getAttribute('data-address-update-success') || 'Address updated successfully';
+      // Use a custom message for newly added addresses
+      const successMessageText = 'Address updated successfully';
       successMessage.textContent = successMessageText;
 
       // Show success message temporarily
@@ -507,8 +508,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show success message
         const successMessage = document.createElement('div');
         successMessage.className = 'success-message';
-        // Get the success message from a data attribute in the DOM
-        const successMessageText = document.querySelector('[data-address-update-success]')?.getAttribute('data-address-update-success') || 'Address updated successfully';
+
+        // Different message based on whether it's a new address or an update
+        let successMessageText;
+        if (formCard && formCard.id === 'NewAddressForm') {
+          successMessageText = document.querySelector('[data-address-add-success]')?.getAttribute('data-address-add-success') || 'Address added successfully';
+        } else {
+          successMessageText = document.querySelector('[data-address-update-success]')?.getAttribute('data-address-update-success') || 'Address updated successfully';
+        }
         successMessage.textContent = successMessageText;
 
         // If this is a new address form, create a new address card
@@ -534,6 +541,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Add event listeners to the new buttons
             addButtonEventListeners(newAddressWrapper);
+
+            // Show success message
+            const addressSection = container.closest('.address-section');
+            if (addressSection) {
+              const existingMessage = addressSection.querySelector('.success-message');
+              if (existingMessage) {
+                existingMessage.remove();
+              }
+
+              const successMessage = document.createElement('div');
+              successMessage.className = 'success-message';
+              const successMessageText = document.querySelector('[data-address-add-success]')?.getAttribute('data-address-add-success') || 'Address added successfully';
+              successMessage.textContent = successMessageText;
+
+              addressSection.prepend(successMessage);
+              setTimeout(() => {
+                successMessage.remove();
+              }, 3000);
+            }
           }
         }
         // If this is an edit form, update the existing card
