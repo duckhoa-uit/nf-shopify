@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
       // Make sure it doesn't have the data-tab attribute
       if (addressesTabLink.hasAttribute('data-tab')) {
         addressesTabLink.removeAttribute('data-tab');
-        console.log('Removed data-tab attribute from addresses tab link');
       }
 
       // Add a click event listener to prevent the default tab behavior
@@ -39,6 +38,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // This is for when the user navigates back to the account page using browser back button
     // We'll store this in sessionStorage
     sessionStorage.setItem('lastAccountTab', 'addresses');
+
+    // Check if the URL has a #login hash and remove it
+    if (window.location.hash === '#login') {
+      // Replace the URL without the hash
+      window.history.replaceState(null, null, window.location.pathname);
+    }
+
+    // Check if we have a return_to parameter in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('return_to')) {
+      const returnTo = urlParams.get('return_to');
+
+      // If the return_to is /account/addresses, we're already here, so just remove the parameter
+      if (returnTo === '/account/addresses') {
+        // Replace the URL without the parameter
+        window.history.replaceState(null, null, window.location.pathname);
+      }
+    }
   }
 
   // Check if we need to highlight the addresses tab

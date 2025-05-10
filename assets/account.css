@@ -690,6 +690,12 @@
   gap: 1.5rem;
 }
 
+/* Style for the new address form at the end of the address cards */
+#AddressNewForm {
+  border-radius: var(--text-boxes-radius);
+  background-color: rgba(var(--color-base-background), 0.5);
+}
+
 @media screen and (min-width: 768px) {
   .address-cards {
     grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr)); /* 400px */
@@ -702,7 +708,6 @@
   padding: 1.5rem;
   position: relative;
   background-color: #ffffff;
-  max-width: 31.25rem; /* 500px */
 }
 
 .address-card.default-address {
@@ -793,6 +798,12 @@
   cursor: pointer;
   font-family: var(--font-body-family);
   line-height: 1.2307692308em;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-edit:hover,
+.button--edit:hover {
+  background-color: #333333;
 }
 
 .btn-delete {
