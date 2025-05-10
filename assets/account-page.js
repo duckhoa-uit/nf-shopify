@@ -352,6 +352,15 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log(pair[0], pair[1]);
     }
 
+    // Add debug info
+    console.log('Form details:', {
+      action: form.action,
+      method: form.method,
+      id: form.id,
+      className: form.className,
+      enctype: form.enctype
+    });
+
     // Custom validation
     let isValid = true;
 
@@ -496,9 +505,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // For regular forms, submit to server
     console.log('Submitting form to:', form.action, 'with method:', form.method || 'POST');
 
-    // Determine if this is a billing or delivery address
-    const isBillingAddress = form.closest('#billing-address-cards') !== null ||
-                           formCard?.closest('#billing-address-cards') !== null;
+    // Check if this is a new address form
+    const isNewAddressForm = form.id === 'AddAddressForm';
+
+    // For new address forms, we need to ensure the form action is correct
+    if (isNewAddressForm && !form.action.includes('/account/addresses')) {
+      form.action = '/account/addresses';
+      console.log('Updated form action to:', form.action);
+    }
 
     // For normal forms, use the standard fetch approach
     fetch(form.action, {
@@ -516,6 +530,13 @@ document.addEventListener('DOMContentLoaded', function() {
         redirected: response.redirected,
         url: response.url
       });
+
+      // Clone the response to inspect its content
+      response.clone().text().then(text => {
+        console.log('Response content:', text.substring(0, 500) + (text.length > 500 ? '...' : ''));
+      }).catch(err => {
+        console.error('Error reading response content:', err);
+      });
       // Remove loading state regardless of response status
       if (submitButton) {
         submitButton.classList.remove('loading');
@@ -527,6 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (response.ok) {
         console.log('Form submission successful');
+
         // Show success message
         const successMessage = document.createElement('div');
         successMessage.className = 'success-message';
@@ -535,64 +557,28 @@ document.addEventListener('DOMContentLoaded', function() {
         let successMessageText;
         if (formCard && formCard.id === 'NewAddressForm') {
           successMessageText = document.querySelector('[data-address-add-success]')?.getAttribute('data-address-add-success') || 'Address added successfully';
+
+          // For new addresses, refresh the page to show the server-generated address
+          // This ensures we get the correct address ID from Shopify
+          console.log('New address added, refreshing page in 1 second...');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
           successMessageText = document.querySelector('[data-address-update-success]')?.getAttribute('data-address-update-success') || 'Address updated successfully';
-        }
-        successMessage.textContent = successMessageText;
 
-        // If this is a new address form, create a new address card
-        if (formCard && formCard.id === 'NewAddressForm') {
-          // Create a new address wrapper
-          const newAddressWrapper = document.createElement('div');
-          newAddressWrapper.className = 'address-wrapper';
-          newAddressWrapper.setAttribute('data-address-id', addressId || ('new_' + Date.now()));
+          // If this is an edit form, update the existing card
+          if (addressCard && formCard) {
+            // Update the address card content
+            updateAddressCardContent(addressCard, addressData);
 
-          // Create the address card HTML
-          const cardHtml = createAddressCardHtml(addressData, addressId || ('new_' + Date.now()));
-          newAddressWrapper.innerHTML = cardHtml;
-
-          // Add the new address card to the appropriate container
-          const container = isBillingAddress ?
-            document.getElementById('billing-address-cards') :
-            document.getElementById('delivery-address-cards');
-
-          if (container) {
-            container.appendChild(newAddressWrapper);
-            // Remove the form
-            formCard.remove();
-
-            // Add event listeners to the new buttons
-            addButtonEventListeners(newAddressWrapper);
-
-            // Show success message
-            const addressSection = container.closest('.address-section');
-            if (addressSection) {
-              const existingMessage = addressSection.querySelector('.success-message');
-              if (existingMessage) {
-                existingMessage.remove();
-              }
-
-              const successMessage = document.createElement('div');
-              successMessage.className = 'success-message';
-              const successMessageText = document.querySelector('[data-address-add-success]')?.getAttribute('data-address-add-success') || 'Address added successfully';
-              successMessage.textContent = successMessageText;
-
-              addressSection.prepend(successMessage);
-              setTimeout(() => {
-                successMessage.remove();
-              }, 3000);
-            }
+            // Hide the form and show the updated card
+            formCard.style.display = 'none';
+            addressCard.style.display = 'block';
           }
         }
-        // If this is an edit form, update the existing card
-        else if (addressCard && formCard) {
-          // Update the address card content
-          updateAddressCardContent(addressCard, addressData);
 
-          // Hide the form and show the updated card
-          formCard.style.display = 'none';
-          addressCard.style.display = 'block';
-        }
+        successMessage.textContent = successMessageText;
 
         // Show success message temporarily
         const addressSection = form.closest('.address-section');
@@ -602,9 +588,13 @@ document.addEventListener('DOMContentLoaded', function() {
             existingMessage.remove();
           }
           addressSection.prepend(successMessage);
-          setTimeout(() => {
-            successMessage.remove();
-          }, 3000);
+
+          // Don't remove the message if we're going to refresh the page
+          if (!(formCard && formCard.id === 'NewAddressForm')) {
+            setTimeout(() => {
+              successMessage.remove();
+            }, 3000);
+          }
         }
       } else {
         console.error('Form submission failed with status:', response.status);
@@ -620,8 +610,34 @@ document.addEventListener('DOMContentLoaded', function() {
         id: form.id,
         className: form.className
       });
-      const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
+
+      // Try direct form submission as a fallback
+      console.log('Trying direct form submission as fallback...');
+
+      // Create a hidden form and submit it
+      const fallbackForm = document.createElement('form');
+      fallbackForm.method = 'POST';
+      fallbackForm.action = '/account/addresses';
+      fallbackForm.style.display = 'none';
+
+      // Copy all form data to the fallback form
+      for (const pair of formData.entries()) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = pair[0];
+        input.value = pair[1];
+        fallbackForm.appendChild(input);
+      }
+
+      // Add the form to the document and submit it
+      document.body.appendChild(fallbackForm);
+      fallbackForm.submit();
+
+      // Show a message to the user
+      const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Trying an alternative method...';
       alert(errorMsg);
+
+      // Remove loading state
       if (submitButton) {
         submitButton.classList.remove('loading');
         const spinner = submitButton.querySelector('.btn-spinner');

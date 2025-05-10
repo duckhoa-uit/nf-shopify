@@ -24,7 +24,7 @@
     id="{{ id }}"
     name="{{ name }}"
     class="field__input"
-    value="{{ value }}"
+    value="{{ value | default: '' }}"
     placeholder="{{ placeholder }}"
     {% if required %}
       required
