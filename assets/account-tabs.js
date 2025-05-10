@@ -19,6 +19,16 @@ class AccountTabs {
   }
 
   handleTabClick(e) {
+    const link = e.currentTarget;
+    const tabId = link.getAttribute('data-tab');
+
+    // Check if this is an external link (no data-tab attribute)
+    if (!tabId) {
+      // This is an external link, let the default navigation happen
+      return;
+    }
+
+    // This is a tab link, prevent default navigation
     e.preventDefault();
 
     // Remove active class from all tabs
@@ -26,10 +36,13 @@ class AccountTabs {
     this.tabContents.forEach(content => content.classList.remove('active'));
 
     // Add active class to clicked tab
-    const link = e.currentTarget;
     link.classList.add('active');
-    const tabId = link.getAttribute('data-tab');
-    document.getElementById(tabId).classList.add('active');
+
+    // Find the tab content and make it active
+    const tabContent = document.getElementById(tabId);
+    if (tabContent) {
+      tabContent.classList.add('active');
+    }
 
     // Update URL hash
     window.history.replaceState(null, null, '#' + tabId);
@@ -40,7 +53,16 @@ class AccountTabs {
     if (hash) {
       const activeTab = document.querySelector(`.tab-link[data-tab="${hash}"]`);
       if (activeTab) {
-        activeTab.click();
+        // Only trigger click if it's a tab link (has data-tab attribute)
+        if (activeTab.getAttribute('data-tab')) {
+          activeTab.click();
+        }
+      }
+    } else {
+      // If no hash, default to first tab
+      const firstTab = document.querySelector('.tab-link[data-tab]');
+      if (firstTab) {
+        firstTab.click();
       }
     }
   }
