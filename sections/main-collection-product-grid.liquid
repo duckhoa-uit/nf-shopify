@@ -107,7 +107,7 @@
 
         <div class="collection-header-right">
           <div class="filter-controls">
-            {%- if section.settings.enable_sorting -%}
+            {%- if section.settings.enable_sorting and collection.products.size > 0 -%}
               <div class="sorting-container">
                 <form method="get" action="{{ collection.url }}" id="ProductsPerPageForm">
                   <div class="products-per-page">
@@ -214,29 +214,31 @@
               </div>
             {%- endif -%}
 
-            <div class="filter-toggle">
-              <button class="filter-toggle-btn" aria-expanded="true" aria-controls="main-collection-filters">
-                <span class="filter-icon">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M0.75 6.26308H12.9615C13.2984 7.62405 14.5295 8.63622 15.9931 8.63622C17.4567 8.63622 18.6878 7.62405 19.0246 6.26308H23.25C23.6642 6.26308 24 5.92727 24 5.51308C24 5.09889 23.6642 4.76308 23.25 4.76308H19.0246C18.6878 3.40211 17.4567 2.38989 15.993 2.38989C14.5294 2.38989 13.2983 3.40211 12.9615 4.76308H0.75C0.335812 4.76308 0 5.09889 0 5.51308C0 5.92727 0.335812 6.26308 0.75 6.26308ZM15.9931 3.88989C16.8881 3.88989 17.6163 4.61805 17.6163 5.51303C17.6163 6.40806 16.8881 7.13622 15.9931 7.13622C15.0981 7.13622 14.3699 6.40806 14.3699 5.51303C14.3699 4.61805 15.0981 3.88989 15.9931 3.88989ZM0.75 12.75H4.97541C5.31225 14.111 6.54333 15.1232 8.00695 15.1232C9.47058 15.1232 10.7017 14.111 11.0385 12.75H23.25C23.6642 12.75 24 12.4142 24 12C24 11.5858 23.6642 11.25 23.25 11.25H11.0385C10.7016 9.88905 9.47053 8.87683 8.00691 8.87683C6.54328 8.87683 5.3122 9.88905 4.97536 11.25H0.75C0.335812 11.25 0 11.5858 0 12C0 12.4142 0.335766 12.75 0.75 12.75ZM8.00691 10.3768C8.90194 10.3768 9.63009 11.105 9.63009 12C9.63009 12.895 8.90194 13.6232 8.00691 13.6232C7.11187 13.6232 6.38372 12.895 6.38372 12C6.38372 11.105 7.11187 10.3768 8.00691 10.3768ZM23.25 17.737H19.0246C18.6877 16.376 17.4567 15.3638 15.993 15.3638C14.5294 15.3638 13.2983 16.376 12.9615 17.737H0.75C0.335812 17.737 0 18.0728 0 18.487C0 18.9011 0.335812 19.237 0.75 19.237H12.9615C13.2984 20.5979 14.5295 21.6101 15.9931 21.6101C17.4567 21.6101 18.6878 20.5979 19.0246 19.237H23.25C23.6642 19.237 24 18.9011 24 18.487C24 18.0728 23.6642 17.737 23.25 17.737ZM15.9931 20.1101C15.0981 20.1101 14.3699 19.382 14.3699 18.487C14.3699 17.5919 15.0981 16.8638 15.9931 16.8638C16.8881 16.8638 17.6163 17.5919 17.6163 18.487C17.6163 19.382 16.8881 20.1101 15.9931 20.1101Z" fill="#EC0009"></path>
-                  </svg>
-                </span>
-                <span class="filter-text">{{ 'products.facets.hide_filters' | t }}</span>
-              </button>
-            </div>
+            {%- if collection.products.size > 0 -%}
+              <div class="filter-toggle">
+                <button class="filter-toggle-btn" aria-expanded="true" aria-controls="main-collection-filters">
+                  <span class="filter-icon">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M0.75 6.26308H12.9615C13.2984 7.62405 14.5295 8.63622 15.9931 8.63622C17.4567 8.63622 18.6878 7.62405 19.0246 6.26308H23.25C23.6642 6.26308 24 5.92727 24 5.51308C24 5.09889 23.6642 4.76308 23.25 4.76308H19.0246C18.6878 3.40211 17.4567 2.38989 15.993 2.38989C14.5294 2.38989 13.2983 3.40211 12.9615 4.76308H0.75C0.335812 4.76308 0 5.09889 0 5.51308C0 5.92727 0.335812 6.26308 0.75 6.26308ZM15.9931 3.88989C16.8881 3.88989 17.6163 4.61805 17.6163 5.51303C17.6163 6.40806 16.8881 7.13622 15.9931 7.13622C15.0981 7.13622 14.3699 6.40806 14.3699 5.51303C14.3699 4.61805 15.0981 3.88989 15.9931 3.88989ZM0.75 12.75H4.97541C5.31225 14.111 6.54333 15.1232 8.00695 15.1232C9.47058 15.1232 10.7017 14.111 11.0385 12.75H23.25C23.6642 12.75 24 12.4142 24 12C24 11.5858 23.6642 11.25 23.25 11.25H11.0385C10.7016 9.88905 9.47053 8.87683 8.00691 8.87683C6.54328 8.87683 5.3122 9.88905 4.97536 11.25H0.75C0.335812 11.25 0 11.5858 0 12C0 12.4142 0.335766 12.75 0.75 12.75ZM8.00691 10.3768C8.90194 10.3768 9.63009 11.105 9.63009 12C9.63009 12.895 8.90194 13.6232 8.00691 13.6232C7.11187 13.6232 6.38372 12.895 6.38372 12C6.38372 11.105 7.11187 10.3768 8.00691 10.3768ZM23.25 17.737H19.0246C18.6877 16.376 17.4567 15.3638 15.993 15.3638C14.5294 15.3638 13.2983 16.376 12.9615 17.737H0.75C0.335812 17.737 0 18.0728 0 18.487C0 18.9011 0.335812 19.237 0.75 19.237H12.9615C13.2984 20.5979 14.5295 21.6101 15.9931 21.6101C17.4567 21.6101 18.6878 20.5979 19.0246 19.237H23.25C23.6642 19.237 24 18.9011 24 18.487C24 18.0728 23.6642 17.737 23.25 17.737ZM15.9931 20.1101C15.0981 20.1101 14.3699 19.382 14.3699 18.487C14.3699 17.5919 15.0981 16.8638 15.9931 16.8638C16.8881 16.8638 17.6163 17.5919 17.6163 18.487C17.6163 19.382 16.8881 20.1101 15.9931 20.1101Z" fill="#EC0009"></path>
+                    </svg>
+                  </span>
+                  <span class="filter-text">{{ 'products.facets.hide_filters' | t }}</span>
+                </button>
+              </div>
+            {%- endif -%}
           </div>
         </div>
       </div>
 
       <div class="collection-container">
         <!-- Filter Sidebar -->
-        {%- if section.settings.enable_filtering -%}
+        {%- if section.settings.enable_filtering and collection.products.size > 0 -%}
           <div class="filter-sidebar">
             <aside
               aria-labelledby="verticalTitle"
@@ -258,7 +260,7 @@
         {%- endif -%}
 
         <!-- Product Grid Container -->
-        <div class="product-grid-wrapper">
+        <div class="product-grid-wrapper {% if collection.products.size == 0 %}full-width{% endif %}">
           <div
             class="product-grid-container {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
             id="ProductGridContainer"
@@ -385,8 +387,10 @@
     // Filter toggle functionality
     const filterToggleBtn = document.querySelector('.filter-toggle-btn');
     const filtersWrapper = document.querySelector('.facets-wrapper');
+    const hasProducts = {% if collection.products.size > 0 %}true{% else %}false{% endif %};
 
-    if (filterToggleBtn && filtersWrapper) {
+    // Only initialize filter toggle if we have products and the necessary elements
+    if (hasProducts && filterToggleBtn && filtersWrapper) {
       const handleFilterToggle = function() {
         const expanded = this.getAttribute('aria-expanded') === 'true';
         const newExpanded = !expanded;
@@ -438,6 +442,14 @@
           }
         }, 200);
       });
+    }
+
+    // If no products, ensure product grid wrapper is full width
+    if (!hasProducts) {
+      const productGridWrapper = document.querySelector('.product-grid-wrapper');
+      if (productGridWrapper) {
+        productGridWrapper.classList.add('full-width');
+      }
     }
 
     // No JavaScript needed for products per page - using form submit
