@@ -272,7 +272,6 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   align-items: start;
   gap: 1rem;
   width: 100%;
-  margin-bottom: 1.75rem;
 }
 
 .nf__predictive-search__result-group h2 {
@@ -440,37 +439,35 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   line-height: 16px;
   color: #FFFFFF;
 }
-.nf__predictive-search__result-group .predictive-search__list-item-products .predictive-search__item .meta .pricing {
+.nf__predictive-search__result-group .predictive-search__list-item-products .predictive-search__item .meta .flex {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .nf__predictive-search__result-group
   .predictive-search__list-item-products
   .predictive-search__item
   .meta
-  .pricing
-  span:first-child {
+  .line-through {
   font-family: var(--font-archivo-expanded);
-  font-size: 0.875rem;
-  line-height: 1.125rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
   text-decoration: line-through;
-  color: #4d4d4d;
+  color: #666666;
 }
 
 .nf__predictive-search__result-group
   .predictive-search__list-item-products
   .predictive-search__item
   .meta
-  .pricing
-  span:nth-child(2) {
+  .text-black {
   font-family: var(--font-archivo-expanded);
   font-weight: 500;
   font-size: 1rem;
-  line-height: 1.125rem;
-  color: rgba(var(--color-base-foreground));
+  line-height: 1.5rem;
+  color: #000000;
 }
 
 button.nf__predictive-search__view-all-button {

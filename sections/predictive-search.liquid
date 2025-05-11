@@ -159,7 +159,20 @@
                       {%- endif -%}
                       <p class="predictive-search__item-heading h5">{{ product.title | escape }}</p>
                       {%- if settings.predictive_search_show_price -%}
-                        {% render 'price', product: product, use_variant: true, show_badges: false %}
+                        <div class="flex gap-3 items-center mt-0.5">
+                          {%- if product.compare_at_price > product.price and product.available -%}
+                            <span class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">
+                              {{- product.compare_at_price | money -}}
+                            </span>
+                            <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+                              {{- product.price | money -}}
+                            </span>
+                          {%- else -%}
+                            <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+                              {{- product.price | money -}}
+                            </span>
+                          {%- endif -%}
+                        </div>
                       {%- endif -%}
                     </div>
                   </a>

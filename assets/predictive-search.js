@@ -200,32 +200,41 @@ class PredictiveSearch extends SearchForm {
         });
       }
 
+      // Ensure we have a valid price if no discount is found
+      if (originalPrice === 0) {
+        originalPrice = parseFloat(product.price_min) || 0;
+        discountPrice = originalPrice;
+      }
+
       return discountPercent > 0 ? [originalPrice, discountPrice, discountPercent] : [originalPrice, discountPrice, 0];
     }
 
     function formatMoney(amount) {
-      // Get the current currency code and locale from the Shopify object
-      const currencyCode = Shopify.currency.active;
-      const locale = `${Shopify.locale}-${Shopify.country}`; // Creates locale like 'en-VN'
+      // Simple money formatter that mimics Shopify's money filter
+      // This doesn't rely on Shopify.formatMoney which might not be available
 
-      // Create formatter instance with store's locale and currency
-      const formatter = new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currencyCode,
-        minimumFractionDigits: 0, // VND typically doesn't use decimal places
-        maximumFractionDigits: 0,
-      });
+      // Default to USD if currency info is not available
+      let currencySymbol = '€';
+      let decimalSeparator = ',';
+      let thousandsSeparator = '.';
 
-      // Format the amount
-      let formattedAmount = formatter.format(amount);
+      // Format the number with 2 decimal places
+      const price = parseFloat(amount);
+      if (isNaN(price)) return '€0,00';
 
-      // For VND, we might want to add space between amount and symbol
-      if (currencyCode === 'VND') {
-        // Replace the symbol position and add space if needed
-        formattedAmount = formattedAmount.replace('₫', '').trim() + ' ₫';
-      }
+      // Convert to string with 2 decimal places
+      let priceString = price.toFixed(2);
 
-      return formattedAmount;
+      // Replace decimal point with our decimal separator
+      priceString = priceString.replace('.', decimalSeparator);
+
+      // Add thousands separators
+      const parts = priceString.split(decimalSeparator);
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator);
+      priceString = parts.join(decimalSeparator);
+
+      // Return formatted price with currency symbol
+      return currencySymbol + priceString;
     }
 
     function formatDate(dateString) {
@@ -286,7 +295,12 @@ class PredictiveSearch extends SearchForm {
                         </li>
                       `;
 
-                    const [originalPrice, discountPrice, discountPercent] = getDiscountDetails(item);
+                    // Get discount details and ensure we're working with numbers
+                    let [originalPrice, discountPrice, discountPercent] = getDiscountDetails(item);
+
+                    // Make sure we have valid price values
+                    originalPrice = parseFloat(originalPrice) || 0;
+                    discountPrice = parseFloat(discountPrice) || 0;
 
                     return hyperHTML.wire(item)`
                       <li class="predictive-search__list-item-products" role="option">
@@ -297,16 +311,15 @@ class PredictiveSearch extends SearchForm {
                           </div>
                           <div class="meta">
                             ${discountPercent ? hyperHTML.wire()`<span class="discount">${discountPercent >= 15 ? `-${Math.round(discountPercent)}%` : 'SALE'}</span>` : ''}
-                            <div class="pricing">
+                            <div class="flex gap-3 items-center mt-0.5">
                               ${
-                                discountPercent
+                                discountPercent > 0
                                   ? hyperHTML.wire()`
-                                <span>${formatMoney(originalPrice)}</span>
-                                <span>${formatMoney(discountPrice)}</span>
+                                <span class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">${formatMoney(originalPrice)}</span>
+                                <span class="text-black font-medium font-archivo-expanded text-base leading-6">${formatMoney(discountPrice)}</span>
                               `
                                   : hyperHTML.wire()`
-                                <span></span>
-                                <span>${formatMoney(originalPrice)}</span>
+                                <span class="text-black font-medium font-archivo-expanded text-base leading-6">${formatMoney(originalPrice)}</span>
                               `
                               }
                             </div>
