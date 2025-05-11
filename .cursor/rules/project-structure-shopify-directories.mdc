@@ -1,0 +1,17 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Shopify Theme Directory Structure
+
+This document outlines the purpose of the standard directories found in a Shopify theme:
+
+*   **`assets/`**: Contains all theme assets, such as images, stylesheets (CSS, SCSS), and JavaScript files. Compiled assets are also typically placed here.
+*   **`config/`**: Holds `settings_schema.json` which defines the theme's customization options available in the Shopify Theme Editor, and `settings_data.json` which stores the merchant's saved settings for the theme.
+*   **`layout/`**: Contains the main theme layout file, typically `theme.liquid`. This file defines the global structure of the store's pages (e.g., header, footer, and main content area).
+*   **`locales/`**: Stores translation files for different languages. Each language has its own JSON file (e.g., `en.default.json` for English).
+*   **`sections/`**: Contains Liquid files that define reusable modules of content for different pages. Merchants can add, remove, and reorder sections in the Shopify Theme Editor.
+*   **`snippets/`**: Holds reusable pieces of Liquid code that can be included in other theme files (layouts, templates, sections). They are not meant to be directly configurable by merchants in the Theme Editor.
+*   **`templates/`**: Contains Liquid files that define the structure for specific page types (e.g., `product.liquid`, `collection.liquid`, `index.liquid`).
+    *   **`templates/customers/`**: Holds templates related to customer accounts (e.g., login, register, order history).
