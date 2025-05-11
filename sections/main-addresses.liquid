@@ -5,6 +5,7 @@
 <script src="{{ 'global.js' | asset_url }}" defer></script>
 <script src="{{ 'customer.js' | asset_url }}" defer></script>
 <script src="{{ 'account-tabs.js' | asset_url }}" defer></script>
+<script src="{{ 'account-mobile-menu.js' | asset_url }}" defer></script>
 <script src="{{ 'account-addresses-redirect.js' | asset_url }}" defer></script>
 <script src="{{ 'address-form-handler.js' | asset_url }}" defer></script>
 
@@ -104,7 +105,7 @@
             </a>
           </li>
           <li role="presentation">
-            <a href="{{ routes.account_addresses_url }}" class="tab-link active">
+            <a href="{{ routes.account_addresses_url }}" class="tab-link active" data-tab="addresses">
               {{- 'customer.account.addresses' | t -}}
             </a>
           </li>
@@ -138,6 +139,17 @@
             </a>
           </li>
         </ul>
+
+        <button id="account-mobile-menu-button" class="account-mobile-menu-button">
+          <span class="button-text">{{ 'customer.account.addresses' | t }}</span>
+          <span class="svg-wrapper ml-2">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </button>
+
+        <template data-icon-caret>
+          {{- 'icon-caret.svg' | inline_asset_content -}}
+        </template>
       </div>
 
       <div class="account-content" data-customer-addresses>
@@ -650,6 +662,8 @@
     </div>
   </div>
 </div>
+
+{% render 'account-mobile-menu' %}
 
 {% schema %}
 {

@@ -1114,38 +1114,188 @@ button.loading .btn-spinner {
   margin-bottom: 0.5rem;
 }
 
+/* Account Mobile Menu Styles */
+.account-mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.account-mobile-menu.active {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.account-mobile-menu__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.account-mobile-menu.animate-in .account-mobile-menu__overlay {
+  opacity: 1;
+}
+
+.account-mobile-menu__container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.account-mobile-menu.animate-in .account-mobile-menu__container {
+  transform: translateY(0);
+}
+
+.account-mobile-menu__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.account-mobile-menu__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.account-mobile-menu__close {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-mobile-menu__close .svg-wrapper {
+  width: 1rem;
+  height: 1rem;
+}
+
+.account-mobile-menu__content {
+  padding: 0;
+}
+
+.account-mobile-menu__tabs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-mobile-menu__tabs li {
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.account-mobile-menu__tabs li:last-child {
+  border-bottom: none;
+}
+
+.account-mobile-menu__tab-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #000000;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.account-mobile-menu__tab-link.active {
+  color: #ec0009;
+  font-weight: 600;
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.account-mobile-menu__tab-link:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.account-mobile-menu__tab-link.logout-link {
+  display: flex;
+  align-items: center;
+}
+
+.account-mobile-menu__tab-link.logout-link .svg-wrapper {
+  margin-right: 0.75rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.account-mobile-menu-button {
+  display: none;
+}
+
 @media screen and (max-width: 767px) {
   .account-main {
     flex-direction: column;
+    gap: 0;
   }
 
   .account-sidebar {
     max-width: none;
     border-right: none;
     padding-right: 0;
-    border-bottom: 0.0625rem solid #dbdbdb; /* 1px */
-    padding-bottom: 1.5rem;
-    margin-bottom: 1.5rem;
+  }
+
+  .account-sidebar .account-tabs {
+    display: none;
+  }
+
+  .account-mobile-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: #0f0f0f;
+    color: #ffffff;
+    border: none;
+    border-radius: 3px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+
+  .account-mobile-menu-button .svg-wrapper {
+    width: 1rem;
+    height: 1rem;
   }
 
   .user-info {
     border: none;
+    border-radius: var(--text-boxes-radius);
   }
 
   .account-content {
     padding-left: 0;
-  }
-
-  .account-tabs {
-    border: none;
-  }
-
-  .account-tabs li {
-    border-bottom: 0.0625rem solid #dbdbdb; /* 1px */
-  }
-
-  .account-tabs a {
-    padding: 0.75rem 0;
   }
 
   .tab-link.active::after {
@@ -1188,11 +1338,6 @@ button.loading .btn-spinner {
     overflow-x: auto;
     white-space: nowrap;
   }
-
-  /* .address-actions {
-    flex-direction: column;
-    align-items: flex-start;
-  } */
 }
 
 /* Orders tab - new design */

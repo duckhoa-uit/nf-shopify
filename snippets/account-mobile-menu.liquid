@@ -1,0 +1,112 @@
+{% comment %}
+  Renders the mobile bottom sheet menu for account tabs on mobile devices.
+
+  Usage:
+  {% render 'account-mobile-menu' %}
+{% endcomment %}
+
+<div id="account-mobile-menu" class="account-mobile-menu">
+  <div class="account-mobile-menu__overlay"></div>
+  <div class="account-mobile-menu__container">
+    <div class="account-mobile-menu__header">
+      <h2 class="account-mobile-menu__title">{{ 'customer.account.menu' | t | default: 'Menu' }}</h2>
+      <button
+        type="button"
+        class="account-mobile-menu__close"
+        aria-label="{{ 'accessibility.close' | t }}"
+        data-account-mobile-menu-close
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </div>
+    <div class="account-mobile-menu__content">
+      <ul class="account-mobile-menu__tabs">
+        <li>
+          <a
+            href="#settings"
+            class="account-mobile-menu__tab-link{% if request.path contains '/account' and request.path != '/account/addresses' %} active{% endif %}"
+            data-tab="settings"
+            data-account-mobile-menu-tab
+          >
+            {{- 'customer.account.basic_info' | t -}}
+          </a>
+        </li>
+        <li>
+          <a
+            href="{{ routes.account_addresses_url }}"
+            class="account-mobile-menu__tab-link{% if request.path contains '/account/addresses' %} active{% endif %}"
+            data-tab="addresses"
+            data-account-mobile-menu-tab
+          >
+            {{- 'customer.account.addresses' | t -}}
+          </a>
+        </li>
+        <li>
+          <a href="#orders" class="account-mobile-menu__tab-link" data-tab="orders" data-account-mobile-menu-tab>
+            {{ 'customer.account.orders' | t }}
+          </a>
+        </li>
+        <li>
+          <a href="#bonus" class="account-mobile-menu__tab-link" data-tab="bonus" data-account-mobile-menu-tab>
+            {{ 'customer.account.loyalty_bonus' | t }}
+            <span class="bonus-pill">48,64 € <span class="bonus-badge">%</span></span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#account-settings"
+            class="account-mobile-menu__tab-link"
+            data-tab="account-settings"
+            data-account-mobile-menu-tab
+          >
+            {{- 'customer.account.settings' | t -}}
+          </a>
+        </li>
+        <li>
+          <a href="#wishlist" class="account-mobile-menu__tab-link" data-tab="wishlist" data-account-mobile-menu-tab>
+            {{- 'customer.account.wishlist' | t -}}
+          </a>
+        </li>
+        <li>
+          <a href="{{ routes.account_logout_url }}" class="account-mobile-menu__tab-link logout-link">
+            <span class="svg-wrapper">
+              {{ 'logout.svg' | inline_asset_content }}
+            </span>
+            {{ 'customer.log_out' | t }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <script>
+      // Sync active tab from main tabs to mobile menu
+      document.addEventListener('DOMContentLoaded', function () {
+        const syncActiveTab = function () {
+          const activeMainTab = document.querySelector('.tab-link.active[data-tab]');
+          if (activeMainTab) {
+            const tabId = activeMainTab.getAttribute('data-tab');
+            const mobileTab = document.querySelector(`.account-mobile-menu__tab-link[data-tab="${tabId}"]`);
+            if (mobileTab) {
+              // Remove active class from all mobile tabs
+              document.querySelectorAll('.account-mobile-menu__tab-link').forEach((tab) => {
+                tab.classList.remove('active');
+              });
+              // Add active class to the corresponding mobile tab
+              mobileTab.classList.add('active');
+            }
+          }
+        };
+
+        // Initial sync
+        syncActiveTab();
+
+        // Listen for tab changes
+        document.querySelectorAll('.tab-link[data-tab]').forEach((tab) => {
+          tab.addEventListener('click', syncActiveTab);
+        });
+      });
+    </script>
+  </div>
+</div>
