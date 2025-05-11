@@ -446,13 +446,7 @@
                       </div>
                     </div>
 
-                    {% if address == customer.default_address %}
-                      <div class="form-group">
-                        <div class="default-address-message">
-                          <p>{{ 'customer.addresses.default' | t }}</p>
-                        </div>
-                      </div>
-                    {% else %}
+                    {% if address != customer.default_address %}
                       <div class="form-group">
                         <div class="checkbox-wrapper">
                           <input
