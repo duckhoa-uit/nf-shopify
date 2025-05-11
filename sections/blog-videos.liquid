@@ -324,7 +324,7 @@
 
     {% if section.settings.enable_load_more %}
       <div class="load-more-container">
-        <button class="load-more-button" id="load-more-button" {% if paginate.pages <= 1 %}disabled{% endif %}>
+        <button class="load-more-button" id="blog-videos-load-more-button" {% if paginate.pages <= 1 %}disabled{% endif %}>
           <span class="load-more-text">{{ 'blogs.main_blog.view_more' | t }}</span>
           <span class="loading-spinner" style="display: none;">
             <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -410,7 +410,7 @@
     function filterArticles() {
       let visibleCount = 0;
       const noResultsMessage = document.querySelector('.no-results-message');
-      const loadMoreButton = document.getElementById('load-more-button');
+      const loadMoreButton = document.getElementById('blog-videos-load-more-button');
 
       // For debugging - log the current category and available articles
       console.log('Filtering by category:', currentCategory);
@@ -479,7 +479,7 @@
     });
 
     // Load more functionality
-    const loadMoreButton = document.getElementById('load-more-button');
+    const loadMoreButton = document.getElementById('blog-videos-load-more-button');
     const loadMoreText = loadMoreButton ? loadMoreButton.querySelector('.load-more-text') : null;
     const loadingSpinner = loadMoreButton ? loadMoreButton.querySelector('.loading-spinner') : null;
 
@@ -563,8 +563,10 @@
 
             // Check if we've reached the last page
             const paginationInfo = doc.querySelector('.pagination');
-            if (!paginationInfo || currentPage >= 3) {
-              // Hide the button completely
+            const nextPageExists = doc.querySelectorAll('.blog-videos-grid__article').length > 0;
+
+            if (!nextPageExists || !paginationInfo || currentPage >= 3) {
+              // Hide the button completely when no more articles or reached last page
               loadMoreButton.style.display = 'none';
             }
           })
