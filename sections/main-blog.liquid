@@ -122,8 +122,32 @@
     transition: opacity 0.2s ease;
   }
 
-  .load-more-button:hover {
+  .load-more-button:hover:not([disabled]) {
     opacity: 0.9;
+  }
+
+  .load-more-button.loading {
+    background-color: #333333;
+  }
+
+  .load-more-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .loading-spinner {
+    animation: spin 1s linear infinite;
+    height: 20px;
+    width: 20px;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .no-results-message {
@@ -217,7 +241,15 @@
 
     {% if section.settings.enable_load_more and paginate.pages > 1 %}
       <div class="load-more-container">
-        <button class="load-more-button" id="load-more-button">{{ 'blogs.main_blog.view_more' | t }}</button>
+        <button class="load-more-button" id="main-blog-load-more-button">
+          <span class="load-more-text">{{ 'blogs.main_blog.view_more' | t }}</span>
+          <span class="loading-spinner" style="display: none;">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </span>
+        </button>
       </div>
     {% else %}
       {%- if paginate.pages > 1 -%}
@@ -245,7 +277,7 @@
     function filterArticles() {
       let visibleCount = 0;
       const noResultsMessage = document.querySelector('.no-results-message');
-      const loadMoreButton = document.getElementById('load-more-button');
+      const loadMoreButton = document.getElementById('main-blog-load-more-button');
 
       articles.forEach((article) => {
         let showByCategory = true;
@@ -323,9 +355,22 @@
     });
 
     // Load more functionality
-    const loadMoreButton = document.getElementById('load-more-button');
+    const loadMoreButton = document.getElementById('main-blog-load-more-button');
+    const loadMoreText = loadMoreButton ? loadMoreButton.querySelector('.load-more-text') : null;
+    const loadingSpinner = loadMoreButton ? loadMoreButton.querySelector('.loading-spinner') : null;
+
     if (loadMoreButton) {
       loadMoreButton.addEventListener('click', function () {
+        // Don't do anything if button is disabled
+        if (loadMoreButton.hasAttribute('disabled')) {
+          return;
+        }
+
+        // Show loading state
+        if (loadMoreText) loadMoreText.style.display = 'none';
+        if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
+        loadMoreButton.classList.add('loading');
+
         currentPage++;
         const nextPageUrl = window.location.pathname + '?page=' + currentPage;
 
@@ -384,15 +429,27 @@
               }
             });
 
+            // Reset loading state
+            if (loadMoreText) loadMoreText.style.display = 'inline';
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            loadMoreButton.classList.remove('loading');
+
             // Check if we've reached the last page
             const paginationInfo = doc.querySelector('.pagination');
-            if (!paginationInfo || currentPage >= 3) {
-              // Hide the button completely
+            const nextPageExists = doc.querySelectorAll('.blog-articles__article').length > 0;
+
+            if (!nextPageExists || !paginationInfo || currentPage >= 3) {
+              // Hide the button completely when no more articles or reached last page
               loadMoreButton.style.display = 'none';
             }
           })
           .catch((error) => {
             console.error('Error loading more articles:', error);
+
+            // Reset loading state
+            if (loadMoreText) loadMoreText.style.display = 'inline';
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            loadMoreButton.classList.remove('loading');
 
             // Hide the button on error
             loadMoreButton.style.display = 'none';
