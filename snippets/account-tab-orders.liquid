@@ -219,7 +219,7 @@
                           <span class="meta-value">{{ line_item.quantity }}</span>
                         </div>
                         <div class="product-meta-item">
-                          <span class="meta-value">
+                          <span class="meta-value md:hidden">
                             {% if line_item.original_price > line_item.final_price %}
                               <s>{{ line_item.original_price | money }}</s>
                               <span>{{ line_item.final_price | money }}</span>
