@@ -245,8 +245,16 @@
                   </div>
                 {% endfor %}
 
-                <div class="order-toggle-container">
+                <div class="order-toggle-container hidden md:block">
                   <div class="order-toggle" data-order-toggle>
+                    {{ 'customer.orders.detail' | t }}
+                    <span class="icon svg-wrapper rotate-90">
+                      {{ 'icon-chevron.svg' | inline_asset_content }}
+                    </span>
+                  </div>
+                </div>
+                <div class="order-toggle-container h-12 md:hidden">
+                  <div class="order-toggle top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8" data-order-toggle>
                     {{ 'customer.orders.detail' | t }}
                     <span class="icon svg-wrapper rotate-90">
                       {{ 'icon-chevron.svg' | inline_asset_content }}
