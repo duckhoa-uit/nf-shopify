@@ -240,6 +240,43 @@
     display: none !important;
   }
 
+  /* Video styling */
+  .video-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* Prevent any interaction with the video */
+    -webkit-user-select: none; /* Prevent selection */
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Hide all video controls completely */
+  .video-container video::-webkit-media-controls,
+  .video-container video::-webkit-media-controls-enclosure,
+  .video-container video::-webkit-media-controls-panel,
+  .video-container video::-webkit-media-controls-overlay-play-button,
+  .video-container video::-webkit-media-controls-play-button,
+  .video-container video::-webkit-media-controls-timeline,
+  .video-container video::-webkit-media-controls-current-time-display,
+  .video-container video::-webkit-media-controls-time-remaining-display,
+  .video-container video::-webkit-media-controls-mute-button,
+  .video-container video::-webkit-media-controls-toggle-closed-captions-button,
+  .video-container video::-webkit-media-controls-volume-slider,
+  .video-container video::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
   /* Footer transition for smooth show/hide */
   .fancybox__footer {
     transition: transform 0.3s ease, opacity 0.3s ease, margin-bottom 0.3s ease;
@@ -470,8 +507,16 @@
       for (const media of allMedia) {
         // Clean up URLs for comparison
         const urlFilename = url.split('/').pop().split('?')[0].toLowerCase();
-        const mediaSrc = media.src;
-        const mediaFilename = mediaSrc.split('/').pop().split('?')[0].toLowerCase();
+
+        // For video media type, compare with preview image
+        let mediaSrc, mediaFilename;
+        if (media.media_type === 'video') {
+          mediaSrc = media.preview_image.src;
+        } else {
+          mediaSrc = media.src;
+        }
+
+        mediaFilename = mediaSrc.split('/').pop().split('?')[0].toLowerCase();
 
         // Check if filenames match or contain each other (more flexible matching)
         if (urlFilename === mediaFilename ||
@@ -486,7 +531,7 @@
       const div = document.createElement('div');
       div.className = `swiper-slide product__media-item${index === 0 ? ' is-active' : ''} scroll-trigger animate--fade-in`;
 
-      // Set attributes based on whethe r we found a media object or not
+      // Set attributes based on whether we found a media object or not
       const mediaId = mediaObject ? mediaObject.id : `generated-${index}`;
       div.id = `Slide-{{ section.id }}-${mediaId}`;
       div.setAttribute('data-media-id', `{{ section.id }}-${mediaId}`);
@@ -495,7 +540,8 @@
       if (mediaObject) {
         div.setAttribute('data-media-object', JSON.stringify({
           id: mediaObject.id,
-          position: mediaObject.position || index
+          position: mediaObject.position || index,
+          media_type: mediaObject.media_type || 'image'
         }));
       }
 
@@ -512,28 +558,91 @@
       const imageContainer = document.createElement('div');
       imageContainer.className = 'absolute inset-0 w-full h-full';
 
-      // Create the image element
-      const img = document.createElement('img');
-      img.src = mediaObject ? mediaObject.src : url;
-      img.alt = mediaObject ? mediaObject.alt || '' : '';
-      img.id = `ProductMedia-{{ section.id }}-${mediaId}`;
-      img.className = 'media-item w-full h-full object-cover product-lightbox-img';
-      img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+      // Handle different media types
+      if (mediaObject && mediaObject.media_type === 'video') {
+        // Create a container for the video
+        const videoContainer = document.createElement('div');
+        videoContainer.className = 'video-container relative w-full h-full';
 
-      // Add click handler for lightbox
-      img.addEventListener('click', function(e) {
-        e.preventDefault();
-        // Pass the index in the filtered and sorted images
-        openProductLightbox(index);
-      });
+        // Create the video element
+        const video = document.createElement('video');
+        video.className = 'w-full h-full object-cover';
+        video.playsInline = true;
+        video.muted = true;
+        video.loop = true;
+        video.autoplay = true;
+        video.controls = false; // Hide controls completely
+        video.setAttribute('playsinline', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('loop', '');
+        video.setAttribute('autoplay', '');
+        video.setAttribute('disablePictureInPicture', '');
+        video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+        video.setAttribute('webkit-playsinline', '');
+        video.disablePictureInPicture = true;
 
-      if (mediaObject) {
-        img.width = mediaObject.width;
-        img.height = mediaObject.height;
+        // Add poster (preview image)
+        if (mediaObject.preview_image) {
+          video.poster = mediaObject.preview_image.src;
+        }
+
+        // Add video sources
+        if (mediaObject.sources) {
+          mediaObject.sources.forEach(source => {
+            const sourceElement = document.createElement('source');
+            sourceElement.src = source.url;
+            sourceElement.type = source.mime_type;
+            video.appendChild(sourceElement);
+          });
+        }
+
+        // Fallback image in case video doesn't load
+        const img = document.createElement('img');
+        img.src = mediaObject.preview_image.src;
+        img.alt = mediaObject.alt || '';
+        img.className = 'absolute inset-0 w-full h-full object-cover';
+        img.style.display = 'none'; // Hide by default
+
+        // If video fails to load, show the image
+        video.addEventListener('error', () => {
+          video.style.display = 'none';
+          img.style.display = 'block';
+        });
+
+        // Assemble the elements
+        videoContainer.appendChild(video);
+        videoContainer.appendChild(img);
+        imageContainer.appendChild(videoContainer);
+
+        // Add click handler to prevent lightbox from opening when clicking on video
+        videoContainer.addEventListener('click', function(e) {
+          e.stopPropagation(); // Prevent event from bubbling up to container
+        });
+      } else {
+        // For images, create a standard image element
+        const img = document.createElement('img');
+        img.src = mediaObject ? mediaObject.src : url;
+        img.alt = mediaObject ? mediaObject.alt || '' : '';
+        img.id = `ProductMedia-{{ section.id }}-${mediaId}`;
+        img.className = 'media-item w-full h-full object-cover product-lightbox-img';
+        img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+
+        // Add click handler for lightbox
+        img.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Pass the index in the filtered and sorted images
+          openProductLightbox(index);
+        });
+
+        if (mediaObject) {
+          img.width = mediaObject.width;
+          img.height = mediaObject.height;
+        }
+
+        // Assemble the elements
+        imageContainer.appendChild(img);
       }
 
-      // Assemble the elements
-      imageContainer.appendChild(img);
       wrapper.appendChild(imageContainer);
       div.appendChild(wrapper);
 
@@ -581,8 +690,17 @@
           return;
         }
 
-        // Get all media URLs - use original src values without transformation
-        const allMediaUrls = {{ product.media | json }}.map(media => media.src);
+        // Get all media objects
+        const allMedia = {{ product.media | json }};
+
+        // Extract URLs, handling videos specially
+        const allMediaUrls = allMedia.map(media => {
+          // For videos, use the preview image URL instead of trying to parse the video URL
+          if (media.media_type === 'video' && media.preview_image) {
+            return media.preview_image.src;
+          }
+          return media.src;
+        });
 
         // Filter URLs by active color
         let urlsToUse = allMediaUrls;
@@ -648,9 +766,94 @@
           }
         }
 
+        // Get all product media to ensure we include videos regardless of color filtering
+        const productMedia = {{ product.media | json }};
+        const videoMedia = productMedia.filter(media => media.media_type === 'video');
+
+        // If we have videos, make sure they're included in our filtered list
+        if (videoMedia.length > 0 && urlsToUse.length > 0) {
+          // Create video preview image URLs for comparison
+          const videoPreviewUrls = videoMedia.map(video =>
+            video.preview_image ? video.preview_image.src : null
+          ).filter(url => url !== null);
+
+          // Check if any video preview URLs are already in our filtered list
+          const hasVideoInFiltered = videoPreviewUrls.some(videoUrl =>
+            urlsToUse.includes(videoUrl)
+          );
+
+          // If videos are not already in the filtered list, add them
+          if (!hasVideoInFiltered) {
+            // Add video preview images to the filtered URLs
+            urlsToUse = [...urlsToUse, ...videoPreviewUrls];
+          }
+        }
+
         // Sort and update gallery, passing color mappings to the sort function
         // The function now returns objects with url and hidden properties
-        const sortedImages = window.sortImagesByDisplayRules(urlsToUse, colorMappings);
+        let sortedImages = window.sortImagesByDisplayRules(urlsToUse, colorMappings);
+
+        // Custom logic to move videos to the 2nd position
+        if (videoMedia.length > 0) {
+          // Create a new array to hold the reordered images
+          const reorderedImages = [];
+
+          // Find video items in the sorted list
+          const videoItems = [];
+          const nonVideoItems = [];
+
+          sortedImages.forEach(item => {
+            // Check if this item is a video by matching its URL with video preview images
+            const isVideo = videoMedia.some(video => {
+              // For videos, compare with preview image URL
+              return video.preview_image &&
+                     (item.url === video.preview_image.src ||
+                      item.url.includes(video.preview_image.src.split('?')[0]));
+            });
+
+            if (isVideo) {
+              videoItems.push(item);
+            } else {
+              nonVideoItems.push(item);
+            }
+          });
+
+          // If we have both video and non-video items
+          if (videoItems.length > 0 && nonVideoItems.length > 0) {
+            // Create a new array to hold the reordered images
+            let reorderedImages = [];
+
+            // Add the first item (usually the main product image)
+            reorderedImages.push(nonVideoItems[0]);
+
+            // Add video items at position 2
+            reorderedImages.push(...videoItems);
+
+            // Add the rest of the non-video items, skipping the first one we already added
+            reorderedImages.push(...nonVideoItems.slice(1));
+
+            // Replace the sorted images with our reordered list
+            sortedImages = reorderedImages;
+
+            // Now mark the first 6 items as visible and the rest as hidden
+            // This ensures we maintain the 6-item limit while prioritizing videos
+            sortedImages.forEach((item, index) => {
+              // First 6 items are visible, rest are hidden
+              if (index < 6) {
+                item.hidden = false;
+              } else {
+                item.hidden = true;
+              }
+
+              // Special case: if this is a video, ensure it's visible if it's within the first 6 items
+              const isVideoItem = videoItems.some(videoItem => videoItem.url === item.url);
+              if (isVideoItem && index < 6) {
+                item.hidden = false;
+              }
+            });
+          }
+        }
+
         updateGallery(sortedImages);
       }
 
@@ -659,11 +862,20 @@
         sliderWrapper.innerHTML = '';
         grid.innerHTML = '';
 
+        // Get all media for reference (needed to check for videos)
+        const allMedia = {{ product.media | json }};
+
         // Ensure we have at least some images to display
         if (images.length === 0) {
-          const allMediaUrls = {{ product.media | json }}.map(media => {
+          const allMediaUrls = allMedia.map(media => {
+            // For videos, use the preview image URL
+            const url = media.media_type === 'video' && media.preview_image ?
+              media.preview_image.src : media.src;
+
             return {
-              url: media.src,
+              url: url,
+              mediaId: media.id,
+              mediaType: media.media_type,
               hidden: false
             };
           });
@@ -1096,8 +1308,12 @@
           }
         }
 
+        // For lightbox, we don't need to include videos
+        // This is different from the gallery grid where we want videos to be included
+
         // Get the current images from the gallery instead of sorting again
         // This ensures the Fancybox shows images in the exact same order as the gallery
+        // including our custom ordering with videos at position 2
         const galleryImages = [];
 
         // Get all visible images from the desktop gallery
@@ -1105,9 +1321,46 @@
         if (desktopGallery) {
           const imageElements = desktopGallery.querySelectorAll('img.product-lightbox-img');
           imageElements.forEach(img => {
+            // Try to get the media ID from the parent element
+            const mediaItem = img.closest('.product__media-item');
+            let mediaId = null;
+            let mediaType = 'image';
+
+            if (mediaItem) {
+              // Extract media ID from data-media-id attribute
+              const mediaIdAttr = mediaItem.getAttribute('data-media-id');
+              if (mediaIdAttr) {
+                // Format is "section-id-media-id", so we extract just the media ID
+                const parts = mediaIdAttr.split('-');
+                if (parts.length > 1) {
+                  mediaId = parts[parts.length - 1];
+                }
+              }
+
+              // If we couldn't get it from data-media-id, try data-media-object
+              if (!mediaId) {
+                try {
+                  const mediaObjectStr = mediaItem.getAttribute('data-media-object');
+                  if (mediaObjectStr) {
+                    const mediaObject = JSON.parse(mediaObjectStr);
+                    mediaId = mediaObject.id;
+                    mediaType = mediaObject.media_type || 'image';
+                  }
+                } catch (e) {
+                  console.error('Error parsing media object data:', e);
+                }
+              }
+            }
+
+            // Skip videos for lightbox
+            if (mediaType === 'video') {
+              return;
+            }
+
             galleryImages.push({
               url: img.src,
-              hidden: img.closest('.product__media-item').classList.contains('hidden')
+              mediaId: mediaId,
+              hidden: mediaItem ? mediaItem.classList.contains('hidden') : false
             });
           });
         }
@@ -1118,8 +1371,45 @@
           if (mobileGallery) {
             const imageElements = mobileGallery.querySelectorAll('.swiper-slide img');
             imageElements.forEach(img => {
+              // Try to get the media ID from the parent element
+              const mediaItem = img.closest('.product__media-item');
+              let mediaId = null;
+              let mediaType = 'image';
+
+              if (mediaItem) {
+                // Extract media ID from data-media-id attribute
+                const mediaIdAttr = mediaItem.getAttribute('data-media-id');
+                if (mediaIdAttr) {
+                  // Format is "section-id-media-id", so we extract just the media ID
+                  const parts = mediaIdAttr.split('-');
+                  if (parts.length > 1) {
+                    mediaId = parts[parts.length - 1];
+                  }
+                }
+
+                // If we couldn't get it from data-media-id, try data-media-object
+                if (!mediaId) {
+                  try {
+                    const mediaObjectStr = mediaItem.getAttribute('data-media-object');
+                    if (mediaObjectStr) {
+                      const mediaObject = JSON.parse(mediaObjectStr);
+                      mediaId = mediaObject.id;
+                      mediaType = mediaObject.media_type || 'image';
+                    }
+                  } catch (e) {
+                    console.error('Error parsing media object data:', e);
+                  }
+                }
+              }
+
+              // Skip videos for lightbox
+              if (mediaType === 'video') {
+                return;
+              }
+
               galleryImages.push({
                 url: img.src,
+                mediaId: mediaId,
                 hidden: false // Mobile gallery doesn't have hidden images
               });
             });
@@ -1132,14 +1422,47 @@
           window.sortImagesByDisplayRules(urlsToUse, colorMappings);
 
         // Create array of items for Fancybox from the sorted images
-        // Use all images, not just visible ones
-        const items = sortedImages.map(img => {
+        // Use all images, not just visible ones, but filter out videos
+        const items = sortedImages.map((img, idx) => {
+          // Try to find the corresponding media object to determine media type
+          const mediaItem = document.querySelector(`[data-media-id="${gallery.id}-${img.mediaId}"]`);
+          let mediaObject = null;
+
+          if (mediaItem) {
+            try {
+              const mediaObjectStr = mediaItem.getAttribute('data-media-object');
+              if (mediaObjectStr) {
+                mediaObject = JSON.parse(mediaObjectStr);
+              }
+            } catch (e) {
+              console.error('Error parsing media object data:', e);
+            }
+          }
+
+          // If we couldn't get the media object from DOM, try to find it in allMedia
+          if (!mediaObject) {
+            for (const media of allMedia) {
+              // Skip videos entirely for lightbox
+              if (media.media_type === 'video') continue;
+
+              if (media.src === img.url) {
+                mediaObject = {
+                  id: media.id,
+                  media_type: 'image', // Force image type for lightbox
+                  position: media.position
+                };
+                break;
+              }
+            }
+          }
+
+          // For lightbox, always use image type
           return {
             src: img.url,
             type: 'image',
             caption: '' // We don't have alt text for the sorted images
           };
-        });
+        }).filter(item => item !== null);
 
         // Make sure we're using the correct startIndex
         // If no startIndex is provided, default to 0
