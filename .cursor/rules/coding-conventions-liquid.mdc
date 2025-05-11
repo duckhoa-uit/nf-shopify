@@ -1,0 +1,33 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Liquid Coding Conventions
+
+Follow these general guidelines when writing Liquid code for Shopify themes. For more detailed information, refer to Shopify's official documentation and best practices.
+
+*   **Readability**:
+    *   Indent your code consistently (usually 2 spaces).
+    *   Use comments (`{% comment %}` ... `{% endcomment %}` or `{# ... #}`) to explain complex logic.
+    *   Keep lines at a reasonable length.
+*   **Performance**:
+    *   Minimize the number of loops and complex operations within them.
+    *   Use `assign` for variables that are used multiple times.
+    *   Be mindful of iterating over large collections. Use `limit` and `offset` parameters where appropriate.
+*   **Shopify Objects**:
+    *   Familiarize yourself with Shopify's global objects (e.g., `product`, `collection`, `cart`, `settings`) and their properties.
+    *   Use the correct object for the context (e.g., `section.settings` within a section, global `settings` for theme-wide settings).
+*   **Conditionals**:
+    *   Use `if/else/elsif` for conditional logic.
+    *   Use `unless` as a more readable alternative to `if not`.
+*   **Loops**:
+    *   Use `for` loops to iterate over collections.
+    *   Use `cycle` for alternating classes or values within a loop.
+*   **Includes**:
+    *   Use `{% render 'snippet-name' %}` to include snippets. Pass variables to snippets to make them reusable and avoid relying on global scope.
+    *   Avoid overly nested includes.
+*   **Schema**:
+    *   When creating sections, define a clear and user-friendly schema in `{% schema %}` for merchant configurability.
+
+*This is a general guideline. Consult Shopify's official documentation for comprehensive best practices. Consider linking to specific Shopify style guides or internal documentation if available.*
