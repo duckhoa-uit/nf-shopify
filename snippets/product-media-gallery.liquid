@@ -470,8 +470,7 @@
       for (const media of allMedia) {
         // Clean up URLs for comparison
         const urlFilename = url.split('/').pop().split('?')[0].toLowerCase();
-        const mediaSrc = media.src.startsWith('//') ? `https:${media.src}` :
-                          !media.src.startsWith('http') ? `https://${media.src}` : media.src;
+        const mediaSrc = media.src;
         const mediaFilename = mediaSrc.split('/').pop().split('?')[0].toLowerCase();
 
         // Check if filenames match or contain each other (more flexible matching)
@@ -515,9 +514,7 @@
 
       // Create the image element
       const img = document.createElement('img');
-      img.src = mediaObject ?
-                (mediaObject.src.startsWith('//') ? `https:${mediaObject.src}` : mediaObject.src) :
-                (url.startsWith('//') ? `https:${url}` : url);
+      img.src = mediaObject ? mediaObject.src : url;
       img.alt = mediaObject ? mediaObject.alt || '' : '';
       img.id = `ProductMedia-{{ section.id }}-${mediaId}`;
       img.className = 'media-item w-full h-full object-cover product-lightbox-img';
@@ -584,12 +581,8 @@
           return;
         }
 
-        // Get and format all media URLs - keep the original format without replacing /files/
-        const allMediaUrls = {{ product.media | json }}.map(media => {
-          let url = media.src;
-          return url.startsWith('//') ? `https:${url}` :
-                 !url.startsWith('http') ? `https://${url}` : url;
-        });
+        // Get all media URLs - use original src values without transformation
+        const allMediaUrls = {{ product.media | json }}.map(media => media.src);
 
         // Filter URLs by active color
         let urlsToUse = allMediaUrls;
@@ -669,10 +662,8 @@
         // Ensure we have at least some images to display
         if (images.length === 0) {
           const allMediaUrls = {{ product.media | json }}.map(media => {
-            let url = media.src;
             return {
-              url: url.startsWith('//') ? `https:${url}` :
-                   !url.startsWith('http') ? `https://${url}` : url,
+              url: media.src,
               hidden: false
             };
           });
@@ -1038,12 +1029,8 @@
           Fancybox.close();
         }
 
-        // Format all media URLs - keep the original format without replacing /files/
-        const allMediaUrls = allMedia.map(media => {
-          let url = media.src;
-          return url.startsWith('//') ? `https:${url}` :
-                 !url.startsWith('http') ? `https://${url}` : url;
-        });
+        // Get all media URLs - use original src values without transformation
+        const allMediaUrls = allMedia.map(media => media.src);
 
         // Filter URLs by active color - using the same logic as the main gallery
         let urlsToUse = allMediaUrls;
