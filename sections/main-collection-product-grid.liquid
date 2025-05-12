@@ -520,61 +520,71 @@
     }
 
     // View more functionality (if not handled by pagination already)
-    const viewMoreButton = document.querySelector('.view-more-button');
-    if (viewMoreButton) {
-      viewMoreButton.addEventListener('click', function() {
-        const url = this.dataset.url;
-        if (url) {
-          // Show loading state
-          viewMoreButton.textContent = 'LOADING...';
-          viewMoreButton.disabled = true;
+    document.addEventListener('click', function(e) {
+      const viewMoreButton = e.target.closest('.view-more-button');
+      if (!viewMoreButton) return;
 
-          fetch(url)
-            .then(response => response.text())
-            .then(html => {
-              const parser = new DOMParser();
-              const doc = parser.parseFromString(html, 'text/html');
-              const newItems = doc.querySelectorAll('#product-grid .grid__item');
-              const productGrid = document.querySelector('#product-grid');
+      const url = viewMoreButton.dataset.url;
+      if (!url) return;
 
-              if (newItems.length && productGrid) {
-                newItems.forEach(item => {
-                  productGrid.appendChild(item.cloneNode(true));
-                });
-              }
+      // Show loading state
+      viewMoreButton.textContent = 'LOADING...';
+      viewMoreButton.disabled = true;
 
-              // Update product count and progress bar
-              const productCountElement = document.querySelector('.product-count-text');
-              const productCountProgressBar = document.querySelector('.product-count-progress-bar');
-              const newProductCount = doc.querySelector('.product-count-text');
-              const newProgressBar = doc.querySelector('.product-count-progress-bar');
-
-              if (productCountElement && newProductCount) {
-                productCountElement.innerHTML = newProductCount.innerHTML;
-              }
-
-              if (productCountProgressBar && newProgressBar) {
-                productCountProgressBar.style.width = newProgressBar.style.width;
-              }
-
-              // Check for next page
-              const nextPageUrl = doc.querySelector('.view-more-button')?.dataset.url;
-              if (nextPageUrl) {
-                viewMoreButton.dataset.url = nextPageUrl;
-                viewMoreButton.textContent = 'VIEW MORE';
-                viewMoreButton.disabled = false;
-              } else {
-                viewMoreButton.style.display = 'none';
-              }
-            })
-            .catch(error => {
-              console.error('Error loading more products:', error);
-              viewMoreButton.textContent = 'VIEW MORE';
-              viewMoreButton.disabled = false;
-            });
+      // Preserve current filters and sorting
+      const currentUrl = new URL(url, window.location.origin);
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.forEach((value, key) => {
+        if (!currentUrl.searchParams.has(key)) {
+          currentUrl.searchParams.set(key, value);
         }
       });
-    }
+
+      fetch(currentUrl.toString())
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newItems = doc.querySelectorAll('#product-grid .grid__item');
+          const productGrid = document.querySelector('#product-grid');
+
+          if (newItems.length && productGrid) {
+            newItems.forEach(item => {
+              productGrid.appendChild(item.cloneNode(true));
+            });
+          }
+
+          // Update product count and progress bar
+          const productCountElement = document.querySelector('.product-count-text');
+          const productCountProgressBar = document.querySelector('.product-count-progress-bar');
+          const newProductCount = doc.querySelector('.product-count-text');
+          const newProgressBar = doc.querySelector('.product-count-progress-bar');
+
+          if (productCountElement && newProductCount) {
+            productCountElement.innerHTML = newProductCount.innerHTML;
+          }
+
+          if (productCountProgressBar && newProgressBar) {
+            productCountProgressBar.style.width = newProgressBar.style.width;
+          }
+
+          // Check for next page
+          const nextPageButton = doc.querySelector('.view-more-button');
+          if (nextPageButton?.dataset.url) {
+            // Update current button with new URL
+            viewMoreButton.dataset.url = nextPageButton.dataset.url;
+            viewMoreButton.textContent = 'VIEW MORE';
+            viewMoreButton.disabled = false;
+          } else {
+            viewMoreButton.style.display = 'none';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading more products:', error);
+          viewMoreButton.textContent = 'VIEW MORE';
+          viewMoreButton.disabled = false;
+        });
+    });
   });
 </script>
 
