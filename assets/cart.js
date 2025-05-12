@@ -135,6 +135,7 @@ class CartItems extends HTMLElement {
         section: 'cart-live-region-text',
         selector: '.shopify-section',
       },
+      // We still need to update the cart footer for totals, but we'll handle it differently
       {
         id: 'main-cart-footer',
         section: document.getElementById('main-cart-footer').dataset.id,
@@ -179,10 +180,32 @@ class CartItems extends HTMLElement {
         this.getSectionsToRender().forEach((section) => {
           const elementToReplace =
             document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
-          elementToReplace.innerHTML = this.getSectionInnerHTML(
-            parsedState.sections[section.section],
-            section.selector
-          );
+
+          // Special handling for main-cart-footer to prevent duplicate line items
+          if (section.id === 'main-cart-footer') {
+            // Get the HTML content
+            const footerHTML = this.getSectionInnerHTML(
+              parsedState.sections[section.section],
+              section.selector
+            );
+
+            // Create a temporary element to parse the HTML
+            const tempElement = document.createElement('div');
+            tempElement.innerHTML = footerHTML;
+
+            // Remove any cart line items that might be in the footer
+            const cartItems = tempElement.querySelectorAll('.nf-cart-items, .cart-item');
+            cartItems.forEach(item => item.remove());
+
+            // Set the cleaned HTML to the footer
+            elementToReplace.innerHTML = tempElement.innerHTML;
+          } else {
+            // For other sections, update normally
+            elementToReplace.innerHTML = this.getSectionInnerHTML(
+              parsedState.sections[section.section],
+              section.selector
+            );
+          }
         });
         const updatedValue = parsedState.items[line - 1] ? parsedState.items[line - 1].quantity : undefined;
         let message = '';
