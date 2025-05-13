@@ -46,6 +46,74 @@
     transform: translateY(-50%);
     pointer-events: none;
   }
+
+  /* Error message styles */
+  .cart-errors,
+  .cart-item__error-text {
+    color: #d20000;
+    font-size: 0.875rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background-color: rgba(210, 0, 0, 0.07);
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .cart-errors.hidden,
+  .cart-item__error-text.hidden {
+    display: none;
+  }
+
+  /* Loading spinner styles */
+  .nf-cart-item__grid .loading__spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nf-cart-item__grid {
+    position: relative;
+  }
+
+  .nf-cart-item__grid .loading__spinner::after {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    border-top-color: #000;
+    animation: spin 1s linear infinite;
+  }
+
+  /* Quantity loading indicator */
+  .quantity-loading-indicator {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+
+  .quantity-loading-indicator.hidden {
+    display: none;
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 {%- endstyle -%}
 
 {%- unless settings.cart_type == 'drawer' -%}
@@ -85,6 +153,9 @@
     </div>
 
     <form action="{{ routes.cart_url }}" class="cart__contents critical-hidden" method="post" id="cart">
+      <div id="cart-errors" class="cart-errors hidden">
+        <!-- Error messages will be displayed here -->
+      </div>
       <div class="nf-cart-wrapper">
         <div class="nf-cart-main">
           {% if cart != empty %}
@@ -102,8 +173,9 @@
                 {%- if cart != empty -%}
                   <ul class="nf-cart-items">
                     {%- for item in cart.items -%}
-                      <li class="nf-cart-item" id="CartItem-{{ item.index | plus: 1 }}">
+                      <li class="nf-cart-item" id="CartItem-{{ item.index | plus: 1 }}" data-item-key="{{ item.key }}">
                         <div class="nf-cart-item__grid">
+                          <div class="loading__spinner hidden"></div>
                           <div class="nf-cart-item__media">
                             <div class="nf-cart-item__image-container">
                               {% comment %} Extract color value from variant options {% endcomment %}
@@ -218,6 +290,8 @@
                                       name="updates[{{ item.key }}]"
                                       data-item-key="{{ item.key }}"
                                       data-is-quantity="true"
+                                      data-index="{{ item.key }}"
+                                      data-previous-value="{{ item.quantity }}"
                                       step="1"
                                     >
                                       {%- for i in (1..20) -%}
@@ -240,6 +314,12 @@
                                     >
                                       <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1"/>
                                     </svg>
+                                    <span class="quantity-loading-indicator hidden">
+                                      <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                      </svg>
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -251,7 +331,7 @@
 
                                 <cart-remove-button
                                   id="Remove-{{ item.index | plus: 1 }}"
-                                  data-index="{{ item.index | plus: 1 }}"
+                                  data-index="{{ item.key }}"
                                   class=""
                                 >
                                   <button
@@ -262,6 +342,8 @@
                                   </button>
                                 </cart-remove-button>
                               </div>
+
+                              <div id="Line-item-error-{{ item.index | plus: 1 }}" class="cart-item__error-text hidden"></div>
                             </div>
                           </div>
                         </div>
@@ -411,11 +493,80 @@
 
     // Handle quantity changes
     const quantitySelects = document.querySelectorAll('.nf-cart-item__variant-select[data-is-quantity="true"]');
+
+    // Initialize previous value for all quantity selects
     quantitySelects.forEach((select) => {
-      select.addEventListener('change', function () {
-        // Submit the cart form
-        cartForm.submit();
+      // Store the initial value as the previous value
+      select.setAttribute('data-previous-value', select.value);
+
+      // Add focus event to store the current value before it changes
+      select.addEventListener('focus', function() {
+        // Store the current value as the previous value when the select is focused
+        this.setAttribute('data-old-value', this.value);
       });
+    });
+
+    quantitySelects.forEach((select) => {
+      select.addEventListener('change', function (event) {
+        event.preventDefault();
+
+        // Get the cart-items component
+        const cartItems = document.querySelector('cart-items');
+        if (cartItems) {
+          // Use the cart-items component's updateQuantity method
+          const itemKey = this.dataset.itemKey;
+          const newQuantity = parseInt(this.value);
+
+          if (itemKey && !isNaN(newQuantity)) {
+            // Get the old value that was stored on focus
+            const oldValue = this.getAttribute('data-old-value') || this.getAttribute('data-previous-value');
+
+            // Store the old value for error recovery
+            this.setAttribute('data-previous-value', oldValue);
+
+            // Show loading indicator
+            const loadingIndicator = this.parentNode.querySelector('.quantity-loading-indicator');
+            if (loadingIndicator) {
+              loadingIndicator.classList.remove('hidden');
+            }
+
+            // Hide the dropdown arrow while loading
+            const arrow = this.parentNode.querySelector('.nf-cart-item__variant-arrow');
+            if (arrow) {
+              arrow.classList.add('hidden');
+            }
+
+            // Disable the select while loading
+            this.disabled = true;
+
+            // Update the cart
+            cartItems.updateQuantity(itemKey, newQuantity);
+
+            // Re-enable the select and hide loading indicator after a timeout (in case the request fails silently)
+            setTimeout(() => {
+              if (loadingIndicator) {
+                loadingIndicator.classList.add('hidden');
+              }
+              if (arrow) {
+                arrow.classList.remove('hidden');
+              }
+              this.disabled = false;
+            }, 5000); // 5 second timeout as a fallback
+          }
+        }
+      });
+    });
+
+    // Prevent the default form submission
+    cartForm.addEventListener('submit', function(event) {
+      // Only prevent default if it's a quantity change
+      // Allow checkout button to work normally
+      if (event.submitter && event.submitter.name === 'checkout') {
+        return true;
+      }
+
+      event.preventDefault();
+      return false;
     });
   });
 </script>
