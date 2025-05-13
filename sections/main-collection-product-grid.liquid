@@ -239,7 +239,7 @@
       <div class="collection-container">
         <!-- Filter Sidebar -->
         {%- if section.settings.enable_filtering and collection.products.size > 0 -%}
-          <div class="filter-sidebar">
+          <div class="filter-sidebar {% if collection.products.size == 0 %}hidden{% endif %}">
             <aside
               aria-labelledby="verticalTitle"
               class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}"
@@ -444,11 +444,16 @@
       });
     }
 
-    // If no products, ensure product grid wrapper is full width
+    // If no products, ensure product grid wrapper is full width and hide filter sidebar
     if (!hasProducts) {
       const productGridWrapper = document.querySelector('.product-grid-wrapper');
+      const filterSidebar = document.querySelector('.filter-sidebar');
       if (productGridWrapper) {
         productGridWrapper.classList.add('full-width');
+      }
+      if (filterSidebar) {
+        filterSidebar.classList.add('hidden');
+        filterSidebar.style.width = '0';
       }
     }
 
