@@ -59,9 +59,10 @@
 
     <div class="page-width">
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+      {{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
 
-      <div class="collection-header-controls mt-6 mb-12">
+      <div class="collection-header-controls mt-6 md:mb-12">
         {%- liquid
           assign has_children = false
 
@@ -158,7 +159,7 @@
                   {% endfor %}
                 </form>
 
-                <facet-filters-form class="facets small-hide">
+                <facet-filters-form class="facets">
                   <form class="facets-form" id="FacetSortForm">
                     <div class="facet-filters sorting">
                       <div class="facet-filters__field">

@@ -196,7 +196,30 @@ class FacetFiltersForm extends HTMLElement {
       document.querySelector(selector).innerHTML = html.querySelector(selector).innerHTML;
     });
 
-    document.getElementById("FacetFiltersFormMobile").closest("menu-drawer").bindEvents();
+    const menuDrawer = document.getElementById("FacetFiltersFormMobile").closest("menu-drawer");
+    if (menuDrawer && typeof menuDrawer.bindEvents === 'function') {
+      menuDrawer.bindEvents();
+    }
+
+    // // Fix mobile facets submenu transitions
+    // const mobileSubmenus = document.querySelectorAll('.mobile-facets__submenu');
+    // mobileSubmenus.forEach(submenu => {
+    //   const closeButton = submenu.querySelector('.mobile-facets__close-button');
+    //   if (closeButton) {
+    //     closeButton.addEventListener('click', function() {
+    //       const details = this.closest('details');
+    //       if (details) {
+    //         submenu.style.transform = 'translateX(100%)';
+    //         submenu.style.visibility = 'hidden';
+
+    //         // Remove open attribute after transition completes
+    //         setTimeout(() => {
+    //           details.removeAttribute('open');
+    //         }, 300);
+    //       }
+    //     });
+    //   }
+    // });
   }
 
   static renderCounts(source, target) {
