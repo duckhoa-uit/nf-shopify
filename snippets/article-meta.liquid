@@ -67,6 +67,6 @@
         stroke-linecap="round"
         stroke-linejoin="round" />
     </svg>
-    <span>{{ article.view_count | default: '0' }}</span>
+    <span>{{ article.metafields.blog.view_count | default: '0' }}</span>
   </div>
 </div>
