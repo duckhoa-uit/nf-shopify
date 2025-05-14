@@ -88,25 +88,22 @@
         </div>
       </div>
 
-      {% comment %}
-        <!-- Birthdate field commented out as requested -->
-        <div class="form-group birthdate-field">
-          {%- assign birth_date = customer.metafields.facts.birth_date | default: '' -%}
-          {%
-            render 'form-field',
-            type: 'text',
-            id: 'CustomerBirthdate',
-            name: 'birthdate',
-            value: birth_date,
-            label: 'customer.account.birthdate' | t,
-            placeholder: 'DD.MM.RRRR',
-            class: 'flatpickr-input'
-          %}
-          <div class="date-picker-icon" id="birthdateCalendarIcon">
-            {{- 'icon-calendar.svg' | inline_asset_content -}}
-          </div>
+      <div class="form-group birthdate-field">
+        {%- assign birth_date = customer.metafields.facts.birth_date | default: '' -%}
+        {%
+          render 'form-field',
+          type: 'text',
+          id: 'CustomerBirthdate',
+          name: 'birthdate',
+          value: birth_date,
+          label: 'customer.account.birthdate' | t,
+          placeholder: 'DD.MM.RRRR',
+          class: 'flatpickr-input'
+        %}
+        <div class="date-picker-icon" id="birthdateCalendarIcon">
+          {{- 'icon-calendar.svg' | inline_asset_content -}}
         </div>
-      {% endcomment %}
+      </div>
 
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">

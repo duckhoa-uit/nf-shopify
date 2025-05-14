@@ -4,9 +4,8 @@
 class AccountForms {
   constructor() {
     this.deleteAccountBtn = document.getElementById('DeleteAccountBtn');
-    // Birthdate field is commented out
-    // this.birthdateField = document.getElementById('CustomerBirthdate');
-    // this.datePickerIcon = document.querySelector('.date-picker-icon');
+    this.birthdateField = document.getElementById('CustomerBirthdate');
+    this.datePickerIcon = document.querySelector('.date-picker-icon');
     this.newPasswordField = document.getElementById('CustomerNewPassword');
     this.confirmPasswordField = document.getElementById('CustomerConfirmPassword');
     this.passwordForm = document.getElementById('CustomerPasswordForm');
@@ -20,11 +19,10 @@ class AccountForms {
       this.deleteAccountBtn.addEventListener('click', this.handleDeleteAccount.bind(this));
     }
 
-    // Birthdate field is commented out
     // Set up date picker for birthdate field
-    // if (this.birthdateField) {
-    //   this.initDatePicker();
-    // }
+    if (this.birthdateField) {
+      this.initDatePicker();
+    }
 
     // Set up password confirmation validation
     if (this.passwordForm && this.newPasswordField && this.confirmPasswordField) {
@@ -77,8 +75,6 @@ class AccountForms {
     }
   }
 
-  // Birthdate field is commented out
-  /*
   initDatePicker() {
     if (!this.birthdateField) return;
 
@@ -123,7 +119,6 @@ class AccountForms {
       });
     }
   }
-  */
 }
 
 // Initialize when DOM is loaded
