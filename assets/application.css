@@ -9,6 +9,8 @@
       "Courier New", monospace;
     --spacing: 0.25rem;
     --container-md: 28rem;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
     --text-base: 1rem;
@@ -659,6 +661,9 @@
   .flex-1 {
     flex: 1 !important;
   }
+  .flex-shrink {
+    flex-shrink: 1 !important;
+  }
   .flex-grow {
     flex-grow: 1 !important;
   }
@@ -1164,6 +1169,10 @@
   .text-sm {
     font-size: var(--text-sm) !important;
     line-height: var(--tw-leading, var(--text-sm--line-height)) !important;
+  }
+  .text-xs {
+    font-size: var(--text-xs) !important;
+    line-height: var(--tw-leading, var(--text-xs--line-height)) !important;
   }
   .text-\[0\.8125rem\] {
     font-size: 0.8125rem !important;
@@ -1872,6 +1881,12 @@
   .md\:text-center {
     @media (width >= 46.875rem) {
       text-align: center !important;
+    }
+  }
+  .md\:text-sm {
+    @media (width >= 46.875rem) {
+      font-size: var(--text-sm) !important;
+      line-height: var(--tw-leading, var(--text-sm--line-height)) !important;
     }
   }
   .md\:text-\[2rem\] {
