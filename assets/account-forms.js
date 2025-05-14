@@ -32,6 +32,35 @@ class AccountForms {
     // Set up customer info form submission
     if (this.customerInfoForm) {
       this.setupCustomerInfoForm();
+      this.setupFormFieldListeners();
+    }
+  }
+
+  setupFormFieldListeners() {
+    // Add input event listeners to form fields to clear messages when editing
+    if (this.customerInfoForm) {
+      const formInputs = this.customerInfoForm.querySelectorAll('input');
+      formInputs.forEach(input => {
+        input.addEventListener('input', () => {
+          this.clearFormMessages();
+        });
+      });
+    }
+  }
+
+  clearFormMessages() {
+    if (!this.customerInfoForm) return;
+
+    // Clear success message
+    const successMessage = this.customerInfoForm.querySelector('.success-message');
+    if (successMessage) {
+      successMessage.style.display = 'none';
+    }
+
+    // Clear error message
+    const errorMessage = this.customerInfoForm.querySelector('.form-error-message');
+    if (errorMessage) {
+      errorMessage.style.display = 'none';
     }
   }
 
@@ -48,23 +77,251 @@ class AccountForms {
     });
   }
 
-  setupCustomerInfoForm() {
-    // Using Shopify's native form handling for the customer info form
-    // No need to add event listeners as Shopify will handle the form submission
-    // and CAPTCHA verification
+  validateCustomerInfoForm() {
+    // Basic validation for the customer info form
+    if (!this.customerInfoForm) return true;
 
-    // Just add loading state when the form is submitted
-    if (this.customerInfoForm) {
-      this.customerInfoForm.addEventListener('submit', () => {
-        const submitButton = this.customerInfoForm.querySelector('button[type="submit"]');
-        if (submitButton) {
-          submitButton.classList.add('loading');
-          if (submitButton.querySelector('.btn-spinner')) {
-            submitButton.querySelector('.btn-spinner').style.display = 'inline-block';
-          }
-        }
-      });
+    let isValid = true;
+
+    // Get form fields
+    const firstNameInput = this.customerInfoForm.querySelector('#CustomerFirstName');
+    const lastNameInput = this.customerInfoForm.querySelector('#CustomerLastName');
+    const emailInput = this.customerInfoForm.querySelector('#CustomerEmail');
+
+    // Clear previous error messages
+    const errorMessage = this.customerInfoForm.querySelector('.form-error-message');
+    if (errorMessage) {
+      errorMessage.style.display = 'none';
     }
+
+    // Validate required fields
+    if (firstNameInput && !firstNameInput.value.trim()) {
+      this.showValidationError('First name is required');
+      isValid = false;
+    }
+
+    if (lastNameInput && !lastNameInput.value.trim()) {
+      this.showValidationError('Last name is required');
+      isValid = false;
+    }
+
+    // Validate email format
+    if (emailInput) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailInput.value.trim()) {
+        this.showValidationError('Email is required');
+        isValid = false;
+      } else if (!emailRegex.test(emailInput.value.trim())) {
+        this.showValidationError('Please enter a valid email address');
+        isValid = false;
+      }
+    }
+
+    return isValid;
+  }
+
+  showValidationError(errorText) {
+    if (!this.customerInfoForm) return;
+
+    let errorMessage = this.customerInfoForm.querySelector('.form-error-message');
+
+    if (!errorMessage) {
+      // Create error message if it doesn't exist
+      errorMessage = document.createElement('div');
+      errorMessage.className = 'form-error-message';
+      errorMessage.setAttribute('role', 'alert');
+
+      const errorHeading = document.createElement('h2');
+      errorHeading.className = 'form-error-heading';
+      errorHeading.textContent = 'Please correct the following errors:';
+
+      errorMessage.appendChild(errorHeading);
+      this.customerInfoForm.insertBefore(errorMessage, this.customerInfoForm.firstChild);
+    }
+
+    // Update error message content
+    const errorHeading = errorMessage.querySelector('.form-error-heading');
+    if (errorHeading) {
+      errorHeading.textContent = 'Please correct the following errors:';
+    }
+
+    // Add error details
+    let errorList = errorMessage.querySelector('ul');
+    if (!errorList) {
+      errorList = document.createElement('ul');
+      errorMessage.appendChild(errorList);
+    }
+
+    const errorItem = document.createElement('li');
+    errorItem.textContent = errorText;
+    errorList.appendChild(errorItem);
+
+    errorMessage.style.display = 'block';
+
+    // Scroll to error message
+    errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  setupCustomerInfoForm() {
+    // Handle customer info form submission through proxy endpoint
+    if (this.customerInfoForm) {
+      // First, remove the form's native action and method attributes
+      // This ensures it won't submit normally even if our handler fails
+      this.customerInfoForm.removeAttribute('action');
+      this.customerInfoForm.setAttribute('data-custom-submit', 'true');
+
+      // Use the submit event with capture to ensure it's always caught first
+      this.customerInfoForm.addEventListener('submit', this.handleCustomerInfoSubmit.bind(this), true);
+    }
+  }
+
+  handleCustomerInfoSubmit(e) {
+    // Always prevent default form submission
+    e.preventDefault();
+    e.stopPropagation();
+
+    console.log('Customer info form submission intercepted by custom handler');
+
+    // Validate form before submission
+    if (!this.validateCustomerInfoForm()) {
+      console.log('Form validation failed');
+      return; // Stop if validation fails
+    }
+
+    const submitButton = this.customerInfoForm.querySelector('button[type="submit"]');
+    if (submitButton) {
+      submitButton.classList.add('loading');
+      if (submitButton.querySelector('.btn-spinner')) {
+        submitButton.querySelector('.btn-spinner').style.display = 'inline-block';
+      }
+    }
+
+    // Get form data
+    const formData = new FormData(this.customerInfoForm);
+    const customerData = {};
+
+    // Transform form data to the required format
+    let isCustomForm = false;
+    for (const [key, value] of formData.entries()) {
+      if (key === 'custom_form' && value === 'true') {
+        isCustomForm = true;
+      }
+      if (key === 'customer[first_name]') customerData.first_name = value;
+      if (key === 'customer[last_name]') customerData.last_name = value;
+      if (key === 'customer[email]') customerData.email = value;
+      if (key === 'customer[phone]') customerData.phone = value;
+      if (key === 'birthdate') customerData.birthdate = value;
+    }
+
+    // Double-check that this is our custom form
+    if (!isCustomForm) {
+      console.warn('Form submission not handled by custom handler - missing custom_form field');
+      // Still prevent default and show an error
+      let errorMessage = this.customerInfoForm.querySelector('.form-error-message');
+      if (!errorMessage) {
+        errorMessage = document.createElement('div');
+        errorMessage.className = 'form-error-message';
+        errorMessage.setAttribute('role', 'alert');
+
+        const errorHeading = document.createElement('h2');
+        errorHeading.className = 'form-error-heading';
+        errorHeading.textContent = 'There was an error processing your request.';
+
+        errorMessage.appendChild(errorHeading);
+        this.customerInfoForm.insertBefore(errorMessage, this.customerInfoForm.firstChild);
+      }
+
+      errorMessage.innerHTML = '<h2 class="form-error-heading">Form submission error</h2><p>Please refresh the page and try again.</p>';
+      errorMessage.style.display = 'block';
+      return;
+    }
+
+    // Send data to proxy endpoint
+    fetch('/apps/nf-data-management/update_customer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(customerData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Show success message
+      let successMessage = this.customerInfoForm.querySelector('.success-message');
+
+      if (!successMessage) {
+        // Create success message if it doesn't exist
+        successMessage = document.createElement('div');
+        successMessage.className = 'success-message';
+        successMessage.setAttribute('tabindex', '-1');
+        successMessage.setAttribute('autofocus', '');
+        this.customerInfoForm.insertBefore(successMessage, this.customerInfoForm.firstChild);
+      }
+
+      successMessage.textContent = data.message || 'Basic information updated successfully!';
+      successMessage.style.display = 'block';
+
+      // Scroll to success message
+      successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      successMessage.focus();
+    })
+    .catch(error => {
+      // Show error message
+      console.error('Error updating customer information:', error);
+
+      let errorMessage = this.customerInfoForm.querySelector('.form-error-message');
+
+      if (!errorMessage) {
+        // Create error message if it doesn't exist
+        errorMessage = document.createElement('div');
+        errorMessage.className = 'form-error-message';
+        errorMessage.setAttribute('role', 'alert');
+
+        const errorHeading = document.createElement('h2');
+        errorHeading.className = 'form-error-heading';
+        errorHeading.textContent = 'There was an error processing your request.';
+
+        errorMessage.appendChild(errorHeading);
+        this.customerInfoForm.insertBefore(errorMessage, this.customerInfoForm.firstChild);
+      }
+
+      // Update error message content
+      const errorHeading = errorMessage.querySelector('.form-error-heading');
+      if (errorHeading) {
+        errorHeading.textContent = 'There was an error processing your request.';
+      }
+
+      // Add error details if available
+      const errorList = errorMessage.querySelector('ul') || document.createElement('ul');
+      errorList.innerHTML = ''; // Clear existing errors
+
+      const errorItem = document.createElement('li');
+      errorItem.textContent = error.message || 'Please try again later.';
+      errorList.appendChild(errorItem);
+
+      if (!errorMessage.contains(errorList)) {
+        errorMessage.appendChild(errorList);
+      }
+
+      errorMessage.style.display = 'block';
+
+      // Scroll to error message
+      errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    })
+    .finally(() => {
+      // Remove loading state
+      if (submitButton) {
+        submitButton.classList.remove('loading');
+        if (submitButton.querySelector('.btn-spinner')) {
+          submitButton.querySelector('.btn-spinner').style.display = 'none';
+        }
+      }
+    });
   }
 
   handleDeleteAccount() {
