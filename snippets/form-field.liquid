@@ -9,6 +9,7 @@
   - label: Label text
   - placeholder: Placeholder text (default: " ")
   - required: Whether the field is required (default: false)
+  - readonly: Whether the field is readonly (default: false)
   - pattern: Validation pattern
   - title: Validation message
   - min_length: Minimum length
@@ -17,6 +18,7 @@
 
 {%- assign placeholder = placeholder | default: ' ' -%}
 {%- assign required = required | default: false -%}
+{%- assign readonly = readonly | default: false -%}
 
 <div class="field{% if class %} {{ class }}{% endif %}">
   <input
@@ -37,6 +39,9 @@
     {% endif %}
     {% if min_length %}
       minlength="{{ min_length }}"
+    {% endif %}
+    {% if readonly %}
+      readonly
     {% endif %}
   >
   <label class="field__label" for="{{ id }}">
