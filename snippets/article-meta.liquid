@@ -5,9 +5,10 @@
 
   Accepts:
   - article: {Object} Article object
+  - is_detail_page: {Boolean} Whether this is being rendered on a detail page (optional, default: false)
 
   Usage:
-  {% render 'article-meta', article: article %}
+  {% render 'article-meta', article: article, is_detail_page: true %}
 {% endcomment %}
 
 <div class="article-meta">
@@ -67,6 +68,13 @@
         stroke-linecap="round"
         stroke-linejoin="round" />
     </svg>
-    <span>{{ article.metafields.blog.view_count | default: '0' }}</span>
+    {% assign is_detail = is_detail_page | default: false %}
+    <span>
+      {% if is_detail %}
+        {{ article.metafields.blog.view_count | plus: 1 | default: 0 }}
+      {% else %}
+        {{ article.metafields.blog.view_count | default: 0 }}
+      {% endif %}
+    </span>
   </div>
 </div>

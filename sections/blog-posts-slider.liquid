@@ -93,7 +93,7 @@
                     <div class="blog-posts-slider__image-overlay"></div>
                   </div>
                   <div class="blog-posts-slider__content">
-                    {% render 'article-meta', article: article %}
+                    {% render 'article-meta', article: article, is_detail_page: false %}
                     <h3 class="blog-posts-slider__title">{{ block.settings.custom_title | default: article.title }}</h3>
                     <div class="blog-posts-slider__excerpt">
                       {{
