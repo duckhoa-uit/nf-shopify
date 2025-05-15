@@ -180,11 +180,8 @@ class AccountForms {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log('Customer info form submission intercepted by custom handler');
-
     // Validate form before submission
     if (!this.validateCustomerInfoForm()) {
-      console.log('Form validation failed');
       return; // Stop if validation fails
     }
 
@@ -210,12 +207,28 @@ class AccountForms {
       if (key === 'customer[last_name]') customerData.last_name = value;
       if (key === 'customer[email]') customerData.email = value;
       if (key === 'customer[phone]') customerData.phone = value;
-      if (key === 'birthdate') customerData.birthdate = value;
+      if (key === 'birthdate') {
+        // Transform birthdate from DD.MM.YYYY to YYYY-MM-DD format
+        if (value) {
+          const parts = value.split('.');
+          if (parts.length === 3) {
+            const day = parts[0].padStart(2, '0');
+            const month = parts[1].padStart(2, '0');
+            const year = parts[2];
+            // Ensure year is 4 digits
+            const fullYear = year.length === 2 ? `20${year}` : year;
+            customerData.birthdate = `${fullYear}-${month}-${day}`;
+          } else {
+            customerData.birthdate = value; // Keep original if format is unexpected
+          }
+        } else {
+          customerData.birthdate = value;
+        }
+      }
     }
 
     // Double-check that this is our custom form
     if (!isCustomForm) {
-      console.warn('Form submission not handled by custom handler - missing custom_form field');
       // Still prevent default and show an error
       let errorMessage = this.customerInfoForm.querySelector('.form-error-message');
       if (!errorMessage) {
@@ -272,6 +285,7 @@ class AccountForms {
     })
     .catch(error => {
       // Show error message
+      // Keep error logging for debugging purposes
       console.error('Error updating customer information:', error);
 
       let errorMessage = this.customerInfoForm.querySelector('.form-error-message');
@@ -332,6 +346,30 @@ class AccountForms {
     }
   }
 
+  transformInitialBirthdateValue() {
+    if (!this.birthdateField || !this.birthdateField.value) return;
+
+    const value = this.birthdateField.value.trim();
+
+    // Check if the value is in YYYY-MM-DD format
+    const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (isoDateRegex.test(value)) {
+      try {
+        // Split the date parts
+        const [year, month, day] = value.split('-');
+
+        // Transform to DD.MM.YYYY format
+        const formattedDate = `${parseInt(day, 10)}.${parseInt(month, 10)}.${year}`;
+
+        // Update the input value
+        this.birthdateField.value = formattedDate;
+      } catch (error) {
+        // Keep error logging for debugging purposes
+        console.error('Error transforming birthdate:', error);
+      }
+    }
+  }
+
   initDatePicker() {
     if (!this.birthdateField) return;
 
@@ -341,6 +379,9 @@ class AccountForms {
     let placeholder = 'DD.MM.YYYY';
 
     this.birthdateField.setAttribute('placeholder', placeholder);
+
+    // Transform the initial value from YYYY-MM-DD to DD.MM.YYYY if needed
+    this.transformInitialBirthdateValue();
 
     // Initialize Flatpickr
     const flatpickrInstance = flatpickr(this.birthdateField, {
