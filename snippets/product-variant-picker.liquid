@@ -54,7 +54,10 @@
       -%}
       {%- if option.name == 'Size' -%}
         <fieldset class="js product-form__input product-form__input--pill product-form__input--pill-size">
-          <legend class="form__label">{{ option.name }}</legend>
+          <div class="flex items-center justify-between mb-2">
+            <legend class="form__label m-0">{{ option.name }}</legend>
+            <button type="button" class="size-chart text-sm font-medium underline">Size & fit</button>
+          </div>
           <div class="grid grid-cols-5 gap-5">
             {% render 'product-variant-options',
               product: product,
@@ -150,7 +153,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // No additional JavaScript needed for color thumbnails
-    // as they are now part of the swatch element itself
+    // No additional JavaScript needed
+    // The size chart button functionality will be handled by a Shopify app
   });
 </script>
