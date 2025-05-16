@@ -1,0 +1,211 @@
+<div class="size-guide-table" data-table-type="{{ table_type }}">
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse">
+      {% case table_type %}
+        {% when 'men_clothing' %}
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 border border-gray-300 text-left">Size</th>
+              <th class="p-3 border border-gray-300 text-center">Chest (cm)</th>
+              <th class="p-3 border border-gray-300 text-center">Waist (cm)</th>
+              <th class="p-3 border border-gray-300 text-center">Hips (cm)</th>
+              <th class="p-3 border border-gray-300 text-center">International</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">S</td>
+              <td class="p-3 border border-gray-300 text-center">86-92</td>
+              <td class="p-3 border border-gray-300 text-center">74-80</td>
+              <td class="p-3 border border-gray-300 text-center">88-94</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 46, UK: 36</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">M</td>
+              <td class="p-3 border border-gray-300 text-center">92-98</td>
+              <td class="p-3 border border-gray-300 text-center">80-86</td>
+              <td class="p-3 border border-gray-300 text-center">94-100</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 48, UK: 38</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">L</td>
+              <td class="p-3 border border-gray-300 text-center">98-104</td>
+              <td class="p-3 border border-gray-300 text-center">86-92</td>
+              <td class="p-3 border border-gray-300 text-center">100-106</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 50, UK: 40</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">XL</td>
+              <td class="p-3 border border-gray-300 text-center">104-110</td>
+              <td class="p-3 border border-gray-300 text-center">92-98</td>
+              <td class="p-3 border border-gray-300 text-center">106-112</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 52, UK: 42</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">XXL</td>
+              <td class="p-3 border border-gray-300 text-center">110-116</td>
+              <td class="p-3 border border-gray-300 text-center">98-104</td>
+              <td class="p-3 border border-gray-300 text-center">112-118</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 54, UK: 44</td>
+            </tr>
+          </tbody>
+
+        {% when 'women_clothing' %}
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 border border-gray-300 text-left">Size</th>
+              <th class="p-3 border border-gray-300 text-center">Chest (cm)</th>
+              <th class="p-3 border border-gray-300 text-center">Waist (cm)</th>
+              <th class="p-3 border border-gray-300 text-center">Hips (cm)</th>
+              <th class="p-3 border border-gray-300 text-center">International</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">XS</td>
+              <td class="p-3 border border-gray-300 text-center">78-82</td>
+              <td class="p-3 border border-gray-300 text-center">60-64</td>
+              <td class="p-3 border border-gray-300 text-center">86-90</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 34, UK: 8</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">S</td>
+              <td class="p-3 border border-gray-300 text-center">82-86</td>
+              <td class="p-3 border border-gray-300 text-center">64-68</td>
+              <td class="p-3 border border-gray-300 text-center">90-94</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 36, UK: 10</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">M</td>
+              <td class="p-3 border border-gray-300 text-center">86-90</td>
+              <td class="p-3 border border-gray-300 text-center">68-72</td>
+              <td class="p-3 border border-gray-300 text-center">94-98</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 38, UK: 12</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">L</td>
+              <td class="p-3 border border-gray-300 text-center">90-94</td>
+              <td class="p-3 border border-gray-300 text-center">72-76</td>
+              <td class="p-3 border border-gray-300 text-center">98-102</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 40, UK: 14</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">XL</td>
+              <td class="p-3 border border-gray-300 text-center">94-98</td>
+              <td class="p-3 border border-gray-300 text-center">76-80</td>
+              <td class="p-3 border border-gray-300 text-center">102-106</td>
+              <td class="p-3 border border-gray-300 text-center">EU: 42, UK: 16</td>
+            </tr>
+          </tbody>
+          
+        {% when 'men_footwear' %}
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 border border-gray-300 text-left">EU</th>
+              <th class="p-3 border border-gray-300 text-center">UK</th>
+              <th class="p-3 border border-gray-300 text-center">US</th>
+              <th class="p-3 border border-gray-300 text-center">Foot Length (cm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">39</td>
+              <td class="p-3 border border-gray-300 text-center">6</td>
+              <td class="p-3 border border-gray-300 text-center">7</td>
+              <td class="p-3 border border-gray-300 text-center">24.5</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">40</td>
+              <td class="p-3 border border-gray-300 text-center">6.5</td>
+              <td class="p-3 border border-gray-300 text-center">7.5</td>
+              <td class="p-3 border border-gray-300 text-center">25.0</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">41</td>
+              <td class="p-3 border border-gray-300 text-center">7</td>
+              <td class="p-3 border border-gray-300 text-center">8</td>
+              <td class="p-3 border border-gray-300 text-center">25.5</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">42</td>
+              <td class="p-3 border border-gray-300 text-center">8</td>
+              <td class="p-3 border border-gray-300 text-center">9</td>
+              <td class="p-3 border border-gray-300 text-center">26.5</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">43</td>
+              <td class="p-3 border border-gray-300 text-center">9</td>
+              <td class="p-3 border border-gray-300 text-center">10</td>
+              <td class="p-3 border border-gray-300 text-center">27.5</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">44</td>
+              <td class="p-3 border border-gray-300 text-center">10</td>
+              <td class="p-3 border border-gray-300 text-center">11</td>
+              <td class="p-3 border border-gray-300 text-center">28.0</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">45</td>
+              <td class="p-3 border border-gray-300 text-center">10.5</td>
+              <td class="p-3 border border-gray-300 text-center">11.5</td>
+              <td class="p-3 border border-gray-300 text-center">28.5</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">46</td>
+              <td class="p-3 border border-gray-300 text-center">11</td>
+              <td class="p-3 border border-gray-300 text-center">12</td>
+              <td class="p-3 border border-gray-300 text-center">29.0</td>
+            </tr>
+          </tbody>
+
+        {% when 'women_footwear' %}
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 border border-gray-300 text-left">EU</th>
+              <th class="p-3 border border-gray-300 text-center">UK</th>
+              <th class="p-3 border border-gray-300 text-center">US</th>
+              <th class="p-3 border border-gray-300 text-center">Foot Length (cm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">36</td>
+              <td class="p-3 border border-gray-300 text-center">3.5</td>
+              <td class="p-3 border border-gray-300 text-center">6</td>
+              <td class="p-3 border border-gray-300 text-center">22.5</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">37</td>
+              <td class="p-3 border border-gray-300 text-center">4</td>
+              <td class="p-3 border border-gray-300 text-center">6.5</td>
+              <td class="p-3 border border-gray-300 text-center">23.0</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">38</td>
+              <td class="p-3 border border-gray-300 text-center">5</td>
+              <td class="p-3 border border-gray-300 text-center">7.5</td>
+              <td class="p-3 border border-gray-300 text-center">24.0</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">39</td>
+              <td class="p-3 border border-gray-300 text-center">6</td>
+              <td class="p-3 border border-gray-300 text-center">8.5</td>
+              <td class="p-3 border border-gray-300 text-center">24.5</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">40</td>
+              <td class="p-3 border border-gray-300 text-center">6.5</td>
+              <td class="p-3 border border-gray-300 text-center">9</td>
+              <td class="p-3 border border-gray-300 text-center">25.0</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gray-300 font-medium">41</td>
+              <td class="p-3 border border-gray-300 text-center">7.5</td>
+              <td class="p-3 border border-gray-300 text-center">10</td>
+              <td class="p-3 border border-gray-300 text-center">25.5</td>
+            </tr>
+          </tbody>
+      {% endcase %}
+    </table>
+  </div>
+</div>

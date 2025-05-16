@@ -1,0 +1,97 @@
+<div class="measurement-figures-container grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div class="measurement-figure">
+    <div class="measurement-image relative overflow-hidden rounded-lg mb-4 bg-gray-100 flex items-center justify-center h-64">
+      {% comment %}
+      If you have actual measurement images, use this instead:
+      {{ 'measurement-figure-1.jpg' | asset_url | img_tag: 'How to measure chest', 'w-full h-auto object-contain' }}
+      {% endcomment %}
+      
+      <div class="measurement-illustration p-4">
+        <svg width="220" height="180" viewBox="0 0 220 180" class="mx-auto">
+          <path d="M110,20 C130,20 145,35 145,60 C145,75 140,90 135,100 L135,170 L85,170 L85,100 C80,90 75,75 75,60 C75,35 90,20 110,20 Z" stroke="#333" fill="none" stroke-width="2"/>
+          <path d="M85,80 L55,90" stroke="#333" stroke-width="2"/>
+          <path d="M135,80 L165,90" stroke="#333" stroke-width="2"/>
+          <circle cx="45" cy="90" r="5" fill="#333"/>
+          <circle cx="175" cy="90" r="5" fill="#333"/>
+          <path d="M45,90 L175,90" stroke="#d00" stroke-width="2" stroke-dasharray="5,3"/>
+          <text x="110" y="85" text-anchor="middle" fill="#d00" font-size="12">Chest</text>
+        </svg>
+      </div>
+    </div>
+    <div class="measurement-instructions">
+      <h3 class="text-lg font-semibold mb-2">Chest / Bust</h3>
+      <p>Measure around the fullest part of your chest, keeping the measuring tape horizontal.</p>
+    </div>
+  </div>
+  
+  <div class="measurement-figure">
+    <div class="measurement-image relative overflow-hidden rounded-lg mb-4 bg-gray-100 flex items-center justify-center h-64">
+      <div class="measurement-illustration p-4">
+        <svg width="220" height="180" viewBox="0 0 220 180" class="mx-auto">
+          <path d="M110,20 C130,20 145,35 145,60 C145,75 140,90 135,100 L135,170 L85,170 L85,100 C80,90 75,75 75,60 C75,35 90,20 110,20 Z" stroke="#333" fill="none" stroke-width="2"/>
+          <path d="M85,110 L55,120" stroke="#333" stroke-width="2"/>
+          <path d="M135,110 L165,120" stroke="#333" stroke-width="2"/>
+          <circle cx="45" cy="120" r="5" fill="#333"/>
+          <circle cx="175" cy="120" r="5" fill="#333"/>
+          <path d="M45,120 L175,120" stroke="#d00" stroke-width="2" stroke-dasharray="5,3"/>
+          <text x="110" y="115" text-anchor="middle" fill="#d00" font-size="12">Waist</text>
+        </svg>
+      </div>
+    </div>
+    <div class="measurement-instructions">
+      <h3 class="text-lg font-semibold mb-2">Waist</h3>
+      <p>Measure around your natural waistline, keeping the tape comfortably loose.</p>
+    </div>
+  </div>
+  
+  <div class="measurement-figure">
+    <div class="measurement-image relative overflow-hidden rounded-lg mb-4 bg-gray-100 flex items-center justify-center h-64">
+      <div class="measurement-illustration p-4">
+        <svg width="220" height="180" viewBox="0 0 220 180" class="mx-auto">
+          <path d="M110,20 C130,20 145,35 145,60 C145,75 140,90 135,100 L135,170 L85,170 L85,100 C80,90 75,75 75,60 C75,35 90,20 110,20 Z" stroke="#333" fill="none" stroke-width="2"/>
+          <path d="M85,140 L55,150" stroke="#333" stroke-width="2"/>
+          <path d="M135,140 L165,150" stroke="#333" stroke-width="2"/>
+          <circle cx="45" cy="150" r="5" fill="#333"/>
+          <circle cx="175" cy="150" r="5" fill="#333"/>
+          <path d="M45,150 L175,150" stroke="#d00" stroke-width="2" stroke-dasharray="5,3"/>
+          <text x="110" y="145" text-anchor="middle" fill="#d00" font-size="12">Hips</text>
+        </svg>
+      </div>
+    </div>
+    <div class="measurement-instructions">
+      <h3 class="text-lg font-semibold mb-2">Hips</h3>
+      <p>Measure around the fullest part of your hips, approximately 8 inches below your waistline.</p>
+    </div>
+  </div>
+  
+  <div class="measurement-figure">
+    <div class="measurement-image relative overflow-hidden rounded-lg mb-4 bg-gray-100 flex items-center justify-center h-64">
+      <div class="measurement-illustration p-4">
+        <svg width="220" height="180" viewBox="0 0 220 180" class="mx-auto">
+          <path d="M70,20 L150,20 L140,170 L80,170 Z" stroke="#333" fill="none" stroke-width="2"/>
+          <path d="M80,120 L50,130" stroke="#333" stroke-width="2"/>
+          <path d="M140,120 L170,130" stroke="#333" stroke-width="2"/>
+          <circle cx="40" cy="130" r="5" fill="#333"/>
+          <circle cx="180" cy="130" r="5" fill="#333"/>
+          <path d="M40,130 L180,130" stroke="#d00" stroke-width="2" stroke-dasharray="5,3"/>
+          <text x="110" y="125" text-anchor="middle" fill="#d00" font-size="12">Foot Length</text>
+        </svg>
+      </div>
+    </div>
+    <div class="measurement-instructions">
+      <h3 class="text-lg font-semibold mb-2">Foot Length</h3>
+      <p>Stand on a piece of paper, mark the longest point of each foot, and measure the distance between the two points.</p>
+    </div>
+  </div>
+</div>
+
+<div class="measurement-tips bg-gray-50 p-6 rounded-lg mb-8">
+  <h3 class="text-lg font-semibold mb-2">Tips for Accurate Measurements</h3>
+  <ul class="list-disc pl-5 space-y-2">
+    <li>Use a flexible tape measure for best results.</li>
+    <li>Measure yourself in your underwear or thin clothing.</li>
+    <li>Keep the tape measure level and not too tight or too loose.</li>
+    <li>If between sizes, we recommend ordering the larger size for a comfortable fit.</li>
+    <li>For footwear, measure your feet in the evening when they are at their largest.</li>
+  </ul>
+</div>
