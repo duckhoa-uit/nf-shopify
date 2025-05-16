@@ -1,0 +1,192 @@
+{{ 'base.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width size-guide-container section-{{ section.id }}-padding">
+  <h1 class="text-3xl font-bold text-center mb-8">{{ section.blocks.intro.settings.heading | default: 'Size Guide' }}</h1>
+  
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'text' %}
+        <div class="size-guide-intro text-center mb-10" {{ block.shopify_attributes }}>
+          {% if block.settings.subheading != blank %}
+            <div class="text-xl mb-2">{{ block.settings.subheading }}</div>
+          {% endif %}
+          
+          {% if block.settings.text != blank %}
+            <div class="rte">{{ block.settings.text }}</div>
+          {% endif %}
+        </div>
+
+      {% when 'measurement_guide' %}
+        <div class="measurement-guide mb-10" {{ block.shopify_attributes }}>
+          <h2 class="text-2xl font-semibold mb-4">{{ block.settings.heading }}</h2>
+          
+          {% if block.settings.instructions != blank %}
+            <div class="rte mb-6">{{ block.settings.instructions }}</div>
+          {% endif %}
+          
+          {% render 'measure-figure-block' %}
+        </div>
+
+      {% when 'size_table' %}
+        <div class="size-table-wrapper mb-12" {{ block.shopify_attributes }}>
+          <h2 class="text-2xl font-semibold mb-4">{{ block.settings.heading }}</h2>
+          {% render 'size-guide-table', table_type: block.settings.table_type %}
+        </div>
+    {% endcase %}
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "Size Guide",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        }
+      ],
+      "default": "background-1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Size Guide",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "default": "Find your perfect fit",
+          "label": "Subheading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Use the tables below to find your size.</p>",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "measurement_guide",
+      "name": "Measurement Guide",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "How to Measure",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "instructions",
+          "default": "<p>For best results, take measurements directly against your body.</p>",
+          "label": "Instructions"
+        }
+      ]
+    },
+    {
+      "type": "size_table",
+      "name": "Size Table",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Size Table",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "table_type",
+          "options": [
+            {
+              "value": "men_clothing",
+              "label": "Men's Clothing"
+            },
+            {
+              "value": "women_clothing",
+              "label": "Women's Clothing"
+            },
+            {
+              "value": "men_footwear",
+              "label": "Men's Footwear"
+            },
+            {
+              "value": "women_footwear",
+              "label": "Women's Footwear"
+            }
+          ],
+          "default": "men_clothing",
+          "label": "Table Type"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Size Guide",
+      "blocks": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "measurement_guide"
+        },
+        {
+          "type": "size_table",
+          "settings": {
+            "heading": "Men's Clothing",
+            "table_type": "men_clothing"
+          }
+        },
+        {
+          "type": "size_table",
+          "settings": {
+            "heading": "Women's Clothing",
+            "table_type": "women_clothing"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
