@@ -170,6 +170,12 @@ class PredictiveSearch extends SearchForm {
       products: 'Products',
     };
 
+    // Check if we have any results
+    const hasResults = ['collections', 'articles', 'products'].some(type => {
+      const items = results[type] || [];
+      return items.length > 0;
+    });
+
     function getDiscountDetails(product) {
       let originalPrice = 0;
       let discountPrice = 0;
@@ -254,17 +260,24 @@ class PredictiveSearch extends SearchForm {
     const html = template`
     <div class="nf__predictive-search-results">
       <div class="nf__predictive-search__results-groups-wrapper" id="predictive-search-results-groups-wrapper">
-        ${['collections', 'articles', 'products']
-          .map((type) => {
-            const items = results[type] || [];
-            if (!items.length) return null;
-            return hyperHTML.wire(items)`
-              <div class="nf__predictive-search__result-group">
-                <h2>
-                  ${categoryLabelMap[type]}
-                </h2>
-                <ul class="predictive-search__result-list list-unstyled" role="list">
-                  ${items.map((item) => {
+        ${!hasResults ?
+          hyperHTML.wire()`
+            <div class="nf__predictive-search__no-results">
+              <p class="nf__predictive-search__no-results-text">${window.theme?.strings?.search?.no_results || `No results found for "${this.searchTerm}"`}</p>
+              <p class="nf__predictive-search__no-results-suggestion">${window.theme?.strings?.search?.suggestions || 'Try checking your spelling or using different words.'}</p>
+            </div>
+          ` :
+          ['collections', 'articles', 'products']
+            .map((type) => {
+              const items = results[type] || [];
+              if (!items.length) return null;
+              return hyperHTML.wire(items)`
+                <div class="nf__predictive-search__result-group">
+                  <h2>
+                    ${categoryLabelMap[type]}
+                  </h2>
+                  <ul class="predictive-search__result-list list-unstyled" role="list">
+                    ${items.map((item) => {
                     if (type === 'collections')
                       return hyperHTML.wire(item)`
                         <li class="predictive-search__list-item-collections" role="option">
@@ -333,7 +346,6 @@ class PredictiveSearch extends SearchForm {
             `;
           })
           .filter(Boolean)}
-
       </div>
     </div>
   `;
@@ -401,6 +413,29 @@ class PredictiveSearch extends SearchForm {
     this.setAttribute('results', true);
     this.setLiveRegionResults();
     this.open();
+
+    // Add styles for no results message if it exists
+    const noResultsElement = this.querySelector('.nf__predictive-search__no-results');
+    if (noResultsElement) {
+      // Apply styles to the no results container
+      noResultsElement.style.padding = '20px';
+      noResultsElement.style.textAlign = 'center';
+
+      // Style the main message
+      const noResultsText = this.querySelector('.nf__predictive-search__no-results-text');
+      if (noResultsText) {
+        noResultsText.style.fontSize = '16px';
+        noResultsText.style.fontWeight = '600';
+        noResultsText.style.marginBottom = '8px';
+      }
+
+      // Style the suggestion text
+      const noResultsSuggestion = this.querySelector('.nf__predictive-search__no-results-suggestion');
+      if (noResultsSuggestion) {
+        noResultsSuggestion.style.fontSize = '14px';
+        noResultsSuggestion.style.color = '#666666';
+      }
+    }
 
     // Add event listeners for category tabs
     const categoryTabs = this.querySelectorAll('.nf__predictive-search__results-category');
