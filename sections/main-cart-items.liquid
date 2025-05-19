@@ -490,6 +490,33 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const cartForm = document.getElementById('cart');
+    const cartTotalElement = document.querySelector('.nf-cart-summary__total-value');
+
+    // Function to update the cart total display
+    function updateCartTotal(cartData) {
+      if (!cartTotalElement || !cartData) return;
+
+      // Format the total price using the Shopify money format
+      const totalPrice = cartData.total_price || cartData.items_subtotal_price || 0;
+
+      // Use the Shopify money format from the window object if available
+      if (window.Shopify && window.Shopify.formatMoney) {
+        cartTotalElement.textContent = window.Shopify.formatMoney(totalPrice);
+      } else {
+        // Simple fallback formatting if Shopify.formatMoney is not available
+        const formattedPrice = (totalPrice / 100).toFixed(2);
+        cartTotalElement.textContent = `€${formattedPrice}`;
+      }
+    }
+
+    // Listen for cart update events
+    if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS === 'object') {
+      subscribe(PUB_SUB_EVENTS.cartUpdate, (event) => {
+        if (event.cartData) {
+          updateCartTotal(event.cartData);
+        }
+      });
+    }
 
     // Handle quantity changes
     const quantitySelects = document.querySelectorAll('.nf-cart-item__variant-select[data-is-quantity="true"]');

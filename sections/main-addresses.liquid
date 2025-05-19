@@ -1,5 +1,6 @@
 {{ 'account.css' | asset_url | stylesheet_tag }}
 {{ 'customer.css' | asset_url | stylesheet_tag }}
+{{ 'intl-tel-input.css' | asset_url | stylesheet_tag }}
 
 <!-- Load Shopify's global.js first to ensure CountryProvinceSelector is available -->
 <script src="{{ 'global.js' | asset_url }}" defer></script>
@@ -8,6 +9,7 @@
 <script src="{{ 'account-mobile-menu.js' | asset_url }}" defer></script>
 <script src="{{ 'account-addresses-redirect.js' | asset_url }}" defer></script>
 <script src="{{ 'address-form-handler.js' | asset_url }}" defer></script>
+<script src="{{ 'intl-tel-input.js' | asset_url }}" defer></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -55,6 +57,27 @@
     opacity: 1 !important;
     height: auto !important;
     overflow: visible !important;
+  }
+
+  /* Phone number field styling */
+  .field {
+    position: relative;
+  }
+
+  .error-message {
+    color: #ED2024;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: none;
+  }
+
+  input.invalid {
+    border-color: #ED2024;
+  }
+
+  /* Fix for intl-tel-input alignment with our form fields */
+  .field .iti {
+    display: block;
   }
 {%- endstyle -%}
 
@@ -362,16 +385,21 @@
                       </div>
 
                       <div class="form-group">
-                        {%
-                          render 'form-field',
-                          type: 'tel',
-                          id: 'EditAddress_' | append: address.id | append: '_Phone',
-                          name: 'address[phone]',
-                          value: address.phone,
-                          label: 'customer.addresses.phone' | t,
-                          pattern: '[0-9\+\-\s]{7,}',
-                          title: 'customer.addresses.phone_min_length' | t | default: 'Phone number should contain at least 7 digits'
-                        %}
+                        <div class="field">
+                          <input
+                            type="tel"
+                            id="EditAddress_{{ address.id }}_Phone"
+                            name="address[phone]"
+                            class="field__input"
+                            value="{{ address.phone | default: '' }}"
+                            placeholder=" "
+                            pattern="[0-9\+\-\s]+"
+                            title="{{ 'customer.addresses.phone_min_length' | t | default: 'Please enter a valid phone number' }}"
+                          >
+                          <label class="field__label" for="EditAddress_{{ address.id }}_Phone">
+                            {{ 'customer.addresses.phone' | t }}
+                          </label>
+                        </div>
                       </div>
                     </div>
 
@@ -538,16 +566,21 @@
                   </div>
 
                   <div class="form-group">
-                    {%
-                      render 'form-field',
-                      type: 'tel',
-                      id: 'AddressPhone_new',
-                      name: 'address[phone]',
-                      value: '',
-                      label: 'customer.addresses.phone' | t,
-                      pattern: '[0-9\+\-\s]{7,}',
-                      title: 'customer.addresses.phone_min_length' | t | default: 'Phone number should contain at least 7 digits'
-                    %}
+                    <div class="field">
+                      <input
+                        type="tel"
+                        id="AddressPhone_new"
+                        name="address[phone]"
+                        class="field__input"
+                        value=""
+                        placeholder=" "
+                        pattern="[0-9\+\-\s]+"
+                        title="{{ 'customer.addresses.phone_min_length' | t | default: 'Please enter a valid phone number' }}"
+                      >
+                      <label class="field__label" for="AddressPhone_new">
+                        {{ 'customer.addresses.phone' | t }}
+                      </label>
+                    </div>
                   </div>
                 </div>
 
