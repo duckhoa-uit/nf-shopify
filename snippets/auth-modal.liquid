@@ -265,28 +265,16 @@
             </div>
 
             <div class="w-full">
-              <div class="flex">
-                <input
-                  type="checkbox"
-                  name="customer[accepts_marketing]"
-                  id="newsletter"
-                  value="1"
-                  class="flex size-[1.125rem] items-center justify-center mr-2 cursor-pointer p-2 relative bg-background"
-                  {% if form.accepts_marketing %}
-                    checked
-                  {% endif %}
-                >
-                <label
-                  for="newsletter"
-                  class="mt-0 text-foreground text-sm leading-6 text-left flex-1"
-                >
-                  {{-
-                    'customer.register.accepts_marketing'
-                    | t
-                    | default: 'In the future, I would like to receive information by email about current trends, offers and NORTHFINDER discounts. The subscription can be canceled free of charge at any time.'
-                  -}}
-                </label>
-              </div>
+              {%
+                render 'checkbox-field',
+                id: 'newsletter',
+                name: 'customer[accepts_marketing]',
+                value: '1',
+                label: 'customer.register.accepts_marketing' | t | default: 'In the future, I would like to receive information by email about current trends, offers and NORTHFINDER discounts. The subscription can be canceled free of charge at any time.',
+                class: 'flex items-start',
+                input_class: 'flex size-[1.125rem] items-center justify-center mr-2 cursor-pointer p-2 relative',
+                label_class: 'mt-0 text-foreground text-sm leading-6 text-left flex-1'
+              %}
             </div>
 
             <button
@@ -295,53 +283,6 @@
             >
               {{ 'customer.register.submit' | t | default: 'Register' }}
             </button>
-
-            <button
-              type="button"
-              aria-label="Add to wishlist"
-              class="wishlist-button button text-sm w-full mt-[3.125rem] mb-2 p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
-            >
-              <img src="{{ 'facebook.svg' | asset_url }}" alt="Facebook" width="16" height="16" class="size-4 mr-2">
-              <span class="flex-1">
-                {{ 'customer.login_page.facebook_login' | t | default: 'Log in via Facebook' }}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              aria-label="Add to wishlist"
-              class="wishlist-button button text-sm w-full p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase"
-            >
-              <img src="{{ 'google.svg' | asset_url }}" alt="Google" width="16" height="16" class="size-4 mr-2">
-              <span class="flex-1"> {{ 'customer.login_page.google_login' | t | default: 'Log in via Google' }} </span>
-            </button>
-
-            <div class="mt-6 text-[#9F9F9F] text-sm font-normal leading-6 text-left">
-              {{
-                'customer.register.privacy_policy_message'
-                | t
-                | default: 'As in any online store, you will receive from us all important updates by email (order confirmation, delivery confirmation, return information, recommendations). Be sure to read the'
-              }}
-              <a href="#" target="_blank">
-                {{ 'customer.register.privacy_policy' | t | default: 'Privacy Policy.' }}
-              </a>
-            </div>
-
-            <div class="mt-4 text-[#9F9F9F] text-sm font-normal leading-6 text-left">
-              {{
-                'customer.register.recaptcha_message'
-                | t
-                | default: 'This site is protected by reCAPTCHA and the Google'
-              }}
-              <a href="https://policies.google.com/privacy" target="_blank">
-                {{- 'customer.register.privacy_policy' | t | default: 'Privacy Policy' -}}
-              </a>
-              {{ 'customer.register.and' | t | default: 'and' }}
-              <a href="https://policies.google.com/terms" target="_blank">
-                {{- 'customer.register.terms_of_service' | t | default: 'Terms of Service' -}}
-              </a>
-              {{ 'customer.register.apply' | t | default: 'apply.' }}
-            </div>
           </div>
         {% endform %}
       </div>

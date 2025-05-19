@@ -1,0 +1,60 @@
+{% comment %}
+  Reusable checkbox field component
+
+  Accepts:
+  - id: Input ID (required)
+  - name: Input name (required)
+  - value: Input value (default: '1')
+  - label: Label text (required)
+  - checked: Whether the checkbox is checked (default: false)
+  - disabled: Whether the checkbox is disabled (default: false)
+  - required: Whether the checkbox is required (default: false)
+  - class: Additional CSS classes for the wrapper
+  - input_class: Additional CSS classes for the input
+  - label_class: Additional CSS classes for the label
+
+  Usage:
+  {% render 'checkbox-field',
+    id: 'my-checkbox',
+    name: 'my_checkbox',
+    value: '1',
+    label: 'My Checkbox Label',
+    checked: false,
+    disabled: false,
+    required: false,
+    class: 'my-custom-class',
+    input_class: 'my-input-class',
+    label_class: 'my-label-class'
+  %}
+{% endcomment %}
+
+{%- assign value = value | default: '1' -%}
+{%- assign checked = checked | default: false -%}
+{%- assign disabled = disabled | default: false -%}
+{%- assign required = required | default: false -%}
+
+<checkbox-handler class="checkbox-wrapper{% if class %} {{ class }}{% endif %}">
+  <input
+    type="checkbox"
+    id="{{ id }}"
+    name="{{ name }}"
+    value="{{ value }}"
+    {% if checked %}
+      checked
+    {% endif %}
+    {% if disabled %}
+      disabled
+    {% endif %}
+    {% if required %}
+      required
+    {% endif %}
+    class="{% if input_class %}{{ input_class }}{% endif %}"
+  >
+  <label for="{{ id }}" class="cursor-pointer{% if label_class %} {{ label_class }}{% endif %}">
+    {% if label contains 'customer.' or label contains 'general.' %}
+      {{ label | t }}
+    {% else %}
+      {{ label }}
+    {% endif %}
+  </label>
+</checkbox-handler>
