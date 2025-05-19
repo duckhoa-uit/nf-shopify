@@ -17,17 +17,15 @@
     data-section-id="{{ section.id }}"
     data-product-variant-id="{{ product.selected_or_first_available_variant.id }}"
   >
-    <input
-      id="Recipient-checkbox-{{ section.id }}"
-      type="checkbox"
-      name="{{ gift_card_recipient_control_flag }}"
-      disabled
-    >
-    <label class="recipient-checkbox" for="Recipient-checkbox-{{ section.id }}">
-      {{ 'square.svg' | inline_asset_content }}
-      {{- 'icon-checkmark.svg' | inline_asset_content -}}
-      <span>{{ 'recipient.form.checkbox' | t }}</span>
-    </label>
+    {%
+      render 'checkbox-field',
+      id: 'Recipient-checkbox-' | append: section.id,
+      name: gift_card_recipient_control_flag,
+      value: '1',
+      label: 'recipient.form.checkbox' | t,
+      disabled: true,
+      class: 'recipient-checkbox-wrapper'
+    %}
     <div
       class="product-form__recipient-error-message-wrapper"
       role="alert"

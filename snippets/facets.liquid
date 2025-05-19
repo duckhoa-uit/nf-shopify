@@ -282,43 +282,17 @@
                                     {{ text_value }}
                                   </div>
                                 {%- else -%}
-                                  <label for="{{ input_id }}" class="{{ label_class }}">
-                                    <input
-                                      type="checkbox"
-                                      class="mr-2"
-                                      name="{{ value.param_name }}"
-                                      value="{{ value.value }}"
-                                      id="{{ input_id }}"
-                                      {% if value.active %}
-                                        checked
-                                      {% endif %}
-                                      {% if is_disabled %}
-                                        disabled
-                                      {% endif %}
-                                    >
-
-                                    {% comment %}
-                                      {%- if presentation == 'image' -%}
-                                        <div class="facets__image-wrapper">
-                                          {%- if value.image -%}
-                                            {{
-                                              value.image
-                                              | image_url: width: 300
-                                              | image_tag: class: 'facets__image', alt: value.alt
-                                            }}
-                                          {%- endif -%}
-                                        </div>
-                                      {%- else -%}
-                                        {{- 'square.svg' | inline_asset_content -}}
-
-                                        <div class="svg-wrapper">
-                                          {{- 'icon-checkmark.svg' | inline_asset_content -}}
-                                        </div>
-                                      {%- endif -%}
-                                    {% endcomment %}
-
-                                    {{ text_value }}
-                                  </label>
+                                  {%
+                                    render 'checkbox-field',
+                                    id: input_id,
+                                    name: value.param_name,
+                                    value: value.value,
+                                    label: text_value,
+                                    checked: value.active,
+                                    disabled: is_disabled,
+                                    class: label_class,
+                                    input_class: ''
+                                  %}
                                 {%- endif -%}
                               </li>
                             {%- endfor -%}
@@ -659,41 +633,17 @@
                                       {{ text_value }}
                                     </div>
                                   {% else %}
-                                    <label for="{{ input_id }}" class="{{ label_class }}">
-                                      <input
-                                        class="mobile-facets__checkbox"
-                                        type="checkbox"
-                                        name="{{ value.param_name }}"
-                                        value="{{ value.value }}"
-                                        id="{{ input_id }}"
-                                        {% if value.active %}
-                                          checked
-                                        {% endif %}
-                                        {% if is_disabled %}
-                                          disabled
-                                        {% endif %}
-                                      >
-
-                                      {% comment %}
-                                        {%- if presentation == 'image' -%}
-                                          <div class="facets__image-wrapper">
-                                            {%- if value.image -%}
-                                              {{
-                                                value.image
-                                                | image_url: width: 300
-                                                | image_tag: class: 'facets__image', alt: value.alt
-                                              }}
-                                            {%- endif -%}
-                                          </div>
-                                        {%- else -%}
-                                          <span class="mobile-facets__highlight"></span>
-                                          {{- 'square.svg' | inline_asset_content -}}
-                                          {{- 'icon-checkmark.svg' | inline_asset_content -}}
-                                        {%- endif %}
-                                      {% endcomment %}
-
-                                      {{ text_value }}
-                                    </label>
+                                    {%
+                                      render 'checkbox-field',
+                                      id: input_id,
+                                      name: value.param_name,
+                                      value: value.value,
+                                      label: text_value,
+                                      checked: value.active,
+                                      disabled: is_disabled,
+                                      class: label_class,
+                                      input_class: 'mobile-facets__checkbox'
+                                    %}
                                   {% endif %}
                                 </li>
                               {%- endfor -%}
