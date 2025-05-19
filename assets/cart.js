@@ -348,6 +348,19 @@ class CartItems extends HTMLElement {
           trapFocus(cartDrawerWrapper, document.querySelector('.cart-item__name'));
         }
 
+        // Update the cart total
+        const cartTotalElement = document.querySelector('.nf-cart-summary__total-value');
+        if (cartTotalElement && parsedState.total_price !== undefined) {
+          // Format the total price using the Shopify money format
+          if (window.Shopify && window.Shopify.formatMoney) {
+            cartTotalElement.textContent = window.Shopify.formatMoney(parsedState.total_price);
+          } else {
+            // Simple fallback formatting if Shopify.formatMoney is not available
+            const formattedPrice = (parsedState.total_price / 100).toFixed(2);
+            cartTotalElement.textContent = `€${formattedPrice}`;
+          }
+        }
+
         publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: parsedState, variantId: variantId });
       })
       .catch((error) => {
