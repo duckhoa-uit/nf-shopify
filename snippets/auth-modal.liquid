@@ -100,23 +100,6 @@
               {{ 'customer.login_page.sign_in' | t | default: 'Sign In' }}
             </button>
 
-            {% comment %}
-              <button
-                type="button"
-                class="button text-sm w-full mt-[3.125rem] mb-2 p-3 flex items-center justify-between bg-background uppercase text-[#0F0F0F] leading-4"
-              >
-                <img src="{{ 'facebook.svg' | asset_url }}" alt="Facebook" width="16" height="16" class="size-4 mr-2">
-                <span class="flex-1"> {{ 'customer.login_page.facebook_login' | t | default: 'Log in via Facebook' }} </span>
-              </button>
-
-              <button
-                type="button"
-                class="button text-sm w-full p-3 flex items-center justify-between bg-background text-[#0F0F0F] uppercase leading-4"
-              >
-                <img src="{{ 'google.svg' | asset_url }}" alt="Google" width="16" height="16" class="size-4 mr-2">
-                <span class="flex-1"> {{ 'customer.login_page.google_login' | t | default: 'Log in via Google' }} </span>
-              </button>
-            {% endcomment %}
             <div class="oxi-social-login"></div>
 
             <div class="text-sm text-[#3D3D3D] mt-6 leading-5 text-left">
@@ -174,7 +157,7 @@
         </div>
 
         {% form 'create_customer', return_to: routes.account_url, id: 'customer_register_form' %}
-          <div class="flex flex-col gap-y-3">
+          <div class="flex flex-col gap-y-3 mb-3">
             <div>
               <div class="relative field">
                 <input
