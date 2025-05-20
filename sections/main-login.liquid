@@ -29,7 +29,7 @@
 
     {%- form 'recover_customer_password' -%}
       {% assign recover_success = form.posted_successfully? %}
-      <div class="field">
+      <div class="relative field">
         <input
           type="email"
           value=""
@@ -38,27 +38,28 @@
           autocorrect="off"
           autocapitalize="off"
           autocomplete="email"
+          required
+          placeholder=" "
           {% if form.errors %}
             aria-invalid="true"
             aria-describedby="RecoverEmail-email-error"
             autofocus
           {% endif %}
-          placeholder="{{ 'customer.login_page.email' | t }}"
         >
         <label for="RecoverEmail">
           {{ 'customer.login_page.email' | t }}
         </label>
       </div>
       {%- if form.errors -%}
-        <small id="RecoverEmail-email-error" class="form__message">
+        <div id="RecoverEmail-email-error" class="form__message">
           <span class="svg-wrapper">
             {{- 'icon-error.svg' | inline_asset_content -}}
           </span>
           {{ form.errors.messages.form }}
-        </small>
+        </div>
       {%- endif -%}
 
-      <button>
+      <button type="submit" class="w-full">
         {{ 'customer.login_page.submit' | t }}
       </button>
 
@@ -73,23 +74,22 @@
   </h1>
   <div>
     {%- if recover_success == true -%}
-      <h3 class="form__message" tabindex="-1" autofocus>
+      <div class="form__message" tabindex="-1" autofocus style="background-color: rgba(22, 163, 74, 0.1); color: rgb(21, 128, 61);">
         <span class="svg-wrapper">
           {{- 'icon-success.svg' | inline_asset_content -}}
         </span>
         {{ 'customer.recover_password.success' | t }}
-      </h3>
+      </div>
     {%- endif -%}
-    {%- form 'customer_login', novalidate: 'novalidate' -%}
+    {%- form 'customer_login', novalidate: 'novalidate', class: 'flex flex-col' -%}
       {%- if form.errors -%}
-        <h2 class="form__message" tabindex="-1" autofocus>
+        <div class="form__message" tabindex="-1" autofocus>
           <span class="visually-hidden">{{ 'accessibility.error' | t }} </span>
           <span class="svg-wrapper">
             {{- 'icon-error.svg' | inline_asset_content -}}
           </span>
-          {{ 'templates.contact.form.error_heading' | t }}
-        </h2>
-        {{ form.errors | default_errors }}
+          {{ form.errors | default_errors }}
+        </div>
       {%- endif -%}
 
       {%- if shop.features.login_with_shop_classic_customer_accounts? -%}
@@ -104,7 +104,7 @@
         </section>
       {%- endif -%}
 
-      <div class="field">
+      <div class="relative field">
         <input
           type="email"
           name="customer[email]"
@@ -112,10 +112,11 @@
           autocomplete="email"
           autocorrect="off"
           autocapitalize="off"
+          required
+          placeholder=" "
           {% if form.errors contains 'form' %}
             aria-invalid="true"
           {% endif %}
-          placeholder="{{ 'customer.login_page.email' | t }}"
         >
         <label for="CustomerEmail">
           {{ 'customer.login_page.email' | t }}
@@ -123,29 +124,30 @@
       </div>
 
       {%- if form.password_needed -%}
-        <div class="field">
+        <div class="relative field">
           <input
             type="password"
             value=""
             name="customer[password]"
             id="CustomerPassword"
             autocomplete="current-password"
+            required
+            placeholder=" "
             {% if form.errors contains 'form' %}
               aria-invalid="true"
             {% endif %}
-            placeholder="{{ 'customer.login_page.password' | t }}"
           >
           <label for="CustomerPassword">
             {{ 'customer.login_page.password' | t }}
           </label>
         </div>
 
-        <a href="#recover">
+        <a href="#recover" style="text-align: left; margin: 0.5rem 0 1.5rem;">
           {{ 'customer.login_page.forgot_password' | t }}
         </a>
       {%- endif -%}
 
-      <button>
+      <button type="submit" class="w-full">
         {{ 'customer.login_page.sign_in' | t }}
       </button>
 

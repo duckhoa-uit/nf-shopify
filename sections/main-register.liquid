@@ -18,132 +18,155 @@
   <h1>
     {{ 'customer.register.title' | t }}
   </h1>
-  {%- form 'create_customer' -%}
+  {%- form 'create_customer', id: 'create_customer', novalidate: 'novalidate' -%}
     {%- if form.errors -%}
-      <h2 class="form__message" tabindex="-1" autofocus>
+      <div class="form__message" tabindex="-1" autofocus>
         <span class="svg-wrapper">
           {{- 'icon-error.svg' | inline_asset_content -}}
         </span>
         {{ 'templates.contact.form.error_heading' | t }}
-      </h2>
-      <ul>
-        {%- for field in form.errors -%}
-          <li>
-            {%- if field == 'form' -%}
-              {{ form.errors.messages[field] }}
-            {%- else -%}
-              <a href="#RegisterForm-{{ field }}">
-                {{ form.errors.translated_fields[field] | capitalize }}
+        <ul>
+          {%- for field in form.errors -%}
+            <li>
+              {%- if field == 'form' -%}
                 {{ form.errors.messages[field] }}
-              </a>
-            {%- endif -%}
-          </li>
-        {%- endfor -%}
-      </ul>
+              {%- else -%}
+                <a href="#RegisterForm-{{ field }}">
+                  {{ form.errors.translated_fields[field] | capitalize }}
+                  {{ form.errors.messages[field] }}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
     {%- endif -%}
-    <div class="field">
-      <input
-        type="text"
-        name="customer[first_name]"
-        id="RegisterForm-FirstName"
-        {% if form.first_name %}
-          value="{{ form.first_name }}"
-        {% endif %}
-        autocomplete="given-name"
-        placeholder="{{ 'customer.register.first_name' | t }}"
-      >
-      <label for="RegisterForm-FirstName">
-        {{ 'customer.register.first_name' | t }}
-      </label>
+    <div class="flex flex-col">
+      <div class="relative field">
+        <input
+          type="text"
+          name="customer[first_name]"
+          id="RegisterForm-FirstName"
+          required
+          {% if form.first_name %}
+            value="{{ form.first_name }}"
+          {% endif %}
+          autocomplete="given-name"
+          placeholder=" "
+        >
+        <label for="RegisterForm-FirstName">
+          {{ 'customer.register.first_name' | t }}
+        </label>
+      </div>
+      <div class="relative field">
+        <input
+          type="text"
+          name="customer[last_name]"
+          id="RegisterForm-LastName"
+          required
+          {% if form.last_name %}
+            value="{{ form.last_name }}"
+          {% endif %}
+          autocomplete="family-name"
+          placeholder=" "
+        >
+        <label for="RegisterForm-LastName">
+          {{ 'customer.register.last_name' | t }}
+        </label>
+      </div>
+      <div class="relative field">
+        <input
+          type="email"
+          name="customer[email]"
+          id="RegisterForm-email"
+          required
+          {% if form.email %}
+            value="{{ form.email }}"
+          {% endif %}
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="email"
+          placeholder=" "
+          {% if form.errors contains 'email' %}
+            aria-invalid="true"
+            aria-describedby="RegisterForm-email-error"
+          {% endif %}
+        >
+        <label for="RegisterForm-email">
+          {{ 'customer.register.email' | t }}
+        </label>
+      </div>
+      {%- if form.errors contains 'email' -%}
+        <div id="RegisterForm-email-error" class="form__message">
+          <span class="svg-wrapper">
+            {{- 'icon-error.svg' | inline_asset_content -}}
+          </span>
+          {{ form.errors.translated_fields.email | capitalize }}
+          {{ form.errors.messages.email }}.
+        </div>
+      {%- endif -%}
+      <div class="relative field">
+        <input
+          type="tel"
+          name="customer[phone]"
+          id="RegisterForm-phone"
+          required
+          {% if form.phone %}
+            value="{{ form.phone }}"
+          {% endif %}
+          autocomplete="tel"
+          placeholder=" "
+        >
+        <label for="RegisterForm-phone">
+          {{ 'customer.register.phone' | t | default: 'Phone Number' }}
+        </label>
+      </div>
+      <div class="relative field">
+        <input
+          type="password"
+          name="customer[password]"
+          id="RegisterForm-password"
+          required
+          minlength="8"
+          title="{{ 'customer.register.password_requirements' | t | default: 'Password must be at least 8 characters and include at least one uppercase letter, one lowercase letter, one number, and one special character' }}"
+          placeholder=" "
+          {% if form.errors contains 'password' %}
+            aria-invalid="true"
+            aria-describedby="RegisterForm-password-error"
+          {% endif %}
+        >
+        <label for="RegisterForm-password">
+          {{ 'customer.register.password' | t }}
+        </label>
+      </div>
+      <div class="password-requirements flex flex-col items-start text-xs mt-1 text-[#666666]">
+        <p>
+          {{ 'customer.register.password_requirements' | t | default: 'Password must meet the following requirements:' }}
+        </p>
+        <ul class="mt-1 ml-4 list-disc">
+          <li class="requirement-length">At least 8 characters</li>
+          <li class="requirement-lowercase">At least one lowercase letter</li>
+          <li class="requirement-uppercase">At least one uppercase letter</li>
+          <li class="requirement-number">At least one number</li>
+          <li class="requirement-special">At least one special character</li>
+        </ul>
+      </div>
+      {%- if form.errors contains 'password' -%}
+        <div id="RegisterForm-password-error" class="form__message">
+          <span class="svg-wrapper">
+            {{- 'icon-error.svg' | inline_asset_content -}}
+          </span>
+          {{ form.errors.translated_fields.password | capitalize }}
+          {{ form.errors.messages.password }}.
+        </div>
+      {%- endif -%}
+      <button type="submit" class="mt-4">
+        {{ 'customer.register.submit' | t }}
+      </button>
+      <a href="{{ routes.account_login_url }}" class="mt-2 text-foreground text-sm leading-5">
+        {{ 'customer.login_page.title' | t }}
+      </a>
     </div>
-    <div class="field">
-      <input
-        type="text"
-        name="customer[last_name]"
-        id="RegisterForm-LastName"
-        {% if form.last_name %}
-          value="{{ form.last_name }}"
-        {% endif %}
-        autocomplete="family-name"
-        placeholder="{{ 'customer.register.last_name' | t }}"
-      >
-      <label for="RegisterForm-LastName">
-        {{ 'customer.register.last_name' | t }}
-      </label>
-    </div>
-    <div class="field">
-      <input
-        type="email"
-        name="customer[email]"
-        id="RegisterForm-email"
-        {% if form.email %}
-          value="{{ form.email }}"
-        {% endif %}
-        spellcheck="false"
-        autocapitalize="off"
-        autocomplete="email"
-        aria-required="true"
-        {% if form.errors contains 'email' %}
-          aria-invalid="true"
-          aria-describedby="RegisterForm-email-error"
-        {% endif %}
-        placeholder="{{ 'customer.register.email' | t }}"
-      >
-      <label for="RegisterForm-email">
-        {{ 'customer.register.email' | t }}
-      </label>
-    </div>
-    {%- if form.errors contains 'email' -%}
-      <span id="RegisterForm-email-error" class="form__message">
-        <span class="svg-wrapper">
-          {{- 'icon-error.svg' | inline_asset_content -}}
-        </span>
-        {{ form.errors.translated_fields.email | capitalize }}
-        {{ form.errors.messages.email }}.
-      </span>
-    {%- endif -%}
-    <div class="field">
-      <input
-        type="password"
-        name="customer[password]"
-        id="RegisterForm-password"
-        aria-required="true"
-        minlength="8"
-        title="{{ 'customer.register.password_requirements' | t | default: 'Password must be at least 8 characters and include at least one uppercase letter, one lowercase letter, one number, and one special character' }}"
-        {% if form.errors contains 'password' %}
-          aria-invalid="true"
-          aria-describedby="RegisterForm-password-error"
-        {% endif %}
-        placeholder="{{ 'customer.register.password' | t }}"
-      >
-      <label for="RegisterForm-password">
-        {{ 'customer.register.password' | t }}
-      </label>
-    </div>
-    <div class="password-requirements flex flex-col items-start text-xs mt-1 text-[#666666]">
-      <p>
-        {{ 'customer.register.password_requirements' | t | default: 'Password must meet the following requirements:' }}
-      </p>
-      <ul class="mt-1 ml-4 list-disc">
-        <li class="requirement-length">At least 8 characters</li>
-        <li class="requirement-lowercase">At least one lowercase letter</li>
-        <li class="requirement-uppercase">At least one uppercase letter</li>
-        <li class="requirement-number">At least one number</li>
-        <li class="requirement-special">At least one special character</li>
-      </ul>
-    </div>
-    {%- if form.errors contains 'password' -%}
-      <span id="RegisterForm-password-error" class="form__message">
-        <span class="svg-wrapper">
-          {{- 'icon-error.svg' | inline_asset_content -}}
-        </span>
-        {{ form.errors.translated_fields.password | capitalize }}
-        {{ form.errors.messages.password }}.
-      </span>
-    {%- endif -%}
-    <button>
-      {{ 'customer.register.submit' | t }}
-    </button>
   {%- endform -%}
 </div>
 
@@ -169,9 +192,72 @@
         if (e.stopPropagation) e.stopPropagation();
         e.returnValue = false;
 
-        // Get the password input
+        // Get required fields
+        const firstNameInput = document.getElementById('RegisterForm-FirstName');
+        const lastNameInput = document.getElementById('RegisterForm-LastName');
+        const emailInput = document.getElementById('RegisterForm-email');
+        const phoneInput = document.getElementById('RegisterForm-phone');
         const passwordInput = document.getElementById('RegisterForm-password');
 
+        // Validate first name
+        if (firstNameInput && !firstNameInput.value.trim()) {
+          firstNameInput.setCustomValidity('Please enter your first name');
+          firstNameInput.reportValidity();
+          firstNameInput.focus();
+          return false;
+        } else if (firstNameInput) {
+          firstNameInput.setCustomValidity('');
+        }
+
+        // Validate last name
+        if (lastNameInput && !lastNameInput.value.trim()) {
+          lastNameInput.setCustomValidity('Please enter your last name');
+          lastNameInput.reportValidity();
+          lastNameInput.focus();
+          return false;
+        } else if (lastNameInput) {
+          lastNameInput.setCustomValidity('');
+        }
+
+        // Validate email
+        if (emailInput) {
+          if (!emailInput.value.trim()) {
+            emailInput.setCustomValidity('Please enter your email address');
+            emailInput.reportValidity();
+            emailInput.focus();
+            return false;
+          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+            emailInput.setCustomValidity('Please enter a valid email address');
+            emailInput.reportValidity();
+            emailInput.focus();
+            return false;
+          } else {
+            emailInput.setCustomValidity('');
+          }
+        }
+
+        // Validate phone (required)
+        if (phoneInput) {
+          if (!phoneInput.value.trim()) {
+            phoneInput.setCustomValidity('Please enter your phone number');
+            phoneInput.reportValidity();
+            phoneInput.focus();
+            return false;
+          } else {
+            // Simple regex for international phone format
+            const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$/;
+            if (!phoneRegex.test(phoneInput.value.trim())) {
+              phoneInput.setCustomValidity('Please enter a valid phone number');
+              phoneInput.reportValidity();
+              phoneInput.focus();
+              return false;
+            } else {
+              phoneInput.setCustomValidity('');
+            }
+          }
+        }
+
+        // Validate password
         if (passwordInput) {
           // Validate the password
           const validation = validatePassword(passwordInput.value);
@@ -249,6 +335,15 @@
         isValid: minLength && hasLowercase && hasUppercase && hasNumber && hasSpecial,
       };
     }
+
+    // Setup real-time validation for all fields
+    // Add input event listeners to clear validation messages as user types
+    document.querySelectorAll('#create_customer input[required]').forEach(function(input) {
+      input.addEventListener('input', function() {
+        // Clear validation message as soon as user starts typing
+        this.setCustomValidity('');
+      });
+    });
 
     // Setup password validation UI
     const passwordInput = document.getElementById('RegisterForm-password');
