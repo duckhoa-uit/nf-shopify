@@ -149,59 +149,36 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM Content Loaded - Initializing password validation');
-
     // Get the form element - using the correct ID from the rendered DOM
     const registerForm = document.getElementById('create_customer');
-    console.log('Register Form found:', !!registerForm);
-
-    // Debug form details
-    if (registerForm) {
-      console.log('Form ID:', registerForm.id);
-      console.log('Form Action:', registerForm.action);
-      console.log('Form Method:', registerForm.method);
-      console.log('Form has novalidate:', registerForm.hasAttribute('novalidate'));
-    }
 
     // Add form submission validation
     if (registerForm) {
       // Disable the native form validation
       registerForm.setAttribute('novalidate', 'novalidate');
-      console.log('Added novalidate attribute to form');
 
       // First, completely disable the form's native submit behavior
       registerForm.onsubmit = function() {
-        console.log('Native onsubmit handler called - preventing default');
         return false;
       };
 
       // Add a submit event listener with capture phase to ensure it runs first
       registerForm.addEventListener('submit', function (e) {
-        console.log('Form submit event triggered');
-
         // Always prevent the default submission first - multiple ways for redundancy
         if (e.preventDefault) e.preventDefault();
         if (e.stopPropagation) e.stopPropagation();
         e.returnValue = false;
-        console.log('Default form submission prevented');
 
         // Get the password input
         const passwordInput = document.getElementById('RegisterForm-password');
-        console.log('Password input found:', !!passwordInput);
 
         if (passwordInput) {
-          console.log('Password value:', passwordInput.value);
-
           // Validate the password
           const validation = validatePassword(passwordInput.value);
-          console.log('Password validation result:', validation);
 
           if (!validation.isValid) {
-            console.log('Password validation failed');
-
             // Get the password-requirements div directly from the form
             const requirementsEl = registerForm.querySelector('.password-requirements');
-            console.log('Requirements element found:', !!requirementsEl);
 
             if (requirementsEl) {
               // Update individual requirement indicators
@@ -210,14 +187,6 @@
               const uppercaseEl = requirementsEl.querySelector('.requirement-uppercase');
               const numberEl = requirementsEl.querySelector('.requirement-number');
               const specialEl = requirementsEl.querySelector('.requirement-special');
-
-              console.log('Requirement elements found:', {
-                length: !!lengthEl,
-                lowercase: !!lowercaseEl,
-                uppercase: !!uppercaseEl,
-                number: !!numberEl,
-                special: !!specialEl
-              });
 
               // Update classes based on validation
               updateRequirementClass(lengthEl, validation.minLength);
@@ -231,20 +200,16 @@
             passwordInput.setCustomValidity('Password must meet all requirements');
             passwordInput.reportValidity();
             passwordInput.focus();
-            console.log('Form submission stopped due to invalid password');
             return false; // Stop here and don't submit
           } else {
             // Clear any previous validation message
             passwordInput.setCustomValidity('');
-            console.log('Password validation passed');
           }
         }
 
-        console.log('Proceeding with form submission');
         // If we get here, validation passed, so submit the form programmatically
         // Use setTimeout to ensure this happens after all other handlers
         setTimeout(function() {
-          console.log('Submitting form programmatically');
           try {
             // Create a new submit event that bypasses our validation
             const submitEvent = new Event('submit-validated', { bubbles: true, cancelable: false });
@@ -252,10 +217,7 @@
 
             // Submit the form directly
             registerForm.submit();
-            console.log('Form submitted successfully');
           } catch (error) {
-            console.error('Error submitting form:', error);
-
             // Fallback method - create a hidden submit button and click it
             const submitButton = document.createElement('button');
             submitButton.type = 'submit';
@@ -290,20 +252,16 @@
 
     // Setup password validation UI
     const passwordInput = document.getElementById('RegisterForm-password');
-    console.log('Setting up real-time password validation for:', !!passwordInput);
 
     if (passwordInput) {
       // Add input event listener
       passwordInput.addEventListener('input', function () {
-        console.log('Password input event triggered');
         const validation = validatePassword(this.value);
-        console.log('Real-time validation result:', validation);
 
         // Get the form element directly
         const form = document.getElementById('create_customer');
         // Look for the password-requirements div in the form
         const requirementsEl = form ? form.querySelector('.password-requirements') : document.querySelector('.password-requirements');
-        console.log('Requirements element found (real-time):', !!requirementsEl);
 
         if (requirementsEl) {
           // Update individual requirement indicators
@@ -312,14 +270,6 @@
           const uppercaseEl = requirementsEl.querySelector('.requirement-uppercase');
           const numberEl = requirementsEl.querySelector('.requirement-number');
           const specialEl = requirementsEl.querySelector('.requirement-special');
-
-          console.log('Real-time requirement elements found:', {
-            length: !!lengthEl,
-            lowercase: !!lowercaseEl,
-            uppercase: !!uppercaseEl,
-            number: !!numberEl,
-            special: !!specialEl
-          });
 
           // Update classes based on validation
           updateRequirementClass(lengthEl, validation.minLength);
@@ -331,20 +281,16 @@
           // Update overall validation state
           if (validation.isValid) {
             this.setCustomValidity('');
-            console.log('Real-time validation passed');
           } else if (this.value.length > 0) {
             this.setCustomValidity('Password must meet all requirements');
-            console.log('Real-time validation failed');
           } else {
             this.setCustomValidity('');
-            console.log('Empty password field');
           }
         }
       });
 
       // Also add a keyup event listener as a backup
       passwordInput.addEventListener('keyup', function() {
-        console.log('Password keyup event triggered');
         // Trigger the input event handler
         const event = new Event('input', { bubbles: true });
         this.dispatchEvent(event);
@@ -353,32 +299,24 @@
       // Helper function to update requirement class
       function updateRequirementClass(element, isValid) {
         if (!element) {
-          console.log('Element not found for class update');
           return;
         }
-
-        console.log('Updating element class:', element.textContent, 'isValid:', isValid);
-        console.log('Before update - classList:', Array.from(element.classList));
 
         try {
           if (isValid) {
             element.classList.add('requirement-success');
             element.classList.remove('requirement-error');
             element.classList.remove('text-[#666666]');
-            console.log('Added green class');
           } else {
             element.classList.add('requirement-error');
             element.classList.remove('requirement-success');
             element.classList.remove('text-[#666666]');
-            console.log('Added red class');
           }
 
           // Force a repaint to ensure the changes take effect
           void element.offsetWidth;
-
-          console.log('After update - classList:', Array.from(element.classList));
         } catch (error) {
-          console.error('Error updating classes:', error);
+          // Silent error handling
         }
       }
     }

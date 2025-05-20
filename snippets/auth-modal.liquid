@@ -707,31 +707,21 @@
       };
 
       customerRegisterForm.addEventListener('submit', function(e) {
-        console.log('Register form submit event triggered');
-
         // Always prevent the default submission first - multiple ways for redundancy
         if (e.preventDefault) e.preventDefault();
         if (e.stopPropagation) e.stopPropagation();
         e.returnValue = false;
-        console.log('Default form submission prevented');
 
         // Validate password before submission
         const passwordInput = this.querySelector('input[type="password"][name="customer[password]"]');
-        console.log('Password input found in form:', !!passwordInput);
 
         if (passwordInput) {
-          console.log('Password value:', passwordInput.value);
-
           // Validate the password
           const validation = validatePassword(passwordInput.value);
-          console.log('Password validation result on submit:', validation);
 
           if (!validation.isValid) {
-            console.log('Password validation failed on submit');
-
             // Get the password-requirements div directly from the form
             const requirementsEl = this.querySelector('.password-requirements');
-            console.log('Requirements element found on submit:', !!requirementsEl);
 
             if (requirementsEl) {
               // Update individual requirement indicators
@@ -740,14 +730,6 @@
               const uppercaseEl = requirementsEl.querySelector('.requirement-uppercase');
               const numberEl = requirementsEl.querySelector('.requirement-number');
               const specialEl = requirementsEl.querySelector('.requirement-special');
-
-              console.log('Submit requirement elements found:', {
-                length: !!lengthEl,
-                lowercase: !!lowercaseEl,
-                uppercase: !!uppercaseEl,
-                number: !!numberEl,
-                special: !!specialEl
-              });
 
               // Update classes based on validation
               updateRequirementClass(lengthEl, validation.minLength);
@@ -761,23 +743,19 @@
             passwordInput.setCustomValidity('Password must meet all requirements');
             passwordInput.reportValidity();
             passwordInput.focus();
-            console.log('Form submission stopped due to invalid password');
             return false; // Stop here and don't submit
           } else {
             // Clear any previous validation message
             passwordInput.setCustomValidity('');
-            console.log('Password validation passed on submit');
           }
         }
 
-        console.log('Proceeding with form submission');
         // Store a flag in localStorage to indicate we should reload after registration
         localStorage.setItem('auth_reload_needed', 'true');
 
         // If we get here, validation passed, so submit the form programmatically
         // Use setTimeout to ensure this happens after all other handlers
         setTimeout(function() {
-          console.log('Submitting register form programmatically');
           try {
             // Create a new submit event that bypasses our validation
             const submitEvent = new Event('submit-validated', { bubbles: true, cancelable: false });
@@ -785,10 +763,7 @@
 
             // Submit the form directly
             customerRegisterForm.submit();
-            console.log('Form submitted successfully');
           } catch (error) {
-            console.error('Error submitting form:', error);
-
             // Fallback method - create a hidden submit button and click it
             const submitButton = document.createElement('button');
             submitButton.type = 'submit';
