@@ -1,12 +1,12 @@
-<div id="auth-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+<div id="auth-modal" class="fixed inset-0 z-50 hidden overflow-y-auto opacity-0 transition-opacity duration-150" style="transition-timing-function: var(--ease-out, cubic-bezier(0, 0, 0.2, 1));">
   <!-- Modal Backdrop -->
-  <div class="absolute top-0 left-0 right-0 h-full bg-[#0f0f0f] opacity-40"></div>
+  <div class="modal-backdrop absolute top-0 left-0 right-0 h-full bg-[#0f0f0f] opacity-40"></div>
 
   <!-- Modal Panel -->
-  <div class="flex min-h-full items-center justify-center p-0 md:p-4 ">
-    <div class="relative w-full md:max-w-md bg-background md:rounded-3">
+  <div class="flex min-h-full items-center justify-center p-0 md:p-4">
+    <div class="relative w-full md:max-w-md bg-background md:rounded-3 transform scale-95 opacity-0 transition-all duration-150" style="transition-timing-function: var(--power1-out, cubic-bezier(0.4, 0, 0.2, 1))">
       <!-- Close Button -->
-      <button type="button" class="close absolute right-8 top-8 text-secondary-foreground hover:text-foreground size-4">
+      <button type="button" class="close absolute right-8 top-8 text-secondary-foreground hover:text-foreground size-6 p-1 rounded-3 cursor-pointer transition-colors hover:bg-[#f0f0f0]">
         <span class="size-4">
           {{- 'icon-close.svg' | inline_asset_content -}}
         </span>
@@ -24,13 +24,13 @@
           <div class="border-b border-[#E0DFDF]">
             <nav class="-mb-px flex gap-x-6 uppercase" aria-label="Tabs">
               <a
-                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
+                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link cursor-pointer transition-all duration-150" style="transition-timing-function: var(--power1-out, cubic-bezier(0.4, 0, 0.2, 1))"
                 data-tab="login"
               >
                 {{- 'customer.login_page.sign_in' | t | default: 'Login' -}}
               </a>
               <a
-                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
+                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link cursor-pointer transition-all duration-150" style="transition-timing-function: var(--power1-out, cubic-bezier(0.4, 0, 0.2, 1))"
                 data-tab="register"
               >
                 {{- 'customer.register.title' | t | default: 'Register' -}}
@@ -133,13 +133,13 @@
           <div class="border-b border-[#E0DFDF]">
             <nav class="-mb-px flex gap-x-6 uppercase" aria-label="Tabs">
               <a
-                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
+                class="whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link cursor-pointer transition-all duration-150" style="transition-timing-function: var(--power1-out, cubic-bezier(0.4, 0, 0.2, 1))"
                 data-tab="login"
               >
                 {{- 'customer.login_page.sign_in' | t | default: 'Login' -}}
               </a>
               <a
-                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link"
+                class="whitespace-nowrap border-b-2 border-[#0F0F0F] px-1 py-4 text-sm font-medium leading-4 text-foreground no-underline tab-link cursor-pointer transition-all duration-150" style="transition-timing-function: var(--power1-out, cubic-bezier(0.4, 0, 0.2, 1))"
                 data-tab="register"
               >
                 {{- 'customer.register.title' | t | default: 'Registration' -}}
@@ -521,9 +521,42 @@
     const forgotPasswordLink = loginForm.querySelector('.forgot-password-link');
     const recoverCancelLink = recoverForm.querySelector('.recovery-cancel');
 
-    // Close modal
+    // Function to close the modal with animation
+    function closeModal() {
+      // First fade out the modal content
+      const modalContent = modal.querySelector('.md\\:max-w-md');
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      modalContent.classList.add('scale-95', 'opacity-0');
+
+      // Then fade out the entire modal
+      setTimeout(() => {
+        modal.classList.remove('opacity-100');
+        modal.classList.add('opacity-0');
+
+        // Finally hide the modal completely
+        setTimeout(() => {
+          modal.classList.add('hidden');
+        }, 150);
+      }, 50);
+    }
+
+    // Close modal when clicking the close button
     closeButton.addEventListener('click', function() {
-      modal.classList.add('hidden');
+      closeModal();
+    });
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal || e.target.classList.contains('modal-backdrop')) {
+        closeModal();
+      }
+    });
+
+    // Close modal when pressing ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
     });
 
     // Switch between login and register
@@ -531,22 +564,87 @@
       tab.addEventListener('click', function(e) {
         e.preventDefault();
         const tabType = this.getAttribute('data-tab');
+        const currentTab = modal.querySelector(`.tab-link[data-tab="${tabType}"]`);
 
-        // Update active tab
+        // Don't do anything if the current tab is already active
+        if (currentTab.classList.contains('border-[#0F0F0F]')) {
+          return;
+        }
+
+        // Update active tab with animation
         loginTabs.forEach(t => {
-          t.classList.toggle('border-[#0F0F0F]', t === this);
-          t.classList.toggle('border-transparent', t !== this);
+          if (t === currentTab) {
+            t.classList.add('border-[#0F0F0F]');
+            t.classList.remove('border-transparent');
+          } else {
+            t.classList.remove('border-[#0F0F0F]');
+            t.classList.add('border-transparent');
+          }
         });
 
-        // Show appropriate form
+        // Determine which form to show and which to hide
+        let formToShow, formToHide;
+
         if (tabType === 'login') {
-          loginForm.classList.remove('hidden');
-          registerForm.classList.add('hidden');
-          recoverForm.classList.add('hidden');
+          formToShow = loginForm;
+          formToHide = registerForm;
         } else if (tabType === 'register') {
-          loginForm.classList.add('hidden');
-          registerForm.classList.remove('hidden');
-          recoverForm.classList.add('hidden');
+          formToShow = registerForm;
+          formToHide = loginForm;
+        }
+
+        // Make sure recover form is hidden
+        recoverForm.classList.add('hidden');
+
+        // Get the modal panel element to animate its height
+        const modalPanel = modal.querySelector('.md\\:max-w-md');
+
+        // Fade out current form - faster transition (150ms)
+        if (!formToHide.classList.contains('hidden')) {
+          // Set initial height on the modal panel before the transition
+          const currentHeight = modalPanel.offsetHeight;
+          modalPanel.style.height = currentHeight + 'px';
+          modalPanel.style.transition = 'height 150ms';
+          modalPanel.style.transitionTimingFunction = 'var(--ease-in-out, cubic-bezier(0.4, 0, 0.2, 1))';
+
+          // Fade out the current form
+          formToHide.style.opacity = '0';
+          formToHide.style.transition = 'opacity 150ms';
+          formToHide.style.transitionTimingFunction = 'var(--ease-in, cubic-bezier(0.4, 0, 1, 1))';
+
+          setTimeout(() => {
+            // Hide current form and show new form (but still invisible)
+            formToHide.classList.add('hidden');
+            formToShow.classList.remove('hidden');
+            formToShow.style.opacity = '0';
+
+            // Reset opacity for animation
+            formToHide.style.opacity = '';
+
+            // Update height of the modal panel to match the new form
+            // Add a small buffer (24px) to ensure no content gets cut off during transition
+            const newHeight = formToShow.offsetHeight + 24;
+            modalPanel.style.height = newHeight + 'px';
+
+            // Fade in new form - faster transition (150ms)
+            formToShow.style.transition = 'opacity 150ms';
+            formToShow.style.transitionTimingFunction = 'var(--ease-out, cubic-bezier(0, 0, 0.2, 1))';
+
+            // Trigger reflow
+            void formToShow.offsetWidth;
+
+            // Fade in
+            formToShow.style.opacity = '1';
+
+            // After animation completes, reset the height to auto
+            setTimeout(() => {
+              modalPanel.style.height = '';
+              modalPanel.style.transition = '';
+            }, 150);
+          }, 150);
+        } else {
+          // If the form is already hidden, just show the new one
+          formToShow.classList.remove('hidden');
         }
       });
     });
@@ -554,24 +652,110 @@
     // Forgot password link
     forgotPasswordLink.addEventListener('click', function(e) {
       e.preventDefault();
-      loginForm.classList.add('hidden');
-      registerForm.classList.add('hidden');
-      recoverForm.classList.remove('hidden');
+
+      // Get the modal panel element to animate its height
+      const modalPanel = modal.querySelector('.md\\:max-w-md');
+
+      // Set initial height on the modal panel before the transition
+      const currentHeight = modalPanel.offsetHeight;
+      modalPanel.style.height = currentHeight + 'px';
+      modalPanel.style.transition = 'height 150ms';
+      modalPanel.style.transitionTimingFunction = 'var(--ease-in-out, cubic-bezier(0.4, 0, 0.2, 1))';
+
+      // Fade out current form - faster transition (150ms)
+      loginForm.style.opacity = '0';
+      loginForm.style.transition = 'opacity 150ms';
+      loginForm.style.transitionTimingFunction = 'var(--ease-in, cubic-bezier(0.4, 0, 1, 1))';
+
+      setTimeout(() => {
+        // Hide login form and show recover form (but still invisible)
+        loginForm.classList.add('hidden');
+        registerForm.classList.add('hidden');
+        recoverForm.classList.remove('hidden');
+        recoverForm.style.opacity = '0';
+
+        // Reset opacity for animation
+        loginForm.style.opacity = '';
+
+        // Update height of the modal panel to match the new form
+        // Add a small buffer (24px) to ensure no content gets cut off during transition
+        const newHeight = recoverForm.offsetHeight + 24;
+        modalPanel.style.height = newHeight + 'px';
+
+        // Fade in recover form - faster transition (150ms)
+        recoverForm.style.transition = 'opacity 150ms';
+        recoverForm.style.transitionTimingFunction = 'var(--ease-out, cubic-bezier(0, 0, 0.2, 1))';
+
+        // Trigger reflow
+        void recoverForm.offsetWidth;
+
+        // Fade in
+        recoverForm.style.opacity = '1';
+
+        // After animation completes, reset the height to auto
+        setTimeout(() => {
+          modalPanel.style.height = '';
+          modalPanel.style.transition = '';
+        }, 150);
+      }, 150);
     });
 
     // Recovery cancel link
     recoverCancelLink.addEventListener('click', function(e) {
       e.preventDefault();
-      loginForm.classList.remove('hidden');
-      registerForm.classList.add('hidden');
-      recoverForm.classList.add('hidden');
 
-      // Ensure login tab is active
-      loginTabs.forEach(function(tab) {
-        const isLoginTab = tab.getAttribute('data-tab') === 'login';
-        tab.classList.toggle('border-[#0F0F0F]', isLoginTab);
-        tab.classList.toggle('border-transparent', !isLoginTab);
-      });
+      // Get the modal panel element to animate its height
+      const modalPanel = modal.querySelector('.md\\:max-w-md');
+
+      // Set initial height on the modal panel before the transition
+      const currentHeight = modalPanel.offsetHeight;
+      modalPanel.style.height = currentHeight + 'px';
+      modalPanel.style.transition = 'height 150ms';
+      modalPanel.style.transitionTimingFunction = 'var(--ease-in-out, cubic-bezier(0.4, 0, 0.2, 1))';
+
+      // Fade out current form - faster transition (150ms)
+      recoverForm.style.opacity = '0';
+      recoverForm.style.transition = 'opacity 150ms';
+      recoverForm.style.transitionTimingFunction = 'var(--ease-in, cubic-bezier(0.4, 0, 1, 1))';
+
+      setTimeout(() => {
+        // Hide recover form and show login form (but still invisible)
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        recoverForm.classList.add('hidden');
+        loginForm.style.opacity = '0';
+
+        // Reset opacity for animation
+        recoverForm.style.opacity = '';
+
+        // Update height of the modal panel to match the new form
+        // Add a small buffer (24px) to ensure no content gets cut off during transition
+        const newHeight = loginForm.offsetHeight + 24;
+        modalPanel.style.height = newHeight + 'px';
+
+        // Fade in login form - faster transition (150ms)
+        loginForm.style.transition = 'opacity 150ms';
+        loginForm.style.transitionTimingFunction = 'var(--ease-out, cubic-bezier(0, 0, 0.2, 1))';
+
+        // Trigger reflow
+        void loginForm.offsetWidth;
+
+        // Fade in
+        loginForm.style.opacity = '1';
+
+        // Ensure login tab is active with animation
+        loginTabs.forEach(function(tab) {
+          const isLoginTab = tab.getAttribute('data-tab') === 'login';
+          tab.classList.toggle('border-[#0F0F0F]', isLoginTab);
+          tab.classList.toggle('border-transparent', !isLoginTab);
+        });
+
+        // After animation completes, reset the height to auto
+        setTimeout(() => {
+          modalPanel.style.height = '';
+          modalPanel.style.transition = '';
+        }, 150);
+      }, 150);
     });
 
     // Function to check if we're already on a login or register page
@@ -600,7 +784,19 @@
         return;
       }
 
+      // First make the modal visible but still transparent
       modal.classList.remove('hidden');
+
+      // Trigger reflow to ensure transitions work properly
+      void modal.offsetWidth;
+
+      // Start the fade-in animation
+      modal.classList.add('opacity-100');
+
+      // Animate the modal content
+      const modalContent = modal.querySelector('.md\\:max-w-md');
+      modalContent.classList.remove('scale-95', 'opacity-0');
+      modalContent.classList.add('scale-100', 'opacity-100');
 
       // Hide all forms first
       loginForm.classList.add('hidden');

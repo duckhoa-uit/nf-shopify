@@ -292,6 +292,9 @@
   .collapse {
     visibility: collapse !important;
   }
+  .invisible {
+    visibility: hidden !important;
+  }
   .visible {
     visibility: visible !important;
   }
@@ -325,6 +328,9 @@
   .top-1\/2 {
     top: calc(1/2 * 100%) !important;
   }
+  .top-4 {
+    top: calc(var(--spacing) * 4) !important;
+  }
   .top-6 {
     top: calc(var(--spacing) * 6) !important;
   }
@@ -342,6 +348,9 @@
   }
   .right-3 {
     right: calc(var(--spacing) * 3) !important;
+  }
+  .right-4 {
+    right: calc(var(--spacing) * 4) !important;
   }
   .right-8 {
     right: calc(var(--spacing) * 8) !important;
@@ -670,6 +679,10 @@
     width: calc(var(--spacing) * 6) !important;
     height: calc(var(--spacing) * 6) !important;
   }
+  .size-8 {
+    width: calc(var(--spacing) * 8) !important;
+    height: calc(var(--spacing) * 8) !important;
+  }
   .size-9 {
     width: calc(var(--spacing) * 9) !important;
     height: calc(var(--spacing) * 9) !important;
@@ -821,6 +834,18 @@
   .-translate-y-1\/2 {
     --tw-translate-y: calc(calc(1/2 * 100%) * -1) !important;
     translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .scale-95 {
+    --tw-scale-x: 95% !important;
+    --tw-scale-y: 95% !important;
+    --tw-scale-z: 95% !important;
+    scale: var(--tw-scale-x) var(--tw-scale-y) !important;
+  }
+  .scale-100 {
+    --tw-scale-x: 100% !important;
+    --tw-scale-y: 100% !important;
+    --tw-scale-z: 100% !important;
+    scale: var(--tw-scale-x) var(--tw-scale-y) !important;
   }
   .-rotate-90 {
     rotate: calc(90deg * -1) !important;
@@ -1166,6 +1191,9 @@
   }
   .p-0 {
     padding: calc(var(--spacing) * 0) !important;
+  }
+  .p-1 {
+    padding: calc(var(--spacing) * 1) !important;
   }
   .p-2 {
     padding: calc(var(--spacing) * 2) !important;
@@ -1539,6 +1567,9 @@
   .underline-offset-2 {
     text-underline-offset: 2px !important;
   }
+  .opacity-0 {
+    opacity: 0% !important;
+  }
   .opacity-25 {
     opacity: 25% !important;
   }
@@ -1578,6 +1609,10 @@
     --tw-blur: blur(8px) !important;
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
   }
+  .grayscale {
+    --tw-grayscale: grayscale(100%) !important;
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
+  }
   .invert {
     --tw-invert: invert(100%) !important;
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
@@ -1610,6 +1645,10 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function)) !important;
     transition-duration: var(--tw-duration, var(--default-transition-duration)) !important;
   }
+  .duration-150 {
+    --tw-duration: 150ms !important;
+    transition-duration: 150ms !important;
+  }
   .duration-300 {
     --tw-duration: 300ms !important;
     transition-duration: 300ms !important;
@@ -1622,12 +1661,20 @@
     --tw-ease: var(--ease-in-out) !important;
     transition-timing-function: var(--ease-in-out) !important;
   }
+  .ease-out {
+    --tw-ease: var(--ease-out) !important;
+    transition-timing-function: var(--ease-out) !important;
+  }
   .backface-hidden {
     backface-visibility: hidden !important;
   }
   .outline-none {
     --tw-outline-style: none !important;
     outline-style: none !important;
+  }
+  .select-none {
+    -webkit-user-select: none !important;
+    user-select: none !important;
   }
   .\*\:my-0\.5 {
     :is(& > *) {
@@ -1749,6 +1796,13 @@
     &:hover {
       @media (hover: hover) {
         border-color: #000 !important;
+      }
+    }
+  }
+  .hover\:bg-\[\#f0f0f0\] {
+    &:hover {
+      @media (hover: hover) {
+        background-color: #f0f0f0 !important;
       }
     }
   }
@@ -2381,6 +2435,21 @@
   inherits: false;
   initial-value: 0;
 }
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
 @property --tw-rotate-x {
   syntax: "*";
   inherits: false;
@@ -2582,19 +2651,4 @@
   syntax: "*";
   initial-value: "";
   inherits: false;
-}
-@property --tw-scale-x {
-  syntax: "*";
-  inherits: false;
-  initial-value: 1;
-}
-@property --tw-scale-y {
-  syntax: "*";
-  inherits: false;
-  initial-value: 1;
-}
-@property --tw-scale-z {
-  syntax: "*";
-  inherits: false;
-  initial-value: 1;
 }
