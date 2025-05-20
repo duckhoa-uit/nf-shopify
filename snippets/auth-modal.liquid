@@ -164,6 +164,7 @@
                   type="text"
                   name="customer[first_name]"
                   id="first_name"
+                  required
                   placeholder=" "
                   autocomplete="given-name"
                   {% if form.errors contains 'first_name' %}
@@ -186,6 +187,7 @@
                   type="text"
                   name="customer[last_name]"
                   id="last_name"
+                  required
                   placeholder=" "
                   autocomplete="family-name"
                   {% if form.errors contains 'last_name' %}
@@ -221,6 +223,29 @@
                   for="email"
                 >
                   {{ 'customer.login_page.email' | t | default: 'E-mail' }}
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <div class="relative field">
+                <input
+                  type="tel"
+                  name="customer[phone]"
+                  id="phone"
+                  required
+                  placeholder=" "
+                  autocomplete="tel"
+                  {% if form.errors contains 'phone' %}
+                    aria-invalid="true"
+                    aria-describedby="phone-error"
+                  {% endif %}
+                  value="{{ form.phone }}"
+                >
+                <label
+                  for="phone"
+                >
+                  {{ 'customer.register.phone' | t | default: 'Phone Number' }}
                 </label>
               </div>
             </div>
@@ -274,7 +299,7 @@
                 label: 'customer.register.accepts_marketing' | t | default: 'In the future, I would like to receive information by email about current trends, offers and NORTHFINDER discounts. The subscription can be canceled free of charge at any time.',
                 class: 'flex items-start',
                 input_class: 'flex size-[1.125rem] items-center justify-center mr-2 cursor-pointer p-2 relative',
-                label_class: 'mt-0 text-foreground text-sm leading-6 text-left flex-1'
+                label_class: 'mt-0 text-foreground text-sm leading-5 text-left flex-1'
               %}
             </div>
 
@@ -393,6 +418,15 @@
         isValid: minLength && hasLowercase && hasUppercase && hasNumber && hasSpecial
       };
     }
+
+    // Setup real-time validation for all fields
+    // Add input event listeners to clear validation messages as user types
+    document.querySelectorAll('#customer_register_form input[required]').forEach(function(input) {
+      input.addEventListener('input', function() {
+        // Clear validation message as soon as user starts typing
+        this.setCustomValidity('');
+      });
+    });
 
     // Setup password validation UI
     const passwordInputs = document.querySelectorAll('input[type="password"][name="customer[password]"]');
@@ -712,9 +746,72 @@
         if (e.stopPropagation) e.stopPropagation();
         e.returnValue = false;
 
-        // Validate password before submission
+        // Get required fields
+        const firstNameInput = this.querySelector('input[name="customer[first_name]"]');
+        const lastNameInput = this.querySelector('input[name="customer[last_name]"]');
+        const emailInput = this.querySelector('input[name="customer[email]"]');
+        const phoneInput = this.querySelector('input[name="customer[phone]"]');
         const passwordInput = this.querySelector('input[type="password"][name="customer[password]"]');
 
+        // Validate first name
+        if (firstNameInput && !firstNameInput.value.trim()) {
+          firstNameInput.setCustomValidity('Please enter your first name');
+          firstNameInput.reportValidity();
+          firstNameInput.focus();
+          return false;
+        } else if (firstNameInput) {
+          firstNameInput.setCustomValidity('');
+        }
+
+        // Validate last name
+        if (lastNameInput && !lastNameInput.value.trim()) {
+          lastNameInput.setCustomValidity('Please enter your last name');
+          lastNameInput.reportValidity();
+          lastNameInput.focus();
+          return false;
+        } else if (lastNameInput) {
+          lastNameInput.setCustomValidity('');
+        }
+
+        // Validate email
+        if (emailInput) {
+          if (!emailInput.value.trim()) {
+            emailInput.setCustomValidity('Please enter your email address');
+            emailInput.reportValidity();
+            emailInput.focus();
+            return false;
+          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+            emailInput.setCustomValidity('Please enter a valid email address');
+            emailInput.reportValidity();
+            emailInput.focus();
+            return false;
+          } else {
+            emailInput.setCustomValidity('');
+          }
+        }
+
+        // Validate phone (required)
+        if (phoneInput) {
+          if (!phoneInput.value.trim()) {
+            phoneInput.setCustomValidity('Please enter your phone number');
+            phoneInput.reportValidity();
+            phoneInput.focus();
+            return false;
+          } else {
+            // Simple regex for international phone format
+            const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$/;
+            if (!phoneRegex.test(phoneInput.value.trim())) {
+              phoneInput.setCustomValidity('Please enter a valid phone number');
+              phoneInput.reportValidity();
+              phoneInput.focus();
+              return false;
+            } else {
+              phoneInput.setCustomValidity('');
+            }
+          }
+        }
+
+        // Validate password before submission
         if (passwordInput) {
           // Validate the password
           const validation = validatePassword(passwordInput.value);
