@@ -25,21 +25,21 @@
           {{- 'icon-error.svg' | inline_asset_content -}}
         </span>
         {{ 'templates.contact.form.error_heading' | t }}
-        <ul>
-          {%- for field in form.errors -%}
-            <li>
-              {%- if field == 'form' -%}
-                {{ form.errors.messages[field] }}
-              {%- else -%}
-                <a href="#RegisterForm-{{ field }}">
-                  {{ form.errors.translated_fields[field] | capitalize }}
-                  {{ form.errors.messages[field] }}
-                </a>
-              {%- endif -%}
-            </li>
-          {%- endfor -%}
-        </ul>
       </div>
+      <ul class="list-disc pl-6 leading-5 text-sm mb-3">
+        {%- for field in form.errors -%}
+          <li>
+            {%- if field == 'form' -%}
+              {{ form.errors.messages[field] }}
+            {%- else -%}
+              <a href="#RegisterForm-{{ field }}">
+                {{ form.errors.translated_fields[field] | capitalize }}
+                {{ form.errors.messages[field] }}
+              </a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
     {%- endif -%}
     <div class="flex flex-col">
       <div class="relative field">
@@ -105,22 +105,7 @@
           {{ form.errors.messages.email }}.
         </div>
       {%- endif -%}
-      <div class="relative field">
-        <input
-          type="tel"
-          name="customer[phone]"
-          id="RegisterForm-phone"
-          required
-          {% if form.phone %}
-            value="{{ form.phone }}"
-          {% endif %}
-          autocomplete="tel"
-          placeholder=" "
-        >
-        <label for="RegisterForm-phone">
-          {{ 'customer.register.phone' | t | default: 'Phone Number' }}
-        </label>
-      </div>
+
       <div class="relative field">
         <input
           type="password"
@@ -141,7 +126,11 @@
       </div>
       <div class="password-requirements flex flex-col items-start text-xs mt-1 text-[#666666]">
         <p>
-          {{ 'customer.register.password_requirements' | t | default: 'Password must meet the following requirements:' }}
+          {{
+            'customer.register.password_requirements'
+            | t
+            | default: 'Password must meet the following requirements:'
+          }}
         </p>
         <ul class="mt-1 ml-4 list-disc">
           <li class="requirement-length">At least 8 characters</li>
@@ -181,141 +170,125 @@
       registerForm.setAttribute('novalidate', 'novalidate');
 
       // First, completely disable the form's native submit behavior
-      registerForm.onsubmit = function() {
+      registerForm.onsubmit = function () {
         return false;
       };
 
       // Add a submit event listener with capture phase to ensure it runs first
-      registerForm.addEventListener('submit', function (e) {
-        // Always prevent the default submission first - multiple ways for redundancy
-        if (e.preventDefault) e.preventDefault();
-        if (e.stopPropagation) e.stopPropagation();
-        e.returnValue = false;
+      registerForm.addEventListener(
+        'submit',
+        function (e) {
+          // Always prevent the default submission first - multiple ways for redundancy
+          if (e.preventDefault) e.preventDefault();
+          if (e.stopPropagation) e.stopPropagation();
+          e.returnValue = false;
 
-        // Get required fields
-        const firstNameInput = document.getElementById('RegisterForm-FirstName');
-        const lastNameInput = document.getElementById('RegisterForm-LastName');
-        const emailInput = document.getElementById('RegisterForm-email');
-        const phoneInput = document.getElementById('RegisterForm-phone');
-        const passwordInput = document.getElementById('RegisterForm-password');
+          // Get required fields
+          const firstNameInput = document.getElementById('RegisterForm-FirstName');
+          const lastNameInput = document.getElementById('RegisterForm-LastName');
+          const emailInput = document.getElementById('RegisterForm-email');
+          const passwordInput = document.getElementById('RegisterForm-password');
 
-        // Validate first name
-        if (firstNameInput && !firstNameInput.value.trim()) {
-          firstNameInput.setCustomValidity('Please enter your first name');
-          firstNameInput.reportValidity();
-          firstNameInput.focus();
-          return false;
-        } else if (firstNameInput) {
-          firstNameInput.setCustomValidity('');
-        }
-
-        // Validate last name
-        if (lastNameInput && !lastNameInput.value.trim()) {
-          lastNameInput.setCustomValidity('Please enter your last name');
-          lastNameInput.reportValidity();
-          lastNameInput.focus();
-          return false;
-        } else if (lastNameInput) {
-          lastNameInput.setCustomValidity('');
-        }
-
-        // Validate email
-        if (emailInput) {
-          if (!emailInput.value.trim()) {
-            emailInput.setCustomValidity('Please enter your email address');
-            emailInput.reportValidity();
-            emailInput.focus();
+          // Validate first name
+          if (firstNameInput && !firstNameInput.value.trim()) {
+            firstNameInput.setCustomValidity('Please enter your first name');
+            firstNameInput.reportValidity();
+            firstNameInput.focus();
             return false;
-          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
-            emailInput.setCustomValidity('Please enter a valid email address');
-            emailInput.reportValidity();
-            emailInput.focus();
-            return false;
-          } else {
-            emailInput.setCustomValidity('');
+          } else if (firstNameInput) {
+            firstNameInput.setCustomValidity('');
           }
-        }
 
-        // Validate phone (required)
-        if (phoneInput) {
-          if (!phoneInput.value.trim()) {
-            phoneInput.setCustomValidity('Please enter your phone number');
-            phoneInput.reportValidity();
-            phoneInput.focus();
+          // Validate last name
+          if (lastNameInput && !lastNameInput.value.trim()) {
+            lastNameInput.setCustomValidity('Please enter your last name');
+            lastNameInput.reportValidity();
+            lastNameInput.focus();
             return false;
-          } else {
-            // Simple regex for international phone format
-            const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$/;
-            if (!phoneRegex.test(phoneInput.value.trim())) {
-              phoneInput.setCustomValidity('Please enter a valid phone number');
-              phoneInput.reportValidity();
-              phoneInput.focus();
+          } else if (lastNameInput) {
+            lastNameInput.setCustomValidity('');
+          }
+
+          // Validate email
+          if (emailInput) {
+            if (!emailInput.value.trim()) {
+              emailInput.setCustomValidity('Please enter your email address');
+              emailInput.reportValidity();
+              emailInput.focus();
+              return false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+              emailInput.setCustomValidity('Please enter a valid email address');
+              emailInput.reportValidity();
+              emailInput.focus();
               return false;
             } else {
-              phoneInput.setCustomValidity('');
+              emailInput.setCustomValidity('');
             }
           }
-        }
 
-        // Validate password
-        if (passwordInput) {
-          // Validate the password
-          const validation = validatePassword(passwordInput.value);
 
-          if (!validation.isValid) {
-            // Get the password-requirements div directly from the form
-            const requirementsEl = registerForm.querySelector('.password-requirements');
 
-            if (requirementsEl) {
-              // Update individual requirement indicators
-              const lengthEl = requirementsEl.querySelector('.requirement-length');
-              const lowercaseEl = requirementsEl.querySelector('.requirement-lowercase');
-              const uppercaseEl = requirementsEl.querySelector('.requirement-uppercase');
-              const numberEl = requirementsEl.querySelector('.requirement-number');
-              const specialEl = requirementsEl.querySelector('.requirement-special');
+          // Validate password
+          if (passwordInput) {
+            // Validate the password
+            const validation = validatePassword(passwordInput.value);
 
-              // Update classes based on validation
-              updateRequirementClass(lengthEl, validation.minLength);
-              updateRequirementClass(lowercaseEl, validation.hasLowercase);
-              updateRequirementClass(uppercaseEl, validation.hasUppercase);
-              updateRequirementClass(numberEl, validation.hasNumber);
-              updateRequirementClass(specialEl, validation.hasSpecial);
+            if (!validation.isValid) {
+              // Get the password-requirements div directly from the form
+              const requirementsEl = registerForm.querySelector('.password-requirements');
+
+              if (requirementsEl) {
+                // Update individual requirement indicators
+                const lengthEl = requirementsEl.querySelector('.requirement-length');
+                const lowercaseEl = requirementsEl.querySelector('.requirement-lowercase');
+                const uppercaseEl = requirementsEl.querySelector('.requirement-uppercase');
+                const numberEl = requirementsEl.querySelector('.requirement-number');
+                const specialEl = requirementsEl.querySelector('.requirement-special');
+
+                // Update classes based on validation
+                updateRequirementClass(lengthEl, validation.minLength);
+                updateRequirementClass(lowercaseEl, validation.hasLowercase);
+                updateRequirementClass(uppercaseEl, validation.hasUppercase);
+                updateRequirementClass(numberEl, validation.hasNumber);
+                updateRequirementClass(specialEl, validation.hasSpecial);
+              }
+
+              // Show error message
+              passwordInput.setCustomValidity('Password must meet all requirements');
+              passwordInput.reportValidity();
+              passwordInput.focus();
+              return false; // Stop here and don't submit
+            } else {
+              // Clear any previous validation message
+              passwordInput.setCustomValidity('');
             }
-
-            // Show error message
-            passwordInput.setCustomValidity('Password must meet all requirements');
-            passwordInput.reportValidity();
-            passwordInput.focus();
-            return false; // Stop here and don't submit
-          } else {
-            // Clear any previous validation message
-            passwordInput.setCustomValidity('');
           }
-        }
 
-        // If we get here, validation passed, so submit the form programmatically
-        // Use setTimeout to ensure this happens after all other handlers
-        setTimeout(function() {
-          try {
-            // Create a new submit event that bypasses our validation
-            const submitEvent = new Event('submit-validated', { bubbles: true, cancelable: false });
-            registerForm.dispatchEvent(submitEvent);
+          // If we get here, validation passed, so submit the form programmatically
+          // Use setTimeout to ensure this happens after all other handlers
+          setTimeout(function () {
+            try {
+              // Create a new submit event that bypasses our validation
+              const submitEvent = new Event('submit-validated', { bubbles: true, cancelable: false });
+              registerForm.dispatchEvent(submitEvent);
 
-            // Submit the form directly
-            registerForm.submit();
-          } catch (error) {
-            // Fallback method - create a hidden submit button and click it
-            const submitButton = document.createElement('button');
-            submitButton.type = 'submit';
-            submitButton.style.display = 'none';
-            registerForm.appendChild(submitButton);
-            submitButton.click();
-            registerForm.removeChild(submitButton);
-          }
-        }, 10);
+              // Submit the form directly
+              registerForm.submit();
+            } catch (error) {
+              // Fallback method - create a hidden submit button and click it
+              const submitButton = document.createElement('button');
+              submitButton.type = 'submit';
+              submitButton.style.display = 'none';
+              registerForm.appendChild(submitButton);
+              submitButton.click();
+              registerForm.removeChild(submitButton);
+            }
+          }, 10);
 
-        return false;
-      }, true); // true for capture phase
+          return false;
+        },
+        true
+      ); // true for capture phase
     }
 
     // Password validation functions
@@ -338,8 +311,8 @@
 
     // Setup real-time validation for all fields
     // Add input event listeners to clear validation messages as user types
-    document.querySelectorAll('#create_customer input[required]').forEach(function(input) {
-      input.addEventListener('input', function() {
+    document.querySelectorAll('#create_customer input[required]').forEach(function (input) {
+      input.addEventListener('input', function () {
         // Clear validation message as soon as user starts typing
         this.setCustomValidity('');
       });
@@ -356,7 +329,9 @@
         // Get the form element directly
         const form = document.getElementById('create_customer');
         // Look for the password-requirements div in the form
-        const requirementsEl = form ? form.querySelector('.password-requirements') : document.querySelector('.password-requirements');
+        const requirementsEl = form
+          ? form.querySelector('.password-requirements')
+          : document.querySelector('.password-requirements');
 
         if (requirementsEl) {
           // Update individual requirement indicators
@@ -385,7 +360,7 @@
       });
 
       // Also add a keyup event listener as a backup
-      passwordInput.addEventListener('keyup', function() {
+      passwordInput.addEventListener('keyup', function () {
         // Trigger the input event handler
         const event = new Event('input', { bubbles: true });
         this.dispatchEvent(event);

@@ -86,7 +86,8 @@
             name: 'customer[phone]',
             value: customer.phone,
             label: 'customer.account.phone' | t,
-            readonly: true
+            pattern: '[0-9\+\-\s]{7,}',
+            title: 'customer.addresses.phone_min_length' | t | default: 'Please enter a valid phone number'
           %}
         </div>
       </div>
