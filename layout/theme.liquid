@@ -279,6 +279,8 @@
     {{ 'application.css' | asset_url | stylesheet_tag }}
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {{ 'checkbox-field.css' | asset_url | stylesheet_tag }}
+    {{ 'intl-tel-input.min.css' | asset_url | stylesheet_tag }}
+    {{ 'phone-input.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -355,6 +357,19 @@
         predictive_search_url: '{{ routes.predictive_search_url }}',
       };
 
+      window.theme = window.theme || {};
+      window.theme.strings = window.theme.strings || {};
+      window.theme.strings.phone_validation = {
+        invalid: {{ 'phone_validation.invalid' | t | default: 'Invalid phone number' | json }},
+        invalid_country_code: {{ 'phone_validation.invalid_country_code' | t | default: 'Invalid country code' | json }},
+        too_short: {{ 'phone_validation.too_short' | t | default: 'Phone number is too short' | json }},
+        too_long: {{ 'phone_validation.too_long' | t | default: 'Phone number is too long' | json }},
+        local_only: {{ 'phone_validation.local_only' | t | default: 'Please enter an international format' | json }}
+      };
+      window.theme.assets = {
+        utilsScript: {{ 'intl-tel-input-utils.js' | asset_url | json }}
+      };
+
       window.cartStrings = {
         error: `{{ 'sections.cart.cart_error' | t }}`,
         quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`,
@@ -400,6 +415,11 @@
 
     <script src="{{ 'auth-modal.js' | asset_url }}" defer></script>
     <script src="{{ 'product-utils.module.js' | asset_url }}" type="module"></script>
+
+    {% comment %} International Phone Input {% endcomment %}
+    <script src="{{ 'intl-tel-input.min.js' | asset_url }}" defer></script>
+    <script src="{{ 'intl-tel-input-utils.js' | asset_url }}" defer></script>
+    <script src="{{ 'phone-validation.js' | asset_url }}" defer></script>
 
     {% comment %} Wishlist by Code Black Belt integration {% endcomment %}
 

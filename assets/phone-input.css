@@ -1,0 +1,159 @@
+/* International Phone Input Styling */
+.phone-field {
+  position: relative;
+  border: 0.0625rem solid rgba(var(--color-base-foreground), 0.3);
+  border-radius: 0.1875rem; /* 3px */
+  background-color: rgb(var(--color-base-background));
+}
+
+.phone-field:hover {
+  border-color: rgba(var(--color-base-foreground), 0.5);
+}
+
+.phone-field:has(input:focus) {
+  border-color: #00ae70;
+  box-shadow: 0 0 0 0.125rem rgba(0, 174, 112, 0.2);
+}
+
+.form-label {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: rgba(var(--color-base-foreground), 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.iti {
+  width: 100%;
+  display: block;
+}
+
+.phone-field-container {
+  width: 100%;
+}
+
+.iti__flag-container {
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.phone-field .field__input {
+  padding-left: 90px !important;
+  line-height: 1.125rem;
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 1rem;
+  color: rgb(var(--color-base-foreground));
+}
+
+/* Fix for the selected flag container */
+.iti__selected-flag {
+  padding: 0 6px 0 8px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Fix for the arrow */
+.iti__arrow {
+  margin-left: 6px;
+}
+
+/* Fix for the country dropdown */
+.iti__country-list {
+  position: absolute;
+  z-index: 10;
+  list-style: none;
+  text-align: left;
+  padding: 0;
+  margin: 0 0 0 -1px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+  max-height: 200px;
+  overflow-y: scroll;
+  border-radius: 3px;
+  top: 100%;
+  max-width: 330px;
+  box-sizing: content-box;
+}
+
+/* Country list items */
+.iti__country {
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.iti__country:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.iti__flag {
+  margin-right: 8px;
+}
+
+.iti__country-name {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+.iti__dial-code {
+  color: #999;
+  font-size: 13px;
+}
+
+/* Selected country styles */
+.iti__selected-flag:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.iti__selected-dial-code {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Highlighted country */
+.iti__country.iti__highlight {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Fix for when the field is disabled or readonly */
+.phone-field:has(input[readonly]),
+.phone-field:has(input:disabled) {
+  background-color: #f5f5f5;
+  border-color: rgba(var(--color-base-foreground), 0.2);
+}
+
+.phone-field:has(input[readonly]) .iti__flag-container,
+.phone-field:has(input:disabled) .iti__flag-container {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.phone-field:has(input[readonly]) .field__input,
+.phone-field:has(input:disabled) .field__input {
+  color: #666666;
+  cursor: not-allowed;
+}
+
+/* Fix for when the field is focused */
+.phone-field:has(input:focus) .iti__selected-flag {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Hide the country select element */
+.phone-field select.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+}

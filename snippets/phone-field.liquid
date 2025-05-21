@@ -1,0 +1,96 @@
+{% comment %}
+  International Phone Field Component with Shopify Country Integration
+
+  Accepts:
+  - id: Input ID
+  - name: Input name
+  - value: Input value
+  - label: Label text
+  - required: Whether the field is required (default: false)
+  - readonly: Whether the field is readonly (default: false)
+  - class: Additional CSS classes
+  - error_id: ID for the error message element (optional)
+  - error_message: Error message to display (optional)
+{% endcomment %}
+
+{%- assign required = required | default: false -%}
+{%- assign readonly = readonly | default: false -%}
+
+{% comment %}
+  Format the phone number to display without leading zero
+  This is needed when the page reloads after form submission
+{% endcomment %}
+{%- assign formatted_value = value | default: '' -%}
+{%- if formatted_value != '' -%}
+  {%- assign first_char = formatted_value | slice: 0, 1 -%}
+  {%- if first_char == '+' -%}
+    {%- comment -%}Already in international format, will be handled by JS{%- endcomment -%}
+  {%- elsif first_char == '0' -%}
+    {%- assign formatted_value = formatted_value | slice: 1, formatted_value.size -%}
+  {%- endif -%}
+{%- endif -%}
+
+<div class="phone-field-wrapper{% if class %} {{ class }}{% endif %}">
+  <label class="form-label mb-0" for="{{ id }}">
+    {% if label contains 'customer.' or label contains 'general.' %}
+      {{ label | t }}
+    {% else %}
+      {{ label }}
+    {% endif %}
+  </label>
+  <div class="phone-field">
+    <input
+      type="tel"
+      id="{{ id }}"
+      name="{{ name }}_display"
+      class="field__input phone-input{% if error_message %} field__input--error{% endif %}"
+      value="{{ formatted_value }}"
+      placeholder="Phone number"
+      {% if required %}
+        required
+        aria-required="true"
+      {% endif %}
+      {% if readonly %}
+        readonly
+      {% endif %}
+      data-intl-tel-input
+      data-shop-country="{{ shop.country }}"
+      {% if error_id %}
+        data-error-for="{{ error_id }}"
+      {% endif %}
+    >
+    <input
+      type="hidden"
+      id="{{ id }}_international"
+      name="{{ name }}"
+      value="{{ value | default: '' }}"
+      class="phone-international-format"
+      {% if required %}
+        required
+      {% endif %}
+    >
+    {% if error_message %}
+      <div class="form__message field__message" id="{{ error_id | default: id | append: '-error' }}">
+        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-error" viewBox="0 0 13 13">
+          <circle cx="6.5" cy="6.5" r="6.5" fill="none" stroke="currentColor"/>
+          <path d="M7 9V5" stroke="currentColor" stroke-width="2"/>
+          <path d="M7 12.5V11" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        {{ error_message }}
+      </div>
+    {% endif %}
+  </div>
+
+  {% comment %}
+    Create a hidden element with all countries from Shopify
+    This will be used by JavaScript to populate the country dropdown
+  {% endcomment %}
+  <select class="hidden" aria-hidden="true" id="{{ id }}_countries" style="display: none;">
+    {% for country in all_country_option_tags %}
+      {% assign country_option = country | split: '"' %}
+      {% assign country_code = country_option[1] | downcase %}
+      {% assign country_name = country_option[2] | remove: '>' | remove: '</' | remove: 'option' | strip %}
+      <option value="{{ country_code }}" data-name="{{ country_name }}">{{ country_name }}</option>
+    {% endfor %}
+  </select>
+</div>
