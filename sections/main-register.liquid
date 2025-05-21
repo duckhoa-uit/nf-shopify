@@ -149,6 +149,21 @@
           {{ form.errors.messages.password }}.
         </div>
       {%- endif -%}
+
+      <div class="w-full mt-4">
+        {%
+          render 'checkbox-field',
+          id: 'RegisterForm-accepts_marketing',
+          name: 'customer[accepts_marketing]',
+          value: '1',
+          checked: form.accepts_marketing,
+          label: 'customer.register.accepts_marketing' | t | default: 'In the future, I would like to receive information by email about current trends, offers and NORTHFINDER discounts. The subscription can be canceled free of charge at any time.',
+          class: 'flex items-start',
+          input_class: 'flex size-[1.125rem] items-center justify-center mr-2 cursor-pointer p-2 relative',
+          label_class: 'mt-0 text-foreground text-sm leading-5 text-left flex-1'
+        %}
+      </div>
+
       <button type="submit" class="mt-4">
         {{ 'customer.register.submit' | t }}
       </button>
@@ -225,8 +240,6 @@
               emailInput.setCustomValidity('');
             }
           }
-
-
 
           // Validate password
           if (passwordInput) {
