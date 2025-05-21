@@ -45,6 +45,19 @@ class AccountForms {
           this.clearFormMessages();
         });
       });
+
+      // Add specific validation for phone field
+      const phoneInput = this.customerInfoForm.querySelector('#CustomerPhone');
+      if (phoneInput) {
+        phoneInput.addEventListener('input', () => {
+          const phoneRegex = /^[0-9\+\-\s]{7,}$/;
+          if (phoneInput.value.trim() && !phoneRegex.test(phoneInput.value.trim())) {
+            phoneInput.setCustomValidity('Please enter a valid phone number (at least 7 digits)');
+          } else {
+            phoneInput.setCustomValidity('');
+          }
+        });
+      }
     }
   }
 
@@ -87,6 +100,7 @@ class AccountForms {
     const firstNameInput = this.customerInfoForm.querySelector('#CustomerFirstName');
     const lastNameInput = this.customerInfoForm.querySelector('#CustomerLastName');
     const emailInput = this.customerInfoForm.querySelector('#CustomerEmail');
+    const phoneInput = this.customerInfoForm.querySelector('#CustomerPhone');
 
     // Clear previous error messages
     const errorMessage = this.customerInfoForm.querySelector('.form-error-message');
@@ -113,6 +127,15 @@ class AccountForms {
         isValid = false;
       } else if (!emailRegex.test(emailInput.value.trim())) {
         this.showValidationError('Please enter a valid email address');
+        isValid = false;
+      }
+    }
+
+    // Validate phone format (if provided)
+    if (phoneInput && phoneInput.value.trim()) {
+      const phoneRegex = /^[0-9\+\-\s]{7,}$/;
+      if (!phoneRegex.test(phoneInput.value.trim())) {
+        this.showValidationError('Please enter a valid phone number (at least 7 digits)');
         isValid = false;
       }
     }

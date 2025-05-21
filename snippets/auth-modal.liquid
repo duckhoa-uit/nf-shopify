@@ -227,28 +227,7 @@
               </div>
             </div>
 
-            <div>
-              <div class="relative field">
-                <input
-                  type="tel"
-                  name="customer[phone]"
-                  id="phone"
-                  required
-                  placeholder=" "
-                  autocomplete="tel"
-                  {% if form.errors contains 'phone' %}
-                    aria-invalid="true"
-                    aria-describedby="phone-error"
-                  {% endif %}
-                  value="{{ form.phone }}"
-                >
-                <label
-                  for="phone"
-                >
-                  {{ 'customer.register.phone' | t | default: 'Phone Number' }}
-                </label>
-              </div>
-            </div>
+
 
             <div>
               <div class="relative field">
@@ -946,7 +925,6 @@
         const firstNameInput = this.querySelector('input[name="customer[first_name]"]');
         const lastNameInput = this.querySelector('input[name="customer[last_name]"]');
         const emailInput = this.querySelector('input[name="customer[email]"]');
-        const phoneInput = this.querySelector('input[name="customer[phone]"]');
         const passwordInput = this.querySelector('input[type="password"][name="customer[password]"]');
 
         // Validate first name
@@ -986,26 +964,7 @@
           }
         }
 
-        // Validate phone (required)
-        if (phoneInput) {
-          if (!phoneInput.value.trim()) {
-            phoneInput.setCustomValidity('Please enter your phone number');
-            phoneInput.reportValidity();
-            phoneInput.focus();
-            return false;
-          } else {
-            // Simple regex for international phone format
-            const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,9}$/;
-            if (!phoneRegex.test(phoneInput.value.trim())) {
-              phoneInput.setCustomValidity('Please enter a valid phone number');
-              phoneInput.reportValidity();
-              phoneInput.focus();
-              return false;
-            } else {
-              phoneInput.setCustomValidity('');
-            }
-          }
-        }
+
 
         // Validate password before submission
         if (passwordInput) {
