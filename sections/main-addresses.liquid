@@ -228,7 +228,292 @@
           </div>
 
           <div class="address-cards" id="address-cards">
+            {% comment %}
+              First display the default address
+            {% endcomment %}
+            {% if customer.default_address %}
+              {% assign default_address = customer.default_address %}
+              <div class="address-wrapper" data-address data-address-id="{{ default_address.id }}">
+                <div class="address-card" data-address-id="{{ default_address.id }}">
+                  <h3 class="address-card-title">
+                    {% if default_address.company != blank %}
+                      {{ default_address.company }},
+                    {% elsif default_address.first_name != blank or default_address.last_name != blank %}
+                      {{ default_address.first_name }}
+                      {{ default_address.last_name }},
+                    {% else %}
+                      N/A,
+                    {% endif %}
+
+                    <span class="default-badge">{{ 'customer.addresses.default' | t }}</span>
+                  </h3>
+                  <p class="address-card-summary">
+                    {% if default_address.address1 != blank %}
+                      {{ default_address.address1 -}}
+                      {%- if default_address.city != blank %}, {{ default_address.city }}{% endif %}
+                    {% elsif default_address.city != blank %}
+                      {{ default_address.city }}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </p>
+
+                  <div class="address-divider"></div>
+
+                  <div class="address-details">
+                    <div class="address-field">
+                      <span class="field-label">{{ 'customer.addresses.name' | t }}</span>
+                      <span class="field-value">
+                        {%- if default_address.first_name != blank or default_address.last_name != blank -%}
+                          {{- default_address.first_name }}
+                          {{ default_address.last_name -}}
+                        {%- else -%}
+                          N/A
+                        {%- endif -%}
+                      </span>
+                    </div>
+
+                    <div class="address-field">
+                      <span class="field-label">{{ 'customer.addresses.email' | t }}</span>
+                      <span class="field-value">
+                        {%- if customer.email != blank %}{{ customer.email }}{% else %}N/A{% endif -%}
+                      </span>
+                    </div>
+
+                    <div class="address-field">
+                      <span class="field-label">{{ 'customer.addresses.phone' | t }}</span>
+                      <span class="field-value">
+                        {%- if default_address.phone != blank %}{{ default_address.phone }}{% else %}N/A{% endif -%}
+                      </span>
+                    </div>
+
+                    <div class="address-field">
+                      <span class="field-label">{{ 'customer.addresses.address1' | t }}</span>
+                      <span class="field-value">
+                        {%- if default_address.address1 != blank %}{{ default_address.address1 }}{% else %}N/A{% endif -%}
+                      </span>
+                    </div>
+
+                    <div class="address-field">
+                      <span class="field-label">{{ 'customer.addresses.city' | t }}</span>
+                      <span class="field-value">
+                        {%- if default_address.city != blank %}{{ default_address.city }}{% else %}N/A{% endif -%}
+                      </span>
+                    </div>
+
+                    <div class="address-field">
+                      <span class="field-label">{{ 'customer.addresses.zip' | t }}</span>
+                      <span class="field-value">
+                        {%- if default_address.zip != blank %}{{ default_address.zip }}{% else %}N/A{% endif -%}
+                      </span>
+                    </div>
+
+                    <div class="address-field">
+                      <span class="field-label">{{ 'customer.addresses.country' | t }}</span>
+                      <span class="field-value">
+                        {%- if default_address.country != blank %}{{ default_address.country }}{% else %}N/A{% endif -%}
+                      </span>
+                    </div>
+
+                    <div class="address-field">
+                      <span class="field-label">{{ 'customer.addresses.company' | t }}</span>
+                      <span class="field-value">
+                        {%- if default_address.company != blank %}{{ default_address.company }}{% else %}N/A{% endif -%}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="address-actions">
+                    <button
+                      type="button"
+                      class="button btn-edit"
+                      aria-expanded="false"
+                      aria-controls="EditAddress_{{ default_address.id }}"
+                      data-address-id="{{ default_address.id }}"
+                    >
+                      <span class="svg-wrapper">
+                        {{ 'icon-edit.svg' | inline_asset_content }}
+                      </span>
+                      {{ 'customer.addresses.edit' | t }}
+                    </button>
+
+                    <button
+                      type="button"
+                      class="button button--tertiary btn-delete"
+                      data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}"
+                      data-target="{{ default_address.url }}"
+                    >
+                      <span class="svg-wrapper">
+                        {{ 'icon-trash.svg' | inline_asset_content }}
+                      </span>
+                      <span class="btn-spinner"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="address-edit-form" id="EditAddress_{{ default_address.id }}" style="display: none;">
+                  {% form 'customer_address', default_address, class: 'address-form' %}
+                    <div class="form-row mb-0">
+                      <div class="form-group mb-1">
+                        {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'EditAddress_' | append: default_address.id | append: '_FirstName',
+                          name: 'address[first_name]',
+                          value: default_address.first_name,
+                          label: 'customer.addresses.first_name' | t,
+                          required: true,
+                          min_length: '2',
+                          title: 'customer.addresses.first_name_min_length' | t | default: 'First name should contain at least 2 characters'
+                        %}
+                      </div>
+
+                      <div class="form-group mb-1">
+                        {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'EditAddress_' | append: default_address.id | append: '_LastName',
+                          name: 'address[last_name]',
+                          value: default_address.last_name,
+                          label: 'customer.addresses.last_name' | t,
+                          required: true,
+                          min_length: '2',
+                          title: 'customer.addresses.last_name_min_length' | t | default: 'Last name should contain at least 2 characters'
+                        %}
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group">
+                        {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'EditAddress_' | append: default_address.id | append: '_Company',
+                          name: 'address[company]',
+                          value: default_address.company,
+                          label: 'customer.addresses.company' | t
+                        %}
+                      </div>
+
+                      <div class="form-group">
+                        {%
+                          render 'phone-field',
+                          id: 'EditAddress_' | append: default_address.id | append: '_Phone',
+                          name: 'address[phone]',
+                          value: default_address.phone,
+                          label: 'customer.addresses.phone' | t,
+                          required: true,
+                          error_id: 'EditAddress_' | append: default_address.id | append: '_Phone_error'
+                        %}
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      {%
+                        render 'form-field',
+                        type: 'text',
+                        id: 'EditAddress_' | append: default_address.id | append: '_Address1',
+                        name: 'address[address1]',
+                        value: default_address.address1,
+                        label: 'customer.addresses.address1' | t,
+                        required: true,
+                        min_length: '5',
+                        title: 'customer.addresses.address_min_length' | t | default: 'Address should be at least 5 characters long'
+                      %}
+                    </div>
+
+                    <div class="form-group">
+                      {%
+                        render 'form-field',
+                        type: 'text',
+                        id: 'EditAddress_' | append: default_address.id | append: '_Address2',
+                        name: 'address[address2]',
+                        value: default_address.address2,
+                        label: 'customer.addresses.address2' | t
+                      %}
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group">
+                        {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'EditAddress_' | append: default_address.id | append: '_City',
+                          name: 'address[city]',
+                          value: default_address.city,
+                          label: 'customer.addresses.city' | t,
+                          required: true,
+                          min_length: '2',
+                          title: 'customer.addresses.city_min_length' | t | default: 'City name should contain at least 2 characters'
+                        %}
+                      </div>
+
+                      <div class="form-group">
+                        {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'EditAddress_' | append: default_address.id | append: '_Zip',
+                          name: 'address[zip]',
+                          value: default_address.zip,
+                          label: 'customer.addresses.zip' | t,
+                          required: true,
+                          pattern: '[0-9A-Za-z\s\-]{3,10}',
+                          title: 'customer.addresses.zip_min_length' | t | default: 'Postal/ZIP code should be 3-10 characters'
+                        %}
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label for="AddressCountry_{{ default_address.id }}">{{ 'customer.addresses.country' | t }}</label>
+                        <div class="select-wrapper">
+                          <select
+                            id="AddressCountry_{{ default_address.id }}"
+                            name="address[country]"
+                            data-address-country-select
+                            data-form-id="{{ default_address.id }}"
+                            data-default="{{ default_address.country }}"
+                            required
+                          >
+                            {{ all_country_option_tags }}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group" id="AddressProvinceContainer_{{ default_address.id }}" style="display:none;">
+                        <label for="AddressProvince_{{ default_address.id }}">{{ 'customer.addresses.province' | t }}</label>
+                        <div class="select-wrapper">
+                          <select
+                            id="AddressProvince_{{ default_address.id }}"
+                            name="address[province]"
+                            data-default="{{ default_address.province }}"
+                          ></select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-actions">
+                      <button type="submit" class="button btn">
+                        <span class="btn-text">{{ 'customer.addresses.update' | t }}</span>
+                        <span class="btn-spinner"></span>
+                      </button>
+                      <button
+                        type="reset"
+                        class="button button--tertiary"
+                      >
+                        {{ 'customer.addresses.cancel' | t }}
+                      </button>
+                    </div>
+                  {% endform %}
+                </div>
+              </div>
+            {% endif %}
+
+            {% comment %}
+              Then display all non-default addresses
+            {% endcomment %}
             {% for address in customer.addresses %}
+              {% if address.id != customer.default_address.id %}
               <div class="address-wrapper" data-address data-address-id="{{ address.id }}">
                 <div class="address-card" data-address-id="{{ address.id }}">
                   <h3 class="address-card-title">
@@ -517,6 +802,7 @@
                   {% endform %}
                 </div>
               </div>
+              {% endif %}
             {%- endfor -%}
 
             <!-- Add Address Form -->
