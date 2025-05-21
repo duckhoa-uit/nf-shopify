@@ -156,7 +156,7 @@
           {% endif %}
         </div>
 
-        {% form 'create_customer', return_to: routes.account_url, id: 'customer_register_form' %}
+        {% form 'create_customer', return_to: routes.account_register_url, id: 'customer_register_form' %}
           <div class="flex flex-col gap-y-3 mb-3">
             <div>
               <div class="relative field">
@@ -275,6 +275,7 @@
                 id: 'newsletter',
                 name: 'customer[accepts_marketing]',
                 value: '1',
+                checked: form.accepts_marketing,
                 label: 'customer.register.accepts_marketing' | t | default: 'In the future, I would like to receive information by email about current trends, offers and NORTHFINDER discounts. The subscription can be canceled free of charge at any time.',
                 class: 'flex items-start',
                 input_class: 'flex size-[1.125rem] items-center justify-center mr-2 cursor-pointer p-2 relative',
