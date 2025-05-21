@@ -9,7 +9,7 @@
   <h2 class="section-title">{{ 'customer.account.basic_info' | t }}</h2>
 
   <div class="form-section">
-    {%- form 'customer', customer, id: 'CustomerInfoForm' -%}
+    {%- form 'customer', customer, id: 'CustomerInfoForm', data-proxy-form: '/apps/nf-data-management/update_customer' -%}
       <input type="hidden" name="custom_form" value="true">
       {%- if form.posted_successfully? -%}
         <div class="success-message" tabindex="-1" autofocus>
@@ -37,8 +37,53 @@
         </div>
       {%- endif -%}
 
-      <div class="form-row">
-        <div class="form-group">
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const form = document.getElementById('CustomerInfoForm');
+          if (!form) return;
+
+          // Note: Form submission and validation is handled in assets/account-forms.js
+
+          // Add real-time validation for phone input
+          const phoneInput = document.getElementById('CustomerPhone');
+          if (phoneInput && window.phoneInputHandler) {
+            // Debounce function to avoid too many validations while typing
+            function debounce(func, wait) {
+              let timeout;
+              return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+              };
+            }
+
+            // Validate after user has typed a few characters and paused
+            const debouncedValidate = debounce(function() {
+              if (phoneInput.value.length >= 3) { // Only validate if there's enough input
+                const instance = window.intlTelInputGlobals.getInstance(phoneInput);
+                if (instance) {
+                  window.phoneInputHandler.validatePhoneInput(phoneInput, instance);
+                }
+              }
+            }, 500); // 500ms delay
+
+            // Clear error when user starts typing
+            phoneInput.addEventListener('input', function() {
+              // Clear any existing error when user starts typing
+              if (phoneInput.value.length < 3) {
+                window.phoneInputHandler.hideErrorMessage(phoneInput);
+              }
+            });
+
+            // Add input event listener for validation after typing
+            phoneInput.addEventListener('input', debouncedValidate);
+          }
+
+          // Note: Form submission is handled in assets/account-forms.js
+        });
+      </script>
+
+      <div class="form-row mb-0">
+        <div class="form-group md:mb-0">
           {%
             render 'form-field',
             type: 'text',
@@ -46,11 +91,11 @@
             name: 'customer[first_name]',
             value: customer.first_name,
             label: 'customer.account.first_name' | t,
-            required: true
+            required: true,
           %}
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-0">
           {%
             render 'form-field',
             type: 'text',
@@ -58,13 +103,13 @@
             name: 'customer[last_name]',
             value: customer.last_name,
             label: 'customer.account.last_name' | t,
-            required: true
+            required: true,
           %}
         </div>
       </div>
 
       <div class="form-row">
-        <div class="form-group">
+        <div class="form-group pt-7">
           {%
             render 'form-field',
             type: 'email',
@@ -80,24 +125,20 @@
 
         <div class="form-group">
           {%
-            render 'form-field',
-            type: 'tel',
+            render 'phone-field',
             id: 'CustomerPhone',
             name: 'customer[phone]',
             value: customer.phone,
             label: 'customer.account.phone' | t,
-            pattern: '[0-9\+\-\s]{7,}',
-            title: 'customer.addresses.phone_min_length' | t | default: 'Please enter a valid phone number'
+            required: true,
+            error_id: 'CustomerPhone-error',
+            error_message: form.errors contains 'phone' | default: false | ternary: form.errors.messages['phone'], ''
           %}
         </div>
       </div>
 
       <div class="form-group birthdate-field">
         {%- assign birth_date = customer.metafields.facts.birth_date | default: '' -%}
-        <script>
-          console.log('birth_date: {{ birth_date }}');
-        </script>
-
         {%
           render 'form-field',
           type: 'text',

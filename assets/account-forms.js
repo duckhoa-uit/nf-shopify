@@ -45,19 +45,6 @@ class AccountForms {
           this.clearFormMessages();
         });
       });
-
-      // Add specific validation for phone field
-      const phoneInput = this.customerInfoForm.querySelector('#CustomerPhone');
-      if (phoneInput) {
-        phoneInput.addEventListener('input', () => {
-          const phoneRegex = /^[0-9\+\-\s]{7,}$/;
-          if (phoneInput.value.trim() && !phoneRegex.test(phoneInput.value.trim())) {
-            phoneInput.setCustomValidity('Please enter a valid phone number (at least 7 digits)');
-          } else {
-            phoneInput.setCustomValidity('');
-          }
-        });
-      }
     }
   }
 
@@ -100,7 +87,6 @@ class AccountForms {
     const firstNameInput = this.customerInfoForm.querySelector('#CustomerFirstName');
     const lastNameInput = this.customerInfoForm.querySelector('#CustomerLastName');
     const emailInput = this.customerInfoForm.querySelector('#CustomerEmail');
-    const phoneInput = this.customerInfoForm.querySelector('#CustomerPhone');
 
     // Clear previous error messages
     const errorMessage = this.customerInfoForm.querySelector('.form-error-message');
@@ -131,14 +117,7 @@ class AccountForms {
       }
     }
 
-    // Validate phone format (if provided)
-    if (phoneInput && phoneInput.value.trim()) {
-      const phoneRegex = /^[0-9\+\-\s]{7,}$/;
-      if (!phoneRegex.test(phoneInput.value.trim())) {
-        this.showValidationError('Please enter a valid phone number (at least 7 digits)');
-        isValid = false;
-      }
-    }
+    // Phone validation is now handled by the intl-tel-input library
 
     return isValid;
   }
@@ -229,7 +208,20 @@ class AccountForms {
       if (key === 'customer[first_name]') customerData.first_name = value;
       if (key === 'customer[last_name]') customerData.last_name = value;
       if (key === 'customer[email]') customerData.email = value;
-      if (key === 'customer[phone]') customerData.phone = value;
+      if (key === 'customer[phone]') {
+        // Get the intlTelInput instance
+        const phoneInput = this.customerInfoForm.querySelector('#CustomerPhone');
+        if (phoneInput && window.intlTelInputGlobals) {
+          const iti = window.intlTelInputGlobals.getInstance(phoneInput);
+          if (iti && iti.isValidNumber()) {
+            customerData.phone = iti.getNumber(); // Use the full international format
+          } else {
+            customerData.phone = value;
+          }
+        } else {
+          customerData.phone = value;
+        }
+      }
       if (key === 'birthdate') {
         // Transform birthdate from DD.MM.YYYY to YYYY-MM-DD format
         if (value) {
