@@ -48,7 +48,7 @@
     {% if required %}
       required
     {% endif %}
-    class="{% if input_class %}{{ input_class }}{% endif %}"
+    class="mr-2 {% if input_class %}{{ input_class }}{% endif %}"
   >
   <label for="{{ id }}" class="cursor-pointer{% if label_class %} {{ label_class }}{% endif %}">
     {% if label contains 'customer.' or label contains 'general.' %}

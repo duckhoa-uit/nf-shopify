@@ -325,6 +325,9 @@
   .top-0 {
     top: calc(var(--spacing) * 0) !important;
   }
+  .top-1 {
+    top: calc(var(--spacing) * 1) !important;
+  }
   .top-1\/2 {
     top: calc(1/2 * 100%) !important;
   }
@@ -360,6 +363,9 @@
   }
   .left-0 {
     left: calc(var(--spacing) * 0) !important;
+  }
+  .left-1 {
+    left: calc(var(--spacing) * 1) !important;
   }
   .left-1\/2 {
     left: calc(1/2 * 100%) !important;
@@ -477,6 +483,9 @@
   }
   .my-0 {
     margin-block: calc(var(--spacing) * 0) !important;
+  }
+  .my-1 {
+    margin-block: calc(var(--spacing) * 1) !important;
   }
   .my-1\.5 {
     margin-block: calc(var(--spacing) * 1.5) !important;
@@ -627,6 +636,9 @@
   }
   .inline-flex {
     display: inline-flex !important;
+  }
+  .list-item {
+    display: list-item !important;
   }
   .table {
     display: table !important;
@@ -820,8 +832,16 @@
   .border-collapse {
     border-collapse: collapse !important;
   }
+  .-translate-x-1 {
+    --tw-translate-x: calc(var(--spacing) * -1) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
   .-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1/2 * 100%) * -1) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .-translate-y-1 {
+    --tw-translate-y: calc(var(--spacing) * -1) !important;
     translate: var(--tw-translate-x) var(--tw-translate-y) !important;
   }
   .-translate-y-1\/2 {
@@ -908,6 +928,9 @@
   }
   .justify-end {
     justify-content: flex-end !important;
+  }
+  .gap-0 {
+    gap: calc(var(--spacing) * 0) !important;
   }
   .gap-0\.5 {
     gap: calc(var(--spacing) * 0.5) !important;
@@ -1131,6 +1154,9 @@
   .bg-black {
     background-color: #000 !important;
   }
+  .bg-foreground {
+    background-color: rgb(var(--color-base-foreground)) !important;
+  }
   .bg-foreground\/10 {
     background-color: color-mix(in oklab, rgb(var(--color-base-foreground)) 10%, transparent) !important;
   }
@@ -1154,6 +1180,10 @@
   }
   .from-\[\#0F0F0F\] {
     --tw-gradient-from: #0F0F0F !important;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
+  }
+  .from-foreground {
+    --tw-gradient-from: rgb(var(--color-base-foreground)) !important;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
   }
   .from-foreground\/70 {
@@ -1250,6 +1280,9 @@
   }
   .py-6 {
     padding-block: calc(var(--spacing) * 6) !important;
+  }
+  .py-7 {
+    padding-block: calc(var(--spacing) * 7) !important;
   }
   .py-16 {
     padding-block: calc(var(--spacing) * 16) !important;
@@ -1485,6 +1518,9 @@
   .text-balance {
     text-wrap: balance !important;
   }
+  .text-wrap {
+    text-wrap: wrap !important;
+  }
   .whitespace-nowrap {
     white-space: nowrap !important;
   }
@@ -1605,12 +1641,20 @@
     --tw-blur: blur(8px) !important;
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
   }
+  .grayscale {
+    --tw-grayscale: grayscale(100%) !important;
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
+  }
   .invert {
     --tw-invert: invert(100%) !important;
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
   }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
+  }
+  .backdrop-filter {
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,) !important;
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,) !important;
   }
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter !important;
@@ -1659,6 +1703,10 @@
   .outline-none {
     --tw-outline-style: none !important;
     outline-style: none !important;
+  }
+  .select-none {
+    -webkit-user-select: none !important;
+    user-select: none !important;
   }
   .\*\:my-0\.5 {
     :is(& > *) {
@@ -1885,6 +1933,11 @@
   .md\:mb-0 {
     @media (width >= 46.875rem) {
       margin-bottom: calc(var(--spacing) * 0) !important;
+    }
+  }
+  .md\:mb-1 {
+    @media (width >= 46.875rem) {
+      margin-bottom: calc(var(--spacing) * 1) !important;
     }
   }
   .md\:mb-4 {
@@ -2625,6 +2678,42 @@
   inherits: false;
 }
 @property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-sepia {
   syntax: "*";
   inherits: false;
 }
