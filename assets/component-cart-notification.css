@@ -237,8 +237,8 @@
 }
 
 .button--primary {
-  background-color: #0F0F0F;
-  color: #FFFFFF;
+  background-color: var(--color-primary-button);  /* #121212 - Scheme 1 button */
+  color: var(--color-primary-button-text);        /* #ffffff - Scheme 1 button_label */
   border: none;
   font-family: var(--font-body-family);
   font-weight: 600;
@@ -248,9 +248,9 @@
 }
 
 .button--secondary {
-  background-color: #FFFFFF;
-  color: #000000;
-  border: 1px solid #B8B8B8;
+  background-color: var(--color-primary-bg);      /* #ffffff - Scheme 1 background */
+  color: var(--color-primary-text);               /* #121212 - Scheme 1 text */
+  border: var(--border-thin) solid var(--color-gray-500); /* #b8b8b8 */
   font-family: var(--font-body-family);
   font-weight: 500;
   text-transform: uppercase;
