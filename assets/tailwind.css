@@ -55,9 +55,13 @@
 
   /* === DESIGN SYSTEM OVERRIDES === */
   /* Override Tailwind defaults to match current design system */
+  /* NOTE: Keep --spacing at Tailwind default to maintain existing classes */
 
-  /* Spacing: Override Tailwind's 4px base to match our 8px grid */
-  --spacing: 0.5rem; /* 8px base unit (was 0.25rem/4px in Tailwind default) */
+  /* Custom spacing for design system (don't override base --spacing) */
+  --spacing-grid: 0.5rem; /* 8px - our grid system base unit */
+  --spacing-grid-half: 0.25rem; /* 4px - half grid unit */
+  --spacing-grid-double: 1rem; /* 16px - double grid unit */
+  --spacing-grid-triple: 1.5rem; /* 24px - triple grid unit */
 
   /* Border Radius: Override Tailwind defaults to match current design */
   --radius-none: 0px;     /* 0px - current cards */
@@ -84,8 +88,8 @@
   /* Layout */
   --page-width-token: 100rem;                    /* 1600px max width */
   --section-spacing-token: 0px;                  /* No section spacing */
-  --grid-spacing-h-token: calc(var(--spacing) * 1); /* 8px horizontal */
-  --grid-spacing-v-token: calc(var(--spacing) * 1); /* 8px vertical */
+  --grid-spacing-h-token: var(--spacing-grid);   /* 8px horizontal */
+  --grid-spacing-v-token: var(--spacing-grid);   /* 8px vertical */
 
   /* Buttons */
   --button-border-width-token: var(--border-thin);   /* 1px */
