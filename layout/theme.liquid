@@ -119,9 +119,59 @@
                   --font-heading-scale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
 
                   --media-padding: {{ settings.media_padding }}px;
-                  --media-border-opacity: {{ settings.media_border_opacity | divided_by: 100.0 }};
-                  --media-border-width: {{ settings.media_border_thickness }}px;
-                  --media-radius: {{ settings.media_radius }}px;
+                  {% comment %} Map media settings to unified tokens {% endcomment %}
+                  {% case settings.media_border_opacity %}
+                    {% when 0 %}
+                      --media-border-opacity: 0;
+                    {% when 5 %}
+                      --media-border-opacity: var(--opacity-5);
+                    {% when 10 %}
+                      --media-border-opacity: var(--opacity-10);
+                    {% when 15 %}
+                      --media-border-opacity: var(--opacity-15);
+                    {% when 20 %}
+                      --media-border-opacity: var(--opacity-20);
+                    {% when 25 %}
+                      --media-border-opacity: var(--opacity-25);
+                    {% when 30 %}
+                      --media-border-opacity: var(--opacity-30);
+                    {% when 50 %}
+                      --media-border-opacity: var(--opacity-50);
+                    {% when 75 %}
+                      --media-border-opacity: var(--opacity-75);
+                    {% when 100 %}
+                      --media-border-opacity: 1;
+                    {% else %}
+                      --media-border-opacity: {{ settings.media_border_opacity | divided_by: 100.0 }};
+                  {% endcase %}
+                  {% case settings.media_border_thickness %}
+                    {% when 0 %}
+                      --media-border-width: var(--border-none);
+                    {% when 1 %}
+                      --media-border-width: var(--border-thin);
+                    {% when 2 %}
+                      --media-border-width: var(--border-medium);
+                    {% when 4 %}
+                      --media-border-width: var(--border-thick);
+                    {% else %}
+                      --media-border-width: {{ settings.media_border_thickness }}px;
+                  {% endcase %}
+                  {% case settings.media_radius %}
+                    {% when 0 %}
+                      --media-radius: var(--radius-none);
+                    {% when 3 %}
+                      --media-radius: var(--radius-sm);
+                    {% when 6 %}
+                      --media-radius: var(--radius-md);
+                    {% when 12 %}
+                      --media-radius: var(--radius-lg);
+                    {% when 24 %}
+                      --media-radius: var(--radius-xl);
+                    {% when 40 %}
+                      --media-radius: var(--radius-full);
+                    {% else %}
+                      --media-radius: {{ settings.media_radius }}px;
+                  {% endcase %}
                   --media-shadow-opacity: {{ settings.media_shadow_opacity | divided_by: 100.0 }};
                   --media-shadow-horizontal-offset: {{ settings.media_shadow_horizontal_offset }}px;
                   --media-shadow-vertical-offset: {{ settings.media_shadow_vertical_offset }}px;
@@ -132,50 +182,196 @@
                   --page-width-margin: {% if settings.page_width == '1600' %}2{% else %}0{% endif %}rem;
 
                   --product-card-image-padding: {{ settings.card_image_padding | divided_by: 10.0 }}rem;
-                  --product-card-corner-radius: {{ settings.card_corner_radius | divided_by: 10.0 }}rem;
+                  {% comment %} Map card settings to unified tokens {% endcomment %}
+                  {% case settings.card_corner_radius %}
+                    {% when 0 %}
+                      --product-card-corner-radius: var(--radius-none);
+                    {% when 3 %}
+                      --product-card-corner-radius: var(--radius-sm);
+                    {% when 6 %}
+                      --product-card-corner-radius: var(--radius-md);
+                    {% when 12 %}
+                      --product-card-corner-radius: var(--radius-lg);
+                    {% when 24 %}
+                      --product-card-corner-radius: var(--radius-xl);
+                    {% when 40 %}
+                      --product-card-corner-radius: var(--radius-full);
+                    {% else %}
+                      --product-card-corner-radius: {{ settings.card_corner_radius | divided_by: 10.0 }}rem;
+                  {% endcase %}
                   --product-card-text-alignment: {{ settings.card_text_alignment }};
-                  --product-card-border-width: {{ settings.card_border_thickness | divided_by: 10.0 }}rem;
-                  --product-card-border-opacity: {{ settings.card_border_opacity | divided_by: 100.0 }};
+                  {% case settings.card_border_thickness %}
+                    {% when 0 %}
+                      --product-card-border-width: var(--border-none);
+                    {% else %}
+                      --product-card-border-width: {{ settings.card_border_thickness | divided_by: 10.0 }}rem;
+                  {% endcase %}
+                  {% case settings.card_border_opacity %}
+                    {% when 0 %}
+                      --product-card-border-opacity: 0;
+                    {% when 5 %}
+                      --product-card-border-opacity: var(--opacity-5);
+                    {% when 10 %}
+                      --product-card-border-opacity: var(--opacity-10);
+                    {% when 15 %}
+                      --product-card-border-opacity: var(--opacity-15);
+                    {% when 20 %}
+                      --product-card-border-opacity: var(--opacity-20);
+                    {% when 25 %}
+                      --product-card-border-opacity: var(--opacity-25);
+                    {% when 30 %}
+                      --product-card-border-opacity: var(--opacity-30);
+                    {% when 50 %}
+                      --product-card-border-opacity: var(--opacity-50);
+                    {% when 75 %}
+                      --product-card-border-opacity: var(--opacity-75);
+                    {% when 100 %}
+                      --product-card-border-opacity: 1;
+                    {% else %}
+                      --product-card-border-opacity: {{ settings.card_border_opacity | divided_by: 100.0 }};
+                  {% endcase %}
                   --product-card-shadow-opacity: {{ settings.card_shadow_opacity | divided_by: 100.0 }};
                   --product-card-shadow-visible: {% if settings.card_shadow_opacity > 0 %}1{% else %}0{% endif %};
                   --product-card-shadow-horizontal-offset: {{ settings.card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
                   --product-card-shadow-vertical-offset: {{ settings.card_shadow_vertical_offset | divided_by: 10.0 }}rem;
                   --product-card-shadow-blur-radius: {{ settings.card_shadow_blur | divided_by: 10.0 }}rem;
 
-                  --collection-card-image-padding: {{ settings.collection_card_image_padding | divided_by: 10.0 }}rem;
-                  --collection-card-corner-radius: {{ settings.collection_card_corner_radius | divided_by: 10.0 }}rem;
-                  --collection-card-text-alignment: {{ settings.collection_card_text_alignment }};
-                  --collection-card-border-width: {{ settings.collection_card_border_thickness | divided_by: 10.0 }}rem;
-                  --collection-card-border-opacity: {{ settings.collection_card_border_opacity | divided_by: 100.0 }};
-                  --collection-card-shadow-opacity: {{ settings.collection_card_shadow_opacity | divided_by: 100.0 }};
-                  --collection-card-shadow-visible: {% if settings.collection_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
-                  --collection-card-shadow-horizontal-offset: {{ settings.collection_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
-                  --collection-card-shadow-vertical-offset: {{ settings.collection_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-                  --collection-card-shadow-blur-radius: {{ settings.collection_card_shadow_blur | divided_by: 10.0 }}rem;
+                  {% comment %} Unified card system - all card types inherit from product card settings {% endcomment %}
+                  --collection-card-image-padding: var(--product-card-image-padding);
+                  --collection-card-corner-radius: var(--product-card-corner-radius);
+                  --collection-card-text-alignment: var(--product-card-text-alignment);
+                  --collection-card-border-width: var(--product-card-border-width);
+                  --collection-card-border-opacity: var(--product-card-border-opacity);
+                  --collection-card-shadow-opacity: var(--product-card-shadow-opacity);
+                  --collection-card-shadow-visible: var(--product-card-shadow-visible);
+                  --collection-card-shadow-horizontal-offset: var(--product-card-shadow-horizontal-offset);
+                  --collection-card-shadow-vertical-offset: var(--product-card-shadow-vertical-offset);
+                  --collection-card-shadow-blur-radius: var(--product-card-shadow-blur-radius);
 
-                  --blog-card-image-padding: {{ settings.blog_card_image_padding | divided_by: 10.0 }}rem;
-                  --blog-card-corner-radius: {{ settings.blog_card_corner_radius | divided_by: 10.0 }}rem;
-                  --blog-card-text-alignment: {{ settings.blog_card_text_alignment }};
-                  --blog-card-border-width: {{ settings.blog_card_border_thickness | divided_by: 10.0 }}rem;
-                  --blog-card-border-opacity: {{ settings.blog_card_border_opacity | divided_by: 100.0 }};
-                  --blog-card-shadow-opacity: {{ settings.blog_card_shadow_opacity | divided_by: 100.0 }};
-                  --blog-card-shadow-visible: {% if settings.blog_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
-                  --blog-card-shadow-horizontal-offset: {{ settings.blog_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
-                  --blog-card-shadow-vertical-offset: {{ settings.blog_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-                  --blog-card-shadow-blur-radius: {{ settings.blog_card_shadow_blur | divided_by: 10.0 }}rem;
+                  --blog-card-image-padding: var(--product-card-image-padding);
+                  --blog-card-corner-radius: var(--product-card-corner-radius);
+                  --blog-card-text-alignment: var(--product-card-text-alignment);
+                  --blog-card-border-width: var(--product-card-border-width);
+                  --blog-card-border-opacity: var(--product-card-border-opacity);
+                  --blog-card-shadow-opacity: var(--product-card-shadow-opacity);
+                  --blog-card-shadow-visible: var(--product-card-shadow-visible);
+                  --blog-card-shadow-horizontal-offset: var(--product-card-shadow-horizontal-offset);
+                  --blog-card-shadow-vertical-offset: var(--product-card-shadow-vertical-offset);
+                  --blog-card-shadow-blur-radius: var(--product-card-shadow-blur-radius);
 
-                  --badge-corner-radius: {{ settings.badge_corner_radius | divided_by: 10.0 }}rem;
+                  {% comment %} Map badge settings to unified tokens {% endcomment %}
+                  {% case settings.badge_corner_radius %}
+                    {% when 0 %}
+                      --badge-corner-radius: var(--radius-none);
+                    {% when 3 %}
+                      --badge-corner-radius: var(--radius-sm);
+                    {% when 6 %}
+                      --badge-corner-radius: var(--radius-md);
+                    {% when 12 %}
+                      --badge-corner-radius: var(--radius-lg);
+                    {% when 24 %}
+                      --badge-corner-radius: var(--radius-xl);
+                    {% when 40 %}
+                      --badge-corner-radius: var(--radius-full);
+                    {% else %}
+                      --badge-corner-radius: {{ settings.badge_corner_radius | divided_by: 10.0 }}rem;
+                  {% endcase %}
 
-                  --popup-border-width: {{ settings.popup_border_thickness }}px;
-                  --popup-border-opacity: {{ settings.popup_border_opacity | divided_by: 100.0 }};
-                  --popup-corner-radius: {{ settings.popup_corner_radius }}px;
+                  {% comment %} Map popup settings to unified tokens {% endcomment %}
+                  {% case settings.popup_border_thickness %}
+                    {% when 0 %}
+                      --popup-border-width: var(--border-none);
+                    {% when 1 %}
+                      --popup-border-width: var(--border-thin);
+                    {% when 2 %}
+                      --popup-border-width: var(--border-medium);
+                    {% when 4 %}
+                      --popup-border-width: var(--border-thick);
+                    {% else %}
+                      --popup-border-width: {{ settings.popup_border_thickness }}px;
+                  {% endcase %}
+                  {% case settings.popup_border_opacity %}
+                    {% when 0 %}
+                      --popup-border-opacity: 0;
+                    {% when 5 %}
+                      --popup-border-opacity: var(--opacity-5);
+                    {% when 10 %}
+                      --popup-border-opacity: var(--opacity-10);
+                    {% when 15 %}
+                      --popup-border-opacity: var(--opacity-15);
+                    {% when 20 %}
+                      --popup-border-opacity: var(--opacity-20);
+                    {% when 25 %}
+                      --popup-border-opacity: var(--opacity-25);
+                    {% when 30 %}
+                      --popup-border-opacity: var(--opacity-30);
+                    {% when 50 %}
+                      --popup-border-opacity: var(--opacity-50);
+                    {% when 75 %}
+                      --popup-border-opacity: var(--opacity-75);
+                    {% when 100 %}
+                      --popup-border-opacity: 1;
+                    {% else %}
+                      --popup-border-opacity: {{ settings.popup_border_opacity | divided_by: 100.0 }};
+                  {% endcase %}
+                  {% case settings.popup_corner_radius %}
+                    {% when 0 %}
+                      --popup-corner-radius: var(--radius-none);
+                    {% when 3 %}
+                      --popup-corner-radius: var(--radius-sm);
+                    {% when 6 %}
+                      --popup-corner-radius: var(--radius-md);
+                    {% when 12 %}
+                      --popup-corner-radius: var(--radius-lg);
+                    {% when 24 %}
+                      --popup-corner-radius: var(--radius-xl);
+                    {% when 40 %}
+                      --popup-corner-radius: var(--radius-full);
+                    {% else %}
+                      --popup-corner-radius: {{ settings.popup_corner_radius }}px;
+                  {% endcase %}
                   --popup-shadow-opacity: {{ settings.popup_shadow_opacity | divided_by: 100.0 }};
                   --popup-shadow-horizontal-offset: {{ settings.popup_shadow_horizontal_offset }}px;
                   --popup-shadow-vertical-offset: {{ settings.popup_shadow_vertical_offset }}px;
                   --popup-shadow-blur-radius: {{ settings.popup_shadow_blur }}px;
 
-                  --drawer-border-width: {{ settings.drawer_border_thickness }}px;
-                  --drawer-border-opacity: {{ settings.drawer_border_opacity | divided_by: 100.0 }};
+                  {% comment %} Map drawer settings to unified tokens {% endcomment %}
+                  {% case settings.drawer_border_thickness %}
+                    {% when 0 %}
+                      --drawer-border-width: var(--border-none);
+                    {% when 1 %}
+                      --drawer-border-width: var(--border-thin);
+                    {% when 2 %}
+                      --drawer-border-width: var(--border-medium);
+                    {% when 4 %}
+                      --drawer-border-width: var(--border-thick);
+                    {% else %}
+                      --drawer-border-width: {{ settings.drawer_border_thickness }}px;
+                  {% endcase %}
+                  {% case settings.drawer_border_opacity %}
+                    {% when 0 %}
+                      --drawer-border-opacity: 0;
+                    {% when 5 %}
+                      --drawer-border-opacity: var(--opacity-5);
+                    {% when 10 %}
+                      --drawer-border-opacity: var(--opacity-10);
+                    {% when 15 %}
+                      --drawer-border-opacity: var(--opacity-15);
+                    {% when 20 %}
+                      --drawer-border-opacity: var(--opacity-20);
+                    {% when 25 %}
+                      --drawer-border-opacity: var(--opacity-25);
+                    {% when 30 %}
+                      --drawer-border-opacity: var(--opacity-30);
+                    {% when 50 %}
+                      --drawer-border-opacity: var(--opacity-50);
+                    {% when 75 %}
+                      --drawer-border-opacity: var(--opacity-75);
+                    {% when 100 %}
+                      --drawer-border-opacity: 1;
+                    {% else %}
+                      --drawer-border-opacity: {{ settings.drawer_border_opacity | divided_by: 100.0 }};
+                  {% endcase %}
                   --drawer-shadow-opacity: {{ settings.drawer_shadow_opacity | divided_by: 100.0 }};
                   --drawer-shadow-horizontal-offset: {{ settings.drawer_shadow_horizontal_offset }}px;
                   --drawer-shadow-vertical-offset: {{ settings.drawer_shadow_vertical_offset }}px;
@@ -189,43 +385,66 @@
                   --grid-mobile-vertical-spacing: {{ settings.spacing_grid_vertical | divided_by: 2 }}px;
                   --grid-mobile-horizontal-spacing: {{ settings.spacing_grid_horizontal | divided_by: 2 }}px;
 
-                  --text-boxes-border-opacity: {{ settings.text_boxes_border_opacity | divided_by: 100.0 }};
-                  --text-boxes-border-width: {{ settings.text_boxes_border_thickness }}px;
-                  --text-boxes-radius: {{ settings.text_boxes_radius }}px;
+                  {% comment %} Map text-boxes settings to unified tokens {% endcomment %}
+                  {% case settings.text_boxes_border_opacity %}
+                    {% when 0 %}
+                      --text-boxes-border-opacity: 0;
+                    {% when 5 %}
+                      --text-boxes-border-opacity: var(--opacity-5);
+                    {% when 10 %}
+                      --text-boxes-border-opacity: var(--opacity-10);
+                    {% when 15 %}
+                      --text-boxes-border-opacity: var(--opacity-15);
+                    {% when 20 %}
+                      --text-boxes-border-opacity: var(--opacity-20);
+                    {% when 25 %}
+                      --text-boxes-border-opacity: var(--opacity-25);
+                    {% when 30 %}
+                      --text-boxes-border-opacity: var(--opacity-30);
+                    {% when 50 %}
+                      --text-boxes-border-opacity: var(--opacity-50);
+                    {% when 75 %}
+                      --text-boxes-border-opacity: var(--opacity-75);
+                    {% when 100 %}
+                      --text-boxes-border-opacity: 1;
+                    {% else %}
+                      --text-boxes-border-opacity: {{ settings.text_boxes_border_opacity | divided_by: 100.0 }};
+                  {% endcase %}
+                  {% case settings.text_boxes_border_thickness %}
+                    {% when 0 %}
+                      --text-boxes-border-width: var(--border-none);
+                    {% when 1 %}
+                      --text-boxes-border-width: var(--border-thin);
+                    {% when 2 %}
+                      --text-boxes-border-width: var(--border-medium);
+                    {% when 4 %}
+                      --text-boxes-border-width: var(--border-thick);
+                    {% else %}
+                      --text-boxes-border-width: {{ settings.text_boxes_border_thickness }}px;
+                  {% endcase %}
+                  {% case settings.text_boxes_radius %}
+                    {% when 0 %}
+                      --text-boxes-radius: var(--radius-none);
+                    {% when 3 %}
+                      --text-boxes-radius: var(--radius-sm);
+                    {% when 6 %}
+                      --text-boxes-radius: var(--radius-md);
+                    {% when 12 %}
+                      --text-boxes-radius: var(--radius-lg);
+                    {% when 24 %}
+                      --text-boxes-radius: var(--radius-xl);
+                    {% when 40 %}
+                      --text-boxes-radius: var(--radius-full);
+                    {% else %}
+                      --text-boxes-radius: {{ settings.text_boxes_radius }}px;
+                  {% endcase %}
                   --text-boxes-shadow-opacity: {{ settings.text_boxes_shadow_opacity | divided_by: 100.0 }};
                   --text-boxes-shadow-visible: {% if settings.text_boxes_shadow_opacity > 0 %}1{% else %}0{% endif %};
                   --text-boxes-shadow-horizontal-offset: {{ settings.text_boxes_shadow_horizontal_offset }}px;
                   --text-boxes-shadow-vertical-offset: {{ settings.text_boxes_shadow_vertical_offset }}px;
                   --text-boxes-shadow-blur-radius: {{ settings.text_boxes_shadow_blur }}px;
 
-                  --buttons-radius: {{ settings.buttons_radius }}px;
-                  --buttons-radius-outset: {% if settings.buttons_radius > 0 %}{{ settings.buttons_radius | plus: settings.buttons_border_thickness }}{% else %}0{% endif %}px;
-                  --buttons-border-width: {% if settings.buttons_border_opacity > 0 %}{{ settings.buttons_border_thickness }}{% else %}0{% endif %}px;
-                  --buttons-border-opacity: {{ settings.buttons_border_opacity | divided_by: 100.0 }};
-                  --buttons-shadow-opacity: {{ settings.buttons_shadow_opacity | divided_by: 100.0 }};
-                  --buttons-shadow-visible: {% if settings.buttons_shadow_opacity > 0 %}1{% else %}0{% endif %};
-                  --buttons-shadow-horizontal-offset: {{ settings.buttons_shadow_horizontal_offset }}px;
-                  --buttons-shadow-vertical-offset: {{ settings.buttons_shadow_vertical_offset }}px;
-                  --buttons-shadow-blur-radius: {{ settings.buttons_shadow_blur }}px;
-                  --buttons-border-offset: {% if settings.buttons_radius > 0 or settings.buttons_shadow_opacity > 0 %}0.3{% else %}0{% endif %}px;
 
-                  --inputs-radius: {{ settings.inputs_radius }}px;
-                  --inputs-border-width: {{ settings.inputs_border_thickness }}px;
-                  --inputs-border-opacity: {{ settings.inputs_border_opacity | divided_by: 100.0 }};
-                  --inputs-shadow-opacity: {{ settings.inputs_shadow_opacity | divided_by: 100.0 }};
-                  --inputs-shadow-horizontal-offset: {{ settings.inputs_shadow_horizontal_offset }}px;
-                  --inputs-margin-offset: {% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_opacity > 0 %}{{ settings.inputs_shadow_vertical_offset | abs }}{% else %}0{% endif %}px;
-                  --inputs-shadow-vertical-offset: {{ settings.inputs_shadow_vertical_offset }}px;
-                  --inputs-shadow-blur-radius: {{ settings.inputs_shadow_blur }}px;
-                  --inputs-radius-outset: {% if settings.inputs_radius > 0 %}{{ settings.inputs_radius | plus: settings.inputs_border_thickness }}{% else %}0{% endif %}px;
-
-                  --variant-pills-radius: {{ settings.variant_pills_radius }}px;
-                  --variant-pills-border-width: {{ settings.variant_pills_border_thickness }}px;
-                  --variant-pills-border-opacity: {{ settings.variant_pills_border_opacity | divided_by: 100.0 }};
-                  --variant-pills-shadow-opacity: {{ settings.variant_pills_shadow_opacity | divided_by: 100.0 }};
-                  --variant-pills-shadow-horizontal-offset: {{ settings.variant_pills_shadow_horizontal_offset }}px;
-                  --variant-pills-shadow-vertical-offset: {{ settings.variant_pills_shadow_vertical_offset }}px;
-                  --variant-pills-shadow-blur-radius: {{ settings.variant_pills_shadow_blur }}px;
                 }
 
                 *,
