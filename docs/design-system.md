@@ -26,14 +26,36 @@ The Northfinder theme is a modern Shopify theme built with a hybrid approach usi
 
 ## Design Tokens
 
-The Northfinder theme uses a comprehensive system of CSS custom properties (variables) for design consistency and theme customization. Variables are defined in two main locations:
+The Northfinder theme uses a comprehensive system of CSS custom properties (variables) optimized specifically for **Color Scheme 1** (white background theme). This focused approach eliminates multi-scheme complexity while maintaining full design system benefits.
 
-1. **Dynamic Variables** (`layout/theme.liquid`) - Generated from Shopify theme settings
-2. **Static Design Tokens** (`assets/tailwind.css`) - Fixed design system values
+### Design System Architecture
+1. **Scheme 1 Core Colors** (`assets/tailwind.css`) - Optimized for white background theme
+2. **Unified Design Tokens** (`assets/tailwind.css`) - Simplified spacing, radius, borders, shadows
+3. **Component Mappings** (`assets/tailwind.css`) - Direct mappings to current settings
+4. **Dynamic Variables** (`layout/theme.liquid`) - Simplified theme generation
 
 ### Colors
 
-The Northfinder theme uses a comprehensive color system with CSS custom properties for consistency and maintainability.
+The Northfinder theme uses a comprehensive color system optimized specifically for **Color Scheme 1** (white background theme), providing excellent contrast ratios and accessibility.
+
+#### Scheme 1 Core Colors (Primary Theme)
+```css
+/* Exact values from Color Scheme 1 */
+--color-primary-bg: #ffffff;               /* scheme-1 background */
+--color-primary-text: #121212;             /* scheme-1 text */
+--color-primary-button: #121212;           /* scheme-1 button */
+--color-primary-button-text: #ffffff;      /* scheme-1 button_label */
+--color-secondary-text: #4d4d4d;           /* scheme-1 secondary_button_label */
+--color-primary-shadow: #121212;           /* scheme-1 shadow */
+
+/* RGB values for dynamic usage */
+--rgb-primary-bg: 255,255,255;             /* #ffffff */
+--rgb-primary-text: 18,18,18;              /* #121212 */
+--rgb-primary-button: 18,18,18;            /* #121212 */
+--rgb-primary-button-text: 255,255,255;    /* #ffffff */
+--rgb-secondary-text: 77,77,77;            /* #4d4d4d */
+--rgb-primary-shadow: 18,18,18;            /* #121212 */
+```
 
 #### Base Colors (Theme Settings)
 ```css
@@ -798,11 +820,19 @@ The theme follows a mobile-first responsive design approach:
 | Video Section | `assets/video-section.css` | Video components | `--ratio-percent` for aspect ratios |
 | Tailwind | `assets/application.css` | Generated Tailwind CSS | All design tokens and utilities |
 
-### CSS Variables Reference
+### Comprehensive Documentation
 
-For a complete reference of all CSS variables used in the theme, see:
-- **[CSS Variables Reference](css-variables-reference.md)** - Comprehensive documentation of all 100+ CSS variables
+For complete documentation and implementation guides, see:
+
+#### Core Documentation
+- **[CSS Variables Reference](css-variables-reference.md)** - Complete documentation of all 150+ CSS variables
 - **[Color System Migration](color-system-migration.md)** - Guide for migrating hardcoded colors to design tokens
+- **[CSS Variables Optimization](css-variables-optimization.md)** - Analysis and optimization opportunities
+
+#### Scheme 1 Focused Documentation
+- **[Scheme 1 Comprehensive Guide](scheme-1-comprehensive-guide.md)** - Complete guide optimized for Color Scheme 1
+- **[Scheme 1 Implementation Plan](scheme-1-implementation-plan.md)** - Simplified implementation focused on white background theme
+- **[Variable Consolidation Guide](variable-consolidation-guide.md)** - Step-by-step consolidation implementation
 
 ### Variable Categories Summary
 
