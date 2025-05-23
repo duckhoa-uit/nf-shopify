@@ -11,6 +11,26 @@ This guide provides a comprehensive plan to migrate all hardcoded colors in the 
 - `#fff` - White
 - `#000` - Black
 - Theme-based colors (background, foreground, secondary)
+- Dynamic theme variables from Shopify settings (50+ variables)
+
+### 🔍 Discovered Theme Variables (from layout/theme.liquid)
+The theme already has an extensive system of CSS variables generated from Shopify theme settings:
+
+#### Color Variables (Dynamic)
+- `--color-base-background`, `--color-base-foreground`
+- `--color-base-button`, `--color-base-button-text`
+- `--color-base-secondary-button`, `--color-base-secondary-button-text`
+- `--color-base-link`, `--color-base-shadow`
+- `--color-base-badge-*` (foreground, background, border)
+- `--gradient-background`, `--payment-terms-background-color`
+
+#### Component Variables (Dynamic)
+- **Cards**: `--product-card-*`, `--collection-card-*`, `--blog-card-*`
+- **UI Elements**: `--badge-*`, `--popup-*`, `--drawer-*`, `--text-boxes-*`
+- **Forms**: `--buttons-*`, `--inputs-*`, `--variant-pills-*`
+- **Layout**: `--page-width`, `--spacing-sections-*`, `--grid-*-spacing`
+- **Media**: `--media-*` (padding, border, radius, shadow)
+- **Typography**: `--font-body-*`, `--font-heading-*`, `--font-*-scale`
 
 ### 🔄 Colors to Migrate
 
@@ -57,12 +77,12 @@ Enhanced `assets/tailwind.css` with comprehensive color palette:
   --color-foreground: rgb(var(--color-base-foreground));
   --color-secondary: rgb(var(--color-base-secondary-button));
   --color-secondary-foreground: rgb(var(--color-base-secondary-button-text));
-  
+
   /* Brand colors */
   --color-white: #fff;
   --color-black: #000;
   --color-accent: #ec0009;
-  
+
   /* Gray scale palette */
   --color-gray-50: #f9f9f9;
   --color-gray-100: #f5f5f5;
@@ -76,13 +96,13 @@ Enhanced `assets/tailwind.css` with comprehensive color palette:
   --color-gray-850: #3d3d3d;
   --color-gray-900: #333333;
   --color-gray-950: #0f0f0f;
-  
+
   /* Semantic colors */
   --color-success: #00945f;
   --color-error: #ec0009;
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
-  
+
   /* Component-specific colors */
   --color-modal-backdrop: #0f0f0f;
   --color-newsletter-bg: #2b3c48;
