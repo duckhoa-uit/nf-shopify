@@ -4,10 +4,10 @@
   justify-content: center;
   width: 18px;
   height: 18px;
-  background-color: #ec0009;
+  background-color: var(--color-accent);  /* Uses existing accent token */
   border-radius: 50%;
-  color: #ffffff;
-  font-family: "Archivo", sans-serif;
+  color: var(--color-white);  /* Uses existing white token */
+  font-family: var(--font-archivo-expanded);  /* Uses existing font token */
   font-weight: 600;
   font-size: 10px;
   line-height: 1;
@@ -60,11 +60,11 @@
 }
 
 .mobile-facets__price {
-  font-family: "Archivo", sans-serif;
+  font-family: var(--font-archivo-expanded);  /* Uses existing font token */
   font-weight: 400;
   font-size: 12px;
   line-height: 1.333em;
-  color: #666666;
+  color: var(--color-gray-700);  /* Uses existing gray token */
 }
 
 /* Close button (X) */
