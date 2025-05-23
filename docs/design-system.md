@@ -26,6 +26,11 @@ The Northfinder theme is a modern Shopify theme built with a hybrid approach usi
 
 ## Design Tokens
 
+The Northfinder theme uses a comprehensive system of CSS custom properties (variables) for design consistency and theme customization. Variables are defined in two main locations:
+
+1. **Dynamic Variables** (`layout/theme.liquid`) - Generated from Shopify theme settings
+2. **Static Design Tokens** (`assets/tailwind.css`) - Fixed design system values
+
 ### Colors
 
 The Northfinder theme uses a comprehensive color system with CSS custom properties for consistency and maintainability.
@@ -96,21 +101,64 @@ The Northfinder theme uses a comprehensive color system with CSS custom properti
 
 ### Typography
 
+The theme uses dynamic typography variables generated from Shopify theme settings:
+
+#### Dynamic Typography Variables
+```css
+/* Font families (from theme settings) */
+--font-body-family: /* Dynamic font with fallbacks */;
+--font-heading-family: /* Dynamic font with fallbacks */;
+
+/* Font properties */
+--font-body-style: /* normal | italic */;
+--font-body-weight: /* 100-900 */;
+--font-body-weight-bold: /* body weight + 300, max 1000 */;
+--font-heading-style: /* normal | italic */;
+--font-heading-weight: /* 100-900 */;
+
+/* Font scaling */
+--font-body-scale: /* Decimal value from settings */;
+--font-heading-scale: /* Calculated ratio */;
+```
+
+#### Static Typography Tokens
 ```css
 --font-archivo-expanded: "Archivo SemiExpanded", sans-serif;
 ```
 
 **Font Families:**
 - **Primary**: Archivo SemiExpanded (400, 500, 700 weights)
+- **Dynamic Body Font**: Set via theme customizer
+- **Dynamic Heading Font**: Set via theme customizer
 - **System Fallbacks**: ui-sans-serif, system-ui, sans-serif
 
 ### Spacing & Layout
 
+The theme uses both dynamic and static spacing variables:
+
+#### Dynamic Layout Variables (from theme settings)
+```css
+/* Page layout */
+--page-width: /* rem value from settings */;
+--page-width-margin: /* 0 or 2rem based on width */;
+
+/* Section spacing */
+--spacing-sections-desktop: /* px value */;
+--spacing-sections-mobile: /* calculated mobile spacing */;
+
+/* Grid spacing */
+--grid-desktop-vertical-spacing: /* px value */;
+--grid-desktop-horizontal-spacing: /* px value */;
+--grid-mobile-vertical-spacing: /* desktop / 2 */;
+--grid-mobile-horizontal-spacing: /* desktop / 2 */;
+```
+
+#### Static Layout Tokens
 ```css
 --spacing: 0.25rem;
---breakpoint-md: 46.875rem;
---breakpoint-lg: 61.875rem;
---breakpoint-xl: 87.5rem;
+--breakpoint-md: 46.875rem;  /* 750px */
+--breakpoint-lg: 61.875rem;  /* 990px */
+--breakpoint-xl: 87.5rem;    /* 1400px */
 --radius-3: 0.1875rem;
 ```
 
@@ -125,6 +173,128 @@ The Northfinder theme uses a comprehensive color system with CSS custom properti
   --ease-out-slow: cubic-bezier(0, 0, 0.3, 1);
   --power1-out: linear(0, 0.2342, 0.4374, 0.6093 37.49%, ...);
 }
+```
+
+### Component Variables
+
+The theme includes extensive component-specific variables generated from theme settings:
+
+#### Card Components
+```css
+/* Product cards */
+--product-card-image-padding: /* rem value */;
+--product-card-corner-radius: /* rem value */;
+--product-card-text-alignment: /* left | center | right */;
+--product-card-border-width: /* rem value */;
+--product-card-border-opacity: /* 0-1 decimal */;
+--product-card-shadow-opacity: /* 0-1 decimal */;
+--product-card-shadow-visible: /* 0 or 1 */;
+--product-card-shadow-horizontal-offset: /* rem value */;
+--product-card-shadow-vertical-offset: /* rem value */;
+--product-card-shadow-blur-radius: /* rem value */;
+
+/* Collection cards */
+--collection-card-image-padding: /* rem value */;
+--collection-card-corner-radius: /* rem value */;
+--collection-card-text-alignment: /* left | center | right */;
+--collection-card-border-width: /* rem value */;
+--collection-card-border-opacity: /* 0-1 decimal */;
+--collection-card-shadow-opacity: /* 0-1 decimal */;
+
+/* Blog cards */
+--blog-card-image-padding: /* rem value */;
+--blog-card-corner-radius: /* rem value */;
+--blog-card-text-alignment: /* left | center | right */;
+--blog-card-border-width: /* rem value */;
+--blog-card-border-opacity: /* 0-1 decimal */;
+```
+
+#### Form Components
+```css
+/* Buttons */
+--buttons-radius: /* px value */;
+--buttons-radius-outset: /* calculated radius + border */;
+--buttons-border-width: /* px value or 0 */;
+--buttons-border-opacity: /* 0-1 decimal */;
+--buttons-shadow-opacity: /* 0-1 decimal */;
+--buttons-shadow-visible: /* 0 or 1 */;
+--buttons-shadow-horizontal-offset: /* px value */;
+--buttons-shadow-vertical-offset: /* px value */;
+--buttons-shadow-blur-radius: /* px value */;
+
+/* Form inputs */
+--inputs-radius: /* px value */;
+--inputs-border-width: /* px value */;
+--inputs-border-opacity: /* 0-1 decimal */;
+--inputs-shadow-opacity: /* 0-1 decimal */;
+--inputs-shadow-horizontal-offset: /* px value */;
+--inputs-shadow-vertical-offset: /* px value */;
+--inputs-shadow-blur-radius: /* px value */;
+
+/* Variant pills */
+--variant-pills-radius: /* px value */;
+--variant-pills-border-width: /* px value */;
+--variant-pills-border-opacity: /* 0-1 decimal */;
+--variant-pills-shadow-opacity: /* 0-1 decimal */;
+```
+
+#### UI Components
+```css
+/* Badges */
+--badge-corner-radius: /* rem value */;
+
+/* Popups */
+--popup-border-width: /* px value */;
+--popup-border-opacity: /* 0-1 decimal */;
+--popup-corner-radius: /* px value */;
+--popup-shadow-opacity: /* 0-1 decimal */;
+
+/* Drawers */
+--drawer-border-width: /* px value */;
+--drawer-border-opacity: /* 0-1 decimal */;
+--drawer-shadow-opacity: /* 0-1 decimal */;
+
+/* Text boxes */
+--text-boxes-border-opacity: /* 0-1 decimal */;
+--text-boxes-border-width: /* px value */;
+--text-boxes-radius: /* px value */;
+--text-boxes-shadow-opacity: /* 0-1 decimal */;
+```
+
+#### Media Components
+```css
+/* Media styling */
+--media-padding: /* px value */;
+--media-border-opacity: /* 0-1 decimal */;
+--media-border-width: /* px value */;
+--media-radius: /* px value */;
+--media-shadow-opacity: /* 0-1 decimal */;
+--media-shadow-horizontal-offset: /* px value */;
+--media-shadow-vertical-offset: /* px value */;
+--media-shadow-blur-radius: /* px value */;
+--media-shadow-visible: /* 0 or 1 */;
+```
+
+#### Component-Specific Tokens
+```css
+/* Swatch components */
+--swatch-size: 3.2rem;
+--swatch-border-radius: 50%;
+--swatch-square-border-radius: 0.2rem;
+
+/* Video components */
+--ratio-percent: 56.25%;  /* 16:9 aspect ratio */
+
+/* Focus states */
+--focused-base-outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
+--focused-base-outline-offset: 0.3rem;
+--focused-base-box-shadow: 0 0 0 0.3rem rgb(var(--color-base-background)), 0 0 0.5rem 0.4rem rgba(var(--color-base-foreground), 0.3);
+
+/* Alpha values */
+--alpha-button-background: 1;
+--alpha-button-border: 1;
+--alpha-link: 0.85;
+--alpha-badge-border: 0.1;
 ```
 
 ## Core Components
@@ -545,13 +715,38 @@ The theme follows a mobile-first responsive design approach:
 
 ### CSS Components
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Base Styles | `assets/base.css` | Core styles and buttons |
-| Cards | `assets/component-card.css` | Card component styles |
-| Slider | `assets/component-slider.css` | Carousel/slider styles |
-| Cart | `assets/component-cart-notification.css` | Cart notification styles |
-| Search | `assets/component-predictive-search.css` | Search functionality styles |
-| Tailwind | `assets/application.css` | Generated Tailwind CSS |
+| Component | File | Description | CSS Variables |
+|-----------|------|-------------|---------------|
+| Base Styles | `assets/base.css` | Core styles and buttons | Animation, focus states |
+| Cards | `assets/component-card.css` | Card component styles | Uses dynamic card variables |
+| Slider | `assets/component-slider.css` | Carousel/slider styles | Media and spacing variables |
+| Cart | `assets/component-cart-notification.css` | Cart notification styles | Button and popup variables |
+| Search | `assets/component-predictive-search.css` | Search functionality styles | Input and text box variables |
+| Swatch | `assets/component-swatch.css` | Color/variant swatches | `--swatch-size`, `--swatch-border-radius` |
+| Swatch Input | `assets/component-swatch-input.css` | Interactive swatches | Swatch sizing and border variables |
+| Video Section | `assets/video-section.css` | Video components | `--ratio-percent` for aspect ratios |
+| Tailwind | `assets/application.css` | Generated Tailwind CSS | All design tokens and utilities |
 
-This design system documentation provides a comprehensive overview of the Northfinder theme's component architecture, styling patterns, and usage guidelines. It serves as a reference for developers working with or extending the theme.
+### CSS Variables Reference
+
+For a complete reference of all CSS variables used in the theme, see:
+- **[CSS Variables Reference](css-variables-reference.md)** - Comprehensive documentation of all 100+ CSS variables
+- **[Color System Migration](color-system-migration.md)** - Guide for migrating hardcoded colors to design tokens
+
+### Variable Categories Summary
+
+| Category | Count | Source | Purpose |
+|----------|-------|--------|----------|
+| **Color Variables** | 15+ | `layout/theme.liquid` | Dynamic theme colors |
+| **Typography Variables** | 8+ | `layout/theme.liquid` | Font families and scaling |
+| **Layout Variables** | 10+ | `layout/theme.liquid` | Page width and spacing |
+| **Card Variables** | 30+ | `layout/theme.liquid` | Product/collection/blog cards |
+| **Form Variables** | 25+ | `layout/theme.liquid` | Buttons, inputs, variant pills |
+| **UI Variables** | 20+ | `layout/theme.liquid` | Badges, popups, drawers |
+| **Media Variables** | 10+ | `layout/theme.liquid` | Image styling and shadows |
+| **Design Tokens** | 25+ | `assets/tailwind.css` | Static color palette and utilities |
+| **Component Tokens** | 15+ | `assets/tailwind.css` | Component-specific values |
+
+**Total: 150+ CSS Variables** providing comprehensive theming and customization capabilities.
+
+This design system documentation provides a comprehensive overview of the Northfinder theme's component architecture, styling patterns, and extensive CSS variable system. It serves as a reference for developers working with or extending the theme.
