@@ -28,16 +28,69 @@ The Northfinder theme is a modern Shopify theme built with a hybrid approach usi
 
 ### Colors
 
+The Northfinder theme uses a comprehensive color system with CSS custom properties for consistency and maintainability.
+
+#### Base Colors (Theme Settings)
 ```css
-@theme inline {
-  --color-*: initial;
-  --color-background: rgb(var(--color-base-background));
-  --color-foreground: rgb(var(--color-base-foreground));
-  --color-secondary: rgb(var(--color-base-secondary-button));
-  --color-secondary-foreground: rgb(var(--color-base-secondary-button-text));
-  --color-white: #fff;
-  --color-black: #000;
-  --color-accent: #ec0009;
+--color-background: rgb(var(--color-base-background));
+--color-foreground: rgb(var(--color-base-foreground));
+--color-secondary: rgb(var(--color-base-secondary-button));
+--color-secondary-foreground: rgb(var(--color-base-secondary-button-text));
+```
+
+#### Brand Colors
+```css
+--color-white: #fff;
+--color-black: #000;
+--color-accent: #ec0009;  /* Northfinder red */
+```
+
+#### Gray Scale Palette
+```css
+--color-gray-50: #f9f9f9;   /* Lightest backgrounds */
+--color-gray-100: #f5f5f5;  /* Announcement bar, info boxes */
+--color-gray-200: #f0f0f0;  /* Search inputs, hover states */
+--color-gray-300: #ebebeb;  /* Light backgrounds */
+--color-gray-400: #e0dfdf;  /* Borders, dividers */
+--color-gray-500: #b8b8b8;  /* Medium borders */
+--color-gray-600: #999999;  /* Light text */
+--color-gray-700: #666666;  /* Medium text */
+--color-gray-800: #4d4d4d;  /* Medium-dark text */
+--color-gray-850: #3d3d3d;  /* Dark text */
+--color-gray-900: #333333;  /* SVG strokes, very dark text */
+--color-gray-950: #0f0f0f;  /* Primary dark, modal backdrop */
+```
+
+#### Semantic Colors
+```css
+--color-success: #00945f;  /* Success states, valid inputs */
+--color-error: #ec0009;    /* Error states, invalid inputs */
+--color-warning: #f59e0b;  /* Warning states */
+--color-info: #3b82f6;     /* Info states */
+```
+
+#### Component-Specific Colors
+```css
+--color-modal-backdrop: #0f0f0f;
+--color-newsletter-bg: #2b3c48;
+--color-border-light: #e0dfdf;
+--color-border-medium: #b8b8b8;
+--color-svg-stroke: #333333;
+--color-svg-accent: #d00000;
+```
+
+#### Usage Examples
+```liquid
+<!-- Using design tokens in Tailwind classes -->
+<div class="bg-gray-200 text-gray-950">Search input</div>
+<div class="bg-accent text-white">CTA button</div>
+<div class="border-gray-400">Card border</div>
+
+<!-- Using in custom CSS -->
+.custom-component {
+  background-color: rgb(var(--color-gray-100));
+  border: 1px solid rgb(var(--color-border-light));
+  color: rgb(var(--color-gray-850));
 }
 ```
 
@@ -117,7 +170,7 @@ The Northfinder theme is a modern Shopify theme built with a hybrid approach usi
 ```liquid
 {% comment %}
   Reusable form field component
-  
+
   Accepts:
   - type: Input type (text, email, password, tel, etc.)
   - id: Input ID
@@ -227,7 +280,7 @@ The Northfinder theme is a modern Shopify theme built with a hybrid approach usi
 <div id="auth-modal" class="fixed inset-0 z-50 hidden overflow-y-auto opacity-0 transition-opacity duration-150">
   <!-- Modal Backdrop -->
   <div class="modal-backdrop absolute top-0 left-0 right-0 h-full bg-[#0f0f0f] opacity-40"></div>
-  
+
   <!-- Modal Panel -->
   <div class="flex min-h-full items-center justify-center p-0 md:p-4">
     <div class="relative w-full md:max-w-md bg-background md:rounded-3">
