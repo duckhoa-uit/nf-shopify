@@ -1,129 +1,97 @@
 /* === DESIGN SYSTEM VALIDATION === */
-/* This file helps validate that all design tokens are working correctly */
+/* This file helps validate that design tokens work with Tailwind CSS v4 */
 
-/* Test all color tokens */
-.test-colors {
-  /* Brand colors */
-  color: var(--color-white);
-  background-color: var(--color-black);
-  border-color: var(--color-accent);
-  
-  /* Semantic colors */
-  color: var(--color-success);
-  color: var(--color-error);
-  color: var(--color-warning);
-  color: var(--color-info);
-  
-  /* Gray scale */
-  color: var(--color-gray-50);
-  color: var(--color-gray-100);
-  color: var(--color-gray-200);
-  color: var(--color-gray-300);
-  color: var(--color-gray-400);
-  color: var(--color-gray-500);
-  color: var(--color-gray-600);
-  color: var(--color-gray-700);
-  color: var(--color-gray-800);
-  color: var(--color-gray-900);
-  color: var(--color-gray-950);
+/* Test Tailwind auto-generated classes with our tokens */
+.test-tailwind-colors {
+  /* These should work with Tailwind's auto-generated classes */
+  @apply text-white bg-black border-accent;
+  @apply text-success text-error text-warning text-info;
+  @apply text-gray-50 text-gray-100 text-gray-200 text-gray-300;
+  @apply text-gray-400 text-gray-500 text-gray-600 text-gray-700;
+  @apply text-gray-800 text-gray-900 text-gray-950;
+  @apply bg-gray-50 bg-gray-100 bg-gray-200 bg-gray-300;
+  @apply border-gray-400 border-gray-500 border-gray-600;
 }
 
-/* Test spacing tokens */
-.test-spacing {
-  margin: var(--spacing-grid);
-  padding: var(--spacing-grid-half);
-  gap: var(--spacing-grid-double);
-  margin-top: var(--spacing-grid-triple);
+/* Test our custom theme utilities */
+.test-theme-colors {
+  /* These use our custom theme utilities */
+  @apply text-theme-primary bg-theme-secondary border-theme-button;
 }
 
-/* Test radius tokens */
-.test-radius {
-  border-radius: var(--radius-none);
-  border-radius: var(--radius-sm);
-  border-radius: var(--radius-full);
+/* Test Tailwind spacing classes */
+.test-tailwind-spacing {
+  /* These use Tailwind's auto-generated spacing */
+  @apply p-1 p-2 p-4 p-8;
+  @apply m-1 m-2 m-4 m-8;
+  @apply gap-1 gap-2 gap-4 gap-8;
 }
 
-/* Test border tokens */
-.test-borders {
-  border-width: var(--border-none);
-  border-width: var(--border-thin);
-  border-width: var(--border-medium);
-  border-width: var(--border-thick);
+/* Test our custom spacing utilities */
+.test-custom-spacing {
+  @apply p-grid m-grid-half space-grid-double;
 }
 
-/* Test opacity tokens */
-.test-opacity {
-  opacity: var(--opacity-5);
-  opacity: var(--opacity-10);
-  opacity: var(--opacity-15);
-  opacity: var(--opacity-20);
-  opacity: var(--opacity-25);
-  opacity: var(--opacity-30);
-  opacity: var(--opacity-75);
+/* Test Tailwind radius classes */
+.test-tailwind-radius {
+  /* These use our overridden Tailwind radius values */
+  @apply rounded-none rounded-sm rounded-full;
 }
 
-/* Test component tokens */
-.test-components {
-  /* Layout tokens */
-  max-width: var(--page-width-token);
-  padding: var(--section-spacing-token);
-  gap: var(--grid-spacing-h-token) var(--grid-spacing-v-token);
-  
-  /* Button tokens */
-  border-width: var(--button-border-width-token);
-  border-radius: var(--button-radius-token);
-  
-  /* Input tokens */
-  border-width: var(--input-border-width-token);
-  border-radius: var(--input-radius-token);
-  opacity: var(--input-border-opacity-token);
-  
-  /* Card tokens */
-  padding: var(--card-padding-token);
-  border-width: var(--card-border-width-token);
-  border-radius: var(--card-radius-token);
-  opacity: var(--card-border-opacity-token);
+/* Test Tailwind opacity classes */
+.test-tailwind-opacity {
+  /* These use our custom opacity values */
+  @apply opacity-5 opacity-10 opacity-20 opacity-30 opacity-75;
 }
 
-/* Test theme variables */
-.test-theme {
-  color: rgb(var(--color-base-foreground));
-  background-color: rgb(var(--color-base-background));
-  border-color: rgb(var(--color-base-button));
+/* Test our custom border utilities */
+.test-custom-borders {
+  @apply border-thin border-medium border-thick;
 }
 
-/* Validation indicators */
+/* Test our component utilities */
+.test-component-utilities {
+  @apply btn-theme btn-theme-primary;
+  @apply input-theme;
+  @apply card-theme;
+  @apply container-theme;
+  @apply section-spacing grid-spacing;
+}
+
+/* Test theme integration */
+.test-theme-integration {
+  @apply text-theme-primary bg-theme-secondary border-theme-button;
+  @apply focus-theme;
+}
+
+/* Validation indicators using Tailwind + custom tokens */
 .design-system-valid {
-  /* If all tokens are working, this should render properly */
+  /* Test that Tailwind classes work with our design tokens */
+  @apply text-white p-grid rounded-sm border-thin;
   background: linear-gradient(
     45deg,
     var(--color-success) 0%,
     var(--color-info) 50%,
     var(--color-accent) 100%
   );
-  border: var(--border-thin) solid var(--color-gray-400);
-  border-radius: var(--radius-sm);
-  padding: var(--spacing-grid);
-  color: var(--color-white);
+  border-color: var(--color-gray-400);
   font-family: var(--font-body-family);
 }
 
-/* Error indicator */
 .design-system-error {
-  background-color: var(--color-error);
-  color: var(--color-white);
-  border: var(--border-medium) solid var(--color-error);
-  border-radius: var(--radius-sm);
-  padding: var(--spacing-grid);
+  @apply bg-error text-white rounded-sm p-grid border-medium;
+  border-color: var(--color-error);
   font-family: var(--font-body-family);
 }
 
-/* Success indicator */
 .design-system-success {
-  background-color: var(--color-success);
-  color: var(--color-white);
-  border: var(--border-thin) solid var(--color-success);
-  border-radius: var(--radius-sm);
-  padding: var(--spacing-grid);
+  @apply bg-success text-white rounded-sm p-grid border-thin;
+  border-color: var(--color-success);
   font-family: var(--font-body-family);
+}
+
+/* Test responsive utilities */
+.test-responsive {
+  @apply p-2 md:p-4 lg:p-8;
+  @apply mobile:p-grid-half desktop:p-grid;
 }

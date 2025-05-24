@@ -856,10 +856,12 @@ The following optimizations have been implemented directly in the codebase:
 - ✅ `assets/component-collection-hero.css` - Migrated 2 hardcoded colors
 
 **Tailwind CSS v4 Integration**:
-- Removed redundant variables that Tailwind provides
-- Overrode Tailwind defaults to match current design (8px spacing, 3px radius)
-- Utility classes are auto-generated from design tokens
-- Seamless integration with existing Tailwind workflow
+- **Auto-generated utilities**: `text-gray-50`, `bg-accent`, `border-success`, etc.
+- **Custom radius overrides**: `rounded-sm` = 3px, `rounded-full` = 40px
+- **Custom opacity values**: `opacity-5`, `opacity-10`, `opacity-15`, etc.
+- **Theme-specific utilities**: `text-theme-primary`, `btn-theme`, `input-theme`
+- **No conflicts**: Removed redundant utilities, kept only theme-specific ones
+- **Responsive system**: Uses Tailwind's breakpoints + custom grid utilities
 
 **Optimization Results**:
 - **65% reduction** in variable generation complexity
@@ -867,7 +869,7 @@ The following optimizations have been implemented directly in the codebase:
 - **Eliminated duplicate** card variable generation
 - **Better integration** with Tailwind CSS v4
 - **Maintained 100% compatibility** with existing theme settings
-- **✅ NEW: 100+ utility classes** for rapid development
+- **✅ NEW: Theme-specific utilities** that complement Tailwind CSS v4
 - **✅ NEW: Design token mapper** for theme customization
 - **✅ NEW: 31+ hardcoded colors migrated** to semantic tokens
 - **✅ NEW: Comprehensive testing utilities** for validation
