@@ -1,0 +1,129 @@
+/* === DESIGN SYSTEM VALIDATION === */
+/* This file helps validate that all design tokens are working correctly */
+
+/* Test all color tokens */
+.test-colors {
+  /* Brand colors */
+  color: var(--color-white);
+  background-color: var(--color-black);
+  border-color: var(--color-accent);
+  
+  /* Semantic colors */
+  color: var(--color-success);
+  color: var(--color-error);
+  color: var(--color-warning);
+  color: var(--color-info);
+  
+  /* Gray scale */
+  color: var(--color-gray-50);
+  color: var(--color-gray-100);
+  color: var(--color-gray-200);
+  color: var(--color-gray-300);
+  color: var(--color-gray-400);
+  color: var(--color-gray-500);
+  color: var(--color-gray-600);
+  color: var(--color-gray-700);
+  color: var(--color-gray-800);
+  color: var(--color-gray-900);
+  color: var(--color-gray-950);
+}
+
+/* Test spacing tokens */
+.test-spacing {
+  margin: var(--spacing-grid);
+  padding: var(--spacing-grid-half);
+  gap: var(--spacing-grid-double);
+  margin-top: var(--spacing-grid-triple);
+}
+
+/* Test radius tokens */
+.test-radius {
+  border-radius: var(--radius-none);
+  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
+}
+
+/* Test border tokens */
+.test-borders {
+  border-width: var(--border-none);
+  border-width: var(--border-thin);
+  border-width: var(--border-medium);
+  border-width: var(--border-thick);
+}
+
+/* Test opacity tokens */
+.test-opacity {
+  opacity: var(--opacity-5);
+  opacity: var(--opacity-10);
+  opacity: var(--opacity-15);
+  opacity: var(--opacity-20);
+  opacity: var(--opacity-25);
+  opacity: var(--opacity-30);
+  opacity: var(--opacity-75);
+}
+
+/* Test component tokens */
+.test-components {
+  /* Layout tokens */
+  max-width: var(--page-width-token);
+  padding: var(--section-spacing-token);
+  gap: var(--grid-spacing-h-token) var(--grid-spacing-v-token);
+  
+  /* Button tokens */
+  border-width: var(--button-border-width-token);
+  border-radius: var(--button-radius-token);
+  
+  /* Input tokens */
+  border-width: var(--input-border-width-token);
+  border-radius: var(--input-radius-token);
+  opacity: var(--input-border-opacity-token);
+  
+  /* Card tokens */
+  padding: var(--card-padding-token);
+  border-width: var(--card-border-width-token);
+  border-radius: var(--card-radius-token);
+  opacity: var(--card-border-opacity-token);
+}
+
+/* Test theme variables */
+.test-theme {
+  color: rgb(var(--color-base-foreground));
+  background-color: rgb(var(--color-base-background));
+  border-color: rgb(var(--color-base-button));
+}
+
+/* Validation indicators */
+.design-system-valid {
+  /* If all tokens are working, this should render properly */
+  background: linear-gradient(
+    45deg,
+    var(--color-success) 0%,
+    var(--color-info) 50%,
+    var(--color-accent) 100%
+  );
+  border: var(--border-thin) solid var(--color-gray-400);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-grid);
+  color: var(--color-white);
+  font-family: var(--font-body-family);
+}
+
+/* Error indicator */
+.design-system-error {
+  background-color: var(--color-error);
+  color: var(--color-white);
+  border: var(--border-medium) solid var(--color-error);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-grid);
+  font-family: var(--font-body-family);
+}
+
+/* Success indicator */
+.design-system-success {
+  background-color: var(--color-success);
+  color: var(--color-white);
+  border: var(--border-thin) solid var(--color-success);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-grid);
+  font-family: var(--font-body-family);
+}
