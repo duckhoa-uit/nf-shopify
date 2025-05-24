@@ -1,0 +1,224 @@
+/* === DESIGN SYSTEM UTILITIES === */
+/* Utility classes for common design patterns using our unified token system */
+
+/* === COLOR UTILITIES === */
+
+/* Text colors */
+.text-primary { color: rgb(var(--color-base-foreground)); }
+.text-secondary { color: rgb(var(--color-base-secondary-button-text)); }
+.text-accent { color: var(--color-accent); }
+.text-success { color: var(--color-success); }
+.text-error { color: var(--color-error); }
+.text-warning { color: var(--color-warning); }
+.text-info { color: var(--color-info); }
+.text-muted { color: var(--color-gray-600); }
+.text-white { color: var(--color-white); }
+.text-black { color: var(--color-black); }
+
+/* Gray scale text colors */
+.text-gray-50 { color: var(--color-gray-50); }
+.text-gray-100 { color: var(--color-gray-100); }
+.text-gray-200 { color: var(--color-gray-200); }
+.text-gray-300 { color: var(--color-gray-300); }
+.text-gray-400 { color: var(--color-gray-400); }
+.text-gray-500 { color: var(--color-gray-500); }
+.text-gray-600 { color: var(--color-gray-600); }
+.text-gray-700 { color: var(--color-gray-700); }
+.text-gray-800 { color: var(--color-gray-800); }
+.text-gray-900 { color: var(--color-gray-900); }
+.text-gray-950 { color: var(--color-gray-950); }
+
+/* Background colors */
+.bg-primary { background-color: rgb(var(--color-base-background)); }
+.bg-secondary { background-color: rgb(var(--color-base-secondary-button)); }
+.bg-accent { background-color: var(--color-accent); }
+.bg-success { background-color: var(--color-success); }
+.bg-error { background-color: var(--color-error); }
+.bg-warning { background-color: var(--color-warning); }
+.bg-info { background-color: var(--color-info); }
+.bg-white { background-color: var(--color-white); }
+.bg-black { background-color: var(--color-black); }
+
+/* Gray scale background colors */
+.bg-gray-50 { background-color: var(--color-gray-50); }
+.bg-gray-100 { background-color: var(--color-gray-100); }
+.bg-gray-200 { background-color: var(--color-gray-200); }
+.bg-gray-300 { background-color: var(--color-gray-300); }
+.bg-gray-400 { background-color: var(--color-gray-400); }
+.bg-gray-500 { background-color: var(--color-gray-500); }
+.bg-gray-600 { background-color: var(--color-gray-600); }
+.bg-gray-700 { background-color: var(--color-gray-700); }
+.bg-gray-800 { background-color: var(--color-gray-800); }
+.bg-gray-900 { background-color: var(--color-gray-900); }
+.bg-gray-950 { background-color: var(--color-gray-950); }
+
+/* === BORDER UTILITIES === */
+
+/* Border colors */
+.border-primary { border-color: rgb(var(--color-base-foreground)); }
+.border-secondary { border-color: rgb(var(--color-base-secondary-button)); }
+.border-accent { border-color: var(--color-accent); }
+.border-success { border-color: var(--color-success); }
+.border-error { border-color: var(--color-error); }
+.border-warning { border-color: var(--color-warning); }
+.border-info { border-color: var(--color-info); }
+.border-white { border-color: var(--color-white); }
+.border-black { border-color: var(--color-black); }
+
+/* Gray scale border colors */
+.border-gray-50 { border-color: var(--color-gray-50); }
+.border-gray-100 { border-color: var(--color-gray-100); }
+.border-gray-200 { border-color: var(--color-gray-200); }
+.border-gray-300 { border-color: var(--color-gray-300); }
+.border-gray-400 { border-color: var(--color-gray-400); }
+.border-gray-500 { border-color: var(--color-gray-500); }
+.border-gray-600 { border-color: var(--color-gray-600); }
+.border-gray-700 { border-color: var(--color-gray-700); }
+.border-gray-800 { border-color: var(--color-gray-800); }
+.border-gray-900 { border-color: var(--color-gray-900); }
+.border-gray-950 { border-color: var(--color-gray-950); }
+
+/* Border widths */
+.border-none { border-width: var(--border-none); }
+.border-thin { border-width: var(--border-thin); }
+.border-medium { border-width: var(--border-medium); }
+.border-thick { border-width: var(--border-thick); }
+
+/* === RADIUS UTILITIES === */
+
+/* Border radius using design tokens */
+.rounded-none { border-radius: var(--radius-none); }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-full { border-radius: var(--radius-full); }
+
+/* === SPACING UTILITIES === */
+
+/* Custom spacing using our grid system */
+.spacing-grid { margin: var(--spacing-grid); }
+.spacing-grid-half { margin: var(--spacing-grid-half); }
+.spacing-grid-double { margin: var(--spacing-grid-double); }
+.spacing-grid-triple { margin: var(--spacing-grid-triple); }
+
+.p-grid { padding: var(--spacing-grid); }
+.p-grid-half { padding: var(--spacing-grid-half); }
+.p-grid-double { padding: var(--spacing-grid-double); }
+.p-grid-triple { padding: var(--spacing-grid-triple); }
+
+.m-grid { margin: var(--spacing-grid); }
+.m-grid-half { margin: var(--spacing-grid-half); }
+.m-grid-double { margin: var(--spacing-grid-double); }
+.m-grid-triple { margin: var(--spacing-grid-triple); }
+
+/* === OPACITY UTILITIES === */
+
+.opacity-5 { opacity: var(--opacity-5); }
+.opacity-10 { opacity: var(--opacity-10); }
+.opacity-15 { opacity: var(--opacity-15); }
+.opacity-20 { opacity: var(--opacity-20); }
+.opacity-25 { opacity: var(--opacity-25); }
+.opacity-30 { opacity: var(--opacity-30); }
+.opacity-75 { opacity: var(--opacity-75); }
+
+/* === COMPONENT UTILITIES === */
+
+/* Button variants using design tokens */
+.btn-primary {
+  background-color: rgb(var(--color-base-button));
+  color: rgb(var(--color-base-button-text));
+  border: var(--button-border-width-token) solid rgb(var(--color-base-button));
+  border-radius: var(--button-radius-token);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: rgb(var(--color-base-secondary-button-text));
+  border: var(--button-border-width-token) solid rgb(var(--color-base-secondary-button-text));
+  border-radius: var(--button-radius-token);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-body-family);
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border: var(--button-border-width-token) solid var(--color-accent);
+  border-radius: var(--button-radius-token);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Input styling using design tokens */
+.input-field {
+  background-color: rgb(var(--color-base-background));
+  color: rgb(var(--color-base-foreground));
+  border: var(--input-border-width-token) solid rgba(var(--color-base-foreground), var(--input-border-opacity-token));
+  border-radius: var(--input-radius-token);
+  padding: 0.75rem 1rem;
+  font-family: var(--font-body-family);
+  transition: border-color 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: rgb(var(--color-base-button));
+  outline: var(--focused-base-outline);
+  outline-offset: var(--focused-base-outline-offset);
+}
+
+.input-field::placeholder {
+  color: var(--color-gray-600);
+}
+
+/* Card styling using design tokens */
+.card {
+  background-color: rgb(var(--color-base-background));
+  border-radius: var(--card-radius-token);
+  border: var(--card-border-width-token) solid rgba(var(--color-base-foreground), var(--card-border-opacity-token));
+  padding: var(--card-padding-token);
+}
+
+.card__title {
+  color: rgb(var(--color-base-foreground));
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.card__text {
+  color: rgb(var(--color-base-secondary-button-text));
+  line-height: 1.5;
+}
+
+/* === FOCUS UTILITIES === */
+
+.focus-visible {
+  outline: var(--focused-base-outline);
+  outline-offset: var(--focused-base-outline-offset);
+  box-shadow: var(--focused-base-box-shadow);
+}
+
+/* === RESPONSIVE UTILITIES === */
+
+@media screen and (max-width: 749px) {
+  .mobile\:text-center { text-align: center; }
+  .mobile\:p-grid-half { padding: var(--spacing-grid-half); }
+  .mobile\:m-grid-half { margin: var(--spacing-grid-half); }
+}
+
+@media screen and (min-width: 750px) {
+  .desktop\:text-left { text-align: left; }
+  .desktop\:p-grid { padding: var(--spacing-grid); }
+  .desktop\:m-grid { margin: var(--spacing-grid); }
+}

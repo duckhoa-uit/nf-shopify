@@ -239,7 +239,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
 }
 
 .nf__predictive-search__results-category-wrapper {
-  border-bottom: 1px solid #d1d0d0;
+  border-bottom: 1px solid var(--color-gray-400);  /* #e0dfdf */
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -261,9 +261,9 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   font-size: 0.8125rem;
 }
 .nf__predictive-search__results-category.active {
-  border-bottom: 2px solid #ec0009;
+  border-bottom: 2px solid var(--color-accent);  /* #ec0009 */
   outline-offset: -1px;
-  color: #ec0009;
+  color: var(--color-accent);  /* #ec0009 */
 }
 
 .nf__predictive-search__result-group {
@@ -316,7 +316,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   color: rgba(var(--color-base-foreground));
 }
 .nf__predictive-search__result-group .predictive-search__list-item-collections .predictive-search__item span {
-  color: #808080;
+  color: var(--color-gray-600);  /* #999999 */
 }
 
 .nf__predictive-search__result-group .predictive-search__list-item-articles {
@@ -325,7 +325,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   align-items: center;
   justify-content: space-between;
   font-family: var(--font-body-family);
-  border-bottom: 1px solid #e0dfdf;
+  border-bottom: 1px solid var(--color-gray-400);  /* #e0dfdf */
   padding: 0.5rem 0;
 }
 
@@ -338,7 +338,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.125rem;
-  color: #000000;
+  color: var(--color-black);  /* #000000 */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -354,14 +354,14 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   gap: 1.5rem;
   font-size: 0.875rem;
   line-height: 1.125rem;
-  color: #666666;
+  color: var(--color-gray-700);  /* #666666 */
   white-space: nowrap;
   min-width: 160px;
   justify-content: flex-end;
 }
 
 .nf__predictive-search__result-group .predictive-search__list-item-articles .article-date {
-  color: #666666;
+  color: var(--color-gray-700);  /* #666666 */
 }
 
 .nf__predictive-search__result-group .predictive-search__list-item-articles .article-views {
@@ -382,7 +382,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
 }
 
 .nf__predictive-search__result-group .predictive-search__list-item-articles .article-views span:last-child {
-  color: #666666;
+  color: var(--color-gray-700);  /* #666666 */
 }
 
 .nf__predictive-search__result-group .predictive-search__list-item-products .predictive-search__item {
@@ -391,7 +391,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e0dfdf;
+  border-bottom: 1px solid var(--color-gray-400);  /* #e0dfdf */
 }
 .nf__predictive-search__result-group .predictive-search__result-list {
   width: 100%;
@@ -408,7 +408,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   object-fit: contain;
   width: 3.5rem;
   height: 3.5rem;
-  background-color: #f5f5f5;
+  background-color: var(--color-gray-100);  /* #f5f5f5 */
 }
 .nf__predictive-search__result-group .predictive-search__list-item-products .predictive-search__item .product h3 {
   font-family: var(--font-body-family);
@@ -430,14 +430,14 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
 }
 
 .nf__predictive-search__result-group .predictive-search__list-item-products .predictive-search__item .meta .discount {
-  background-color: #ec0009;
+  background-color: var(--color-accent);  /* #ec0009 */
   border-radius: 2px;
   padding: 4px 8px;
   font-family: var(--font-body-family);
   font-weight: 700;
   font-size: 15px;
   line-height: 16px;
-  color: #FFFFFF;
+  color: var(--color-white);  /* #ffffff */
 }
 .nf__predictive-search__result-group .predictive-search__list-item-products .predictive-search__item .meta .flex {
   display: flex;
@@ -455,7 +455,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   font-size: 1rem;
   line-height: 1.5rem;
   text-decoration: line-through;
-  color: #666666;
+  color: var(--color-gray-700);  /* #666666 */
 }
 
 .nf__predictive-search__result-group
@@ -467,7 +467,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   font-weight: 500;
   font-size: 1rem;
   line-height: 1.5rem;
-  color: #000000;
+  color: var(--color-black);  /* #000000 */
 }
 
 button.nf__predictive-search__view-all-button {
