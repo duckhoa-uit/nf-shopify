@@ -1,0 +1,105 @@
+{% comment %}
+  Design Token Mapper
+  
+  Maps numeric settings values to design token names for consistent styling.
+  
+  Usage:
+  {% render 'design-token-mapper', 
+    value: settings.buttons_radius, 
+    type: 'radius',
+    variable_name: 'buttons-radius' %}
+    
+  Parameters:
+  - value: The numeric value from theme settings
+  - type: The type of token (radius, border, opacity, spacing)
+  - variable_name: The CSS variable name to generate
+{% endcomment %}
+
+{% case type %}
+  {% when 'radius' %}
+    {% case value %}
+      {% when 0 %}
+        --{{ variable_name }}: var(--radius-none);
+      {% when 3 %}
+        --{{ variable_name }}: var(--radius-sm);
+      {% when 6 %}
+        --{{ variable_name }}: var(--radius-md);
+      {% when 12 %}
+        --{{ variable_name }}: var(--radius-lg);
+      {% when 24 %}
+        --{{ variable_name }}: var(--radius-xl);
+      {% when 40 %}
+        --{{ variable_name }}: var(--radius-full);
+      {% else %}
+        --{{ variable_name }}: {{ value }}px;
+    {% endcase %}
+    
+  {% when 'border' %}
+    {% case value %}
+      {% when 0 %}
+        --{{ variable_name }}: var(--border-none);
+      {% when 1 %}
+        --{{ variable_name }}: var(--border-thin);
+      {% when 2 %}
+        --{{ variable_name }}: var(--border-medium);
+      {% when 4 %}
+        --{{ variable_name }}: var(--border-thick);
+      {% else %}
+        --{{ variable_name }}: {{ value }}px;
+    {% endcase %}
+    
+  {% when 'opacity' %}
+    {% assign opacity_decimal = value | divided_by: 100.0 %}
+    {% case value %}
+      {% when 0 %}
+        --{{ variable_name }}: 0;
+      {% when 5 %}
+        --{{ variable_name }}: var(--opacity-5);
+      {% when 10 %}
+        --{{ variable_name }}: var(--opacity-10);
+      {% when 15 %}
+        --{{ variable_name }}: var(--opacity-15);
+      {% when 20 %}
+        --{{ variable_name }}: var(--opacity-20);
+      {% when 25 %}
+        --{{ variable_name }}: var(--opacity-25);
+      {% when 30 %}
+        --{{ variable_name }}: var(--opacity-30);
+      {% when 50 %}
+        --{{ variable_name }}: var(--opacity-50);
+      {% when 75 %}
+        --{{ variable_name }}: var(--opacity-75);
+      {% when 100 %}
+        --{{ variable_name }}: 1;
+      {% else %}
+        --{{ variable_name }}: {{ opacity_decimal }};
+    {% endcase %}
+    
+  {% when 'spacing' %}
+    {% case value %}
+      {% when 0 %}
+        --{{ variable_name }}: 0px;
+      {% when 4 %}
+        --{{ variable_name }}: var(--spacing-grid-half);
+      {% when 8 %}
+        --{{ variable_name }}: var(--spacing-grid);
+      {% when 12 %}
+        --{{ variable_name }}: calc(var(--spacing-grid) * 1.5);
+      {% when 16 %}
+        --{{ variable_name }}: var(--spacing-grid-double);
+      {% when 20 %}
+        --{{ variable_name }}: calc(var(--spacing-grid) * 2.5);
+      {% when 24 %}
+        --{{ variable_name }}: var(--spacing-grid-triple);
+      {% when 32 %}
+        --{{ variable_name }}: calc(var(--spacing-grid) * 4);
+      {% when 40 %}
+        --{{ variable_name }}: calc(var(--spacing-grid) * 5);
+      {% else %}
+        --{{ variable_name }}: {{ value }}px;
+    {% endcase %}
+    
+  {% else %}
+    {% comment %} Fallback for unknown types {% endcomment %}
+    --{{ variable_name }}: {{ value }}{% if type == 'radius' or type == 'border' or type == 'spacing' %}px{% endif %};
+{% endcase %}
