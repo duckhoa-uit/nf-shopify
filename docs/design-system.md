@@ -815,11 +815,6 @@ All implementation guides have been completed and removed. The design system is 
 - **37+ hardcoded colors migrated** to semantic design tokens
 - **World-class component utilities** and testing system
 
-#### ✅ New Design System Files
-- **[Design Token Mapper](../snippets/design-token-mapper.liquid)** - ✅ Reusable token mapping snippet
-- **[Design System Utilities](../assets/design-system-utilities.css)** - ✅ Theme-specific utilities for Tailwind CSS v4
-- **[Design System Test](../assets/design-system-test.css)** - ✅ Validation and testing utilities
-
 #### ✅ Implemented Optimizations
 The following optimizations have been implemented directly in the codebase:
 
