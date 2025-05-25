@@ -120,6 +120,8 @@
   <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
 
+<script src="{{ 'cart-sync.js' | asset_url }}" defer="defer"></script>
+
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
 <cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
@@ -585,10 +587,26 @@
     });
 
     // Prevent the default form submission
-    cartForm.addEventListener('submit', function(event) {
+    cartForm.addEventListener('submit', async function(event) {
       // Only prevent default if it's a quantity change
       // Allow checkout button to work normally
       if (event.submitter && event.submitter.name === 'checkout') {
+        // Validate cart before checkout if cart sync is available
+        if (window.cartSyncManager) {
+          event.preventDefault();
+
+          const isValid = await window.cartSyncManager.validateBeforeCheckout();
+          if (isValid) {
+            // Proceed with checkout by submitting the form again
+            event.submitter.disabled = true;
+            event.submitter.textContent = 'Processing...';
+            cartForm.submit();
+          } else {
+            // User chose to review cart, do nothing
+            console.log('[CartSync] User chose to review cart before checkout');
+          }
+          return false;
+        }
         return true;
       }
 

@@ -551,6 +551,7 @@
             {% if cart == empty %}
               disabled
             {% endif %}
+            onclick="return handleCartDrawerCheckout(event)"
           >
             {{ 'sections.cart.checkout' | t }}
           </button>
@@ -559,3 +560,31 @@
     </div>
   </div>
 </cart-drawer>
+
+<script>
+  // Handle cart drawer checkout with validation
+  async function handleCartDrawerCheckout(event) {
+    if (window.cartSyncManager) {
+      event.preventDefault();
+
+      const isValid = await window.cartSyncManager.validateBeforeCheckout();
+      if (isValid) {
+        // Proceed with checkout
+        const form = document.getElementById('CartDrawer-Form');
+        if (form) {
+          event.target.disabled = true;
+          event.target.textContent = 'Processing...';
+          form.submit();
+        }
+      } else {
+        // User chose to review cart, close drawer
+        const cartDrawer = document.querySelector('cart-drawer');
+        if (cartDrawer) {
+          cartDrawer.close();
+        }
+      }
+      return false;
+    }
+    return true;
+  }
+</script>

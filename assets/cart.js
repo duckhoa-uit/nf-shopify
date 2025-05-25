@@ -362,6 +362,11 @@ class CartItems extends HTMLElement {
         }
 
         publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: parsedState, variantId: variantId });
+
+        // Broadcast cart update to other tabs
+        if (window.cartSyncManager) {
+          window.cartSyncManager.broadcastCartUpdate(parsedState);
+        }
       })
       .catch((error) => {
         this.querySelectorAll('.loading__spinner').forEach((overlay) => overlay.classList.add('hidden'));

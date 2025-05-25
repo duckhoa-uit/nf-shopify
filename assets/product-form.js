@@ -72,6 +72,11 @@ if (!customElements.get('product-form')) {
                 productVariantId: formData.get('id'),
                 cartData: response,
               });
+
+            // Broadcast cart update to other tabs
+            if (window.cartSyncManager && !this.error) {
+              window.cartSyncManager.broadcastCartUpdate(response);
+            }
             this.error = false;
             const quickAddModal = this.closest('quick-add-modal');
             if (quickAddModal) {
