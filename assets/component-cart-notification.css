@@ -237,8 +237,8 @@
 }
 
 .button--primary {
-  background-color: #0F0F0F;
-  color: #FFFFFF;
+  background-color: rgb(var(--color-base-button));     /* Uses theme button color */
+  color: rgb(var(--color-base-button-text));           /* Uses theme button text color */
   border: none;
   font-family: var(--font-body-family);
   font-weight: 600;
@@ -248,9 +248,9 @@
 }
 
 .button--secondary {
-  background-color: #FFFFFF;
-  color: #000000;
-  border: 1px solid #B8B8B8;
+  background-color: rgb(var(--color-base-background)); /* Uses theme background color */
+  color: rgb(var(--color-base-foreground));            /* Uses theme foreground color */
+  border: 1px solid var(--color-gray-500);             /* Uses existing gray token */
   font-family: var(--font-body-family);
   font-weight: 500;
   text-transform: uppercase;

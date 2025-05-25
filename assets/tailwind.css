@@ -2,13 +2,143 @@
 
 @theme inline {
   --color-*: initial;
+
+  /* Base colors from theme settings */
   --color-background: rgb(var(--color-base-background));
   --color-foreground: rgb(var(--color-base-foreground));
   --color-secondary: rgb(var(--color-base-secondary-button));
   --color-secondary-foreground: rgb(var(--color-base-secondary-button-text));
-  --color-white: #fff;
-  --color-black: #000;
+
+  /* Brand colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
   --color-accent: #ec0009;
+
+  /* Gray scale palette */
+  --color-gray-50: #f9f9f9;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #f0f0f0;
+  --color-gray-300: #ebebeb;
+  --color-gray-400: #e0dfdf;
+  --color-gray-500: #b8b8b8;
+  --color-gray-600: #999999;
+  --color-gray-700: #666666;
+  --color-gray-800: #4d4d4d;
+  --color-gray-850: #3d3d3d;
+  --color-gray-900: #333333;
+  --color-gray-950: #0f0f0f;
+
+  /* Semantic colors */
+  --color-success: #00945f;
+  --color-error: #ec0009;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  /* Component-specific colors */
+  --color-modal-backdrop: #0f0f0f;
+  --color-newsletter-bg: #2b3c48;
+  --color-border-light: #e0dfdf;
+  --color-border-medium: #b8b8b8;
+  --color-svg-stroke: #333333;
+  --color-svg-accent: #d00000;
+
+  /* Alpha values for transparency */
+  --alpha-button-background: 1;
+  --alpha-button-border: 1;
+  --alpha-link: 0.85;
+  --alpha-badge-border: 0.1;
+
+  /* Focus states */
+  --focused-base-outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
+  --focused-base-outline-offset: 0.3rem;
+  --focused-base-box-shadow: 0 0 0 0.3rem rgb(var(--color-base-background)), 0 0 0.5rem 0.4rem rgba(var(--color-base-foreground), 0.3);
+
+  /* === DESIGN SYSTEM OVERRIDES === */
+  /* Override Tailwind defaults to match current design system */
+  /* NOTE: Keep --spacing at Tailwind default to maintain existing classes */
+
+  /* Custom spacing for design system (don't override base --spacing) */
+  --spacing-grid: 0.5rem; /* 8px - our grid system base unit */
+  --spacing-grid-half: 0.25rem; /* 4px - half grid unit */
+  --spacing-grid-double: 1rem; /* 16px - double grid unit */
+  --spacing-grid-triple: 1.5rem; /* 24px - triple grid unit */
+
+  /* Border Radius: Override Tailwind defaults to match current design */
+  --radius-none: 0px;     /* 0px - current cards */
+  --radius-sm: 0.1875rem; /* 3px - current buttons/inputs (was 0.25rem/4px) */
+  --radius-full: 2.5rem;  /* 40px - current pills/badges (was 9999px) */
+
+  /* Custom variables not provided by Tailwind */
+  --border-none: 0px;
+  --border-thin: 1px;
+  --border-medium: 2px;
+  --border-thick: 4px;
+
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-15: 0.15;
+  --opacity-20: 0.2;
+  --opacity-25: 0.25;
+  --opacity-30: 0.3;
+  --opacity-75: 0.75;
+
+  /* === COMPONENT TOKENS === */
+  /* Map current design system values to Tailwind variables */
+
+  /* Layout */
+  --page-width-token: 100rem;                    /* 1600px max width */
+  --section-spacing-token: 0px;                  /* No section spacing */
+  --grid-spacing-h-token: var(--spacing-grid);   /* 8px horizontal */
+  --grid-spacing-v-token: var(--spacing-grid);   /* 8px vertical */
+
+  /* Buttons */
+  --button-border-width-token: var(--border-thin);   /* 1px */
+  --button-border-opacity-token: 1;                  /* 100% opacity */
+  --button-radius-token: var(--radius-sm);           /* 3px */
+
+  /* Inputs */
+  --input-border-width-token: var(--border-thin);    /* 1px */
+  --input-border-opacity-token: var(--opacity-30);   /* 30% opacity */
+  --input-radius-token: var(--radius-sm);            /* 3px */
+
+  /* Variant Pills */
+  --pill-border-width-token: var(--border-medium);   /* 2px */
+  --pill-border-opacity-token: 1;                    /* 100% opacity */
+  --pill-radius-token: var(--radius-full);           /* 40px */
+
+  /* Cards (Unified) */
+  --card-padding-token: 0px;                         /* No padding */
+  --card-border-width-token: var(--border-none);     /* No border */
+  --card-border-opacity-token: var(--opacity-10);    /* 10% opacity */
+  --card-radius-token: var(--radius-none);           /* Square corners */
+
+  /* UI Components */
+  --popup-border-width-token: var(--border-thin);
+  --popup-border-opacity-token: var(--opacity-10);
+  --popup-radius-token: var(--radius-none);
+  --popup-shadow-opacity-token: var(--opacity-5);
+
+  --drawer-border-width-token: var(--border-thin);
+  --drawer-border-opacity-token: var(--opacity-10);
+  --drawer-shadow-token: var(--shadow-none);
+
+  --badge-radius-token: var(--radius-full);
+
+  --text-box-border-width-token: var(--border-none);
+  --text-box-border-opacity-token: var(--opacity-10);
+  --text-box-radius-token: var(--radius-sm);
+  --text-box-shadow-token: var(--shadow-none);
+
+  --media-border-width-token: var(--border-none);
+  --media-border-opacity-token: var(--opacity-5);
+  --media-radius-token: var(--radius-none);
+  --media-shadow-token: var(--shadow-none);
+
+  /* Component sizing */
+  --swatch-size: 3.2rem;
+  --swatch-border-radius: 50%;
+  --swatch-square-border-radius: 0.2rem;
+  --ratio-percent: 56.25%;
 
   --breakpoint-md: 46.875rem;
   --breakpoint-lg: 61.875rem;

@@ -34,13 +34,13 @@
   display: inline-flex;
   align-items: center;
   padding: 4px 8px;
-  background-color: #FFFFFF;
+  background-color: var(--color-white);  /* Uses existing white token */
   border-radius: 2px;
-  font-family: Archivo, sans-serif;
+  font-family: var(--font-body-family);  /* Uses theme body font */
   font-weight: 500;
   font-size: 13px;
   line-height: 1.23;
-  color: #0F0F0F;
+  color: rgb(var(--color-base-foreground));  /* Uses theme foreground color */
   text-transform: uppercase;
 }
 
@@ -82,13 +82,13 @@
   display: inline-flex;
   align-items: center;
   padding: 4px 8px;
-  border: 1px solid #CCCCCC;
+  border: 1px solid var(--color-gray-300);  /* Uses existing gray token */
   border-radius: 2px;
-  font-family: Archivo, sans-serif;
+  font-family: var(--font-body-family);  /* Uses theme body font */
   font-weight: 500;
   font-size: 13px;
   line-height: 1.23;
-  color: #4D4D4D;
+  color: var(--color-gray-800);  /* Uses existing gray token */
   text-transform: uppercase;
 }
 
