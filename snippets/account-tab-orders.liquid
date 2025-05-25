@@ -285,8 +285,11 @@
                           {% if order.billing_address.phone != blank %}
                             <li>{{ order.billing_address.phone }}</li>
                           {% endif %}
-                          {% if order.billing_address.street != blank %}
-                            <li>{{ order.billing_address.street }}</li>
+                          {% if order.billing_address.address1 != blank %}
+                            <li>{{ order.billing_address.address1 }}</li>
+                          {% endif %}
+                          {% if order.billing_address.address2 != blank %}
+                            <li>{{ order.billing_address.address2 }}</li>
                           {% endif %}
                           {% if order.billing_address.city != blank %}
                             <li>{{ order.billing_address.city }}</li>
@@ -319,8 +322,11 @@
                           {% if order.shipping_address.phone != blank %}
                             <li>{{ order.shipping_address.phone }}</li>
                           {% endif %}
-                          {% if order.shipping_address.street != blank %}
-                            <li>{{ order.shipping_address.street }}</li>
+                          {% if order.shipping_address.address1 != blank %}
+                            <li>{{ order.shipping_address.address1 }}</li>
+                          {% endif %}
+                          {% if order.shipping_address.address2 != blank %}
+                            <li>{{ order.shipping_address.address2 }}</li>
                           {% endif %}
                           {% if order.shipping_address.city != blank %}
                             <li>{{ order.shipping_address.city }}</li>
@@ -343,15 +349,16 @@
                 <div class="order-details-column order-pricing-column">
                   <h3>{{ 'customer.orders.price_details' | t }}</h3>
                   <div class="order-pricing">
+                    {% assign original_price = order.subtotal_price | plus: order.total_discounts %}
                     <div class="price-item">
                       <span class="price-label">{{ 'customer.orders.original_price' | t }}</span>
-                      <span class="price-value">{{ order.subtotal_price | money }}</span>
+                      <span class="price-value">{{ original_price | money }}</span>
                     </div>
 
                     {% if order.total_discounts > 0 %}
                       {% assign discount_percentage = order.total_discounts
                         | times: 100
-                        | divided_by: order.subtotal_price
+                        | divided_by: original_price
                         | round
                       %}
                       <div class="price-item discount-row">
@@ -363,16 +370,22 @@
                       </div>
                     {% endif %}
 
-                    {% assign purchase_price = order.subtotal_price | minus: order.total_discounts %}
                     <div class="price-item">
                       <span class="price-label">{{ 'customer.orders.purchase_price' | t }}</span>
-                      <span class="price-value">{{ purchase_price | money }}</span>
+                      <span class="price-value">{{ order.total_price | money }}</span>
                     </div>
 
-                    {% assign vat_amount = order.total_price | minus: purchase_price %}
+                    {% assign shipping_price = order.total_price | minus: order.subtotal_price | minus: order.tax_price %}
+                    {% if shipping_price > 0 %}
+                      <div class="price-item">
+                        <span class="price-label">{{ 'customer.orders.shipping' | t }}</span>
+                        <span class="price-value">{{ shipping_price | money }}</span>
+                      </div>
+                    {% endif %}
+
                     <div class="price-item">
                       <span class="price-label">{{ 'customer.orders.including_vat' | t }}</span>
-                      <span class="price-value">{{ vat_amount | money }}</span>
+                      <span class="price-value">{{ order.tax_price | money }}</span>
                     </div>
                   </div>
                 </div>
