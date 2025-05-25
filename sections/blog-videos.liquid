@@ -171,10 +171,16 @@
     opacity: 0.5;
   }
 
-  .loading-spinner {
+  /* Unified loading spinner for load-more-button */
+  .load-more-button .button-spinner {
     animation: spin 1s linear infinite;
     height: 20px;
     width: 20px;
+  }
+
+  .load-more-button .button-spinner svg {
+    width: 20px;
+    height: 20px;
   }
 
   @keyframes spin {
@@ -325,9 +331,9 @@
     {% if section.settings.enable_load_more %}
       <div class="load-more-container">
         <button class="load-more-button" id="blog-videos-load-more-button" {% if paginate.pages <= 1 %}disabled{% endif %}>
-          <span class="load-more-text">{{ 'blogs.main_blog.view_more' | t }}</span>
-          <span class="loading-spinner" style="display: none;">
-            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <span class="button-text">{{ 'blogs.main_blog.view_more' | t }}</span>
+          <span class="button-spinner" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -480,8 +486,8 @@
 
     // Load more functionality
     const loadMoreButton = document.getElementById('blog-videos-load-more-button');
-    const loadMoreText = loadMoreButton ? loadMoreButton.querySelector('.load-more-text') : null;
-    const loadingSpinner = loadMoreButton ? loadMoreButton.querySelector('.loading-spinner') : null;
+    const loadMoreText = loadMoreButton ? loadMoreButton.querySelector('.button-text') : null;
+    const loadingSpinner = loadMoreButton ? loadMoreButton.querySelector('.button-spinner') : null;
 
     if (loadMoreButton) {
       // Check if button should be disabled initially

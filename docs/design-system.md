@@ -375,6 +375,10 @@ The theme now includes a comprehensive unified design token system:
 
 ### 1. Buttons
 
+**Unified Button System:**
+
+The Northfinder theme uses a unified button system with consistent loading states across all button types. All buttons follow the same loading pattern inspired by the "load more" button design.
+
 **Base Button Component:**
 
 ```css
@@ -390,6 +394,7 @@ The theme now includes a comprehensive unified design token system:
   border-radius: var(--buttons-radius-outset);
   min-width: calc(5rem + var(--buttons-border-width) * 2);
   min-height: calc(2rem + var(--buttons-border-width) * 2);
+  position: relative;
 }
 ```
 
@@ -400,11 +405,80 @@ The theme now includes a comprehensive unified design token system:
 - `.button--small`: Smaller button (0.8125rem font, 0.625rem 1.25rem padding)
 - `.button--full-width`: Full width button
 
-**Usage:**
+**Unified Loading State:**
+
+All buttons use a consistent loading state with:
+- Background color change to `#333333` (gray-900) for primary buttons
+- 20px spinner with 1s linear animation
+- Text visibility hidden during loading
+- Spinner positioned absolutely in center
+
+```css
+.button.loading {
+  position: relative;
+}
+
+.button.loading .button-text {
+  visibility: hidden;
+}
+
+.button.loading .button-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+}
+
+.button.loading:not(.button--secondary):not(.button--tertiary) {
+  background-color: rgb(var(--color-gray-900)) !important;
+}
+```
+
+**Button HTML Structure:**
+
 ```liquid
+<button class="button">
+  <span class="button-text">Button Text</span>
+  <span class="button-spinner" style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+  </span>
+</button>
+```
+
+**Unified Button Snippet:**
+
+Use the `unified-button.liquid` snippet for consistent button implementation:
+
+```liquid
+{% render 'unified-button',
+  text: 'Add to Cart',
+  type: 'submit',
+  variant: 'primary',
+  loading: false
+%}
+```
+
+**Usage Examples:**
+```liquid
+<!-- Primary button -->
 <button class="button">Primary Button</button>
+
+<!-- Secondary button -->
 <button class="button button--secondary">Secondary Button</button>
+
+<!-- Small button -->
 <button class="button button--small">Small Button</button>
+
+<!-- Using unified snippet -->
+{% render 'unified-button', text: 'Submit', variant: 'primary' %}
 ```
 
 ### 2. Form Fields

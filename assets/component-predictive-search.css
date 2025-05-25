@@ -471,23 +471,48 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
 }
 
 button.nf__predictive-search__view-all-button {
-  border-radius: 3px;
+  /* Use unified button system */
+  @extend .button;
+  @extend .button--primary;
+
+  /* Keep specific styling for predictive search */
   width: 100%;
   height: 2.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
   text-transform: uppercase;
   font-size: 0.875rem;
   line-height: 1rem;
-
-  background-color: rgb(var(--color-base-button));
-  border: none;
-  color: rgb(var(--color-base-button-text));
-  cursor: pointer;
-
+  gap: 0.5rem;
   margin-top: auto;
+
+  /* Ensure unified button structure works */
+  position: relative;
+}
+
+/* Unified loading state for predictive search button */
+button.nf__predictive-search__view-all-button.loading {
+  background-color: rgb(var(--color-gray-900)) !important;
+}
+
+button.nf__predictive-search__view-all-button.loading .button-text {
+  visibility: hidden;
+}
+
+button.nf__predictive-search__view-all-button.loading .button-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+}
+
+button.nf__predictive-search__view-all-button.loading .button-spinner svg {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
 }
 @media screen and (min-width: 750px) {
   .nf__predictive-search__results-groups-wrapper{
