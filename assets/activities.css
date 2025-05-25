@@ -75,7 +75,50 @@
   margin: 0;
 }
 
+/* Activity button now uses unified button system */
+.activities-section .button {
+  /* Override button styling for activity context */
+  background-color: rgb(var(--color-base-background));
+  color: rgb(var(--color-base-foreground));
+  border-radius: 0.1875rem;
+  text-decoration: none;
+  position: relative;
+  z-index: 30;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+/* Unified loading state for activity buttons */
+.activities-section .button.loading {
+  background-color: rgb(var(--color-gray-900)) !important;
+}
+
+.activities-section .button.loading .button-text {
+  visibility: hidden;
+}
+
+.activities-section .button.loading .button-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+}
+
+.activities-section .button.loading .button-spinner svg {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+/* Legacy support for old activity-button class */
 .activities-section .activity-button {
+  /* Deprecated - use .button instead */
   display: inline-block;
   background-color: rgb(var(--color-base-background));
   color: rgb(var(--color-base-foreground));
@@ -112,6 +155,13 @@
     font-size: 1.25rem;
   }
 
+  /* Responsive styling for unified button */
+  .activities-section .button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Legacy responsive styling */
   .activities-section .activity-button {
     font-size: 0.875rem;
     padding: 0.5rem 1rem;

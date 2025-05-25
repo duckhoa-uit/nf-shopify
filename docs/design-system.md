@@ -671,10 +671,20 @@ Use the `unified-button.liquid` snippet for consistent button implementation:
   </div>
   <div class="activity-content">
     <h3 class="activity-title font-archivo-expanded font-extrabold">{{ block.settings.activity_title }}</h3>
-    <a href="{{ block.settings.link_url }}" class="activity-button">{{ block.settings.button_text }}</a>
+    <a href="{{ block.settings.link_url }}" class="button button--primary hidden md:block px-5 py-3 text-sm leading-4 font-semibold uppercase">
+      <span class="button-text">{{ block.settings.button_text }}</span>
+      <span class="button-spinner" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 818-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </span>
+    </a>
   </div>
 </div>
 ```
+
+**Note**: Activity buttons now use the unified button system with `button button--primary` classes instead of the deprecated `activity-button` class. The styling is preserved through CSS overrides in `assets/activities.css`.
 
 ## CSS Architecture
 
