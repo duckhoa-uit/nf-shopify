@@ -733,8 +733,8 @@ body.overflow-hidden {
 }
 
 .mobile-facets__close-text {
-  color: #666666;
-  font-family: "Archivo", sans-serif;
+  color: var(--color-gray-700);  /* Uses existing gray token */
+  font-family: var(--font-body-family);  /* Uses theme body font */
   font-weight: 400;
   font-size: 12px;
   line-height: 12px;
@@ -965,7 +965,7 @@ details.menu-opening .mobile-facets__close .svg-wrapper {
   display: flex;
   gap: 0.75rem;
   box-sizing: border-box; /* Ensure padding is included in width */
-  font-family: "Archivo", sans-serif;
+  font-family: var(--font-body-family);  /* Uses theme body font */
   font-weight: 400;
   font-size: 12px;
   line-height: 1rem;
