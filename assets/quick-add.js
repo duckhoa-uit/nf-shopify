@@ -44,7 +44,17 @@ if (!customElements.get('quick-add-modal')) {
           .finally(() => {
             opener.removeAttribute('aria-disabled');
             opener.classList.remove('loading');
-            opener.querySelector('.loading__spinner').classList.add('hidden');
+
+            // Hide unified spinner
+            const spinner = opener.querySelector('.button-spinner');
+            if (spinner) {
+              spinner.style.display = 'none';
+            }
+            // Fallback for old spinner
+            const oldSpinner = opener.querySelector('.loading__spinner');
+            if (oldSpinner) {
+              oldSpinner.classList.add('hidden');
+            }
           });
       }
 

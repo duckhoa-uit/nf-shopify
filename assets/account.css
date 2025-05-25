@@ -1900,16 +1900,45 @@ button.loading {
   display: block;
 }
 
-/* Loading state for all buttons */
-.btn.loading .btn-spinner,
-button.loading .btn-spinner {
-  display: inline-block;
+/* UNIFIED LOADING STATE - Align with base button system */
+.btn.loading {
+  position: relative;
+  background-color: rgb(var(--color-gray-900)) !important; /* Consistent with unified system */
 }
 
-/* Hide button text when loading */
 .btn.loading .btn-text,
 button.loading .btn-text {
   visibility: hidden;
+}
+
+.btn.loading .btn-spinner,
+button.loading .btn-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+}
+
+.btn.loading .btn-spinner svg,
+button.loading .btn-spinner svg {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+/* Use the same spin animation as unified system */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .btn-icon {
