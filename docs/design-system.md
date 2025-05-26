@@ -96,9 +96,9 @@ The Northfinder theme uses a comprehensive color system with CSS custom properti
 
 <!-- Using in custom CSS -->
 .custom-component {
-  background-color: rgb(var(--color-gray-100));
-  border: 1px solid rgb(var(--color-border-light));
-  color: rgb(var(--color-gray-850));
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-border-light);
+  color: var(--color-gray-850);
 }
 ```
 
@@ -416,26 +416,26 @@ All buttons use a consistent loading state with:
 ```css
 .button.loading {
   position: relative;
+  display: grid;
+  place-items: center;
 }
 
 .button.loading .button-text {
   visibility: hidden;
+  grid-area: 1 / 1;
 }
 
 .button.loading .button-spinner {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  grid-area: 1 / 1;
   width: 20px;
   height: 20px;
 }
 
 .button.loading:not(.button--secondary):not(.button--tertiary) {
-  background-color: rgb(var(--color-gray-900)) !important;
+  background-color: var(--color-gray-900) !important;
 }
 ```
 
@@ -466,6 +466,23 @@ Use the `unified-button.liquid` snippet for consistent button implementation:
 %}
 ```
 
+**Manual Button Structure:**
+
+```liquid
+<!-- For buttons that need loading states (forms, actions) -->
+<button class="button [variant-classes]">
+  <span class="button-text">[Button Text]</span>
+  <span class="button-spinner">
+    {{- 'loading-spinner.svg' | inline_asset_content -}}
+  </span>
+</button>
+
+<!-- For simple navigation links (no loading needed) -->
+<a href="[url]" class="button [variant-classes]">
+  [Button Text]
+</a>
+```
+
 **Usage Examples:**
 ```liquid
 <!-- Primary button -->
@@ -477,9 +494,20 @@ Use the `unified-button.liquid` snippet for consistent button implementation:
 <!-- Small button -->
 <button class="button button--small">Small Button</button>
 
-<!-- Using unified snippet -->
-{% render 'unified-button', text: 'Submit', variant: 'primary' %}
+<!-- Using unified snippet (recommended) -->
+{% render 'unified-button', text: 'Submit', variant: 'primary', loading: true %}
+
+<!-- Navigation link (no loading) -->
+{% render 'unified-button', text: 'Learn More', variant: 'primary', loading: false %}
 ```
+
+**Loading Spinner Asset:**
+
+The unified system uses `assets/loading-spinner.svg` for consistent spinner appearance across all buttons. This provides:
+- Consistent 20px size
+- Unified animation timing (1s linear)
+- Better maintainability
+- Reduced code duplication
 
 ### 2. Form Fields
 
