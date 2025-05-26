@@ -109,7 +109,7 @@
         </ul>
 
         <button id="account-mobile-menu-button" class="account-mobile-menu-button md:hidden">
-          <span class="button-text">{{ 'customer.account.menu' | t | default: 'Menu' }}</span>
+          {{ 'customer.account.menu' | t | default: 'Menu' }}
           <span class="svg-wrapper ml-2">
             {{- 'icon-caret.svg' | inline_asset_content -}}
           </span>

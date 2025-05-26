@@ -490,21 +490,21 @@ button.nf__predictive-search__view-all-button {
 
 /* Unified loading state for predictive search button */
 button.nf__predictive-search__view-all-button.loading {
-  background-color: rgb(var(--color-gray-900)) !important;
+  background-color: var(--color-gray-900) !important;
+  display: grid;
+  place-items: center;
 }
 
 button.nf__predictive-search__view-all-button.loading .button-text {
   visibility: hidden;
+  grid-area: 1 / 1;
 }
 
 button.nf__predictive-search__view-all-button.loading .button-spinner {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  grid-area: 1 / 1;
   width: 20px;
   height: 20px;
 }

@@ -998,7 +998,6 @@
   border-radius: 50%;
   border-top-color: #ffffff;
   animation: spin 1s ease-in-out infinite;
-  margin-left: 0.5rem;
 }
 
 @keyframes spin {
@@ -1007,14 +1006,22 @@
   }
 }
 
+button.loading {
+  display: grid;
+  place-items: center;
+}
+
 button.loading .btn-text,
 button.loading .svg-wrapper {
   visibility: hidden;
+  grid-area: 1 / 1;
 }
 
 button.loading .btn-spinner {
-  display: inline-block;
-  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  grid-area: 1 / 1;
 }
 
 .delete-address-confirmation {
@@ -1860,7 +1867,7 @@ button.loading .btn-spinner {
   gap: 0.5rem;
 }
 
-.btn-spinner {
+/* .btn-spinner {
   display: none;
   box-sizing: border-box;
   width: 16px;
@@ -1875,14 +1882,14 @@ button.loading .btn-spinner {
   transform: translate(-50%, -50%);
   margin: 0;
   padding: 0;
-}
+} */
 
 @keyframes spin {
   0% {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
@@ -1890,25 +1897,34 @@ button.loading .btn-spinner {
 button.loading {
   position: relative;
   min-width: 120px; /* Ensure button has enough width for spinner */
+  display: grid;
+  place-items: center;
 }
 
 .btn-reorder.loading .btn-text {
   visibility: hidden;
+  grid-area: 1 / 1;
 }
 
 .btn-reorder.loading .btn-spinner {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  grid-area: 1 / 1;
 }
 
-/* UNIFIED LOADING STATE - Align with base button system */
+/* UNIFIED LOADING STATE - Using grid layout to avoid transform conflicts */
 .btn.loading {
   position: relative;
-  background-color: rgb(var(--color-gray-900)) !important; /* Consistent with unified system */
+  background-color: var(--color-gray-900) !important; /* Consistent with unified system */
+  display: grid;
+  place-items: center;
 }
 
 .btn.loading .btn-text,
 button.loading .btn-text {
   visibility: hidden;
+  grid-area: 1 / 1;
 }
 
 .btn.loading .btn-spinner,
@@ -1916,10 +1932,7 @@ button.loading .btn-spinner {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  grid-area: 1 / 1;
   width: 20px;
   height: 20px;
 }
@@ -1931,7 +1944,7 @@ button.loading .btn-spinner svg {
   animation: spin 1s linear infinite;
 }
 
-/* Use the same spin animation as unified system */
+/* Simplified spin animation - only rotation, no positioning transform */
 @keyframes spin {
   from {
     transform: rotate(0deg);
