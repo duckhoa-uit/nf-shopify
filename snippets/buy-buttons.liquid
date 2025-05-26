@@ -82,7 +82,7 @@
               disabled
             {% endif %}
           >
-            <span>
+            <span class="button-text">
               {%- if product.selected_or_first_available_variant == null -%}
                 {{ 'products.product.unavailable' | t }}
               {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
@@ -91,7 +91,9 @@
                 {{ 'products.product.add_to_cart' | t }}
               {%- endif -%}
             </span>
-            {%- render 'loading-spinner' -%}
+            <span class="button-spinner" style="display: none;">
+              {{- 'loading-spinner.svg' | inline_asset_content -}}
+            </span>
           </button>
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}

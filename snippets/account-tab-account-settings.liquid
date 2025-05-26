@@ -1,6 +1,6 @@
 {% comment %}
   Account Settings tab content
-  
+
   Accepts:
   - No specific parameters
 {% endcomment %}
@@ -17,7 +17,10 @@
 
     <div class="form-actions">
       <button type="button" class="btn btn-primary" id="DeleteAccountBtn">
-        {{ 'customer.account.delete_account' | t }}
+        <span class="btn-text">{{ 'customer.account.delete_account' | t }}</span>
+        <span class="btn-spinner">
+          {{- 'loading-spinner.svg' | inline_asset_content -}}
+        </span>
       </button>
     </div>
   </div>

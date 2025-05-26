@@ -311,8 +311,8 @@ background-color: rgb(var(--color-base-background));
 color: rgb(var(--color-base-foreground));
 
 /* Using design tokens */
-background-color: rgb(var(--color-gray-100));
-border-color: rgb(var(--color-border-light));
+background-color: var(--color-gray-100);
+border-color: var(--color-border-light);
 
 /* Using with alpha */
 background-color: rgba(var(--color-base-foreground), var(--alpha-link));
@@ -372,7 +372,7 @@ box-shadow: var(--buttons-shadow-horizontal-offset) var(--buttons-shadow-vertica
 
 /* 3. Design token level (tailwind.css) */
 .bg-gray-200 {
-  background-color: rgb(var(--color-gray-200));
+  background-color: var(--color-gray-200);
 }
 ```
 

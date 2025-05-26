@@ -128,7 +128,10 @@
       </div>
       <div class="contact__button">
         <button type="submit" class="button">
-          {{ 'templates.contact.form.send' | t }}
+          <span class="button-text">{{ 'templates.contact.form.send' | t }}</span>
+          <span class="button-spinner" style="display: none;">
+            {{- 'loading-spinner.svg' | inline_asset_content -}}
+          </span>
         </button>
       </div>
     {%- endform -%}

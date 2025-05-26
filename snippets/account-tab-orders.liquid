@@ -411,7 +411,9 @@
                   data-variants="{% for item in order.line_items %}{{ item.variant_id }}:{{ item.quantity }}{% unless forloop.last %},{% endunless %}{% endfor %}"
                 >
                   <span class="btn-text">{{ 'customer.orders.reorder' | t }}</span>
-                  <span class="btn-spinner"></span>
+                  <span class="btn-spinner">
+                    {{- 'loading-spinner.svg' | inline_asset_content -}}
+                  </span>
                 </button>
               </div>
 

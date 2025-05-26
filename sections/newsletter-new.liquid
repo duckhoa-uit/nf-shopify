@@ -1,0 +1,345 @@
+{{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
+{{ 'newsletter-section.css' | asset_url | stylesheet_tag }}
+
+{% comment %} Check if current page is cart or account page and hide newsletter if true {% endcomment %}
+{% unless template == 'cart' or template == 'customers/account' %}
+  <div class=" pt-[10rem] md:pt-20">
+    <div class="newsletter bg-[#2B3C48] ">
+      <div class="newsletter__wrapper relative page-width content-container isolate section-{{ section.id }}-padding">
+        <div class="relative w-full h-full flex flex-col md:flex-row items-center md:justify-end min-h-[200px]">
+          <img
+            src="{{ 'yeti.webp' | asset_url }}"
+            alt="Yeti"
+            width="350"
+            height="280"
+            loading="lazy"
+            class="newsletter__yeti-image hidden md:block absolute left-0 bottom-0 max-h-[280px] aspect-5/4 z-[1] object-contain max-w-[350px]"
+          >
+          <img
+            src="{{ 'yeti-mobile.webp' | asset_url }}"
+            alt="Yeti"
+            width="320"
+            height="241"
+            loading="lazy"
+            class="newsletter__yeti-image block md:hidden absolute left-1/2 -translate-x-1/2 -top-[158px] max-h-[241px] aspect-320/241 z-[1] object-contain max-w-[350px]"
+          >
+
+          <div class="newsletter__content flex flex-col lg:flex-row gap-[20px] relative z-[2] h-full pt-24 pb-9 md:py-10 lg:py-0">
+            <div class="flex flex-col items-start gap-5 relative max-w-[400px]">
+              <h2 class="font-archivo-expanded font-semibold text-[1.375rem] lg:text-2xl leading-6 lg:leading-[1.333] text-white m-0">
+                {{ section.settings.heading | default: 'Never miss any news or discounts' }}
+              </h2>
+              <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                  <div class="size-6 rounded-full flex items-center justify-center">
+                    {{- 'icon-check-circle.svg' | inline_asset_content -}}
+                  </div>
+                  <div class="text-white text-base lg:text-sm leading-5 font-normal">
+                    {{ section.settings.subtitle | default: 'Discount coupon for subscribers' }}
+                  </div>
+                </div>
+                <div class="border-2 border-white rounded px-3 py-2 leading-8 text-[2.25rem] font-semibold text-white">
+                  {{ section.settings.discount_amount | default: '-5 €' }}
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-7">
+              {% form 'customer', class: 'newsletter-form' %}
+                <input
+                  type="hidden"
+                  name="contact[tags]"
+                  value="newsletter"
+                >
+                <div class="flex md:flex-row flex-col gap-3 justify-center w-full lg:max-w-[600px]">
+                  <div class="flex-grow bg-white rounded-3">
+                    <input
+                      id="NewsletterForm--{{ section.id }}"
+                      type="email"
+                      name="contact[email]"
+                      class="field__input w-full h-12 p-4 border-0 shadow-none text-[#4D4D4D] focus:outline-none focus:shadow-none rounded-3 placeholder:text-[#4D4D4D] placeholder:opacity-100"
+                      value="{{ form.email }}"
+                      aria-required="true"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      autocomplete="email"
+                      {% if form.errors %}
+                        autofocus
+                        aria-invalid="true"
+                        aria-describedby="Newsletter-error--{{ section.id }}"
+                      {% elsif form.posted_successfully? %}
+                        aria-describedby="Newsletter-success--{{ section.id }}"
+                      {% endif %}
+                      placeholder="{{ 'newsletter.placeholder' | t | default: 'Enter your email' }}"
+                      required
+                    >
+                    <label class="field__label hidden" for="NewsletterForm--{{ section.id }}">
+                      {{ 'newsletter.label' | t }}
+                    </label>
+                  </div>
+                  <div class="flex items-end gap-8">
+                    {% if section.settings.show_policy_agreement %}
+                      <div class="text-[10px] text-white italic flex-1 text-balance md:hidden">
+                        {{
+                          section.settings.policy_text
+                          | default: 'By submitting your email, you agree to our Privacy Policy.'
+                        }}
+                      </div>
+                    {% endif %}
+                    <button
+                      type="submit"
+                      class="newsletter-submit-button bg-black text-white font-semibold h-12 max-w-[100px] md:min-w-[110px] md:max-w-full flex items-center justify-center uppercase text-sm md:mt-0 mt-2 w-full md:w-auto rounded-3 shadow"
+                      name="commit"
+                      id="Subscribe"
+                      aria-label="{{ 'newsletter.button_label' | t }}"
+                    >
+                      <span class="button-text"> {{ section.settings.button_text | default: 'SUBMIT' }}</span>
+
+                      <span class="button-icon ml-2">
+                        {{- 'icon-chevron.svg' | inline_asset_content -}}
+                      </span>
+
+                      <!-- Unified loading spinner -->
+                      <span class="button-spinner hidden ml-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          style="width: 20px; height: 20px; animation: spin 1s linear infinite;"
+                        >
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      </span>
+
+                      <span class="success-icon hidden ml-2">
+                        <svg
+                          class="h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                {%- if form.errors -%}
+                  <small class="newsletter-form__message form__message" id="Newsletter-error--{{ section.id }}">
+                    <span class="svg-wrapper">
+                      {{- 'icon-error.svg' | inline_asset_content -}}
+                    </span>
+                    {{- form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email -}}
+                  </small>
+                {%- endif -%}
+                {%- if form.posted_successfully? -%}
+                  <h3
+                    class="newsletter-form__message newsletter-form__message--success form__message"
+                    id="Newsletter-success--{{ section.id }}"
+                    tabindex="-1"
+                    autofocus
+                  >
+                    <span class="svg-wrapper">
+                      {{- 'icon-success.svg' | inline_asset_content -}}
+                    </span>
+                    {{- 'newsletter.success' | t }}
+                  </h3>
+                {%- endif -%}
+              {% endform %}
+              {% if section.settings.show_policy_agreement %}
+                <div class="mt-4 text-[10px] lg:text-sm text-white italic hidden md:block">
+                  {{
+                    section.settings.policy_text
+                    | default: 'By submitting your email, you agree to our Privacy Policy.'
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endunless %}
+{% schema %}
+{
+  "name": "t:sections.newsletter.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:sections.newsletter.settings.background_color.label",
+      "default": "#2B3C48"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Never miss any news or discounts"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Discount coupon for subscribers"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "SUBMIT"
+    },
+    {
+      "type": "text",
+      "id": "policy_text",
+      "label": "Policy text",
+      "default": "By submitting your email, you agree to our Privacy Policy."
+    },
+    {
+      "type": "text",
+      "id": "discount_amount",
+      "label": "t:sections.newsletter.settings.discount_amount.label",
+      "default": "-5 €"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policy_agreement",
+      "default": true,
+      "label": "t:sections.newsletter.settings.show_policy_agreement.label"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.newsletter.settings.paragraph.content"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.newsletter.presets.name"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const newsletterForms = document.querySelectorAll('.newsletter-form');
+
+    newsletterForms.forEach((form) => {
+      const submitButton = form.querySelector('.newsletter-submit-button');
+      const buttonText = submitButton.querySelector('.button-text');
+      const buttonIcon = submitButton.querySelector('.button-icon');
+      const loadingSpinner = submitButton.querySelector('.button-spinner');
+
+      // Function to reset button state
+      function resetButtonState() {
+        buttonIcon.classList.remove('hidden');
+        loadingSpinner.classList.add('hidden');
+        submitButton.querySelector('.success-icon').classList.add('hidden');
+        submitButton.classList.remove('is-loading');
+        submitButton.classList.remove('is-success');
+      }
+
+      // Function to show success state
+      function showSuccessState() {
+        buttonIcon.classList.add('hidden');
+        loadingSpinner.classList.add('hidden');
+        submitButton.querySelector('.success-icon').classList.remove('hidden');
+        submitButton.classList.remove('is-loading');
+        submitButton.classList.add('is-success');
+      }
+
+      // Function to show loading state
+      function showLoadingState() {
+        buttonIcon.classList.add('hidden');
+        loadingSpinner.classList.remove('hidden');
+        submitButton.classList.add('is-loading');
+      }
+
+      // Handle form submission
+      form.addEventListener('submit', function (event) {
+        showLoadingState();
+
+        // We don't prevent default here because we want the form to submit normally
+      });
+
+      // This uses MutationObserver to detect when messages are added to the DOM
+      const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            // Check if an error message was added
+            const errorMessage = form.querySelector(
+              '.newsletter-form__message:not(.newsletter-form__message--success)'
+            );
+            if (errorMessage) {
+              resetButtonState();
+            }
+
+            // Check if a success message was added
+            const successMessage = form.querySelector('.newsletter-form__message--success');
+            if (successMessage) {
+              // On success, we can keep the loading state for a moment before showing the success state
+              setTimeout(() => {
+                // Show success icon and update button state
+                showSuccessState();
+                // Optionally update button text to indicate success
+                buttonText.textContent = 'Submitted';
+
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                  resetButtonState();
+                  buttonText.textContent = "{{ section.settings.button_text | default: 'SUBMIT' }}";
+                }, 3000);
+              }, 500);
+            }
+
+            // If either message type was found, disconnect the observer
+            if (errorMessage || successMessage) {
+              observer.disconnect();
+            }
+          }
+        });
+      });
+
+      // Start observing the form for changes
+      observer.observe(form, { childList: true, subtree: true });
+    });
+  });
+</script>
