@@ -91,7 +91,7 @@
     {%- endif -%}
 
     {%- if block.settings.button_url != blank -%}
-      <a href="{{ block.settings.button_url | default: '#' }}" class="material-button mt-4 lg:mt-6 leading-4">
+      <a href="{{ block.settings.button_url | default: '#' }}" class="button button--primary font-semibold text-sm uppercase mt-4 lg:mt-6 leading-4">
         {{ 'blogs.article.read_more' | t }}
       </a>
     {%- endif -%}

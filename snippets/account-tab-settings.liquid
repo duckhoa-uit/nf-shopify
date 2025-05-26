@@ -156,8 +156,10 @@
 
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">
-          {{ 'customer.account.save' | t }}
-          <span class="btn-spinner"></span>
+          <span class="btn-text">{{ 'customer.account.save' | t }}</span>
+          <span class="btn-spinner">
+            {{- 'loading-spinner.svg' | inline_asset_content -}}
+          </span>
         </button>
       </div>
     {%- endform -%}
@@ -236,8 +238,10 @@
 
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">
-          {{ 'customer.account.save' | t }}
-          <span class="btn-spinner"></span>
+          <span class="btn-text">{{ 'customer.account.save' | t }}</span>
+          <span class="btn-spinner">
+            {{- 'loading-spinner.svg' | inline_asset_content -}}
+          </span>
         </button>
       </div>
     {%- endform -%}

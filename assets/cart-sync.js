@@ -12,6 +12,7 @@ class CartSyncManager {
     this.isValidatingCheckout = false;
 
     this.init();
+    this.initializeCartHash();
   }
 
   /**
@@ -26,6 +27,24 @@ class CartSyncManager {
       console.log('[CartSync] Initialized with BroadcastChannel support');
     } else {
       console.log('[CartSync] BroadcastChannel not supported, sync disabled');
+    }
+  }
+
+  /**
+   * Initialize cart hash with current cart state
+   */
+  async initializeCartHash() {
+    try {
+      // Fetch current cart from server to initialize hash
+      const response = await fetch(`${routes.cart_url}.js`);
+      if (response.ok) {
+        const cartData = await response.json();
+        this.lastCartHash = this.generateCartHash(cartData);
+        console.log('[CartSync] Initialized cart hash:', this.lastCartHash);
+      }
+    } catch (error) {
+      console.log('[CartSync] Could not initialize cart hash:', error);
+      // Keep lastCartHash as null, validation will still work but may show dialog unnecessarily
     }
   }
 
@@ -71,8 +90,8 @@ class CartSyncManager {
 
     const cartHash = this.generateCartHash(cartData);
 
-    // Only broadcast if cart actually changed
-    if (cartHash === this.lastCartHash) return;
+    // Only broadcast if cart actually changed (skip check if lastCartHash is null)
+    if (this.lastCartHash !== null && cartHash === this.lastCartHash) return;
 
     this.lastCartHash = cartHash;
 
@@ -250,6 +269,13 @@ class CartSyncManager {
 
       const serverCart = await response.json();
       const serverCartHash = this.generateCartHash(serverCart);
+
+      // If lastCartHash is null (initialization failed), set it now and proceed
+      if (this.lastCartHash === null) {
+        this.lastCartHash = serverCartHash;
+        console.log('[CartSync] Set initial cart hash during checkout validation:', this.lastCartHash);
+        return true;
+      }
 
       // Compare with current UI state
       if (serverCartHash !== this.lastCartHash) {

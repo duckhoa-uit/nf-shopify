@@ -59,8 +59,11 @@
         </div>
       {%- endif -%}
 
-      <button type="submit" class="w-full mt-2">
-        {{ 'customer.login_page.submit' | t }}
+      <button type="submit" class="button button--primary w-full mt-2">
+        <span class="button-text">{{ 'customer.login_page.submit' | t }}</span>
+        <span class="button-spinner" style="display: none;">
+          {{- 'loading-spinner.svg' | inline_asset_content -}}
+        </span>
       </button>
 
       <a href="#login">
@@ -147,8 +150,11 @@
         </a>
       {%- endif -%}
 
-      <button type="submit" class="w-full">
-        {{ 'customer.login_page.sign_in' | t }}
+      <button type="submit" class="button button--primary w-full">
+        <span class="button-text">{{ 'customer.login_page.sign_in' | t }}</span>
+        <span class="button-spinner" style="display: none;">
+          {{- 'loading-spinner.svg' | inline_asset_content -}}
+        </span>
       </button>
 
       <a href="{{ routes.account_register_url }}">

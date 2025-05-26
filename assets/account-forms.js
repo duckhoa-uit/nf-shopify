@@ -190,9 +190,6 @@ class AccountForms {
     const submitButton = this.customerInfoForm.querySelector('button[type="submit"]');
     if (submitButton) {
       submitButton.classList.add('loading');
-      if (submitButton.querySelector('.btn-spinner')) {
-        submitButton.querySelector('.btn-spinner').style.display = 'inline-block';
-      }
     }
 
     // Get form data
@@ -346,9 +343,6 @@ class AccountForms {
       // Remove loading state
       if (submitButton) {
         submitButton.classList.remove('loading');
-        if (submitButton.querySelector('.btn-spinner')) {
-          submitButton.querySelector('.btn-spinner').style.display = 'none';
-        }
       }
     });
   }

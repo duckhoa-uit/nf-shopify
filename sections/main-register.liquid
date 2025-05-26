@@ -164,8 +164,11 @@
         %}
       </div>
 
-      <button type="submit" class="mt-4">
-        {{ 'customer.register.submit' | t }}
+      <button type="submit" class="button button--primary mt-4">
+        <span class="button-text">{{ 'customer.register.submit' | t }}</span>
+        <span class="button-spinner" style="display: none;">
+          {{- 'loading-spinner.svg' | inline_asset_content -}}
+        </span>
       </button>
       <a href="{{ routes.account_login_url }}" class="mt-2 text-foreground text-sm leading-5">
         {{ 'customer.login_page.title' | t }}

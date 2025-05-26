@@ -96,9 +96,9 @@ The Northfinder theme uses a comprehensive color system with CSS custom properti
 
 <!-- Using in custom CSS -->
 .custom-component {
-  background-color: rgb(var(--color-gray-100));
-  border: 1px solid rgb(var(--color-border-light));
-  color: rgb(var(--color-gray-850));
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-border-light);
+  color: var(--color-gray-850);
 }
 ```
 
@@ -375,6 +375,10 @@ The theme now includes a comprehensive unified design token system:
 
 ### 1. Buttons
 
+**Unified Button System:**
+
+The Northfinder theme uses a unified button system with consistent loading states across all button types. All buttons follow the same loading pattern inspired by the "load more" button design.
+
 **Base Button Component:**
 
 ```css
@@ -390,6 +394,7 @@ The theme now includes a comprehensive unified design token system:
   border-radius: var(--buttons-radius-outset);
   min-width: calc(5rem + var(--buttons-border-width) * 2);
   min-height: calc(2rem + var(--buttons-border-width) * 2);
+  position: relative;
 }
 ```
 
@@ -400,12 +405,109 @@ The theme now includes a comprehensive unified design token system:
 - `.button--small`: Smaller button (0.8125rem font, 0.625rem 1.25rem padding)
 - `.button--full-width`: Full width button
 
-**Usage:**
-```liquid
-<button class="button">Primary Button</button>
-<button class="button button--secondary">Secondary Button</button>
-<button class="button button--small">Small Button</button>
+**Unified Loading State:**
+
+All buttons use a consistent loading state with:
+- Background color change to `#333333` (gray-900) for primary buttons
+- 20px spinner with 1s linear animation
+- Text visibility hidden during loading
+- Spinner positioned absolutely in center
+
+```css
+.button.loading {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.button.loading .button-text {
+  visibility: hidden;
+  grid-area: 1 / 1;
+}
+
+.button.loading .button-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  grid-area: 1 / 1;
+  width: 20px;
+  height: 20px;
+}
+
+.button.loading:not(.button--secondary):not(.button--tertiary) {
+  background-color: var(--color-gray-900) !important;
+}
 ```
+
+**Button HTML Structure:**
+
+```liquid
+<button class="button">
+  <span class="button-text">Button Text</span>
+  <span class="button-spinner" style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+  </span>
+</button>
+```
+
+**Unified Button Snippet:**
+
+Use the `unified-button.liquid` snippet for consistent button implementation:
+
+```liquid
+{% render 'unified-button',
+  text: 'Add to Cart',
+  type: 'submit',
+  variant: 'primary',
+  loading: false
+%}
+```
+
+**Manual Button Structure:**
+
+```liquid
+<!-- For buttons that need loading states (forms, actions) -->
+<button class="button [variant-classes]">
+  <span class="button-text">[Button Text]</span>
+  <span class="button-spinner">
+    {{- 'loading-spinner.svg' | inline_asset_content -}}
+  </span>
+</button>
+
+<!-- For simple navigation links (no loading needed) -->
+<a href="[url]" class="button [variant-classes]">
+  [Button Text]
+</a>
+```
+
+**Usage Examples:**
+```liquid
+<!-- Primary button -->
+<button class="button">Primary Button</button>
+
+<!-- Secondary button -->
+<button class="button button--secondary">Secondary Button</button>
+
+<!-- Small button -->
+<button class="button button--small">Small Button</button>
+
+<!-- Using unified snippet (recommended) -->
+{% render 'unified-button', text: 'Submit', variant: 'primary', loading: true %}
+
+<!-- Navigation link (no loading) -->
+{% render 'unified-button', text: 'Learn More', variant: 'primary', loading: false %}
+```
+
+**Loading Spinner Asset:**
+
+The unified system uses `assets/loading-spinner.svg` for consistent spinner appearance across all buttons. This provides:
+- Consistent 20px size
+- Unified animation timing (1s linear)
+- Better maintainability
+- Reduced code duplication
 
 ### 2. Form Fields
 
@@ -597,10 +699,20 @@ The theme now includes a comprehensive unified design token system:
   </div>
   <div class="activity-content">
     <h3 class="activity-title font-archivo-expanded font-extrabold">{{ block.settings.activity_title }}</h3>
-    <a href="{{ block.settings.link_url }}" class="activity-button">{{ block.settings.button_text }}</a>
+    <a href="{{ block.settings.link_url }}" class="button button--primary hidden md:block px-5 py-3 text-sm leading-4 font-semibold uppercase">
+      <span class="button-text">{{ block.settings.button_text }}</span>
+      <span class="button-spinner" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 818-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </span>
+    </a>
   </div>
 </div>
 ```
+
+**Note**: Activity buttons now use the unified button system with `button button--primary` classes instead of the deprecated `activity-button` class. The styling is preserved through CSS overrides in `assets/activities.css`.
 
 ## CSS Architecture
 
