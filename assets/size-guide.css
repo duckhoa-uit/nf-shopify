@@ -1,0 +1,68 @@
+/* Size Guide Measurement Instructions */
+table tr:first-of-type td:first-of-type,
+table tr:not(:first-of-type) th {
+  position: sticky;
+  left: 0;
+  background: light-dark(hsl(0 0% 98%), #000);
+}
+
+tr:not(:first-of-type) td:hover {
+  background: var(--color-gray-400);
+  color: canvasText;
+  font-weight: 600;
+  opacity: 1;
+}
+
+td:has(~ td:hover),
+table:has(td:nth-of-type(1):hover) tr:not(:first-of-type):has(~ tr:hover) td:nth-of-type(1),
+table:has(td:nth-of-type(2):hover) tr:not(:first-of-type):has(~ tr:hover) td:nth-of-type(2),
+table:has(td:nth-of-type(3):hover) tr:not(:first-of-type):has(~ tr:hover) td:nth-of-type(3),
+table:has(td:nth-of-type(4):hover) tr:not(:first-of-type):has(~ tr:hover) td:nth-of-type(4),
+table:has(td:nth-of-type(5):hover) tr:not(:first-of-type):has(~ tr:hover) td:nth-of-type(5),
+table:has(td:nth-of-type(6):hover) tr:not(:first-of-type):has(~ tr:hover) td:nth-of-type(6),
+table:has(td:nth-of-type(7):hover) tr:not(:first-of-type):has(~ tr:hover) td:nth-of-type(7) {
+  opacity: 1;
+  color: canvasText;
+  background: var(--color-gray-100);
+}
+
+.measurement-instructions li {
+  display: flex;
+  color: var(--color-black);
+  font-family: var(--font-body-family);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  padding-left: 2.5rem;
+  padding-top: 0.25rem;
+}
+
+.measurement-instructions ol {
+  margin: 1rem 0;
+  padding-left: 2.5rem;
+  counter-reset: item;
+}
+
+.measurement-instructions ol > li:before {
+  content: counter(item, upper-latin);
+  counter-increment: item;
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-white);
+  text-align: center;
+  font-family: var(--font-body-family);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-top: -0.25rem;
+  margin-left: -2.5rem;
+  margin-right: 1rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--color-black);
+  border-radius: 50%;
+}
