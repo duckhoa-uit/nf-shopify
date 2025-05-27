@@ -255,6 +255,96 @@ class CartSyncManager {
   }
 
   /**
+   * Validate stock availability for cart items
+   */
+  async validateStock(cartData) {
+    try {
+      const productIds = cartData.items.map(item => item.product_id);
+
+      console.log('[CartSync] Validating stock for products:', productIds);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
+      const response = await fetch('/apps/nf-data-management/sync_erp_at_checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ product_ids: productIds }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`Stock validation failed: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('[CartSync] Stock validation result:', result);
+
+      return result;
+    } catch (error) {
+      console.error('[CartSync] Error validating stock:', error);
+
+      if (error.name === 'AbortError') {
+        throw new Error('Stock validation timed out');
+      }
+
+      throw error;
+    }
+  }
+
+  /**
+   * Show loading state on checkout buttons
+   */
+  showCheckoutLoading() {
+    // Main cart checkout button
+    const mainCheckoutBtn = document.querySelector('.nf-cart-checkout__button');
+    if (mainCheckoutBtn) {
+      mainCheckoutBtn.disabled = true;
+      mainCheckoutBtn.classList.add('loading');
+      const buttonText = mainCheckoutBtn.querySelector('.button-text');
+      const buttonSpinner = mainCheckoutBtn.querySelector('.button-spinner');
+      if (buttonText) buttonText.textContent = 'Validating stock...';
+      if (buttonSpinner) buttonSpinner.style.display = 'inline-flex';
+    }
+
+    // Cart drawer checkout button
+    const drawerCheckoutBtn = document.querySelector('#CartDrawer-Checkout');
+    if (drawerCheckoutBtn) {
+      drawerCheckoutBtn.disabled = true;
+      drawerCheckoutBtn.classList.add('loading');
+      drawerCheckoutBtn.textContent = 'Validating stock...';
+    }
+  }
+
+  /**
+   * Hide loading state on checkout buttons
+   */
+  hideCheckoutLoading() {
+    // Main cart checkout button
+    const mainCheckoutBtn = document.querySelector('.nf-cart-checkout__button');
+    if (mainCheckoutBtn) {
+      mainCheckoutBtn.disabled = false;
+      mainCheckoutBtn.classList.remove('loading');
+      const buttonText = mainCheckoutBtn.querySelector('.button-text');
+      const buttonSpinner = mainCheckoutBtn.querySelector('.button-spinner');
+      if (buttonText) buttonText.textContent = 'Check out';
+      if (buttonSpinner) buttonSpinner.style.display = 'none';
+    }
+
+    // Cart drawer checkout button
+    const drawerCheckoutBtn = document.querySelector('#CartDrawer-Checkout');
+    if (drawerCheckoutBtn) {
+      drawerCheckoutBtn.disabled = false;
+      drawerCheckoutBtn.classList.remove('loading');
+      drawerCheckoutBtn.textContent = 'Check out';
+    }
+  }
+
+  /**
    * Validate cart before checkout
    */
   async validateBeforeCheckout() {
@@ -263,11 +353,46 @@ class CartSyncManager {
     this.isValidatingCheckout = true;
 
     try {
+      // Show loading state
+      this.showCheckoutLoading();
+
       // Fetch latest cart from server
       const response = await fetch(`${routes.cart_url}.js`);
       if (!response.ok) throw new Error('Failed to fetch cart for validation');
 
       const serverCart = await response.json();
+
+      // First, validate stock availability
+      try {
+        const stockValidation = await this.validateStock(serverCart);
+
+        // Check if stock validation indicates any issues
+        if (stockValidation && stockValidation.errors) {
+          const shouldProceed = await this.showStockValidationDialog(stockValidation, serverCart);
+          if (!shouldProceed) {
+            return false;
+          }
+
+          // If user chose to proceed after stock adjustments, fetch updated cart
+          const updatedResponse = await fetch(`${routes.cart_url}.js`);
+          if (updatedResponse.ok) {
+            const updatedCart = await updatedResponse.json();
+            this.lastCartHash = this.generateCartHash(updatedCart);
+            await this.updateCartUI(updatedCart);
+          }
+
+          return false; // Don't proceed to checkout, user made changes
+        }
+      } catch (stockError) {
+        console.error('[CartSync] Stock validation failed:', stockError);
+
+        // Show warning but allow checkout to proceed
+        const shouldProceed = await this.showStockValidationWarning(stockError.message);
+        if (!shouldProceed) {
+          return false;
+        }
+      }
+
       const serverCartHash = this.generateCartHash(serverCart);
 
       // If lastCartHash is null (initialization failed), set it now and proceed
@@ -294,8 +419,317 @@ class CartSyncManager {
       console.error('[CartSync] Error validating cart before checkout:', error);
       return true; // Allow checkout to proceed on error
     } finally {
+      // Always hide loading state
+      this.hideCheckoutLoading();
       this.isValidatingCheckout = false;
     }
+  }
+
+  /**
+   * Show stock validation dialog when items are out of stock
+   */
+  async showStockValidationDialog(stockValidation, cartData) {
+    return new Promise((resolve) => {
+      const modal = document.createElement('div');
+      modal.className = 'stock-validation-modal';
+
+      // Build the list of out-of-stock items
+      let itemsList = '';
+      if (stockValidation.errors && Array.isArray(stockValidation.errors)) {
+        stockValidation.errors.forEach(error => {
+          const cartItem = cartData.items.find(item => item.product_id === error.product_id);
+          const productTitle = cartItem ? cartItem.product_title : `Product ${error.product_id}`;
+          const variantTitle = cartItem && cartItem.variant_title ? ` - ${cartItem.variant_title}` : '';
+          const currentQty = cartItem ? cartItem.quantity : 0;
+          const availableQty = error.available_quantity || 0;
+
+          itemsList += `
+            <div class="stock-item" data-product-id="${error.product_id}" data-item-key="${cartItem ? cartItem.key : ''}">
+              <div class="stock-item__info">
+                <strong>${productTitle}${variantTitle}</strong>
+                <p>Requested: ${currentQty}, Available: ${availableQty}</p>
+              </div>
+              <div class="stock-item__actions">
+                <button class="btn btn--small btn--secondary" data-action="remove" data-item-key="${cartItem ? cartItem.key : ''}">
+                  Remove
+                </button>
+                ${availableQty > 0 ? `
+                  <button class="btn btn--small btn--primary" data-action="adjust" data-item-key="${cartItem ? cartItem.key : ''}" data-quantity="${availableQty}">
+                    Adjust to ${availableQty}
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      modal.innerHTML = `
+        <div class="stock-validation-modal__overlay">
+          <div class="stock-validation-modal__content">
+            <h3>Stock Unavailable</h3>
+            <p>Some items in your cart are not available in the requested quantities:</p>
+            <div class="stock-items-list">
+              ${itemsList}
+            </div>
+            <div class="stock-validation-modal__actions">
+              <button class="btn btn--secondary" data-action="cancel">Cancel Checkout</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Add styles
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10001;
+      `;
+
+      const overlay = modal.querySelector('.stock-validation-modal__overlay');
+      overlay.style.cssText = `
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+      `;
+
+      const content = modal.querySelector('.stock-validation-modal__content');
+      content.style.cssText = `
+        background: white;
+        padding: 24px;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 100%;
+        max-height: 80vh;
+        overflow-y: auto;
+      `;
+
+      // Style stock items
+      const stockItems = modal.querySelectorAll('.stock-item');
+      stockItems.forEach(item => {
+        item.style.cssText = `
+          border: 1px solid #ddd;
+          padding: 16px;
+          margin-bottom: 12px;
+          border-radius: 4px;
+        `;
+
+        const info = item.querySelector('.stock-item__info');
+        if (info) {
+          info.style.cssText = 'margin-bottom: 12px;';
+        }
+
+        const actions = item.querySelector('.stock-item__actions');
+        if (actions) {
+          actions.style.cssText = 'display: flex; gap: 8px;';
+        }
+      });
+
+      // Handle button clicks
+      modal.addEventListener('click', async (e) => {
+        const action = e.target.dataset.action;
+        const itemKey = e.target.dataset.itemKey;
+        const quantity = e.target.dataset.quantity;
+
+        if (action === 'cancel') {
+          resolve(false);
+          document.body.removeChild(modal);
+        } else if (action === 'remove' && itemKey) {
+          // Remove item from cart
+          e.target.disabled = true;
+          e.target.textContent = 'Removing...';
+
+          try {
+            await this.removeCartItem(itemKey);
+            // Remove the stock item from the dialog
+            const stockItem = e.target.closest('.stock-item');
+            if (stockItem) {
+              stockItem.remove();
+            }
+
+            // Check if all items are resolved
+            const remainingItems = modal.querySelectorAll('.stock-item');
+            if (remainingItems.length === 0) {
+              resolve(true);
+              document.body.removeChild(modal);
+            }
+          } catch (error) {
+            console.error('Error removing item:', error);
+            e.target.disabled = false;
+            e.target.textContent = 'Remove';
+            alert('Failed to remove item. Please try again.');
+          }
+        } else if (action === 'adjust' && itemKey && quantity) {
+          // Adjust item quantity
+          e.target.disabled = true;
+          e.target.textContent = 'Adjusting...';
+
+          try {
+            await this.updateCartItemQuantity(itemKey, parseInt(quantity));
+            // Remove the stock item from the dialog
+            const stockItem = e.target.closest('.stock-item');
+            if (stockItem) {
+              stockItem.remove();
+            }
+
+            // Check if all items are resolved
+            const remainingItems = modal.querySelectorAll('.stock-item');
+            if (remainingItems.length === 0) {
+              resolve(true);
+              document.body.removeChild(modal);
+            }
+          } catch (error) {
+            console.error('Error adjusting quantity:', error);
+            e.target.disabled = false;
+            e.target.textContent = `Adjust to ${quantity}`;
+            alert('Failed to adjust quantity. Please try again.');
+          }
+        }
+      });
+
+      document.body.appendChild(modal);
+    });
+  }
+
+  /**
+   * Show stock validation warning when API fails
+   */
+  async showStockValidationWarning(errorMessage) {
+    return new Promise((resolve) => {
+      const modal = document.createElement('div');
+      modal.className = 'stock-warning-modal';
+      modal.innerHTML = `
+        <div class="stock-warning-modal__overlay">
+          <div class="stock-warning-modal__content">
+            <h3>Stock Validation Warning</h3>
+            <p>We couldn't verify stock availability: ${errorMessage}</p>
+            <p>Your order may be subject to stock availability. Do you want to continue?</p>
+            <div class="stock-warning-modal__actions">
+              <button class="btn btn--secondary" data-action="cancel">Cancel Checkout</button>
+              <button class="btn btn--primary" data-action="proceed">Continue Anyway</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Add styles
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10001;
+      `;
+
+      const overlay = modal.querySelector('.stock-warning-modal__overlay');
+      overlay.style.cssText = `
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `;
+
+      const content = modal.querySelector('.stock-warning-modal__content');
+      content.style.cssText = `
+        background: white;
+        padding: 24px;
+        border-radius: 8px;
+        max-width: 400px;
+        text-align: center;
+      `;
+
+      // Handle button clicks
+      modal.addEventListener('click', (e) => {
+        const action = e.target.dataset.action;
+        if (action === 'proceed') {
+          resolve(true);
+        } else if (action === 'cancel') {
+          resolve(false);
+        }
+        document.body.removeChild(modal);
+      });
+
+      document.body.appendChild(modal);
+    });
+  }
+
+  /**
+   * Remove item from cart
+   */
+  async removeCartItem(itemKey) {
+    const body = JSON.stringify({
+      id: itemKey,
+      quantity: 0,
+      sections: ['cart-drawer', 'cart-icon-bubble'],
+      sections_url: window.location.pathname
+    });
+
+    const response = await fetch(`${routes.cart_change_url}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to remove item: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    // Update cart UI
+    await this.updateCartUI(result);
+
+    // Broadcast cart update
+    this.broadcastCartUpdate(result);
+
+    return result;
+  }
+
+  /**
+   * Update cart item quantity
+   */
+  async updateCartItemQuantity(itemKey, quantity) {
+    const body = JSON.stringify({
+      id: itemKey,
+      quantity: quantity,
+      sections: ['cart-drawer', 'cart-icon-bubble'],
+      sections_url: window.location.pathname
+    });
+
+    const response = await fetch(`${routes.cart_change_url}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update quantity: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    // Update cart UI
+    await this.updateCartUI(result);
+
+    // Broadcast cart update
+    this.broadcastCartUpdate(result);
+
+    return result;
   }
 
   /**
