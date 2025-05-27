@@ -1,16 +1,18 @@
 {{ 'base.css' | asset_url | stylesheet_tag }}
 
 <div class="page-width size-guide-container section-{{ section.id }}-padding">
-  <h1 class="text-3xl font-bold text-center mb-8">{{ section.blocks.intro.settings.heading | default: 'Size Guide' }}</h1>
-  
   {% for block in section.blocks %}
     {% case block.type %}
       {% when 'text' %}
         <div class="size-guide-intro text-center mb-10" {{ block.shopify_attributes }}>
+          {% if block.settings.heading != blank %}
+            <h1 class="text-3xl font-bold text-center mb-8">{{ block.settings.heading }}</h1>
+          {% endif %}
+
           {% if block.settings.subheading != blank %}
             <div class="text-xl mb-2">{{ block.settings.subheading }}</div>
           {% endif %}
-          
+
           {% if block.settings.text != blank %}
             <div class="rte">{{ block.settings.text }}</div>
           {% endif %}
@@ -18,19 +20,36 @@
 
       {% when 'measurement_guide' %}
         <div class="measurement-guide mb-10" {{ block.shopify_attributes }}>
-          <h2 class="text-2xl font-semibold mb-4">{{ block.settings.heading }}</h2>
-          
-          {% if block.settings.instructions != blank %}
-            <div class="rte mb-6">{{ block.settings.instructions }}</div>
-          {% endif %}
-          
-          {% render 'measure-figure-block' %}
+          <h3 class="text-xl font-semibold mb-4">{{ block.settings.heading }}</h3>
+
+          <div class="measurement-content flex flex-col md:flex-row items-center gap-8">
+            <div class="measurement-instructions flex-1">
+              {% if block.settings.instructions != blank %}
+                <div class="rte">{{ block.settings.instructions }}</div>
+              {% endif %}
+            </div>
+
+            {% if block.settings.figure_image != blank %}
+              <div class="measurement-figure flex-1 text-center">
+                <img src="{{ block.settings.figure_image }}" alt="{{ block.settings.heading }}" class="max-w-full h-auto">
+              </div>
+            {% else %}
+              {% render 'measure-figure-block', figure_type: block.settings.figure_type %}
+            {% endif %}
+          </div>
         </div>
 
       {% when 'size_table' %}
         <div class="size-table-wrapper mb-12" {{ block.shopify_attributes }}>
           <h2 class="text-2xl font-semibold mb-4">{{ block.settings.heading }}</h2>
+
           {% render 'size-guide-table', table_type: block.settings.table_type %}
+
+          {% if block.settings.description != blank %}
+            <div class="size-table-description mt-4 text-sm text-gray-600">
+              {{ block.settings.description }}
+            </div>
+          {% endif %}
         </div>
     {% endcase %}
   {% endfor %}
@@ -108,19 +127,44 @@
     {
       "type": "measurement_guide",
       "name": "Measurement Guide",
-      "limit": 1,
       "settings": [
         {
           "type": "text",
           "id": "heading",
-          "default": "How to Measure",
+          "default": "How to Measure your Body?",
           "label": "Heading"
         },
         {
           "type": "richtext",
           "id": "instructions",
-          "default": "<p>For best results, take measurements directly against your body.</p>",
+          "default": "<ol><li>CHEST</li><li>WAIST</li><li>HIP</li><li>HEIGHT</li><li>INSEAM LENGTH</li></ol>",
           "label": "Instructions"
+        },
+        {
+          "type": "select",
+          "id": "figure_type",
+          "options": [
+            {
+              "value": "man",
+              "label": "Man"
+            },
+            {
+              "value": "woman",
+              "label": "Woman"
+            },
+            {
+              "value": "foot",
+              "label": "Foot"
+            }
+          ],
+          "default": "man",
+          "label": "Figure Type"
+        },
+        {
+          "type": "url",
+          "id": "figure_image",
+          "label": "Figure Image URL",
+          "info": "Optional: Use custom image URL instead of default figure"
         }
       ]
     },
@@ -157,6 +201,12 @@
           ],
           "default": "men_clothing",
           "label": "Table Type"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "info": "Optional description text below the table"
         }
       ]
     }
