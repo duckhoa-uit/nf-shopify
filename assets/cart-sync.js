@@ -24,9 +24,6 @@ class CartSyncManager {
       this.isSupported = true;
       this.channel = new BroadcastChannel('cart-sync');
       this.setupEventListeners();
-      console.log('[CartSync] Initialized with BroadcastChannel support');
-    } else {
-      console.log('[CartSync] BroadcastChannel not supported, sync disabled');
     }
   }
 
@@ -40,10 +37,8 @@ class CartSyncManager {
       if (response.ok) {
         const cartData = await response.json();
         this.lastCartHash = this.generateCartHash(cartData);
-        console.log('[CartSync] Initialized cart hash:', this.lastCartHash);
       }
     } catch (error) {
-      console.log('[CartSync] Could not initialize cart hash:', error);
       // Keep lastCartHash as null, validation will still work but may show dialog unnecessarily
     }
   }
@@ -67,8 +62,6 @@ class CartSyncManager {
       // Ignore messages from the same tab
       if (tabId === this.tabId) return;
 
-      console.log('[CartSync] Received message:', { type, tabId });
-
       switch (type) {
         case 'cart-updated':
           this.handleCartUpdatedFromOtherTab(data);
@@ -76,8 +69,6 @@ class CartSyncManager {
         case 'checkout-started':
           this.handleCheckoutStartedFromOtherTab(data);
           break;
-        default:
-          console.log('[CartSync] Unknown message type:', type);
       }
     });
   }
@@ -107,7 +98,6 @@ class CartSyncManager {
     };
 
     this.channel.postMessage(message);
-    console.log('[CartSync] Broadcasted cart update:', message);
   }
 
   /**
@@ -261,8 +251,6 @@ class CartSyncManager {
     try {
       const productIds = cartData.items.map(item => item.product_id);
 
-      console.log('[CartSync] Validating stock for products:', productIds);
-
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
@@ -289,10 +277,8 @@ class CartSyncManager {
       return result;
       */
 
-      // Just log that the API call was made
-      console.log('[CartSync] Stock validation API called, proceeding to checkout without processing response');
+      // API call made, proceeding to checkout without processing response
     } catch (error) {
-      console.error('[CartSync] Error validating stock:', error);
       // Note: Error throwing commented out - we now proceed to checkout even if API fails
 
       /* COMMENTED OUT - Error throwing for potential future re-enabling
@@ -303,8 +289,7 @@ class CartSyncManager {
       throw error;
       */
 
-      // Just log the error and continue
-      console.log('[CartSync] Stock validation failed, but proceeding to checkout anyway');
+      // Stock validation failed, but proceeding to checkout anyway
     }
   }
 
@@ -399,7 +384,6 @@ class CartSyncManager {
         }
         */
       } catch (stockError) {
-        console.error('[CartSync] Stock validation failed:', stockError);
         // Note: Error handling commented out - we now proceed directly to checkout
 
         /* COMMENTED OUT - Error handling for potential future re-enabling
@@ -416,7 +400,6 @@ class CartSyncManager {
       // If lastCartHash is null (initialization failed), set it now and proceed
       if (this.lastCartHash === null) {
         this.lastCartHash = serverCartHash;
-        console.log('[CartSync] Set initial cart hash during checkout validation:', this.lastCartHash);
         return true;
       }
 
@@ -434,7 +417,6 @@ class CartSyncManager {
 
       return true;
     } catch (error) {
-      console.error('[CartSync] Error validating cart before checkout:', error);
       return true; // Allow checkout to proceed on error
     } finally {
       // Always hide loading state
@@ -580,7 +562,6 @@ class CartSyncManager {
               document.body.removeChild(modal);
             }
           } catch (error) {
-            console.error('Error removing item:', error);
             e.target.disabled = false;
             e.target.textContent = 'Remove';
             alert('Failed to remove item. Please try again.');
@@ -605,7 +586,6 @@ class CartSyncManager {
               document.body.removeChild(modal);
             }
           } catch (error) {
-            console.error('Error adjusting quantity:', error);
             e.target.disabled = false;
             e.target.textContent = `Adjust to ${quantity}`;
             alert('Failed to adjust quantity. Please try again.');

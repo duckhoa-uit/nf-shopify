@@ -87,6 +87,12 @@ if (!customElements.get('product-form')) {
               window.cartSyncManager.broadcastCartUpdate(response);
             }
             this.error = false;
+
+            // Check if we're on cart page - if so, skip notification and let page reload handle it
+            if (window.isCartPage) {
+              return;
+            }
+
             const quickAddModal = this.closest('quick-add-modal');
             if (quickAddModal) {
               document.body.addEventListener(
