@@ -71,6 +71,16 @@ class CartDrawer extends HTMLElement {
   }
 
   renderContents(parsedState) {
+    // If we're on cart page, don't show drawer but trigger reload
+    if (window.isCartPage) {
+      // Trigger reload to refresh cart items
+      setTimeout(() => {
+        window.location.reload();
+      }, 500); // Small delay to ensure cart update is processed
+
+      return;
+    }
+
     this.querySelector('.drawer__inner').classList.contains('is-empty') &&
       this.querySelector('.drawer__inner').classList.remove('is-empty');
     this.productId = parsedState.id;

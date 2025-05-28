@@ -521,8 +521,18 @@
         if (event.cartData) {
           updateCartTotal(event.cartData);
         }
+
+        // Auto reload page when cart is updated from external sources (like wishlist app)
+        // to ensure cart items are properly refreshed
+        if (event.source && event.source !== 'cart-items' && event.source !== 'cart-sync') {
+          // Immediate reload without delay since we're skipping notification
+          window.location.reload();
+        }
       });
     }
+
+    // Set up a global flag to indicate we're on cart page
+    window.isCartPage = true;
 
     // Handle quantity changes
     const quantitySelects = document.querySelectorAll('.nf-cart-item__variant-select[data-is-quantity="true"]');

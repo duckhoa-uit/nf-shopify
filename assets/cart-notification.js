@@ -63,6 +63,16 @@ class CartNotification extends HTMLElement {
   }
 
   renderContents(parsedState) {
+    // If we're on cart page, don't show notification but trigger reload
+    if (window.isCartPage) {
+      // Trigger reload to refresh cart items
+      setTimeout(() => {
+        window.location.reload();
+      }, 500); // Small delay to ensure cart update is processed
+
+      return;
+    }
+
     this.cartItemKey = parsedState.key;
     this.getSectionsToRender().forEach((section) => {
       document.getElementById(section.id).innerHTML = this.getSectionInnerHTML(
