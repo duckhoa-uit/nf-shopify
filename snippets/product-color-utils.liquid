@@ -79,6 +79,7 @@
 
       {% comment %} If no model image without sequence found, look for one with lowest sequence {% endcomment %}
       {% unless found_model_image %}
+        {% assign best_model_media = nil %}
         {% for media in product.media %}
           {% assign media_src = media.src | default: '' %}
           {% assign parsed_url = media_src | split: '/' | last %}
@@ -86,14 +87,20 @@
             {% assign sequence_part = parsed_url | split: '-M_' | last | split: '.' | first %}
             {% assign sequence_number = sequence_part | plus: 0 %}
 
-            {% if sequence_number < lowest_sequence %}
+            {% comment %} Only update if this sequence is lower than current lowest {% endcomment %}
+            {% if sequence_number > 0 and sequence_number < lowest_sequence %}
               {% assign lowest_sequence = sequence_number %}
-              {% assign image_url = media.preview_image | image_url: width: width, height: height, crop: crop %}
-              {% assign image_object = media %}
+              {% assign best_model_media = media %}
               {% assign found_model_image = true %}
             {% endif %}
           {% endif %}
         {% endfor %}
+
+        {% comment %} Set the image URL from the best model media found {% endcomment %}
+        {% if best_model_media %}
+          {% assign image_url = best_model_media.preview_image | image_url: width: width, height: height, crop: crop %}
+          {% assign image_object = best_model_media %}
+        {% endif %}
       {% endunless %}
     {% else %}
       {% comment %} Look for specific image type or use priority order {% endcomment %}
@@ -227,6 +234,7 @@
 
         {% comment %} If no model image without sequence found, look for one with lowest sequence {% endcomment %}
         {% unless found_model_image %}
+          {% assign best_model_media = nil %}
           {% for media in product.media %}
             {% assign media_src = media.src | default: '' %}
             {% assign parsed_url = media_src | split: '/' | last %}
@@ -234,13 +242,19 @@
               {% assign sequence_part = parsed_url | split: '-M_' | last | split: '.' | first %}
               {% assign sequence_number = sequence_part | plus: 0 %}
 
-              {% if sequence_number < lowest_sequence %}
+              {% comment %} Only update if this sequence is lower than current lowest {% endcomment %}
+              {% if sequence_number > 0 and sequence_number < lowest_sequence %}
                 {% assign lowest_sequence = sequence_number %}
-                {% assign image_url = media.preview_image | image_url: width: width, height: height, crop: crop %}
+                {% assign best_model_media = media %}
                 {% assign found_model_image = true %}
               {% endif %}
             {% endif %}
           {% endfor %}
+
+          {% comment %} Set the image URL from the best model media found {% endcomment %}
+          {% if best_model_media %}
+            {% assign image_url = best_model_media.preview_image | image_url: width: width, height: height, crop: crop %}
+          {% endif %}
         {% endunless %}
       {% else %}
         {% comment %} Look for specific image type or use priority order {% endcomment %}
