@@ -277,6 +277,8 @@ class CartSyncManager {
 
       clearTimeout(timeoutId);
 
+      // Note: Response handling commented out - we now just call the API without processing result
+      /* COMMENTED OUT - Response processing for potential future re-enabling
       if (!response.ok) {
         throw new Error(`Stock validation failed: ${response.status}`);
       }
@@ -285,14 +287,24 @@ class CartSyncManager {
       console.log('[CartSync] Stock validation result:', result);
 
       return result;
+      */
+
+      // Just log that the API call was made
+      console.log('[CartSync] Stock validation API called, proceeding to checkout without processing response');
     } catch (error) {
       console.error('[CartSync] Error validating stock:', error);
+      // Note: Error throwing commented out - we now proceed to checkout even if API fails
 
+      /* COMMENTED OUT - Error throwing for potential future re-enabling
       if (error.name === 'AbortError') {
         throw new Error('Stock validation timed out');
       }
 
       throw error;
+      */
+
+      // Just log the error and continue
+      console.log('[CartSync] Stock validation failed, but proceeding to checkout anyway');
     }
   }
 
@@ -362,10 +374,12 @@ class CartSyncManager {
 
       const serverCart = await response.json();
 
-      // First, validate stock availability
+      // First, validate stock availability - just call the API without handling response
       try {
-        const stockValidation = await this.validateStock(serverCart);
+        await this.validateStock(serverCart);
+        // Note: Response handling commented out - we now proceed directly to checkout
 
+        /* COMMENTED OUT - Response handling for potential future re-enabling
         // Check if stock validation indicates any issues
         if (stockValidation && stockValidation.errors) {
           const shouldProceed = await this.showStockValidationDialog(stockValidation, serverCart);
@@ -383,14 +397,18 @@ class CartSyncManager {
 
           return false; // Don't proceed to checkout, user made changes
         }
+        */
       } catch (stockError) {
         console.error('[CartSync] Stock validation failed:', stockError);
+        // Note: Error handling commented out - we now proceed directly to checkout
 
+        /* COMMENTED OUT - Error handling for potential future re-enabling
         // Show warning but allow checkout to proceed
         const shouldProceed = await this.showStockValidationWarning(stockError.message);
         if (!shouldProceed) {
           return false;
         }
+        */
       }
 
       const serverCartHash = this.generateCartHash(serverCart);
