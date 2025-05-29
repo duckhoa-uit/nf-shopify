@@ -1,6 +1,6 @@
 {% comment %}
   Wishlist tab content
-  
+
   Accepts:
   - No specific parameters
 {% endcomment %}
@@ -8,7 +8,15 @@
 <div id="wishlist" class="tab-content" role="tabpanel">
   <h2 class="section-title">{{ 'customer.account.wishlist' | t }}</h2>
 
-  <div class="wishlist-empty">
+  {% comment %} <div class="wishlist-empty">
     <p>{{ 'customer.account.wishlist_empty' | t }}</p>
-  </div>
+  </div> {% endcomment %}
+
+  <wishlist-page
+    show-product-title
+    show-price
+    product-options="dropdowns"
+    move-to-cart
+    wishlist-empty-link="/collections/all"
+  ></wishlist-page>
 </div>
