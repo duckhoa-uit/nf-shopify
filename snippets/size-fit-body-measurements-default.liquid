@@ -1,0 +1,167 @@
+{% comment %}
+  Default Size Fit Body Measurements Component
+  Used when no metafields are available
+{% endcomment %}
+
+<div class="body-measurements-section">
+  <!-- Table -->
+  <div class="overflow-x-auto mb-8">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="p-3 border border-gray-300 text-left font-medium">
+            {{ 'size_fit.table_headers.size' | t | default: 'Size' }}
+          </th>
+          <th class="p-3 border border-gray-300 text-center font-medium">S</th>
+          <th class="p-3 border border-gray-300 text-center font-medium">M</th>
+          <th class="p-3 border border-gray-300 text-center font-medium">L</th>
+          <th class="p-3 border border-gray-300 text-center font-medium">XL</th>
+          <th class="p-3 border border-gray-300 text-center font-medium">XXL</th>
+          <th class="p-3 border border-gray-300 text-center font-medium">3XL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- EU Size Row -->
+        <tr>
+          <td class="p-3 border border-gray-300 font-medium">
+            {{ 'size_fit.table_headers.eu' | t | default: 'EU' }}
+          </td>
+          <td class="p-3 border border-gray-300 text-center">44-46</td>
+          <td class="p-3 border border-gray-300 text-center">48-50</td>
+          <td class="p-3 border border-gray-300 text-center">52-54</td>
+          <td class="p-3 border border-gray-300 text-center">56-58</td>
+          <td class="p-3 border border-gray-300 text-center">60-62</td>
+          <td class="p-3 border border-gray-300 text-center">64</td>
+        </tr>
+
+        <!-- Chest Row -->
+        <tr>
+          <td class="p-3 border border-gray-300 font-medium">
+            {{ 'size_fit.table_headers.chest' | t | default: 'CHEST' }}
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+            <span class="measurement-value" data-cm="86-94" data-in="33.9-37.0">86-94</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+            <span class="measurement-value" data-cm="94-102" data-in="37.0-40.2">94-102</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+            <span class="measurement-value" data-cm="102-110" data-in="40.2-43.3">102-110</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+            <span class="measurement-value" data-cm="110-116" data-in="43.3-45.7">110-116</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+            <span class="measurement-value" data-cm="116-128" data-in="45.7-50.4">116-128</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+            <span class="measurement-value" data-cm="126-132" data-in="49.6-52.0">126-132</span>
+          </td>
+        </tr>
+
+        <!-- Waist Row -->
+        <tr>
+          <td class="p-3 border border-gray-300 font-medium">
+            {{ 'size_fit.table_headers.waist' | t | default: 'WAIST' }}
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+            <span class="measurement-value" data-cm="72-80" data-in="28.3-31.5">72-80</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+            <span class="measurement-value" data-cm="80-88" data-in="31.5-34.6">80-88</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+            <span class="measurement-value" data-cm="88-96" data-in="34.6-37.8">88-96</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+            <span class="measurement-value" data-cm="96-104" data-in="37.8-40.9">96-104</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+            <span class="measurement-value" data-cm="104-112" data-in="40.9-44.1">104-112</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+            <span class="measurement-value" data-cm="112-120" data-in="44.1-47.2">112-120</span>
+          </td>
+        </tr>
+
+        <!-- Hip Row -->
+        <tr>
+          <td class="p-3 border border-gray-300 font-medium">
+            {{ 'size_fit.table_headers.hip' | t | default: 'HIP' }}
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+            <span class="measurement-value" data-cm="88-96" data-in="34.6-37.8">88-96</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+            <span class="measurement-value" data-cm="96-104" data-in="37.8-40.9">96-104</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+            <span class="measurement-value" data-cm="104-112" data-in="40.9-44.1">104-112</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+            <span class="measurement-value" data-cm="112-120" data-in="44.1-47.2">112-120</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+            <span class="measurement-value" data-cm="120-128" data-in="47.2-50.4">120-128</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+            <span class="measurement-value" data-cm="128-136" data-in="50.4-53.5">128-136</span>
+          </td>
+        </tr>
+
+        <!-- Height Row -->
+        <tr>
+          <td class="p-3 border border-gray-300 font-medium">
+            {{ 'size_fit.table_headers.height' | t | default: 'HEIGHT' }}
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+            <span class="measurement-value" data-cm="170-176" data-in="66.9-69.3">170-176</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+            <span class="measurement-value" data-cm="176-182" data-in="69.3-71.7">176-182</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+            <span class="measurement-value" data-cm="182-188" data-in="71.7-74.0">182-188</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+            <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+            <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+            <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
+          </td>
+        </tr>
+
+        <!-- Inseam Length Row -->
+        <tr>
+          <td class="p-3 border border-gray-300 font-medium">
+            {{ 'size_fit.table_headers.inseam_length' | t | default: 'INSEAM LENGTH' }}
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+            <span class="measurement-value" data-cm="79-80" data-in="31.1-31.5">79-80</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+            <span class="measurement-value" data-cm="81-82" data-in="31.9-32.3">81-82</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+            <span class="measurement-value" data-cm="83-84" data-in="32.7-33.1">83-84</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+            <span class="measurement-value" data-cm="85-86" data-in="33.5-33.9">85-86</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+            <span class="measurement-value" data-cm="87-88" data-in="34.3-34.6">87-88</span>
+          </td>
+          <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+            <span class="measurement-value" data-cm="89" data-in="35.0">89</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- How to Measure Section -->
+  {% render 'size-fit-measurement-guide' %}
+</div>
