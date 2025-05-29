@@ -1,0 +1,174 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Size Fit Metafields Schema",
+  "description": "JSON Schema for Size Fit metafields in Shopify",
+  
+  "definitions": {
+    "measurementRange": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Minimum measurement value in centimeters"
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Maximum measurement value in centimeters"
+        }
+      },
+      "required": ["min", "max"],
+      "additionalProperties": false
+    },
+    
+    "sizeInfo": {
+      "type": "object",
+      "properties": {
+        "eu_size": {
+          "type": "string",
+          "description": "EU size designation (e.g., '44-46', '32')",
+          "examples": ["44-46", "48-50", "32", "34-36"]
+        },
+        "chest": {
+          "$ref": "#/definitions/measurementRange",
+          "description": "Chest measurement range in cm"
+        },
+        "waist": {
+          "$ref": "#/definitions/measurementRange",
+          "description": "Waist measurement range in cm"
+        },
+        "hip": {
+          "$ref": "#/definitions/measurementRange",
+          "description": "Hip measurement range in cm"
+        },
+        "height": {
+          "$ref": "#/definitions/measurementRange",
+          "description": "Height range in cm"
+        },
+        "inseam_length": {
+          "$ref": "#/definitions/measurementRange",
+          "description": "Inseam length range in cm"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "productMeasurements": {
+      "type": "object",
+      "properties": {
+        "chest_girth_half": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Half chest girth measurement in cm"
+        },
+        "bottom_girth_stretched_half": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Half bottom girth (stretched) measurement in cm"
+        },
+        "shoulder_point_to_point": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Shoulder point to point measurement in cm"
+        },
+        "shoulder_sleeve_length": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Shoulder and sleeve length measurement in cm"
+        },
+        "center_back_length": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Center back length measurement in cm"
+        },
+        "sleeve_length": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Sleeve length measurement in cm"
+        },
+        "waist_girth": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Waist girth measurement in cm (for bottoms)"
+        },
+        "hip_girth": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Hip girth measurement in cm (for bottoms)"
+        },
+        "inside_length": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Inside length measurement in cm (for bottoms)"
+        }
+      },
+      "additionalProperties": false
+    },
+    
+    "sizeChart": {
+      "type": "object",
+      "properties": {
+        "measurements": {
+          "$ref": "#/definitions/productMeasurements"
+        }
+      },
+      "required": ["measurements"],
+      "additionalProperties": false
+    }
+  },
+  
+  "properties": {
+    "bodyMeasurements": {
+      "type": "object",
+      "title": "Body Measurements Metafield (size_fit.body_measurements)",
+      "description": "Standard body measurements for size guide",
+      "properties": {
+        "gender": {
+          "type": "string",
+          "enum": ["men", "women", "unisex"],
+          "description": "Target gender for the measurements"
+        },
+        "sizes": {
+          "type": "object",
+          "description": "Size-specific body measurements",
+          "patternProperties": {
+            "^(XXS|XS|S|M|L|XL|XXL|3XL|4XL)$": {
+              "$ref": "#/definitions/sizeInfo"
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
+        }
+      },
+      "required": ["gender", "sizes"],
+      "additionalProperties": false
+    },
+    
+    "productMeasurements": {
+      "type": "object",
+      "title": "Product Measurements Metafield (size_fit.measurements)",
+      "description": "Product-specific measurements for garments",
+      "properties": {
+        "product_category": {
+          "type": "string",
+          "enum": ["top", "bottom", "dress", "outerwear", "underwear"],
+          "description": "Category of the product for measurement display"
+        },
+        "size_chart": {
+          "type": "object",
+          "description": "Size-specific product measurements",
+          "patternProperties": {
+            "^(XXS|XS|S|M|L|XL|XXL|3XL|4XL)$": {
+              "$ref": "#/definitions/sizeChart"
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
+        }
+      },
+      "required": ["product_category", "size_chart"],
+      "additionalProperties": false
+    }
+  }
+}

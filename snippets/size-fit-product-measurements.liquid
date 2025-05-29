@@ -1,0 +1,225 @@
+{% comment %}
+  Size Fit Product Measurements Component
+  
+  Accepts:
+  - measurements: {Object} product measurements data from metafields
+  - product: {Object} product object
+  
+  Usage:
+  {% render 'size-fit-product-measurements', measurements: measurements, product: product %}
+{% endcomment %}
+
+{% assign measurements = measurements | default: blank %}
+{% assign product_category = measurements.product_category | default: 'top' %}
+
+<div class="product-measurements-section">
+  <!-- Description -->
+  <div class="mb-6 text-center">
+    <p class="text-gray-600">Approximate dimensions measured on the products</p>
+    <p class="text-sm text-gray-500">(use to compare with your clothes in the wardrobe)</p>
+  </div>
+
+  <!-- Product Measurements Table -->
+  {% if measurements.size_chart %}
+    <div class="overflow-x-auto mb-8">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-gray-100">
+            {% assign sizes = measurements.size_chart | map: 'first' %}
+            {% for size in sizes limit: 6 %}
+              <th class="p-3 border border-gray-300 text-center font-medium">{{ size }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% if product_category == 'top' %}
+            <!-- Top/Jacket Measurements -->
+            
+            <!-- 1/2 Chest Girth -->
+            <tr>
+              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
+                <div class="flex items-center">
+                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">1</div>
+                  <span class="font-medium">1/2 CHEST GIRTH (CM)</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements.size_chart limit: 6 %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.chest_girth_half %}
+                    <span class="measurement-value" data-cm="{{ size_measurements.chest_girth_half }}" data-in="{{ size_measurements.chest_girth_half | divided_by: 2.54 | round: 1 }}">
+                      {{ size_measurements.chest_girth_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- 1/2 Bottom Girth -->
+            <tr>
+              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
+                <div class="flex items-center">
+                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">2</div>
+                  <span class="font-medium">1/2 BOTTOM GIRTH (CM)</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements.size_chart limit: 6 %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.bottom_girth_stretched_half %}
+                    <span class="measurement-value" data-cm="{{ size_measurements.bottom_girth_stretched_half }}" data-in="{{ size_measurements.bottom_girth_stretched_half | divided_by: 2.54 | round: 1 }}">
+                      {{ size_measurements.bottom_girth_stretched_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- Shoulder Point to Point -->
+            <tr>
+              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
+                <div class="flex items-center">
+                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">3</div>
+                  <span class="font-medium">SHOULDER POINT TO POINT (CM)</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements.size_chart limit: 6 %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.shoulder_point_to_point %}
+                    <span class="measurement-value" data-cm="{{ size_measurements.shoulder_point_to_point }}" data-in="{{ size_measurements.shoulder_point_to_point | divided_by: 2.54 | round: 1 }}">
+                      {{ size_measurements.shoulder_point_to_point }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- Center Back Length -->
+            <tr>
+              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
+                <div class="flex items-center">
+                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">4</div>
+                  <span class="font-medium">CENTER BACK LENGTH (CM)</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements.size_chart limit: 6 %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.center_back_length %}
+                    <span class="measurement-value" data-cm="{{ size_measurements.center_back_length }}" data-in="{{ size_measurements.center_back_length | divided_by: 2.54 | round: 1 }}">
+                      {{ size_measurements.center_back_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+          {% elsif product_category == 'bottom' %}
+            <!-- Bottom/Pants Measurements -->
+            
+            <!-- Waist Girth -->
+            <tr>
+              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
+                <div class="flex items-center">
+                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">1</div>
+                  <span class="font-medium">WAIST GIRTH (CM)</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements.size_chart limit: 6 %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.waist_girth %}
+                    <span class="measurement-value" data-cm="{{ size_measurements.waist_girth }}" data-in="{{ size_measurements.waist_girth | divided_by: 2.54 | round: 1 }}">
+                      {{ size_measurements.waist_girth }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- Hip Girth -->
+            <tr>
+              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
+                <div class="flex items-center">
+                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">2</div>
+                  <span class="font-medium">HIP GIRTH (CM)</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements.size_chart limit: 6 %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.hip_girth %}
+                    <span class="measurement-value" data-cm="{{ size_measurements.hip_girth }}" data-in="{{ size_measurements.hip_girth | divided_by: 2.54 | round: 1 }}">
+                      {{ size_measurements.hip_girth }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- Inside Length -->
+            <tr>
+              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
+                <div class="flex items-center">
+                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">3</div>
+                  <span class="font-medium">INSIDE LENGTH (CM)</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements.size_chart limit: 6 %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.inside_length %}
+                    <span class="measurement-value" data-cm="{{ size_measurements.inside_length }}" data-in="{{ size_measurements.inside_length | divided_by: 2.54 | round: 1 }}">
+                      {{ size_measurements.inside_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="text-center py-8">
+      <p class="text-gray-500">No product measurements available for this item.</p>
+    </div>
+  {% endif %}
+
+  <!-- Product Measurement Guide -->
+  <div class="mt-8">
+    <h3 class="text-lg font-bold mb-4">How to measure the product?</h3>
+    <div class="text-sm text-gray-600">
+      <p>These measurements are taken directly from the garment and can be used to compare with your existing clothes.</p>
+    </div>
+  </div>
+</div>
