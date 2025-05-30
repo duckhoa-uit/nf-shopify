@@ -1,10 +1,10 @@
 {% comment %}
   Size Fit Product Measurements Component
-  
+
   Accepts:
   - measurements: {Object} product measurements data from metafields
   - product: {Object} product object
-  
+
   Usage:
   {% render 'size-fit-product-measurements', measurements: measurements, product: product %}
 {% endcomment %}
@@ -22,26 +22,27 @@
   <!-- Product Measurements Table -->
   {% if measurements.size_chart %}
     <div class="overflow-x-auto mb-8">
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="bg-gray-100">
-            {% assign sizes = measurements.size_chart | map: 'first' %}
-            {% for size in sizes limit: 6 %}
-              <th class="p-3 border border-gray-300 text-center font-medium">{{ size }}</th>
+      <table class="w-full border-collapse size_table_product">
+        <tbody>
+          <!-- Size Header Row -->
+          <tr>
+            {% for size_data in measurements.size_chart limit: 6 %}
+              {% assign size_name = size_data[0] %}
+              <th class="p-3 border border-gray-300 text-center font-medium bg-gray-100">{{ size_name }}</th>
             {% endfor %}
           </tr>
-        </thead>
-        <tbody>
+
+          {% comment %} Calculate number of sizes for colspan {% endcomment %}
+          {% assign size_count = measurements.size_chart.size | default: 3 %}
+          {% if size_count > 6 %}{% assign size_count = 6 %}{% endif %}
+
           {% if product_category == 'top' %}
             <!-- Top/Jacket Measurements -->
-            
+
             <!-- 1/2 Chest Girth -->
             <tr>
-              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
-                <div class="flex items-center">
-                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">1</div>
-                  <span class="font-medium">1/2 CHEST GIRTH (CM)</span>
-                </div>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">B</span> 1/2 chest girth (cm)</span>
               </td>
             </tr>
             <tr>
@@ -61,11 +62,8 @@
 
             <!-- 1/2 Bottom Girth -->
             <tr>
-              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
-                <div class="flex items-center">
-                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">2</div>
-                  <span class="font-medium">1/2 BOTTOM GIRTH (CM)</span>
-                </div>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C2</span> 1/2 bottom girth - stretched (cm)</span>
               </td>
             </tr>
             <tr>
@@ -85,11 +83,8 @@
 
             <!-- Shoulder Point to Point -->
             <tr>
-              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
-                <div class="flex items-center">
-                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">3</div>
-                  <span class="font-medium">SHOULDER POINT TO POINT (CM)</span>
-                </div>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">D</span> Shoulder point to point (cm)</span>
               </td>
             </tr>
             <tr>
@@ -109,11 +104,8 @@
 
             <!-- Center Back Length -->
             <tr>
-              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
-                <div class="flex items-center">
-                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">4</div>
-                  <span class="font-medium">CENTER BACK LENGTH (CM)</span>
-                </div>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">F</span> Center back length (cm)</span>
               </td>
             </tr>
             <tr>
@@ -131,16 +123,55 @@
               {% endfor %}
             </tr>
 
+            <!-- Shoulder & Sleeve Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">E</span> Shoulder & Sleeve length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements.size_chart limit: 6 %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.shoulder_sleeve_length %}
+                    <span class="measurement-value" data-cm="{{ size_measurements.shoulder_sleeve_length }}" data-in="{{ size_measurements.shoulder_sleeve_length | divided_by: 2.54 | round: 1 }}">
+                      {{ size_measurements.shoulder_sleeve_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- Sleeve Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">G</span> Sleeve length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements.size_chart limit: 6 %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.sleeve_length %}
+                    <span class="measurement-value" data-cm="{{ size_measurements.sleeve_length }}" data-in="{{ size_measurements.sleeve_length | divided_by: 2.54 | round: 1 }}">
+                      {{ size_measurements.sleeve_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
           {% elsif product_category == 'bottom' %}
             <!-- Bottom/Pants Measurements -->
-            
+
             <!-- Waist Girth -->
             <tr>
-              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
-                <div class="flex items-center">
-                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">1</div>
-                  <span class="font-medium">WAIST GIRTH (CM)</span>
-                </div>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">A</span> Waist girth (cm)</span>
               </td>
             </tr>
             <tr>
@@ -160,11 +191,8 @@
 
             <!-- Hip Girth -->
             <tr>
-              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
-                <div class="flex items-center">
-                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">2</div>
-                  <span class="font-medium">HIP GIRTH (CM)</span>
-                </div>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">B</span> Hip girth (cm)</span>
               </td>
             </tr>
             <tr>
@@ -184,11 +212,8 @@
 
             <!-- Inside Length -->
             <tr>
-              <td colspan="6" class="p-2 bg-gray-50 border border-gray-300">
-                <div class="flex items-center">
-                  <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold mr-2">3</div>
-                  <span class="font-medium">INSIDE LENGTH (CM)</span>
-                </div>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C</span> Inside length (cm)</span>
               </td>
             </tr>
             <tr>
@@ -223,3 +248,36 @@
     </div>
   </div>
 </div>
+
+<style>
+.size_table_product .type_name {
+  font-weight: 500;
+  background-color: #f8f9fa;
+}
+
+.size_table_product .alpha {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.size_table_product th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+.size_table_product td,
+.size_table_product th {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+</style>

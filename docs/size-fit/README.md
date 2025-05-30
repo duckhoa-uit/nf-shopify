@@ -12,6 +12,7 @@ This folder contains all documentation related to the Size Fit Modal feature.
 ### 📖 **Reference**
 - **[Data Examples](./data-examples.md)** - All JSON examples & templates
 - **[JSON Schema Reference](./json-schema-reference.md)** - Complete schema documentation
+- **[Size Recommendation Algorithm](./size-recommendation-algorithm.md)** - How size calculation works
 - **[Implementation Summary](./implementation-summary.md)** - Final implementation details
 - **[Troubleshooting Guide](./troubleshooting-guide.md)** - Debug & troubleshooting
 

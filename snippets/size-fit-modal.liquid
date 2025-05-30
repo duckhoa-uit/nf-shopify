@@ -1,10 +1,10 @@
 {% comment %}
   Size Fit Modal Component
-  
+
   Accepts:
   - product: {Object} product object
   - modal_id: {String} unique modal ID
-  
+
   Usage:
   {% render 'size-fit-modal', product: product, modal_id: 'size-fit-modal' %}
 {% endcomment %}
@@ -16,15 +16,17 @@
 <div id="{{ modal_id }}" class="size-fit-modal fixed inset-0 z-50 hidden">
   <!-- Modal Backdrop -->
   <div class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 transition-opacity" data-modal-close></div>
-  
+
   <!-- Modal Content -->
   <div class="modal-content fixed inset-4 md:inset-8 lg:inset-16 bg-white rounded-lg shadow-xl overflow-hidden flex flex-col">
     <!-- Modal Header -->
     <div class="modal-header flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
-      <h2 class="text-xl md:text-2xl font-bold text-gray-900">
-        Size Guide - Men's
-      </h2>
-      <button type="button" class="modal-close-btn p-2 hover:bg-gray-100 rounded-full transition-colors" data-modal-close>
+      <h2 class="text-xl md:text-2xl font-bold text-gray-900">Size Guide - Men's</h2>
+      <button
+        type="button"
+        class="modal-close-btn p-2 hover:bg-gray-100 rounded-full transition-colors"
+        data-modal-close
+      >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
@@ -38,10 +40,18 @@
         <div class="flex items-center space-x-4">
           <span class="text-sm font-medium text-gray-700">Unit:</span>
           <div class="flex bg-gray-100 rounded-lg p-1">
-            <button type="button" class="unit-btn px-3 py-1 text-sm font-medium rounded-md transition-colors active" data-unit="cm">
+            <button
+              type="button"
+              class="unit-btn px-3 py-1 text-sm font-medium rounded-md transition-colors active"
+              data-unit="cm"
+            >
               CM
             </button>
-            <button type="button" class="unit-btn px-3 py-1 text-sm font-medium rounded-md transition-colors" data-unit="in">
+            <button
+              type="button"
+              class="unit-btn px-3 py-1 text-sm font-medium rounded-md transition-colors"
+              data-unit="in"
+            >
               INCHES
             </button>
           </div>
@@ -50,13 +60,25 @@
 
       <!-- Tab Navigation -->
       <div class="tab-navigation flex border-b border-gray-200">
-        <button type="button" class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors active" data-tab="body-measurements">
+        <button
+          type="button"
+          class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors active"
+          data-tab="body-measurements"
+        >
           Body Measurements
         </button>
-        <button type="button" class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors" data-tab="product-measurements">
+        <button
+          type="button"
+          class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors"
+          data-tab="product-measurements"
+        >
           Product Measurements
         </button>
-        <button type="button" class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors" data-tab="size-recommender">
+        <button
+          type="button"
+          class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors"
+          data-tab="size-recommender"
+        >
           Size Recommender
         </button>
       </div>
@@ -93,31 +115,37 @@
 </div>
 
 <style>
-.size-fit-modal .tab-btn.active {
-  color: #1f2937;
-  border-bottom-color: #ef4444;
-}
+  .size-fit-modal .tab-btn.active {
+    color: #1f2937;
+    border-bottom-color: #ef4444;
+  }
 
-.size-fit-modal .unit-btn.active {
-  background-color: white;
-  color: #1f2937;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
+  .size-fit-modal .unit-btn.active {
+    background-color: white;
+    color: #1f2937;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
 
-.size-fit-modal .unit-btn:not(.active) {
-  color: #6b7280;
-}
+  .size-fit-modal .unit-btn:not(.active) {
+    color: #6b7280;
+  }
 
-.size-fit-modal .unit-btn:not(.active):hover {
-  color: #374151;
-}
+  .size-fit-modal .unit-btn:not(.active):hover {
+    color: #374151;
+  }
 
-.size-fit-modal .tab-panel {
-  animation: fadeIn 0.3s ease-in-out;
-}
+  .size-fit-modal .tab-panel {
+    animation: fadeIn 0.3s ease-in-out;
+  }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>
