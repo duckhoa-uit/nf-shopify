@@ -1,28 +1,69 @@
+{{ 'size-guide.css' | asset_url | stylesheet_tag }}
+
 {% comment %}
   Size Fit Body Measurements Component
 
   Accepts:
-  - measurements: {Object} body measurements data from metafields
+  - product: {Object} product object for classification
 
   Usage:
-  {% render 'size-fit-body-measurements', measurements: body_measurements %}
+  {% render 'size-fit-body-measurements', product: product %}
 {% endcomment %}
 
-{% assign measurements = measurements | default: blank %}
+{% comment %} Classification logic based on metafields {% endcomment %}
+{% assign is_shoes = false %}
+{% assign is_men = false %}
+{% assign kind_values = '' %}
+{% assign gender_values = '' %}
+
+{% comment %} Check features.kind for shoes {% endcomment %}
+{% if product.metafields.features.kind.value %}
+  {% for kind_item in product.metafields.features.kind.value %}
+    {% assign kind_name = kind_item.name | downcase %}
+    {% assign kind_values = kind_values | append: kind_name | append: ',' %}
+    {% if kind_name == 'shoes' %}
+      {% assign is_shoes = true %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% comment %} Check features.gender for men {% endcomment %}
+{% if product.metafields.features.gender.value %}
+  {% for gender_item in product.metafields.features.gender.value %}
+    {% assign gender_name = gender_item.name | downcase %}
+    {% assign gender_values = gender_values | append: gender_name | append: ',' %}
+    {% if gender_name == 'men' %}
+      {% assign is_men = true %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% comment %} Determine category {% endcomment %}
+{% if is_shoes %}
+  {% if is_men %}
+    {% assign category = 'hiking_shoes_men' %}
+  {% else %}
+    {% assign category = 'hiking_shoes_women' %}
+  {% endif %}
+{% else %}
+  {% if is_men %}
+    {% assign category = 'clothing_men' %}
+  {% else %}
+    {% assign category = 'clothing_women' %}
+  {% endif %}
+{% endif %}
 
 <div class="body-measurements-section">
   <!-- Table -->
   <div class="overflow-x-auto mb-8">
     <table class="w-full border-collapse">
-      <thead>
+      <tbody>
         <tr class="bg-gray-100">
-          <th class="p-3 border border-gray-300 text-left font-medium">Size</th>
-          {% if measurements %}
-            {% for size_data in measurements limit: 7 %}
-              {% assign size = size_data[0] %}
-              <th class="p-3 border border-gray-300 text-center font-medium">{{ size }}</th>
-            {% endfor %}
-          {% else %}
+          <th class="p-3 border border-gray-300 text-left font-medium">
+            {% if is_shoes %}Size{% else %}Size{% endif %}
+          </th>
+          {% comment %} Define sizes based on category {% endcomment %}
+          {% if category == 'clothing_men' %}
             <th class="p-3 border border-gray-300 text-center font-medium">S</th>
             <th class="p-3 border border-gray-300 text-center font-medium">M</th>
             <th class="p-3 border border-gray-300 text-center font-medium">L</th>
@@ -30,251 +71,578 @@
             <th class="p-3 border border-gray-300 text-center font-medium">XXL</th>
             <th class="p-3 border border-gray-300 text-center font-medium">3XL</th>
             <th class="p-3 border border-gray-300 text-center font-medium">4XL</th>
-          {% endif %}
-        </tr>
-      </thead>
-      <tbody>
-        <!-- EU Size Row -->
-        <tr>
-          <td class="p-3 border border-gray-300 font-medium">EU</td>
-          {% if measurements %}
-            {% for size_data in measurements limit: 7 %}
-              {% assign size_info = size_data[1] %}
-              <td class="p-3 border border-gray-300 text-center" data-measurement="eu" data-size="{{ size_data[0] }}">
-                {% if size_info.eu_size %}
-                  {{ size_info.eu_size }}
-                {% else %}
-                  -
-                {% endif %}
-              </td>
-            {% endfor %}
+          {% elsif category == 'clothing_women' %}
+            <th class="p-3 border border-gray-300 text-center font-medium">XS</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">S</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">M</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">L</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">XL</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">XXL</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">3XL</th>
+          {% elsif category == 'hiking_shoes_men' %}
+            <th class="p-3 border border-gray-300 text-center font-medium">40</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">41</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">42</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">43</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">44</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">45</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">46</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">47</th>
+          {% elsif category == 'hiking_shoes_women' %}
+            <th class="p-3 border border-gray-300 text-center font-medium">36</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">37</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">38</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">39</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">40</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">41</th>
           {% else %}
-            <td class="p-3 border border-gray-300 text-center">44-46</td>
-            <td class="p-3 border border-gray-300 text-center">48-50</td>
-            <td class="p-3 border border-gray-300 text-center">52-54</td>
-            <td class="p-3 border border-gray-300 text-center">56-58</td>
-            <td class="p-3 border border-gray-300 text-center">60-62</td>
-            <td class="p-3 border border-gray-300 text-center">64</td>
-            <td class="p-3 border border-gray-300 text-center">66</td>
+            {% comment %} Default fallback {% endcomment %}
+            <th class="p-3 border border-gray-300 text-center font-medium">S</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">M</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">L</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">XL</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">XXL</th>
+            <th class="p-3 border border-gray-300 text-center font-medium">3XL</th>
           {% endif %}
         </tr>
+        {% if is_shoes %}
+          <!-- For shoes: EU, UK, US, Foot Length rows -->
+          <!-- EU Size Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">EU</td>
+            {% if category == 'hiking_shoes_men' %}
+              <td class="p-3 border border-gray-300 text-center">40</td>
+              <td class="p-3 border border-gray-300 text-center">41</td>
+              <td class="p-3 border border-gray-300 text-center">42</td>
+              <td class="p-3 border border-gray-300 text-center">43</td>
+              <td class="p-3 border border-gray-300 text-center">44</td>
+              <td class="p-3 border border-gray-300 text-center">45</td>
+              <td class="p-3 border border-gray-300 text-center">46</td>
+              <td class="p-3 border border-gray-300 text-center">47</td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center">36</td>
+              <td class="p-3 border border-gray-300 text-center">37</td>
+              <td class="p-3 border border-gray-300 text-center">38</td>
+              <td class="p-3 border border-gray-300 text-center">39</td>
+              <td class="p-3 border border-gray-300 text-center">40</td>
+              <td class="p-3 border border-gray-300 text-center">41</td>
+            {% endif %}
+          </tr>
 
-        <!-- Chest Row -->
-        <tr>
-          <td class="p-3 border border-gray-300 font-medium">CHEST</td>
-          {% if measurements %}
-            {% for size_data in measurements limit: 7 %}
-              {% assign size_info = size_data[1] %}
-              <td class="p-3 border border-gray-300 text-center" data-measurement="chest" data-size="{{ size_data[0] }}">
-              {% if size_info.chest %}
-                <span class="measurement-value" data-cm="{{ size_info.chest.min }}-{{ size_info.chest.max }}" data-in="{{ size_info.chest.min | divided_by: 2.54 | round: 1 }}-{{ size_info.chest.max | divided_by: 2.54 | round: 1 }}">
-                  {{ size_info.chest.min }}-{{ size_info.chest.max }}
-                </span>
-              {% else %}
-                -
-              {% endif %}
-            </td>
-            {% endfor %}
-          {% else %}
-            <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
-              <span class="measurement-value" data-cm="86-94" data-in="33.9-37.0">86-94</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
-              <span class="measurement-value" data-cm="94-102" data-in="37.0-40.2">94-102</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
-              <span class="measurement-value" data-cm="102-110" data-in="40.2-43.3">102-110</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
-              <span class="measurement-value" data-cm="110-116" data-in="43.3-45.7">110-116</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
-              <span class="measurement-value" data-cm="116-128" data-in="45.7-50.4">116-128</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
-              <span class="measurement-value" data-cm="126-132" data-in="49.6-52.0">126-132</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
-              <span class="measurement-value" data-cm="132-140" data-in="52.0-55.1">132-140</span>
-            </td>
-          {% endif %}
-        </tr>
+          <!-- UK Size Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">UK</td>
+            {% if category == 'hiking_shoes_men' %}
+              <td class="p-3 border border-gray-300 text-center">6.5</td>
+              <td class="p-3 border border-gray-300 text-center">7</td>
+              <td class="p-3 border border-gray-300 text-center">8</td>
+              <td class="p-3 border border-gray-300 text-center">8.5</td>
+              <td class="p-3 border border-gray-300 text-center">9</td>
+              <td class="p-3 border border-gray-300 text-center">9.5</td>
+              <td class="p-3 border border-gray-300 text-center">11</td>
+              <td class="p-3 border border-gray-300 text-center">12</td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center">3.5</td>
+              <td class="p-3 border border-gray-300 text-center">4</td>
+              <td class="p-3 border border-gray-300 text-center">5</td>
+              <td class="p-3 border border-gray-300 text-center">6</td>
+              <td class="p-3 border border-gray-300 text-center">6.5</td>
+              <td class="p-3 border border-gray-300 text-center">7</td>
+            {% endif %}
+          </tr>
 
-        <!-- Waist Row -->
-        <tr>
-          <td class="p-3 border border-gray-300 font-medium">WAIST</td>
-          {% if measurements %}
-            {% for size_data in measurements limit: 7 %}
-              {% assign size_info = size_data[1] %}
-              <td class="p-3 border border-gray-300 text-center" data-measurement="waist" data-size="{{ size_data[0] }}">
-                {% if size_info.waist %}
-                  <span class="measurement-value" data-cm="{{ size_info.waist.min }}-{{ size_info.waist.max }}" data-in="{{ size_info.waist.min | divided_by: 2.54 | round: 1 }}-{{ size_info.waist.max | divided_by: 2.54 | round: 1 }}">
-                    {{ size_info.waist.min }}-{{ size_info.waist.max }}
-                  </span>
-                {% else %}
-                  -
-                {% endif %}
-              </td>
-            {% endfor %}
-          {% else %}
-            <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
-              <span class="measurement-value" data-cm="72-80" data-in="28.3-31.5">72-80</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
-              <span class="measurement-value" data-cm="80-88" data-in="31.5-34.6">80-88</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
-              <span class="measurement-value" data-cm="88-96" data-in="34.6-37.8">88-96</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
-              <span class="measurement-value" data-cm="96-104" data-in="37.8-40.9">96-104</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
-              <span class="measurement-value" data-cm="104-112" data-in="40.9-44.1">104-112</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
-              <span class="measurement-value" data-cm="112-120" data-in="44.1-47.2">112-120</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
-              <span class="measurement-value" data-cm="120-128" data-in="47.2-50.4">120-128</span>
-            </td>
-          {% endif %}
-        </tr>
+          <!-- US Size Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">US</td>
+            {% if category == 'hiking_shoes_men' %}
+              <td class="p-3 border border-gray-300 text-center">7</td>
+              <td class="p-3 border border-gray-300 text-center">7.5</td>
+              <td class="p-3 border border-gray-300 text-center">8.5</td>
+              <td class="p-3 border border-gray-300 text-center">9</td>
+              <td class="p-3 border border-gray-300 text-center">9.5</td>
+              <td class="p-3 border border-gray-300 text-center">10.5</td>
+              <td class="p-3 border border-gray-300 text-center">11.5</td>
+              <td class="p-3 border border-gray-300 text-center">12.5</td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center">6</td>
+              <td class="p-3 border border-gray-300 text-center">6.5</td>
+              <td class="p-3 border border-gray-300 text-center">7.5</td>
+              <td class="p-3 border border-gray-300 text-center">8.5</td>
+              <td class="p-3 border border-gray-300 text-center">9</td>
+              <td class="p-3 border border-gray-300 text-center">9.5</td>
+            {% endif %}
+          </tr>
 
-        <!-- Hip Row -->
-        <tr>
-          <td class="p-3 border border-gray-300 font-medium">HIP</td>
-          {% if measurements %}
-            {% for size_data in measurements limit: 7 %}
-              {% assign size_info = size_data[1] %}
-              <td class="p-3 border border-gray-300 text-center" data-measurement="hip" data-size="{{ size_data[0] }}">
-                {% if size_info.hip %}
-                  <span class="measurement-value" data-cm="{{ size_info.hip.min }}-{{ size_info.hip.max }}" data-in="{{ size_info.hip.min | divided_by: 2.54 | round: 1 }}-{{ size_info.hip.max | divided_by: 2.54 | round: 1 }}">
-                    {{ size_info.hip.min }}-{{ size_info.hip.max }}
-                  </span>
-                {% else %}
-                  -
-                {% endif %}
-              </td>
-            {% endfor %}
-          {% else %}
-            <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
-              <span class="measurement-value" data-cm="88-96" data-in="34.6-37.8">88-96</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
-              <span class="measurement-value" data-cm="96-104" data-in="37.8-40.9">96-104</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
-              <span class="measurement-value" data-cm="104-112" data-in="40.9-44.1">104-112</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
-              <span class="measurement-value" data-cm="112-120" data-in="44.1-47.2">112-120</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
-              <span class="measurement-value" data-cm="120-128" data-in="47.2-50.4">120-128</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
-              <span class="measurement-value" data-cm="128-136" data-in="50.4-53.5">128-136</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
-              <span class="measurement-value" data-cm="136-144" data-in="53.5-56.7">136-144</span>
-            </td>
-          {% endif %}
-        </tr>
+          <!-- Foot Length Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">Foot Length (cm)</td>
+            {% if category == 'hiking_shoes_men' %}
+              <td class="p-3 border border-gray-300 text-center">26.3</td>
+              <td class="p-3 border border-gray-300 text-center">27.0</td>
+              <td class="p-3 border border-gray-300 text-center">27.5</td>
+              <td class="p-3 border border-gray-300 text-center">28.0</td>
+              <td class="p-3 border border-gray-300 text-center">28.7</td>
+              <td class="p-3 border border-gray-300 text-center">29.5</td>
+              <td class="p-3 border border-gray-300 text-center">30.3</td>
+              <td class="p-3 border border-gray-300 text-center">31.0</td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center">23.5</td>
+              <td class="p-3 border border-gray-300 text-center">24.0</td>
+              <td class="p-3 border border-gray-300 text-center">24.5</td>
+              <td class="p-3 border border-gray-300 text-center">25.0</td>
+              <td class="p-3 border border-gray-300 text-center">26.0</td>
+              <td class="p-3 border border-gray-300 text-center">27.0</td>
+            {% endif %}
+          </tr>
 
-        <!-- Height Row -->
-        <tr>
-          <td class="p-3 border border-gray-300 font-medium">HEIGHT</td>
-          {% if measurements %}
-            {% for size_data in measurements limit: 7 %}
-              {% assign size_info = size_data[1] %}
-              <td class="p-3 border border-gray-300 text-center" data-measurement="height" data-size="{{ size_data[0] }}">
-                {% if size_info.height %}
-                  <span class="measurement-value" data-cm="{{ size_info.height.min }}-{{ size_info.height.max }}" data-in="{{ size_info.height.min | divided_by: 2.54 | round: 1 }}-{{ size_info.height.max | divided_by: 2.54 | round: 1 }}">
-                    {{ size_info.height.min }}-{{ size_info.height.max }}
-                  </span>
-                {% else %}
-                  -
-                {% endif %}
-              </td>
-            {% endfor %}
-          {% else %}
-            <td class="p-3 border border-gray-300 text-center" data-measurement="height">
-              <span class="measurement-value" data-cm="170-176" data-in="66.9-69.3">170-176</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="height">
-              <span class="measurement-value" data-cm="176-182" data-in="69.3-71.7">176-182</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="height">
-              <span class="measurement-value" data-cm="182-188" data-in="71.7-74.0">182-188</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="height">
-              <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="height">
-              <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="height">
-              <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="height">
-              <span class="measurement-value" data-cm="194-198" data-in="76.4-77.9">194-198</span>
-            </td>
-          {% endif %}
-        </tr>
+        {% else %}
+          <!-- For clothing: EU, Chest, Waist, Hip, Height, Inseam rows -->
+          <!-- EU Size Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">EU</td>
+            {% if category == 'clothing_men' %}
+              <td class="p-3 border border-gray-300 text-center">44-46</td>
+              <td class="p-3 border border-gray-300 text-center">48-50</td>
+              <td class="p-3 border border-gray-300 text-center">52-54</td>
+              <td class="p-3 border border-gray-300 text-center">56-58</td>
+              <td class="p-3 border border-gray-300 text-center">60-62</td>
+              <td class="p-3 border border-gray-300 text-center">64</td>
+              <td class="p-3 border border-gray-300 text-center">66</td>
+            {% elsif category == 'clothing_women' %}
+              <td class="p-3 border border-gray-300 text-center">32</td>
+              <td class="p-3 border border-gray-300 text-center">34-36</td>
+              <td class="p-3 border border-gray-300 text-center">38-40</td>
+              <td class="p-3 border border-gray-300 text-center">42-44</td>
+              <td class="p-3 border border-gray-300 text-center">46-48</td>
+              <td class="p-3 border border-gray-300 text-center">50-52</td>
+              <td class="p-3 border border-gray-300 text-center">54-56</td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center">44-46</td>
+              <td class="p-3 border border-gray-300 text-center">48-50</td>
+              <td class="p-3 border border-gray-300 text-center">52-54</td>
+              <td class="p-3 border border-gray-300 text-center">56-58</td>
+              <td class="p-3 border border-gray-300 text-center">60-62</td>
+              <td class="p-3 border border-gray-300 text-center">64</td>
+            {% endif %}
+          </tr>
 
-        <!-- Inseam Length Row -->
-        <tr>
-          <td class="p-3 border border-gray-300 font-medium">INSEAM LENGTH</td>
-          {% if measurements %}
-            {% for size_data in measurements limit: 7 %}
-              {% assign size_info = size_data[1] %}
-              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam" data-size="{{ size_data[0] }}">
-                {% if size_info.inseam_length %}
-                  <span class="measurement-value" data-cm="{{ size_info.inseam_length.min }}-{{ size_info.inseam_length.max }}" data-in="{{ size_info.inseam_length.min | divided_by: 2.54 | round: 1 }}-{{ size_info.inseam_length.max | divided_by: 2.54 | round: 1 }}">
-                    {{ size_info.inseam_length.min }}-{{ size_info.inseam_length.max }}
-                  </span>
-                {% else %}
-                  -
-                {% endif %}
+          <!-- Chest Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">CHEST</td>
+            {% if category == 'clothing_men' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="86-94" data-in="33.9-37.0">86-94</span>
               </td>
-            {% endfor %}
-          {% else %}
-            <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
-              <span class="measurement-value" data-cm="79-80" data-in="31.1-31.5">79-80</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
-              <span class="measurement-value" data-cm="81-82" data-in="31.9-32.3">81-82</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
-              <span class="measurement-value" data-cm="83-84" data-in="32.7-33.1">83-84</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
-              <span class="measurement-value" data-cm="85-86" data-in="33.5-33.9">85-86</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
-              <span class="measurement-value" data-cm="87-88" data-in="34.3-34.6">87-88</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
-              <span class="measurement-value" data-cm="89" data-in="35.0">89</span>
-            </td>
-            <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
-              <span class="measurement-value" data-cm="89" data-in="35.0">89</span>
-            </td>
-          {% endif %}
-        </tr>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="94-102" data-in="37.0-40.2">94-102</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="102-110" data-in="40.2-43.3">102-110</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="110-116" data-in="43.3-45.7">110-116</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="116-128" data-in="45.7-50.4">116-128</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="126-132" data-in="49.6-52.0">126-132</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="132-140" data-in="52.0-55.1">132-140</span>
+              </td>
+            {% elsif category == 'clothing_women' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="74-78" data-in="29.1-30.7">74-78</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="78-86" data-in="30.7-33.9">78-86</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="86-94" data-in="33.9-37.0">86-94</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="94-102" data-in="37.0-40.2">94-102</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="102-112" data-in="40.2-44.1">102-112</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="112-124" data-in="44.1-48.8">112-124</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="124-136" data-in="48.8-53.5">124-136</span>
+              </td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="86-94" data-in="33.9-37.0">86-94</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="94-102" data-in="37.0-40.2">94-102</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="102-110" data-in="40.2-43.3">102-110</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="110-116" data-in="43.3-45.7">110-116</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="116-128" data-in="45.7-50.4">116-128</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="chest">
+                <span class="measurement-value" data-cm="126-132" data-in="49.6-52.0">126-132</span>
+              </td>
+            {% endif %}
+          </tr>
+
+          <!-- Waist Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">WAIST</td>
+            {% if category == 'clothing_men' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="72-80" data-in="28.3-31.5">72-80</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="80-88" data-in="31.5-34.6">80-88</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="88-96" data-in="34.6-37.8">88-96</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="96-104" data-in="37.8-40.9">96-104</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="104-112" data-in="40.9-44.1">104-112</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="112-120" data-in="44.1-47.2">112-120</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="120-128" data-in="47.2-50.4">120-128</span>
+              </td>
+            {% elsif category == 'clothing_women' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="58-62" data-in="22.8-24.4">58-62</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="62-70" data-in="24.4-27.6">62-70</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="70-78" data-in="27.6-30.7">70-78</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="78-86" data-in="30.7-33.9">78-86</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="86-98" data-in="33.9-38.6">86-98</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="98-108" data-in="38.6-42.5">98-108</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="108-120" data-in="42.5-47.2">108-120</span>
+              </td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="72-80" data-in="28.3-31.5">72-80</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="80-88" data-in="31.5-34.6">80-88</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="88-96" data-in="34.6-37.8">88-96</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="96-104" data-in="37.8-40.9">96-104</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="104-112" data-in="40.9-44.1">104-112</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="waist">
+                <span class="measurement-value" data-cm="112-120" data-in="44.1-47.2">112-120</span>
+              </td>
+            {% endif %}
+          </tr>
+
+          <!-- Hip Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">HIP</td>
+            {% if category == 'clothing_men' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="88-96" data-in="34.6-37.8">88-96</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="96-104" data-in="37.8-40.9">96-104</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="104-112" data-in="40.9-44.1">104-112</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="112-120" data-in="44.1-47.2">112-120</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="120-128" data-in="47.2-50.4">120-128</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="128-136" data-in="50.4-53.5">128-136</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="136-144" data-in="53.5-56.7">136-144</span>
+              </td>
+            {% elsif category == 'clothing_women' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="82-86" data-in="32.3-33.9">82-86</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="86-94" data-in="33.9-37.0">86-94</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="94-102" data-in="37.0-40.2">94-102</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="102-110" data-in="40.2-43.3">102-110</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="110-120" data-in="43.3-47.2">110-120</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="120-128" data-in="47.2-50.4">120-128</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="128-140" data-in="50.4-55.1">128-140</span>
+              </td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="88-96" data-in="34.6-37.8">88-96</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="96-104" data-in="37.8-40.9">96-104</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="104-112" data-in="40.9-44.1">104-112</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="112-120" data-in="44.1-47.2">112-120</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="120-128" data-in="47.2-50.4">120-128</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="hip">
+                <span class="measurement-value" data-cm="128-136" data-in="50.4-53.5">128-136</span>
+              </td>
+            {% endif %}
+          </tr>
+
+          <!-- Height Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">HEIGHT</td>
+            {% if category == 'clothing_men' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="170-176" data-in="66.9-69.3">170-176</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="176-182" data-in="69.3-71.7">176-182</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="182-188" data-in="71.7-74.0">182-188</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="194-198" data-in="76.4-77.9">194-198</span>
+              </td>
+            {% elsif category == 'clothing_women' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="154-158" data-in="60.6-62.2">154-158</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="158-162" data-in="62.2-63.8">158-162</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="162-166" data-in="63.8-65.4">162-166</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="166-170" data-in="65.4-66.9">166-170</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="170-178" data-in="66.9-70.1">170-178</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="178-182" data-in="70.1-71.7">178-182</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="178-182" data-in="70.1-71.7">178-182</span>
+              </td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="170-176" data-in="66.9-69.3">170-176</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="176-182" data-in="69.3-71.7">176-182</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="182-188" data-in="71.7-74.0">182-188</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="height">
+                <span class="measurement-value" data-cm="188-194" data-in="74.0-76.4">188-194</span>
+              </td>
+            {% endif %}
+          </tr>
+
+          <!-- Inseam Length Row -->
+          <tr>
+            <td class="p-3 border border-gray-300 font-medium">INSEAM LENGTH</td>
+            {% if category == 'clothing_men' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="79-80" data-in="31.1-31.5">79-80</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="81-82" data-in="31.9-32.3">81-82</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="83-84" data-in="32.7-33.1">83-84</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="85-86" data-in="33.5-33.9">85-86</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="87-88" data-in="34.3-34.6">87-88</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="89" data-in="35.0">89</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="89" data-in="35.0">89</span>
+              </td>
+            {% elsif category == 'clothing_women' %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="79" data-in="31.1">79</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="80" data-in="31.5">80</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="81" data-in="31.9">81</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="81-82" data-in="31.9-32.3">81-82</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="83-84" data-in="32.7-33.1">83-84</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="85" data-in="33.5">85</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="85" data-in="33.5">85</span>
+              </td>
+            {% else %}
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="79-80" data-in="31.1-31.5">79-80</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="81-82" data-in="31.9-32.3">81-82</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="83-84" data-in="32.7-33.1">83-84</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="85-86" data-in="33.5-33.9">85-86</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="87-88" data-in="34.3-34.6">87-88</span>
+              </td>
+              <td class="p-3 border border-gray-300 text-center" data-measurement="inseam">
+                <span class="measurement-value" data-cm="89" data-in="35.0">89</span>
+              </td>
+            {% endif %}
+          </tr>
+        {% endif %}
       </tbody>
     </table>
   </div>
 
   <!-- How to Measure Section -->
-  <div class="measurement-guide-section mt-8">
-    <h3 class="text-lg font-bold mb-6">How to Measure your Body?</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-      <div><strong>CHEST:</strong> Measure around the fullest part of your chest</div>
-      <div><strong>WAIST:</strong> Measure around your natural waistline</div>
-      <div><strong>HIP:</strong> Measure around the fullest part of your hips</div>
-      <div><strong>HEIGHT:</strong> Measure from head to floor without shoes</div>
-    </div>
+  <div class="measurement-guide mb-10 mt-8">
+    {% if is_shoes %}
+      <h3 class="text-xl text-left mb-4 font-archivo-expanded">How to Measure the Product's Size?</h3>
+
+      <div class="measurement-content flex flex-col md:flex-row items-center gap-8">
+        <div class="measurement-instructions flex-1">
+          <div class="rte">
+            <ol>
+              <li>FOOT LENGTH</li>
+            </ol>
+            <p class="text-gray-600 mt-4">*Hiking shoes are sized according to the human foot</p>
+          </div>
+        </div>
+
+        <div class="measurement-figure flex-1 text-center">
+          {% if category == 'hiking_shoes_men' %}
+            <img
+              src="{{ 'hiking-shoe-sizing-man.png' | asset_url }}"
+              alt="How to Measure Foot Length - Men"
+              class="max-w-full h-auto"
+            >
+          {% elsif category == 'hiking_shoes_women' %}
+            <img
+              src="{{ 'hiking-shoe-sizing-woman.png' | asset_url }}"
+              alt="How to Measure Foot Length - Women"
+              class="max-w-full h-auto"
+            >
+          {% else %}
+            <img
+              src="{{ 'hiking-shoe-sizing-man.png' | asset_url }}"
+              alt="How to Measure Foot Length"
+              class="max-w-full h-auto"
+            >
+          {% endif %}
+        </div>
+      </div>
+
+    {% else %}
+      <h3 class="text-xl text-left mb-4 font-archivo-expanded">How to Measure your Body?</h3>
+
+      <div class="measurement-content flex flex-col md:flex-row items-center gap-8">
+        <div class="measurement-instructions flex-1">
+          <div class="rte">
+            <ol>
+              <li>CHEST</li>
+              <li>WAIST</li>
+              <li>HIP</li>
+              <li>HEIGHT</li>
+              <li>INSEAM LENGTH</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="measurement-figure flex-1 text-center">
+          {% if category == 'clothing_men' %}
+            <img src="{{ 'size-guide-man.png' | asset_url }}" alt="How to Measure Body - Men" class="max-w-full h-auto">
+          {% elsif category == 'clothing_women' %}
+            <img
+              src="{{ 'size-guide-woman.png' | asset_url }}"
+              alt="How to Measure Body - Women"
+              class="max-w-full h-auto"
+            >
+          {% else %}
+            <img src="{{ 'size-guide-man.png' | asset_url }}" alt="How to Measure Body" class="max-w-full h-auto">
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
   </div>
 </div>
