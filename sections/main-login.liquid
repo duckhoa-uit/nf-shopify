@@ -84,7 +84,7 @@
         {{ 'customer.recover_password.success' | t }}
       </div>
     {%- endif -%}
-    {%- form 'customer_login', novalidate: 'novalidate', class: 'flex flex-col' -%}
+    {%- form 'customer_login', novalidate: 'novalidate', class: 'flex flex-col gap-3' -%}
       {%- if form.errors -%}
         <div class="form__message" tabindex="-1" autofocus>
           <span class="visually-hidden">{{ 'accessibility.error' | t }} </span>

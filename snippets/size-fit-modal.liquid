@@ -87,11 +87,7 @@
       <div class="tab-content p-4 md:p-6">
         <!-- Body Measurements Tab -->
         <div id="body-measurements" class="tab-panel active">
-          {% if body_measurements %}
-            {% render 'size-fit-body-measurements', measurements: body_measurements %}
-          {% else %}
-            {% render 'size-fit-body-measurements-default' %}
-          {% endif %}
+          {% render 'size-fit-body-measurements', product: product %}
         </div>
 
         <!-- Product Measurements Tab -->
