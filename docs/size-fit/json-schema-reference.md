@@ -19,16 +19,13 @@
 ### Body Measurements Structure
 ```typescript
 interface BodyMeasurements {
-  gender: "men" | "women" | "unisex";
-  sizes: {
-    [sizeName: string]: {
-      eu_size?: string;
-      chest?: MeasurementRange;
-      waist?: MeasurementRange;
-      hip?: MeasurementRange;
-      height?: MeasurementRange;
-      inseam_length?: MeasurementRange;
-    }
+  [sizeName: string]: {
+    eu_size?: string;
+    chest?: MeasurementRange;
+    waist?: MeasurementRange;
+    hip?: MeasurementRange;
+    height?: MeasurementRange;
+    inseam_length?: MeasurementRange;
   }
 }
 
@@ -36,18 +33,21 @@ interface MeasurementRange {
   min: number; // in centimeters
   max: number; // in centimeters
 }
+
+// Gender is obtained from: product.metafields.features.gender.value[0].name
+// Values: "men" | "women" | "unisex"
 ```
 
 ### Product Measurements Structure
 ```typescript
 interface ProductMeasurements {
-  product_category: "top" | "bottom" | "dress" | "outerwear" | "underwear";
-  size_chart: {
-    [sizeName: string]: {
-      measurements: TopMeasurements | BottomMeasurements;
-    }
+  [sizeName: string]: {
+    measurements: TopMeasurements | BottomMeasurements;
   }
 }
+
+// Product category is obtained from: product.metafields.features.kind.value[0].name
+// Values: "top" | "bottom" | "dress" | "outerwear" | "underwear"
 
 interface TopMeasurements {
   chest_girth_half?: number;
@@ -96,15 +96,16 @@ interface BottomMeasurements {
 ## ✅ Validation Rules
 
 ### Required Fields
-- **Body Measurements**: `gender`, `sizes`
-- **Product Measurements**: `product_category`, `size_chart`
+- **Body Measurements**: At least one size entry (S, M, L, etc.)
+- **Product Measurements**: At least one size entry with measurements
+- **Product Metafields**: `features.gender` and `features.kind` must be set
 
 ### Data Constraints
 - All measurements must be positive numbers
 - `min` must be less than `max` in ranges
 - Size names should be standard (S, M, L, XL, etc.)
-- Gender must be: `men`, `women`, or `unisex`
-- Product category must be: `top`, `bottom`, `dress`, `outerwear`, or `underwear`
+- Gender (from features.gender): `men`, `women`, or `unisex`
+- Product category (from features.kind): `top`, `bottom`, `dress`, `outerwear`, or `underwear`
 
 ### Recommended Ranges
 - Chest: 60-200 cm

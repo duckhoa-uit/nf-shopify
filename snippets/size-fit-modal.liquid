@@ -114,6 +114,13 @@
   </div>
 </div>
 
+<script>
+  // Pass body measurements data to JavaScript for size recommendation
+  {% if body_measurements %}
+    window.sizeFitBodyMeasurements = {{ body_measurements | json }};
+  {% endif %}
+</script>
+
 <style>
   .size-fit-modal .tab-btn.active {
     color: #1f2937;

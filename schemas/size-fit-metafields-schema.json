@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Size Fit Metafields Schema",
   "description": "JSON Schema for Size Fit metafields in Shopify",
-  
+
   "definitions": {
     "measurementRange": {
       "type": "object",
@@ -21,7 +21,7 @@
       "required": ["min", "max"],
       "additionalProperties": false
     },
-    
+
     "sizeInfo": {
       "type": "object",
       "properties": {
@@ -53,7 +53,7 @@
       },
       "additionalProperties": false
     },
-    
+
     "productMeasurements": {
       "type": "object",
       "properties": {
@@ -105,7 +105,7 @@
       },
       "additionalProperties": false
     },
-    
+
     "sizeChart": {
       "type": "object",
       "properties": {
@@ -117,58 +117,32 @@
       "additionalProperties": false
     }
   },
-  
+
   "properties": {
     "bodyMeasurements": {
       "type": "object",
       "title": "Body Measurements Metafield (size_fit.body_measurements)",
-      "description": "Standard body measurements for size guide",
-      "properties": {
-        "gender": {
-          "type": "string",
-          "enum": ["men", "women", "unisex"],
-          "description": "Target gender for the measurements"
-        },
-        "sizes": {
-          "type": "object",
-          "description": "Size-specific body measurements",
-          "patternProperties": {
-            "^(XXS|XS|S|M|L|XL|XXL|3XL|4XL)$": {
-              "$ref": "#/definitions/sizeInfo"
-            }
-          },
-          "additionalProperties": false,
-          "minProperties": 1
+      "description": "Standard body measurements for size guide. Gender is obtained from product.metafields.features.gender",
+      "patternProperties": {
+        "^(XXS|XS|S|M|L|XL|XXL|3XL|4XL)$": {
+          "$ref": "#/definitions/sizeInfo"
         }
       },
-      "required": ["gender", "sizes"],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "minProperties": 1
     },
-    
+
     "productMeasurements": {
       "type": "object",
       "title": "Product Measurements Metafield (size_fit.measurements)",
-      "description": "Product-specific measurements for garments",
-      "properties": {
-        "product_category": {
-          "type": "string",
-          "enum": ["top", "bottom", "dress", "outerwear", "underwear"],
-          "description": "Category of the product for measurement display"
-        },
-        "size_chart": {
-          "type": "object",
-          "description": "Size-specific product measurements",
-          "patternProperties": {
-            "^(XXS|XS|S|M|L|XL|XXL|3XL|4XL)$": {
-              "$ref": "#/definitions/sizeChart"
-            }
-          },
-          "additionalProperties": false,
-          "minProperties": 1
+      "description": "Product-specific measurements for garments. Product category is obtained from product.metafields.features.kind",
+      "patternProperties": {
+        "^(XXS|XS|S|M|L|XL|XXL|3XL|4XL)$": {
+          "$ref": "#/definitions/sizeChart"
         }
       },
-      "required": ["product_category", "size_chart"],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "minProperties": 1
     }
   }
 }
