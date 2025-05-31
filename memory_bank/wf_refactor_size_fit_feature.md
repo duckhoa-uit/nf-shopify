@@ -44,6 +44,7 @@
 - SIMPLIFIED: Clean bullet points without detailed descriptions, matching original design
 - ENSURED: Explicitly handle tất cả 4 categories với proper fallbacks
 - MOVED: Size fit button từ sections/main-product.liquid sang line 60 trong snippets/product-variant-picker.liquid
+- CLEANED UP: Documentation - removed 9 intermediate files, kept only 4 essential files
 - Completed refactor successfully
 
 ## Things not done yet
