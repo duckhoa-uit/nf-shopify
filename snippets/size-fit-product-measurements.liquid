@@ -10,7 +10,11 @@
 {% endcomment %}
 
 {% assign measurements = measurements | default: blank %}
-{% assign product_category = measurements.product_category | default: 'top' %}
+{% comment %} Get product category from product metafields {% endcomment %}
+{% assign product_category = 'top' %}
+{% if product.metafields.features.kind.value.size > 0 %}
+  {% assign product_category = product.metafields.features.kind.value[0].name %}
+{% endif %}
 
 <div class="product-measurements-section">
   <!-- Description -->
@@ -20,20 +24,20 @@
   </div>
 
   <!-- Product Measurements Table -->
-  {% if measurements.size_chart %}
+  {% if measurements %}
     <div class="overflow-x-auto mb-8">
       <table class="w-full border-collapse size_table_product">
         <tbody>
           <!-- Size Header Row -->
           <tr>
-            {% for size_data in measurements.size_chart limit: 6 %}
+            {% for size_data in measurements limit: 6 %}
               {% assign size_name = size_data[0] %}
               <th class="p-3 border border-gray-300 text-center font-medium bg-gray-100">{{ size_name }}</th>
             {% endfor %}
           </tr>
 
           {% comment %} Calculate number of sizes for colspan {% endcomment %}
-          {% assign size_count = measurements.size_chart.size | default: 3 %}
+          {% assign size_count = measurements.size | default: 3 %}
           {% if size_count > 6 %}{% assign size_count = 6 %}{% endif %}
 
           {% if product_category == 'top' %}
@@ -46,7 +50,7 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements.size_chart limit: 6 %}
+              {% for size_data in measurements limit: 6 %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.chest_girth_half %}
@@ -67,7 +71,7 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements.size_chart limit: 6 %}
+              {% for size_data in measurements limit: 6 %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.bottom_girth_stretched_half %}
@@ -88,7 +92,7 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements.size_chart limit: 6 %}
+              {% for size_data in measurements limit: 6 %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.shoulder_point_to_point %}
@@ -109,7 +113,7 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements.size_chart limit: 6 %}
+              {% for size_data in measurements limit: 6 %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.center_back_length %}
@@ -130,7 +134,7 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements.size_chart limit: 6 %}
+              {% for size_data in measurements limit: 6 %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.shoulder_sleeve_length %}
@@ -151,7 +155,7 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements.size_chart limit: 6 %}
+              {% for size_data in measurements limit: 6 %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.sleeve_length %}
@@ -175,7 +179,7 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements.size_chart limit: 6 %}
+              {% for size_data in measurements limit: 6 %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.waist_girth %}
@@ -196,7 +200,7 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements.size_chart limit: 6 %}
+              {% for size_data in measurements limit: 6 %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.hip_girth %}
@@ -217,7 +221,7 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements.size_chart limit: 6 %}
+              {% for size_data in measurements limit: 6 %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.inside_length %}

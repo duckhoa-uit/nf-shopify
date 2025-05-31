@@ -17,8 +17,8 @@
       <thead>
         <tr class="bg-gray-100">
           <th class="p-3 border border-gray-300 text-left font-medium">Size</th>
-          {% if measurements.sizes %}
-            {% for size_data in measurements.sizes limit: 7 %}
+          {% if measurements %}
+            {% for size_data in measurements limit: 7 %}
               {% assign size = size_data[0] %}
               <th class="p-3 border border-gray-300 text-center font-medium">{{ size }}</th>
             {% endfor %}
@@ -37,8 +37,8 @@
         <!-- EU Size Row -->
         <tr>
           <td class="p-3 border border-gray-300 font-medium">EU</td>
-          {% if measurements.sizes %}
-            {% for size_data in measurements.sizes limit: 7 %}
+          {% if measurements %}
+            {% for size_data in measurements limit: 7 %}
               {% assign size_info = size_data[1] %}
               <td class="p-3 border border-gray-300 text-center" data-measurement="eu" data-size="{{ size_data[0] }}">
                 {% if size_info.eu_size %}
@@ -62,8 +62,8 @@
         <!-- Chest Row -->
         <tr>
           <td class="p-3 border border-gray-300 font-medium">CHEST</td>
-          {% if measurements.sizes %}
-            {% for size_data in measurements.sizes limit: 7 %}
+          {% if measurements %}
+            {% for size_data in measurements limit: 7 %}
               {% assign size_info = size_data[1] %}
               <td class="p-3 border border-gray-300 text-center" data-measurement="chest" data-size="{{ size_data[0] }}">
               {% if size_info.chest %}
@@ -103,8 +103,8 @@
         <!-- Waist Row -->
         <tr>
           <td class="p-3 border border-gray-300 font-medium">WAIST</td>
-          {% if measurements.sizes %}
-            {% for size_data in measurements.sizes limit: 7 %}
+          {% if measurements %}
+            {% for size_data in measurements limit: 7 %}
               {% assign size_info = size_data[1] %}
               <td class="p-3 border border-gray-300 text-center" data-measurement="waist" data-size="{{ size_data[0] }}">
                 {% if size_info.waist %}
@@ -144,8 +144,8 @@
         <!-- Hip Row -->
         <tr>
           <td class="p-3 border border-gray-300 font-medium">HIP</td>
-          {% if measurements.sizes %}
-            {% for size_data in measurements.sizes limit: 7 %}
+          {% if measurements %}
+            {% for size_data in measurements limit: 7 %}
               {% assign size_info = size_data[1] %}
               <td class="p-3 border border-gray-300 text-center" data-measurement="hip" data-size="{{ size_data[0] }}">
                 {% if size_info.hip %}
@@ -185,8 +185,8 @@
         <!-- Height Row -->
         <tr>
           <td class="p-3 border border-gray-300 font-medium">HEIGHT</td>
-          {% if measurements.sizes %}
-            {% for size_data in measurements.sizes limit: 7 %}
+          {% if measurements %}
+            {% for size_data in measurements limit: 7 %}
               {% assign size_info = size_data[1] %}
               <td class="p-3 border border-gray-300 text-center" data-measurement="height" data-size="{{ size_data[0] }}">
                 {% if size_info.height %}
@@ -226,8 +226,8 @@
         <!-- Inseam Length Row -->
         <tr>
           <td class="p-3 border border-gray-300 font-medium">INSEAM LENGTH</td>
-          {% if measurements.sizes %}
-            {% for size_data in measurements.sizes limit: 7 %}
+          {% if measurements %}
+            {% for size_data in measurements limit: 7 %}
               {% assign size_info = size_data[1] %}
               <td class="p-3 border border-gray-300 text-center" data-measurement="inseam" data-size="{{ size_data[0] }}">
                 {% if size_info.inseam_length %}

@@ -9,7 +9,7 @@ class SizeFitModal {
     this.modal = document.getElementById(modalId);
     this.currentUnit = 'cm';
     this.productData = null;
-    
+
     if (this.modal) {
       this.init();
     }
@@ -29,7 +29,7 @@ class SizeFitModal {
         e.preventDefault();
         this.openModal();
       }
-      
+
       if (e.target.matches('[data-modal-close]') || e.target.closest('[data-modal-close]')) {
         this.closeModal();
       }
@@ -55,17 +55,17 @@ class SizeFitModal {
     tabButtons.forEach(button => {
       button.addEventListener('click', () => {
         const targetTab = button.dataset.tab;
-        
+
         // Update active tab button
         tabButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
-        
+
         // Update active tab panel
         tabPanels.forEach(panel => {
           panel.classList.add('hidden');
           panel.classList.remove('active');
         });
-        
+
         const targetPanel = this.modal.querySelector(`#${targetTab}`);
         if (targetPanel) {
           targetPanel.classList.remove('hidden');
@@ -77,12 +77,12 @@ class SizeFitModal {
 
   initUnitConverter() {
     const unitButtons = this.modal.querySelectorAll('.unit-btn');
-    
+
     unitButtons.forEach(button => {
       button.addEventListener('click', () => {
         const unit = button.dataset.unit;
         this.switchUnit(unit);
-        
+
         // Update active button
         unitButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
@@ -92,15 +92,15 @@ class SizeFitModal {
 
   switchUnit(unit) {
     if (this.currentUnit === unit) return;
-    
+
     this.currentUnit = unit;
     const measurementValues = this.modal.querySelectorAll('.measurement-value');
     const unitLabels = this.modal.querySelectorAll('.unit-label');
-    
+
     measurementValues.forEach(element => {
       const cmValue = element.dataset.cm;
       const inValue = element.dataset.in;
-      
+
       if (unit === 'cm' && cmValue) {
         element.textContent = cmValue;
       } else if (unit === 'in' && inValue) {
@@ -154,11 +154,11 @@ class SizeFitModal {
           div.classList.remove('border-red-500', 'bg-red-50');
           div.classList.add('border-gray-200');
         });
-        
+
         const selectedDiv = option.querySelector('div');
         selectedDiv.classList.remove('border-gray-200');
         selectedDiv.classList.add('border-red-500', 'bg-red-50');
-        
+
         option.querySelector('input').checked = true;
       });
     });
@@ -189,7 +189,7 @@ class SizeFitModal {
     }
 
     this.showLoading();
-    
+
     try {
       const recommendation = await this.getSizeRecommendation(measurements);
       this.showRecommendation(recommendation);
@@ -215,29 +215,93 @@ class SizeFitModal {
   calculateBasicRecommendation(measurements) {
     // Basic size recommendation algorithm
     const { chest, waist, fit_preference } = measurements;
-    
+
     if (!chest || !waist) {
       throw new Error('Chest and waist measurements are required');
     }
 
-    // Sample size chart (should come from product metafields)
-    const sizeChart = {
-      'XS': { chest: { min: 82, max: 86 }, waist: { min: 68, max: 72 } },
-      'S': { chest: { min: 86, max: 94 }, waist: { min: 72, max: 80 } },
-      'M': { chest: { min: 94, max: 102 }, waist: { min: 80, max: 88 } },
-      'L': { chest: { min: 102, max: 110 }, waist: { min: 88, max: 96 } },
-      'XL': { chest: { min: 110, max: 118 }, waist: { min: 96, max: 104 } }
-    };
+    // Get size chart from product metafields (new schema structure)
+    const sizeChart = this.getSizeChartFromMetafields();
+
+    if (!sizeChart || Object.keys(sizeChart).length === 0) {
+      // Fallback to default size chart if no metafields available
+      const defaultSizeChart = {
+        'XS': { chest: { min: 82, max: 86 }, waist: { min: 68, max: 72 } },
+        'S': { chest: { min: 86, max: 94 }, waist: { min: 72, max: 80 } },
+        'M': { chest: { min: 94, max: 102 }, waist: { min: 80, max: 88 } },
+        'L': { chest: { min: 102, max: 110 }, waist: { min: 88, max: 96 } },
+        'XL': { chest: { min: 110, max: 118 }, waist: { min: 96, max: 104 } }
+      };
+      return this.processRecommendation(measurements, defaultSizeChart);
+    }
+
+    return this.processRecommendation(measurements, sizeChart);
+  }
+
+  getSizeChartFromMetafields() {
+    // Try to get body measurements from global window object or data attributes
+    // This would be set by the Liquid template when rendering the modal
+    const bodyMeasurementsData = window.sizeFitBodyMeasurements || this.getDataFromModal('body-measurements');
+
+    if (!bodyMeasurementsData) {
+      return null;
+    }
+
+    // Convert new schema structure to format expected by algorithm
+    const sizeChart = {};
+
+    Object.entries(bodyMeasurementsData).forEach(([size, measurements]) => {
+      if (measurements.chest && measurements.waist) {
+        sizeChart[size] = {
+          chest: measurements.chest,
+          waist: measurements.waist,
+          hip: measurements.hip || null,
+          height: measurements.height || null
+        };
+      }
+    });
+
+    return sizeChart;
+  }
+
+  getDataFromModal(tabId) {
+    // Try to extract data from the modal's data attributes or hidden elements
+    const tab = this.modal.querySelector(`#${tabId}`);
+    if (!tab) return null;
+
+    const dataElement = tab.querySelector('[data-measurements]');
+    if (dataElement) {
+      try {
+        return JSON.parse(dataElement.dataset.measurements);
+      } catch (e) {
+        console.warn('Failed to parse measurements data:', e);
+        return null;
+      }
+    }
+
+    return null;
+  }
+
+  processRecommendation(measurements, sizeChart) {
+    const { chest, waist, fit_preference } = measurements;
 
     let bestMatch = null;
     let bestScore = -1;
     const results = [];
 
     Object.entries(sizeChart).forEach(([size, ranges]) => {
-      const chestFit = this.calculateFitScore(chest, ranges.chest);
-      const waistFit = this.calculateFitScore(waist, ranges.waist);
+      // Handle both old and new schema structures
+      const chestRange = ranges.chest;
+      const waistRange = ranges.waist;
+
+      if (!chestRange || !waistRange) {
+        return; // Skip if essential measurements are missing
+      }
+
+      const chestFit = this.calculateFitScore(chest, chestRange);
+      const waistFit = this.calculateFitScore(waist, waistRange);
       const totalScore = (chestFit * 0.6) + (waistFit * 0.4); // Weighted score
-      
+
       results.push({
         size,
         score: totalScore,
@@ -284,16 +348,16 @@ class SizeFitModal {
   calculateFitScore(measurement, range) {
     const mid = (range.min + range.max) / 2;
     const tolerance = (range.max - range.min) / 2;
-    
+
     if (measurement >= range.min && measurement <= range.max) {
       return 100; // Perfect fit
     }
-    
+
     const distance = Math.min(
       Math.abs(measurement - range.min),
       Math.abs(measurement - range.max)
     );
-    
+
     return Math.max(0, 100 - (distance / tolerance) * 50);
   }
 
@@ -314,7 +378,7 @@ class SizeFitModal {
 
   showRecommendation(recommendation) {
     this.hideAllStates();
-    
+
     const resultsDiv = this.modal.querySelector('#recommendation-results');
     const sizeElement = resultsDiv.querySelector('#recommended-size');
     const confidenceElement = resultsDiv.querySelector('#confidence-score');
@@ -340,10 +404,10 @@ class SizeFitModal {
 
   showError(message) {
     this.hideAllStates();
-    
+
     const errorDiv = this.modal.querySelector('#recommendation-error');
     const messageElement = errorDiv.querySelector('#error-message');
-    
+
     messageElement.textContent = message;
     errorDiv.classList.remove('hidden');
   }
@@ -359,7 +423,7 @@ class SizeFitModal {
   openModal() {
     this.modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-    
+
     // Focus trap
     const focusableElements = this.modal.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -373,7 +437,7 @@ class SizeFitModal {
     this.modal.classList.add('hidden');
     document.body.style.overflow = '';
     this.hideAllStates();
-    
+
     // Reset form
     const form = this.modal.querySelector('#size-recommender-form');
     if (form) form.reset();
