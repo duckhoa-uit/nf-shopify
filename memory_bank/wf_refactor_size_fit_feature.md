@@ -43,6 +43,7 @@
 - ADDED: Category-specific figure images từ assets (size-guide-man/woman.png, hiking-shoe-sizing-man/woman.png)
 - SIMPLIFIED: Clean bullet points without detailed descriptions, matching original design
 - ENSURED: Explicitly handle tất cả 4 categories với proper fallbacks
+- MOVED: Size fit button từ sections/main-product.liquid sang line 60 trong snippets/product-variant-picker.liquid
 - Completed refactor successfully
 
 ## Things not done yet
