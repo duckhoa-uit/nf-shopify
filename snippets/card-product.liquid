@@ -131,26 +131,17 @@
             data-main-image-src="{{ main_image | image_url: width: 533 }}"
             data-main-image-srcset="{%- if main_image.width >= 360 -%}{{ main_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if main_image.width >= 533 -%}{{ main_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if main_image.width >= 720 -%}{{ main_image | image_url: width: 720 }} 720w,{%- endif -%}{{ main_image | image_url }} {{ main_image.width }}w"
           >
-            <img
-              id="main-image-{{ card_product.id }}"
-              srcset="
-                {%- if model_image.width >= 360 -%}{{ model_image | image_url: width: 360 }} 360w,{%- endif -%}
-                {%- if model_image.width >= 533 -%}{{ model_image | image_url: width: 533 }} 533w,{%- endif -%}
-                {%- if model_image.width >= 720 -%}{{ model_image | image_url: width: 720 }} 720w,{%- endif -%}
-                {{ model_image | image_url }} {{ model_image.width }}w
-              "
-              src="{{ model_image | image_url: width: 533 }}"
-              sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
-              alt="{{ model_image.alt | escape }}"
-              class="w-full h-auto object-cover aspect-square transition-opacity duration-300 ease-in-out"
-              {% unless lazy_load == false %}
-                loading="lazy"
-              {% endunless %}
-              width="{{ model_image.width }}"
-              height="{{ model_image.height }}"
-              data-original-src="{{ model_image | image_url: width: 533 }}"
-              data-original-srcset="{%- if model_image.width >= 360 -%}{{ model_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if model_image.width >= 533 -%}{{ model_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if model_image.width >= 720 -%}{{ model_image | image_url: width: 720 }} 720w,{%- endif -%}{{ model_image | image_url }} {{ model_image.width }}w"
-            >
+            <div id="main-image-{{ card_product.id }}"
+                 data-original-src="{{ model_image | image_url: width: 533 }}"
+                 data-original-srcset="{%- if model_image.width >= 360 -%}{{ model_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if model_image.width >= 533 -%}{{ model_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if model_image.width >= 720 -%}{{ model_image | image_url: width: 720 }} 720w,{%- endif -%}{{ model_image | image_url }} {{ model_image.width }}w">
+              {%- render 'optimized-image',
+                image: model_image,
+                sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+                loading: 'lazy',
+                class: 'w-full h-auto object-cover aspect-square transition-opacity duration-300 ease-in-out',
+                alt: model_image.alt
+              -%}
+            </div>
           </a>
 
         </div>
@@ -366,14 +357,13 @@
                   data-variant-image="{{ variant_image | image_url: width: 533 }}"
                   data-variant-image-srcset="{%- if variant_image.width >= 360 -%}{{ variant_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if variant_image.width >= 533 -%}{{ variant_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if variant_image.width >= 720 -%}{{ variant_image | image_url: width: 720 }} 720w,{%- endif -%}{{ variant_image | image_url }} {{ variant_image.width }}w"
                 >
-                  <img
-                    src="{{ variant_image | image_url: width: 80 }}"
-                    alt="{{ color }}"
-                    width="60"
-                    height="60"
-                    loading="lazy"
-                    class="w-full h-full object-cover"
-                  >
+                  {%- render 'optimized-image',
+                    image: variant_image,
+                    sizes: '80px',
+                    loading: 'lazy',
+                    class: 'w-full h-full object-cover',
+                    alt: color
+                  -%}
                 </a>
               {%- endif -%}
             {%- endfor -%}
@@ -440,12 +430,15 @@
       const productId = card.dataset.productId;
       if (!productId) return;
 
-      const mainImage = document.getElementById(`main-image-${productId}`);
+      const mainImageContainer = document.getElementById(`main-image-${productId}`);
+      if (!mainImageContainer) return;
+
+      const mainImage = mainImageContainer.querySelector('img');
       if (!mainImage) return;
 
       // Store original image data
-      const originalSrc = mainImage.dataset.originalSrc;
-      const originalSrcset = mainImage.dataset.originalSrcset;
+      const originalSrc = mainImageContainer.dataset.originalSrc;
+      const originalSrcset = mainImageContainer.dataset.originalSrcset;
 
       // Get main image data (with -H suffix) from data attributes
       const mainImageSrc = card.dataset.mainImageSrc;
@@ -477,12 +470,15 @@
       const productId = swatch.dataset.productId;
       const variantImage = swatch.dataset.variantImage;
       const variantImageSrcset = swatch.dataset.variantImageSrcset;
-      const mainImage = document.getElementById(`main-image-${productId}`);
+      const mainImageContainer = document.getElementById(`main-image-${productId}`);
 
-      if (mainImage && variantImage) {
+      if (mainImageContainer && variantImage) {
+        const mainImage = mainImageContainer.querySelector('img');
+        if (!mainImage) return;
+
         // Store original image data
-        const originalSrc = mainImage.dataset.originalSrc;
-        const originalSrcset = mainImage.dataset.originalSrcset;
+        const originalSrc = mainImageContainer.dataset.originalSrc;
+        const originalSrcset = mainImageContainer.dataset.originalSrcset;
 
         swatch.addEventListener('mouseenter', function () {
           // Change to variant image

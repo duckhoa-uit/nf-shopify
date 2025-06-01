@@ -230,33 +230,21 @@
             <div class="collection-card">
               <div class="collection-card__image-wrapper">
                 {%- if block.settings.image != blank -%}
-                  <img
-                    srcset="{%- if block.settings.image.width >= 360 -%}{{ block.settings.image | image_url: width: 360 }} 360w,{%- endif -%}
-                            {%- if block.settings.image.width >= 533 -%}{{ block.settings.image | image_url: width: 533 }} 533w,{%- endif -%}
-                            {%- if block.settings.image.width >= 720 -%}{{ block.settings.image | image_url: width: 720 }} 720w,{%- endif -%}
-                            {%- if block.settings.image.width >= 1066 -%}{{ block.settings.image | image_url: width: 1066 }} 1066w,{%- endif -%}
-                            {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
-                            {{ block.settings.image | image_url }} {{ block.settings.image.width }}w"
-                    src="{{ block.settings.image | image_url: width: 720 }}"
-                    sizes="(min-width: 1200px) 600px, (min-width: 990px) calc(50vw - 50px), (min-width: 750px) calc(50vw - 30px), 100vw"
-                    alt="{{ block.settings.image.alt | escape }}"
-                    loading="lazy"
-                    width="{{ block.settings.image.width }}"
-                    height="{{ block.settings.image.height }}"
-                    class="collection-card__image">
+                  {%- render 'optimized-image',
+                    image: block.settings.image,
+                    sizes: '(min-width: 1200px) 600px, (min-width: 990px) calc(50vw - 50px), (min-width: 750px) calc(50vw - 30px), 100vw',
+                    loading: 'lazy',
+                    class: 'collection-card__image',
+                    alt: block.settings.image.alt
+                  -%}
                 {%- elsif blockType == 'collection' and block.settings.collection != blank and block.settings.collection.featured_image != blank -%}
-                  <img
-                    srcset="{{ block.settings.collection.featured_image | image_url: width: 533 }} 533w,
-                            {{ block.settings.collection.featured_image | image_url: width: 720 }} 720w,
-                            {{ block.settings.collection.featured_image | image_url: width: 1066 }} 1066w,
-                            {{ block.settings.collection.featured_image | image_url: width: 1500 }} 1500w"
-                    src="{{ block.settings.collection.featured_image | image_url: width: 720 }}"
-                    sizes="(min-width: 1200px) 600px, (min-width: 990px) calc(50vw - 50px), (min-width: 750px) calc(50vw - 30px), 100vw"
-                    alt="{{ block.settings.collection.title | escape }}"
-                    height="{{ block.settings.collection.featured_image.height }}"
-                    width="{{ block.settings.collection.featured_image.width }}"
-                    loading="lazy"
-                    class="collection-card__image">
+                  {%- render 'optimized-image',
+                    image: block.settings.collection.featured_image,
+                    sizes: '(min-width: 1200px) 600px, (min-width: 990px) calc(50vw - 50px), (min-width: 750px) calc(50vw - 30px), 100vw',
+                    loading: 'lazy',
+                    class: 'collection-card__image',
+                    alt: block.settings.collection.title
+                  -%}
                 {%- else -%}
                   {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg collection-card__image' }}
                 {%- endif -%}

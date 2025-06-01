@@ -4,16 +4,37 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="">
+    <meta name="theme-color" content="{{ settings.colors_accent_1 | default: '#000000' }}">
     <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- comment -%} Accessibility improvements {%- endcomment -%}
+    <meta name="color-scheme" content="light">
+    <meta name="format-detection" content="telephone=no">
 
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
 
+    {%- comment -%} Resource hints for performance {%- endcomment -%}
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com">
+
     {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
+
+    {%- comment -%} Preload critical images {%- endcomment -%}
+    {%- if template.name == 'index' -%}
+      {%- for section in template.sections -%}
+        {%- if section.type == 'video' and section.settings.video.preview_image -%}
+          <link rel="preload" as="image" href="{{ section.settings.video.preview_image | image_url: width: 1920 }}">
+        {%- elsif section.type == 'image-banner' and section.settings.image -%}
+          <link rel="preload" as="image" href="{{ section.settings.image | image_url: width: 1920 }}">
+        {%- endif -%}
+      {%- endfor -%}
+    {%- elsif template.name == 'product' and product.featured_image -%}
+      <link rel="preload" as="image" href="{{ product.featured_image | image_url: width: 800 }}">
+    {%- endif -%}
 
     <title>
       {{ page_title }}
@@ -28,14 +49,10 @@
 
     {% render 'meta-tags' %}
 
+    {%- comment -%} Critical JavaScript - Only essential scripts in head {%- endcomment -%}
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'hyperhtml.min.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'checkbox-handler.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
@@ -276,12 +293,33 @@
                 }
     {% endstyle %}
 
-    {{ 'application.css' | asset_url | stylesheet_tag }}
-    {{ 'base.css' | asset_url | stylesheet_tag }}
-    {{ 'checkbox-field.css' | asset_url | stylesheet_tag }}
-    {{ 'intl-tel-input.min.css' | asset_url | stylesheet_tag }}
-    {{ 'phone-input.css' | asset_url | stylesheet_tag }}
+    {%- comment -%} Critical CSS inlined for performance {%- endcomment -%}
+    {{ 'critical.css' | asset_url | stylesheet_tag }}
+
+    {%- comment -%} Preload critical stylesheets {%- endcomment -%}
+    <link rel="preload" href="{{ 'application.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ 'base.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+    {%- comment -%} Non-critical CSS loaded asynchronously {%- endcomment -%}
+    <link rel="stylesheet" href="{{ 'checkbox-field.css' | asset_url }}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
+
+    {%- comment -%} Conditional CSS loading for phone input (only when needed) {%- endcomment -%}
+    {%- if template.name == 'customers/register' or template.name == 'customers/account' or template.name == 'customers/addresses' -%}
+      <link rel="stylesheet" href="{{ 'intl-tel-input.min.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="{{ 'phone-input.css' | asset_url }}" media="print" onload="this.media='all'">
+    {%- endif -%}
+
+    {%- comment -%} Fallback for browsers that don't support preload {%- endcomment -%}
+    <noscript>
+      {{ 'application.css' | asset_url | stylesheet_tag }}
+      {{ 'base.css' | asset_url | stylesheet_tag }}
+      {{ 'checkbox-field.css' | asset_url | stylesheet_tag }}
+      {%- if template.name == 'customers/register' or template.name == 'customers/account' or template.name == 'customers/addresses' -%}
+        {{ 'intl-tel-input.min.css' | asset_url | stylesheet_tag }}
+        {{ 'phone-input.css' | asset_url | stylesheet_tag }}
+      {%- endif -%}
+    </noscript>
 
     {%- if settings.cart_type == 'drawer' -%}
       {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
@@ -418,10 +456,29 @@
     <script src="{{ 'auth-modal.js' | asset_url }}" defer></script>
     <script src="{{ 'product-utils.module.js' | asset_url }}" type="module"></script>
 
-    {% comment %} International Phone Input {% endcomment %}
-    <script src="{{ 'intl-tel-input.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'intl-tel-input-utils.js' | asset_url }}" defer></script>
-    <script src="{{ 'phone-validation.js' | asset_url }}" defer></script>
+    {% comment %} International Phone Input - Load only when needed {% endcomment %}
+    {%- if template.name == 'customers/register' or template.name == 'customers/account' or template.name == 'customers/addresses' -%}
+      <script src="{{ 'intl-tel-input.min.js' | asset_url }}" defer></script>
+      <script src="{{ 'intl-tel-input-utils.js' | asset_url }}" defer></script>
+      <script src="{{ 'phone-validation.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    {%- comment -%} Non-critical JavaScript - Load at end of body {%- endcomment -%}
+    <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'checkbox-handler.js' | asset_url }}" defer="defer"></script>
+
+    {%- comment -%} Third-party libraries - Load only when needed {%- endcomment -%}
+    {%- unless template.name == 'product' -%}
+      {%- comment -%} hyperhtml only needed for specific components {%- endcomment -%}
+      <script src="{{ 'hyperhtml.min.js' | asset_url }}" defer="defer"></script>
+    {%- endunless -%}
+
+    {%- comment -%} Performance monitoring - Load in production only {%- endcomment -%}
+    {%- unless Shopify.designMode -%}
+      <script src="{{ 'performance-monitor.js' | asset_url }}" defer="defer"></script>
+    {%- endunless -%}
 
     {% comment %} Wishlist by Code Black Belt integration {% endcomment %}
 
