@@ -54,30 +54,13 @@
             <span class="svg-wrapper">{{ 'icon-play.svg' | inline_asset_content }}</span>
           </span>
 
-          {%- if media.alt != blank -%}
-            {{
-              media.preview_image
-              | image_url: width: 1200
-              | image_tag:
-                class: 'motion-reduce h-full w-full object-cover',
-                loading: 'lazy',
-                sizes: sizes,
-                widths: '218, 436, 770, 900, 1100, 1500, 2200, 3000',
-                alt: media.alt
-              | escape
-            }}
-          {%- else -%}
-            {{
-              media.preview_image
-              | image_url: width: 1200
-              | image_tag:
-                class: 'motion-reduce h-full w-full object-cover',
-                loading: 'lazy',
-                sizes: sizes,
-                widths: '218, 436, 770, 900, 1100, 1500, 2200, 3000'
-              | escape
-            }}
-          {%- endif -%}
+          {%- render 'optimized-image',
+            image: media.preview_image,
+            sizes: sizes,
+            loading: 'lazy',
+            class: 'motion-reduce h-full w-full object-cover',
+            alt: media.alt
+          -%}
         </button>
         <template>
           {% case media.media_type %}
@@ -167,32 +150,25 @@
         {% endif %}
 
         {% if lightbox %}
-          {{
-            media
-            | image_url: width: 1500
-            | image_tag: loading: lazy_load
-            | default: 'lazy',
+          <div id="ProductMedia-{{ media.id }}" data-fancybox="product-gallery" data-src="{{ media | image_url: width: 2000 }}">
+            {%- render 'optimized-image',
+              image: media,
+              sizes: sizes,
+              loading: 'lazy',
               class: 'media-item w-full h-full object-cover product-lightbox-img',
-              sizes: sizes,
-              widths: '218, 436, 770, 900, 1100, 1500, 2200, 3000',
-              alt: alt_text,
-              id: 'ProductMedia-'
-            | append: media.id, data-fancybox: 'product-gallery', data-src: media
-            | image_url: width: 2000
-          }}
+              alt: alt_text
+            -%}
+          </div>
         {% else %}
-          {{
-            media
-            | image_url: width: 1500
-            | image_tag: loading: lazy_load
-            | default: 'lazy',
-              class: 'media-item w-full h-full object-cover',
+          <div id="ProductMedia-{{ media.id }}">
+            {%- render 'optimized-image',
+              image: media,
               sizes: sizes,
-              widths: '218, 436, 770, 900, 1100, 1500, 2200, 3000',
-              alt: alt_text,
-              id: 'ProductMedia-'
-            | append: media.id
-          }}
+              loading: 'lazy',
+              class: 'media-item w-full h-full object-cover',
+              alt: alt_text
+            -%}
+          </div>
         {% endif %}
 
       {%- else -%}

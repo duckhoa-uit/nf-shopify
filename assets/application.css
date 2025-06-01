@@ -14,7 +14,6 @@
     --breakpoint-xl: 87.5rem;
     --container-md: 28rem;
     --container-2xl: 42rem;
-    --container-3xl: 48rem;
     --container-4xl: 56rem;
     --text-xs: 0.75rem;
     --text-xs--line-height: calc(1 / 0.75);
@@ -774,17 +773,11 @@
   .max-w-full {
     max-width: 100% !important;
   }
-  .max-w-md {
-    max-width: var(--container-md) !important;
-  }
   .min-w-12 {
     min-width: calc(var(--spacing) * 12) !important;
   }
   .flex-1 {
     flex: 1 !important;
-  }
-  .flex-shrink {
-    flex-shrink: 1 !important;
   }
   .flex-shrink-0 {
     flex-shrink: 0 !important;
@@ -841,12 +834,6 @@
   }
   .resize {
     resize: both !important;
-  }
-  .list-inside {
-    list-style-position: inside !important;
-  }
-  .list-decimal {
-    list-style-type: decimal !important;
   }
   .list-disc {
     list-style-type: disc !important;
@@ -933,20 +920,6 @@
       margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse))) !important;
     }
   }
-  .space-y-3 {
-    :where(& > :not(:last-child)) {
-      --tw-space-y-reverse: 0 !important;
-      margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse)) !important;
-      margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse))) !important;
-    }
-  }
-  .space-y-4 {
-    :where(& > :not(:last-child)) {
-      --tw-space-y-reverse: 0 !important;
-      margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse)) !important;
-      margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse))) !important;
-    }
-  }
   .space-y-6 {
     :where(& > :not(:last-child)) {
       --tw-space-y-reverse: 0 !important;
@@ -959,13 +932,6 @@
   }
   .gap-x-20 {
     column-gap: calc(var(--spacing) * 20) !important;
-  }
-  .space-x-3 {
-    :where(& > :not(:last-child)) {
-      --tw-space-x-reverse: 0 !important;
-      margin-inline-start: calc(calc(var(--spacing) * 3) * var(--tw-space-x-reverse)) !important;
-      margin-inline-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-x-reverse))) !important;
-    }
   }
   .space-x-4 {
     :where(& > :not(:last-child)) {
@@ -1072,10 +1038,6 @@
   .border-l {
     border-left-style: var(--tw-border-style) !important;
     border-left-width: 1px !important;
-  }
-  .border-l-4 {
-    border-left-style: var(--tw-border-style) !important;
-    border-left-width: 4px !important;
   }
   .border-l-\[8px\] {
     border-left-style: var(--tw-border-style) !important;
@@ -1696,10 +1658,6 @@
     --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1)) !important;
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
   }
-  .ring {
-    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor) !important;
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
-  }
   .outline {
     outline-style: var(--tw-outline-style) !important;
     outline-width: 1px !important;
@@ -1755,6 +1713,9 @@
   .outline-none {
     --tw-outline-style: none !important;
     outline-style: none !important;
+  }
+  .\[xml\:lang\] {
+    xml: lang !important;
   }
   .backface-hidden {
     backface-visibility: hidden !important;

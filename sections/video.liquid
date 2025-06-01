@@ -167,10 +167,17 @@
         >
           {%- if section.settings.hide_banner_content != true -%}
             {%- if poster != null -%}
+              {%- comment -%} Optimize poster image for LCP {%- endcomment -%}
               {{
                 poster
                 | image_url: width: 3840
-                | image_tag: sizes: sizes, widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840', alt: alt
+                | image_tag:
+                  sizes: sizes,
+                  widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+                  alt: alt,
+                  loading: 'eager',
+                  fetchpriority: 'high',
+                  decoding: 'async'
               }}
             {%- else -%}
               {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}

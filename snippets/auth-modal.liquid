@@ -100,7 +100,8 @@
               {{ 'customer.login_page.sign_in' | t | default: 'Sign In' }}
             </button>
 
-            <div class="oxi-social-login"></div>
+            {%- comment -%} Social login - Load only when modal is opened {%- endcomment -%}
+            <div class="oxi-social-login" data-lazy-load="true"></div>
 
             <div class="text-sm text-[#3D3D3D] mt-6 leading-5 text-left">
               {{
