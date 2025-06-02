@@ -70,7 +70,7 @@ class AccountForms {
       // Check if passwords match
       if (this.newPasswordField.value !== this.confirmPasswordField.value) {
         e.preventDefault();
-        const passwordMismatchMsg = 'New password and confirmation do not match!';
+        const passwordMismatchMsg = window.theme?.strings?.password_mismatch || 'New password and confirmation do not match!';
         alert(passwordMismatchMsg);
         return;
       }
@@ -96,12 +96,14 @@ class AccountForms {
 
     // Validate required fields
     if (firstNameInput && !firstNameInput.value.trim()) {
-      this.showValidationError('First name is required');
+      const errorMsg = window.theme?.strings?.first_name_required || 'First name is required';
+      this.showValidationError(errorMsg);
       isValid = false;
     }
 
     if (lastNameInput && !lastNameInput.value.trim()) {
-      this.showValidationError('Last name is required');
+      const errorMsg = window.theme?.strings?.last_name_required || 'Last name is required';
+      this.showValidationError(errorMsg);
       isValid = false;
     }
 
@@ -109,10 +111,12 @@ class AccountForms {
     if (emailInput) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailInput.value.trim()) {
-        this.showValidationError('Email is required');
+        const errorMsg = window.theme?.strings?.email_required || 'Email is required';
+        this.showValidationError(errorMsg);
         isValid = false;
       } else if (!emailRegex.test(emailInput.value.trim())) {
-        this.showValidationError('Please enter a valid email address');
+        const errorMsg = window.theme?.strings?.email_invalid || 'Please enter a valid email address';
+        this.showValidationError(errorMsg);
         isValid = false;
       }
     }

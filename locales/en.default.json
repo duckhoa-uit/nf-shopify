@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin language editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "general": {
     "404": {
@@ -118,6 +109,10 @@
     "cart": {
       "item_added": "Item added to your cart",
       "view": "View cart ({{ count }} items)"
+    },
+    "text_truncation": {
+      "read_more": "Read more",
+      "read_less": "Read less"
     }
   },
   "newsletter": {
@@ -193,6 +188,11 @@
   "onboarding": {
     "product_title": "Example product title",
     "collection_title": "Your collection's name"
+  },
+  "collections": {
+    "general": {
+      "all": "All"
+    }
   },
   "products": {
     "general": {
@@ -308,7 +308,18 @@
       "sort_button": "Sort",
       "sort_by_label": "Sort by:",
       "to": "To",
-      "clear_filter": "Remove filter"
+      "clear_filter": "Remove filter",
+      "product_count": "Viewed {{ viewed }} of {{ total }} products",
+      "view_more": "VIEW MORE",
+      "loading": "LOADING...",
+      "show_products": "SHOW PRODUCTS",
+      "sort_by": {
+        "manual": "Favourites",
+        "created_descending": "New Products",
+        "price_ascending": "Lowest price",
+        "price_descending": "Highest price"
+      },
+      "show_only_discounted": "Show only discounted products"
     }
   },
   "video": {
@@ -429,7 +440,8 @@
       }
     },
     "main_product": {
-      "inspiration": "Inspiration"
+      "inspiration": "Inspiration",
+      "main_elements": "Main elements"
     },
     "cart": {
       "title": "Shopping cart",
@@ -464,10 +476,25 @@
         "title": "Have an account?",
         "paragraph_html": "<a href=\"{{ link }}\" class=\"link underlined-link\">Log in</a> to check out faster."
       },
-      "item_added": "Item added to your cart"
+      "item_added": "Item added to your cart",
+      "view_cart": "View Cart",
+      "validating_stock": "Validating stock...",
+      "cart_updated_other_tab": "Cart updated from another tab",
+      "failed_remove_item": "Failed to remove item. Please try again.",
+      "failed_adjust_quantity": "Failed to adjust quantity. Please try again.",
+      "stock_validation_warning": "Stock Validation Warning",
+      "stock_validation_error": "We couldn't verify stock availability",
+      "stock_validation_continue": "Your order may be subject to stock availability. Do you want to continue?",
+      "cancel_checkout": "Cancel Checkout",
+      "continue_anyway": "Continue Anyway",
+      "cart_updated": "Cart Updated",
+      "cart_updated_review": "Your cart has been updated from another tab. Please review the changes before proceeding to checkout.",
+      "review_cart": "Review Cart",
+      "continue_to_checkout": "Continue to Checkout"
     },
     "footer": {
-      "payment": "Payment methods"
+      "payment": "Payment methods",
+      "contact_us": "Contact us"
     },
     "featured_blog": {
       "view_all": "View more blog posts",
@@ -545,8 +572,10 @@
   "customer": {
     "form_errors": {
       "error": "There was an error processing your request. Please try again.",
-      "first_name": "First name should contain at least 2 letters",
-      "last_name": "Last name should contain at least 2 letters"
+      "first_name": "First name is required",
+      "last_name": "Last name is required",
+      "email_required": "Email is required",
+      "email_invalid": "Please enter a valid email address"
     },
     "account": {
       "title": "Account",
@@ -585,7 +614,8 @@
       "info_update_success": "Basic information updated successfully!",
       "password_mismatch": "New password and confirmation do not match!",
       "password_update_success": "Password updated successfully!",
-      "password_changed": "Password updated successfully!"
+      "password_changed": "Password updated successfully!",
+      "addresses": "Addresses"
     },
     "account_fallback": "Account",
     "activate_account": {
@@ -729,7 +759,12 @@
       "recaptcha_message": "This site is protected by reCAPTCHA and the Google",
       "and": "and",
       "terms_of_service": "Terms of Service",
-      "apply": "apply."
+      "apply": "apply.",
+      "password_requirement_length": "At least 8 characters",
+      "password_requirement_lowercase": "At least one lowercase letter",
+      "password_requirement_uppercase": "At least one uppercase letter",
+      "password_requirement_number": "At least one number",
+      "password_requirement_special": "At least one special character"
     },
     "log_in": "Log in",
     "log_out": "Log out",
@@ -883,7 +918,8 @@
     "invalid_country_code": "Invalid country code",
     "too_short": "Phone number is too short",
     "too_long": "Phone number is too long",
-    "local_only": "Please enter an international format"
+    "local_only": "Please enter an international format",
+    "required": "Please enter a phone number"
   },
   "date_formats": {
     "month_day_year": "%B %d, %Y"

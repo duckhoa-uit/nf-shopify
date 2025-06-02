@@ -106,7 +106,7 @@ class AccountMobileMenu {
         // If we're on the addresses page, use the addresses text
         activeTabText = document.querySelector('.tab-link[href*="addresses"]')?.textContent.trim() ||
                         document.querySelector('.button-text')?.textContent.trim() ||
-                        'Addresses';
+                        (window.theme?.strings?.addresses || 'Addresses');
       } else if (activeTab) {
         // Get the text content of the active tab
         activeTabText = activeTab.textContent.trim();
@@ -125,7 +125,7 @@ class AccountMobileMenu {
         }
       } else {
         // Fallback to the current button text or default
-        activeTabText = this.mobileMenuButtonText?.textContent.trim() || 'Menu';
+        activeTabText = this.mobileMenuButtonText?.textContent.trim() || (window.theme?.strings?.menu || 'Menu');
       }
 
       // Update the button text

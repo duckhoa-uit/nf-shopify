@@ -8,7 +8,8 @@ class OrderReorder {
   constructor() {
     // Get translation strings from the DOM
     this.strings = {
-      reorderError: document.getElementById('orders')?.getAttribute('data-reorder-error') || 'Failed to reorder items. Please try again.'
+      reorderError: document.getElementById('orders')?.getAttribute('data-reorder-error') ||
+                   (window.theme?.strings?.reorder_error || 'Failed to reorder items. Please try again.')
     };
 
     this.initEventListeners();
