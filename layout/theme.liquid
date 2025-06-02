@@ -404,6 +404,37 @@
         too_long: {{ 'phone_validation.too_long' | t | default: 'Phone number is too long' | json }},
         local_only: {{ 'phone_validation.local_only' | t | default: 'Please enter an international format' | json }}
       };
+      window.theme.strings.phone_required = {{ 'phone_validation.required' | t | default: 'Please enter a phone number' | json }};
+
+      // Account form validation strings
+      window.theme.strings.password_mismatch = {{ 'customer.account.password_mismatch' | t | default: 'New password and confirmation do not match!' | json }};
+      window.theme.strings.first_name_required = {{ 'customer.form_errors.first_name' | t | default: 'First name is required' | json }};
+      window.theme.strings.last_name_required = {{ 'customer.form_errors.last_name' | t | default: 'Last name is required' | json }};
+      window.theme.strings.email_required = {{ 'customer.form_errors.email_required' | t | default: 'Email is required' | json }};
+      window.theme.strings.email_invalid = {{ 'customer.form_errors.email_invalid' | t | default: 'Please enter a valid email address' | json }};
+
+      // Cart and checkout strings
+      window.theme.strings.validating_stock = {{ 'sections.cart.validating_stock' | t | default: 'Validating stock...' | json }};
+      window.theme.strings.check_out = {{ 'sections.cart.checkout' | t | default: 'Check out' | json }};
+      window.theme.strings.cart_updated_other_tab = {{ 'sections.cart.cart_updated_other_tab' | t | default: 'Cart updated from another tab' | json }};
+      window.theme.strings.failed_remove_item = {{ 'sections.cart.failed_remove_item' | t | default: 'Failed to remove item. Please try again.' | json }};
+      window.theme.strings.failed_adjust_quantity = {{ 'sections.cart.failed_adjust_quantity' | t | default: 'Failed to adjust quantity. Please try again.' | json }};
+      window.theme.strings.stock_validation_warning = {{ 'sections.cart.stock_validation_warning' | t | default: 'Stock Validation Warning' | json }};
+      window.theme.strings.stock_validation_error = {{ 'sections.cart.stock_validation_error' | t | default: 'We couldn\'t verify stock availability' | json }};
+      window.theme.strings.stock_validation_continue = {{ 'sections.cart.stock_validation_continue' | t | default: 'Your order may be subject to stock availability. Do you want to continue?' | json }};
+      window.theme.strings.cancel_checkout = {{ 'sections.cart.cancel_checkout' | t | default: 'Cancel Checkout' | json }};
+      window.theme.strings.continue_anyway = {{ 'sections.cart.continue_anyway' | t | default: 'Continue Anyway' | json }};
+      window.theme.strings.cart_updated = {{ 'sections.cart.cart_updated' | t | default: 'Cart Updated' | json }};
+      window.theme.strings.cart_updated_review = {{ 'sections.cart.cart_updated_review' | t | default: 'Your cart has been updated from another tab. Please review the changes before proceeding to checkout.' | json }};
+      window.theme.strings.review_cart = {{ 'sections.cart.review_cart' | t | default: 'Review Cart' | json }};
+      window.theme.strings.continue_to_checkout = {{ 'sections.cart.continue_to_checkout' | t | default: 'Continue to Checkout' | json }};
+
+      // Account mobile menu strings
+      window.theme.strings.menu = {{ 'customer.account.menu' | t | default: 'Menu' | json }};
+      window.theme.strings.addresses = {{ 'customer.account.addresses' | t | default: 'Addresses' | json }};
+
+      // Order reorder strings
+      window.theme.strings.reorder_error = {{ 'customer.orders.reorder_error' | t | default: 'Failed to reorder items. Please try again.' | json }};
       window.theme.assets = {
         utilsScript: {{ 'intl-tel-input-utils.js' | asset_url | json }}
       };

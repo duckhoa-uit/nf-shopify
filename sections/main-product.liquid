@@ -936,7 +936,7 @@
 
           <div id="main-elements-section" class="product-info flex flex-col">
             {% if product.metafields.custom.main_elements.value != blank %}
-              <h3 class="text-lg font-bold leading-7 mb-4">Main elements</h3>
+              <h3 class="text-lg font-bold leading-7 mb-4">{{ 'sections.main_product.main_elements' | t }}</h3>
               <div class="flex flex-col main-elements-container">
                 {% for field in product.metafields.custom.main_elements.value %}
                   {% assign name = field.name %}
@@ -982,7 +982,7 @@
           id="description-toggle-button"
           class="button button--primary flex items-center gap-1 font-semibold text-sm leading-4 uppercase cursor-pointer"
         >
-          <span id="description-toggle-text" class="toggle-text">Show more</span>
+          <span id="description-toggle-text" class="toggle-text">{{ 'products.facets.show_more' | t }}</span>
           <span id="description-toggle-icon" class="toggle-icon rotate-90">
             {{- 'icon-chevron.svg' | inline_asset_content -}}
           </span>
@@ -1004,13 +1004,13 @@
             // Collapse
             descriptionGrid.style.maxHeight = '400px';
             gradientOverlay.style.display = 'block';
-            toggleText.textContent = 'Show more';
+            toggleText.textContent = '{{ 'products.facets.show_more' | t }}';
             toggleIcon.style.transform = 'rotate(0deg)';
           } else {
             // Expand
             descriptionGrid.style.maxHeight = descriptionGrid.scrollHeight + 'px';
             gradientOverlay.style.display = 'none';
-            toggleText.textContent = 'Show less';
+            toggleText.textContent = '{{ 'products.facets.show_less' | t }}';
             toggleIcon.style.transform = 'rotate(180deg)';
           }
           isExpanded = !isExpanded;

@@ -519,10 +519,10 @@
             <div class="mobile-facets__header">
               <div class="mobile-facets__header-inner">
                 <h2 class="mobile-facets__heading">
-                  FILTER
+                  {{ 'products.facets.filter_button' | t }}
                 </h2>
                 <span class="mobile-facets__close-text">
-                  Clear filter
+                  {{ 'products.facets.clear_filter' | t }}
                 </span>
               </div>
             </div>
@@ -731,7 +731,7 @@
                   class="button"
                   onclick="this.closest('.mobile-facets__wrapper').querySelector('summary').click()"
                 >
-                  SHOW PRODUCTS
+                  {{ 'products.facets.show_products' | t }}
                   <span class="svg-wrapper">
                     {{- 'chevron-right.svg' | inline_asset_content -}}
                   </span>
@@ -776,7 +776,7 @@
                     selected="selected"
                   {% endif %}
                 >
-                  Favourites
+                  {{ 'products.facets.sort_by.manual' | t }}
                 </option>
                 <option
                   value="created-descending"
@@ -784,7 +784,7 @@
                     selected="selected"
                   {% endif %}
                 >
-                  New Products
+                  {{ 'products.facets.sort_by.created_descending' | t }}
                 </option>
                 <option
                   value="price-ascending"
@@ -792,7 +792,7 @@
                     selected="selected"
                   {% endif %}
                 >
-                  Lowest price
+                  {{ 'products.facets.sort_by.price_ascending' | t }}
                 </option>
                 <option
                   value="price-descending"
@@ -800,7 +800,7 @@
                     selected="selected"
                   {% endif %}
                 >
-                  Highest price
+                  {{ 'products.facets.sort_by.price_descending' | t }}
                 </option>
               </select>
               <span class="svg-wrapper">
