@@ -88,7 +88,7 @@
                     href="{{ collection.url }}"
                     class="child-collection-link {% if request.path == collection.url %}active{% endif %}"
                   >
-                    <span class="child-collection-title">All</span>
+                    <span class="child-collection-title">{{ 'collections.general.all' | t }}</span>
                   </a>
 
                   {%- for child_collection in collections -%}
@@ -182,7 +182,7 @@
                                 selected="selected"
                               {% endif %}
                             >
-                              Favourites
+                              {{ 'products.facets.sort_by.manual' | t }}
                             </option>
                             <option
                               value="created-descending"
@@ -190,7 +190,7 @@
                                 selected="selected"
                               {% endif %}
                             >
-                              New Products
+                              {{ 'products.facets.sort_by.created_descending' | t }}
                             </option>
                             <option
                               value="price-ascending"
@@ -198,7 +198,7 @@
                                 selected="selected"
                               {% endif %}
                             >
-                              Lowest price
+                              {{ 'products.facets.sort_by.price_ascending' | t }}
                             </option>
                             <option
                               value="price-descending"
@@ -206,7 +206,7 @@
                                 selected="selected"
                               {% endif %}
                             >
-                              Highest price
+                              {{ 'products.facets.sort_by.price_descending' | t }}
                             </option>
                           </select>
                           <span class="svg-wrapper">
@@ -332,7 +332,7 @@
                     {% if viewed_items > paginate.items %}
                       {% assign viewed_items = paginate.items %}
                     {% endif %}
-                    Viewed {{ viewed_items }} of {{ paginate.items }} products
+                    {{ 'products.facets.product_count' | t: viewed: viewed_items, total: paginate.items }}
                   </p>
                   <div class="product-count-progress">
                     <div
@@ -345,7 +345,7 @@
                 {%- if paginate.pages > 1 -%}
                   {% if paginate.next.url %}
                     <div class="view-more-container">
-                      <button class="view-more-button" data-url="{{ paginate.next.url }}">VIEW MORE</button>
+                      <button class="view-more-button" data-url="{{ paginate.next.url }}">{{ 'products.facets.view_more' | t }}</button>
                     </div>
                   {% endif %}
                 {%- endif -%}
@@ -539,7 +539,7 @@
       if (!url) return;
 
       // Show loading state
-      viewMoreButton.textContent = 'LOADING...';
+      viewMoreButton.textContent = {{ 'products.facets.loading' | t | json }};
       viewMoreButton.disabled = true;
 
       // Preserve current filters and sorting
@@ -584,7 +584,7 @@
           if (nextPageButton?.dataset.url) {
             // Update current button with new URL
             viewMoreButton.dataset.url = nextPageButton.dataset.url;
-            viewMoreButton.textContent = 'VIEW MORE';
+            viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
             viewMoreButton.disabled = false;
           } else {
             viewMoreButton.style.display = 'none';
@@ -592,7 +592,7 @@
         })
         .catch(error => {
           console.error('Error loading more products:', error);
-          viewMoreButton.textContent = 'VIEW MORE';
+          viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
           viewMoreButton.disabled = false;
         });
     });

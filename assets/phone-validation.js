@@ -237,8 +237,9 @@ class PhoneInputHandler {
     if (!input.value.trim()) {
       // Empty is fine unless required
       if (input.hasAttribute('required')) {
-        input.setCustomValidity('Please enter a phone number');
-        this.showErrorMessage(input, 'Please enter a phone number');
+        const errorMsg = window.theme?.strings?.phone_required || 'Please enter a phone number';
+        input.setCustomValidity(errorMsg);
+        this.showErrorMessage(input, errorMsg);
         return false;
       }
       return true;

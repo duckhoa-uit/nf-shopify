@@ -225,7 +225,7 @@
                         </a>
                         <a href="https://northfinder.com/en/contact-us">
                           <span class="svg-wrapper size-4">{{ 'icon-contact.svg' | inline_asset_content }}</span>
-                          Contact us</a
+                          {{ 'footer.contact_us' | t }}</a
                         >
                       </div>
                       {%- if block.settings.show_social and has_social_icons -%}
@@ -302,7 +302,7 @@
     <div class="footer__content-bottom-wrapper page-width  w-full lg:max-w-[75rem]">
       <div class="flex flex-col md:flex-row items-center justify-between min-h-[3.75rem] w-full">
         <span class="text-sm text-[#3D3D3D] leading-[1.125rem]">
-          {{ 'footer.copyright' | t | default: '© Copyright Northfinder 2025 / All rights reserved' }}
+          {{ 'footer.copyright' | t }}
         </span>
         <div class="md:border-l border-[#E0E0E0] h-[1.8125rem] pl-2">
           <ul class="ml-2 flex *:inline-block gap-4 ">

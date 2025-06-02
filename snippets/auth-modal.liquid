@@ -66,7 +66,7 @@
                 <label
                   for="customer_email"
                 >
-                  E-mail
+                  {{ 'customer.login_page.email' | t }}
                 </label>
               </div>
             </div>
@@ -88,7 +88,7 @@
                 <label
                   for="customer_password"
                 >
-                  Password
+                  {{ 'customer.login_page.password' | t }}
                 </label>
               </div>
             </div>
@@ -261,11 +261,11 @@
                   }}
                 </div>
                 <ul class="mt-1 ml-4 list-disc">
-                  <li class="requirement-length">At least 8 characters</li>
-                  <li class="requirement-lowercase">At least one lowercase letter</li>
-                  <li class="requirement-uppercase">At least one uppercase letter</li>
-                  <li class="requirement-number">At least one number</li>
-                  <li class="requirement-special">At least one special character</li>
+                  <li class="requirement-length">{{ 'customer.register.password_requirement_length' | t }}</li>
+                  <li class="requirement-lowercase">{{ 'customer.register.password_requirement_lowercase' | t }}</li>
+                  <li class="requirement-uppercase">{{ 'customer.register.password_requirement_uppercase' | t }}</li>
+                  <li class="requirement-number">{{ 'customer.register.password_requirement_number' | t }}</li>
+                  <li class="requirement-special">{{ 'customer.register.password_requirement_special' | t }}</li>
                 </ul>
               </div>
             </div>

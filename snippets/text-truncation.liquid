@@ -20,7 +20,7 @@
     <div class="truncated-text" id="truncated-{{ id }}">
       {{ truncated_words }}...
       <button class="read-more-btn" onclick="toggleText('{{ id }}')">
-        Read more
+        {{ 'general.text_truncation.read_more' | t }}
         <span class="*:rotate-90 *:inline *:ml-1 *:size-3">
           {{- 'icon-chevron.svg' | inline_asset_content -}}
         </span>
@@ -29,7 +29,7 @@
     <div class="full-text" id="full-{{ id }}" style="display: none;">
       {{ text }}
       <button class="read-less-btn" onclick="toggleText('{{ id }}')">
-        Read less
+        {{ 'general.text_truncation.read_less' | t }}
         <span class="*:-rotate-90 *:inline *:ml-1 *:size-3">
           {{- 'icon-chevron.svg' | inline_asset_content -}}
         </span>

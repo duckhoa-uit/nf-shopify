@@ -140,21 +140,21 @@
           {% if section.settings.blog_link != blank %}
           <div>
             <a href="{{ section.settings.blog_link }}">
-              Blog
+              {{ 'general.navigation.blog' | t }}
             </a>
           </div>
           {% endif %}
           {% if section.settings.contact_link != blank %}
           <div>
             <a href="{{ section.settings.contact_link }}">
-              Contact
+              {{ 'general.navigation.contact' | t }}
             </a>
           </div>
           {% endif %}
           {% if section.settings.faq_link != blank %}
           <div>
             <a href="{{ section.settings.faq_link }}">
-              FAQ
+              {{ 'general.navigation.faq' | t }}
             </a>
           </div>
           {% endif %}
