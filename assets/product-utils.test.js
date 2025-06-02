@@ -240,4 +240,24 @@ describe("sortImagesByDisplayRules", () => {
     expect(sortedUrls).toContain("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_1.jpg");
     expect(sortedUrls).toContain("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_1.jpg");
   });
+
+  test("handles single image correctly - should not be hidden", () => {
+    const imageUrls = [
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-H.jpg"
+    ];
+
+    const sortedImages = sortImagesByDisplayRules(imageUrls);
+
+    // Check that we get exactly one image back
+    expect(sortedImages).toBeInstanceOf(Array);
+    expect(sortedImages.length).toBe(1);
+
+    // Check that the single image has the correct properties
+    expect(sortedImages[0]).toHaveProperty('url');
+    expect(sortedImages[0]).toHaveProperty('hidden');
+
+    // Most importantly: the single image should NOT be hidden
+    expect(sortedImages[0].hidden).toBe(false);
+    expect(sortedImages[0].url).toBe("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-H.jpg");
+  });
 });

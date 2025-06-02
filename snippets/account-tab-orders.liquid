@@ -376,7 +376,7 @@
                       <span class="price-value">{{ order.total_price | money }}</span>
                     </div>
 
-                    {% assign shipping_price = order.total_price | minus: order.subtotal_price | minus: order.tax_price %}
+                    {% assign shipping_price = order.shipping_price %}
                     {% if shipping_price > 0 %}
                       <div class="price-item">
                         <span class="price-label">{{ 'customer.orders.shipping' | t }}</span>

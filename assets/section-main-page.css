@@ -29,12 +29,6 @@ h1 {
   line-height: 1.5;
 }
 
-/* a {
-  color: black;
-  text-decoration: underline;
-  text-underline-offset: 0;
-} */
-
 ol {
   list-style-type: decimal;
 }
@@ -58,4 +52,17 @@ p {
 .rte a:hover {
   color: black;
   text-decoration-thickness: 0.1rem;
+}
+
+table:not([class]) {
+  box-shadow: none;
+}
+
+table:not([class]) td,
+table:not([class]) th {
+  border: 0;
+}
+
+table:not([class]) tr {
+  border-bottom: 1px solid #eaeaea;
 }
