@@ -1218,7 +1218,7 @@ deferred-media {
   --alpha-button-background: 0;
   --alpha-button-border: 0.2;
   background-color: transparent;
-  color: var(--color-gray-950);  /* #0f0f0f */
+  color: var(--color-gray-950); /* #0f0f0f */
   border: 0.0625rem solid var(--color-gray-950); /* 1px - #0f0f0f */
 }
 
@@ -1829,7 +1829,7 @@ details[open] > .share-button__fallback {
   transition:
     top var(--duration-short) ease,
     font-size var(--duration-short) ease;
-  color: var(--color-gray-700);  /* #666666 */
+  color: var(--color-gray-700); /* #666666 */
   line-height: 1.125;
   z-index: 2;
 }
@@ -1914,19 +1914,19 @@ input[type="checkbox"]:focus {
 input[type="checkbox"] {
   display: inline-block;
   width: auto;
-  border: 1px solid var(--color-gray-300);  /* #ebebeb */
+  border: 1px solid var(--color-gray-300); /* #ebebeb */
   padding: 0.5rem 0.5rem;
   position: relative;
   -webkit-appearance: none;
   cursor: pointer;
-  background-color: var(--color-white);  /* #ffffff */
+  background-color: var(--color-white); /* #ffffff */
   border-radius: 0.1875rem;
 }
 
 input[type="checkbox"]:checked {
-  background-color: var(--color-gray-950);  /* #0f0f0f */
-  border-color: var(--color-gray-950);  /* #0f0f0f */
-  color: var(--color-white);  /* #ffffff */
+  background-color: var(--color-gray-950); /* #0f0f0f */
+  border-color: var(--color-gray-950); /* #0f0f0f */
+  color: var(--color-white); /* #ffffff */
 }
 
 input[type="checkbox"]:checked + label a {
@@ -2195,7 +2195,7 @@ input[type="checkbox"]:checked + label a {
 
 .cart-count-bubble {
   position: absolute;
-  background-color: var(--color-accent);  /* #ec0009 */
+  background-color: var(--color-accent); /* #ec0009 */
   color: rgb(var(--color-base-button-text));
   min-height: 1.125rem;
   min-width: 1.125rem;
@@ -2772,7 +2772,7 @@ details[open] .modal-overlay {
 details[open] .modal-overlay::after {
   position: absolute;
   content: "";
-  background-color: var(--color-gray-950);  /* #0f0f0f */
+  background-color: var(--color-gray-950); /* #0f0f0f */
   opacity: 0.4;
   top: 100%;
   left: 0;
@@ -3301,16 +3301,16 @@ details-disclosure > details {
 }
 
 .rte a {
-  color: black;
+  color: rgba(var(--color-base-link), var(--alpha-link));
   text-underline-offset: 0.3rem;
   text-decoration-thickness: 0.0625rem;
   transition: text-decoration-thickness var(--duration-short) ease;
 }
 
-/* .rte a:hover {
+.rte a:hover {
   color: rgb(var(--color-base-link));
   text-decoration-thickness: 0.2rem;
-} */
+}
 
 .rte blockquote {
   display: inline-flex;
