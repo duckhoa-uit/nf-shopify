@@ -29,11 +29,11 @@ h1 {
   line-height: 1.5;
 }
 
-a {
+/* a {
   color: black;
   text-decoration: underline;
   text-underline-offset: 0;
-}
+} */
 
 ol {
   list-style-type: decimal;
@@ -41,4 +41,17 @@ ol {
 table:not([class]),
 p {
   font-size: 1rem;
+}
+
+.rte a {
+  color: black;
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  text-decoration-thickness: 0.0625rem;
+  transition: text-decoration-thickness var(--duration-short) ease;
+}
+
+.rte a:hover {
+  color: black;
+  text-decoration-thickness: 0.1rem;
 }
