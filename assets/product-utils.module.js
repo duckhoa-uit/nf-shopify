@@ -363,7 +363,8 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
     let visibleCount = 8; // Maximum of 8 images
     if (groupedImages[key].length < 8) {
       // If we have fewer than 8 images, round down to the nearest even number
-      visibleCount = Math.floor(groupedImages[key].length / 2) * 2;
+      // But ensure we always show at least 1 image
+      visibleCount = Math.max(1, Math.floor(groupedImages[key].length / 2) * 2);
     }
 
     groupedImages[key].forEach((img, index) => {
