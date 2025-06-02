@@ -68,12 +68,12 @@
           {%- endfor -%}
 
           <div class="cart-notification__item-property">
-            <span class="cart-notification__item-property-name">Quantity:</span>
+            <span class="cart-notification__item-property-name">{{ 'products.product.quantity.label' | t }}:</span>
             <span class="cart-notification__item-property-value">{{ item.quantity }}</span>
           </div>
 
           <div class="cart-notification__item-property">
-            <span class="cart-notification__item-property-name">Price:</span>
+            <span class="cart-notification__item-property-name">{{ 'products.product.price.regular_price' | t }}:</span>
             <span class="cart-notification__item-price">{{ item.final_line_price | money }}</span>
           </div>
         </div>

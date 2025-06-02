@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin language editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "general": {
     "404": {
@@ -29,24 +20,25 @@
       "password_link": "Mit Passwort einloggen"
     },
     "social": {
+      "share_on_twitter": "Twittern",
+      "share_on_facebook": "Teilen",
+      "share_on_pinterest": "Pinnen",
       "alt_text": {
         "share_on_facebook": "Auf Facebook teilen",
-        "share_on_twitter": "Auf X teilen",
+        "share_on_twitter": "Auf Twitter twittern",
         "share_on_pinterest": "Auf Pinterest pinnen"
       },
       "links": {
-        "twitter": "X (Twitter)",
-        "facebook": "Facebook",
-        "pinterest": "Pinterest",
         "instagram": "Instagram",
-        "tumblr": "Tumblr",
-        "snapchat": "Snapchat",
+        "facebook": "Facebook",
         "youtube": "YouTube",
-        "vimeo": "Vimeo",
-        "tiktok": "TikTok"
-      },
-      "share_on_facebook": "Aktie",
-      "share_on_pinterest": "Pin es"
+        "tiktok": "TikTok",
+        "twitter": "Twitter",
+        "pinterest": "Pinterest",
+        "snapchat": "Snapchat",
+        "tumblr": "Tumblr",
+        "vimeo": "Vimeo"
+      }
     },
     "continue_shopping": "Weiter shoppen",
     "pagination": {
@@ -72,7 +64,11 @@
     "cart": {
       "view": "Warenkorb ansehen ({{ count }})",
       "item_added": "Artikel wurde in den Warenkorb gelegt",
-      "view_empty_cart": "Warenkorb ansehen"
+      "view_empty_cart": "Warenkorb ansehen",
+      "coupon": {
+        "placeholder": "Code"
+      },
+      "save_for_later": "Für später speichern"
     },
     "share": {
       "copy_to_clipboard": "Link kopieren",
@@ -118,6 +114,10 @@
     "filters": {
       "show_more": "Mehr anzeigen",
       "show_less": "Weniger anzeigen"
+    },
+    "text_truncation": {
+      "read_more": "Mehr lesen",
+      "read_less": "Weniger lesen"
     }
   },
   "newsletter": {
@@ -167,18 +167,8 @@
       "posted_in": "Veröffentlicht in",
       "read_more": "Mehr lesen"
     },
-    "main_blog": {
-      "search_placeholder": "Suche nach Artikeln",
-      "all_articles": "Alle Artikel",
-      "view_more": "Mehr anzeigen",
-      "no_results": "Es wurden keine Artikel gefunden, die Ihren Suchkriterien entsprechen.",
-      "categories": {
-        "adventure": "Abenteuer",
-        "tips": "Tipps",
-        "gear": "Gang"
-      }
-    },
     "comments": {
+      "name": "Name",
       "title": "Hinterlasse einen Kommentar",
       "email": "E-Mail",
       "message": "Nachricht",
@@ -189,6 +179,18 @@
       "comments_with_count": {
         "one": "{{ count }} Kommentar",
         "other": "{{ count }} Kommentare"
+      }
+    },
+    "main_blog": {
+      "search_placeholder": "Suche nach Artikeln",
+      "all_articles": "Alle Artikel",
+      "view_more": "Mehr anzeigen",
+      "no_results": "Es wurden keine Artikel gefunden, die Ihren Suchkriterien entsprechen.",
+      "categories": {
+        "adventure": "Abenteuer",
+        "tips": "Tipps",
+        "gear": "Gang",
+        "skialp": "Skialp"
       }
     }
   },
@@ -276,7 +278,8 @@
       "add_to_wishlist": "Zu Favoriten hinzufügen",
       "related_products": "Das könnte Ihnen auch gefallen",
       "wishlist": "Wunschliste",
-      "load_video": "Video in der Galerieansicht laden"
+      "load_video": "Video in der Galerieansicht laden",
+      "new": "Neu"
     },
     "modal": {
       "label": "Medien-Galerie"
@@ -294,10 +297,7 @@
         "other": "{{ count }} ausgewählt"
       },
       "max_price": "Der höchste Preis ist {{ price }}",
-      "product_count": {
-        "one": "{{ product_count }} von {{ count }} Produkt",
-        "other": "{{ product_count }} von {{ count }} Produkten"
-      },
+      "product_count": "{{ viewed }} von {{ total }} Produkten angezeigt",
       "product_count_simple": {
         "one": "{{ count }} Produkt",
         "other": "{{ count }} Produkte"
@@ -314,11 +314,26 @@
       "hide_filters": "Filter ausblenden",
       "product_count_status": "{{ viewed_count }} von {{ total_count }} Produkten angesehen",
       "products_per_page": "Zeigen:",
-      "remove_filter": "Filter entfernen {{ value }}"
+      "remove_filter": "Filter entfernen {{ value }}",
+      "view_more": "MEHR ANZEIGEN",
+      "loading": "LÄDT...",
+      "show_products": "PRODUKTE ANZEIGEN",
+      "sort_by": {
+        "manual": "Favoriten",
+        "created_descending": "Neue Produkte",
+        "price_ascending": "Niedrigster Preis",
+        "price_descending": "Höchster Preis"
+      },
+      "show_only_discounted": "Nur reduzierte Produkte anzeigen"
     },
     "general": {
       "view_more": "Mehr anzeigen",
       "view_all": "Alle Produkte"
+    }
+  },
+  "collections": {
+    "general": {
+      "all": "Alle"
     }
   },
   "templates": {
@@ -413,10 +428,26 @@
       "taxes_at_checkout_shipping_at_checkout_without_policy": "Steuern, Rabatte und Versand werden beim Checkout berechnet.",
       "remove": "Entfernen",
       "summary": "Zusammenfassung",
-      "item_added": "Artikel zum Warenkorb hinzugefügt"
+      "item_added": "Artikel zum Warenkorb hinzugefügt",
+      "view_cart": "Warenkorb ansehen",
+      "validating_stock": "Lagerbestand wird überprüft...",
+      "cart_updated_other_tab": "Warenkorb von anderem Tab aktualisiert",
+      "failed_remove_item": "Artikel konnte nicht entfernt werden. Bitte versuchen Sie es erneut.",
+      "failed_adjust_quantity": "Menge konnte nicht angepasst werden. Bitte versuchen Sie es erneut.",
+      "stock_validation_warning": "Lagerbestand-Validierungswarnung",
+      "stock_validation_error": "Lagerbestand konnte nicht überprüft werden",
+      "stock_validation_continue": "Ihre Bestellung kann der Lagerverfügbarkeit unterliegen. Möchten Sie fortfahren?",
+      "cancel_checkout": "Checkout abbrechen",
+      "continue_anyway": "Trotzdem fortfahren",
+      "cart_updated": "Warenkorb aktualisiert",
+      "cart_updated_review": "Ihr Warenkorb wurde von einem anderen Tab aktualisiert. Bitte überprüfen Sie die Änderungen, bevor Sie zur Kasse gehen.",
+      "review_cart": "Warenkorb überprüfen",
+      "continue_to_checkout": "Zur Kasse gehen"
     },
     "footer": {
-      "payment": "Zahlungsmethoden"
+      "payment": "Zahlungsmethoden",
+      "copyright": "© Copyright Northfinder 2025 / Alle Rechte vorbehalten",
+      "contact_us": "Kontaktiere uns"
     },
     "featured_blog": {
       "view_all": "Alle anzeigen",
@@ -500,6 +531,9 @@
           "options__2": {
             "label": "Klein"
           },
+          "options__3": {
+            "label": "Mittel"
+          },
           "options__4": {
             "label": "Groß"
           }
@@ -532,6 +566,10 @@
     },
     "main-cart-items": {
       "name": "Warenkorbartikel"
+    },
+    "main_product": {
+      "inspiration": "Inspiration",
+      "main_elements": "Hauptelemente"
     }
   },
   "localization": {
@@ -571,7 +609,18 @@
       "confirm_password": "Neues Passwort bestätigen",
       "change_password": "Neues Passwort festlegen",
       "save": "Speichern",
-      "wishlist_empty": "Sie haben noch keine Produkte in Ihrer Favoritenliste."
+      "wishlist_empty": "Sie haben noch keine Produkte in Ihrer Favoritenliste.",
+      "password_mismatch": "Neues Passwort und Bestätigung stimmen nicht überein!",
+      "menu": "Menü",
+      "account_settings": "Kontoeinstellungen",
+      "bonus_amount": "48,64 €",
+      "delete_account": "Konto löschen",
+      "delete_confirm": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "delete_success": "Antrag auf Kontolöschung eingereicht.",
+      "info_update_success": "Grundlegende Informationen erfolgreich aktualisiert!",
+      "password_changed": "Passwort erfolgreich aktualisiert!",
+      "password_update_success": "Passwort erfolgreich aktualisiert!",
+      "settings_description": "Sie können Ihr Konto und alle zugehörigen Daten löschen. Diese Aktion kann nicht rückgängig gemacht werden."
     },
     "account_fallback": "Konto",
     "activate_account": {
@@ -603,7 +652,22 @@
       "cancel": "Abbrechen",
       "edit": "Bearbeiten",
       "delete": "Löschen",
-      "delete_confirm": "Bist du sicher, dass du diese Adresse löschen möchtest?"
+      "delete_confirm": "Bist du sicher, dass du diese Adresse löschen möchtest?",
+      "add_success": "Adresse erfolgreich hinzugefügt",
+      "address_min_length": "Die Adresse sollte mindestens 5 Zeichen lang sein",
+      "billing_address": "Rechnungsadresse",
+      "city_min_length": "Der Stadtname sollte mindestens 2 Zeichen enthalten",
+      "company_id": "Firmen-ID",
+      "delivery_address": "Lieferadresse",
+      "email": "E-Mail",
+      "error": "Bei der Bearbeitung Ihrer Anfrage ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+      "first_name_min_length": "Der Vorname sollte mindestens 2 Zeichen enthalten",
+      "last_name_min_length": "Der Nachname sollte mindestens 2 Zeichen enthalten",
+      "name": "Name",
+      "phone_min_length": "Bitte geben Sie eine gültige Telefonnummer ein",
+      "tax_id": "Steuer-ID",
+      "update_success": "Adresse erfolgreich aktualisiert",
+      "zip_min_length": "Die Postleitzahl sollte 3-10 Zeichen lang sein"
     },
     "log_in": "Einloggen",
     "log_out": "Abmelden",
@@ -618,7 +682,10 @@
       "title": "Login",
       "sign_in": "Anmelden",
       "submit": "Senden",
-      "alternate_provider_separator": "oder"
+      "alternate_provider_separator": "oder",
+      "facebook_login": "Über Facebook anmelden",
+      "forgot_password_message": "Wenn Sie Ihr Passwort verloren haben, gehen Sie zur Seite",
+      "google_login": "Über Google anmelden"
     },
     "orders": {
       "title": "Bestellhistorie",
@@ -628,7 +695,28 @@
       "payment_status": "Zahlungsstatus",
       "fulfillment_status": "Fulfillmentstatus",
       "total": "Gesamtsumme",
-      "none": "Du hast noch keine Bestellungen aufgegeben."
+      "none": "Du hast noch keine Bestellungen aufgegeben.",
+      "reorder_error": "Artikel konnten nicht erneut bestellt werden. Bitte versuchen Sie es erneut.",
+      "billing_address": "Rechnungsadresse",
+      "color": "Farbe",
+      "delivered": "Geliefert",
+      "detail": "Details",
+      "discount": "Rabatt",
+      "download_invoice": "Rechnung herunterladen",
+      "final_price": "Endpreis",
+      "including_vat": "Inkl. MwSt.",
+      "no_billing_address": "Keine Rechnungsadresse verfügbar",
+      "no_shipping_address": "Keine Lieferadresse verfügbar",
+      "original_price": "Originalpreis",
+      "price_details": "Preis",
+      "purchase_price": "Kaufpreis",
+      "quantity": "Menge",
+      "reorder": "Erneut bestellen",
+      "shipping": "Versand",
+      "shipping_address": "Lieferadresse",
+      "size": "Größe",
+      "status": "Status",
+      "tax": "Steuer"
     },
     "recover_password": {
       "title": "Setze dein Passwort zurück",
@@ -638,13 +726,45 @@
       "submit": "Einreichen",
       "cancel": "Stornieren"
     },
+    "form_errors": {
+      "first_name": "Vorname ist erforderlich",
+      "last_name": "Nachname ist erforderlich",
+      "email_required": "E-Mail ist erforderlich",
+      "email_invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "error": "Bei der Bearbeitung Ihrer Anfrage ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "login": {
+      "title": "Anmelden",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "forgot_password": "Passwort vergessen?",
+      "sign_in": "Anmelden",
+      "guest_title": "Als Gast fortfahren",
+      "guest_continue": "Weitermachen",
+      "submit": "Einreichen",
+      "alternate_provider_separator": "oder"
+    },
     "register": {
       "title": "Konto erstellen",
       "first_name": "Vorname",
       "last_name": "Nachname",
       "email": "E-Mail",
       "password": "Passwort",
-      "submit": "Erstellen"
+      "submit": "Erstellen",
+      "password_requirement_length": "Mindestens 8 Zeichen",
+      "password_requirement_lowercase": "Mindestens ein Kleinbuchstabe",
+      "password_requirement_uppercase": "Mindestens ein Großbuchstabe",
+      "password_requirement_number": "Mindestens eine Zahl",
+      "password_requirement_special": "Mindestens ein Sonderzeichen",
+      "accepts_marketing": "In Zukunft möchte ich per E-Mail Informationen über aktuelle Trends, Angebote und NORTHFINDER-Rabatte erhalten. Das Abonnement kann jederzeit kostenlos gekündigt werden.",
+      "and": "und",
+      "apply": "gelten.",
+      "password_requirements": "Das Passwort muss die folgenden Anforderungen erfüllen:",
+      "phone": "Telefonnummer",
+      "privacy_policy": "Datenschutzrichtlinie",
+      "privacy_policy_message": "Wie in jedem Online-Shop erhalten Sie von uns alle wichtigen Updates per E-Mail (Bestellbestätigung, Lieferbestätigung, Rücksendeinformationen, Empfehlungen). Lesen Sie unbedingt die",
+      "recaptcha_message": "Diese Website ist durch reCAPTCHA geschützt und es gelten die Google",
+      "terms_of_service": "Nutzungsbedingungen"
     },
     "reset_password": {
       "title": "Passwort für Konto zurücksetzen",
@@ -678,16 +798,6 @@
       "subtotal": "Zwischensumme",
       "total_duties": "Zollgebühren",
       "total_refunded": "Zurückerstattet"
-    },
-    "login": {
-      "email": "E-Mail",
-      "password": "Passwort",
-      "forgot_password": "Passwort vergessen?",
-      "sign_in": "Anmelden",
-      "guest_title": "Als Gast fortfahren",
-      "guest_continue": "Weitermachen",
-      "submit": "Einreichen",
-      "alternate_provider_separator": "oder"
     }
   },
   "gift_cards": {
@@ -730,49 +840,72 @@
   "video": {
     "no_support": "Ihr Browser unterstützt das Video-Tag nicht."
   },
+  "date_formats": {
+    "month_day_year": "%B %d, %Y"
+  },
+  "footer": {
+    "shopping_from": "Einkaufen von",
+    "language": "Deutsch (Deutsch)",
+    "change": "Ändern",
+    "copyright": "© Copyright Northfinder 2025 / Alle Rechte vorbehalten",
+    "contact_us": "Kontaktiere uns",
+    "contact": {
+      "contact_us": "Kontaktiere uns",
+      "email": "eshop@northfinder.com",
+      "phone": "+421 233 418 364"
+    }
+  },
+  "phone_validation": {
+    "invalid": "Ungültige Telefonnummer",
+    "invalid_country_code": "Ungültiger Ländercode",
+    "local_only": "Bitte geben Sie ein internationales Format ein",
+    "required": "Bitte geben Sie eine Telefonnummer ein",
+    "too_long": "Telefonnummer ist zu lang",
+    "too_short": "Telefonnummer ist zu kurz"
+  },
   "pagefly": {
     "products": {
       "product": {
-        "regular_price": "Regular price",
-        "sold_out": "Sold out",
-        "unavailable": "Unavailable",
+        "regular_price": "Regulärer Preis",
+        "sold_out": "Ausverkauft",
+        "unavailable": "Nicht verfügbar",
         "on_sale": "Sale",
-        "quantity": "Quantity",
-        "add_to_cart": "Add to cart",
-        "back_to_collection": "Back to {{ title }}",
-        "view_details": "View details"
+        "quantity": "Menge",
+        "add_to_cart": "In den Warenkorb",
+        "back_to_collection": "Zurück zu {{ title }}",
+        "view_details": "Details anzeigen"
       }
     },
     "article": {
       "tags": "Tags:",
-      "all_topics": "All topics",
-      "by_author": "by {{ author }}",
-      "posted_in": "Posted in",
-      "read_more": "Read more",
-      "back_to_blog": "Back to {{ title }}"
+      "all_topics": "Alle Themen",
+      "by_author": "von {{ author }}",
+      "posted_in": "Veröffentlicht in",
+      "read_more": "Weiterlesen",
+      "back_to_blog": "Zurück zu {{ title }}"
     },
     "comments": {
-      "title": "Leave a comment",
+      "title": "Kommentar hinterlassen",
       "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "post": "Post comment",
-      "moderated": "Please note, comments must be approved before they are published",
-      "success_moderated": "Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.",
-      "success": "Your comment was posted successfully! Thank you!",
+      "email": "E-Mail",
+      "message": "Nachricht",
+      "post": "Kommentar posten",
+      "moderated": "Bitte beachten Sie, dass Kommentare vor der Veröffentlichung genehmigt werden müssen",
+      "success_moderated": "Ihr Kommentar wurde erfolgreich gepostet. Wir werden ihn in Kürze veröffentlichen, da unser Blog moderiert wird.",
+      "success": "Ihr Kommentar wurde erfolgreich gepostet! Vielen Dank!",
       "comments_with_count": {
-        "one": "{{ count }} comment",
-        "other": "{{ count }} comments"
+        "one": "{{ count }} Kommentar",
+        "other": "{{ count }} Kommentare"
       }
     },
     "password_page": {
-      "login_form_message": "Enter store using password:",
-      "login_form_password_label": "Password",
-      "login_form_password_placeholder": "Your password",
-      "login_form_submit": "Enter",
-      "signup_form_email_label": "Email",
-      "signup_form_success": "We will send you an email right before we open!",
-      "password_link": "Enter using password"
+      "login_form_message": "Shop mit Passwort betreten:",
+      "login_form_password_label": "Passwort",
+      "login_form_password_placeholder": "Ihr Passwort",
+      "login_form_submit": "Betreten",
+      "signup_form_email_label": "E-Mail",
+      "signup_form_success": "Wir senden Ihnen eine E-Mail kurz vor der Eröffnung!",
+      "password_link": "Mit Passwort betreten"
     }
   },
   "cart": {
@@ -795,8 +928,10 @@
     },
     "coupon": {
       "title": "Rabattgutschein / Geschenkkarte",
-      "apply": "Anwenden"
+      "apply": "Anwenden",
+      "placeholder": "Code"
     },
+    "save_for_later": "Für später speichern",
     "general": {
       "title": "Einkaufswagen",
       "note": "Fügen Sie Ihrer Bestellung eine Notiz hinzu",

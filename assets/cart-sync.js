@@ -181,7 +181,7 @@ class CartSyncManager {
     notification.className = 'cart-sync-notification';
     notification.innerHTML = `
       <div class="cart-sync-notification__content">
-        <span>Cart updated from another tab</span>
+        <span>${window.theme?.strings?.cart_updated_other_tab || 'Cart updated from another tab'}</span>
       </div>
     `;
 
@@ -304,7 +304,8 @@ class CartSyncManager {
       mainCheckoutBtn.classList.add('loading');
       const buttonText = mainCheckoutBtn.querySelector('.button-text');
       const buttonSpinner = mainCheckoutBtn.querySelector('.button-spinner');
-      if (buttonText) buttonText.textContent = 'Validating stock...';
+      const validatingText = window.theme?.strings?.validating_stock || 'Validating stock...';
+      if (buttonText) buttonText.textContent = validatingText;
       if (buttonSpinner) buttonSpinner.style.display = 'inline-flex';
     }
 
@@ -313,7 +314,8 @@ class CartSyncManager {
     if (drawerCheckoutBtn) {
       drawerCheckoutBtn.disabled = true;
       drawerCheckoutBtn.classList.add('loading');
-      drawerCheckoutBtn.textContent = 'Validating stock...';
+      const validatingText = window.theme?.strings?.validating_stock || 'Validating stock...';
+      drawerCheckoutBtn.textContent = validatingText;
     }
   }
 
@@ -328,7 +330,8 @@ class CartSyncManager {
       mainCheckoutBtn.classList.remove('loading');
       const buttonText = mainCheckoutBtn.querySelector('.button-text');
       const buttonSpinner = mainCheckoutBtn.querySelector('.button-spinner');
-      if (buttonText) buttonText.textContent = 'Check out';
+      const checkoutText = window.theme?.strings?.check_out || 'Check out';
+      if (buttonText) buttonText.textContent = checkoutText;
       if (buttonSpinner) buttonSpinner.style.display = 'none';
     }
 
@@ -337,7 +340,8 @@ class CartSyncManager {
     if (drawerCheckoutBtn) {
       drawerCheckoutBtn.disabled = false;
       drawerCheckoutBtn.classList.remove('loading');
-      drawerCheckoutBtn.textContent = 'Check out';
+      const checkoutText = window.theme?.strings?.check_out || 'Check out';
+      drawerCheckoutBtn.textContent = checkoutText;
     }
   }
 
@@ -564,7 +568,8 @@ class CartSyncManager {
           } catch (error) {
             e.target.disabled = false;
             e.target.textContent = 'Remove';
-            alert('Failed to remove item. Please try again.');
+            const errorMsg = window.theme?.strings?.failed_remove_item || 'Failed to remove item. Please try again.';
+            alert(errorMsg);
           }
         } else if (action === 'adjust' && itemKey && quantity) {
           // Adjust item quantity
@@ -588,7 +593,8 @@ class CartSyncManager {
           } catch (error) {
             e.target.disabled = false;
             e.target.textContent = `Adjust to ${quantity}`;
-            alert('Failed to adjust quantity. Please try again.');
+            const errorMsg = window.theme?.strings?.failed_adjust_quantity || 'Failed to adjust quantity. Please try again.';
+            alert(errorMsg);
           }
         }
       });
@@ -607,12 +613,12 @@ class CartSyncManager {
       modal.innerHTML = `
         <div class="stock-warning-modal__overlay">
           <div class="stock-warning-modal__content">
-            <h3>Stock Validation Warning</h3>
-            <p>We couldn't verify stock availability: ${errorMessage}</p>
-            <p>Your order may be subject to stock availability. Do you want to continue?</p>
+            <h3>${window.theme?.strings?.stock_validation_warning || 'Stock Validation Warning'}</h3>
+            <p>${window.theme?.strings?.stock_validation_error || 'We couldn\'t verify stock availability'}: ${errorMessage}</p>
+            <p>${window.theme?.strings?.stock_validation_continue || 'Your order may be subject to stock availability. Do you want to continue?'}</p>
             <div class="stock-warning-modal__actions">
-              <button class="btn btn--secondary" data-action="cancel">Cancel Checkout</button>
-              <button class="btn btn--primary" data-action="proceed">Continue Anyway</button>
+              <button class="btn btn--secondary" data-action="cancel">${window.theme?.strings?.cancel_checkout || 'Cancel Checkout'}</button>
+              <button class="btn btn--primary" data-action="proceed">${window.theme?.strings?.continue_anyway || 'Continue Anyway'}</button>
             </div>
           </div>
         </div>
@@ -740,11 +746,11 @@ class CartSyncManager {
       modal.innerHTML = `
         <div class="cart-validation-modal__overlay">
           <div class="cart-validation-modal__content">
-            <h3>Cart Updated</h3>
-            <p>Your cart has been updated from another tab. Please review the changes before proceeding to checkout.</p>
+            <h3>${window.theme?.strings?.cart_updated || 'Cart Updated'}</h3>
+            <p>${window.theme?.strings?.cart_updated_review || 'Your cart has been updated from another tab. Please review the changes before proceeding to checkout.'}</p>
             <div class="cart-validation-modal__actions">
-              <button class="btn btn--secondary" data-action="cancel">Review Cart</button>
-              <button class="btn btn--primary" data-action="proceed">Continue to Checkout</button>
+              <button class="btn btn--secondary" data-action="cancel">${window.theme?.strings?.review_cart || 'Review Cart'}</button>
+              <button class="btn btn--primary" data-action="proceed">${window.theme?.strings?.continue_to_checkout || 'Continue to Checkout'}</button>
             </div>
           </div>
         </div>
