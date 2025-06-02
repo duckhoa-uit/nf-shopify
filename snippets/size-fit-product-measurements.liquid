@@ -11,10 +11,19 @@
 
 {% assign measurements = measurements | default: blank %}
 {% comment %} Get product category from product metafields {% endcomment %}
-{% assign product_category = 'top' %}
-{% if product.metafields.features.kind.value.size > 0 %}
-  {% assign product_category = product.metafields.features.kind.value[0].name %}
+{% assign product_category = 'fleece sweaters' %}
+
+{% comment %} Try different ways to access the array {% endcomment %}
+{% assign kind_value = product.metafields.features.kind.value %}
+{% if kind_value %}
+  {% for item in kind_value %}
+    {% assign product_category = item.name %}
+    {% break %}
+  {% endfor %}
 {% endif %}
+
+{% comment %} Create sorted size array for JavaScript sorting {% endcomment %}
+{% assign size_order = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL' | split: ',' %}
 
 <div class="product-measurements-section">
   <!-- Description -->
@@ -30,7 +39,7 @@
         <tbody>
           <!-- Size Header Row -->
           <tr>
-            {% for size_data in measurements limit: 6 %}
+            {% for size_data in measurements %}
               {% assign size_name = size_data[0] %}
               <th class="p-3 border border-gray-300 text-center font-medium bg-gray-100">{{ size_name }}</th>
             {% endfor %}
@@ -38,9 +47,316 @@
 
           {% comment %} Calculate number of sizes for colspan {% endcomment %}
           {% assign size_count = measurements.size | default: 3 %}
-          {% if size_count > 6 %}{% assign size_count = 6 %}{% endif %}
 
-          {% if product_category == 'top' %}
+          {% if product_category == 'fleece sweaters' %}
+            <!-- Fleece Sweaters Measurements -->
+
+            <!-- B: 1/2 Chest Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">B</span> 1/2 chest girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.chest_girth_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.chest_girth_half }}"
+                      data-in="{{ size_measurements.chest_girth_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.chest_girth_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- C1: 1/2 Bottom Girth - Relaxed -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C1</span> 1/2 bottom girth - relaxed (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.bottom_girth_relaxed %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_girth_relaxed }}"
+                      data-in="{{ size_measurements.bottom_girth_relaxed | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.bottom_girth_relaxed }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- C2: 1/2 Bottom Girth - Stretched -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C2</span> 1/2 bottom girth - stretched (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.bottom_girth_stretched_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_girth_stretched_half }}"
+                      data-in="{{ size_measurements.bottom_girth_stretched_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.bottom_girth_stretched_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- E: Shoulder & Sleeve Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">E</span> Shoulder & sleeve length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.shoulder_sleeve_length %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.shoulder_sleeve_length }}"
+                      data-in="{{ size_measurements.shoulder_sleeve_length | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.shoulder_sleeve_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- F: Center Back Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">F</span> Center back length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.center_back_length %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.center_back_length }}"
+                      data-in="{{ size_measurements.center_back_length | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.center_back_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- K: 1/2 Waist Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">K</span> 1/2 waist girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.waist_girth_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.waist_girth_half }}"
+                      data-in="{{ size_measurements.waist_girth_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.waist_girth_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+          {% elsif product_category == 't-shirts' %}
+            <!-- T-shirts Measurements -->
+
+            <!-- B: 1/2 Chest Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">B</span> 1/2 chest girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.chest_girth_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.chest_girth_half }}"
+                      data-in="{{ size_measurements.chest_girth_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.chest_girth_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- C: 1/2 Bottom Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C</span> 1/2 bottom girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.bottom_girth_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_girth_half }}"
+                      data-in="{{ size_measurements.bottom_girth_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.bottom_girth_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- D: Shoulder Point to Point -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">D</span> Shoulder point to point (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.shoulder_point_to_point %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.shoulder_point_to_point }}"
+                      data-in="{{ size_measurements.shoulder_point_to_point | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.shoulder_point_to_point }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- E: Shoulder & Sleeve Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">E</span> Shoulder & sleeve length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.shoulder_sleeve_length %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.shoulder_sleeve_length }}"
+                      data-in="{{ size_measurements.shoulder_sleeve_length | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.shoulder_sleeve_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- F: Center Back Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">F</span> Center back length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.center_back_length %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.center_back_length }}"
+                      data-in="{{ size_measurements.center_back_length | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.center_back_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- G: Sleeve Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">G</span> Sleeve length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.sleeve_length %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.sleeve_length }}"
+                      data-in="{{ size_measurements.sleeve_length | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.sleeve_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+          {% elsif product_category == 'hoodies & sweatpants'
+            or product_category == 'shirts'
+          %}
             <!-- Top/Jacket Measurements -->
 
             <!-- 1/2 Chest Girth -->
@@ -50,11 +366,15 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements limit: 6 %}
+              {% for size_data in measurements %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.chest_girth_half %}
-                    <span class="measurement-value" data-cm="{{ size_measurements.chest_girth_half }}" data-in="{{ size_measurements.chest_girth_half | divided_by: 2.54 | round: 1 }}">
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.chest_girth_half }}"
+                      data-in="{{ size_measurements.chest_girth_half | divided_by: 2.54 | round: 1 }}"
+                    >
                       {{ size_measurements.chest_girth_half }}
                     </span>
                   {% else %}
@@ -71,11 +391,15 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements limit: 6 %}
+              {% for size_data in measurements %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.bottom_girth_stretched_half %}
-                    <span class="measurement-value" data-cm="{{ size_measurements.bottom_girth_stretched_half }}" data-in="{{ size_measurements.bottom_girth_stretched_half | divided_by: 2.54 | round: 1 }}">
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_girth_stretched_half }}"
+                      data-in="{{ size_measurements.bottom_girth_stretched_half | divided_by: 2.54 | round: 1 }}"
+                    >
                       {{ size_measurements.bottom_girth_stretched_half }}
                     </span>
                   {% else %}
@@ -92,11 +416,15 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements limit: 6 %}
+              {% for size_data in measurements %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.shoulder_point_to_point %}
-                    <span class="measurement-value" data-cm="{{ size_measurements.shoulder_point_to_point }}" data-in="{{ size_measurements.shoulder_point_to_point | divided_by: 2.54 | round: 1 }}">
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.shoulder_point_to_point }}"
+                      data-in="{{ size_measurements.shoulder_point_to_point | divided_by: 2.54 | round: 1 }}"
+                    >
                       {{ size_measurements.shoulder_point_to_point }}
                     </span>
                   {% else %}
@@ -113,11 +441,15 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements limit: 6 %}
+              {% for size_data in measurements %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.center_back_length %}
-                    <span class="measurement-value" data-cm="{{ size_measurements.center_back_length }}" data-in="{{ size_measurements.center_back_length | divided_by: 2.54 | round: 1 }}">
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.center_back_length }}"
+                      data-in="{{ size_measurements.center_back_length | divided_by: 2.54 | round: 1 }}"
+                    >
                       {{ size_measurements.center_back_length }}
                     </span>
                   {% else %}
@@ -134,11 +466,15 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements limit: 6 %}
+              {% for size_data in measurements %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.shoulder_sleeve_length %}
-                    <span class="measurement-value" data-cm="{{ size_measurements.shoulder_sleeve_length }}" data-in="{{ size_measurements.shoulder_sleeve_length | divided_by: 2.54 | round: 1 }}">
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.shoulder_sleeve_length }}"
+                      data-in="{{ size_measurements.shoulder_sleeve_length | divided_by: 2.54 | round: 1 }}"
+                    >
                       {{ size_measurements.shoulder_sleeve_length }}
                     </span>
                   {% else %}
@@ -155,11 +491,15 @@
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements limit: 6 %}
+              {% for size_data in measurements %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.sleeve_length %}
-                    <span class="measurement-value" data-cm="{{ size_measurements.sleeve_length }}" data-in="{{ size_measurements.sleeve_length | divided_by: 2.54 | round: 1 }}">
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.sleeve_length }}"
+                      data-in="{{ size_measurements.sleeve_length | divided_by: 2.54 | round: 1 }}"
+                    >
                       {{ size_measurements.sleeve_length }}
                     </span>
                   {% else %}
@@ -169,22 +509,26 @@
               {% endfor %}
             </tr>
 
-          {% elsif product_category == 'bottom' %}
-            <!-- Bottom/Pants Measurements -->
+          {% elsif product_category == 'shorts' %}
+            <!-- Shorts Measurements -->
 
-            <!-- Waist Girth -->
+            <!-- A1: Waist Girth - Relaxed -->
             <tr>
               <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
-                <span><span class="alpha">A</span> Waist girth (cm)</span>
+                <span><span class="alpha">A1</span> Waist girth - relaxed (cm)</span>
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements limit: 6 %}
+              {% for size_data in measurements %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
-                  {% if size_measurements.waist_girth %}
-                    <span class="measurement-value" data-cm="{{ size_measurements.waist_girth }}" data-in="{{ size_measurements.waist_girth | divided_by: 2.54 | round: 1 }}">
-                      {{ size_measurements.waist_girth }}
+                  {% if size_measurements.waist_girth_relaxed %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.waist_girth_relaxed }}"
+                      data-in="{{ size_measurements.waist_girth_relaxed | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.waist_girth_relaxed }}
                     </span>
                   {% else %}
                     -
@@ -193,18 +537,72 @@
               {% endfor %}
             </tr>
 
-            <!-- Hip Girth -->
+            <!-- A2: Waist Girth - Stretched -->
             <tr>
               <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
-                <span><span class="alpha">B</span> Hip girth (cm)</span>
+                <span><span class="alpha">A2</span> Waist girth - stretched (cm)</span>
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements limit: 6 %}
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.waist_girth_stretched %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.waist_girth_stretched }}"
+                      data-in="{{ size_measurements.waist_girth_stretched | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.waist_girth_stretched }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- B: Out Side Length From The End Waist -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">B</span> Out side length from the end waist (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.outside_length_end_waist %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.outside_length_end_waist }}"
+                      data-in="{{ size_measurements.outside_length_end_waist | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.outside_length_end_waist }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- C: Hip Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C</span> Hip girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
                   {% if size_measurements.hip_girth %}
-                    <span class="measurement-value" data-cm="{{ size_measurements.hip_girth }}" data-in="{{ size_measurements.hip_girth | divided_by: 2.54 | round: 1 }}">
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.hip_girth }}"
+                      data-in="{{ size_measurements.hip_girth | divided_by: 2.54 | round: 1 }}"
+                    >
                       {{ size_measurements.hip_girth }}
                     </span>
                   {% else %}
@@ -214,19 +612,532 @@
               {% endfor %}
             </tr>
 
-            <!-- Inside Length -->
+            <!-- D: Front Rise Length From The End Waist -->
             <tr>
               <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
-                <span><span class="alpha">C</span> Inside length (cm)</span>
+                <span><span class="alpha">D</span> Front rise length from the end waist (cm)</span>
               </td>
             </tr>
             <tr>
-              {% for size_data in measurements limit: 6 %}
+              {% for size_data in measurements %}
                 {% assign size_measurements = size_data[1].measurements %}
                 <td class="p-3 border border-gray-300 text-center">
-                  {% if size_measurements.inside_length %}
-                    <span class="measurement-value" data-cm="{{ size_measurements.inside_length }}" data-in="{{ size_measurements.inside_length | divided_by: 2.54 | round: 1 }}">
-                      {{ size_measurements.inside_length }}
+                  {% if size_measurements.front_rise_end_waist %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.front_rise_end_waist }}"
+                      data-in="{{ size_measurements.front_rise_end_waist | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.front_rise_end_waist }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- E: Back Rise Length - Fr The End Waist -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">E</span> Back rise length - fr the end waist (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.back_rise_end_waist %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.back_rise_end_waist }}"
+                      data-in="{{ size_measurements.back_rise_end_waist | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.back_rise_end_waist }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- G: 1/2 Thigh - At Crotch -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">G</span> 1/2 thigh - at crotch (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.thigh_half_crotch %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.thigh_half_crotch }}"
+                      data-in="{{ size_measurements.thigh_half_crotch | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.thigh_half_crotch }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- J: 1/2 Bottom Legs -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">J</span> 1/2 bottom legs (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.bottom_legs_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_legs_half }}"
+                      data-in="{{ size_measurements.bottom_legs_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.bottom_legs_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+          {% elsif product_category == 'jackets' %}
+            <!-- Jackets Measurements -->
+
+            <!-- B: 1/2 Chest Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">B</span> 1/2 chest girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.chest_girth_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.chest_girth_half }}"
+                      data-in="{{ size_measurements.chest_girth_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.chest_girth_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- C: 1/2 Bottom Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C</span> 1/2 bottom girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.bottom_girth_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_girth_half }}"
+                      data-in="{{ size_measurements.bottom_girth_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.bottom_girth_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- E: Shoulder & Sleeve Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">E</span> Shoulder & sleeve length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.shoulder_sleeve_length %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.shoulder_sleeve_length }}"
+                      data-in="{{ size_measurements.shoulder_sleeve_length | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.shoulder_sleeve_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- F: Center Back Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">F</span> Center back length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.center_back_length %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.center_back_length }}"
+                      data-in="{{ size_measurements.center_back_length | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.center_back_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- G: Sleeve Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">G</span> Sleeve length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.sleeve_length %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.sleeve_length }}"
+                      data-in="{{ size_measurements.sleeve_length | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.sleeve_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+          {% elsif product_category == 'vests' %}
+            <!-- Vests Measurements -->
+
+            <!-- B: 1/2 Chest Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">B</span> 1/2 chest girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.chest_girth_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.chest_girth_half }}"
+                      data-in="{{ size_measurements.chest_girth_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.chest_girth_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- C1: 1/2 Bottom Girth - Relaxed -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C1</span> 1/2 bottom girth - relaxed (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.bottom_girth_relaxed %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_girth_relaxed }}"
+                      data-in="{{ size_measurements.bottom_girth_relaxed | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.bottom_girth_relaxed }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- C2: 1/2 Bottom Girth - Stretched -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C2</span> 1/2 bottom girth - stretched (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.bottom_girth_stretched_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_girth_stretched_half }}"
+                      data-in="{{ size_measurements.bottom_girth_stretched_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.bottom_girth_stretched_half }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- D: Shoulder Point to Point -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">D</span> Shoulder point to point (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.shoulder_point_to_point %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.shoulder_point_to_point }}"
+                      data-in="{{ size_measurements.shoulder_point_to_point | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.shoulder_point_to_point }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- F: Center Back Length -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">F</span> Center back length (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.center_back_length %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.center_back_length }}"
+                      data-in="{{ size_measurements.center_back_length | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.center_back_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+          {% elsif product_category == 'trousers' %}
+            <!-- Trousers Measurements -->
+
+            <!-- A: Waist Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">A</span> Waist girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.waist_girth %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.waist_girth }}"
+                      data-in="{{ size_measurements.waist_girth | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.waist_girth }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- B: Out Side Length From The End Waist -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">B</span> Out side length from the end waist (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.outside_length_end_waist %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.outside_length_end_waist }}"
+                      data-in="{{ size_measurements.outside_length_end_waist | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.outside_length_end_waist }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- C: Hip Girth -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">C</span> Hip girth (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.hip_girth %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.hip_girth }}"
+                      data-in="{{ size_measurements.hip_girth | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.hip_girth }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- D: Front Rise Length From The End Waist -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">D</span> Front rise length from the end waist (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.front_rise_end_waist %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.front_rise_end_waist }}"
+                      data-in="{{ size_measurements.front_rise_end_waist | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.front_rise_end_waist }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- E: Back Rise Length - Fr The End Waist -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">E</span> Back rise length - fr the end waist (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.back_rise_end_waist %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.back_rise_end_waist }}"
+                      data-in="{{ size_measurements.back_rise_end_waist | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.back_rise_end_waist }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- G: 1/2 Thigh - At Crotch -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">G</span> 1/2 thigh - at crotch (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.thigh_half_crotch %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.thigh_half_crotch }}"
+                      data-in="{{ size_measurements.thigh_half_crotch | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.thigh_half_crotch }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- J: 1/2 Bottom Legs -->
+            <tr>
+              <td colspan="{{ size_count }}" class="p-2 bg-gray-50 border border-gray-300 type_name">
+                <span><span class="alpha">J</span> 1/2 bottom legs (cm)</span>
+              </td>
+            </tr>
+            <tr>
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="p-3 border border-gray-300 text-center">
+                  {% if size_measurements.bottom_legs_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_legs_half }}"
+                      data-in="{{ size_measurements.bottom_legs_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.bottom_legs_half }}
                     </span>
                   {% else %}
                     -
@@ -248,40 +1159,98 @@
   <div class="mt-8">
     <h3 class="text-lg font-bold mb-4">How to measure the product?</h3>
     <div class="text-sm text-gray-600">
-      <p>These measurements are taken directly from the garment and can be used to compare with your existing clothes.</p>
+      <p>
+        These measurements are taken directly from the garment and can be used to compare with your existing clothes.
+      </p>
     </div>
   </div>
 </div>
 
 <style>
-.size_table_product .type_name {
-  font-weight: 500;
-  background-color: #f8f9fa;
-}
+  .size_table_product .type_name {
+    font-weight: 500;
+    background-color: #f8f9fa;
+  }
 
-.size_table_product .alpha {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-color: #000;
-  color: #fff;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 20px;
-  font-size: 12px;
-  font-weight: bold;
-  margin-right: 8px;
-}
+  .size_table_product .alpha {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 8px;
+  }
 
-.size_table_product th {
-  background-color: #f1f5f9;
-  font-weight: 600;
-}
+  .size_table_product th {
+    background-color: #f1f5f9;
+    font-weight: 600;
+  }
 
-.size_table_product td,
-.size_table_product th {
-  padding: 12px;
-  border: 1px solid #e2e8f0;
-  text-align: center;
-}
+  .size_table_product td,
+  .size_table_product th {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+  }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Sort size columns in measurement table
+  const sizeTable = document.querySelector('.size_table_product');
+  if (!sizeTable) return;
+
+  const sizeOrder = {{ size_order | json }};
+  const headerRow = sizeTable.querySelector('tr:first-child');
+  const measurementRows = sizeTable.querySelectorAll('tr:not(:first-child)');
+
+  if (!headerRow) return;
+
+  // Get header cells (size names)
+  const headerCells = Array.from(headerRow.querySelectorAll('th'));
+  if (headerCells.length === 0) return;
+
+  // Create array of column data with original index
+  const columns = headerCells.map((cell, index) => ({
+    size: cell.textContent.trim(),
+    index: index,
+    headerCell: cell
+  }));
+
+  // Sort columns by size order
+  columns.sort((a, b) => {
+    const aIndex = sizeOrder.indexOf(a.size);
+    const bIndex = sizeOrder.indexOf(b.size);
+
+    // If size not found in order, put it at the end
+    if (aIndex === -1 && bIndex === -1) return 0;
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+
+    return aIndex - bIndex;
+  });
+
+  // Reorder header cells
+  const sortedHeaderCells = columns.map(col => col.headerCell);
+  headerRow.innerHTML = '';
+  sortedHeaderCells.forEach(cell => headerRow.appendChild(cell));
+
+  // Reorder measurement cells in each row
+  measurementRows.forEach(row => {
+    const cells = Array.from(row.querySelectorAll('td'));
+    if (cells.length === 0) return;
+
+    // Skip rows that are measurement type headers (have colspan)
+    if (cells.length === 1 && cells[0].hasAttribute('colspan')) return;
+
+    const sortedCells = columns.map(col => cells[col.index]).filter(cell => cell);
+    row.innerHTML = '';
+    sortedCells.forEach(cell => row.appendChild(cell));
+  });
+});
+</script>
