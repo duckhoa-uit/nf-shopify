@@ -36,59 +36,63 @@
 <div class="color-{{ section.settings.color_scheme }} isolate gradient activities-section">
   <div class="section-{{ section.id }}-padding">
     <div class="page-width">
-      {%- if section.settings.title != blank -%}
-        <h2 class="font-extrabold font-archivo-expanded text-base lg:text-2xl leading-7 text-[#0F0F0F] uppercase mb-3 lg:mb-6{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-          {{ section.settings.title }}
-        </h2>
-      {%- endif -%}
+      <h2 class="font-extrabold font-archivo-expanded text-base lg:text-2xl leading-7 text-[#0F0F0F] uppercase mb-3 lg:mb-6{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {{ 'sections.activities.title' | t }}
+      </h2>
 
       <div class="activities-grid -mx-4 md:mx-0">
         {%- for block in section.blocks -%}
-            <div
-              class="activity-card relative{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-              {{ block.shopify_attributes }}
-              data-position="{{ forloop.index }}"
-            >
-              {% if block.settings.link_url != blank %}
-                <a href="{{ block.settings.link_url }}" class="absolute inset-0 z-10 block cursor-pointer"></a>
-              {% endif %}
-              {%- if block.settings.image != blank -%}
-                <div class="relative overflow-hidden h-full aspect-video">
-                  <img
-                    srcset="
-                      {%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
-                      {%- if block.settings.image.width >= 550 -%}{{ block.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
-                      {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
-                      {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
-                      {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
-                      {%- if block.settings.image.width >= 2200 -%}{{ block.settings.image | image_url: width: 2200 }} 2200w,{%- endif -%}
-                      {%- if block.settings.image.width >= 3000 -%}{{ block.settings.image | image_url: width: 3000 }} 3000w,{%- endif -%}
-                      {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
-                    "
-                    src="{{ block.settings.image | image_url: width: 1500 }}"
-                    sizes="100vw"
-                    alt="{{ block.settings.image.alt | escape }}"
-                    loading="lazy"
-                    width="{{ block.settings.image.width }}"
-                    height="{{ block.settings.image.height }}"
-                    class="activity-image"
-                  >
-                </div>
-              {%- else -%}
-                <div class="bg-foreground/10 aspect-[4/3] flex items-center justify-center">
-                  {{ 'image' | placeholder_svg_tag: 'w-full h-48 text-foreground/50' }}
-                </div>
-              {%- endif -%}
-
-              <div class="activity-content">
-                <h3 class="activity-title font-archivo-expanded font-extrabold text-base leading-[1.3125rem] lg:leading-7 lg:text-[1.3125rem]">{{ block.settings.activity_title }}</h3>
-                {%- if block.settings.link_url != blank -%}
-                  <a href="{{ block.settings.link_url }}" class="button button--secondary hidden md:block px-5 py-3 text-sm leading-4 font-semibold uppercase" onclick="event.stopPropagation();">
-                    {{ block.settings.button_text | default: 'Explore' }}
-                  </a>
-                {%- endif -%}
+          <div
+            class="activity-card relative{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {{ block.shopify_attributes }}
+            data-position="{{ forloop.index }}"
+          >
+            {% if block.settings.link_url != blank %}
+              <a href="{{ block.settings.link_url }}" class="absolute inset-0 z-10 block cursor-pointer"></a>
+            {% endif %}
+            {%- if block.settings.image != blank -%}
+              <div class="relative overflow-hidden h-full aspect-video">
+                <img
+                  srcset="
+                    {%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+                    {%- if block.settings.image.width >= 550 -%}{{ block.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
+                    {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+                    {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                    {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                    {%- if block.settings.image.width >= 2200 -%}{{ block.settings.image | image_url: width: 2200 }} 2200w,{%- endif -%}
+                    {%- if block.settings.image.width >= 3000 -%}{{ block.settings.image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                    {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
+                  "
+                  src="{{ block.settings.image | image_url: width: 1500 }}"
+                  sizes="100vw"
+                  alt="{{ block.settings.image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                  class="activity-image"
+                >
               </div>
+            {%- else -%}
+              <div class="bg-foreground/10 aspect-[4/3] flex items-center justify-center">
+                {{ 'image' | placeholder_svg_tag: 'w-full h-48 text-foreground/50' }}
+              </div>
+            {%- endif -%}
+
+            <div class="activity-content">
+              <h3 class="activity-title font-archivo-expanded font-extrabold text-base leading-[1.3125rem] lg:leading-7 lg:text-[1.3125rem]">
+                {{ block.settings.activity_title }}
+              </h3>
+              {%- if block.settings.link_url != blank -%}
+                <a
+                  href="{{ block.settings.link_url }}"
+                  class="button button--secondary hidden md:block px-5 py-3 text-sm leading-4 font-semibold uppercase"
+                  onclick="event.stopPropagation();"
+                >
+                  {{ block.settings.button_text | default: 'Explore' }}
+                </a>
+              {%- endif -%}
             </div>
+          </div>
         {%- endfor -%}
       </div>
     </div>
@@ -104,12 +108,6 @@
     "groups": ["header", "footer"]
   },
   "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "default": "ACTIVITIES",
-      "label": "Heading"
-    },
     {
       "type": "color_scheme",
       "id": "color_scheme",
