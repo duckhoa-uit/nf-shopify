@@ -474,6 +474,10 @@
       };
     </script>
 
+    {%- comment -%} Load dependencies before predictive-search.js to avoid dependency issues {%- endcomment -%}
+    <script src="{{ 'hyperhtml.min.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
+
     {%- if settings.predictive_search_enabled -%}
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
@@ -497,14 +501,7 @@
     {%- comment -%} Non-critical JavaScript - Load at end of body {%- endcomment -%}
     <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'checkbox-handler.js' | asset_url }}" defer="defer"></script>
-
-    {%- comment -%} Third-party libraries - Load only when needed {%- endcomment -%}
-    {%- unless template.name == 'product' -%}
-      {%- comment -%} hyperhtml only needed for specific components {%- endcomment -%}
-      <script src="{{ 'hyperhtml.min.js' | asset_url }}" defer="defer"></script>
-    {%- endunless -%}
 
     {%- comment -%} Performance monitoring - Load in production only {%- endcomment -%}
     {%- unless Shopify.designMode -%}
