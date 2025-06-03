@@ -224,8 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const isAddressesPage = window.location.pathname.includes('/account/addresses') ||
                           document.querySelector('[data-customer-addresses]') !== null;
 
-  // Remove any #login hash from the URL if present
-  if (window.location.hash === '#login') {
+  // Remove any unwanted hashes from the URL if present
+  if (window.location.hash === '#login' || window.location.hash === '#addresses') {
     window.history.replaceState(null, null, window.location.pathname);
   }
 

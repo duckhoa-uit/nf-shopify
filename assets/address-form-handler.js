@@ -2,12 +2,23 @@
  * Address Form Handler
  *
  * This script ensures that address forms are submitted correctly,
- * especially when the URL has a hash.
+ * especially when the URL has a hash, and preserves language context.
  */
 document.addEventListener('DOMContentLoaded', function() {
-  // Remove any #login hash from the URL if present
-  if (window.location.hash === '#login') {
+  // Remove any unwanted hashes from the URL if present
+  if (window.location.hash === '#login' || window.location.hash === '#addresses') {
     window.history.replaceState(null, null, window.location.pathname);
+  }
+
+  // Get language context from the page
+  function getLanguageContext() {
+    const localeElement = document.querySelector('[data-current-locale]');
+    const addressesUrlElement = document.querySelector('[data-account-addresses-url]');
+
+    return {
+      locale: localeElement ? localeElement.textContent.trim() : 'en',
+      addressesUrl: addressesUrlElement ? addressesUrlElement.textContent.trim() : '/account/addresses'
+    };
   }
 
   // Check if we need to reload the page after an address update
@@ -18,15 +29,38 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (getCookie('reload_after_address_update') === 'true') {
-    // Clear the cookie
-    document.cookie = 'reload_after_address_update=; path=/account/addresses; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+    // Get language context to clear cookie with correct path
+    const languageContext = getLanguageContext();
+
+    // Clear the cookie with language-aware path
+    document.cookie = `reload_after_address_update=; path=${languageContext.addressesUrl}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
 
     // Show a success message
     const addressSection = document.querySelector('.address-section');
     if (addressSection) {
       const successMessage = document.createElement('div');
       successMessage.className = 'success-message';
-      successMessage.textContent = document.querySelector('[data-address-update-success]')?.getAttribute('data-address-update-success') || 'Address updated successfully';
+
+      // Get the appropriate success message based on the operation type
+      let messageText = '';
+      const updateSuccessElement = document.querySelector('[data-address-update-success]');
+      const addSuccessElement = document.querySelector('[data-address-add-success]');
+
+      // Check if this was an add operation (look for URL parameters or form context)
+      const urlParams = new URLSearchParams(window.location.search);
+      const isAddOperation = urlParams.has('address_added') ||
+                            sessionStorage.getItem('address_operation') === 'add';
+
+      if (isAddOperation && addSuccessElement) {
+        messageText = addSuccessElement.textContent.trim() || 'Address added successfully';
+        sessionStorage.removeItem('address_operation'); // Clean up
+      } else if (updateSuccessElement) {
+        messageText = updateSuccessElement.textContent.trim() || 'Address updated successfully';
+      } else {
+        messageText = 'Address updated successfully';
+      }
+
+      successMessage.textContent = messageText;
       addressSection.prepend(successMessage);
 
       // Remove the message after 3 seconds
@@ -85,14 +119,28 @@ document.addEventListener('DOMContentLoaded', function() {
       // Prevent default form submission
       e.preventDefault();
 
+      // Get language context to preserve current language
+      const languageContext = getLanguageContext();
+
+      // Determine operation type for success message
+      let operationType = 'update'; // default
+      if (form.closest('#AddressNewForm') || form.closest('#NewAddressForm')) {
+        operationType = 'add';
+      }
+
+      // Store operation type for success message
+      sessionStorage.setItem('address_operation', operationType);
+
       // Get form action and ensure it's correct
-      let formAction = form.action || '/account/addresses';
+      let formAction = form.action || languageContext.addressesUrl;
 
       // If the form is for editing an address, make sure the action is correct
       if (form.closest('.address-edit-form')) {
         const addressId = form.closest('.address-wrapper')?.getAttribute('data-address-id');
         if (addressId) {
-          formAction = `/account/addresses/${addressId}`;
+          // Construct language-aware edit URL
+          const baseUrl = languageContext.addressesUrl.replace('/addresses', '');
+          formAction = `${baseUrl}/addresses/${addressId}`;
         }
       }
 
@@ -102,11 +150,11 @@ document.addEventListener('DOMContentLoaded', function() {
       submitForm.action = formAction;
       submitForm.style.display = 'none';
 
-      // Add a return_to hidden field to redirect back to the addresses page
+      // Add a return_to hidden field to redirect back to the addresses page with language preserved
       const returnToInput = document.createElement('input');
       returnToInput.type = 'hidden';
       returnToInput.name = 'return_to';
-      returnToInput.value = '/account/addresses';
+      returnToInput.value = languageContext.addressesUrl;
       submitForm.appendChild(returnToInput);
 
       // Copy all form data
@@ -122,8 +170,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Add the form to the document and submit it
       document.body.appendChild(submitForm);
 
-      // Set a cookie to reload the page after redirect
-      document.cookie = 'reload_after_address_update=true; path=/account/addresses';
+      // Set a cookie to reload the page after redirect (with language-aware path)
+      const cookiePath = languageContext.addressesUrl;
+      document.cookie = `reload_after_address_update=true; path=${cookiePath}`;
 
       // Submit the form
       submitForm.submit();

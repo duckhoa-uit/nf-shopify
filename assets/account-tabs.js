@@ -28,6 +28,12 @@ class AccountTabs {
       return;
     }
 
+    // Skip addresses tab as it should navigate to a separate page
+    if (tabId === 'addresses') {
+      // Let the default navigation happen
+      return;
+    }
+
     // This is a tab link, prevent default navigation
     e.preventDefault();
 

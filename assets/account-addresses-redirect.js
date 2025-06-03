@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // We'll store this in sessionStorage
     sessionStorage.setItem('lastAccountTab', 'addresses');
 
-    // Check if the URL has a #login hash and remove it
-    if (window.location.hash === '#login') {
+    // Check if the URL has unwanted hashes and remove them
+    if (window.location.hash === '#login' || window.location.hash === '#addresses') {
       // Replace the URL without the hash
       window.history.replaceState(null, null, window.location.pathname);
     }
@@ -50,8 +50,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (urlParams.has('return_to')) {
       const returnTo = urlParams.get('return_to');
 
-      // If the return_to is /account/addresses, we're already here, so just remove the parameter
-      if (returnTo === '/account/addresses') {
+      // Check if the return_to is pointing to the current addresses page (with or without language prefix)
+      const currentPath = window.location.pathname;
+      if (returnTo === '/account/addresses' || returnTo === currentPath) {
         // Replace the URL without the parameter
         window.history.replaceState(null, null, window.location.pathname);
       }

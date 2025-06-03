@@ -31,6 +31,9 @@
   data-form-error="{{ 'customer.form_errors.error' | t }}"
   data-firstname-error="{{ 'customer.form_errors.first_name' | t }}"
   data-lastname-error="{{ 'customer.form_errors.last_name' | t }}"
+  data-current-locale="{{ request.locale.iso_code }}"
+  data-account-addresses-url="{{ routes.account_addresses_url }}"
+  data-account-url="{{ routes.account_url }}"
 >
   <div class="account-container">
     <div class="account-header">
@@ -75,7 +78,7 @@
             </a>
           </li>
           <li role="presentation">
-            <a href="{{ routes.account_addresses_url }}" class="tab-link" data-tab="addresses">
+            <a href="{{ routes.account_addresses_url }}" class="tab-link">
               {{- 'customer.account.addresses' | t -}}
             </a>
           </li>

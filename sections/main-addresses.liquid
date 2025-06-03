@@ -137,7 +137,7 @@
             </a>
           </li>
           <li role="presentation">
-            <a href="{{ routes.account_addresses_url }}" class="tab-link active" data-tab="addresses">
+            <a href="{{ routes.account_addresses_url }}" class="tab-link active">
               {{- 'customer.account.addresses' | t -}}
             </a>
           </li>
@@ -207,6 +207,10 @@
           <span data-edit-icon>{{ 'icon-edit.svg' | inline_asset_content }}</span>
           <span data-delete-icon>{{ 'icon-trash.svg' | inline_asset_content }}</span>
           <span data-delete-confirm>{{ 'customer.addresses.delete_confirm' | t }}</span>
+          <!-- Language and URL context for JavaScript -->
+          <span data-current-locale>{{ request.locale.iso_code }}</span>
+          <span data-account-addresses-url>{{ routes.account_addresses_url }}</span>
+          <span data-account-url>{{ routes.account_url }}</span>
         </div>
 
         <div class="address-section">
