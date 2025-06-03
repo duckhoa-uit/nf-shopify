@@ -86,7 +86,7 @@
   align-items: center;
   margin-bottom: 24px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #D1D0D0;
+  border-bottom: 1px solid #d1d0d0;
 }
 
 .cart-notification__success {
@@ -96,7 +96,7 @@
 }
 
 .cart-notification__checkmark {
-  background-color: #00AE70;
+  background-color: #00ae70;
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -108,7 +108,7 @@
 .cart-notification__checkmark svg {
   width: 14px;
   height: 14px;
-  stroke: #FFFFFF;
+  stroke: #ffffff;
   stroke-width: 2px;
 }
 
@@ -118,7 +118,7 @@
   font-size: 16px;
   line-height: 1.5em;
   text-transform: uppercase;
-  color: #0F0F0F;
+  color: #0f0f0f;
   margin: 0;
 }
 
@@ -143,7 +143,7 @@
   gap: 24px;
   margin-bottom: 24px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #D1D0D0;
+  border-bottom: 1px solid #d1d0d0;
 }
 
 .cart-notification__item {
@@ -176,7 +176,7 @@
   font-weight: 700;
   font-size: 18px;
   line-height: 1.2;
-  color: #0F0F0F;
+  color: #0f0f0f;
   margin: 0;
 }
 
@@ -197,7 +197,7 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 1.14;
-  color: #3D3D3D;
+  color: #3d3d3d;
 }
 
 .cart-notification__item-property-value {
@@ -205,7 +205,7 @@
   font-weight: 500;
   font-size: 14px;
   line-height: 1.14;
-  color: #0F0F0F;
+  color: #0f0f0f;
 }
 
 .cart-notification__item-price {
@@ -213,7 +213,7 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 1.14;
-  color: #0F0F0F;
+  color: #0f0f0f;
   margin-top: auto;
 }
 
@@ -237,8 +237,8 @@
 }
 
 .button--primary {
-  background-color: rgb(var(--color-base-button));     /* Uses theme button color */
-  color: rgb(var(--color-base-button-text));           /* Uses theme button text color */
+  background-color: rgb(var(--color-base-button)); /* Uses theme button color */
+  color: rgb(var(--color-base-button-text)); /* Uses theme button text color */
   border: none;
   font-family: var(--font-body-family);
   font-weight: 600;
@@ -249,8 +249,8 @@
 
 .button--secondary {
   background-color: rgb(var(--color-base-background)); /* Uses theme background color */
-  color: rgb(var(--color-base-foreground));            /* Uses theme foreground color */
-  border: 1px solid var(--color-gray-500);             /* Uses existing gray token */
+  color: rgb(var(--color-base-foreground)); /* Uses theme foreground color */
+  border: 1px solid var(--color-gray-500); /* Uses existing gray token */
   font-family: var(--font-body-family);
   font-weight: 500;
   text-transform: uppercase;
@@ -288,5 +288,9 @@
   .cart-notification__links .button {
     width: 100%;
     min-width: 0;
+  }
+
+  .cart-notification.active .cart-notification-product {
+    flex-direction: column;
   }
 }
