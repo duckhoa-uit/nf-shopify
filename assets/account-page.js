@@ -19,6 +19,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
+      // Skip addresses tab as it should navigate to a separate page
+      if (tabId === 'addresses') {
+        // Let the default navigation happen
+        return;
+      }
+
       // This is a tab link, prevent default navigation
       e.preventDefault();
 
@@ -617,7 +623,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Create a hidden form and submit it
       const fallbackForm = document.createElement('form');
       fallbackForm.method = 'POST';
-      fallbackForm.action = '/account/addresses';
+      // Use language-aware URL if available, fallback to hardcoded
+      const addressesUrlElement = document.querySelector('[data-account-addresses-url]');
+      fallbackForm.action = addressesUrlElement ? addressesUrlElement.textContent.trim() : '/account/addresses';
       fallbackForm.style.display = 'none';
 
       // Copy all form data to the fallback form
