@@ -1,4 +1,234 @@
 /* Size Guide Measurement Instructions */
+
+/* Size Guide Table Responsive Styles */
+.size-guide-table__wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.size-guide-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 100%;
+}
+
+/* Header row styling */
+.size-guide-table__header-row {
+  background-color: rgb(243 244 246); /* bg-gray-100 equivalent */
+}
+
+.size-guide-table__header-cell {
+  padding: 0.75rem; /* p-3 equivalent */
+  border: 1px solid rgb(209 213 219); /* border-gray-300 equivalent */
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.size-guide-table__header-cell.size-guide-table__sticky-cell {
+  text-align: left;
+}
+
+/* Data row styling */
+.size-guide-table__data-row {
+  background-color: white;
+}
+
+.size-guide-table__data-cell {
+  padding: 0.75rem; /* p-3 equivalent */
+  border: 1px solid rgb(209 213 219); /* border-gray-300 equivalent */
+  text-align: center;
+  white-space: nowrap;
+}
+
+.size-guide-table__data-cell.size-guide-table__sticky-cell {
+  font-weight: 500;
+  text-align: left;
+}
+
+/* Sticky column styling for all screen sizes */
+.size-guide-table__sticky-cell {
+  position: sticky;
+  left: 0;
+  background-color: white;
+  z-index: 2;
+  /* Subtle shadow for desktop - enhanced on mobile */
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.size-guide-table__header-row .size-guide-table__sticky-cell {
+  background-color: rgb(243 244 246); /* bg-gray-100 equivalent */
+}
+
+/* Enhanced responsive styles for mobile and tablet */
+@media screen and (max-width: 749px) {
+  .size-guide-table__wrapper {
+    border-radius: 0.375rem; /* rounded-md */
+    border: 1px solid rgb(229 231 235); /* border-gray-200 */
+    /* Aggressive breakout of container constraints on mobile */
+    width: calc(100vw - 2rem); /* Use viewport width minus minimal padding */
+    max-width: none; /* Override any max-width constraints */
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%); /* Center the table */
+  }
+
+  /* More aggressive breakout for narrow containers */
+  .page-width--narrow .size-guide-table__wrapper,
+  .size-guide-container .size-guide-table__wrapper {
+    width: calc(100vw - 2rem); /* Full viewport width approach */
+  }
+
+  .size-guide-table__table {
+    min-width: 600px; /* Ensure horizontal scroll is needed */
+  }
+
+  .size-guide-table__sticky-cell {
+    min-width: 150px; /* Ensure sticky column has enough width */
+    max-width: 150px;
+    /* Enhanced shadow effect for better visual separation during horizontal scroll */
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .size-guide-table__header-cell,
+  .size-guide-table__data-cell {
+    min-width: 80px; /* Minimum width for size columns */
+    padding: 0.5rem; /* Smaller padding on mobile */
+    font-size: 0.875rem; /* text-sm */
+  }
+
+  .size-guide-table__sticky-cell {
+    padding: 0.5rem 0.75rem; /* More horizontal padding for sticky column */
+    font-size: 0.875rem;
+  }
+}
+
+/* Tablet responsive styles */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .page-width--narrow .size-guide-table__wrapper,
+  .size-guide-container .size-guide-table__wrapper {
+    margin-left: -4rem; /* Offset narrow container padding */
+    margin-right: -4rem;
+    width: calc(100% + 8rem); /* Extend beyond container */
+    max-width: none; /* Override max-width constraints */
+  }
+}
+
+/* Size Fit Modal Tables - Same responsive behavior as size guide tables */
+.size-fit-table__wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.size-fit-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 100%;
+}
+
+.size-fit-table__header-row {
+  background-color: rgb(243 244 246); /* bg-gray-100 equivalent */
+}
+
+.size-fit-table__header-cell {
+  padding: 0.75rem; /* p-3 equivalent */
+  border: 1px solid rgb(209 213 219); /* border-gray-300 equivalent */
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.size-fit-table__header-cell.size-fit-table__sticky-cell {
+  text-align: left;
+}
+
+.size-fit-table__data-row {
+  background-color: white;
+}
+
+.size-fit-table__data-cell {
+  padding: 0.75rem; /* p-3 equivalent */
+  border: 1px solid rgb(209 213 219); /* border-gray-300 equivalent */
+  text-align: center;
+  white-space: nowrap;
+}
+
+.size-fit-table__data-cell.size-fit-table__sticky-cell {
+  font-weight: 500;
+  text-align: left;
+}
+
+/* Sticky column styling for size fit tables */
+.size-fit-table__sticky-cell {
+  position: sticky;
+  left: 0;
+  background-color: white;
+  z-index: 10;
+  /* Subtle shadow for desktop - enhanced on mobile */
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.size-fit-table__header-row .size-fit-table__sticky-cell {
+  background-color: rgb(243 244 246);
+}
+
+/* Enhanced responsive styles for size fit tables */
+@media screen and (max-width: 749px) {
+  .size-fit-table__wrapper {
+    border-radius: 0.375rem;
+    border: 1px solid rgb(229 231 235);
+    /* Aggressive breakout of container constraints on mobile */
+    width: calc(100vw - 2rem);
+    max-width: none;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* More aggressive breakout for modal containers */
+  .size-fit-modal .size-fit-table__wrapper,
+  .modal-content .size-fit-table__wrapper {
+    width: calc(100vw - 3rem);
+  }
+
+  .size-fit-table__table {
+    min-width: 600px;
+  }
+
+  .size-fit-table__sticky-cell {
+    min-width: 120px;
+    max-width: 120px;
+    /* Enhanced shadow effect for better visual separation during horizontal scroll */
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .size-fit-table__header-cell,
+  .size-fit-table__data-cell {
+    min-width: 80px;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .size-fit-table__sticky-cell {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Tablet responsive styles for size fit tables */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .size-fit-modal .size-fit-table__wrapper,
+  .modal-content .size-fit-table__wrapper {
+    margin-left: -2rem;
+    margin-right: -2rem;
+    width: calc(100% + 4rem);
+    max-width: none;
+  }
+}
+
+/* Legacy sticky styles for backward compatibility */
 table tr:first-of-type td:first-of-type,
 table tr:not(:first-of-type) th {
   position: sticky;
