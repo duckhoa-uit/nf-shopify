@@ -765,6 +765,31 @@
               {% endfor %}
             </tr>
 
+            <!-- D: Shoulder Point to Point -->
+            <tr class="size-fit-table__data-row">
+              <td colspan="{{ size_count }}" class="size-fit-table__data-cell size-fit-table__sticky-cell type_name text-center">
+                <span><span class="alpha">D</span> Shoulder point to point (cm)</span>
+              </td>
+            </tr>
+            <tr class="size-fit-table__data-row">
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="size-fit-table__data-cell">
+                  {% if size_measurements.shoulder_point_to_point %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.shoulder_point_to_point }}"
+                      data-in="{{ size_measurements.shoulder_point_to_point | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.shoulder_point_to_point }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
             <!-- E: Shoulder & Sleeve Length -->
             <tr class="size-fit-table__data-row">
               <td colspan="{{ size_count }}" class="size-fit-table__data-cell size-fit-table__sticky-cell type_name text-center">
@@ -832,6 +857,31 @@
                       data-in="{{ size_measurements.sleeve_length | divided_by: 2.54 | round: 1 }}"
                     >
                       {{ size_measurements.sleeve_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- K: 1/2 Waist Girth -->
+            <tr class="size-fit-table__data-row">
+              <td colspan="{{ size_count }}" class="size-fit-table__data-cell size-fit-table__sticky-cell type_name text-center">
+                <span><span class="alpha">K</span> 1/2 waist girth (cm)</span>
+              </td>
+            </tr>
+            <tr class="size-fit-table__data-row">
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="size-fit-table__data-cell">
+                  {% if size_measurements.waist_girth_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.waist_girth_half }}"
+                      data-in="{{ size_measurements.waist_girth_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.waist_girth_half }}
                     </span>
                   {% else %}
                     -
@@ -960,6 +1010,134 @@
                       data-in="{{ size_measurements.center_back_length | divided_by: 2.54 | round: 1 }}"
                     >
                       {{ size_measurements.center_back_length }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+          {% elsif product_category == 'skirts' %}
+            <!-- Skirts Measurements -->
+
+            <!-- A1: Waist Girth - Relaxed -->
+            <tr class="size-fit-table__data-row">
+              <td colspan="{{ size_count }}" class="size-fit-table__data-cell size-fit-table__sticky-cell type_name text-center">
+                <span><span class="alpha">A1</span> Waist girth - relaxed (cm)</span>
+              </td>
+            </tr>
+            <tr class="size-fit-table__data-row">
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="size-fit-table__data-cell">
+                  {% if size_measurements.waist_girth_relaxed %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.waist_girth_relaxed }}"
+                      data-in="{{ size_measurements.waist_girth_relaxed | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.waist_girth_relaxed }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- A2: Waist Girth - Stretched -->
+            <tr class="size-fit-table__data-row">
+              <td colspan="{{ size_count }}" class="size-fit-table__data-cell size-fit-table__sticky-cell type_name text-center">
+                <span><span class="alpha">A2</span> Waist girth - stretched (cm)</span>
+              </td>
+            </tr>
+            <tr class="size-fit-table__data-row">
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="size-fit-table__data-cell">
+                  {% if size_measurements.waist_girth_stretched %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.waist_girth_stretched }}"
+                      data-in="{{ size_measurements.waist_girth_stretched | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.waist_girth_stretched }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- B1: Out Side Length From The Top Waist -->
+            <tr class="size-fit-table__data-row">
+              <td colspan="{{ size_count }}" class="size-fit-table__data-cell size-fit-table__sticky-cell type_name text-center">
+                <span><span class="alpha">B1</span> Out side length from the top waist (cm)</span>
+              </td>
+            </tr>
+            <tr class="size-fit-table__data-row">
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="size-fit-table__data-cell">
+                  {% if size_measurements.outside_length_top_waist %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.outside_length_top_waist }}"
+                      data-in="{{ size_measurements.outside_length_top_waist | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.outside_length_top_waist }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- C: Hip Girth -->
+            <tr class="size-fit-table__data-row">
+              <td colspan="{{ size_count }}" class="size-fit-table__data-cell size-fit-table__sticky-cell type_name text-center">
+                <span><span class="alpha">C</span> Hip girth (cm)</span>
+              </td>
+            </tr>
+            <tr class="size-fit-table__data-row">
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="size-fit-table__data-cell">
+                  {% if size_measurements.hip_girth %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.hip_girth }}"
+                      data-in="{{ size_measurements.hip_girth | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.hip_girth }}
+                    </span>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+
+            <!-- J: 1/2 Bottom Legs -->
+            <tr class="size-fit-table__data-row">
+              <td colspan="{{ size_count }}" class="size-fit-table__data-cell size-fit-table__sticky-cell type_name text-center">
+                <span><span class="alpha">J</span> 1/2 bottom legs (cm)</span>
+              </td>
+            </tr>
+            <tr class="size-fit-table__data-row">
+              {% for size_data in measurements %}
+                {% assign size_measurements = size_data[1].measurements %}
+                <td class="size-fit-table__data-cell">
+                  {% if size_measurements.bottom_legs_half %}
+                    <span
+                      class="measurement-value"
+                      data-cm="{{ size_measurements.bottom_legs_half }}"
+                      data-in="{{ size_measurements.bottom_legs_half | divided_by: 2.54 | round: 1 }}"
+                    >
+                      {{ size_measurements.bottom_legs_half }}
                     </span>
                   {% else %}
                     -
