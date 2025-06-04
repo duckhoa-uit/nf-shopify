@@ -9,6 +9,7 @@ class FacetFiltersForm extends HTMLElement {
 
     const facetForm = this.querySelector("form");
     facetForm.addEventListener("input", this.debouncedOnSubmit.bind(this));
+    facetForm.addEventListener("change", this.debouncedOnSubmit.bind(this));
 
     const facetWrapper = this.querySelector("#FacetsWrapperDesktop");
     if (facetWrapper) facetWrapper.addEventListener("keyup", onKeyUpEscape);
@@ -93,15 +94,30 @@ class FacetFiltersForm extends HTMLElement {
   }
 
   static renderProductCount(html) {
-    const count = new DOMParser().parseFromString(html, "text/html").getElementById("ProductCount").innerHTML;
+    const parsedHTML = new DOMParser().parseFromString(html, "text/html");
+    const productCountElement = parsedHTML.getElementById("ProductCount");
+
+    // Check if ProductCount element exists in the parsed HTML
+    if (!productCountElement) {
+      console.warn("ProductCount element not found in fetched HTML");
+      return;
+    }
+
+    const count = productCountElement.innerHTML;
     const container = document.getElementById("ProductCount");
     const containerDesktop = document.getElementById("ProductCountDesktop");
-    container.innerHTML = count;
-    container.classList.remove("loading");
+
+    // Check if containers exist in the current DOM
+    if (container) {
+      container.innerHTML = count;
+      container.classList.remove("loading");
+    }
+
     if (containerDesktop) {
       containerDesktop.innerHTML = count;
       containerDesktop.classList.remove("loading");
     }
+
     const loadingSpinners = document.querySelectorAll(
       ".facets-container .loading__spinner, facet-filters-form .loading__spinner",
     );
@@ -156,22 +172,25 @@ class FacetFiltersForm extends HTMLElement {
     FacetFiltersForm.renderActiveFacets(parsedHTML);
     FacetFiltersForm.renderAdditionalElements(parsedHTML);
 
-    if (countsToRender) {
-      const closestJSFilterID = event.target.closest(".js-filter").id;
+    if (countsToRender && event && event.target) {
+      const closestJSFilter = event.target.closest(".js-filter");
+      const closestJSFilterID = closestJSFilter ? closestJSFilter.id : null;
 
       if (closestJSFilterID) {
-        FacetFiltersForm.renderCounts(countsToRender, event.target.closest(".js-filter"));
+        FacetFiltersForm.renderCounts(countsToRender, closestJSFilter);
         FacetFiltersForm.renderMobileCounts(countsToRender, document.getElementById(closestJSFilterID));
 
         const newFacetDetailsElement = document.getElementById(closestJSFilterID);
-        const newElementSelector = newFacetDetailsElement.classList.contains("mobile-facets__details")
-          ? `.mobile-facets__close-button`
-          : `.facets__summary`;
-        const newElementToActivate = newFacetDetailsElement.querySelector(newElementSelector);
+        if (newFacetDetailsElement) {
+          const newElementSelector = newFacetDetailsElement.classList.contains("mobile-facets__details")
+            ? `.mobile-facets__close-button`
+            : `.facets__summary`;
+          const newElementToActivate = newFacetDetailsElement.querySelector(newElementSelector);
 
-        const isTextInput = event.target.getAttribute("type") === "text";
+          const isTextInput = event.target.getAttribute("type") === "text";
 
-        if (newElementToActivate && !isTextInput) newElementToActivate.focus();
+          if (newElementToActivate && !isTextInput) newElementToActivate.focus();
+        }
       }
     }
   }
@@ -180,9 +199,12 @@ class FacetFiltersForm extends HTMLElement {
     const activeFacetElementSelectors = [".active-facets-mobile", ".active-facets-desktop"];
 
     activeFacetElementSelectors.forEach((selector) => {
-      const activeFacetsElement = html.querySelector(selector);
-      if (!activeFacetsElement) return;
-      document.querySelector(selector).innerHTML = activeFacetsElement.innerHTML;
+      const sourceElement = html.querySelector(selector);
+      const targetElement = document.querySelector(selector);
+
+      if (!sourceElement || !targetElement) return;
+
+      targetElement.innerHTML = sourceElement.innerHTML;
     });
 
     FacetFiltersForm.toggleActiveFacets(false);
@@ -192,13 +214,20 @@ class FacetFiltersForm extends HTMLElement {
     const mobileElementSelectors = [".mobile-facets__open", ".mobile-facets__count", ".sorting"];
 
     mobileElementSelectors.forEach((selector) => {
-      if (!html.querySelector(selector)) return;
-      document.querySelector(selector).innerHTML = html.querySelector(selector).innerHTML;
+      const sourceElement = html.querySelector(selector);
+      const targetElement = document.querySelector(selector);
+
+      if (!sourceElement || !targetElement) return;
+
+      targetElement.innerHTML = sourceElement.innerHTML;
     });
 
-    const menuDrawer = document.getElementById("FacetFiltersFormMobile").closest("menu-drawer");
-    if (menuDrawer && typeof menuDrawer.bindEvents === 'function') {
-      menuDrawer.bindEvents();
+    const facetFormMobile = document.getElementById("FacetFiltersFormMobile");
+    if (facetFormMobile) {
+      const menuDrawer = facetFormMobile.closest("menu-drawer");
+      if (menuDrawer && typeof menuDrawer.bindEvents === 'function') {
+        menuDrawer.bindEvents();
+      }
     }
 
     // // Fix mobile facets submenu transitions
@@ -331,12 +360,17 @@ class FacetFiltersForm extends HTMLElement {
   onSubmitHandler(event) {
     event.preventDefault();
     const sortFilterForms = document.querySelectorAll("facet-filters-form form");
-    if (event.srcElement.className == "mobile-facets__checkbox") {
-      const searchParams = this.createSearchParams(event.target.closest("form"));
-      this.onSubmitForm(searchParams, event);
+
+    if (event.srcElement && event.srcElement.className == "mobile-facets__checkbox") {
+      const form = event.target.closest("form");
+      if (form) {
+        const searchParams = this.createSearchParams(form);
+        this.onSubmitForm(searchParams, event);
+      }
     } else {
       const forms = [];
-      const isMobile = event.target.closest("form").id === "FacetFiltersFormMobile";
+      const targetForm = event.target.closest("form");
+      const isMobile = targetForm && targetForm.id === "FacetFiltersFormMobile";
 
       sortFilterForms.forEach((form) => {
         if (!isMobile) {
