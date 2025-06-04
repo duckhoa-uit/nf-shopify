@@ -114,6 +114,71 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  /* Price display styles */
+  .nf-cart-item__price {
+    text-align: right;
+    min-width: 120px;
+  }
+
+  .nf-cart-item__unit-prices {
+    margin-bottom: 0.25rem;
+  }
+
+  .nf-cart-item__line-total {
+    font-weight: 600;
+    font-size: 1.1em;
+  }
+
+  .nf-cart-item__price-regular.cart-item__old-price {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 0.5rem;
+  }
+
+  .nf-cart-item__price-sale.cart-item__final-price {
+    color: #d20000;
+    font-weight: bold;
+  }
+
+  .price--end {
+    text-align: right;
+    justify-content: flex-end;
+    display: flex;
+  }
+
+  .cart-item__old-price.price.price--end {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 0.5rem;
+  }
+
+  /* Unit price styling */
+  .unit-price {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.25rem;
+    text-align: right;
+  }
+
+  /* Discounts styling */
+  .discounts {
+    margin-top: 0.5rem;
+  }
+
+  .discounts__discount {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #d20000;
+    margin-bottom: 0.25rem;
+  }
+
+  .discounts__discount svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 0.5rem;
+  }
 {%- endstyle -%}
 
 {%- unless settings.cart_type == 'drawer' -%}
@@ -258,12 +323,44 @@
                                   {{- item.product.title | escape -}}
                                 </a>
                                 <div class="nf-cart-item__price">
+                                  {%- comment -%} Unit Price Display {%- endcomment -%}
                                   {%- if item.original_price != item.final_price -%}
-                                    <span class="nf-cart-item__price-regular">{{- item.original_price | money -}}</span>
-                                    <span class="nf-cart-item__price-sale">{{ item.final_price | money }}</span>
+                                    <div class="nf-cart-item__unit-prices">
+                                      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+                                      <s class="nf-cart-item__price-regular cart-item__old-price">{{- item.original_price | money -}}</s>
+                                      <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+                                      <strong class="nf-cart-item__price-sale cart-item__final-price">{{ item.final_price | money }}</strong>
+                                    </div>
                                   {%- else -%}
                                     <span class="nf-cart-item__price-regular">{{ item.original_price | money }}</span>
                                   {%- endif -%}
+
+                                  {%- comment -%} Line Total Price Display {%- endcomment -%}
+                                  {% comment %} <div class="nf-cart-item__line-total">
+                                    {%- if item.original_line_price != item.final_line_price -%}
+                                      <div class="nf-cart-item__line-discounted-prices">
+                                        <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+                                        <s class="cart-item__old-price price price--end">{{ item.original_line_price | money }}</s>
+                                        <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+                                        <span class="price price--end">{{ item.final_line_price | money }}</span>
+                                      </div>
+                                    {%- else -%}
+                                      <span class="price price--end">{{ item.original_line_price | money }}</span>
+                                    {%- endif -%}
+
+                                    {%- if item.variant.available and item.unit_price_measurement -%}
+                                      <div class="unit-price caption">
+                                        <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+                                        {{ item.unit_price | money }}
+                                        <span aria-hidden="true">/</span>
+                                        <span class="visually-hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+                                        {%- if item.unit_price_measurement.reference_value != 1 -%}
+                                          {{- item.unit_price_measurement.reference_value -}}
+                                        {%- endif -%}
+                                        {{ item.unit_price_measurement.reference_unit }}
+                                      </div>
+                                    {%- endif -%}
+                                  </div> {% endcomment %}
                                 </div>
                               </div>
 
@@ -326,6 +423,15 @@
                                   </div>
                                 </div>
                               </div>
+
+                              <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+                                {%- for discount in item.line_level_discount_allocations -%}
+                                  <li class="discounts__discount">
+                                    {{- 'icon-discount.svg' | inline_asset_content -}}
+                                    {{ discount.discount_application.title | escape }}
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
 
                               <div class="nf-cart-item__actions text-[#3D3D3D] flex items-center">
                                 <!-- Save for Later button will be injected here by save-for-later.js -->
