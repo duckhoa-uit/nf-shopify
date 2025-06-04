@@ -7,7 +7,18 @@
      sizes: '(min-width: 750px) 50vw, 100vw',
      loading: 'lazy',
      class: 'custom-class',
-     alt: 'Alt text' %}
+     alt: 'Alt text',
+     mode: 'responsive',
+     max_width: 500 %}
+
+  Parameters:
+  - image: Image object (required)
+  - sizes: CSS sizes attribute (default: '100vw')
+  - loading: 'lazy' or 'eager' (default: 'lazy')
+  - class: CSS classes
+  - alt: Alt text
+  - mode: 'responsive', 'thumbnail', 'hero' (default: 'responsive')
+  - max_width: Maximum width for optimization (default: auto-detected)
 {%- endcomment -%}
 
 {%- liquid
@@ -15,6 +26,8 @@
   assign image_class = class | default: ''
   assign image_alt = alt | default: image.alt | escape
   assign image_sizes = sizes | default: '100vw'
+  assign image_mode = mode | default: 'responsive'
+  assign max_width_param = max_width | default: 0
 
   # Determine if this is above the fold (should be eager loaded)
   if loading_strategy == 'eager' or loading_strategy == 'auto'
@@ -23,23 +36,111 @@
     assign loading_attr = 'lazy'
   endif
 
-  # Generate responsive widths
-  assign widths = '375,550,750,1100,1500,1780,2000,3000,3840' | split: ','
+  # Generate responsive widths based on mode and max_width
+  case image_mode
+    when 'thumbnail'
+      # Optimized for small thumbnails (variant swatches, etc.)
+      # Includes higher resolutions for sharp display on retina screens
+      assign widths = '40,60,80,100,120,160' | split: ','
+      assign fallback_width = 80
+    when 'hero'
+      # Optimized for large hero images
+      assign widths = '750,1100,1500,1780,2000,2400,3000,3840' | split: ','
+      assign fallback_width = 1500
+    else
+      # Default responsive mode - optimized for product cards
+      # Ensures sharp images across all device sizes
+      assign widths = '200,300,400,500,600,750,900,1100' | split: ','
+      assign fallback_width = 500
+  endcase
+
+  # Override fallback width if max_width is specified
+  if max_width_param > 0
+    assign fallback_width = max_width_param
+    # TEMPORARILY DISABLE FILTERING TO DEBUG
+    # Just use the original widths array for now
+  endif
 -%}
 
 {%- if image -%}
+  {%- liquid
+    # DEBUG: Add debug info as HTML comments
+    assign debug_info = 'DEBUG: Image width=' | append: image.width | append: ', Mode=' | append: image_mode | append: ', Max width=' | append: max_width_param | append: ', Widths=' | append: widths | join: ','
+
+    # Generate optimized srcset only for widths that don't exceed original image width
+    assign webp_srcset = ''
+    assign regular_srcset = ''
+    assign debug_widths_used = ''
+
+    # Build arrays of valid widths first
+    assign valid_widths = ''
+    for width in widths
+      assign width_num = width | plus: 0
+      if width_num <= image.width
+        if valid_widths == ''
+          assign valid_widths = width_num
+        else
+          assign valid_widths = valid_widths | append: ',' | append: width_num
+        endif
+      endif
+    endfor
+
+    # Convert back to array and build srcsets
+    assign valid_widths_array = valid_widths | split: ','
+    assign debug_widths_used = valid_widths
+
+    for width_str in valid_widths_array
+      assign width_num = width_str | plus: 0
+
+      # WebP srcset
+      assign webp_url = image | image_url: width: width_num, format: 'webp'
+      assign webp_entry = webp_url | append: ' ' | append: width_num | append: 'w'
+      if webp_srcset == ''
+        assign webp_srcset = webp_entry
+      else
+        assign webp_srcset = webp_srcset | append: ', ' | append: webp_entry
+      endif
+
+      # Regular srcset
+      assign regular_url = image | image_url: width: width_num
+      assign regular_entry = regular_url | append: ' ' | append: width_num | append: 'w'
+      if regular_srcset == ''
+        assign regular_srcset = regular_entry
+      else
+        assign regular_srcset = regular_srcset | append: ', ' | append: regular_entry
+      endif
+    endfor
+
+    # Ensure we have at least the original image in srcset if no widths matched
+    if regular_srcset == ''
+      assign regular_srcset = image | image_url | append: ' ' | append: image.width | append: 'w'
+      assign webp_srcset = image | image_url: format: 'webp' | append: ' ' | append: image.width | append: 'w'
+      assign debug_widths_used = 'fallback-' | append: image.width
+    endif
+
+    # Use fallback_width for src, but don't exceed original image width
+    assign src_width = fallback_width
+    if src_width > image.width
+      assign src_width = image.width
+    endif
+
+    assign debug_final = debug_info | append: ', Widths used=' | append: debug_widths_used | append: ', Src width=' | append: src_width
+  -%}
+
+  <!-- {{ debug_final }} -->
+
   <picture class="{{ image_class }}">
     {%- comment -%} WebP source for modern browsers {%- endcomment -%}
     <source
       type="image/webp"
-      srcset="{%- for width in widths -%}{{ image | image_url: width: width, format: 'webp' }} {{ width }}w{%- unless forloop.last -%}, {%- endunless -%}{%- endfor -%}"
+      srcset="{{ webp_srcset }}"
       sizes="{{ image_sizes }}"
     >
 
     {%- comment -%} Fallback for browsers that don't support WebP {%- endcomment -%}
     <img
-      src="{{ image | image_url: width: 1100 }}"
-      srcset="{%- for width in widths -%}{{ image | image_url: width: width }} {{ width }}w{%- unless forloop.last -%}, {%- endunless -%}{%- endfor -%}"
+      src="{{ image | image_url: width: src_width }}"
+      srcset="{{ regular_srcset }}"
       sizes="{{ image_sizes }}"
       alt="{{ image_alt }}"
       loading="{{ loading_attr }}"

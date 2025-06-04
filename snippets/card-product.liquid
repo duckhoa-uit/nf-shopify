@@ -128,18 +128,20 @@
             href="{{ card_product.url }}"
             class="card-product-northfinder__link"
             data-product-id="{{ card_product.id }}"
-            data-main-image-src="{{ main_image | image_url: width: 533 }}"
-            data-main-image-srcset="{%- if main_image.width >= 360 -%}{{ main_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if main_image.width >= 533 -%}{{ main_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if main_image.width >= 720 -%}{{ main_image | image_url: width: 720 }} 720w,{%- endif -%}{{ main_image | image_url }} {{ main_image.width }}w"
+            data-main-image-src="{{ main_image | image_url: width: 400 }}"
+            data-main-image-srcset="{%- if main_image.width >= 200 -%}{{ main_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if main_image.width >= 250 -%}{{ main_image | image_url: width: 250 }} 250w,{%- endif -%}{%- if main_image.width >= 300 -%}{{ main_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if main_image.width >= 400 -%}{{ main_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if main_image.width >= 500 -%}{{ main_image | image_url: width: 500 }} 500w,{%- endif -%}{{ main_image | image_url }} {{ main_image.width }}w"
           >
             <div id="main-image-{{ card_product.id }}"
-                 data-original-src="{{ model_image | image_url: width: 533 }}"
-                 data-original-srcset="{%- if model_image.width >= 360 -%}{{ model_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if model_image.width >= 533 -%}{{ model_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if model_image.width >= 720 -%}{{ model_image | image_url: width: 720 }} 720w,{%- endif -%}{{ model_image | image_url }} {{ model_image.width }}w">
+                 data-original-src="{{ model_image | image_url: width: 400 }}"
+                 data-original-srcset="{%- if model_image.width >= 200 -%}{{ model_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if model_image.width >= 250 -%}{{ model_image | image_url: width: 250 }} 250w,{%- endif -%}{%- if model_image.width >= 300 -%}{{ model_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if model_image.width >= 400 -%}{{ model_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if model_image.width >= 500 -%}{{ model_image | image_url: width: 500 }} 500w,{%- endif -%}{{ model_image | image_url }} {{ model_image.width }}w">
               {%- render 'optimized-image',
                 image: model_image,
-                sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+                sizes: '(min-width: 990px) calc(33.33vw - 2rem), (min-width: 750px) calc(50vw - 1.5rem), calc(50vw - 1rem)',
                 loading: 'lazy',
                 class: 'w-full h-auto object-cover aspect-square transition-opacity duration-300 ease-in-out',
-                alt: model_image.alt
+                alt: model_image.alt,
+                mode: 'responsive',
+                max_width: 750
               -%}
             </div>
           </a>
@@ -354,15 +356,17 @@
                   class="size-9 xl:size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors variant-swatch"
                   data-variant-id="{{ color_variant.id }}"
                   data-product-id="{{ card_product.id }}"
-                  data-variant-image="{{ variant_image | image_url: width: 533 }}"
-                  data-variant-image-srcset="{%- if variant_image.width >= 360 -%}{{ variant_image | image_url: width: 360 }} 360w,{%- endif -%}{%- if variant_image.width >= 533 -%}{{ variant_image | image_url: width: 533 }} 533w,{%- endif -%}{%- if variant_image.width >= 720 -%}{{ variant_image | image_url: width: 720 }} 720w,{%- endif -%}{{ variant_image | image_url }} {{ variant_image.width }}w"
+                  data-variant-image="{{ variant_image | image_url: width: 120 }}"
+                  data-variant-image-srcset="{%- if variant_image.width >= 40 -%}{{ variant_image | image_url: width: 40 }} 40w,{%- endif -%}{%- if variant_image.width >= 60 -%}{{ variant_image | image_url: width: 60 }} 60w,{%- endif -%}{%- if variant_image.width >= 80 -%}{{ variant_image | image_url: width: 80 }} 80w,{%- endif -%}{%- if variant_image.width >= 100 -%}{{ variant_image | image_url: width: 100 }} 100w,{%- endif -%}{%- if variant_image.width >= 120 -%}{{ variant_image | image_url: width: 120 }} 120w,{%- endif -%}{{ variant_image | image_url }} {{ variant_image.width }}w"
                 >
                   {%- render 'optimized-image',
                     image: variant_image,
-                    sizes: '80px',
+                    sizes: '(min-width: 1280px) 60px, 36px',
                     loading: 'lazy',
                     class: 'w-full h-full object-cover',
-                    alt: color
+                    alt: color,
+                    mode: 'thumbnail',
+                    max_width: 120
                   -%}
                 </a>
               {%- endif -%}
