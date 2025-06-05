@@ -20,8 +20,31 @@
   assign product_form_id = 'product-form-' | append: section.id
   assign sorted_indices = ''
 
+  # Position-based option detection for internationalization
+  # Color is typically position 1, Size is typically position 2
+  assign is_color_option = false
+  assign is_size_option = false
+
+  # Check if this is a color option FIRST (higher priority)
+  assign swatch_count = option.values | map: 'swatch' | compact | size
+
+  if option.position == 1
+    assign is_color_option = true
+  endif
+
+  if swatch_count > 0
+    assign is_color_option = true
+  endif
+
+  # Only check for size option if it's NOT already identified as color
+  unless is_color_option
+    if option.position == 2
+      assign is_size_option = true
+    endif
+  endunless
+
   # Only do sorting for Color and Size options
-  if option.name == 'Color' and product.metafields.custom.color.value != blank
+  if is_color_option and product.metafields.custom.color.value != blank
     assign metafield_colors = product.metafields.custom.color.value
 
     # Build position data for each value with index
@@ -47,7 +70,7 @@
 
     # Sort indices by position
     assign sorted_indices = sorted_indices | split: ',' | sort
-  elsif option.name == 'Size' and product.metafields.custom.size.value != blank
+  elsif is_size_option and product.metafields.custom.size.value != blank
     assign metafield_sizes = product.metafields.custom.size.value
 
     # Build position data for each value with index
@@ -114,7 +137,7 @@
           endif
         -%}
 
-        {%- if option.name == 'Size' -%}
+        {%- if is_size_option -%}
           <div class="attribute_radio">
             <input
               type="radio"
@@ -139,7 +162,7 @@
               {% endif %}
             </label>
           </div>
-        {%- elsif option.name == 'Color' -%}
+        {%- elsif is_color_option -%}
           {%- capture help_text -%}
             <span class="visually-hidden">{{ value | escape }}</span>
             {% if option_disabled %}
@@ -232,7 +255,7 @@
       endif
     -%}
 
-    {%- if option.name == 'Size' -%}
+    {%- if is_size_option -%}
       <div class="attribute_radio">
         <input
           type="radio"
@@ -257,7 +280,7 @@
           {% endif %}
         </label>
       </div>
-    {%- elsif option.name == 'Color' -%}
+    {%- elsif is_color_option -%}
       {%- capture help_text -%}
         <span class="visually-hidden">{{ value | escape }}</span>
         {% if option_disabled %}

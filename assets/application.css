@@ -279,6 +279,9 @@
   .pointer-events-none {
     pointer-events: none !important;
   }
+  .collapse {
+    visibility: collapse !important;
+  }
   .invisible {
     visibility: hidden !important;
   }
@@ -326,6 +329,9 @@
   .top-0 {
     top: calc(var(--spacing) * 0) !important;
   }
+  .top-1 {
+    top: calc(var(--spacing) * 1) !important;
+  }
   .top-1\/2 {
     top: calc(1/2 * 100%) !important;
   }
@@ -355,6 +361,9 @@
   }
   .left-0 {
     left: calc(var(--spacing) * 0) !important;
+  }
+  .left-1 {
+    left: calc(var(--spacing) * 1) !important;
   }
   .left-1\/2 {
     left: calc(1/2 * 100%) !important;
@@ -433,6 +442,9 @@
   }
   .my-0 {
     margin-block: calc(var(--spacing) * 0) !important;
+  }
+  .my-1 {
+    margin-block: calc(var(--spacing) * 1) !important;
   }
   .my-1\.5 {
     margin-block: calc(var(--spacing) * 1.5) !important;
@@ -794,8 +806,16 @@
   .border-collapse {
     border-collapse: collapse !important;
   }
+  .-translate-x-1 {
+    --tw-translate-x: calc(var(--spacing) * -1) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
   .-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1/2 * 100%) * -1) !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .-translate-y-1 {
+    --tw-translate-y: calc(var(--spacing) * -1) !important;
     translate: var(--tw-translate-x) var(--tw-translate-y) !important;
   }
   .-translate-y-1\/2 {
@@ -882,6 +902,9 @@
   }
   .justify-end {
     justify-content: flex-end !important;
+  }
+  .gap-0 {
+    gap: calc(var(--spacing) * 0) !important;
   }
   .gap-0\.5 {
     gap: calc(var(--spacing) * 0.5) !important;
@@ -1140,6 +1163,9 @@
   .bg-black {
     background-color: #000000 !important;
   }
+  .bg-foreground {
+    background-color: rgb(var(--color-base-foreground)) !important;
+  }
   .bg-foreground\/10 {
     background-color: rgb(var(--color-base-foreground)) !important;
     @supports (color: color-mix(in lab, red, red)) {
@@ -1178,6 +1204,10 @@
   }
   .from-\[\#0F0F0F\] {
     --tw-gradient-from: #0F0F0F !important;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
+  }
+  .from-foreground {
+    --tw-gradient-from: rgb(var(--color-base-foreground)) !important;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
   }
   .from-foreground\/70 {
@@ -1518,6 +1548,9 @@
   .text-balance {
     text-wrap: balance !important;
   }
+  .text-wrap {
+    text-wrap: wrap !important;
+  }
   .whitespace-nowrap {
     white-space: nowrap !important;
   }
@@ -1719,6 +1752,9 @@
   .outline-none {
     --tw-outline-style: none !important;
     outline-style: none !important;
+  }
+  .\[xml\:lang\] {
+    xml: lang !important;
   }
   .backface-hidden {
     backface-visibility: hidden !important;

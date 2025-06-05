@@ -8,6 +8,7 @@
   Usage:
   {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
 {% endcomment %}
+
 {%- unless product.has_only_default_variant -%}
   <variant-selects
     id="variant-selects-{{ section.id }}"
@@ -16,21 +17,61 @@
     {{ block.shopify_attributes }}
   >
     {%- liquid
+      # Position-based option sorting for internationalization
+      # Color is typically position 1, Size is typically position 2
       assign sorted_options = ''
+      assign color_option = null
+      assign size_option = null
+
+      # First, identify Color and Size options by position and common patterns
       for option in product.options_with_values
-        if option.name == 'Color'
-          assign sorted_options = sorted_options | append: option.name | append: ','
+        assign is_color_option = false
+        assign is_size_option = false
+
+        # Check if this is a color option (position 1 or has color-related values)
+        if option.position == 1
+          assign is_color_option = true
+        endif
+
+        # Additional check: if option has swatch values, it's likely a color option
+        assign swatch_count = option.values | map: 'swatch' | compact | size
+        if swatch_count > 0
+          assign is_color_option = true
+        endif
+
+        # Check if this is a size option (position 2 or has size-related patterns)
+        if option.position == 2
+          assign is_size_option = true
+        endif
+
+        # Store the identified options
+        if is_color_option
+          assign color_option = option
+        elsif is_size_option
+          assign size_option = option
         endif
       endfor
 
-      for option in product.options_with_values
-        if option.name == 'Size'
-          assign sorted_options = sorted_options | append: option.name | append: ','
-        endif
-      endfor
+      # Build sorted options list: Color first, then Size, then others
+      if color_option
+        assign sorted_options = sorted_options | append: color_option.name | append: ','
+      endif
 
+      if size_option
+        assign sorted_options = sorted_options | append: size_option.name | append: ','
+      endif
+
+      # Add remaining options
       for option in product.options_with_values
-        unless option.name == 'Color' or option.name == 'Size'
+        assign is_already_added = false
+        if color_option and option.position == color_option.position
+          assign is_already_added = true
+        endif
+        if size_option and option.position == size_option.position
+          assign is_already_added = true
+        endif
+
+        unless is_already_added
           assign sorted_options = sorted_options | append: option.name | append: ','
         endunless
       endfor
@@ -52,11 +93,65 @@
           endif
         endif
       -%}
-      {%- if option.name == 'Size' -%}
+      {%- liquid
+        # Determine option type based on position and characteristics
+        assign is_size_option = false
+        assign is_color_option = false
+
+        # Check if this is a color option FIRST (higher priority)
+        assign swatch_count_check = option.values | map: 'swatch' | compact | size
+
+        # Primary detection: Position 1 (most reliable for color)
+        if option.position == 1
+          assign is_color_option = true
+        endif
+
+        # Secondary detection: Has swatch values
+        if swatch_count_check > 0
+          assign is_color_option = true
+        endif
+
+        # Additional detection: Common color-related option names (fallback)
+        assign option_name_lower = option.name | downcase
+
+        if option_name_lower contains 'color'
+          assign is_color_option = true
+        endif
+
+        if option_name_lower contains 'colour'
+          assign is_color_option = true
+        endif
+
+        if option_name_lower contains 'farbe'
+          assign is_color_option = true
+        endif
+
+        if option_name_lower contains 'couleur'
+          assign is_color_option = true
+        endif
+
+        # Only check for size option if it's NOT already identified as color
+        unless is_color_option
+          if option.position == 2
+            assign is_size_option = true
+          endif
+
+          # Additional check for size metafields only if not color
+          if product.metafields.size_fit.measurements.value or product.metafields.size_fit.body_measurements.value
+            assign is_size_option = true
+          endif
+        endunless
+      -%}
+
+
+
+      {%- if is_size_option -%}
         <fieldset class="js product-form__input product-form__input--pill product-form__input--pill-size">
           <div class="flex items-center justify-between mb-2">
             <legend class="form__label m-0">{{ option.name }}</legend>
-            {% if product.metafields.size_fit.measurements.value or product.metafields.size_fit.body_measurements.value %}
+            {% if product.metafields.size_fit.measurements.value
+              or product.metafields.size_fit.body_measurements.value
+            %}
               <button
                 type="button"
                 class="size-fit-button flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
@@ -78,7 +173,7 @@
             %}
           </div>
         </fieldset>
-      {%- elsif option.name == 'Color' -%}
+      {%- elsif is_color_option -%}
         <fieldset class="js product-form__input product-form__input--swatch product-form__input--pill-color">
           <legend class="form__label">
             {{ option.name }}:
@@ -163,7 +258,7 @@
 {%- endunless -%}
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     // No additional JavaScript needed
     // The size chart button functionality will be handled by a Shopify app
   });
