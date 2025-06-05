@@ -437,20 +437,18 @@
                                 </div>
                               </div>
 
-                              {%- if cart.cart_level_discount_applications.size > 0 -%}
-                                <ul
-                                  class="discounts list-unstyled"
-                                  role="list"
-                                  aria-label="{{ 'customer.order.discount' | t }}"
-                                >
-                                  {%- for discount in item.line_level_discount_allocations -%}
-                                    <li class="discounts__discount">
-                                      {{- 'icon-discount.svg' | inline_asset_content -}}
-                                      {{ discount.discount_application.title | escape }}
-                                    </li>
-                                  {%- endfor -%}
-                                </ul>
-                              {%- endif -%}
+                              <ul
+                                class="discounts list-unstyled"
+                                role="list"
+                                aria-label="{{ 'customer.order.discount' | t }}"
+                              >
+                                {%- for discount in item.line_level_discount_allocations -%}
+                                  <li class="discounts__discount">
+                                    {{- 'icon-discount.svg' | inline_asset_content -}}
+                                    {{ discount.discount_application.title | escape }}
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
 
                               <div class="nf-cart-item__actions text-[#3D3D3D] flex items-center">
                                 <!-- Save for Later button will be injected here by save-for-later.js -->
