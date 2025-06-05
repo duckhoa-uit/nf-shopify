@@ -58,54 +58,55 @@
         </div>
       </div>
 
-      <!-- Tab Navigation -->
-      <div class="tab-navigation flex border-b border-gray-200">
-        <button
-          type="button"
-          class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors active"
-          data-tab="body-measurements"
-        >
-          Body Measurements
-        </button>
-        <button
-          type="button"
-          class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors"
-          data-tab="product-measurements"
-        >
-          Product Measurements
-        </button>
-        <button
-          type="button"
-          class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors"
-          data-tab="size-recommender"
-        >
-          Size Recommender
-        </button>
-      </div>
+      {% if size_fit_data %}
+        <!-- Tab Navigation - Only show when product measurements exist -->
+        <div class="tab-navigation flex border-b border-gray-200">
+          <button
+            type="button"
+            class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors active"
+            data-tab="body-measurements"
+          >
+            Body Measurements
+          </button>
+          <button
+            type="button"
+            class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors"
+            data-tab="product-measurements"
+          >
+            Product Measurements
+          </button>
+          <button
+            type="button"
+            class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors"
+            data-tab="size-recommender"
+          >
+            Size Recommender
+          </button>
+        </div>
 
-      <!-- Tab Content -->
-      <div class="tab-content p-4 md:p-6">
-        <!-- Body Measurements Tab -->
-        <div id="body-measurements" class="tab-panel active">
+        <!-- Tab Content - Full functionality when product measurements exist -->
+        <div class="tab-content p-4 md:p-6">
+          <!-- Body Measurements Tab -->
+          <div id="body-measurements" class="tab-panel active">
+            {% render 'size-fit-body-measurements', product: product %}
+          </div>
+
+          <!-- Product Measurements Tab -->
+          <div id="product-measurements" class="tab-panel hidden">
+            {% render 'size-fit-product-measurements', measurements: size_fit_data, product: product %}
+          </div>
+
+          <!-- Size Recommender Tab -->
+          <div id="size-recommender" class="tab-panel hidden">
+            {% render 'size-fit-recommender', product: product %}
+          </div>
+        </div>
+      {% else %}
+        <!-- Simple view - Only body measurements when no product measurements -->
+        <div class="simple-content p-4 md:p-6">
           {% render 'size-fit-body-measurements', product: product %}
         </div>
-
-        <!-- Product Measurements Tab -->
-        <div id="product-measurements" class="tab-panel hidden">
-          {% if size_fit_data %}
-            {% render 'size-fit-product-measurements', measurements: size_fit_data, product: product %}
-          {% else %}
-            <div class="text-center py-8">
-              <p class="text-gray-500">No product measurements available for this item.</p>
-            </div>
-          {% endif %}
-        </div>
-
-        <!-- Size Recommender Tab -->
-        <div id="size-recommender" class="tab-panel hidden">
-          {% render 'size-fit-recommender', product: product %}
-        </div>
-      </div>
+      {% endif %}
     </div>
   </div>
 </div>
