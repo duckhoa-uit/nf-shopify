@@ -373,7 +373,20 @@
     assign color_position = -1
     assign option_index = 0
     for option in product.options_with_values
-      if option.name == 'Color' or option.name == 'Colour'
+      # Position-based color detection for internationalization
+      # Color is typically position 1 or has swatch values
+      assign swatch_count = option.values | map: 'swatch' | compact | size
+      assign is_color_option = false
+
+      if option.position == 1
+        assign is_color_option = true
+      endif
+
+      if swatch_count > 0
+        assign is_color_option = true
+      endif
+
+      if is_color_option
         assign color_position = option_index
         break
       endif
@@ -391,7 +404,28 @@
   if active_color_value == blank
     assign selected_options = first_variant.selected_options
     for option in selected_options
-      if option.name == 'Color' or option.name == 'Colour'
+      # Position-based color detection for internationalization
+      # Check if this is a color option (position 1 or has swatch values)
+      assign is_color_option = false
+      if option.name
+        # Find the corresponding option in product.options_with_values to check position
+        for product_option in product.options_with_values
+          if product_option.name == option.name
+            assign swatch_count = product_option.values | map: 'swatch' | compact | size
+
+            if product_option.position == 1
+              assign is_color_option = true
+            endif
+
+            if swatch_count > 0
+              assign is_color_option = true
+            endif
+            break
+          endif
+        endfor
+      endif
+
+      if is_color_option
         assign active_color_value = option.value | downcase | strip | replace: ' ', '-'
         break
       endif
