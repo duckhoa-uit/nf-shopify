@@ -586,31 +586,6 @@
                   </div>
                 {% endif %}
 
-                <!-- Size Chart -->
-                {% if product.metafields.custom.size_chart %}
-                  <div class="size-chart">
-                    <h3>Size Chart</h3>
-                    <table class="size-chart-table">
-                      <thead>
-                        <tr>
-                          {% for header in product.metafields.custom.size_chart.value.headers %}
-                            <th>{{ header }}</th>
-                          {% endfor %}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for row in product.metafields.custom.size_chart.value.rows %}
-                          <tr>
-                            {% for cell in row %}
-                              <td>{{ cell }}</td>
-                            {% endfor %}
-                          </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                {% endif %}
-
                 <!-- Main Elements -->
                 {% if product.metafields.custom.main_elements %}
                   <div class="main-elements">
