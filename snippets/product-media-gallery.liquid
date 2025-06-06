@@ -14,7 +14,9 @@
 {{ 'pagination-dots.css' | asset_url | stylesheet_tag }}
 {{ 'swiper.css' | asset_url | stylesheet_tag }}
 {%- comment -%} Swiper CSS loaded globally in theme.liquid {%- endcomment -%}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
+{%- if template.name == 'product' -%}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
+{%- endif -%}
 {{ 'lightbox.css' | asset_url | stylesheet_tag }}
 
 <style>
@@ -336,7 +338,10 @@
 </style>
 
 {%- comment -%} Swiper loaded globally in theme.liquid {%- endcomment -%}
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" defer></script>
+{%- comment -%} Load Fancybox only on product pages {%- endcomment -%}
+{%- if template.name == 'product' -%}
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" defer></script>
+{%- endif -%}
 <script type="module">
   import {
     parseImageUrl,
