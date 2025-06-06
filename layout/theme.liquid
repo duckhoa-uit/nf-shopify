@@ -475,7 +475,9 @@
     </script>
 
     {%- comment -%} Load dependencies before predictive-search.js to avoid dependency issues {%- endcomment -%}
-    <script src="{{ 'hyperhtml.min.js' | asset_url }}" defer="defer"></script>
+    {%- if settings.predictive_search_enabled -%}
+      <script src="{{ 'hyperhtml.min.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.predictive_search_enabled -%}

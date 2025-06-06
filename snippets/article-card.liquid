@@ -61,11 +61,11 @@
         {% endif %}
         {% render 'article-meta', article: article, is_detail_page: false %}
 
-        <h4 class="article-card__title">
+        <h3 class="article-card__title">
           <a href="{{ article.url }}" class="article-card__title-link">
             {{ article.title | escape }}
           </a>
-        </h4>
+        </h3>
 
         <div class="article-card__excerpt">
           {%- if article.excerpt.size > 0 -%}

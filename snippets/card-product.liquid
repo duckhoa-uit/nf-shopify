@@ -357,6 +357,7 @@
                   data-variant-id="{{ color_variant.id }}"
                   data-product-id="{{ card_product.id }}"
                   data-variant-image="{{ variant_image | image_url: width: 120 }}"
+                  aria-label="Select {{ color_variant.title | escape }} variant"
                   data-variant-image-srcset="{%- if variant_image.width >= 40 -%}{{ variant_image | image_url: width: 40 }} 40w,{%- endif -%}{%- if variant_image.width >= 60 -%}{{ variant_image | image_url: width: 60 }} 60w,{%- endif -%}{%- if variant_image.width >= 80 -%}{{ variant_image | image_url: width: 80 }} 80w,{%- endif -%}{%- if variant_image.width >= 100 -%}{{ variant_image | image_url: width: 100 }} 100w,{%- endif -%}{%- if variant_image.width >= 120 -%}{{ variant_image | image_url: width: 120 }} 120w,{%- endif -%}{{ variant_image | image_url }} {{ variant_image.width }}w"
                 >
                   {%- render 'optimized-image',
