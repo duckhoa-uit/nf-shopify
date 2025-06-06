@@ -102,7 +102,7 @@
 
 /* Filter toggle button */
 .filter-toggle {
-  display: hidden;
+  display: none;
 }
 .filter-toggle-btn {
   display: flex;
@@ -754,20 +754,23 @@ body.overflow-hidden {
 .mobile-facets__open {
   text-align: left;
   width: 100%;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  color: rgba(var(--color-base-foreground), 0.75);
 }
 
-.mobile-facets__open:hover {
-  color: rgb(var(--color-base-foreground));
+/* Override button styling for mobile facets when using primary button class */
+.mobile-facets__open.button {
+  min-width: auto;
+  min-height: 36px;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .mobile-facets__open:hover line,
 .mobile-facets__open:hover circle {
-  stroke: rgb(var(--color-base-foreground));
+  stroke: currentColor;
 }
 
 .mobile-facets__open-label {
@@ -781,6 +784,11 @@ body.overflow-hidden {
 
 .mobile-facets__open > * + * {
   margin-left: 1rem;
+}
+
+/* Ensure proper spacing for button elements */
+.mobile-facets__open.button > * + * {
+  margin-left: 0.75rem;
 }
 
 .mobile-facets__open .svg-wrapper {
