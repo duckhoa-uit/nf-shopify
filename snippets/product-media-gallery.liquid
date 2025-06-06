@@ -638,7 +638,7 @@
         // Fallback image in case video doesn't load
         const img = document.createElement('img');
         img.src = mediaObject.preview_image.src;
-        img.alt = mediaObject.alt || '';
+        img.alt = mediaObject.alt || mediaObject.preview_image.alt || 'Product video preview';
         img.className = 'absolute inset-0 w-full h-full object-cover';
         img.style.display = 'none'; // Hide by default
 
@@ -661,7 +661,7 @@
         // For images, create a standard image element
         const img = document.createElement('img');
         img.src = mediaObject ? mediaObject.src : url;
-        img.alt = mediaObject ? mediaObject.alt || '' : '';
+        img.alt = mediaObject ? (mediaObject.alt || 'Product image') : 'Product image';
         img.id = `ProductMedia-{{ section.id }}-${mediaId}`;
         img.className = 'media-item w-full h-full object-cover product-lightbox-img';
         img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');

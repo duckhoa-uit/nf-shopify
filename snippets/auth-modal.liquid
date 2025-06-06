@@ -110,7 +110,7 @@
                 | default: 'If you have lost your password, continue to the page'
               }}
               <a
-                href="javascript:void(0)"
+                href="{{ routes.account_recover_url }}"
                 title="Recover your forgotten password"
                 rel="nofollow"
                 class="text-accent underline forgot-password-link"
@@ -362,7 +362,7 @@
 
             <div class="text-center">
               <a
-                href="javascript:void(0)"
+                href="{{ routes.account_login_url }}"
                 class="text-black font-medium text-sm recovery-cancel"
               >
                 {{- 'customer.recover_password.cancel' | t | default: 'Back to login' -}}
@@ -632,7 +632,13 @@
 
     // Forgot password link
     forgotPasswordLink.addEventListener('click', function(e) {
-      e.preventDefault();
+      // Only prevent default if modal is visible (we're in modal context)
+      if (!modal.classList.contains('hidden')) {
+        e.preventDefault();
+      } else {
+        // Let default navigation happen if modal is not visible
+        return;
+      }
 
       // Get the modal panel element to animate its height
       const modalPanel = modal.querySelector('.md\\:max-w-md');
@@ -683,7 +689,13 @@
 
     // Recovery cancel link
     recoverCancelLink.addEventListener('click', function(e) {
-      e.preventDefault();
+      // Only prevent default if modal is visible (we're in modal context)
+      if (!modal.classList.contains('hidden')) {
+        e.preventDefault();
+      } else {
+        // Let default navigation happen if modal is not visible
+        return;
+      }
 
       // Get the modal panel element to animate its height
       const modalPanel = modal.querySelector('.md\\:max-w-md');
@@ -859,24 +871,17 @@
     // Initialize any auth trigger buttons
     document.querySelectorAll('[data-auth-trigger]').forEach(function(button) {
       button.addEventListener('click', function(e) {
-        e.preventDefault();
         const formType = e.currentTarget.getAttribute('data-auth-trigger');
 
         // Check if we're already on an auth page
         if (isOnAuthPage()) {
-          console.log('Already on auth page, redirecting instead of showing modal');
-
-          // Redirect to the appropriate page based on the form type
-          if (formType === 'login' && !window.location.pathname.includes('/account/login')) {
-            window.location.href = '/account/login';
-          } else if (formType === 'register' && !window.location.pathname.includes('/account/register')) {
-            window.location.href = '/account/register';
-          }
-
+          console.log('Already on auth page, allowing default navigation');
+          // Let the default href navigation happen
           return;
         }
 
-        // If not on an auth page, show the modal
+        // If not on an auth page, prevent default and show the modal
+        e.preventDefault();
         showAuthModal(formType);
       });
     });
