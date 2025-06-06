@@ -18,14 +18,13 @@
   }
 {%- endstyle -%}
 
-
 <div class="featured_blog color-{{ section.settings.color_scheme }} gradient{% if section.settings.heading == blank %} no-heading{% endif %}">
   <div class="page-width isolate section-{{ section.id }}-padding">
     {%- unless section.settings.heading == blank -%}
       <div class="title-wrapper-with-link title-wrapper--no-top-margin">
         <h2
           id="SectionHeading-{{ section.id }}"
-          class="font-extrabold font-archivo-expanded text-lg lg:text-2xl leading-7 text-[#0F0F0F] uppercase{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          class="font-extrabold font-archivo-expanded text-lg lg:text-2xl leading-7 text-gray-950 uppercase{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           {% if settings.animations_reveal_on_scroll %}
             data-cascade
           {% endif %}
