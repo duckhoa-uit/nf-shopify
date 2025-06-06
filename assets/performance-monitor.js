@@ -130,23 +130,31 @@
 
     // Send to Google Analytics if available
     if (typeof gtag !== 'undefined') {
-      gtag('event', 'performance_metrics', {
-        custom_map: {
-          metric1: 'fcp',
-          metric2: 'lcp',
-          metric3: 'fid',
-          metric4: 'cls'
-        },
-        fcp: vitals.FCP,
-        lcp: vitals.LCP,
-        fid: vitals.FID,
-        cls: vitals.CLS
-      });
+      try {
+        gtag('event', 'performance_metrics', {
+          custom_map: {
+            metric1: 'fcp',
+            metric2: 'lcp',
+            metric3: 'fid',
+            metric4: 'cls'
+          },
+          fcp: vitals.FCP,
+          lcp: vitals.LCP,
+          fid: vitals.FID,
+          cls: vitals.CLS
+        });
+      } catch (error) {
+        console.warn('Failed to send performance data to Google Analytics:', error);
+      }
     }
 
     // Send to Shopify Analytics if available
-    if (window.ShopifyAnalytics) {
-      window.ShopifyAnalytics.lib.track('Performance Metrics', performanceData);
+    if (window.ShopifyAnalytics && window.ShopifyAnalytics.lib && window.ShopifyAnalytics.lib.track) {
+      try {
+        window.ShopifyAnalytics.lib.track('Performance Metrics', performanceData);
+      } catch (error) {
+        console.warn('Failed to send performance data to Shopify Analytics:', error);
+      }
     }
 
     // Console log for development
