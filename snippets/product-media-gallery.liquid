@@ -13,7 +13,7 @@
 
 {{ 'pagination-dots.css' | asset_url | stylesheet_tag }}
 {{ 'swiper.css' | asset_url | stylesheet_tag }}
-{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+{%- comment -%} Swiper CSS loaded globally in theme.liquid {%- endcomment -%}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
 {{ 'lightbox.css' | asset_url | stylesheet_tag }}
 
@@ -335,7 +335,7 @@
   }
 </style>
 
-<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+{%- comment -%} Swiper loaded globally in theme.liquid {%- endcomment -%}
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" defer></script>
 <script type="module">
   import {

@@ -132,7 +132,7 @@
                             <li class="my-1.5 leading-7 text-left">
                               <a
                                 href="{{ link.url }}"
-                                class="text-[#3D3D3D] hover:text-accent text-sm leading-[1.125rem] transition-colors"
+                                class="text-gray-850 hover:text-accent text-sm leading-[1.125rem] transition-colors"
                               >
                                 {{ link.title | escape }}
                               </a>
@@ -159,7 +159,7 @@
                               <li class="my-1.5 leading-7 text-left">
                                 <a
                                   href="{{ link.url }}"
-                                  class="text-[#3D3D3D] hover:text-accent text-sm leading-[1.125rem] transition-colors"
+                                  class="text-gray-850 hover:text-accent text-sm leading-[1.125rem] transition-colors"
                                 >
                                   {{ link.title | escape }}
                                 </a>
@@ -214,7 +214,7 @@
                           <div class="rte">{{ settings.brand_description }}</div>
                         {%- endif -%}
                       {% endcomment %}
-                      <div class="flex flex-col w-full gap-y-3 [&_a]:flex [&_a]:items-center [&_a]:gap-2 [&_a]:text-[#3D3D3D] [&_a]:text-sm [&_a]:hover:text-accent [&_a]:transition-colors">
+                      <div class="flex flex-col w-full gap-y-3 [&_a]:flex [&_a]:items-center [&_a]:gap-2 [&_a]:text-gray-850 [&_a]:text-sm [&_a]:hover:text-accent [&_a]:transition-colors">
                         <a href="tel:+421 233 418 364" class="flex_address">
                           <span class="svg-wrapper size-4">{{ 'icon-telephone.svg' | inline_asset_content }}</span>
                           <span> +421 233 418 364 </span>
@@ -225,8 +225,8 @@
                         </a>
                         <a href="https://northfinder.com/en/contact-us">
                           <span class="svg-wrapper size-4">{{ 'icon-contact.svg' | inline_asset_content }}</span>
-                          {{ 'footer.contact_us' | t }}</a
-                        >
+                          {{ 'footer.contact_us' | t -}}
+                        </a>
                       </div>
                       {%- if block.settings.show_social and has_social_icons -%}
                         {%- render 'social-icons', class: 'footer__list-social' -%}
@@ -273,19 +273,23 @@
                     class="w-4 h-[11px]"
                     alt="English (English)"
                   >
-                  <span class="mr-2 border-r border-[#ccc] pr-2 text-[#3D3D3D] text-sm leading-[1.125rem]"
-                    >{{ 'footer.language' | t | default: 'English (English)' }}</span
-                  >
-                  <span class="font-semibold underline uppercase cursor-pointer text-sm">{{ 'footer.change' | t | default: 'Change' }}</span>
+                  <span class="mr-2 border-r border-[#ccc] pr-2 text-gray-850 text-sm leading-[1.125rem]">
+                    {{- 'footer.language' | t | default: 'English (English)' -}}
+                  </span>
+                  <span class="font-semibold underline uppercase cursor-pointer text-sm">
+                    {{- 'footer.change' | t | default: 'Change' -}}
+                  </span>
                 </div>
               </div>
-              {% comment %} <a
-                class="hidden md:inline-flex my-6 py-[0.625rem] px-5 w-full md:w-fit justify-center items-center gap-2 text-sm text-[#3d3d3d] text-center rounded-3 border border-[#E0E0E0] shadow-2xs"
-                href="https://northfinder.com/en/stores"
-              >
-                <span class="svg-wrapper size-5">{{ 'icon-store.svg' | inline_asset_content }}</span>
-                <span>Find a store</span></a
-              > {% endcomment %}
+              {% comment %}
+                <a
+                  class="hidden md:inline-flex my-6 py-[0.625rem] px-5 w-full md:w-fit justify-center items-center gap-2 text-sm text-[#3d3d3d] text-center rounded-3 border border-[#E0E0E0] shadow-2xs"
+                  href="https://northfinder.com/en/stores"
+                >
+                  <span class="svg-wrapper size-5">{{ 'icon-store.svg' | inline_asset_content }}</span>
+                  <span>Find a store</span></a
+                >
+              {% endcomment %}
             </div>
           </div>
         {%- endif -%}
@@ -301,7 +305,7 @@
   >
     <div class="footer__content-bottom-wrapper page-width  w-full lg:max-w-[75rem]">
       <div class="flex flex-col md:flex-row items-center justify-between min-h-[3.75rem] w-full">
-        <span class="text-sm text-[#3D3D3D] leading-[1.125rem]">
+        <span class="text-sm text-gray-850 leading-[1.125rem]">
           {{ 'footer.copyright' | t }}
         </span>
         <div class="md:border-l border-[#E0E0E0] h-[1.8125rem] pl-2">
