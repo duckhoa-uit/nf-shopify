@@ -76,7 +76,7 @@
         </div>
 
         <div class="article-card__footer">
-          <a class="article-card__read-more" href="{{ article.url }}">
+          <a class="article-card__read-more" href="{{ article.url }}" aria-label="Read full article: {{ article.title | escape }}">
             {{ 'blogs.article.read_more' | t }} <span class="svg-wrapper -rotate-90 size-3">{{ 'icon-caret.svg' | inline_asset_content }}</span>
           </a>
         </div>

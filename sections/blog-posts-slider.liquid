@@ -100,7 +100,7 @@
                         | truncatewords: 15
                       }}
                     </div>
-                    <a href="{{ article.url }}" class="blog-posts-slider__button">
+                    <a href="{{ article.url }}" class="blog-posts-slider__button" aria-label="Read full article: {{ article.title | escape }}">
                       {{ 'blogs.article.read_more' | t }}
                     </a>
                   </div>
