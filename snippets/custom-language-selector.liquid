@@ -13,12 +13,13 @@
     aria-controls="{{ localPosition }}List"
     aria-describedby="{{ localPosition }}Label"
   >
-    <img 
-      src="{{ 'flag-' | append: localization.language.iso_code | downcase | append: '.png' | asset_url }}" 
+    <img
+      src="{{ 'flag-' | append: localization.language.iso_code | downcase | append: '.png' | asset_url }}"
       alt="{{ localization.language.endonym_name }}"
-      width="24"
-      height="16"
+      width="22"
+      height="15"
       class="language-flag"
+      loading="lazy"
     >
   </button>
   <div class="custom-language-dropdown" hidden>
@@ -35,12 +36,13 @@
             {% endif %}
             data-value="{{ language.iso_code }}"
           >
-            <img 
-              src="{{ 'flag-' | append: language.iso_code | downcase | append: '.png' | asset_url }}" 
+            <img
+              src="{{ 'flag-' | append: language.iso_code | downcase | append: '.png' | asset_url }}"
               alt="{{ language.endonym_name }}"
-              width="24"
-              height="16"
+              width="22"
+              height="15"
               class="language-flag"
+              loading="lazy"
             >
             <span class="language-name">
               {{ language.endonym_name }}
