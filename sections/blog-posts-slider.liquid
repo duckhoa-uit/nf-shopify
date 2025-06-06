@@ -74,7 +74,7 @@
                           {%- if article.image.width >= 535 -%}{{ article.image | image_url: width: 535 }} 535w,{%- endif -%}
                           {%- if article.image.width >= 750 -%}{{ article.image | image_url: width: 750 }} 750w,{%- endif -%}
                           {%- if article.image.width >= 1070 -%}{{ article.image | image_url: width: 1070 }} 1070w,{%- endif -%}
-                          {%- if article.image.width >= 1500 -%}{{ article.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                          {%- if article.image.width >= 1200 -%}{{ article.image | image_url: width: 1200 }} 1200w,{%- endif -%}
                         "
                         src="{{ article.image | image_url: width: 533 }}"
                         sizes="(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw"

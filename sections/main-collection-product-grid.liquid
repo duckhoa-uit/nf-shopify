@@ -48,11 +48,7 @@
     endif
   %}
 
-  <div style="display: none;" data-debug-info="Products per page: {{ products_per_page }}"></div>
-  <script>
-    console.log('Products per page from Liquid: {{ products_per_page }}');
-    console.log('URL parameters:', {{ request.parameters | json }});
-  </script>
+
 
   {%- paginate collection.products by products_per_page -%}
     <div style="display: none;" data-debug-paginate="Items per page: {{ paginate.page_size }}"></div>
