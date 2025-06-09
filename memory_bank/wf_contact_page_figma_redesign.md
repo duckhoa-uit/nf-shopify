@@ -160,8 +160,7 @@
     {
       "type": "url",
       "id": "contact_page_url",
-      "label": "Contact Page URL",
-      "default": "/pages/contact"
+      "label": "Contact Page URL"
     }
   ]
 }
