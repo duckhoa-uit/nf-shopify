@@ -18,31 +18,29 @@
   }
 {%- endstyle -%}
 
-<div class="featured_blog color-{{ section.settings.color_scheme }} gradient{% if section.settings.heading == blank %} no-heading{% endif %}">
+<div class="featured_blog color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width isolate section-{{ section.id }}-padding">
-    {%- unless section.settings.heading == blank -%}
-      <div class="title-wrapper-with-link title-wrapper--no-top-margin">
-        <h2
-          id="SectionHeading-{{ section.id }}"
-          class="font-extrabold font-archivo-expanded text-lg lg:text-2xl leading-7 text-gray-950 uppercase{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-          {% if settings.animations_reveal_on_scroll %}
-            data-cascade
-          {% endif %}
-        >
-          {{ section.settings.heading }}
-        </h2>
+    <div class="title-wrapper-with-link title-wrapper--no-top-margin">
+      <h2
+        id="SectionHeading-{{ section.id }}"
+        class="font-extrabold font-archivo-expanded text-lg lg:text-2xl leading-7 text-gray-950 uppercase{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+        {% if settings.animations_reveal_on_scroll %}
+          data-cascade
+        {% endif %}
+      >
+        {{ 'sections.featured_blog.heading' | t }}
+      </h2>
 
-        {%- if section.settings.blog != blank and section.settings.show_view_all -%}
-          <a
-            href="{{ section.settings.blog.url }}"
-            class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} items-center gap-2 text-foreground text-base font-semibold leading-4 uppercase hidden md:flex"
-          >
-            {{ 'sections.featured_blog.view_all' | t -}}
-            <span class="svg-wrapper -rotate-90 size-3">{{ 'icon-caret.svg' | inline_asset_content }}</span>
-          </a>
-        {%- endif -%}
-      </div>
-    {%- endunless -%}
+      {%- if section.settings.blog != blank and section.settings.show_view_all -%}
+        <a
+          href="{{ section.settings.blog.url }}"
+          class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %} items-center gap-2 text-foreground text-base font-semibold leading-4 uppercase hidden md:flex"
+        >
+          {{ 'sections.featured_blog.view_all' | t -}}
+          <span class="svg-wrapper -rotate-90 size-3">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+        </a>
+      {%- endif -%}
+    </div>
 
     <div class="swiper w-full{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
       <div
@@ -197,12 +195,6 @@
     "groups": ["header", "footer"]
   },
   "settings": [
-    {
-      "type": "inline_richtext",
-      "id": "heading",
-      "default": "t:sections.featured-blog.settings.heading.default",
-      "label": "t:sections.featured-blog.settings.heading.label"
-    },
     {
       "type": "blog",
       "id": "blog",
