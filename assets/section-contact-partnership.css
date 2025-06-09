@@ -1,0 +1,201 @@
+/* Partnership Section Wrapper */
+.contact-partnership-wrapper {
+  background-color: #0f0f0f;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 49.25rem; /* 788px */
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* Fallback pattern when no background image is uploaded */
+.contact-partnership-wrapper:not([style*="background-image"]) {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+}
+
+.contact-partnership {
+  width: 100%;
+}
+
+.contact-partnership__background {
+  position: relative;
+  max-width: 92.5rem; /* 1480px */
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.contact-partnership__content {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 3rem;
+  border-radius: 0.1875rem;
+  position: relative;
+  max-width: 30.5rem; /* 488px */
+  min-height: 25.75rem; /* 412px */
+  margin-left: 6rem; /* 96px offset from left */
+}
+
+@media screen and (max-width: 1199px) {
+  .contact-partnership__content {
+    margin-left: 3rem;
+    max-width: 28rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .contact-partnership__content {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 2rem;
+    min-height: auto;
+  }
+
+  .contact-partnership-wrapper {
+    min-height: auto;
+    padding: 3rem 0;
+  }
+}
+
+/* Typography */
+.contact-partnership__heading {
+  font-family: "Archivo SemiExpanded", sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.333;
+  text-transform: uppercase;
+  color: #0f0f0f;
+  margin: 0 0 1.5rem 0;
+}
+
+@media screen and (min-width: 750px) {
+  .contact-partnership__heading {
+    font-size: 1.5rem; /* 24px to match Figma */
+    line-height: 1.333;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.contact-partnership__description {
+  font-family: "Archivo", sans-serif;
+  font-weight: 400;
+  font-size: 1rem; /* 16px to match Figma */
+  line-height: 1.5;
+  color: #3d3d3d;
+  margin: 0 0 2rem 0;
+}
+
+@media screen and (min-width: 750px) {
+  .contact-partnership__description {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Contact Section */
+.contact-partnership__contact {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.contact-partnership__avatar {
+  flex-shrink: 0;
+}
+
+.contact-partnership__avatar-circle {
+  width: 4.375rem; /* 70px to match Figma */
+  height: 4.375rem; /* 70px to match Figma */
+  background-color: #ec0009;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-partnership__avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.contact-partnership__details {
+  flex: 1;
+  padding-top: 0.5rem; /* Align with avatar center */
+}
+
+.contact-partnership__name {
+  font-family: "Archivo", sans-serif;
+  font-weight: 600;
+  font-size: 1.125rem; /* 18px to match Figma */
+  line-height: 1.556;
+  color: #000000;
+  margin: 0 0 0.5rem 0;
+}
+
+.contact-partnership__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact-partnership__email,
+.contact-partnership__phone {
+  font-family: "Archivo", sans-serif;
+  font-weight: 400;
+  font-size: 1rem; /* 16px to match Figma */
+  line-height: 1.5;
+  color: #ec0009; /* Red color to match Figma */
+  margin: 0;
+}
+
+.contact-partnership__email a,
+.contact-partnership__phone a {
+  color: #ec0009; /* Red color to match Figma */
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contact-partnership__email a:hover,
+.contact-partnership__phone a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+
+/* Mobile responsive adjustments */
+@media screen and (max-width: 749px) {
+  .contact-partnership__heading {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .contact-partnership__description {
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-partnership__contact {
+    gap: 1.5rem;
+  }
+
+  .contact-partnership__avatar-circle {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .contact-partnership__name {
+    font-size: 1rem;
+  }
+
+  .contact-partnership__email,
+  .contact-partnership__phone {
+    font-size: 0.875rem;
+  }
+
+  .contact-partnership__details {
+    padding-top: 0.25rem;
+  }
+}

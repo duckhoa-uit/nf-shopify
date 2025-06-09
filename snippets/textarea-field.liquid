@@ -1,49 +1,37 @@
 {% comment %}
-  Reusable form field component
+  Reusable textarea field component
 
   Accepts:
-  - type: Input type (text, email, password, tel, etc.)
-  - id: Input ID
-  - name: Input name
-  - value: Input value
+  - id: Textarea ID
+  - name: Textarea name
+  - value: Textarea value
   - label: Label text
   - placeholder: Placeholder text (default: " ")
   - required: Whether the field is required (default: false)
   - readonly: Whether the field is readonly (default: false)
-  - pattern: Validation pattern
-  - title: Validation message
-  - min_length: Minimum length
+  - rows: Number of rows (default: 10)
   - class: Additional CSS classes
 {% endcomment %}
 
 {%- assign placeholder = placeholder | default: ' ' -%}
 {%- assign required = required | default: false -%}
 {%- assign readonly = readonly | default: false -%}
+{%- assign rows = rows | default: 10 -%}
 
 <div class="field{% if class %} {{ class }}{% endif %}">
-  <input
-    type="{{ type }}"
+  <textarea
     id="{{ id }}"
     name="{{ name }}"
-    class="field__input"
-    value="{{ value | default: '' }}"
+    class="text-area field__input"
+    rows="{{ rows }}"
     placeholder="{{ placeholder }}"
     {% if required %}
       required
     {% endif %}
-    {% if pattern %}
-      pattern="{{ pattern }}"
-    {% endif %}
-    {% if title %}
-      title="{{ title }}"
-    {% endif %}
-    {% if min_length %}
-      minlength="{{ min_length }}"
-    {% endif %}
     {% if readonly %}
       readonly
     {% endif %}
-  >
+  >{{ value | default: '' }}</textarea>
   <label class="field__label" for="{{ id }}">
     {% if label contains 'customer.' or label contains 'general.' or label contains 'templates.' %}
       {{ label | t }}
