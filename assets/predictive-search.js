@@ -8,6 +8,24 @@ class PredictiveSearch extends SearchForm {
     this.abortController = new AbortController();
     this.searchTerm = '';
 
+    // Helper function to decode HTML entities
+    this.decodeHtmlEntities = (str) => {
+      const textarea = document.createElement('textarea');
+      textarea.innerHTML = str;
+      return textarea.value;
+    };
+
+    // Localized strings - fallback to window.theme.strings if available
+    this.translations = {
+      categories: this.decodeHtmlEntities(window.theme?.strings?.search?.categories || 'Categories'),
+      articles: this.decodeHtmlEntities(window.theme?.strings?.search?.articles || 'Articles'),
+      products: this.decodeHtmlEntities(window.theme?.strings?.search?.products || 'Products'),
+      no_results: this.decodeHtmlEntities(window.theme?.strings?.search?.no_results || 'No results found for {{ terms }}. Check the spelling or use a different word or phrase.'),
+      no_results_suggestion: this.decodeHtmlEntities(window.theme?.strings?.search?.no_results_suggestion || 'Try checking your spelling or using different words.')
+    };
+
+
+
     this.setupEventListeners();
   }
 
@@ -165,9 +183,9 @@ class PredictiveSearch extends SearchForm {
 
     const template = hyperHTML.wire();
     const categoryLabelMap = {
-      collections: 'Categories',
-      articles: 'Articles',
-      products: 'Products',
+      collections: this.translations.categories,
+      articles: this.translations.articles,
+      products: this.translations.products,
     };
 
     // Check if we have any results
@@ -219,7 +237,7 @@ class PredictiveSearch extends SearchForm {
       // Simple money formatter that mimics Shopify's money filter
       // This doesn't rely on Shopify.formatMoney which might not be available
 
-      // Default to USD if currency info is not available
+      // Default to EUR formatting
       let currencySymbol = '€';
       let decimalSeparator = ',';
       let thousandsSeparator = '.';
@@ -263,8 +281,8 @@ class PredictiveSearch extends SearchForm {
         ${!hasResults ?
           hyperHTML.wire()`
             <div class="nf__predictive-search__no-results">
-              <p class="nf__predictive-search__no-results-text">${window.theme?.strings?.search?.no_results || `No results found for "${this.searchTerm}"`}</p>
-              <p class="nf__predictive-search__no-results-suggestion">${window.theme?.strings?.search?.suggestions || 'Try checking your spelling or using different words.'}</p>
+              <p class="nf__predictive-search__no-results-text">${this.translations.no_results.replace('{{ terms }}', `"${this.searchTerm}"`)}</p>
+              <p class="nf__predictive-search__no-results-suggestion">${this.translations.no_results_suggestion}</p>
             </div>
           ` :
           ['collections', 'articles', 'products']
@@ -421,12 +439,16 @@ class PredictiveSearch extends SearchForm {
       noResultsElement.style.padding = '20px';
       noResultsElement.style.textAlign = 'center';
 
-      // Style the main message
+      // Style the main message and fix text content
       const noResultsText = this.querySelector('.nf__predictive-search__no-results-text');
       if (noResultsText) {
         noResultsText.style.fontSize = '16px';
         noResultsText.style.fontWeight = '600';
         noResultsText.style.marginBottom = '8px';
+
+        // Fix the text content by setting it directly
+        const cleanText = this.translations.no_results.replace('{{ terms }}', `"${this.searchTerm}"`);
+        noResultsText.textContent = cleanText;
       }
 
       // Style the suggestion text
