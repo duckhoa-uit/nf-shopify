@@ -18,7 +18,7 @@
 <div class="color-{{ section.settings.color_scheme }} gradient bg-gray-100">
   <div class="page-width section-{{ section.id }}-padding">
     <h2 class="font-extrabold font-archivo-expanded text-base lg:text-2xl leading-7 text-[#0F0F0F] uppercase mb-3 lg:mb-6{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-      Contact
+      {{ 'sections.contact_form.heading' | t }}
     </h2>
     <div class="contact">
       <div class="contact-info__container">
@@ -102,7 +102,7 @@
         {%- else -%}
           <h2 class="contact__form-heading">{{ 'templates.contact.form.write_to_us' | t }}</h2>
         {%- endif -%}
-        <p class="text-sm leading-5 md:text-lg text-black md:leading-7">Radi vám poradime</p>
+        <p class="text-sm leading-5 md:text-lg text-black md:leading-7">{{ 'templates.contact.info.subtitle' | t }}</p>
         {%- liquid
           assign contact_form_class = 'isolate'
           if settings.animations_reveal_on_scroll
