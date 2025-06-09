@@ -1,8 +1,9 @@
 # Workflow: Localization Support
 
 ## Current tasks from user prompt
-- Support localization cho hardcode text trong `/sections/featured-blog.liquid`
-- Support localization cho hardcode text trong `/sections/contact-form.liquid`
+- Support localization cho hardcode text trong `/sections/featured-blog.liquid` ✅
+- Support localization cho hardcode text trong `/sections/contact-form.liquid` ✅
+- Support localization cho hardcode text trong `/sections/main-register.liquid` 🔄
 
 ## Plan (simple)
 1. Kiểm tra nội dung của hai file để xác định các hardcode text
@@ -41,5 +42,30 @@
   - de.json: thêm `sections.featured_blog.heading` và `sections.contact_form.heading`
   - sk.json: thêm `sections.featured_blog.heading`, `sections.contact_form.heading` và `templates.contact.info.subtitle`
 
+## Hardcode text cần localize trong main-register.liquid:
+- Line 136: "At least 8 characters"
+- Line 137: "At least one lowercase letter"
+- Line 138: "At least one uppercase letter"
+- Line 139: "At least one number"
+- Line 140: "At least one special character"
+- Line 212: "Please enter your first name"
+- Line 222: "Please enter your last name"
+- Line 233: "Please enter your email address"
+- Line 238: "Please enter a valid email address"
+- Line 273: "Password must meet all requirements"
+
+## Things done cho main-register.liquid
+- Thay thế hardcode text trong password requirements (lines 136-140)
+- Thay thế validation messages trong JavaScript:
+  - "Please enter your first name" → `{{ 'customer.form_errors.first_name' | t }}`
+  - "Please enter your last name" → `{{ 'customer.form_errors.last_name' | t }}`
+  - "Please enter your email address" → `{{ 'customer.form_errors.email_required' | t }}`
+  - "Please enter a valid email address" → `{{ 'customer.form_errors.email_invalid' | t }}`
+  - "Password must meet all requirements" → `{{ 'customer.form_errors.password_requirements' | t }}`
+- Cập nhật translation files:
+  - en.default.json: thêm `customer.form_errors.password_requirements`
+  - de.json: thêm `customer.form_errors.password_requirements`
+  - sk.json: thêm toàn bộ phần `customer.form_errors` và cập nhật `customer.register`
+
 ## Things not done yet
-- Hoàn thành
+- Hoàn thành ✅

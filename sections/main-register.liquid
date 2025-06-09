@@ -133,11 +133,11 @@
           }}
         </p>
         <ul class="mt-1 ml-4 list-disc">
-          <li class="requirement-length">At least 8 characters</li>
-          <li class="requirement-lowercase">At least one lowercase letter</li>
-          <li class="requirement-uppercase">At least one uppercase letter</li>
-          <li class="requirement-number">At least one number</li>
-          <li class="requirement-special">At least one special character</li>
+          <li class="requirement-length">{{ 'customer.register.password_requirement_length' | t }}</li>
+          <li class="requirement-lowercase">{{ 'customer.register.password_requirement_lowercase' | t }}</li>
+          <li class="requirement-uppercase">{{ 'customer.register.password_requirement_uppercase' | t }}</li>
+          <li class="requirement-number">{{ 'customer.register.password_requirement_number' | t }}</li>
+          <li class="requirement-special">{{ 'customer.register.password_requirement_special' | t }}</li>
         </ul>
       </div>
       {%- if form.errors contains 'password' -%}
@@ -164,7 +164,7 @@
         %}
       </div>
 
-      <button type="submit" class="button button--primary mt-4">
+      <button type="submit" class="button button--primary w-full mt-4">
         <span class="button-text">{{ 'customer.register.submit' | t }}</span>
         <span class="button-spinner" style="display: none;">
           {{- 'loading-spinner.svg' | inline_asset_content -}}
@@ -209,7 +209,7 @@
 
           // Validate first name
           if (firstNameInput && !firstNameInput.value.trim()) {
-            firstNameInput.setCustomValidity('Please enter your first name');
+            firstNameInput.setCustomValidity('{{ 'customer.form_errors.first_name' | t }}');
             firstNameInput.reportValidity();
             firstNameInput.focus();
             return false;
@@ -219,7 +219,7 @@
 
           // Validate last name
           if (lastNameInput && !lastNameInput.value.trim()) {
-            lastNameInput.setCustomValidity('Please enter your last name');
+            lastNameInput.setCustomValidity('{{ 'customer.form_errors.last_name' | t }}');
             lastNameInput.reportValidity();
             lastNameInput.focus();
             return false;
@@ -230,12 +230,12 @@
           // Validate email
           if (emailInput) {
             if (!emailInput.value.trim()) {
-              emailInput.setCustomValidity('Please enter your email address');
+              emailInput.setCustomValidity('{{ 'customer.form_errors.email_required' | t }}');
               emailInput.reportValidity();
               emailInput.focus();
               return false;
             } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
-              emailInput.setCustomValidity('Please enter a valid email address');
+              emailInput.setCustomValidity('{{ 'customer.form_errors.email_invalid' | t }}');
               emailInput.reportValidity();
               emailInput.focus();
               return false;
@@ -270,7 +270,7 @@
               }
 
               // Show error message
-              passwordInput.setCustomValidity('Password must meet all requirements');
+              passwordInput.setCustomValidity('{{ 'customer.form_errors.password_requirements' | t }}');
               passwordInput.reportValidity();
               passwordInput.focus();
               return false; // Stop here and don't submit
@@ -368,7 +368,7 @@
           if (validation.isValid) {
             this.setCustomValidity('');
           } else if (this.value.length > 0) {
-            this.setCustomValidity('Password must meet all requirements');
+            this.setCustomValidity('{{ 'customer.form_errors.password_requirements' | t }}');
           } else {
             this.setCustomValidity('');
           }
