@@ -1,17 +1,39 @@
 {
   "sections": {
+    "breadcrumb": {
+      "type": "breadcrumb",
+      "settings": {
+        "back_text": "Back",
+        "home_text": "Home",
+        "divider_style": "arrow"
+      }
+    },
     "main": {
       "type": "main-page",
       "settings": {
+        "show_title": true,
         "padding_top": 36,
-        "padding_bottom": 36
+        "padding_bottom": 0
       }
     },
     "form": {
       "type": "contact-form",
       "settings": {
         "heading": "",
-        "heading_size": "h1",
+        "heading_size": "h2",
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "partnership": {
+      "type": "contact-partnership",
+      "settings": {
+        "heading": "",
+        "description": "",
+        "contact_name": "",
+        "contact_email": "",
+        "contact_phone": "",
         "color_scheme": "scheme-1",
         "padding_top": 36,
         "padding_bottom": 36
@@ -19,7 +41,9 @@
     }
   },
   "order": [
+    "breadcrumb",
     "main",
-    "form"
+    "form",
+    "partnership"
   ]
 }
