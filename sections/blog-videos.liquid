@@ -93,7 +93,7 @@
     font-size: 0.875rem;
   }
 
-  .blog-categories {
+  .blog-videos .blog-categories {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
@@ -102,18 +102,18 @@
     padding-bottom: 1rem;
   }
 
-  .blog-category {
+  .blog-videos .blog-category {
     font-weight: 500;
     text-transform: uppercase;
     cursor: pointer;
     position: relative;
   }
 
-  .blog-category.active {
+  .blog-videos .blog-category.active {
     color: #EC0009;
   }
 
-  .blog-category.active::after {
+  .blog-videos .blog-category.active::after {
     content: '';
     position: absolute;
     bottom: -1rem;
@@ -123,7 +123,7 @@
     background-color: #EC0009;
   }
 
-  .no-results-message {
+  .blog-videos .no-results-message {
     text-align: center;
     padding: 2rem 0;
     font-size: 1rem;
@@ -131,14 +131,14 @@
     display: none;
   }
 
-  .load-more-container {
+  .blog-videos .load-more-container {
     display: flex;
     justify-content: center;
     margin-top: 2rem;
   }
 
   /* Use unified button system - override specific properties for load-more */
-  .load-more-button.button {
+  .blog-videos .load-more-button.button {
     min-width: 160px;
     padding: 12px 60px;
   }
@@ -153,37 +153,25 @@
     <div class="blog-categories">
       <div class="blog-category active" data-category="all">{{ 'blogs.main_blog.all_articles' | t }}</div>
 
-      {% comment %}Get unique tags from all articles{% endcomment %}
-      {%- assign all_tags = '' -%}
-      {%- for article in blogs.video.articles -%}
-        {%- for tag in article.tags -%}
-          {%- assign all_tags = all_tags | append: ',' | append: tag | downcase -%}
-        {%- endfor -%}
-      {%- endfor -%}
-
-      {% comment %}Convert to array and remove duplicates{% endcomment %}
-      {%- assign tag_array = all_tags | remove_first: ',' | split: ',' -%}
-      {%- assign unique_tags = '' -%}
-
-      {%- for tag in tag_array -%}
-        {%- unless unique_tags contains tag -%}
-          {%- assign unique_tags = unique_tags | append: ',' | append: tag -%}
-          <div class="blog-category" data-category="{{ tag }}">#{{ tag }}</div>
-        {%- endunless -%}
+      {% comment %}Use Shopify's built-in blog.all_tags for better performance{% endcomment %}
+      {%- for tag in blogs.video.all_tags -%}
+        {%- assign tag_lower = tag | downcase -%}
+        <div class="blog-category" data-category="{{ tag_lower }}">#{{ tag_lower }}</div>
       {%- endfor -%}
 
       {% comment %}Fallback to predefined categories if no tags found{% endcomment %}
-      {% if unique_tags == '' %}
-        <div class="blog-category" data-category="skialp">#{{ 'blogs.main_blog.categories.skialp' | t }}</div>
-        <div class="blog-category" data-category="adventure">#{{ 'blogs.main_blog.categories.adventure' | t }}</div>
-        <div class="blog-category" data-category="tips">#{{ 'blogs.main_blog.categories.tips' | t }}</div>
-        <div class="blog-category" data-category="gear">#{{ 'blogs.main_blog.categories.gear' | t }}</div>
+      {% if blogs.video.all_tags.size == 0 %}
+        <div class="blog-category" data-category="northkit">#northkit</div>
+        <div class="blog-category" data-category="vlog">#vlog</div>
       {% endif %}
     </div>
   {% endif %}
 
   {%- paginate blogs.video.articles by section.settings.posts_per_page -%}
-    <div class="blog-videos-grid">
+    <div class="blog-videos-grid"
+         data-total-pages="{{ paginate.pages }}"
+         data-current-page="{{ paginate.current_page }}"
+         data-posts-per-page="{{ section.settings.posts_per_page }}">
       <div class="no-results-message">{{ 'blogs.main_blog.no_results' | t }}</div>
       {%- for article in blogs.video.articles -%}
         <div
@@ -303,11 +291,11 @@
     if (!blogVideosSection) return; // Exit if this section is not on the page
 
     const categories = blogVideosSection.querySelectorAll('.blog-category');
-    const articles = document.querySelectorAll('.blog-videos-grid__article');
+    const articles = blogVideosSection.querySelectorAll('.blog-videos-grid__article');
 
     // Fix YouTube iframes if needed
     function fixYouTubeEmbeds() {
-      const iframes = document.querySelectorAll('.video-embed iframe');
+      const iframes = blogVideosSection.querySelectorAll('.video-embed iframe');
       iframes.forEach((iframe) => {
         const src = iframe.getAttribute('src');
         if (src && (src.includes('youtube.com') || src.includes('youtu.be'))) {
@@ -337,57 +325,203 @@
     // Run the fix on page load
     fixYouTubeEmbeds();
 
-    // Debug function to check available tags in articles
-    function debugAvailableTags() {
-      const allTags = new Set();
-      articles.forEach((article) => {
-        const tags = article.getAttribute('data-tags') || '';
-        if (tags) {
-          tags.split(' ').forEach((tag) => allTags.add(tag));
-        }
-      });
-      console.log('Available tags in articles:', Array.from(allTags));
-
-      // Log category tabs
-      const categoryTabs = [];
-      categories.forEach((category) => {
-        categoryTabs.push(category.getAttribute('data-category'));
-      });
-      console.log('Category tabs:', categoryTabs);
-    }
-
-    // Run debug on page load
-    debugAvailableTags();
-
     // Current filters state
     let currentCategory = 'all';
     let currentPage = 1;
+    let isLoadingPosts = false;
+    let loadedPages = new Set([1]); // Track which pages we've loaded
 
-    // Function to filter articles based on category
-    function filterArticles() {
-      let visibleCount = 0;
-      const noResultsMessage = document.querySelector('.no-results-message');
+    // Initialize category from URL parameters for deep linking
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryFromUrl = urlParams.get('video_category');
+
+    if (categoryFromUrl) {
+      currentCategory = categoryFromUrl;
+      // Update active category tab
+      categories.forEach((cat) => cat.classList.remove('active'));
+      const activeCategory = blogVideosSection.querySelector(`[data-category="${categoryFromUrl}"]`);
+      if (activeCategory) {
+        activeCategory.classList.add('active');
+      }
+    }
+
+    // Function to load posts from a specific page
+    async function loadPostsFromPage(pageNumber) {
+      if (isLoadingPosts || loadedPages.has(pageNumber)) {
+        return [];
+      }
+
+      isLoadingPosts = true;
+      const nextPageUrl = window.location.pathname + '?page=' + pageNumber;
+
+      try {
+        const response = await fetch(nextPageUrl);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newArticles = doc.querySelectorAll('.blog-videos-grid__article');
+
+        loadedPages.add(pageNumber);
+        return Array.from(newArticles);
+      } catch (error) {
+        console.error('Error loading posts from page', pageNumber, ':', error);
+        return [];
+      } finally {
+        isLoadingPosts = false;
+      }
+    }
+
+    // Function to automatically load posts until we find matches for the current filter
+    async function loadPostsForFilter(maxPages = 3) {
+      if (currentCategory === 'all') {
+        return; // No need to load more for 'all' filter
+      }
+
+      const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
+      const totalPages = parseInt(gridContainer.getAttribute('data-total-pages')) || 1;
       const loadMoreButton = document.getElementById('blog-videos-load-more-button');
 
-      // For debugging - log the current category and available articles
-      console.log('Filtering by category:', currentCategory);
-      console.log('Available articles:', articles.length);
+      // Show loading state on load more button if it exists
+      if (loadMoreButton) {
+        loadMoreButton.classList.add('loading');
+      }
 
-      articles.forEach((article) => {
+      let foundMatches = false;
+      let pagesToLoad = Math.min(maxPages, totalPages - loadedPages.size);
+
+      for (let i = 1; i <= pagesToLoad; i++) {
+        const nextPage = Math.max(...loadedPages) + 1;
+        if (nextPage > totalPages) break;
+
+        const newArticles = await loadPostsFromPage(nextPage);
+
+        if (newArticles.length > 0) {
+          // Add articles to DOM
+          newArticles.forEach((article) => {
+            const clonedArticle = article.cloneNode(true);
+            gridContainer.appendChild(clonedArticle);
+
+            // Check if this article matches current filter
+            if (currentCategory !== 'all') {
+              const tags = clonedArticle.getAttribute('data-tags') || '';
+              const categoryLower = currentCategory.toLowerCase().trim();
+              const tagsLower = tags.toLowerCase().trim();
+              const tagsArray = tagsLower.split(/\s+/).filter(tag => tag.length > 0);
+
+              if (tagsArray.includes(categoryLower)) {
+                foundMatches = true;
+              }
+            }
+          });
+
+          // Fix YouTube embeds in newly loaded content
+          fixYouTubeEmbeds();
+        }
+      }
+
+      // Remove loading state
+      if (loadMoreButton) {
+        loadMoreButton.classList.remove('loading');
+      }
+
+      // Update load more button visibility after loading
+      updateLoadMoreButton();
+
+      return foundMatches;
+    }
+
+    // Function to update load more button visibility
+    function updateLoadMoreButton() {
+      const loadMoreButton = document.getElementById('blog-videos-load-more-button');
+      if (!loadMoreButton) return;
+
+      const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
+      const totalPages = parseInt(gridContainer.getAttribute('data-total-pages')) || 1;
+      const postsPerPage = parseInt(gridContainer.getAttribute('data-posts-per-page')) || 4;
+      const currentArticles = blogVideosSection.querySelectorAll('.blog-videos-grid__article');
+
+      // Count visible articles
+      let visibleCount = 0;
+      currentArticles.forEach((article) => {
+        if (article.style.display !== 'none') {
+          visibleCount++;
+        }
+      });
+
+      // New approach: Show button based on content availability rather than page tracking
+      const hasVisibleContent = visibleCount > 0;
+
+      // For "all" filter: show if we haven't loaded all pages OR if visible content suggests more pages
+      // For specific filters: show if visible count > posts per page (indicating more content available)
+      let shouldShowButton = false;
+
+      if (currentCategory === 'all') {
+        // For "all": show button if there are more pages to load OR if we have exactly posts-per-page visible (suggesting more)
+        const hasMorePagesToLoad = loadedPages.size < totalPages;
+        const hasFullPageOfContent = visibleCount >= postsPerPage && totalPages > 1;
+        shouldShowButton = hasVisibleContent && (hasMorePagesToLoad || hasFullPageOfContent);
+      } else {
+        // For specific filters: show if we have more than one page worth of visible content
+        shouldShowButton = hasVisibleContent && visibleCount > postsPerPage;
+      }
+
+      if (shouldShowButton) {
+        loadMoreButton.style.display = 'flex';
+        loadMoreButton.removeAttribute('disabled');
+        loadMoreButton.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        loadMoreButton.style.display = 'none';
+      }
+
+      // Debug info to understand the issue
+      console.log('Button visibility debug:', {
+        currentCategory,
+        hasVisibleContent,
+        visibleCount,
+        postsPerPage,
+        totalPages,
+        loadedPagesSize: loadedPages.size,
+        loadedPagesArray: Array.from(loadedPages),
+        shouldShowButton,
+        logic: currentCategory === 'all' ? 'all-filter' : 'specific-filter'
+      });
+
+
+
+
+
+    }
+
+    // Function to filter articles based on category
+    async function filterArticles() {
+      let visibleCount = 0;
+      const noResultsMessage = blogVideosSection.querySelector('.no-results-message');
+
+      // Get all current articles (including newly loaded ones)
+      const currentArticles = blogVideosSection.querySelectorAll('.blog-videos-grid__article');
+
+      currentArticles.forEach((article) => {
         let showByCategory = true;
 
         // Category filtering
         if (currentCategory !== 'all') {
           const tags = article.getAttribute('data-tags') || '';
-          console.log('Article tags:', tags);
 
-          // Check if the article has the selected category tag
-          // Use word boundaries to ensure exact tag match
-          const tagPattern = new RegExp('\\b' + currentCategory.toLowerCase() + '\\b');
-          showByCategory = tagPattern.test(tags);
+          // Simple and robust matching
+          const categoryLower = currentCategory.toLowerCase().trim();
+          const tagsLower = tags.toLowerCase().trim();
+
+          // Split tags into array and check for exact match
+          const tagsArray = tagsLower.split(/\s+/).filter(tag => tag.length > 0);
+          showByCategory = tagsArray.includes(categoryLower);
         }
+        // If currentCategory === 'all', showByCategory remains true for all articles
 
-        // Show article only if it passes the filter
+        // Always set display style based on filter result
         if (showByCategory) {
           article.style.display = 'block';
           visibleCount++;
@@ -396,29 +530,53 @@
         }
       });
 
-      console.log('Visible articles after filtering:', visibleCount);
+      // If no results found and we have a specific category filter, try loading more posts
+      if (visibleCount === 0 && currentCategory !== 'all') {
+        const foundMatches = await loadPostsForFilter();
+
+        if (foundMatches) {
+          // Re-run filtering after loading new posts
+          return filterArticles();
+        }
+      }
 
       // Show/hide no results message
       if (visibleCount === 0) {
         noResultsMessage.style.display = 'block';
-        if (loadMoreButton) {
-          loadMoreButton.style.display = 'none';
-        }
       } else {
         noResultsMessage.style.display = 'none';
-        if (loadMoreButton && currentPage < 3) {
-          loadMoreButton.style.display = 'flex';
-        }
       }
+
+      // Note: updateLoadMoreButton() will be called by the calling function
+    }
+
+    // Function to update URL with current category filter
+    function updateURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // Add category if not 'all'
+      if (currentCategory !== 'all') {
+        urlParams.set('video_category', currentCategory);
+      } else {
+        urlParams.delete('video_category');
+      }
+
+      // Build new URL
+      const newUrl = urlParams.toString() ?
+        `${window.location.pathname}?${urlParams.toString()}` :
+        window.location.pathname;
+
+      // Update URL without page reload
+      history.pushState({
+        video_category: currentCategory
+      }, '', newUrl);
     }
 
     // Category filtering
     categories.forEach((category) => {
-      category.addEventListener('click', function (event) {
+      category.addEventListener('click', async function (event) {
         // Prevent default behavior
         event.preventDefault();
-
-        console.log('Category clicked:', this.getAttribute('data-category'));
 
         // Remove active class from all categories
         categories.forEach((cat) => cat.classList.remove('active'));
@@ -427,11 +585,37 @@
         this.classList.add('active');
 
         // Update current category
-        currentCategory = this.getAttribute('data-category');
-        console.log('Current category set to:', currentCategory);
+        const newCategory = this.getAttribute('data-category');
 
-        // Apply filters
-        filterArticles();
+        // If switching to "all" from a specific filter, reset pagination state
+        if (newCategory === 'all' && currentCategory !== 'all') {
+          // Reset to initial state - only page 1 loaded
+          loadedPages.clear();
+          loadedPages.add(1);
+
+          // Remove any articles that were auto-loaded beyond the first page
+          const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
+          const allArticles = gridContainer.querySelectorAll('.blog-videos-grid__article');
+          const postsPerPage = parseInt(gridContainer.getAttribute('data-posts-per-page')) || 4;
+
+          // Keep only the first postsPerPage articles
+          allArticles.forEach((article, index) => {
+            if (index >= postsPerPage) {
+              article.remove();
+            }
+          });
+        }
+
+        currentCategory = newCategory;
+
+        // Update URL with current filter
+        updateURL();
+
+        // Apply filters (now async)
+        await filterArticles();
+
+        // Ensure button visibility is updated after filtering
+        updateLoadMoreButton();
       });
     });
 
@@ -441,12 +625,11 @@
     const loadingSpinner = loadMoreButton ? loadMoreButton.querySelector('.button-spinner') : null;
 
     if (loadMoreButton) {
-      // Check if button should be disabled initially
-      if (loadMoreButton.hasAttribute('disabled')) {
-        loadMoreButton.classList.add('opacity-50', 'cursor-not-allowed');
-      }
+      // Remove any initial disabled state - we'll handle this in JavaScript
+      loadMoreButton.removeAttribute('disabled');
+      loadMoreButton.classList.remove('opacity-50', 'cursor-not-allowed');
 
-      loadMoreButton.addEventListener('click', function () {
+      loadMoreButton.addEventListener('click', async function () {
         // Don't do anything if button is disabled
         if (loadMoreButton.hasAttribute('disabled')) {
           return;
@@ -455,82 +638,111 @@
         // Show loading state using unified button system
         loadMoreButton.classList.add('loading');
 
-        currentPage++;
-        const nextPageUrl = window.location.pathname + '?page=' + currentPage;
+        const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
+        const totalPages = parseInt(gridContainer.getAttribute('data-total-pages')) || 1;
+        const nextPage = Math.max(...loadedPages) + 1;
 
-        fetch(nextPageUrl)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.text();
-          })
-          .then((html) => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const newArticles = doc.querySelectorAll('.blog-videos-grid__article');
-            const articlesContainer = document.querySelector('.blog-videos-grid');
+        if (nextPage > totalPages) {
+          loadMoreButton.style.display = 'none';
+          loadMoreButton.classList.remove('loading');
+          return;
+        }
 
-            // Check if we got any new articles
-            if (newArticles.length === 0) {
-              console.log('No more articles to load');
-              // Hide the button completely
-              loadMoreButton.style.display = 'none';
-              return;
-            }
+        try {
+          const newArticles = await loadPostsFromPage(nextPage);
+          const articlesContainer = blogVideosSection.querySelector('.blog-videos-grid');
 
-            // Add new articles to the grid
-            newArticles.forEach((article) => {
-              const clonedArticle = article.cloneNode(true);
-              articlesContainer.appendChild(clonedArticle);
-
-              // Apply current filters to newly loaded articles
-              if (currentCategory !== 'all') {
-                // Add the data-tags attribute to the cloned article
-                if (article.hasAttribute('data-tags')) {
-                  clonedArticle.setAttribute('data-tags', article.getAttribute('data-tags'));
-                }
-
-                let showByCategory = true;
-
-                // Category filtering
-                if (currentCategory !== 'all') {
-                  const tags = clonedArticle.getAttribute('data-tags') || '';
-                  // Use word boundaries to ensure exact tag match
-                  const tagPattern = new RegExp('\\b' + currentCategory.toLowerCase() + '\\b');
-                  showByCategory = tagPattern.test(tags);
-                }
-
-                // Show article only if it passes the filter
-                if (!showByCategory) {
-                  clonedArticle.style.display = 'none';
-                }
-              }
-            });
-
-            // Fix YouTube embeds in newly loaded content
-            fixYouTubeEmbeds();
-
-            // Reset loading state using unified button system
-            loadMoreButton.classList.remove('loading');
-
-            // Check if we've reached the last page
-            const paginationInfo = doc.querySelector('.pagination');
-            const nextPageExists = doc.querySelectorAll('.blog-videos-grid__article').length > 0;
-
-            if (!nextPageExists || !paginationInfo || currentPage >= 3) {
-              // Hide the button completely when no more articles or reached last page
-              loadMoreButton.style.display = 'none';
-            }
-          })
-          .catch((error) => {
-            console.error('Error loading more articles:', error);
-
-            // Hide the button on error
+          // Check if we got any new articles
+          if (newArticles.length === 0) {
+            console.log('No more articles to load');
+            // Hide the button completely
             loadMoreButton.style.display = 'none';
+            return;
+          }
+
+          // Add new articles to the grid
+          newArticles.forEach((article) => {
+            const clonedArticle = article.cloneNode(true);
+            articlesContainer.appendChild(clonedArticle);
+
+            // Apply current filters to newly loaded articles
+            if (currentCategory !== 'all') {
+              const tags = clonedArticle.getAttribute('data-tags') || '';
+              const categoryLower = currentCategory.toLowerCase().trim();
+              const tagsLower = tags.toLowerCase().trim();
+              const tagsArray = tagsLower.split(/\s+/).filter(tag => tag.length > 0);
+              const showByCategory = tagsArray.includes(categoryLower);
+
+              // Show article only if it passes the filter
+              if (!showByCategory) {
+                clonedArticle.style.display = 'none';
+              }
+            }
           });
+
+          // Fix YouTube embeds in newly loaded content
+          fixYouTubeEmbeds();
+
+          // Update load more button visibility
+          updateLoadMoreButton();
+        } catch (error) {
+          console.error('Error loading more articles:', error);
+          // Update button visibility on error too
+          updateLoadMoreButton();
+        } finally {
+          // Reset loading state using unified button system
+          loadMoreButton.classList.remove('loading');
+        }
       });
     }
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', async function(event) {
+      if (event.state && event.state.video_category !== undefined) {
+        const newCategory = event.state.video_category || 'all';
+
+        // If switching to "all" from a specific filter, reset pagination state
+        if (newCategory === 'all' && currentCategory !== 'all') {
+          // Reset to initial state - only page 1 loaded
+          loadedPages.clear();
+          loadedPages.add(1);
+
+          // Remove any articles that were auto-loaded beyond the first page
+          const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
+          const allArticles = gridContainer.querySelectorAll('.blog-videos-grid__article');
+          const postsPerPage = parseInt(gridContainer.getAttribute('data-posts-per-page')) || 4;
+
+          // Keep only the first postsPerPage articles
+          allArticles.forEach((article, index) => {
+            if (index >= postsPerPage) {
+              article.remove();
+            }
+          });
+        }
+
+        // Restore category state from history
+        currentCategory = newCategory;
+
+        // Update active category tab
+        categories.forEach((cat) => cat.classList.remove('active'));
+        const activeCategory = blogVideosSection.querySelector(`[data-category="${currentCategory}"]`);
+        if (activeCategory) {
+          activeCategory.classList.add('active');
+        }
+
+        // Apply filters (now async)
+        await filterArticles();
+
+        // Ensure button visibility is updated after filtering
+        updateLoadMoreButton();
+      }
+    });
+
+    // Apply initial filters based on URL parameters (now async)
+    filterArticles().then(() => {
+      // Ensure load more button is visible initially if needed
+      updateLoadMoreButton();
+    });
   });
 </script>
 
