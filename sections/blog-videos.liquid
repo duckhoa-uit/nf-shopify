@@ -298,8 +298,11 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // Get DOM elements
-    const categories = document.querySelectorAll('.blog-category');
+    // Get DOM elements - scope to this section only
+    const blogVideosSection = document.querySelector('.blog-videos');
+    if (!blogVideosSection) return; // Exit if this section is not on the page
+
+    const categories = blogVideosSection.querySelectorAll('.blog-category');
     const articles = document.querySelectorAll('.blog-videos-grid__article');
 
     // Fix YouTube iframes if needed
