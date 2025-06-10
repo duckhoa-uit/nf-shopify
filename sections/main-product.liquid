@@ -1,6 +1,6 @@
 <product-info
   id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }} northfinder-product-page"
+  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
   data-section="{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-update-url="true"
@@ -351,7 +351,7 @@
   </script>
 
   <div class="page-width">
-    <div class="product grid grid-cols-1{% if product.media.size > 0 %} md:grid-cols-2 lg:grid-cols-3{% else %} product--no-media{% endif %}">
+    <div class="product northfinder-product-page grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3{% if product.media.size == 0 %} product--no-media{% endif %}">
       <div class="product__media-wrapper col-span-1 md:col-span-1 lg:col-span-2">
         {% render 'product-media-gallery', variant_images: variant_images %}
       </div>
@@ -419,7 +419,8 @@
                     endif
                   -%}
                   <div class="price-wrapper flex flex-col">
-                    <span class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]"
+                    <span
+                      class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]"
                       {% if settings.currency_code_enabled %}
                         data-format="{{ shop.money_with_currency_format }}"
                       {% else %}
@@ -441,7 +442,9 @@
                             {{ current_variant.compare_at_price | money }}
                           {% endif %}
                         </span>
-                        <span class="price-label text-[14px] font-light font-['Archivo'] text-[#4D4D4D] leading-[1.14] ml-1">- original recommended price</span>
+                        <span class="price-label text-[14px] font-light font-['Archivo'] text-[#4D4D4D] leading-[1.14] ml-1"
+                          >- original recommended price</span
+                        >
                       </div>
                     {% endif %}
                   </div>

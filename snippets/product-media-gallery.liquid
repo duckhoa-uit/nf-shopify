@@ -506,29 +506,61 @@
       data-media-urls="{{ all_media | escape }}"
       data-active-color="{{ active_color_value }}"
       aria-live="polite"
-    ></div>
+    >
+      {%- if product.media.size == 0 -%}
+        {%- comment -%} Fallback placeholder for mobile when no media and JS fails {%- endcomment -%}
+        <div class="swiper-slide product__media-item is-active scroll-trigger animate--fade-in">
+          <div
+            class="product__media media relative w-full h-0"
+            style="--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;"
+          >
+            <div class="absolute inset-0 w-full h-full bg-gray-100 flex items-center justify-center">
+              {{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
     <div class="swiper-pagination"></div>
   </div>
 
   <div id="desktop-gallery" class="hidden md:grid grid-cols-2 gap-4 loading-media relative">
-    {%- for media in product.media -%}
+    {%- if product.media.size > 0 -%}
+      {%- for media in product.media -%}
+        <div
+          id="Grid-{{ section.id }}-{{ media.id }}"
+          class="product__media-item{% if forloop.first %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %} scroll-trigger animate--fade-in"
+          data-media-id="{{ section.id }}-{{ media.id }}"
+        >
+          {%
+            render 'product-thumbnail',
+            media: media,
+            position: forloop.index,
+            loop: section.settings.enable_video_looping,
+            modal_id: section.id,
+            xr_button: true,
+            media_width: media_width,
+            lazy_load: forloop.index > 1
+          %}
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- comment -%} Product has no media - show placeholder {%- endcomment -%}
       <div
-        id="Grid-{{ section.id }}-{{ media.id }}"
-        class="product__media-item{% if forloop.first %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %} scroll-trigger animate--fade-in"
-        data-media-id="{{ section.id }}-{{ media.id }}"
+        id="Grid-{{ section.id }}-placeholder"
+        class="product__media-item is-active scroll-trigger animate--fade-in col-span-2"
+        data-media-id="{{ section.id }}-placeholder"
       >
-        {%
-          render 'product-thumbnail',
-          media: media,
-          position: forloop.index,
-          loop: section.settings.enable_video_looping,
-          modal_id: section.id,
-          xr_button: true,
-          media_width: media_width,
-          lazy_load: forloop.index > 1
-        %}
+        <div
+          class="product__media media relative w-full h-0"
+          style="--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;"
+        >
+          <div class="absolute inset-0 w-full h-full bg-gray-100 flex items-center justify-center">
+            {{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}
+          </div>
+        </div>
       </div>
-    {%- endfor -%}
+    {%- endif -%}
   </div>
 
   <!-- See More/Less Button -->
@@ -658,28 +690,43 @@
           e.stopPropagation(); // Prevent event from bubbling up to container
         });
       } else {
-        // For images, create a standard image element
-        const img = document.createElement('img');
-        img.src = mediaObject ? mediaObject.src : url;
-        img.alt = mediaObject ? (mediaObject.alt || 'Product image') : 'Product image';
-        img.id = `ProductMedia-{{ section.id }}-${mediaId}`;
-        img.className = 'media-item w-full h-full object-cover product-lightbox-img';
-        img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+        // Check if this is a placeholder
+        if (url === 'placeholder' || url.includes('placeholder_svg_tag') || (!mediaObject && url.includes('placeholder'))) {
+          // Create placeholder container
+          const placeholderDiv = document.createElement('div');
+          placeholderDiv.className = 'w-full h-full bg-gray-100 flex items-center justify-center';
 
-        // Add click handler for lightbox
-        img.addEventListener('click', function(e) {
-          e.preventDefault();
-          // Pass the index in the filtered and sorted images
-          openProductLightbox(index);
-        });
+          // Create SVG placeholder
+          const svgContainer = document.createElement('div');
+          svgContainer.className = 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%] flex items-center justify-center';
+          svgContainer.innerHTML = `{{ 'product-apparel-2' | placeholder_svg_tag: '' }}`;
 
-        if (mediaObject) {
-          img.width = mediaObject.width;
-          img.height = mediaObject.height;
+          placeholderDiv.appendChild(svgContainer);
+          imageContainer.appendChild(placeholderDiv);
+        } else {
+          // For images, create a standard image element
+          const img = document.createElement('img');
+          img.src = mediaObject ? mediaObject.src : url;
+          img.alt = mediaObject ? (mediaObject.alt || 'Product image') : 'Product image';
+          img.id = `ProductMedia-{{ section.id }}-${mediaId}`;
+          img.className = 'media-item w-full h-full object-cover product-lightbox-img';
+          img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+
+          // Add click handler for lightbox
+          img.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Pass the index in the filtered and sorted images
+            openProductLightbox(index);
+          });
+
+          if (mediaObject) {
+            img.width = mediaObject.width;
+            img.height = mediaObject.height;
+          }
+
+          // Assemble the elements
+          imageContainer.appendChild(img);
         }
-
-        // Assemble the elements
-        imageContainer.appendChild(img);
       }
 
       wrapper.appendChild(imageContainer);
@@ -803,6 +850,11 @@
               }
             }
           }
+
+          // If still no matches found for the selected variant, show placeholder
+          if (urlsToUse.length === 0) {
+            urlsToUse = ['placeholder'];
+          }
         }
 
         // Get all product media to ensure we include videos regardless of color filtering
@@ -906,19 +958,29 @@
 
         // Ensure we have at least some images to display
         if (images.length === 0) {
-          const allMediaUrls = allMedia.map(media => {
-            // For videos, use the preview image URL
-            const url = media.media_type === 'video' && media.preview_image ?
-              media.preview_image.src : media.src;
+          if (allMedia.length > 0) {
+            const allMediaUrls = allMedia.map(media => {
+              // For videos, use the preview image URL
+              const url = media.media_type === 'video' && media.preview_image ?
+                media.preview_image.src : media.src;
 
-            return {
-              url: url,
-              mediaId: media.id,
-              mediaType: media.media_type,
+              return {
+                url: url,
+                mediaId: media.id,
+                mediaType: media.media_type,
+                hidden: false
+              };
+            });
+            images = [allMediaUrls[0]];
+          } else {
+            // Product has no media at all - create placeholder
+            images = [{
+              url: 'placeholder',
+              mediaId: 'placeholder',
+              mediaType: 'placeholder',
               hidden: false
-            };
-          });
-          images = allMediaUrls.length > 0 ? [allMediaUrls[0]] : [];
+            }];
+          }
         }
 
         // Normalize the images array to ensure all items have url and hidden properties
