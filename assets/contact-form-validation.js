@@ -4,6 +4,8 @@
  */
 class ContactFormValidation {
   constructor() {
+    this.isSubmitting = false;
+    this.hasValidationErrors = false;
     this.init();
   }
 
@@ -23,6 +25,34 @@ class ContactFormValidation {
     // Add validation listeners
     this.addFieldValidation(contactForm);
     this.addSubmitValidation(contactForm);
+    this.addFormResetListeners(contactForm);
+  }
+
+  addFormResetListeners(form) {
+    // Reset submission state when page loads (in case of form errors)
+    window.addEventListener('load', () => {
+      this.resetSubmissionState(form);
+    });
+
+    // Reset submission state if form has server errors
+    if (form.querySelector('.form-status-list') || form.querySelector('.form__message')) {
+      this.resetSubmissionState(form);
+    }
+  }
+
+  resetSubmissionState(form) {
+    this.isSubmitting = false;
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+      const buttonText = submitButton.querySelector('.button-text');
+      const buttonSpinner = submitButton.querySelector('.button-spinner');
+
+      if (buttonText) buttonText.style.display = 'inline-block';
+      if (buttonSpinner) buttonSpinner.style.display = 'none';
+
+      submitButton.disabled = false;
+    }
   }
 
   addFieldValidation(form) {
@@ -50,19 +80,38 @@ class ContactFormValidation {
 
   addSubmitValidation(form) {
     form.addEventListener('submit', (e) => {
+      // Prevent multiple submissions
+      if (this.isSubmitting) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.showSubmissionBlockedMessage(form);
+        return false;
+      }
+
+      // Validate form without clearing existing errors first
       if (!this.validateForm(form)) {
         e.preventDefault();
         e.stopPropagation();
+        this.hasValidationErrors = true;
+        this.showValidationErrorMessage(form);
         return false;
       }
+
+      // If validation passes, set submitting state
+      this.isSubmitting = true;
+      this.hasValidationErrors = false;
+      this.showSubmissionInProgress(form);
     });
   }
 
   validateForm(form) {
     let isValid = true;
 
-    // Clear all previous errors
-    this.clearAllErrors(form);
+    // Only clear errors if we don't already have validation errors showing
+    // This prevents clearing errors during resubmission attempts
+    if (!this.hasValidationErrors) {
+      this.clearAllErrors(form);
+    }
 
     // Validate required fields
     const nameField = form.querySelector('#ContactForm-name');
@@ -200,6 +249,12 @@ class ContactFormValidation {
 
     // Clear custom validity
     field.setCustomValidity('');
+
+    // Check if all errors are cleared, reset validation error state
+    const form = field.closest('form');
+    if (form && !this.hasAnyVisibleErrors(form)) {
+      this.hasValidationErrors = false;
+    }
   }
 
   clearAllErrors(form) {
@@ -227,6 +282,62 @@ class ContactFormValidation {
     errorElements.forEach(element => {
       element.style.display = 'none';
     });
+
+    // Clear form-level error messages
+    this.clearFormMessages(form);
+  }
+
+  hasAnyVisibleErrors(form) {
+    const errorElements = form.querySelectorAll('.field__error');
+    return Array.from(errorElements).some(element =>
+      element.style.display !== 'none' && element.textContent.trim() !== ''
+    );
+  }
+
+  showSubmissionBlockedMessage(form) {
+    this.showFormMessage(form, 'Please wait, your message is being sent...', 'info');
+  }
+
+  showValidationErrorMessage(form) {
+    this.showFormMessage(form, 'Please fix the errors above before submitting.', 'error');
+  }
+
+  showSubmissionInProgress(form) {
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+      const buttonText = submitButton.querySelector('.button-text');
+      const buttonSpinner = submitButton.querySelector('.button-spinner');
+
+      if (buttonText) buttonText.style.display = 'none';
+      if (buttonSpinner) buttonSpinner.style.display = 'inline-block';
+
+      submitButton.disabled = true;
+    }
+  }
+
+  showFormMessage(form, message, type = 'error') {
+    // Remove existing form messages
+    this.clearFormMessages(form);
+
+    // Create message element
+    const messageElement = document.createElement('div');
+    messageElement.className = `form__message form__message--${type}`;
+
+    const statusDiv = document.createElement('div');
+    statusDiv.className = 'form-status caption-large text-body';
+    statusDiv.setAttribute('role', 'alert');
+    statusDiv.textContent = message;
+
+    messageElement.appendChild(statusDiv);
+
+    // Insert message at the top of the form
+    const firstChild = form.firstElementChild;
+    form.insertBefore(messageElement, firstChild);
+  }
+
+  clearFormMessages(form) {
+    const existingMessages = form.querySelectorAll('.form__message--error, .form__message--info');
+    existingMessages.forEach(message => message.remove());
   }
 }
 
