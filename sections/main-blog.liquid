@@ -68,6 +68,14 @@
     text-transform: uppercase;
     cursor: pointer;
     position: relative;
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+  }
+
+  .blog-category:hover {
+    text-decoration: none;
+    color: inherit;
   }
 
   .blog-category.active {
@@ -163,11 +171,49 @@
 
   {% if section.settings.enable_filtering %}
     <div class="blog-categories">
-      <div class="blog-category active" data-category="all">{{ 'blogs.main_blog.all_articles' | t }}</div>
-      <div class="blog-category" data-category="skialp">#{{ 'blogs.main_blog.categories.skialp' | t }}</div>
-      <div class="blog-category" data-category="adventure">#{{ 'blogs.main_blog.categories.adventure' | t }}</div>
-      <div class="blog-category" data-category="tips">#{{ 'blogs.main_blog.categories.tips' | t }}</div>
-      <div class="blog-category" data-category="gear">#{{ 'blogs.main_blog.categories.gear' | t }}</div>
+      <!-- All articles link - active when no tags are selected -->
+      <a
+        href="{{ blog.url }}{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
+        class="blog-category{% unless current_tags %} active{% endunless %}"
+      >
+        {{ 'blogs.main_blog.all_articles' | t }}
+      </a>
+
+      {% comment %}Use Shopify's built-in blog.all_tags with native tag filtering{% endcomment %}
+      {%- for tag in blog.all_tags -%}
+        {%- assign tag_handle = tag | handleize -%}
+        <a
+          href="{{ blog.url }}/tagged/{{ tag_handle }}{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
+          class="blog-category{% if current_tags contains tag %} active{% endif %}"
+          aria-current="{% if current_tags contains tag %}page{% endif %}"
+        >
+          #{{ tag | downcase }}
+        </a>
+      {%- endfor -%}
+
+      {% comment %}Fallback to predefined categories if no tags found{% endcomment %}
+      {% if blog.all_tags.size == 0 %}
+        <a
+          href="{{ blog.url }}/tagged/skialp{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
+          class="blog-category"
+          >#{{ 'blogs.main_blog.categories.skialp' | t -}}
+        </a>
+        <a
+          href="{{ blog.url }}/tagged/adventure{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
+          class="blog-category"
+          >#{{ 'blogs.main_blog.categories.adventure' | t -}}
+        </a>
+        <a
+          href="{{ blog.url }}/tagged/tips{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
+          class="blog-category"
+          >#{{ 'blogs.main_blog.categories.tips' | t -}}
+        </a>
+        <a
+          href="{{ blog.url }}/tagged/gear{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
+          class="blog-category"
+          >#{{ 'blogs.main_blog.categories.gear' | t -}}
+        </a>
+      {% endif %}
     </div>
   {% endif %}
 
@@ -217,42 +263,48 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // Get DOM elements
-    const categories = document.querySelectorAll('.blog-category');
-    const articles = document.querySelectorAll('.blog-articles__article');
+    // Get DOM elements for search functionality
     const searchForm = document.getElementById('blog-search-form');
     const searchInput = document.getElementById('blog-search-input');
     const searchButton = document.getElementById('blog-search-submit');
 
-    // Current filters state
-    let currentCategory = 'all';
+    // Current search state
     let currentSearchQuery = '';
     let currentPage = 1;
+    let searchTimeout;
 
-    // Function to filter articles based on category and search query
+    // Initialize search from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchFromUrl = urlParams.get('search');
+
+    if (searchFromUrl) {
+      currentSearchQuery = searchFromUrl;
+      // Update search input field
+      if (searchInput) {
+        searchInput.value = searchFromUrl;
+      }
+    }
+
+    // Function to filter articles based on search query only (categories handled by server)
     function filterArticles() {
       let visibleCount = 0;
       const noResultsMessage = document.querySelector('.no-results-message');
       const loadMoreButton = document.getElementById('main-blog-load-more-button');
 
-      articles.forEach((article) => {
-        let showByCategory = true;
+      // Get all current articles (including newly loaded ones)
+      const currentArticles = document.querySelectorAll('.blog-articles__article');
+
+      currentArticles.forEach((article) => {
         let showBySearch = true;
 
-        // Category filtering
-        if (currentCategory !== 'all') {
-          const tags = article.getAttribute('data-tags');
-          showByCategory = tags && tags.includes(currentCategory.toLowerCase());
-        }
-
-        // Search filtering
+        // Search filtering only (categories handled by Shopify server-side)
         if (currentSearchQuery) {
           const articleContent = article.textContent.toLowerCase();
           showBySearch = articleContent.includes(currentSearchQuery.toLowerCase());
         }
 
-        // Show article only if it passes both filters
-        if (showByCategory && showBySearch) {
+        // Show article based on search filter
+        if (showBySearch) {
           article.style.display = 'block';
           visibleCount++;
         } else {
@@ -260,7 +312,7 @@
         }
       });
 
-      // Show/hide no results message
+      // Show/hide no results message and load more button
       if (visibleCount === 0) {
         noResultsMessage.style.display = 'block';
         if (loadMoreButton) {
@@ -268,46 +320,73 @@
         }
       } else {
         noResultsMessage.style.display = 'none';
-        if (loadMoreButton && currentPage < 3) {
-          loadMoreButton.style.display = 'flex';
+
+        // Hide load more button if search is active and visible count is less than pagination size
+        // This prevents showing load more when search results are limited
+        if (loadMoreButton) {
+          const postsPerPage = {{ section.settings.posts_per_page | default: 8 }};
+          const totalArticles = currentArticles.length;
+
+          // Hide load more button if:
+          // 1. Search is active AND visible count < posts per page, OR
+          // 2. We're on the first page and visible count < posts per page (indicating no more pages)
+          if ((currentSearchQuery && visibleCount < postsPerPage) ||
+              (currentPage === 1 && visibleCount < postsPerPage && totalArticles <= postsPerPage)) {
+            loadMoreButton.style.display = 'none';
+          } else if (visibleCount > 0) {
+            loadMoreButton.style.display = 'flex';
+          }
         }
       }
     }
 
-    // Category filtering
-    categories.forEach((category) => {
-      category.addEventListener('click', function () {
-        // Remove active class from all categories
-        categories.forEach((cat) => cat.classList.remove('active'));
-
-        // Add active class to clicked category
-        this.classList.add('active');
-
-        // Update current category
-        currentCategory = this.getAttribute('data-category');
-
-        // Apply filters
-        filterArticles();
-      });
-    });
-
     // Search functionality
     function handleSearch() {
       currentSearchQuery = searchInput.value.trim();
+
+      // Update URL with search query (preserve current tag filtering)
+      updateSearchURL();
+
       filterArticles();
     }
 
-    // Search on enter key
+    // Function to update URL with search query while preserving tag filtering
+    function updateSearchURL() {
+      const currentUrl = new URL(window.location);
+
+      if (currentSearchQuery) {
+        currentUrl.searchParams.set('search', currentSearchQuery);
+      } else {
+        currentUrl.searchParams.delete('search');
+      }
+
+      // Update URL without page reload
+      history.pushState({
+        search: currentSearchQuery
+      }, '', currentUrl.toString());
+    }
+
+    // Real-time search with debouncing
+    searchInput.addEventListener('input', function () {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        handleSearch();
+      }, 300); // 300ms debounce delay
+    });
+
+    // Search on enter key (immediate search)
     searchInput.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        handleSearch();
+        clearTimeout(searchTimeout); // Cancel debounced search
+        handleSearch(); // Execute immediately
       }
     });
 
-    // Search on click
+    // Search on click (immediate search)
     searchButton.addEventListener('click', function () {
-      handleSearch();
+      clearTimeout(searchTimeout); // Cancel debounced search
+      handleSearch(); // Execute immediately
     });
 
     // Load more functionality
@@ -354,30 +433,18 @@
               const clonedArticle = article.cloneNode(true);
               articlesContainer.appendChild(clonedArticle);
 
-              // Apply current filters to newly loaded articles
-              if (currentCategory !== 'all' || currentSearchQuery) {
-                // Add the data-tags attribute to the cloned article
-                if (article.hasAttribute('data-tags')) {
-                  clonedArticle.setAttribute('data-tags', article.getAttribute('data-tags'));
-                }
-
-                let showByCategory = true;
+              // Apply search filter to newly loaded articles (categories handled by server)
+              if (currentSearchQuery) {
                 let showBySearch = true;
 
-                // Category filtering
-                if (currentCategory !== 'all') {
-                  const tags = clonedArticle.getAttribute('data-tags');
-                  showByCategory = tags && tags.includes(currentCategory.toLowerCase());
-                }
-
-                // Search filtering
+                // Search filtering only
                 if (currentSearchQuery) {
                   const articleContent = clonedArticle.textContent.toLowerCase();
                   showBySearch = articleContent.includes(currentSearchQuery.toLowerCase());
                 }
 
-                // Show article only if it passes both filters
-                if (!(showByCategory && showBySearch)) {
+                // Hide article if it doesn't match search
+                if (!showBySearch) {
                   clonedArticle.style.display = 'none';
                 }
               }
@@ -390,7 +457,7 @@
             const paginationInfo = doc.querySelector('.pagination');
             const nextPageExists = doc.querySelectorAll('.blog-articles__article').length > 0;
 
-            if (!nextPageExists || !paginationInfo || currentPage >= 3) {
+            if (!nextPageExists || !paginationInfo) {
               // Hide the button completely when no more articles or reached last page
               loadMoreButton.style.display = 'none';
             }
@@ -405,6 +472,29 @@
             loadMoreButton.style.display = 'none';
           });
       });
+    }
+
+    // Handle browser back/forward buttons for search
+    window.addEventListener('popstate', function(event) {
+      if (event.state) {
+        // Restore search state from history
+        currentSearchQuery = event.state.search || '';
+
+        // Update search input to match state
+        if (searchInput) {
+          searchInput.value = currentSearchQuery;
+        }
+
+        // Apply search filter
+        filterArticles();
+      }
+    });
+
+
+
+    // Apply initial search filter if present
+    if (currentSearchQuery) {
+      filterArticles();
     }
   });
 </script>
