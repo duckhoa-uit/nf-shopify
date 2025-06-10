@@ -189,6 +189,9 @@
             {%- liquid
               # Clean up any whitespace in the captured URL
               assign thumbnail_url = thumbnail_url | strip
+
+              # If no thumbnail found, we'll let the swatch component handle the placeholder
+              # The swatch.liquid will show a placeholder when thumbnail_url is blank
             -%}
 
             <div class="color-option-with-thumbnail" data-color-name="{{ value }}">
@@ -307,6 +310,9 @@
         {%- liquid
           # Clean up any whitespace in the captured URL
           assign thumbnail_url = thumbnail_url | strip
+
+          # If no thumbnail found, we'll let the swatch component handle the placeholder
+          # The swatch.liquid will show a placeholder when thumbnail_url is blank
         -%}
 
         <div class="color-option-with-thumbnail" data-color-name="{{ value }}">

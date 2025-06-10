@@ -29,13 +29,28 @@
         {% endif %}
 
         <div class="cart-notification__item-image">
-          <img
-            src="{% if variant_image_url != blank %}{{ variant_image_url }}{% else %}{{ item.image | image_url: width: 140 }}{% endif %}"
-            alt="{{ item.image.alt | escape }}"
-            width="80"
-            height="80"
-            loading="lazy"
-          >
+          {%- if variant_image_url != blank -%}
+            <img
+              src="{{ variant_image_url }}"
+              alt="{{ item.image.alt | escape }}"
+              width="80"
+              height="80"
+              loading="lazy"
+            >
+          {%- elsif item.image -%}
+            <img
+              src="{{ item.image | image_url: width: 140 }}"
+              alt="{{ item.image.alt | escape }}"
+              width="80"
+              height="80"
+              loading="lazy"
+            >
+          {%- else -%}
+            {%- comment -%} Show placeholder when no image is available {%- endcomment -%}
+            <div class="cart-notification__item-placeholder">
+              {{ 'product-apparel-2' | placeholder_svg_tag: 'cart-notification-placeholder-svg' }}
+            </div>
+          {%- endif -%}
         </div>
       {%- endif -%}
       <div class="cart-notification__item-details">
