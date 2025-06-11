@@ -91,6 +91,11 @@ class FacetFiltersForm extends HTMLElement {
       .forEach((element) => {
         element.classList.add("scroll-trigger--cancel");
       });
+
+    // Re-initialize product card hover functionality after DOM update
+    if (window.ProductCardHover && typeof window.ProductCardHover.reinitialize === 'function') {
+      window.ProductCardHover.reinitialize();
+    }
   }
 
   static renderProductCount(html) {
