@@ -67,7 +67,7 @@
 
         {%- comment -%} If no model image without sequence found, look for one with lowest sequence {%- endcomment -%}
         {%- unless found_model_image -%}
-          {%- assign best_model_media = nil -%}
+          {%- assign best_model_media = null -%}
           {%- for media in card_product.media -%}
             {%- assign media_src = media.src | default: '' -%}
             {%- assign parsed_url = media_src | split: '/' | last -%}
@@ -129,25 +129,27 @@
             class="card-product-northfinder__link"
             data-product-id="{{ card_product.id }}"
             data-main-image-src="{{ main_image | image_url: width: 400 }}"
-            data-main-image-srcset="{%- if main_image.width >= 200 -%}{{ main_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if main_image.width >= 250 -%}{{ main_image | image_url: width: 250 }} 250w,{%- endif -%}{%- if main_image.width >= 300 -%}{{ main_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if main_image.width >= 400 -%}{{ main_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if main_image.width >= 500 -%}{{ main_image | image_url: width: 500 }} 500w,{%- endif -%}{{ main_image | image_url }} {{ main_image.width }}w"
+            data-main-image-srcset="{%- if main_image.width >= 200 -%}{{ main_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if main_image.width >= 300 -%}{{ main_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if main_image.width >= 400 -%}{{ main_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if main_image.width >= 500 -%}{{ main_image | image_url: width: 500 }} 500w{%- endif -%}"
           >
-            <div id="main-image-{{ card_product.id }}"
-                 data-original-src="{{ model_image | image_url: width: 400 }}"
-                 data-original-srcset="{%- if model_image.width >= 200 -%}{{ model_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if model_image.width >= 250 -%}{{ model_image | image_url: width: 250 }} 250w,{%- endif -%}{%- if model_image.width >= 300 -%}{{ model_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if model_image.width >= 400 -%}{{ model_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if model_image.width >= 500 -%}{{ model_image | image_url: width: 500 }} 500w,{%- endif -%}{{ model_image | image_url }} {{ model_image.width }}w">
-              {%- render 'optimized-image',
-                image: model_image,
-                sizes: '(min-width: 990px) calc(33.33vw - 2rem), (min-width: 750px) calc(50vw - 1.5rem), calc(50vw - 1rem)',
-                loading: 'lazy',
-                class: 'w-full h-auto object-cover aspect-square transition-opacity duration-300 ease-in-out',
-                alt: model_image.alt,
-                mode: 'responsive',
-                max_width: 750
-              -%}
+            <div
+              id="main-image-{{ card_product.id }}"
+              data-original-src="{{ model_image | image_url: width: 400 }}"
+              data-original-srcset="{%- if model_image.width >= 200 -%}{{ model_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if model_image.width >= 300 -%}{{ model_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if model_image.width >= 400 -%}{{ model_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if model_image.width >= 500 -%}{{ model_image | image_url: width: 500 }} 500w{%- endif -%}"
+            >
+              <img
+                src="{{ model_image | image_url: width: 400 }}"
+                srcset="{%- if model_image.width >= 200 -%}{{ model_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if model_image.width >= 300 -%}{{ model_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if model_image.width >= 400 -%}{{ model_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if model_image.width >= 500 -%}{{ model_image | image_url: width: 500 }} 500w{%- endif -%}"
+                sizes="(min-width: 990px) calc(33.33vw - 2rem), (min-width: 750px) calc(50vw - 1.5rem), calc(50vw - 1rem)"
+                alt="{{ model_image.alt | escape }}"
+                loading="lazy"
+                decoding="async"
+                width="{{ model_image.width }}"
+                height="{{ model_image.height }}"
+                class="w-full h-auto object-cover aspect-square transition-opacity duration-300 ease-in-out"
+              >
             </div>
           </a>
-
         </div>
-
 
       {%- else -%}
         {%- comment -%} Product has no media - show placeholder with consistent dimensions {%- endcomment -%}
@@ -282,7 +284,7 @@
 
                 {%- comment -%} If no model image without sequence found, look for one with lowest sequence {%- endcomment -%}
                 {%- unless found_model_image -%}
-                  {%- assign best_variant_media = nil -%}
+                  {%- assign best_variant_media = null -%}
                   {%- for media in card_product.media -%}
                     {%- assign media_src = media.src | default: '' -%}
                     {%- assign parsed_url = media_src | split: '/' | last -%}
@@ -375,7 +377,7 @@
                 data-product-id="{{ card_product.id }}"
                 {%- if variant_image -%}
                   data-variant-image="{{ variant_image | image_url: width: 120 }}"
-                  data-variant-image-srcset="{%- if variant_image.width >= 40 -%}{{ variant_image | image_url: width: 40 }} 40w,{%- endif -%}{%- if variant_image.width >= 60 -%}{{ variant_image | image_url: width: 60 }} 60w,{%- endif -%}{%- if variant_image.width >= 80 -%}{{ variant_image | image_url: width: 80 }} 80w,{%- endif -%}{%- if variant_image.width >= 100 -%}{{ variant_image | image_url: width: 100 }} 100w,{%- endif -%}{%- if variant_image.width >= 120 -%}{{ variant_image | image_url: width: 120 }} 120w,{%- endif -%}{{ variant_image | image_url }} {{ variant_image.width }}w"
+                  data-variant-image-srcset="{%- if variant_image.width >= 200 -%}{{ variant_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if variant_image.width >= 300 -%}{{ variant_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if variant_image.width >= 400 -%}{{ variant_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if variant_image.width >= 500 -%}{{ variant_image | image_url: width: 500 }} 500w{%- endif -%}"
                 {%- else -%}
                   data-variant-image="placeholder"
                   data-variant-image-srcset=""
@@ -383,19 +385,24 @@
                 aria-label="Select {{ color_variant.title | escape }} variant"
               >
                 {%- if variant_image -%}
-                  {%- render 'optimized-image',
-                    image: variant_image,
-                    sizes: '(min-width: 1280px) 60px, 36px',
-                    loading: 'lazy',
-                    class: 'w-full h-full object-cover',
-                    alt: color,
-                    mode: 'thumbnail',
-                    max_width: 120
-                  -%}
+                  <img
+                    src="{{ variant_image | image_url: width: 120 }}"
+                    srcset="{%- if variant_image.width >= 40 -%}{{ variant_image | image_url: width: 40 }} 40w,{%- endif -%}{%- if variant_image.width >= 60 -%}{{ variant_image | image_url: width: 60 }} 60w,{%- endif -%}{%- if variant_image.width >= 80 -%}{{ variant_image | image_url: width: 80 }} 80w,{%- endif -%}{%- if variant_image.width >= 100 -%}{{ variant_image | image_url: width: 100 }} 100w,{%- endif -%}{%- if variant_image.width >= 120 -%}{{ variant_image | image_url: width: 120 }} 120w,{%- endif -%}{{ variant_image | image_url: width: variant_image.width }} {{ variant_image.width }}w"
+                    sizes="(min-width: 1280px) 60px, 36px"
+                    alt="{{ color | escape }}"
+                    loading="lazy"
+                    decoding="async"
+                    width="120"
+                    height="120"
+                    class="w-full h-full object-cover"
+                  >
                 {%- else -%}
                   {%- comment -%} Show placeholder when no variant image is available {%- endcomment -%}
                   <div class="variant-swatch-placeholder w-full h-full bg-gray-100 flex items-center justify-center">
-                    {{ 'product-apparel-2' | placeholder_svg_tag: 'variant-swatch-placeholder-svg w-3/5 h-3/5 text-gray-400 opacity-70' }}
+                    {{
+                      'product-apparel-2'
+                      | placeholder_svg_tag: 'variant-swatch-placeholder-svg w-3/5 h-3/5 text-gray-400 opacity-70'
+                    }}
                   </div>
                 {%- endif -%}
               </a>
@@ -455,19 +462,157 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    console.log('🚀 Product card hover functionality initializing...');
+
+    // Image preloading and caching system
+    const imageCache = new Map();
+    const preloadQueue = new Set();
+    let intersectionObserver;
+
+    // Preload image function with caching
+    function preloadImage(src, srcset = '') {
+      if (imageCache.has(src) || preloadQueue.has(src)) {
+        return imageCache.get(src) || Promise.resolve();
+      }
+
+      console.log(`🔄 Preloading image: ${src}`);
+      preloadQueue.add(src);
+
+      const promise = new Promise((resolve, reject) => {
+        const img = new Image();
+
+        img.onload = () => {
+          console.log(`✅ Preloaded successfully: ${src}`);
+          imageCache.set(src, img);
+          preloadQueue.delete(src);
+          resolve(img);
+        };
+
+        img.onerror = () => {
+          console.warn(`❌ Failed to preload: ${src}`);
+          preloadQueue.delete(src);
+          reject(new Error(`Failed to load ${src}`));
+        };
+
+        // Set srcset first if available for responsive loading
+        if (srcset) {
+          img.srcset = srcset;
+        }
+        img.src = src;
+      });
+
+      imageCache.set(src, promise);
+      return promise;
+    }
+
+    // Hover intent detection with delay
+    function addHoverIntent(element, onIntent, delay = 150) {
+      let hoverTimer;
+
+      element.addEventListener('mouseenter', () => {
+        hoverTimer = setTimeout(() => {
+          onIntent();
+        }, delay);
+      });
+
+      element.addEventListener('mouseleave', () => {
+        if (hoverTimer) {
+          clearTimeout(hoverTimer);
+          hoverTimer = null;
+        }
+      });
+    }
+
+    // Setup Intersection Observer for viewport-based preloading
+    if ('IntersectionObserver' in window) {
+      intersectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const card = entry.target;
+            const productId = card.dataset.productId;
+
+            // Preload main hover image
+            const mainImageSrc = card.dataset.mainImageSrc;
+            const mainImageSrcset = card.dataset.mainImageSrcset;
+
+            if (mainImageSrc) {
+              preloadImage(mainImageSrc, mainImageSrcset).catch(() => {
+                console.warn(`Failed to preload main image for product ${productId}`);
+              });
+            }
+
+            // Preload variant images
+            const variantSwatches = document.querySelectorAll(`[data-product-id="${productId}"].variant-swatch`);
+            variantSwatches.forEach(swatch => {
+              const variantImage = swatch.dataset.variantImage;
+              const variantImageSrcset = swatch.dataset.variantImageSrcset;
+
+              if (variantImage && variantImage !== 'placeholder') {
+                preloadImage(variantImage, variantImageSrcset).catch(() => {
+                  console.warn(`Failed to preload variant image for product ${productId}`);
+                });
+              }
+            });
+
+            // Stop observing this card after preloading
+            intersectionObserver.unobserve(card);
+          }
+        });
+      }, {
+        rootMargin: '50px', // Start preloading 50px before entering viewport
+        threshold: 0.1
+      });
+    }
+
     // Find all product cards
     const productCards = document.querySelectorAll('.card-product-northfinder__link');
+    console.log(`📦 Found ${productCards.length} product cards`);
+
+    // Debug: Show all product cards found
+    productCards.forEach((card, i) => {
+      console.log(`📦 Product card ${i + 1}:`, {
+        element: card,
+        productId: card.dataset.productId,
+        mainImageSrc: card.dataset.mainImageSrc,
+        mainImageSrcset: card.dataset.mainImageSrcset,
+      });
+    });
 
     // Add hover effect to product cards
-    productCards.forEach((card) => {
+    productCards.forEach((card, index) => {
       const productId = card.dataset.productId;
-      if (!productId) return;
+      console.log(`🔍 Processing card ${index + 1}:`, {
+        productId,
+        hasProductId: !!productId,
+        cardElement: card,
+      });
+
+      if (!productId) {
+        console.warn(`⚠️ Product card ${index + 1} missing product ID`);
+        return;
+      }
+
+      // Start observing for viewport-based preloading
+      if (intersectionObserver) {
+        intersectionObserver.observe(card);
+      }
 
       const mainImageContainer = document.getElementById(`main-image-${productId}`);
-      if (!mainImageContainer) return;
+      console.log(`🖼️ Main image container for product ${productId}:`, mainImageContainer);
 
+      if (!mainImageContainer) {
+        console.warn(`⚠️ Main image container not found for product ${productId}`);
+        return;
+      }
+
+      // Find img element (now using simple img tag instead of picture)
       const mainImage = mainImageContainer.querySelector('img');
-      if (!mainImage) return;
+      console.log(`🎯 Main image element for product ${productId}:`, mainImage);
+
+      if (!mainImage) {
+        console.warn(`⚠️ Main image element not found for product ${productId}`);
+        return;
+      }
 
       // Store original image data
       const originalSrc = mainImageContainer.dataset.originalSrc;
@@ -477,82 +622,221 @@
       const mainImageSrc = card.dataset.mainImageSrc;
       const mainImageSrcset = card.dataset.mainImageSrcset;
 
+      console.log(`📊 Image data for product ${productId}:`, {
+        originalSrc,
+        originalSrcset,
+        mainImageSrc,
+        mainImageSrcset,
+        currentSrc: mainImage.src,
+      });
+
+      // Add hover intent detection for preloading
+      addHoverIntent(card, () => {
+        // Preload main image on hover intent
+        if (mainImageSrc && !imageCache.has(mainImageSrc)) {
+          preloadImage(mainImageSrc, mainImageSrcset).catch(() => {
+            console.warn(`Failed to preload on hover intent for product ${productId}`);
+          });
+        }
+      });
+
       // Add hover event to show main image
       card.addEventListener('mouseenter', function () {
+        console.log(`🖱️ MOUSEENTER on product ${productId}`, {
+          mainImageSrc,
+          originalSrc,
+          willChange: mainImageSrc && mainImageSrc !== originalSrc,
+        });
+
         if (mainImageSrc && mainImageSrc !== originalSrc) {
-          // Change to main image immediately without transition
-          mainImage.src = mainImageSrc;
-          if (mainImageSrcset) {
-            mainImage.srcset = mainImageSrcset;
+          // Check if we're already showing the target image to avoid unnecessary reloads
+          const currentImageUrl = new URL(mainImage.src, window.location.origin);
+          const targetImageUrl = new URL(mainImageSrc, window.location.origin);
+
+          // Compare base URLs without query parameters to avoid flash
+          const currentBase = currentImageUrl.pathname;
+          const targetBase = targetImageUrl.pathname;
+
+          if (currentBase !== targetBase) {
+            console.log(`🔄 Changing image from ${mainImage.src} to ${mainImageSrc}`);
+
+            // Update img element (simple approach)
+            mainImage.src = mainImageSrc;
+            if (mainImageSrcset) {
+              mainImage.srcset = mainImageSrcset;
+            }
+
+            console.log(`✅ Image changed successfully. New src: ${mainImage.src}`);
+          } else {
+            console.log(`⏭️ Already showing target image, skipping change`);
           }
+        } else {
+          console.log(`❌ No image change needed or no main image available`);
         }
       });
 
       card.addEventListener('mouseleave', function () {
-        // Reset to the original model image
-        if (mainImage.src !== originalSrc) {
-          mainImage.src = originalSrc;
-          mainImage.srcset = originalSrcset;
+        console.log(`🖱️ MOUSELEAVE on product ${productId}`, {
+          currentSrc: mainImage.src,
+          originalSrc,
+          willRestore: true,
+        });
+
+        // Preload original image if not cached (for faster reset next time)
+        if (!imageCache.has(originalSrc)) {
+          preloadImage(originalSrc, originalSrcset).catch(() => {
+            console.warn(`Failed to cache original image for product ${productId}`);
+          });
         }
+
+        // Always reset to the original model image on mouseleave
+        console.log(`🔄 Restoring image from ${mainImage.src} to ${originalSrc}`);
+        mainImage.src = originalSrc;
+        mainImage.srcset = originalSrcset;
+        console.log(`✅ Image restored successfully. New src: ${mainImage.src}`);
       });
     });
 
     // Handle variant swatch hover
+    console.log('🎨 Initializing variant swatch hover...');
     const variantSwatches = document.querySelectorAll('.variant-swatch');
-    variantSwatches.forEach((swatch) => {
+    console.log(`🎨 Found ${variantSwatches.length} variant swatches`);
+
+    // Debug: Show all variant swatches found
+    variantSwatches.forEach((swatch, i) => {
+      console.log(`🎨 Variant swatch ${i + 1}:`, {
+        element: swatch,
+        productId: swatch.dataset.productId,
+        variantImage: swatch.dataset.variantImage,
+        variantImageSrcset: swatch.dataset.variantImageSrcset,
+      });
+    });
+
+    variantSwatches.forEach((swatch, index) => {
       const productId = swatch.dataset.productId;
       const variantImage = swatch.dataset.variantImage;
       const variantImageSrcset = swatch.dataset.variantImageSrcset;
       const mainImageContainer = document.getElementById(`main-image-${productId}`);
 
-      if (mainImageContainer && variantImage) {
-        const mainImage = mainImageContainer.querySelector('img');
-        if (!mainImage) return;
+      console.log(`🎨 Processing variant swatch ${index + 1}:`, {
+        productId,
+        variantImage,
+        variantImageSrcset,
+        hasMainImageContainer: !!mainImageContainer,
+      });
 
-        // Store original image data
-        const originalSrc = mainImageContainer.dataset.originalSrc;
-        const originalSrcset = mainImageContainer.dataset.originalSrcset;
+      if (!mainImageContainer || !variantImage) {
+        console.warn(`⚠️ Variant swatch ${index + 1}: Missing container or image data`);
+        return;
+      }
 
-        swatch.addEventListener('mouseenter', function () {
-          // Check if variant has an actual image or is placeholder
-          if (variantImage && variantImage !== 'placeholder') {
-            // Change to variant image
-            mainImage.src = variantImage;
-            mainImage.srcset = variantImageSrcset;
-          } else {
-            // For placeholder variants, show a placeholder in main image
-            const placeholderContainer = mainImage.parentElement;
-            const existingPlaceholder = placeholderContainer.querySelector('.main-image-placeholder');
+      // Find img element (now using simple img tag instead of picture)
+      const mainImage = mainImageContainer.querySelector('img');
+      if (!mainImage) {
+        console.warn(`⚠️ Variant swatch ${index + 1}: Main image element not found`);
+        return;
+      }
 
-            if (!existingPlaceholder) {
-              // Hide the main image and show placeholder
-              mainImage.style.display = 'none';
+      // Store original image data
+      const originalSrc = mainImageContainer.dataset.originalSrc;
+      const originalSrcset = mainImageContainer.dataset.originalSrcset;
 
-              // Create placeholder element
-              const placeholder = document.createElement('div');
-              placeholder.className = 'main-image-placeholder absolute inset-0 w-full h-full bg-gray-100 flex items-center justify-center';
-              placeholder.innerHTML = `{{ 'product-apparel-2' | placeholder_svg_tag: 'w-3/5 h-3/5 text-gray-400 opacity-70' }}`;
+      console.log(`🎨 Variant swatch ${index + 1} setup complete:`, {
+        originalSrc,
+        originalSrcset,
+        variantImage,
+        isPlaceholder: variantImage === 'placeholder',
+      });
 
-              placeholderContainer.appendChild(placeholder);
-            }
-          }
+      // Add hover intent detection for variant preloading
+      addHoverIntent(swatch, () => {
+        if (variantImage && variantImage !== 'placeholder' && !imageCache.has(variantImage)) {
+          preloadImage(variantImage, variantImageSrcset).catch(() => {
+            console.warn(`Failed to preload variant on hover intent for product ${productId}`);
+          });
+        }
+      });
+
+      swatch.addEventListener('mouseenter', function () {
+        console.log(`🖱️ VARIANT MOUSEENTER on product ${productId}`, {
+          variantImage,
+          isPlaceholder: variantImage === 'placeholder',
+          currentSrc: mainImage.src,
         });
 
-        swatch.addEventListener('mouseleave', function () {
-          // Remove any placeholder that might be showing
-          const placeholderContainer = mainImage.parentElement;
+        // Check if variant has an actual image or is placeholder
+        if (variantImage && variantImage !== 'placeholder') {
+          // Check if we're already showing the target variant image to avoid unnecessary reloads
+          const currentImageUrl = new URL(mainImage.src, window.location.origin);
+          const targetImageUrl = new URL(variantImage, window.location.origin);
+
+          // Compare base URLs without query parameters to avoid flash
+          const currentBase = currentImageUrl.pathname;
+          const targetBase = targetImageUrl.pathname;
+
+          if (currentBase !== targetBase) {
+            console.log(`🔄 Changing to variant image: ${variantImage}`);
+
+            // Update img element (simple approach)
+            mainImage.src = variantImage;
+            mainImage.srcset = variantImageSrcset || '';
+
+            console.log(`✅ Variant image changed successfully. New src: ${mainImage.src}`);
+          } else {
+            console.log(`⏭️ Already showing target variant image, skipping change`);
+          }
+        } else {
+          console.log(`🖼️ Showing placeholder for variant`);
+          // For placeholder variants, show a placeholder in main image
+          const placeholderContainer = mainImage.closest('picture') || mainImage.parentElement;
           const existingPlaceholder = placeholderContainer.querySelector('.main-image-placeholder');
 
-          if (existingPlaceholder) {
-            existingPlaceholder.remove();
-            mainImage.style.display = 'block';
-          }
+          if (!existingPlaceholder) {
+            // Hide the main image and show placeholder
+            mainImage.style.display = 'none';
 
-          // Restore original image
-          mainImage.src = originalSrc;
-          mainImage.srcset = originalSrcset;
+            // Create placeholder element with proper SVG
+            const placeholder = document.createElement('div');
+            placeholder.className =
+              'main-image-placeholder absolute inset-0 w-full h-full bg-gray-100 flex items-center justify-center';
+
+            // Create SVG placeholder instead of using Liquid template
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'w-3/5 h-3/5 text-gray-400 opacity-70');
+            svg.setAttribute('fill', 'currentColor');
+            svg.setAttribute('viewBox', '0 0 20 20');
+            svg.innerHTML =
+              '<path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>';
+
+            placeholder.appendChild(svg);
+            placeholderContainer.appendChild(placeholder);
+          }
+        }
+      });
+
+      swatch.addEventListener('mouseleave', function () {
+        console.log(`🖱️ VARIANT MOUSELEAVE on product ${productId}`, {
+          currentSrc: mainImage.src,
+          originalSrc,
+          willRestore: true,
         });
-      }
+
+        // Remove any placeholder that might be showing
+        const placeholderContainer = mainImage.closest('picture') || mainImage.parentElement;
+        const existingPlaceholder = placeholderContainer.querySelector('.main-image-placeholder');
+
+        if (existingPlaceholder) {
+          console.log(`🗑️ Removing placeholder for product ${productId}`);
+          existingPlaceholder.remove();
+          mainImage.style.display = 'block';
+        }
+
+        // Restore original image
+        console.log(`🔄 Restoring variant image from ${mainImage.src} to ${originalSrc}`);
+        mainImage.src = originalSrc;
+        mainImage.srcset = originalSrcset || '';
+        console.log(`✅ Variant image restored successfully. New src: ${mainImage.src}`);
+      });
     });
   });
 
