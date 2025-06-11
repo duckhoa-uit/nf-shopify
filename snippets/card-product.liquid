@@ -118,10 +118,42 @@
           {%- assign model_image = card_product.featured_media -%}
         {%- endunless -%}
 
-        {%- comment -%} If no main image found, use the first model image as fallback {%- endcomment -%}
+        {%- comment -%} If no main image found, try to find alternative model images for hover effect {%- endcomment -%}
         {%- unless main_image -%}
-          {%- assign main_image = model_image -%}
+          {%- comment -%} Look for model images with sequence numbers (-M_2, -M_3, etc.) {%- endcomment -%}
+          {%- assign alternative_main_image = null -%}
+          {%- assign lowest_sequence = 999 -%}
+
+          {%- for media in card_product.media -%}
+            {%- assign media_src = media.src | default: '' -%}
+            {%- assign parsed_url = media_src | split: '/' | last -%}
+
+            {%- comment -%} Look for model images with sequence that are different from current model image {%- endcomment -%}
+            {%- if parsed_url contains '-M_' and media.id != model_image.id -%}
+              {%- assign sequence_part = parsed_url | split: '-M_' | last | split: '.' | first -%}
+              {%- assign sequence_number = sequence_part | plus: 0 -%}
+
+              {%- comment -%} Find the lowest sequence number for consistent behavior {%- endcomment -%}
+              {%- if sequence_number > 0 and sequence_number < lowest_sequence -%}
+                {%- assign lowest_sequence = sequence_number -%}
+                {%- assign alternative_main_image = media -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- comment -%} Use alternative model image if found, otherwise fallback to current model image {%- endcomment -%}
+          {%- if alternative_main_image -%}
+            {%- assign main_image = alternative_main_image -%}
+          {%- else -%}
+            {%- assign main_image = model_image -%}
+          {%- endif -%}
         {%- endunless -%}
+
+        {%- comment -%} Check if we found a real main image (different from model image) {%- endcomment -%}
+        {%- assign has_real_main_image = false -%}
+        {%- if main_image and main_image.id != model_image.id -%}
+          {%- assign has_real_main_image = true -%}
+        {%- endif -%}
 
         <div class="relative overflow-hidden mb-3">
           <a
@@ -130,6 +162,7 @@
             data-product-id="{{ card_product.id }}"
             data-main-image-src="{{ main_image | image_url: width: 400 }}"
             data-main-image-srcset="{%- if main_image.width >= 200 -%}{{ main_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if main_image.width >= 300 -%}{{ main_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if main_image.width >= 400 -%}{{ main_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if main_image.width >= 500 -%}{{ main_image | image_url: width: 500 }} 500w{%- endif -%}"
+            data-has-real-main-image="{{ has_real_main_image }}"
           >
             <div
               id="main-image-{{ card_product.id }}"
@@ -462,8 +495,6 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    console.log('🚀 Product card hover functionality initializing...');
-
     // Image preloading and caching system
     const imageCache = new Map();
     const preloadQueue = new Set();
@@ -475,21 +506,18 @@
         return imageCache.get(src) || Promise.resolve();
       }
 
-      console.log(`🔄 Preloading image: ${src}`);
       preloadQueue.add(src);
 
       const promise = new Promise((resolve, reject) => {
         const img = new Image();
 
         img.onload = () => {
-          console.log(`✅ Preloaded successfully: ${src}`);
           imageCache.set(src, img);
           preloadQueue.delete(src);
           resolve(img);
         };
 
         img.onerror = () => {
-          console.warn(`❌ Failed to preload: ${src}`);
           preloadQueue.delete(src);
           reject(new Error(`Failed to load ${src}`));
         };
@@ -525,70 +553,52 @@
 
     // Setup Intersection Observer for viewport-based preloading
     if ('IntersectionObserver' in window) {
-      intersectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const card = entry.target;
-            const productId = card.dataset.productId;
+      intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const card = entry.target;
+              const productId = card.dataset.productId;
 
-            // Preload main hover image
-            const mainImageSrc = card.dataset.mainImageSrc;
-            const mainImageSrcset = card.dataset.mainImageSrcset;
+              // Preload main hover image
+              const mainImageSrc = card.dataset.mainImageSrc;
+              const mainImageSrcset = card.dataset.mainImageSrcset;
 
-            if (mainImageSrc) {
-              preloadImage(mainImageSrc, mainImageSrcset).catch(() => {
-                console.warn(`Failed to preload main image for product ${productId}`);
-              });
-            }
-
-            // Preload variant images
-            const variantSwatches = document.querySelectorAll(`[data-product-id="${productId}"].variant-swatch`);
-            variantSwatches.forEach(swatch => {
-              const variantImage = swatch.dataset.variantImage;
-              const variantImageSrcset = swatch.dataset.variantImageSrcset;
-
-              if (variantImage && variantImage !== 'placeholder') {
-                preloadImage(variantImage, variantImageSrcset).catch(() => {
-                  console.warn(`Failed to preload variant image for product ${productId}`);
-                });
+              if (mainImageSrc) {
+                preloadImage(mainImageSrc, mainImageSrcset).catch(() => {});
               }
-            });
 
-            // Stop observing this card after preloading
-            intersectionObserver.unobserve(card);
-          }
-        });
-      }, {
-        rootMargin: '50px', // Start preloading 50px before entering viewport
-        threshold: 0.1
-      });
+              // Preload variant images
+              const variantSwatches = document.querySelectorAll(`[data-product-id="${productId}"].variant-swatch`);
+              variantSwatches.forEach((swatch) => {
+                const variantImage = swatch.dataset.variantImage;
+                const variantImageSrcset = swatch.dataset.variantImageSrcset;
+
+                if (variantImage && variantImage !== 'placeholder') {
+                  preloadImage(variantImage, variantImageSrcset).catch(() => {});
+                }
+              });
+
+              // Stop observing this card after preloading
+              intersectionObserver.unobserve(card);
+            }
+          });
+        },
+        {
+          rootMargin: '50px', // Start preloading 50px before entering viewport
+          threshold: 0.1,
+        }
+      );
     }
 
     // Find all product cards
     const productCards = document.querySelectorAll('.card-product-northfinder__link');
-    console.log(`📦 Found ${productCards.length} product cards`);
-
-    // Debug: Show all product cards found
-    productCards.forEach((card, i) => {
-      console.log(`📦 Product card ${i + 1}:`, {
-        element: card,
-        productId: card.dataset.productId,
-        mainImageSrc: card.dataset.mainImageSrc,
-        mainImageSrcset: card.dataset.mainImageSrcset,
-      });
-    });
 
     // Add hover effect to product cards
     productCards.forEach((card, index) => {
       const productId = card.dataset.productId;
-      console.log(`🔍 Processing card ${index + 1}:`, {
-        productId,
-        hasProductId: !!productId,
-        cardElement: card,
-      });
 
       if (!productId) {
-        console.warn(`⚠️ Product card ${index + 1} missing product ID`);
         return;
       }
 
@@ -598,19 +608,15 @@
       }
 
       const mainImageContainer = document.getElementById(`main-image-${productId}`);
-      console.log(`🖼️ Main image container for product ${productId}:`, mainImageContainer);
 
       if (!mainImageContainer) {
-        console.warn(`⚠️ Main image container not found for product ${productId}`);
         return;
       }
 
       // Find img element (now using simple img tag instead of picture)
       const mainImage = mainImageContainer.querySelector('img');
-      console.log(`🎯 Main image element for product ${productId}:`, mainImage);
 
       if (!mainImage) {
-        console.warn(`⚠️ Main image element not found for product ${productId}`);
         return;
       }
 
@@ -622,95 +628,54 @@
       const mainImageSrc = card.dataset.mainImageSrc;
       const mainImageSrcset = card.dataset.mainImageSrcset;
 
-      console.log(`📊 Image data for product ${productId}:`, {
-        originalSrc,
-        originalSrcset,
-        mainImageSrc,
-        mainImageSrcset,
-        currentSrc: mainImage.src,
-      });
+      // Check if this product has a real main image (different from model image)
+      const hasRealMainImage = card.dataset.hasRealMainImage === 'true';
 
       // Add hover intent detection for preloading
       addHoverIntent(card, () => {
         // Preload main image on hover intent
         if (mainImageSrc && !imageCache.has(mainImageSrc)) {
-          preloadImage(mainImageSrc, mainImageSrcset).catch(() => {
-            console.warn(`Failed to preload on hover intent for product ${productId}`);
-          });
+          preloadImage(mainImageSrc, mainImageSrcset).catch(() => {});
         }
       });
 
-      // Add hover event to show main image
-      card.addEventListener('mouseenter', function () {
-        console.log(`🖱️ MOUSEENTER on product ${productId}`, {
-          mainImageSrc,
-          originalSrc,
-          willChange: mainImageSrc && mainImageSrc !== originalSrc,
-        });
+      // Add hover event to show main image (only if has real main image)
+      if (hasRealMainImage) {
+        card.addEventListener('mouseenter', function () {
+          if (mainImageSrc && mainImageSrc !== originalSrc) {
+            // Check if we're already showing the target image to avoid unnecessary reloads
+            const currentImageUrl = new URL(mainImage.src, window.location.origin);
+            const targetImageUrl = new URL(mainImageSrc, window.location.origin);
 
-        if (mainImageSrc && mainImageSrc !== originalSrc) {
-          // Check if we're already showing the target image to avoid unnecessary reloads
-          const currentImageUrl = new URL(mainImage.src, window.location.origin);
-          const targetImageUrl = new URL(mainImageSrc, window.location.origin);
+            // Compare base URLs without query parameters to avoid flash
+            const currentBase = currentImageUrl.pathname;
+            const targetBase = targetImageUrl.pathname;
 
-          // Compare base URLs without query parameters to avoid flash
-          const currentBase = currentImageUrl.pathname;
-          const targetBase = targetImageUrl.pathname;
-
-          if (currentBase !== targetBase) {
-            console.log(`🔄 Changing image from ${mainImage.src} to ${mainImageSrc}`);
-
-            // Update img element (simple approach)
-            mainImage.src = mainImageSrc;
-            if (mainImageSrcset) {
-              mainImage.srcset = mainImageSrcset;
+            if (currentBase !== targetBase) {
+              // Update img element (simple approach)
+              mainImage.src = mainImageSrc;
+              if (mainImageSrcset) {
+                mainImage.srcset = mainImageSrcset;
+              }
             }
-
-            console.log(`✅ Image changed successfully. New src: ${mainImage.src}`);
-          } else {
-            console.log(`⏭️ Already showing target image, skipping change`);
           }
-        } else {
-          console.log(`❌ No image change needed or no main image available`);
-        }
-      });
-
-      card.addEventListener('mouseleave', function () {
-        console.log(`🖱️ MOUSELEAVE on product ${productId}`, {
-          currentSrc: mainImage.src,
-          originalSrc,
-          willRestore: true,
         });
 
-        // Preload original image if not cached (for faster reset next time)
-        if (!imageCache.has(originalSrc)) {
-          preloadImage(originalSrc, originalSrcset).catch(() => {
-            console.warn(`Failed to cache original image for product ${productId}`);
-          });
-        }
+        card.addEventListener('mouseleave', function () {
+          // Preload original image if not cached (for faster reset next time)
+          if (!imageCache.has(originalSrc)) {
+            preloadImage(originalSrc, originalSrcset).catch(() => {});
+          }
 
-        // Always reset to the original model image on mouseleave
-        console.log(`🔄 Restoring image from ${mainImage.src} to ${originalSrc}`);
-        mainImage.src = originalSrc;
-        mainImage.srcset = originalSrcset;
-        console.log(`✅ Image restored successfully. New src: ${mainImage.src}`);
-      });
+          // Always reset to the original model image on mouseleave
+          mainImage.src = originalSrc;
+          mainImage.srcset = originalSrcset;
+        });
+      }
     });
 
     // Handle variant swatch hover
-    console.log('🎨 Initializing variant swatch hover...');
     const variantSwatches = document.querySelectorAll('.variant-swatch');
-    console.log(`🎨 Found ${variantSwatches.length} variant swatches`);
-
-    // Debug: Show all variant swatches found
-    variantSwatches.forEach((swatch, i) => {
-      console.log(`🎨 Variant swatch ${i + 1}:`, {
-        element: swatch,
-        productId: swatch.dataset.productId,
-        variantImage: swatch.dataset.variantImage,
-        variantImageSrcset: swatch.dataset.variantImageSrcset,
-      });
-    });
 
     variantSwatches.forEach((swatch, index) => {
       const productId = swatch.dataset.productId;
@@ -718,22 +683,13 @@
       const variantImageSrcset = swatch.dataset.variantImageSrcset;
       const mainImageContainer = document.getElementById(`main-image-${productId}`);
 
-      console.log(`🎨 Processing variant swatch ${index + 1}:`, {
-        productId,
-        variantImage,
-        variantImageSrcset,
-        hasMainImageContainer: !!mainImageContainer,
-      });
-
       if (!mainImageContainer || !variantImage) {
-        console.warn(`⚠️ Variant swatch ${index + 1}: Missing container or image data`);
         return;
       }
 
       // Find img element (now using simple img tag instead of picture)
       const mainImage = mainImageContainer.querySelector('img');
       if (!mainImage) {
-        console.warn(`⚠️ Variant swatch ${index + 1}: Main image element not found`);
         return;
       }
 
@@ -741,29 +697,14 @@
       const originalSrc = mainImageContainer.dataset.originalSrc;
       const originalSrcset = mainImageContainer.dataset.originalSrcset;
 
-      console.log(`🎨 Variant swatch ${index + 1} setup complete:`, {
-        originalSrc,
-        originalSrcset,
-        variantImage,
-        isPlaceholder: variantImage === 'placeholder',
-      });
-
       // Add hover intent detection for variant preloading
       addHoverIntent(swatch, () => {
         if (variantImage && variantImage !== 'placeholder' && !imageCache.has(variantImage)) {
-          preloadImage(variantImage, variantImageSrcset).catch(() => {
-            console.warn(`Failed to preload variant on hover intent for product ${productId}`);
-          });
+          preloadImage(variantImage, variantImageSrcset).catch(() => {});
         }
       });
 
       swatch.addEventListener('mouseenter', function () {
-        console.log(`🖱️ VARIANT MOUSEENTER on product ${productId}`, {
-          variantImage,
-          isPlaceholder: variantImage === 'placeholder',
-          currentSrc: mainImage.src,
-        });
-
         // Check if variant has an actual image or is placeholder
         if (variantImage && variantImage !== 'placeholder') {
           // Check if we're already showing the target variant image to avoid unnecessary reloads
@@ -775,18 +716,11 @@
           const targetBase = targetImageUrl.pathname;
 
           if (currentBase !== targetBase) {
-            console.log(`🔄 Changing to variant image: ${variantImage}`);
-
             // Update img element (simple approach)
             mainImage.src = variantImage;
             mainImage.srcset = variantImageSrcset || '';
-
-            console.log(`✅ Variant image changed successfully. New src: ${mainImage.src}`);
-          } else {
-            console.log(`⏭️ Already showing target variant image, skipping change`);
           }
         } else {
-          console.log(`🖼️ Showing placeholder for variant`);
           // For placeholder variants, show a placeholder in main image
           const placeholderContainer = mainImage.closest('picture') || mainImage.parentElement;
           const existingPlaceholder = placeholderContainer.querySelector('.main-image-placeholder');
@@ -815,27 +749,18 @@
       });
 
       swatch.addEventListener('mouseleave', function () {
-        console.log(`🖱️ VARIANT MOUSELEAVE on product ${productId}`, {
-          currentSrc: mainImage.src,
-          originalSrc,
-          willRestore: true,
-        });
-
         // Remove any placeholder that might be showing
         const placeholderContainer = mainImage.closest('picture') || mainImage.parentElement;
         const existingPlaceholder = placeholderContainer.querySelector('.main-image-placeholder');
 
         if (existingPlaceholder) {
-          console.log(`🗑️ Removing placeholder for product ${productId}`);
           existingPlaceholder.remove();
           mainImage.style.display = 'block';
         }
 
         // Restore original image
-        console.log(`🔄 Restoring variant image from ${mainImage.src} to ${originalSrc}`);
         mainImage.src = originalSrc;
         mainImage.srcset = originalSrcset || '';
-        console.log(`✅ Variant image restored successfully. New src: ${mainImage.src}`);
       });
     });
   });
