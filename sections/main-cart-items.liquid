@@ -649,17 +649,27 @@
           updateCartTotal(event.cartData);
         }
 
-        // Auto reload page when cart is updated from external sources (like wishlist app)
-        // to ensure cart items are properly refreshed
-        if (event.source && event.source !== 'cart-items' && event.source !== 'cart-sync') {
-          // Immediate reload without delay since we're skipping notification
-          window.location.reload();
+        // Auto reload page when cart is updated to ensure cart items and totals are properly refreshed
+        // This handles both external sources (wishlist app) and direct cart operations
+        if (event.source) {
+          // For external sources (not from cart page itself), reload immediately
+          if (event.source !== 'cart-items' && event.source !== 'cart-sync') {
+            window.location.reload();
+          }
+          // For cart page operations, reload after a short delay to ensure smooth UX
+          else if (event.source === 'cart-items') {
+            setTimeout(() => {
+              window.location.reload();
+            }, 500); // 500ms delay to ensure cart update completes and provide smooth transition
+          }
         }
       });
     }
 
     // Set up a global flag to indicate we're on cart page
     window.isCartPage = true;
+
+
 
     // Handle quantity changes
     const quantitySelects = document.querySelectorAll('.nf-cart-item__variant-select[data-is-quantity="true"]');
@@ -694,36 +704,57 @@
             // Store the old value for error recovery
             this.setAttribute('data-previous-value', oldValue);
 
-            // Show loading indicator
-            const loadingIndicator = this.parentNode.querySelector('.quantity-loading-indicator');
-            if (loadingIndicator) {
-              loadingIndicator.classList.remove('hidden');
-            }
-
-            // Hide the dropdown arrow while loading
-            const arrow = this.parentNode.querySelector('.nf-cart-item__variant-arrow');
-            if (arrow) {
-              arrow.classList.add('hidden');
-            }
-
-            // Disable the select while loading
+            // Disable the select to prevent double-clicks (minimal loading approach)
             this.disabled = true;
 
             // Update the cart
             cartItems.updateQuantity(itemKey, newQuantity);
 
-            // Re-enable the select and hide loading indicator after a timeout (in case the request fails silently)
+            // Set up a fallback reload mechanism in case the PUB_SUB_EVENTS system doesn't trigger
+            const fallbackReloadTimer = setTimeout(() => {
+              console.log('[Cart] Fallback reload triggered for quantity change');
+              window.location.reload();
+            }, 3000); // 3 second fallback
+
+            // Clear the fallback timer if the page reloads normally
+            window.addEventListener('beforeunload', () => {
+              clearTimeout(fallbackReloadTimer);
+            });
+
+            // Re-enable the select after a timeout (in case the request fails silently)
             setTimeout(() => {
-              if (loadingIndicator) {
-                loadingIndicator.classList.add('hidden');
-              }
-              if (arrow) {
-                arrow.classList.remove('hidden');
-              }
               this.disabled = false;
+              // Clear fallback timer if we reach this point without reload
+              clearTimeout(fallbackReloadTimer);
             }, 5000); // 5 second timeout as a fallback
           }
         }
+      });
+    });
+
+    // Handle remove button clicks
+    const removeButtons = document.querySelectorAll('cart-remove-button button');
+    removeButtons.forEach((button) => {
+      button.addEventListener('click', function(event) {
+        // Disable button to prevent double-clicks (minimal loading approach)
+        this.disabled = true;
+
+        // Set up a fallback reload mechanism for remove operations
+        const fallbackReloadTimer = setTimeout(() => {
+          console.log('[Cart] Fallback reload triggered for item removal');
+          window.location.reload();
+        }, 3000); // 3 second fallback
+
+        // Clear the fallback timer if the page reloads normally
+        window.addEventListener('beforeunload', () => {
+          clearTimeout(fallbackReloadTimer);
+        });
+
+        // Re-enable button if operation fails (fallback)
+        setTimeout(() => {
+          this.disabled = false;
+          clearTimeout(fallbackReloadTimer);
+        }, 5000); // 5 second timeout as a fallback
       });
     });
 
