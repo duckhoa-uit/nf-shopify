@@ -25,7 +25,9 @@
 5. ✅ Design auto-reload implementation strategy
 6. ✅ Implement auto-reload functionality for cart page operations
 7. ✅ Simplify loading effects to minimal approach (Option 1)
-8. ⏳ Test the implementation
+8. ✅ Comment out updateCartTotal handlers (redundant with auto-reload)
+9. ✅ Comment out redundant cart.js handlers (updateCartTotal, onCartUpdate, getSectionsToRender)
+10. ⏳ Test the implementation
 
 ## Implementation Strategy:
 ### Approach: Enhance existing auto-reload system
@@ -72,22 +74,46 @@
 ## Implementation Details:
 ### Changes Made to `sections/main-cart-items.liquid`:
 
-1. **Enhanced PUB_SUB_EVENTS.cartUpdate handler** (lines 645-667):
+1. **Enhanced PUB_SUB_EVENTS.cartUpdate handler** (lines 648-673):
    - Modified to trigger auto-reload for 'cart-items' source events
    - Added 500ms delay for smooth UX transition
    - Maintained immediate reload for external sources
+   - Commented out updateCartTotal calls (redundant with auto-reload)
 
 2. **Simplified loading approach** (Option 1 - Minimal Loading):
    - Removed visual loading effects (opacity changes, spinners)
    - Kept essential functionality (disable controls to prevent double-clicks)
    - Cleaner, less intrusive user experience
 
-3. **Enhanced quantity change handler** (lines 672-729):
+3. **Commented out updateCartTotal functionality** (lines 628-646):
+   - Removed redundant cart total updates via JavaScript
+   - Auto-reload ensures fresh data from server
+   - Simplified codebase by removing unnecessary handlers
+
+### Changes Made to `assets/cart.js`:
+
+1. **Commented out updateCartTotal in updateQuantity** (lines 351-365):
+   - Removed redundant cart total updates via JavaScript
+   - Auto-reload will show fresh totals from server
+
+2. **Commented out main cart page logic in onCartUpdate** (lines 120-130):
+   - Kept cart drawer functionality intact
+   - Removed main cart page AJAX updates (redundant with auto-reload)
+
+3. **Simplified getSectionsToRender** (lines 137-167):
+   - Commented out main-cart-items and main-cart-footer sections
+   - Kept cart-icon-bubble and cart-live-region-text for essential functionality
+
+4. **Commented out section updates in updateQuantity** (lines 298-331):
+   - Removed AJAX section updates for main cart page
+   - Auto-reload will refresh entire page with fresh data
+
+5. **Enhanced quantity change handler** (lines 675-732):
    - Minimal loading: only disables select dropdown
    - Fallback reload mechanism (3-second timeout)
    - Proper cleanup for timers and re-enabling controls
 
-4. **Added remove button handler** (lines 733-759):
+6. **Added remove button handler** (lines 736-762):
    - Minimal loading: only disables remove button
    - Fallback reload mechanism for remove operations
    - Proper error recovery and cleanup
@@ -109,6 +135,8 @@
 - Implemented auto-reload functionality for all cart page operations
 - Simplified to minimal loading approach (Option 1)
 - Removed unnecessary visual effects while keeping essential functionality
+- Commented out redundant updateCartTotal handlers in main-cart-items.liquid
+- Commented out redundant cart.js handlers for main cart page operations
 
 ## Things not done yet:
 - Test the implementation in browser

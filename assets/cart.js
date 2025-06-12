@@ -117,6 +117,9 @@ class CartItems extends HTMLElement {
           console.error(e);
         });
     } else {
+      // NOTE: Commented out because we use auto-reload approach for main cart page
+      // The page will reload with fresh data instead of updating via AJAX
+      /*
       fetch(`${routes.cart_url}?section_id=main-cart-items`)
         .then((response) => response.text())
         .then((responseText) => {
@@ -127,16 +130,21 @@ class CartItems extends HTMLElement {
         .catch((e) => {
           console.error(e);
         });
+      */
     }
   }
 
   getSectionsToRender() {
     return [
+      // NOTE: Commented out main-cart-items and main-cart-footer because we use auto-reload approach
+      // The page will reload with fresh data instead of updating these sections via AJAX
+      /*
       {
         id: 'main-cart-items',
         section: document.getElementById('main-cart-items').dataset.id,
         selector: '.js-contents',
       },
+      */
       {
         id: 'cart-icon-bubble',
         section: 'cart-icon-bubble',
@@ -147,12 +155,14 @@ class CartItems extends HTMLElement {
         section: 'cart-live-region-text',
         selector: '.shopify-section',
       },
-      // We still need to update the cart footer for totals, but we'll handle it differently
+      // NOTE: Commented out because auto-reload will refresh the entire page including footer
+      /*
       {
         id: 'main-cart-footer',
         section: document.getElementById('main-cart-footer').dataset.id,
         selector: '.js-contents',
       },
+      */
     ];
   }
 
@@ -285,6 +295,9 @@ class CartItems extends HTMLElement {
         if (cartFooter) cartFooter.classList.toggle('is-empty', parsedState.item_count === 0);
         if (cartDrawerWrapper) cartDrawerWrapper.classList.toggle('is-empty', parsedState.item_count === 0);
 
+        // NOTE: Commented out section updates because we use auto-reload approach
+        // The page will reload with fresh data instead of updating sections via AJAX
+        /*
         this.getSectionsToRender().forEach((section) => {
           const elementToReplace =
             document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
@@ -315,6 +328,7 @@ class CartItems extends HTMLElement {
             );
           }
         });
+        */
         const updatedValue = parsedState.items[line - 1] ? parsedState.items[line - 1].quantity : undefined;
         let message = '';
         if (items.length === parsedState.items.length && updatedValue !== parseInt(quantityElement.value)) {
@@ -349,6 +363,8 @@ class CartItems extends HTMLElement {
         }
 
         // Update the cart total
+        // NOTE: Commented out because we use auto-reload approach - page will refresh with fresh data
+        /*
         const cartTotalElement = document.querySelector('.nf-cart-summary__total-value');
         if (cartTotalElement && parsedState.total_price !== undefined) {
           // Format the total price using the Shopify money format
@@ -360,6 +376,7 @@ class CartItems extends HTMLElement {
             cartTotalElement.textContent = `€${formattedPrice}`;
           }
         }
+        */
 
         publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: parsedState, variantId: variantId });
 
