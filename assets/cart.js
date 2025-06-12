@@ -366,13 +366,14 @@ class CartItems extends HTMLElement {
         // NOTE: Commented out because we use auto-reload approach - page will refresh with fresh data
         /*
         const cartTotalElement = document.querySelector('.nf-cart-summary__total-value');
-        if (cartTotalElement && parsedState.total_price !== undefined) {
+        if (cartTotalElement && parsedState.original_total_price !== undefined) {
           // Format the total price using the Shopify money format
+          // Use original_total_price to show price before discounts
           if (window.Shopify && window.Shopify.formatMoney) {
-            cartTotalElement.textContent = window.Shopify.formatMoney(parsedState.total_price);
+            cartTotalElement.textContent = window.Shopify.formatMoney(parsedState.original_total_price);
           } else {
             // Simple fallback formatting if Shopify.formatMoney is not available
-            const formattedPrice = (parsedState.total_price / 100).toFixed(2);
+            const formattedPrice = (parsedState.original_total_price / 100).toFixed(2);
             cartTotalElement.textContent = `€${formattedPrice}`;
           }
         }

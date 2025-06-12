@@ -502,7 +502,7 @@
           <div class="nf-cart-summary">
             <div class="nf-cart-summary__total">
               <span class="nf-cart-summary__total-label">{{ 'cart.summary.total' | t | default: 'Total' }}</span>
-              <span class="nf-cart-summary__total-value">{{ cart.total_price | money }}</span>
+              <span class="nf-cart-summary__total-value">{{ cart.original_total_price | money }}</span>
             </div>
             <p class="text-sm">
               {{
@@ -633,7 +633,8 @@
       if (!cartTotalElement || !cartData) return;
 
       // Format the total price using the Shopify money format
-      const totalPrice = cartData.total_price || cartData.items_subtotal_price || 0;
+      // Use original_total_price to show price before discounts
+      const totalPrice = cartData.original_total_price || cartData.items_subtotal_price || 0;
 
       // Use the Shopify money format from the window object if available
       if (window.Shopify && window.Shopify.formatMoney) {

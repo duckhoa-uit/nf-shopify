@@ -27,7 +27,8 @@
 7. ✅ Simplify loading effects to minimal approach (Option 1)
 8. ✅ Comment out updateCartTotal handlers (redundant with auto-reload)
 9. ✅ Comment out redundant cart.js handlers (updateCartTotal, onCartUpdate, getSectionsToRender)
-10. ⏳ Test the implementation
+10. ✅ Fix cart total display to use original_total_price instead of total_price
+11. ⏳ Test the implementation
 
 ## Implementation Strategy:
 ### Approach: Enhance existing auto-reload system
@@ -108,6 +109,16 @@
    - Removed AJAX section updates for main cart page
    - Auto-reload will refresh entire page with fresh data
 
+### Root Cause Discovery & Fix:
+
+**Issue**: Cart total displaying incorrect price due to discount interference
+**Root Cause**: Using `cart.total_price` which includes discounts
+**Solution**: Changed to `cart.original_total_price` to show price before discounts
+
+**Files Updated**:
+- `sections/main-cart-items.liquid` line 505: `{{ cart.original_total_price | money }}`
+- Updated comments in both files to reflect the use of `original_total_price`
+
 5. **Enhanced quantity change handler** (lines 675-732):
    - Minimal loading: only disables select dropdown
    - Fallback reload mechanism (3-second timeout)
@@ -137,6 +148,7 @@
 - Removed unnecessary visual effects while keeping essential functionality
 - Commented out redundant updateCartTotal handlers in main-cart-items.liquid
 - Commented out redundant cart.js handlers for main cart page operations
+- Fixed cart total display to use original_total_price (root cause of incorrect pricing)
 
 ## Things not done yet:
 - Test the implementation in browser
