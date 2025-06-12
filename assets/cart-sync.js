@@ -248,48 +248,126 @@ class CartSyncManager {
    * Validate stock availability for cart items
    */
   async validateStock(cartData) {
+    console.log("🚀 ~ CartSyncManager ~ validateStock ~ cartData:", cartData)
     try {
-      const productIds = cartData.items.map(item => item.product_id);
+      // Build variants array with sku and id from cart items
+      const variants = cartData.items.map(item => ({
+        sku: item.sku,
+        id: item.variant_id.toString()
+      }));
 
+      console.log('[CartSync DEBUG] Starting stock validation...');
+      console.log('[CartSync DEBUG] Cart items:', cartData.items.map(item => ({
+        sku: item.sku,
+        variant_id: item.variant_id,
+        quantity: item.quantity,
+        product_title: item.product_title,
+        variant_title: item.variant_title
+      })));
+      console.log('[CartSync DEBUG] Request variants:', variants);
+
+      // DEBUG: Check if we should use mock response (for testing)
+      const shouldMockResponse = localStorage.getItem('cart-sync-mock-stock') === 'true';
+
+      if (shouldMockResponse) {
+        console.log('[CartSync DEBUG] Using MOCK response for testing');
+        // Mock response with insufficient stock for testing
+        const mockResult = {
+          data: variants.map(variant => ({
+            sku: variant.sku,
+            stock: Math.floor(Math.random() * 3) // Random stock 0-2 (likely insufficient)
+          }))
+        };
+        console.log('[CartSync DEBUG] Mock stock validation result:', mockResult);
+
+        // Continue with normal processing using mock data
+        const result = mockResult;
+
+        // Check if any items have insufficient stock
+        const stockIssues = [];
+
+        if (result.data && Array.isArray(result.data)) {
+          cartData.items.forEach(cartItem => {
+            const stockData = result.data.find(stock => stock.sku === cartItem.sku);
+            console.log(`[CartSync DEBUG] Item ${cartItem.sku}: requested=${cartItem.quantity}, available=${stockData?.stock || 'N/A'}`);
+
+            if (stockData && stockData.stock < cartItem.quantity) {
+              console.log(`[CartSync DEBUG] INSUFFICIENT STOCK for ${cartItem.sku}!`);
+              stockIssues.push({
+                cartItem: cartItem,
+                availableStock: stockData.stock,
+                requestedQuantity: cartItem.quantity
+              });
+            }
+          });
+        }
+
+        console.log('[CartSync DEBUG] Stock issues found:', stockIssues);
+
+        return {
+          success: stockIssues.length === 0,
+          stockIssues: stockIssues
+        };
+      }
+
+      // Normal API call
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
+      console.log('[CartSync DEBUG] Making API request to stock validation endpoint...');
       const response = await fetch('/apps/nf-data-management/sync_erp_at_checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ product_ids: productIds }),
+        body: JSON.stringify({ variants: variants }),
         signal: controller.signal
       });
 
       clearTimeout(timeoutId);
 
-      // Note: Response handling commented out - we now just call the API without processing result
-      /* COMMENTED OUT - Response processing for potential future re-enabling
       if (!response.ok) {
+        console.error('[CartSync DEBUG] API request failed:', response.status, response.statusText);
         throw new Error(`Stock validation failed: ${response.status}`);
       }
 
       const result = await response.json();
-      console.log('[CartSync] Stock validation result:', result);
+      console.log('[CartSync DEBUG] API stock validation result:', result);
 
-      return result;
-      */
+      // Check if any items have insufficient stock
+      const stockIssues = [];
 
-      // API call made, proceeding to checkout without processing response
-    } catch (error) {
-      // Note: Error throwing commented out - we now proceed to checkout even if API fails
+      if (result.data && Array.isArray(result.data)) {
+        cartData.items.forEach(cartItem => {
+          const stockData = result.data.find(stock => stock.sku === cartItem.sku);
+          console.log(`[CartSync DEBUG] Item ${cartItem.sku}: requested=${cartItem.quantity}, available=${stockData?.stock || 'N/A'}`);
 
-      /* COMMENTED OUT - Error throwing for potential future re-enabling
-      if (error.name === 'AbortError') {
-        throw new Error('Stock validation timed out');
+          if (stockData && stockData.stock < cartItem.quantity) {
+            console.log(`[CartSync DEBUG] INSUFFICIENT STOCK for ${cartItem.sku}!`);
+            stockIssues.push({
+              cartItem: cartItem,
+              availableStock: stockData.stock,
+              requestedQuantity: cartItem.quantity
+            });
+          }
+        });
       }
 
-      throw error;
-      */
+      console.log('[CartSync DEBUG] Stock issues found:', stockIssues);
+      console.log('[CartSync DEBUG] Stock validation success:', stockIssues.length === 0);
 
-      // Stock validation failed, but proceeding to checkout anyway
+      return {
+        success: stockIssues.length === 0,
+        stockIssues: stockIssues
+      };
+
+    } catch (error) {
+      console.error('[CartSync DEBUG] Stock validation error:', error);
+      if (error.name === 'AbortError') {
+        console.error('[CartSync DEBUG] Stock validation timed out');
+        throw new Error('Stock validation timed out');
+      }
+      throw error;
     }
   }
 
@@ -349,83 +427,117 @@ class CartSyncManager {
    * Validate cart before checkout
    */
   async validateBeforeCheckout() {
-    if (this.isValidatingCheckout) return true;
+    console.log('[CartSync DEBUG] ===== CHECKOUT VALIDATION STARTED =====');
+
+    if (this.isValidatingCheckout) {
+      console.log('[CartSync DEBUG] Already validating checkout, returning true');
+      return true;
+    }
 
     this.isValidatingCheckout = true;
 
     try {
       // Show loading state
+      console.log('[CartSync DEBUG] Showing checkout loading state...');
       this.showCheckoutLoading();
 
       // Fetch latest cart from server
+      console.log('[CartSync DEBUG] Fetching latest cart from server...');
       const response = await fetch(`${routes.cart_url}.js`);
       if (!response.ok) throw new Error('Failed to fetch cart for validation');
 
       const serverCart = await response.json();
+      console.log('[CartSync DEBUG] Server cart fetched:', {
+        item_count: serverCart.item_count,
+        total_price: serverCart.total_price,
+        items: serverCart.items?.length || 0
+      });
 
-      // First, validate stock availability - just call the API without handling response
+      // First, validate stock availability
+      console.log('[CartSync DEBUG] Starting stock validation...');
       try {
-        await this.validateStock(serverCart);
-        // Note: Response handling commented out - we now proceed directly to checkout
+        const stockValidation = await this.validateStock(serverCart);
+        console.log('[CartSync DEBUG] Stock validation completed:', stockValidation);
 
-        /* COMMENTED OUT - Response handling for potential future re-enabling
         // Check if stock validation indicates any issues
-        if (stockValidation && stockValidation.errors) {
+        if (!stockValidation.success && stockValidation.stockIssues.length > 0) {
+          console.log('[CartSync DEBUG] Stock issues detected, showing dialog...');
           const shouldProceed = await this.showStockValidationDialog(stockValidation, serverCart);
+          console.log('[CartSync DEBUG] User dialog result:', shouldProceed ? 'proceed' : 'cancel');
+
           if (!shouldProceed) {
+            console.log('[CartSync DEBUG] User cancelled checkout due to stock issues');
             return false;
           }
 
           // If user chose to proceed after stock adjustments, fetch updated cart
+          console.log('[CartSync DEBUG] Fetching updated cart after stock adjustments...');
           const updatedResponse = await fetch(`${routes.cart_url}.js`);
           if (updatedResponse.ok) {
             const updatedCart = await updatedResponse.json();
             this.lastCartHash = this.generateCartHash(updatedCart);
             await this.updateCartUI(updatedCart);
+            console.log('[CartSync DEBUG] Cart UI updated after stock adjustments');
           }
 
+          console.log('[CartSync DEBUG] Blocking checkout - user made changes');
           return false; // Don't proceed to checkout, user made changes
+        } else {
+          console.log('[CartSync DEBUG] No stock issues found, continuing...');
         }
-        */
       } catch (stockError) {
-        // Note: Error handling commented out - we now proceed directly to checkout
-
-        /* COMMENTED OUT - Error handling for potential future re-enabling
+        console.error('[CartSync DEBUG] Stock validation error:', stockError);
         // Show warning but allow checkout to proceed
         const shouldProceed = await this.showStockValidationWarning(stockError.message);
+        console.log('[CartSync DEBUG] Stock error dialog result:', shouldProceed ? 'proceed' : 'cancel');
+
         if (!shouldProceed) {
+          console.log('[CartSync DEBUG] User cancelled checkout due to stock validation error');
           return false;
         }
-        */
       }
 
+      console.log('[CartSync DEBUG] Checking cart hash changes...');
       const serverCartHash = this.generateCartHash(serverCart);
+      console.log('[CartSync DEBUG] Server cart hash:', serverCartHash);
+      console.log('[CartSync DEBUG] Last cart hash:', this.lastCartHash);
 
       // If lastCartHash is null (initialization failed), set it now and proceed
       if (this.lastCartHash === null) {
+        console.log('[CartSync DEBUG] Last cart hash is null, setting and proceeding...');
         this.lastCartHash = serverCartHash;
         return true;
       }
 
       // Compare with current UI state
       if (serverCartHash !== this.lastCartHash) {
+        console.log('[CartSync DEBUG] Cart hash changed, showing validation dialog...');
         // Cart has changed, show warning and update UI
         const shouldProceed = await this.showCheckoutValidationDialog(serverCart);
+        console.log('[CartSync DEBUG] Cart validation dialog result:', shouldProceed ? 'proceed' : 'cancel');
+
         if (shouldProceed) {
           await this.updateCartUI(serverCart);
+          console.log('[CartSync DEBUG] Cart UI updated, proceeding to checkout');
           return true;
         } else {
+          console.log('[CartSync DEBUG] User cancelled due to cart changes');
           return false;
         }
       }
 
+      console.log('[CartSync DEBUG] No cart changes detected, proceeding to checkout');
       return true;
     } catch (error) {
+      console.error('[CartSync DEBUG] Checkout validation error:', error);
+      console.log('[CartSync DEBUG] Allowing checkout to proceed despite error');
       return true; // Allow checkout to proceed on error
     } finally {
       // Always hide loading state
+      console.log('[CartSync DEBUG] Hiding checkout loading state...');
       this.hideCheckoutLoading();
       this.isValidatingCheckout = false;
+      console.log('[CartSync DEBUG] ===== CHECKOUT VALIDATION COMPLETED =====');
     }
   }
 
@@ -433,32 +545,35 @@ class CartSyncManager {
    * Show stock validation dialog when items are out of stock
    */
   async showStockValidationDialog(stockValidation, cartData) {
+    console.log('[CartSync DEBUG] Showing stock validation dialog...');
+    console.log('[CartSync DEBUG] Stock validation data:', stockValidation);
+
     return new Promise((resolve) => {
       const modal = document.createElement('div');
       modal.className = 'stock-validation-modal';
 
       // Build the list of out-of-stock items
       let itemsList = '';
-      if (stockValidation.errors && Array.isArray(stockValidation.errors)) {
-        stockValidation.errors.forEach(error => {
-          const cartItem = cartData.items.find(item => item.product_id === error.product_id);
-          const productTitle = cartItem ? cartItem.product_title : `Product ${error.product_id}`;
-          const variantTitle = cartItem && cartItem.variant_title ? ` - ${cartItem.variant_title}` : '';
-          const currentQty = cartItem ? cartItem.quantity : 0;
-          const availableQty = error.available_quantity || 0;
+      if (stockValidation.stockIssues && Array.isArray(stockValidation.stockIssues)) {
+        stockValidation.stockIssues.forEach(issue => {
+          const cartItem = issue.cartItem;
+          const productTitle = cartItem.product_title || `Product ${cartItem.product_id}`;
+          const variantTitle = cartItem.variant_title ? ` - ${cartItem.variant_title}` : '';
+          const currentQty = issue.requestedQuantity;
+          const availableQty = issue.availableStock;
 
           itemsList += `
-            <div class="stock-item" data-product-id="${error.product_id}" data-item-key="${cartItem ? cartItem.key : ''}">
+            <div class="stock-item" data-product-id="${cartItem.product_id}" data-item-key="${cartItem.key}">
               <div class="stock-item__info">
                 <strong>${productTitle}${variantTitle}</strong>
                 <p>Requested: ${currentQty}, Available: ${availableQty}</p>
               </div>
               <div class="stock-item__actions">
-                <button class="btn btn--small btn--secondary" data-action="remove" data-item-key="${cartItem ? cartItem.key : ''}">
+                <button class="button button--small button--secondary" data-action="remove" data-item-key="${cartItem.key}">
                   Remove
                 </button>
                 ${availableQty > 0 ? `
-                  <button class="btn btn--small btn--primary" data-action="adjust" data-item-key="${cartItem ? cartItem.key : ''}" data-quantity="${availableQty}">
+                  <button class="button button--small button--primary" data-action="adjust" data-item-key="${cartItem.key}" data-quantity="${availableQty}">
                     Adjust to ${availableQty}
                   </button>
                 ` : ''}
@@ -477,7 +592,7 @@ class CartSyncManager {
               ${itemsList}
             </div>
             <div class="stock-validation-modal__actions">
-              <button class="btn btn--secondary" data-action="cancel">Cancel Checkout</button>
+              <button class="button button--secondary" data-action="cancel">Cancel Checkout</button>
             </div>
           </div>
         </div>
@@ -562,6 +677,7 @@ class CartSyncManager {
             // Check if all items are resolved
             const remainingItems = modal.querySelectorAll('.stock-item');
             if (remainingItems.length === 0) {
+              console.log('[CartSync DEBUG] All stock issues resolved, closing dialog...');
               resolve(true);
               document.body.removeChild(modal);
             }
@@ -587,6 +703,7 @@ class CartSyncManager {
             // Check if all items are resolved
             const remainingItems = modal.querySelectorAll('.stock-item');
             if (remainingItems.length === 0) {
+              console.log('[CartSync DEBUG] All stock issues resolved, closing dialog...');
               resolve(true);
               document.body.removeChild(modal);
             }
@@ -617,8 +734,8 @@ class CartSyncManager {
             <p>${window.theme?.strings?.stock_validation_error || 'We couldn\'t verify stock availability'}: ${errorMessage}</p>
             <p>${window.theme?.strings?.stock_validation_continue || 'Your order may be subject to stock availability. Do you want to continue?'}</p>
             <div class="stock-warning-modal__actions">
-              <button class="btn btn--secondary" data-action="cancel">${window.theme?.strings?.cancel_checkout || 'Cancel Checkout'}</button>
-              <button class="btn btn--primary" data-action="proceed">${window.theme?.strings?.continue_anyway || 'Continue Anyway'}</button>
+              <button class="button button--secondary" data-action="cancel">${window.theme?.strings?.cancel_checkout || 'Cancel Checkout'}</button>
+              <button class="button button--primary" data-action="proceed">${window.theme?.strings?.continue_anyway || 'Continue Anyway'}</button>
             </div>
           </div>
         </div>
@@ -672,32 +789,45 @@ class CartSyncManager {
    * Remove item from cart
    */
   async removeCartItem(itemKey) {
-    const body = JSON.stringify({
+    console.log('[CartSync DEBUG] Removing cart item:', itemKey);
+
+    const bodyData = {
       id: itemKey,
       quantity: 0,
       sections: ['cart-drawer', 'cart-icon-bubble'],
       sections_url: window.location.pathname
-    });
+    };
 
-    const response = await fetch(`${routes.cart_change_url}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: body
-    });
+    const body = JSON.stringify(bodyData);
+    console.log('[CartSync DEBUG] Remove request body:', bodyData);
+
+    const response = await fetch(`${routes.cart_change_url}`, { ...fetchConfig(), ...{ body } });
+
+    console.log('[CartSync DEBUG] Remove response status:', response.status);
 
     if (!response.ok) {
-      throw new Error(`Failed to remove item: ${response.status}`);
+      const errorText = await response.text();
+      console.error('[CartSync DEBUG] Remove error response:', errorText);
+      throw new Error(`Failed to remove item: ${response.status} - ${errorText}`);
     }
 
     const result = await response.json();
+    console.log('[CartSync DEBUG] Remove successful, result:', result);
 
     // Update cart UI
     await this.updateCartUI(result);
 
     // Broadcast cart update
     this.broadcastCartUpdate(result);
+
+    // Trigger PUB_SUB_EVENTS for auto-reload (if on cart page)
+    if (typeof publish === 'function' && typeof PUB_SUB_EVENTS === 'object') {
+      console.log('[CartSync DEBUG] Publishing cartUpdate event for auto-reload');
+      publish(PUB_SUB_EVENTS.cartUpdate, {
+        source: 'cart-sync-stock-dialog',
+        cartData: result
+      });
+    }
 
     return result;
   }
@@ -706,32 +836,45 @@ class CartSyncManager {
    * Update cart item quantity
    */
   async updateCartItemQuantity(itemKey, quantity) {
-    const body = JSON.stringify({
+    console.log('[CartSync DEBUG] Updating cart item quantity:', itemKey, 'to', quantity);
+
+    const bodyData = {
       id: itemKey,
       quantity: quantity,
       sections: ['cart-drawer', 'cart-icon-bubble'],
       sections_url: window.location.pathname
-    });
+    };
 
-    const response = await fetch(`${routes.cart_change_url}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: body
-    });
+    const body = JSON.stringify(bodyData);
+    console.log('[CartSync DEBUG] Update quantity request body:', bodyData);
+
+    const response = await fetch(`${routes.cart_change_url}`, { ...fetchConfig(), ...{ body } });
+
+    console.log('[CartSync DEBUG] Update quantity response status:', response.status);
 
     if (!response.ok) {
-      throw new Error(`Failed to update quantity: ${response.status}`);
+      const errorText = await response.text();
+      console.error('[CartSync DEBUG] Update quantity error response:', errorText);
+      throw new Error(`Failed to update quantity: ${response.status} - ${errorText}`);
     }
 
     const result = await response.json();
+    console.log('[CartSync DEBUG] Update quantity successful, result:', result);
 
     // Update cart UI
     await this.updateCartUI(result);
 
     // Broadcast cart update
     this.broadcastCartUpdate(result);
+
+    // Trigger PUB_SUB_EVENTS for auto-reload (if on cart page)
+    if (typeof publish === 'function' && typeof PUB_SUB_EVENTS === 'object') {
+      console.log('[CartSync DEBUG] Publishing cartUpdate event for auto-reload');
+      publish(PUB_SUB_EVENTS.cartUpdate, {
+        source: 'cart-sync-stock-dialog',
+        cartData: result
+      });
+    }
 
     return result;
   }
@@ -749,8 +892,8 @@ class CartSyncManager {
             <h3>${window.theme?.strings?.cart_updated || 'Cart Updated'}</h3>
             <p>${window.theme?.strings?.cart_updated_review || 'Your cart has been updated from another tab. Please review the changes before proceeding to checkout.'}</p>
             <div class="cart-validation-modal__actions">
-              <button class="btn btn--secondary" data-action="cancel">${window.theme?.strings?.review_cart || 'Review Cart'}</button>
-              <button class="btn btn--primary" data-action="proceed">${window.theme?.strings?.continue_to_checkout || 'Continue to Checkout'}</button>
+              <button class="button button--secondary" data-action="cancel">${window.theme?.strings?.review_cart || 'Review Cart'}</button>
+              <button class="button button--primary" data-action="proceed">${window.theme?.strings?.continue_to_checkout || 'Continue to Checkout'}</button>
             </div>
           </div>
         </div>
@@ -801,6 +944,30 @@ class CartSyncManager {
   }
 
   /**
+   * Enable mock stock response for testing (insufficient stock)
+   */
+  enableMockStock() {
+    localStorage.setItem('cart-sync-mock-stock', 'true');
+    console.log('[CartSync DEBUG] Mock stock mode ENABLED - will simulate insufficient stock');
+    console.log('[CartSync DEBUG] To disable: cartSyncManager.disableMockStock()');
+  }
+
+  /**
+   * Disable mock stock response (use real API)
+   */
+  disableMockStock() {
+    localStorage.removeItem('cart-sync-mock-stock');
+    console.log('[CartSync DEBUG] Mock stock mode DISABLED - will use real API');
+  }
+
+  /**
+   * Check if mock stock mode is enabled
+   */
+  isMockStockEnabled() {
+    return localStorage.getItem('cart-sync-mock-stock') === 'true';
+  }
+
+  /**
    * Cleanup when page unloads
    */
   destroy() {
@@ -812,6 +979,32 @@ class CartSyncManager {
 
 // Initialize cart sync manager
 window.cartSyncManager = new CartSyncManager();
+
+// Debug helper functions for console
+window.enableMockStock = () => window.cartSyncManager.enableMockStock();
+window.disableMockStock = () => window.cartSyncManager.disableMockStock();
+window.checkMockStock = () => {
+  const enabled = window.cartSyncManager.isMockStockEnabled();
+  console.log(`[CartSync DEBUG] Mock stock mode: ${enabled ? 'ENABLED' : 'DISABLED'}`);
+  return enabled;
+};
+
+// Show debug instructions
+console.log(`
+[CartSync DEBUG] Stock Validation Debug Mode Ready!
+
+Available console commands:
+- enableMockStock()  : Enable mock insufficient stock responses
+- disableMockStock() : Disable mock mode (use real API)
+- checkMockStock()   : Check current mock mode status
+
+To test insufficient stock:
+1. Add items to cart
+2. Run: enableMockStock()
+3. Try to checkout
+4. Check console for debug logs
+5. Run: disableMockStock() when done testing
+`);
 
 // Cleanup on page unload
 window.addEventListener('beforeunload', () => {
