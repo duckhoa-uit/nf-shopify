@@ -623,9 +623,12 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const cartForm = document.getElementById('cart');
-    const cartTotalElement = document.querySelector('.nf-cart-summary__total-value');
+    // NOTE: Commented out because we use auto-reload approach - no need to update totals via JS
+    // const cartTotalElement = document.querySelector('.nf-cart-summary__total-value');
 
     // Function to update the cart total display
+    // NOTE: Commented out because we use auto-reload approach - page will refresh with fresh data
+    /*
     function updateCartTotal(cartData) {
       if (!cartTotalElement || !cartData) return;
 
@@ -641,13 +644,17 @@
         cartTotalElement.textContent = `€${formattedPrice}`;
       }
     }
+    */
 
     // Listen for cart update events
     if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS === 'object') {
       subscribe(PUB_SUB_EVENTS.cartUpdate, (event) => {
+        // NOTE: Commented out updateCartTotal call because we use auto-reload approach
+        /*
         if (event.cartData) {
           updateCartTotal(event.cartData);
         }
+        */
 
         // Auto reload page when cart is updated to ensure cart items and totals are properly refreshed
         // This handles both external sources (wishlist app) and direct cart operations
