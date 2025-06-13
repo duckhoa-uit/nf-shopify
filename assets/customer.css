@@ -109,7 +109,7 @@
 }
 
 .customer tbody td:first-of-type {
-  padding-top: 4rem;
+  padding-top: 2.5rem;
 }
 
 @media screen and (min-width: 750px) {
@@ -122,8 +122,8 @@
 
   .customer thead th,
   .customer tbody td {
-    padding-top: 2.4rem;
-    padding-bottom: 2.4rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
   .customer th:first-of-type,
@@ -136,12 +136,12 @@
   }
 
   .customer tbody td:first-of-type {
-    padding-top: 2.4rem;
+    padding-top: 1.5rem;
   }
 }
 
 .customer tbody td:last-of-type {
-  padding-bottom: 4rem;
+  padding-bottom: 2.5rem;
 }
 
 @media screen and (min-width: 750px) {
@@ -177,24 +177,24 @@
 }
 
 .customer tfoot tr:first-of-type td {
-  padding-top: 4rem;
+  padding-top: 2.5rem;
 }
 
 @media screen and (min-width: 750px) {
   .customer tfoot tr:first-of-type td,
   .customer tfoot tr:first-of-type th {
-    padding-top: 2.4rem;
+    padding-top: 1.5rem;
   }
 }
 
 .customer tfoot tr:last-of-type td {
-  padding-bottom: 4rem;
+  padding-bottom: 2.5rem;
 }
 
 @media screen and (min-width: 750px) {
   .customer tfoot tr:last-of-type td,
   .customer tfoot tr:last-of-type th {
-    padding-bottom: 2.4rem;
+    padding-bottom: 1.5rem;
   }
 }
 
@@ -275,7 +275,7 @@
 
 .customer .pagination li {
   flex: 1 1;
-  max-width: 4rem;
+  max-width: 2.5rem;
 }
 
 .customer .pagination li:not(:last-child) {
@@ -287,7 +287,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  height: 4rem;
+  height: 2.5rem;
   width: 100%;
   padding: 0;
   text-decoration: none;
@@ -446,10 +446,10 @@
     text-align: right;
   }
 
-  .account table td:first-of-type {
+  /* .account table td:first-of-type {
     padding-top: 1.2rem;
     padding-bottom: 1.2rem;
-  }
+  } */
 }
 
 .account table td:first-of-type a {
@@ -479,7 +479,7 @@
 .order tfoot tr:last-of-type th {
   font-size: 2.2rem;
   padding-top: 1.5rem;
-  padding-bottom: 4rem;
+  padding-bottom: 2.5rem;
 }
 
 @media screen and (min-width: 750px) {
@@ -718,13 +718,51 @@ li[data-address] > h2 {
   margin-top: 1.5rem;
 }
 
-/* .customer #customer_login > * {
-  order: 2;
-}
-
-.customer #customer_login .oxi_social_wrapper {
-  order: 1;
-} */
 .oxi_social_wrapper {
   margin-top: 1rem;
+}
+
+.bon-item {
+  padding-top: 0;
+}
+.bon-table tfoot tr:first-of-type td {
+  padding-top: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .bon-table tfoot tr:first-of-type td,
+  .bon-table tfoot tr:first-of-type th {
+    padding-top: 0;
+  }
+}
+
+.bon-table tfoot tr:last-of-type td {
+  padding-bottom: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .bon-table tfoot tr:last-of-type td,
+  .bon-table tfoot tr:last-of-type th {
+    padding-bottom: 0;
+  }
+}
+
+.bon-table table td:first-of-type {
+  padding: unset;
+}
+
+.bon-table .pagination {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+.bon-table-custom tfoot {
+  border: none;
+}
+
+.bon-table tbody td {
+  padding: 20px 24px;
+}
+.bon-table-custom thead th {
+  font-family: var(--font-body-family);
 }

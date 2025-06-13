@@ -12,14 +12,12 @@
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
-{%- if section.settings.menu_type_desktop == 'mega' -%}
-  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
+<link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 
 <style>
   header-drawer {
     justify-self: start;
-    grid-area: "burger";
+    grid-area: 'burger';
   }
 
   @media screen and (min-width: 990px) {
@@ -114,14 +112,13 @@
   -%}
   <header class="header header--dropdown py-0 h-[3.125rem] lg:h-[3.25rem] page-width{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}">
     {%- liquid
-    if section.settings.menu != blank
-      render 'header-drawer'
-    endif
-  -%}
+      if section.settings.menu != blank
+        render 'header-drawer'
+      endif
+    -%}
     {%- if request.page_type == 'index' -%}
       <h1 class="header__heading justify-self-start">
     {%- endif -%}
-
 
     <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset pl-0">
       {%- if settings.logo != blank -%}
