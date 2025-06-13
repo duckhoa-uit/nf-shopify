@@ -20,7 +20,8 @@
   }
 {%- endstyle -%}
 
-<div class="customer account section-{{ section.id }}-padding"
+<div
+  class="customer account section-{{ section.id }}-padding"
   data-address-update-success="{{ 'customer.addresses.update_success' | t }}"
   data-info-update-success="{{ 'customer.account.info_update_success' | t }}"
   data-password-mismatch="{{ 'customer.account.password_mismatch' | t }}"
@@ -88,7 +89,6 @@
           <li>
             <a href="#bonus" role="tab" class="tab-link" data-tab="bonus">
               {{ 'customer.account.loyalty_bonus' | t }}
-              <span class="bonus-pill">48,64 € <span class="bonus-badge">%</span></span>
             </a>
           </li>
           <li role="presentation">
@@ -139,7 +139,15 @@
         {% render 'account-tab-orders', customer: customer %}
 
         <!-- Bonus Tab -->
-        {% render 'account-tab-bonus' %}
+        <div id="bonus" class="tab-content" role="tabpanel">
+          {% comment %} <h2 class="section-title">{{ 'customer.account.loyalty_bonus' | t }}</h2> {% endcomment %}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when '@app' -%}
+                {% render block %}
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
 
         <!-- Account Settings Tab -->
         {% render 'account-tab-account-settings' %}
@@ -189,6 +197,7 @@
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
     }
-  ]
+  ],
+  "blocks": [{ "type": "@app" }]
 }
 {% endschema %}
