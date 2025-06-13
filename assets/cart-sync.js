@@ -511,8 +511,13 @@ class CartSyncManager {
 
       // Compare with current UI state
       if (serverCartHash !== this.lastCartHash) {
-        console.log('[CartSync DEBUG] Cart hash changed, showing validation dialog...');
-        // Cart has changed, show warning and update UI
+        console.log('[CartSync DEBUG] Cart hash changed, syncing cart UI...');
+        // Cart has changed, sync UI without showing dialog
+        this.lastCartHash = serverCartHash;
+        await this.updateCartUI(serverCart);
+        console.log('[CartSync DEBUG] Cart UI synced, proceeding to checkout');
+
+        /* COMMENTED OUT - Cart Updated dialog (just sync without dialog)
         const shouldProceed = await this.showCheckoutValidationDialog(serverCart);
         console.log('[CartSync DEBUG] Cart validation dialog result:', shouldProceed ? 'proceed' : 'cancel');
 
@@ -524,6 +529,7 @@ class CartSyncManager {
           console.log('[CartSync DEBUG] User cancelled due to cart changes');
           return false;
         }
+        */
       }
 
       console.log('[CartSync DEBUG] No cart changes detected, proceeding to checkout');
