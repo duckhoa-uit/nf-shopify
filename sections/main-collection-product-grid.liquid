@@ -40,14 +40,25 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .products-per-page-form {
+    margin-right: 1rem;
+  }
+
+  .sorting-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {% liquid
+    comment
+      Since Shopify request.parameters don't work reliably, 
+      we'll handle products_per_page with JavaScript
+    endcomment
     assign products_per_page = 24
-    if request.parameters.products_per_page
-      assign products_per_page = request.parameters.products_per_page | plus: 0
-    endif
   %}
 
 
@@ -113,7 +124,8 @@
           <div class="filter-controls">
             {%- if section.settings.enable_sorting and collection.products.size > 0 -%}
               <div class="sorting-container">
-                <form method="get" action="{{ collection.url }}" id="ProductsPerPageForm">
+                <!-- Separate form for products per page (full page reload) -->
+                <form method="get" action="{{ collection.url }}" id="ProductsPerPageForm" class="products-per-page-form">
                   <div class="products-per-page">
                     <label for="ProductsPerPage">{{ 'products.facets.products_per_page' | t }}</label>
                     <div class="select after:border-0 after:shadow-none">
@@ -121,7 +133,7 @@
                         name="products_per_page"
                         id="ProductsPerPage"
                         class="select__select pl-[5px]"
-                        onchange="document.getElementById('ProductsPerPageForm').submit();"
+                        onchange="handleProductsPerPageChange(this);"
                       >
                         <option
                           value="24"
@@ -153,15 +165,11 @@
                       </span>
                     </div>
                   </div>
-
-                  {% comment %} Preserve other URL parameters {% endcomment %}
-                  {% for param in request.parameters %}
-                    {% if param[0] != 'products_per_page' and param[0] != 'page' %}
-                      <input type="hidden" name="{{ param[0] }}" value="{{ param[1] }}">
-                    {% endif %}
-                  {% endfor %}
+                  
+                  <!-- Hidden inputs will be populated by JavaScript -->
                 </form>
 
+                <!-- Facets form for sorting only (AJAX) -->
                 <facet-filters-form class="facets">
                   <form class="facets-form" id="FacetSortForm">
                     <div class="facet-filters sorting">
@@ -365,6 +373,185 @@
 </div>
 
 <script>
+  // Handle products per page change while preserving filters/sorting
+  // This function needs to be in global scope for onchange attribute
+  function handleProductsPerPageChange(selectElement) {
+    const newProductsPerPage = selectElement.value;
+    const form = selectElement.closest('form');
+    
+    // Clear existing hidden inputs
+    const existingHiddenInputs = form.querySelectorAll('input[type="hidden"]');
+    existingHiddenInputs.forEach(input => input.remove());
+    
+    // Get current URL parameters to preserve filters/sorting
+    const currentParams = new URLSearchParams(window.location.search);
+    
+    // Add all current parameters except products_per_page and page
+    currentParams.forEach((value, key) => {
+      if (key !== 'products_per_page' && key !== 'page') {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = key;
+        hiddenInput.value = value;
+        form.appendChild(hiddenInput);
+      }
+    });
+    
+    // Submit the form
+    form.submit();
+  }
+
+  // Make functions globally available for facets system to call
+  window.handleProductsPerPageWithJS = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedProductsPerPage = urlParams.get('products_per_page');
+    
+    if (requestedProductsPerPage && requestedProductsPerPage !== '24') {
+      // If user requested different page size, we need to load the correct number of products
+      const targetProductsPerPage = parseInt(requestedProductsPerPage);
+      const currentProductGrid = document.querySelector('#product-grid');
+      
+      if (currentProductGrid) {
+        const currentProducts = currentProductGrid.querySelectorAll('.grid__item');
+        console.log(`Current products: ${currentProducts.length}, Requested: ${targetProductsPerPage}`);
+        
+        if (currentProducts.length < targetProductsPerPage) {
+          // Need to load more products via AJAX
+          window.loadMoreProductsToReachTarget(targetProductsPerPage, currentProducts.length);
+        } else if (currentProducts.length > targetProductsPerPage) {
+          // Need to hide excess products
+          window.hideExcessProducts(targetProductsPerPage);
+        }
+      }
+      
+      // Update the select to show correct value
+      const productsPerPageSelect = document.querySelector('#ProductsPerPage');
+      if (productsPerPageSelect) {
+        productsPerPageSelect.value = requestedProductsPerPage;
+      }
+    }
+  };
+
+  window.updateProductCount = function() {
+    // Update the product count text to reflect current displayed products
+    const productGrid = document.querySelector('#product-grid');
+    const productCountElement = document.querySelector('.product-count-text');
+    
+    if (productGrid && productCountElement) {
+      const visibleProducts = productGrid.querySelectorAll('.grid__item:not([style*="display: none"])');
+      const totalProducts = {{ paginate.items | default: collection.products_count | default: 0 }};
+      
+      // Create the updated text using the same pattern as the Liquid template
+      const productCountTemplate = {{ 'products.facets.product_count' | t: viewed: '__VIEWED__', total: '__TOTAL__' | json }};
+      const productCountText = productCountTemplate
+        .replace('__VIEWED__', visibleProducts.length)
+        .replace('__TOTAL__', totalProducts);
+      
+      productCountElement.innerHTML = productCountText;
+      
+      // Update progress bar
+      const progressBar = document.querySelector('.product-count-progress-bar');
+      if (progressBar && totalProducts > 0) {
+        const percentage = (visibleProducts.length / totalProducts) * 100;
+        progressBar.style.width = `${percentage}%`;
+      }
+    }
+  };
+
+  window.updateViewMoreButton = function() {
+    // Update view-more button visibility and URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productsPerPage = urlParams.get('products_per_page');
+    const viewMoreButton = document.querySelector('.view-more-button');
+    
+    if (viewMoreButton && productsPerPage) {
+      const currentUrl = viewMoreButton.dataset.url;
+      if (currentUrl) {
+        const url = new URL(currentUrl, window.location.origin);
+        url.searchParams.set('products_per_page', productsPerPage);
+        viewMoreButton.dataset.url = url.pathname + url.search;
+      }
+    }
+    
+    // Check if we should hide the view-more button
+    const productGrid = document.querySelector('#product-grid');
+    if (productGrid && viewMoreButton) {
+      const visibleProducts = productGrid.querySelectorAll('.grid__item:not([style*="display: none"])');
+      const totalProducts = {{ paginate.items | default: collection.products_count | default: 0 }};
+      
+      if (totalProducts > 0 && visibleProducts.length >= totalProducts) {
+        viewMoreButton.style.display = 'none';
+      } else if (totalProducts > 0) {
+        viewMoreButton.style.display = 'block';
+      }
+    }
+  };
+
+  // Helper functions for loading products (global scope)
+  window.loadMoreProductsToReachTarget = function(targetCount, currentCount) {
+    const pagesToLoad = Math.ceil((targetCount - currentCount) / 24); // Load in chunks of 24
+    
+    let loadedPages = 0;
+    function loadNextPage() {
+      if (loadedPages >= pagesToLoad) {
+        window.updateProductCount();
+        window.updateViewMoreButton();
+        return;
+      }
+      
+      const nextPage = Math.floor(currentCount / 24) + 2 + loadedPages; // Calculate next page
+      const url = new URL(window.location);
+      url.searchParams.set('page', nextPage);
+      url.searchParams.delete('products_per_page'); // Remove to get default 24 per page
+      
+      fetch(url.toString())
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newItems = doc.querySelectorAll('#product-grid .grid__item');
+          const productGrid = document.querySelector('#product-grid');
+          
+          if (newItems.length && productGrid) {
+            newItems.forEach((item) => {
+              productGrid.appendChild(item.cloneNode(true));
+            });
+            
+            loadedPages++;
+            
+            // Check if we need to load more
+            const updatedItems = productGrid.querySelectorAll('.grid__item');
+            if (updatedItems.length < targetCount && newItems.length === 24) {
+              loadNextPage(); // Load next page if we still need more products
+            } else {
+              // Update counts and button after loading
+              window.updateProductCount();
+              window.updateViewMoreButton();
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error loading more products:', error);
+        });
+    }
+    
+    loadNextPage();
+  };
+  
+  window.hideExcessProducts = function(targetCount) {
+    const productGrid = document.querySelector('#product-grid');
+    if (productGrid) {
+      const allProducts = productGrid.querySelectorAll('.grid__item');
+      allProducts.forEach((product, index) => {
+        if (index >= targetCount) {
+          product.style.display = 'none';
+        }
+      });
+      window.updateProductCount();
+      window.updateViewMoreButton();
+    }
+  };
+
   document.addEventListener('DOMContentLoaded', function() {
     // Handle smooth scrolling for Read More link
     document.addEventListener('click', function(e) {
@@ -461,7 +648,7 @@
       }
     }
 
-    // No JavaScript needed for products per page - using form submit
+    // Products per page is now handled by the facets system
 
     // Child collections scroll functionality
     const childCollectionsScroll = document.querySelector('.child-collections-scroll');
@@ -528,72 +715,160 @@
       }, { passive: false });
     }
 
-    // View more functionality (if not handled by pagination already)
-    document.addEventListener('click', function(e) {
+
+    
+    
+    // View more functionality
+    function handleViewMoreClick(e) {
       const viewMoreButton = e.target.closest('.view-more-button');
       if (!viewMoreButton) return;
 
-      const url = viewMoreButton.dataset.url;
-      if (!url) return;
+      e.preventDefault();
+      const baseUrl = viewMoreButton.dataset.url;
+      if (!baseUrl) return;
+
+      // Get current products per page setting
+      const urlParams = new URLSearchParams(window.location.search);
+      const currentProductsPerPage = urlParams.get('products_per_page');
+      const targetProductsPerPage = currentProductsPerPage ? parseInt(currentProductsPerPage) : 24;
+
+      console.log('View More clicked, target products per page:', targetProductsPerPage);
 
       // Show loading state
       viewMoreButton.textContent = {{ 'products.facets.loading' | t | json }};
       viewMoreButton.disabled = true;
 
-      // Preserve current filters and sorting
-      const currentUrl = new URL(url, window.location.origin);
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.forEach((value, key) => {
-        if (!currentUrl.searchParams.has(key)) {
-          currentUrl.searchParams.set(key, value);
+      // If we need to load more than 24 products, we need to load multiple pages
+      const pagesToLoad = Math.ceil(targetProductsPerPage / 24);
+      const basePageUrl = new URL(baseUrl, window.location.origin);
+      const currentPage = parseInt(basePageUrl.searchParams.get('page') || '2');
+      
+      let loadedProducts = 0;
+      let pagesLoaded = 0;
+      
+      function loadNextBatch() {
+        if (pagesLoaded >= pagesToLoad) {
+          // Finished loading all required pages
+          updateViewMoreButtonState();
+          return;
         }
-      });
+        
+        const pageToLoad = currentPage + pagesLoaded;
+        const fetchUrl = new URL(baseUrl, window.location.origin);
+        fetchUrl.searchParams.set('page', pageToLoad.toString());
+        // Don't set products_per_page in the fetch URL to get default 24 per page
+        fetchUrl.searchParams.delete('products_per_page');
+        
+        console.log(`Loading page ${pageToLoad}, URL:`, fetchUrl.toString());
 
-      fetch(currentUrl.toString())
-        .then(response => response.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
-          const newItems = doc.querySelectorAll('#product-grid .grid__item');
-          const productGrid = document.querySelector('#product-grid');
+        fetch(fetchUrl.toString())
+          .then(response => response.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newItems = doc.querySelectorAll('#product-grid .grid__item');
+            const productGrid = document.querySelector('#product-grid');
 
-          if (newItems.length && productGrid) {
-            newItems.forEach(item => {
-              productGrid.appendChild(item.cloneNode(true));
-            });
-          }
+            console.log(`Page ${pageToLoad} loaded ${newItems.length} items`);
 
-          // Update product count and progress bar
-          const productCountElement = document.querySelector('.product-count-text');
-          const productCountProgressBar = document.querySelector('.product-count-progress-bar');
-          const newProductCount = doc.querySelector('.product-count-text');
-          const newProgressBar = doc.querySelector('.product-count-progress-bar');
+            if (newItems.length && productGrid) {
+              // Add products but don't exceed the target amount
+              const remainingToLoad = targetProductsPerPage - loadedProducts;
+              let addedCount = 0;
+              
+              newItems.forEach((item, index) => {
+                if (addedCount < remainingToLoad && addedCount < 24) {
+                  productGrid.appendChild(item.cloneNode(true));
+                  addedCount++;
+                  loadedProducts++;
+                }
+              });
+              
+              console.log(`Added ${addedCount} products, total loaded: ${loadedProducts}`);
+            }
 
-          if (productCountElement && newProductCount) {
-            productCountElement.innerHTML = newProductCount.innerHTML;
-          }
-
-          if (productCountProgressBar && newProgressBar) {
-            productCountProgressBar.style.width = newProgressBar.style.width;
-          }
-
-          // Check for next page
-          const nextPageButton = doc.querySelector('.view-more-button');
-          if (nextPageButton?.dataset.url) {
-            // Update current button with new URL
-            viewMoreButton.dataset.url = nextPageButton.dataset.url;
+            pagesLoaded++;
+            
+            // Check if we need to load more pages
+            if (loadedProducts < targetProductsPerPage && newItems.length === 24) {
+              loadNextBatch(); // Load next page
+            } else {
+              updateViewMoreButtonState();
+            }
+          })
+          .catch(error => {
+            console.error('Error loading more products:', error);
             viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
             viewMoreButton.disabled = false;
-          } else {
-            viewMoreButton.style.display = 'none';
-          }
-        })
-        .catch(error => {
-          console.error('Error loading more products:', error);
-          viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
-          viewMoreButton.disabled = false;
-        });
-    });
+          });
+      }
+      
+      function updateViewMoreButtonState() {
+        // Check if there are more pages available
+        const lastPageToCheck = currentPage + pagesLoaded;
+        const checkUrl = new URL(baseUrl, window.location.origin);
+        checkUrl.searchParams.set('page', lastPageToCheck.toString());
+        checkUrl.searchParams.delete('products_per_page');
+        
+        fetch(checkUrl.toString())
+          .then(response => response.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const nextPageButton = doc.querySelector('.view-more-button');
+            
+            if (nextPageButton?.dataset.url) {
+              // Update current button with new URL, preserving products_per_page
+              const nextUrl = new URL(nextPageButton.dataset.url, window.location.origin);
+              if (currentProductsPerPage) {
+                nextUrl.searchParams.set('products_per_page', currentProductsPerPage);
+              }
+              
+              viewMoreButton.dataset.url = nextUrl.pathname + nextUrl.search;
+              viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
+              viewMoreButton.disabled = false;
+            } else {
+              // No more pages - hide the button
+              viewMoreButton.style.display = 'none';
+            }
+
+            // Update product count and progress bar
+            window.updateProductCount();
+
+            // Re-initialize product card hover functionality if available
+            if (window.ProductCardHover && typeof window.ProductCardHover.reinitialize === 'function') {
+              window.ProductCardHover.reinitialize();
+            }
+          })
+          .catch(error => {
+            console.error('Error checking next page:', error);
+            viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
+            viewMoreButton.disabled = false;
+          });
+      }
+
+      // Start loading the required pages
+      loadNextBatch();
+    }
+
+    // Add view more event listener
+    document.addEventListener('click', handleViewMoreClick);
+    
+    // Initialize everything on page load
+    function initializePage() {
+      console.log('Initializing page...');
+      window.handleProductsPerPageWithJS();
+      
+      // Update counts and button state after JS manipulation
+      setTimeout(() => {
+        window.updateProductCount();
+        window.updateViewMoreButton();
+        console.log('Page initialization complete');
+      }, 200);
+    }
+    
+    // Initialize when everything is ready
+    initializePage();
   });
 </script>
 

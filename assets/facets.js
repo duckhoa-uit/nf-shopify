@@ -96,6 +96,19 @@ class FacetFiltersForm extends HTMLElement {
     if (window.ProductCardHover && typeof window.ProductCardHover.reinitialize === 'function') {
       window.ProductCardHover.reinitialize();
     }
+
+    // Re-run products per page JavaScript after AJAX update
+    if (window.handleProductsPerPageWithJS && typeof window.handleProductsPerPageWithJS === 'function') {
+      setTimeout(() => {
+        window.handleProductsPerPageWithJS();
+        if (window.updateProductCount && typeof window.updateProductCount === 'function') {
+          window.updateProductCount();
+        }
+        if (window.updateViewMoreButton && typeof window.updateViewMoreButton === 'function') {
+          window.updateViewMoreButton();
+        }
+      }, 100);
+    }
   }
 
   static renderProductCount(html) {
@@ -332,6 +345,11 @@ class FacetFiltersForm extends HTMLElement {
     // Only add non-empty values to the URL parameters
     for (const [key, value] of formData.entries()) {
       if (value && value !== "undefined" && value !== "null") {
+        // Skip page parameter - reset to page 1 when filters change
+        if (key === "page") {
+          continue;
+        }
+
         // For price filters, only add if they're not at default values
         if (key.includes("price") && form.querySelector("price-range")) {
           const priceRange = form.querySelector("price-range");
@@ -353,6 +371,13 @@ class FacetFiltersForm extends HTMLElement {
           params.append(key, value);
         }
       }
+    }
+
+    // Always preserve products_per_page from current URL if it exists
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    const currentProductsPerPage = currentUrlParams.get('products_per_page');
+    if (currentProductsPerPage && currentProductsPerPage !== '24') {
+      params.set('products_per_page', currentProductsPerPage);
     }
 
     return params.toString();
