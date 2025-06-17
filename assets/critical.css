@@ -27,6 +27,7 @@ html {
 }
 
 body {
+  overflow-x: hidden;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   grid-template-columns: 100%;
@@ -143,8 +144,8 @@ h2,
   background-color: rgb(var(--color-base-button));
   color: rgb(var(--color-base-button-text));
   border-radius: var(--buttons-radius);
-  min-width: calc(12rem + var(--buttons-border-width) * 2);
-  min-height: calc(4.5rem + var(--buttons-border-width) * 2);
+  min-width: calc(5rem + var(--buttons-border-width) * 2);
+  min-height: calc(2rem + var(--buttons-border-width) * 2);
   transition: box-shadow var(--duration-short) ease;
   position: relative;
 }
@@ -189,8 +190,12 @@ h2,
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Focus States - Critical for Accessibility */

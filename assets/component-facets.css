@@ -19,7 +19,7 @@
   flex-shrink: 0;
   opacity: 1;
   visibility: visible;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .filter-sidebar.hidden {
@@ -47,7 +47,7 @@
   opacity: 1;
   visibility: visible;
   transform: none;
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 100%;
 }
 
@@ -135,7 +135,6 @@
   display: grid;
   grid-template-columns: repeat(2, auto);
   grid-template-rows: repeat(2, auto);
-  padding-top: 1rem;
 }
 
 .active-facets-mobile {
@@ -145,6 +144,7 @@
 .mobile-facets__wrapper {
   display: flex;
   flex-direction: column;
+  grid-column: span 2 / span 2;
 }
 
 .mobile-facets__wrapper .disclosure-has-popup {
@@ -166,9 +166,10 @@
 }
 
 .mobile-facets__disclosure summary {
-  padding: 0.625rem 0;
+  padding-top: 0.625rem;
   background: transparent;
   border: none;
+  width: 100%;
 }
 
 .mobile-facets__disclosure .mobile-facets__summary {
@@ -188,6 +189,9 @@
 }
 
 @media screen and (min-width: 750px) {
+  .facets-container {
+    padding-top: 1rem;
+  }
   .facets-container > * + * {
     margin-top: 0;
   }
@@ -674,7 +678,7 @@ body.overflow-hidden {
   background-color: rgb(var(--color-base-background));
   width: calc(100% - 2.5rem);
   margin-left: auto;
-  height: 100%;
+  height: 100dvh;
   overflow-y: auto;
   pointer-events: all; /* This ensures the inner content is interactive */
   transition: transform var(--duration-default) ease;
@@ -733,8 +737,8 @@ body.overflow-hidden {
 }
 
 .mobile-facets__close-text {
-  color: var(--color-gray-700);  /* Uses existing gray token */
-  font-family: var(--font-body-family);  /* Uses theme body font */
+  color: var(--color-gray-700); /* Uses existing gray token */
+  font-family: var(--font-body-family); /* Uses theme body font */
   font-weight: 400;
   font-size: 12px;
   line-height: 12px;
@@ -753,20 +757,26 @@ body.overflow-hidden {
 
 .mobile-facets__open {
   text-align: left;
-  width: 100%;
   display: flex;
   align-items: center;
+
+  justify-content: center;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  color: rgb(var(--color-base-button-text));
+  transition: box-shadow var(--duration-short) ease;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: rgba(var(--color-base-button), var(--alpha-button-background));
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  text-transform: uppercase;
 }
 
 /* Override button styling for mobile facets when using primary button class */
-.mobile-facets__open.button {
-  min-width: auto;
-  min-height: 36px;
-  width: 100%;
-  padding: 0.5rem 1rem;
-  justify-content: flex-start;
-  text-align: left;
-}
 
 .mobile-facets__open:hover line,
 .mobile-facets__open:hover circle {
@@ -973,7 +983,7 @@ details.menu-opening .mobile-facets__close .svg-wrapper {
   display: flex;
   gap: 0.75rem;
   box-sizing: border-box; /* Ensure padding is included in width */
-  font-family: var(--font-body-family);  /* Uses theme body font */
+  font-family: var(--font-body-family); /* Uses theme body font */
   font-weight: 400;
   font-size: 12px;
   line-height: 1rem;
