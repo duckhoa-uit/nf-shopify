@@ -488,7 +488,7 @@
   >
     <details class="mobile-facets__disclosure disclosure-has-popup">
       <summary class="mobile-facets__open-wrapper focus-offset">
-        <span class="button mobile-facets__open{% if filter_type == 'drawer' and enable_filtering == false %} medium-hide large-up-hide{% endif %}">
+        <div class="mobile-facets__open{% if filter_type == 'drawer' and enable_filtering == false %} medium-hide large-up-hide{% endif %}">
           <span class="svg-wrapper">
             {{- 'icon-filter.svg' | inline_asset_content -}}
           </span>
@@ -506,7 +506,7 @@
               {{ 'products.facets.filter_button' | t }}
             {%- endif -%}
           </span>
-        </span>
+        </div>
         <span tabindex="0" class="mobile-facets__close">
           <span class="svg-wrapper text-white">
             {{- 'icon-close.svg' | inline_asset_content -}}
