@@ -189,6 +189,9 @@ class FacetFiltersForm extends HTMLElement {
 
     FacetFiltersForm.renderActiveFacets(parsedHTML);
     FacetFiltersForm.renderAdditionalElements(parsedHTML);
+    
+    // Update all mobile facets summaries to ensure counters are current
+    FacetFiltersForm.updateAllMobileFacetsSummaries(parsedHTML);
 
     if (countsToRender && event && event.target) {
       const closestJSFilter = event.target.closest(".js-filter");
@@ -229,15 +232,40 @@ class FacetFiltersForm extends HTMLElement {
   }
 
   static renderAdditionalElements(html) {
-    const mobileElementSelectors = [".mobile-facets__open", ".mobile-facets__count", ".sorting"];
+    // Handle elements that have single instances
+    const singleElementSelectors = [".mobile-facets__open", ".sorting"];
 
-    mobileElementSelectors.forEach((selector) => {
+    singleElementSelectors.forEach((selector) => {
       const sourceElement = html.querySelector(selector);
       const targetElement = document.querySelector(selector);
 
       if (!sourceElement || !targetElement) return;
 
       targetElement.innerHTML = sourceElement.innerHTML;
+    });
+
+    // Handle mobile facets counts specifically - there can be multiple instances
+    const sourceCountElements = html.querySelectorAll(".mobile-facets__count");
+    const targetCountElements = document.querySelectorAll(".mobile-facets__count");
+
+    // Update each counter by matching their parent summary elements
+    sourceCountElements.forEach((sourceCount) => {
+      const sourceSummary = sourceCount.closest('.mobile-facets__summary');
+      if (!sourceSummary) return;
+
+      const sourceLabelText = sourceSummary.querySelector('.mobile-facets__label')?.textContent?.trim();
+      if (!sourceLabelText) return;
+
+      // Find the corresponding target element by matching label text
+      targetCountElements.forEach((targetCount) => {
+        const targetSummary = targetCount.closest('.mobile-facets__summary');
+        if (!targetSummary) return;
+
+        const targetLabelText = targetSummary.querySelector('.mobile-facets__label')?.textContent?.trim();
+        if (targetLabelText === sourceLabelText) {
+          targetCount.innerHTML = sourceCount.innerHTML;
+        }
+      });
     });
 
     const facetFormMobile = document.getElementById("FacetFiltersFormMobile");
@@ -306,6 +334,35 @@ class FacetFiltersForm extends HTMLElement {
     if (sourceFacetsList && targetFacetsList) {
       targetFacetsList.outerHTML = sourceFacetsList.outerHTML;
     }
+
+    // Also update the mobile facets summary which contains the counter
+    const targetSummary = target.querySelector(".mobile-facets__summary");
+    const sourceSummary = source.querySelector(".mobile-facets__summary");
+
+    if (sourceSummary && targetSummary) {
+      targetSummary.outerHTML = sourceSummary.outerHTML;
+    }
+  }
+
+  static updateAllMobileFacetsSummaries(html) {
+    // Get all mobile facet details from both source and target
+    const sourceMobileFacets = html.querySelectorAll("#FacetFiltersFormMobile .mobile-facets__details");
+    const targetMobileFacets = document.querySelectorAll("#FacetFiltersFormMobile .mobile-facets__details");
+
+    // Update summaries for all mobile facets to ensure counters are current
+    sourceMobileFacets.forEach((sourceFacet) => {
+      const sourceId = sourceFacet.id;
+      const targetFacet = document.getElementById(sourceId);
+
+      if (targetFacet) {
+        const sourceSummary = sourceFacet.querySelector(".mobile-facets__summary");
+        const targetSummary = targetFacet.querySelector(".mobile-facets__summary");
+
+        if (sourceSummary && targetSummary) {
+          targetSummary.outerHTML = sourceSummary.outerHTML;
+        }
+      }
+    });
   }
 
   static updateURLHash(searchParams) {
