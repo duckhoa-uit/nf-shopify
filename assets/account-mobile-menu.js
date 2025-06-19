@@ -69,21 +69,46 @@ class AccountMobileMenu {
     const tab = event.currentTarget;
     const tabId = tab.getAttribute('data-tab');
 
-    if (!tabId) return; // External link, let default navigation happen
+    // Special handling for addresses tab - let it navigate to the addresses page
+    if (tabId === 'addresses') {
+      // Don't prevent default, let it navigate normally
+      this.closeMobileMenu();
+      return;
+    }
 
+    // For external links (no data-tab), let default navigation happen
+    if (!tabId) {
+      this.closeMobileMenu();
+      return;
+    }
+
+    // Check if we need to navigate to a different page
+    const correspondingTab = document.querySelector(`.tab-link[data-tab="${tabId}"]`);
+    const isAddressesPage = window.location.pathname.includes('/account/addresses');
+    
+    if (isAddressesPage && correspondingTab) {
+      // On addresses page, navigate to the account page with hash
+      this.closeMobileMenu();
+      const targetUrl = correspondingTab.getAttribute('href');
+      if (targetUrl) {
+        window.location.href = targetUrl;
+      }
+      return;
+    }
+
+    // For internal tab switching on main account page
     event.preventDefault();
 
-    // Remove active class from all tabs in mobile menu
-    this.mobileMenuTabs.forEach(tab => tab.classList.remove('active'));
-
-    // Add active class to clicked tab in mobile menu
-    tab.classList.add('active');
-
-    // Find and click the corresponding tab in the main content
-    const correspondingTab = document.querySelector(`.tab-link[data-tab="${tabId}"]`);
+    // Click the corresponding tab first to trigger content change
     if (correspondingTab) {
       correspondingTab.click();
     }
+
+    // Update mobile menu active states after desktop tab has been clicked
+    // Use a small delay to ensure the desktop tab click has processed
+    setTimeout(() => {
+      this.syncMobileMenuWithDesktop();
+    }, 10);
 
     // Update the button text
     this.updateButtonText();
@@ -141,6 +166,26 @@ class AccountMobileMenu {
         iconSpan.innerHTML = document.querySelector('template[data-icon-caret]')?.innerHTML || '';
         this.mobileMenuButton.appendChild(iconSpan);
       }
+    }
+  }
+
+  updateMobileActiveStates(activeTabId) {
+    // Remove active class from all mobile menu tabs
+    this.mobileMenuTabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Add active class to the specified tab
+    const activeTab = document.querySelector(`.account-mobile-menu__tab-link[data-tab="${activeTabId}"]`);
+    if (activeTab) {
+      activeTab.classList.add('active');
+    }
+  }
+
+  syncMobileMenuWithDesktop() {
+    // Find the currently active desktop tab
+    const activeDesktopTab = document.querySelector('.tab-link.active[data-tab]');
+    if (activeDesktopTab) {
+      const tabId = activeDesktopTab.getAttribute('data-tab');
+      this.updateMobileActiveStates(tabId);
     }
   }
 }
