@@ -37,8 +37,21 @@
               <div class="order-date">{{ order.created_at | date: '%d.%m.%Y' }}</div>
               <div class="order-quantity">{{ order.line_items.size }}</div>
               <div>
-                {% if order.fulfillment_status_label == 'Fulfilled' %}
+                {% comment %} Priority order: cancelled > refunded > partially_refunded > delivered > shipped > processing > pending {% endcomment %}
+                {% if order.cancelled %}
+                  <div class="order-status cancelled">{{ 'customer.orders.cancelled' | t }}</div>
+                {% elsif order.financial_status == 'refunded' %}
+                  <div class="order-status refunded">{{ 'customer.orders.refunded' | t }}</div>
+                {% elsif order.financial_status == 'partially_refunded' %}
+                  <div class="order-status partially-refunded">{{ 'customer.orders.partially_refunded' | t }}</div>
+                {% elsif order.fulfillment_status_label == 'Fulfilled' %}
                   <div class="order-status delivered">{{ 'customer.orders.delivered' | t }}</div>
+                {% elsif order.fulfillment_status == 'fulfilled' or order.fulfillment_status == 'partial' %}
+                  <div class="order-status shipped">{{ 'customer.orders.shipped' | t }}</div>
+                {% elsif order.financial_status == 'paid' and order.fulfillment_status == 'unfulfilled' %}
+                  <div class="order-status processing">{{ 'customer.orders.processing' | t }}</div>
+                {% elsif order.financial_status == 'pending' or order.financial_status == 'unpaid' %}
+                  <div class="order-status pending">{{ 'customer.orders.pending_payment' | t }}</div>
                 {% else %}
                   <div class="order-status processing">{{ order.fulfillment_status_label }}</div>
                 {% endif %}
@@ -53,8 +66,21 @@
                 <div class="order-header-mobile-value font-bold">{{ order.name }}</div>
 
                 <div class="order-header-mobile-status">
-                  {% if order.fulfillment_status_label == 'Fulfilled' %}
+                  {% comment %} Priority order: cancelled > refunded > partially_refunded > delivered > shipped > processing > pending {% endcomment %}
+                  {% if order.cancelled %}
+                    <div class="order-status cancelled">{{ 'customer.orders.cancelled' | t }}</div>
+                  {% elsif order.financial_status == 'refunded' %}
+                    <div class="order-status refunded">{{ 'customer.orders.refunded' | t }}</div>
+                  {% elsif order.financial_status == 'partially_refunded' %}
+                    <div class="order-status partially-refunded">{{ 'customer.orders.partially_refunded' | t }}</div>
+                  {% elsif order.fulfillment_status_label == 'Fulfilled' %}
                     <div class="order-status delivered">{{ 'customer.orders.delivered' | t }}</div>
+                  {% elsif order.fulfillment_status == 'fulfilled' or order.fulfillment_status == 'partial' %}
+                    <div class="order-status shipped">{{ 'customer.orders.shipped' | t }}</div>
+                  {% elsif order.financial_status == 'paid' and order.fulfillment_status == 'unfulfilled' %}
+                    <div class="order-status processing">{{ 'customer.orders.processing' | t }}</div>
+                  {% elsif order.financial_status == 'pending' or order.financial_status == 'unpaid' %}
+                    <div class="order-status pending">{{ 'customer.orders.pending_payment' | t }}</div>
                   {% else %}
                     <div class="order-status processing">{{ order.fulfillment_status_label }}</div>
                   {% endif %}
@@ -362,7 +388,7 @@
                       {% assign shipping_discount_total = 0 %}
                       {% assign line_item_discount_percentage = 0 %}
                       {% assign shipping_discount_percentage = 0 %}
-                      
+
                       {% for discount_application in order.discount_applications %}
                         {% if discount_application.target_type == 'line_item' %}
                           {% assign line_item_discount_total = line_item_discount_total | plus: discount_application.total_allocated_amount %}
@@ -376,20 +402,20 @@
                           {% endif %}
                         {% endif %}
                       {% endfor %}
-                      
+
                       {% comment %} Display line item discounts {% endcomment %}
                       {% if line_item_discount_total > 0 %}
                         <div class="price-item discount-row">
                           <span class="price-label">{{ 'customer.orders.product_discount' | t }}</span>
                           <div class="price-value-with-badge">
                             <span class="price-value discount">-{{ line_item_discount_total | money }}</span>
-                            {% if line_item_discount_percentage > 0 %}
+                            {% comment %} {% if line_item_discount_percentage > 0 %}
                               <span class="discount-badge">-{{ line_item_discount_percentage }}%</span>
-                            {% endif %}
+                            {% endif %} {% endcomment %}
                           </div>
                         </div>
                       {% endif %}
-                      
+
                       {% comment %} Display shipping discounts {% endcomment %}
                       {% if shipping_discount_total > 0 %}
                         <div class="price-item discount-row">

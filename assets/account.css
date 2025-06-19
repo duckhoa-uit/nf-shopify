@@ -1514,6 +1514,26 @@ button.loading .btn-spinner {
   --color: 0, 174, 112;
 }
 
+.order-status.refunded {
+  --color: 156, 163, 175; /* Gray for refunded orders */
+}
+
+.order-status.cancelled {
+  --color: 239, 68, 68; /* Red for cancelled orders */
+}
+
+.order-status.partially-refunded {
+  --color: 245, 158, 11; /* Amber for partially refunded orders */
+}
+
+.order-status.pending {
+  --color: 59, 130, 246; /* Blue for pending orders */
+}
+
+.order-status.shipped {
+  --color: 16, 185, 129; /* Emerald for shipped orders */
+}
+
 .order-total {
   font-weight: 600;
   font-size: 1rem;
@@ -1658,7 +1678,7 @@ button.loading .btn-spinner {
   color: #3d3d3d;
   font-size: 0.9375rem; /* 15px */
   opacity: 0.8;
-  min-width: 6rem;
+  min-width: 8rem;
 }
 
 .price-value {
