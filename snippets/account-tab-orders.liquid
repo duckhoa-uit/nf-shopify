@@ -356,7 +356,53 @@
                       <span class="price-value">{{ original_price | money }}</span>
                     </div>
 
-                    {% if order.total_discounts > 0 %}
+                    {% if order.discount_applications.size > 0 %}
+                      {% comment %} Group discounts by target_type {% endcomment %}
+                      {% assign line_item_discount_total = 0 %}
+                      {% assign shipping_discount_total = 0 %}
+                      {% assign line_item_discount_percentage = 0 %}
+                      {% assign shipping_discount_percentage = 0 %}
+                      
+                      {% for discount_application in order.discount_applications %}
+                        {% if discount_application.target_type == 'line_item' %}
+                          {% assign line_item_discount_total = line_item_discount_total | plus: discount_application.total_allocated_amount %}
+                          {% if discount_application.value_type == 'percentage' and line_item_discount_percentage == 0 %}
+                            {% assign line_item_discount_percentage = discount_application.value %}
+                          {% endif %}
+                        {% elsif discount_application.target_type == 'shipping_line' %}
+                          {% assign shipping_discount_total = shipping_discount_total | plus: discount_application.total_allocated_amount %}
+                          {% if discount_application.value_type == 'percentage' and shipping_discount_percentage == 0 %}
+                            {% assign shipping_discount_percentage = discount_application.value %}
+                          {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                      
+                      {% comment %} Display line item discounts {% endcomment %}
+                      {% if line_item_discount_total > 0 %}
+                        <div class="price-item discount-row">
+                          <span class="price-label">{{ 'customer.orders.product_discount' | t }}</span>
+                          <div class="price-value-with-badge">
+                            <span class="price-value discount">-{{ line_item_discount_total | money }}</span>
+                            {% if line_item_discount_percentage > 0 %}
+                              <span class="discount-badge">-{{ line_item_discount_percentage }}%</span>
+                            {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                      
+                      {% comment %} Display shipping discounts {% endcomment %}
+                      {% if shipping_discount_total > 0 %}
+                        <div class="price-item discount-row">
+                          <span class="price-label">{{ 'customer.orders.shipping_discount' | t }}</span>
+                          <div class="price-value-with-badge">
+                            <span class="price-value discount">-{{ shipping_discount_total | money }}</span>
+                            {% if shipping_discount_percentage > 0 %}
+                              <span class="discount-badge">-{{ shipping_discount_percentage }}%</span>
+                            {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% elsif order.total_discounts > 0 %}
                       {% assign discount_percentage = order.total_discounts
                         | times: 100
                         | divided_by: original_price
