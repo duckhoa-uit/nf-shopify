@@ -132,7 +132,7 @@
 
         <ul class="account-tabs" role="tablist">
           <li role="presentation">
-            <a href="{{ routes.account_url }}#settings" class="tab-link">
+            <a href="{{ routes.account_url }}#settings" class="tab-link" data-tab="settings">
               {{- 'customer.account.basic_info' | t -}}
             </a>
           </li>
@@ -142,22 +142,22 @@
             </a>
           </li>
           <li role="presentation">
-            <a href="{{ routes.account_url }}#orders" class="tab-link">
+            <a href="{{ routes.account_url }}#orders" class="tab-link" data-tab="orders">
               {{ 'customer.account.orders' | t }}
             </a>
           </li>
           <li>
-            <a href="{{ routes.account_url }}#bonus" class="tab-link">
+            <a href="{{ routes.account_url }}#bonus" class="tab-link" data-tab="bonus">
               {{ 'customer.account.loyalty_bonus' | t }}
             </a>
           </li>
           <li role="presentation">
-            <a href="{{ routes.account_url }}#account-settings" class="tab-link">
+            <a href="{{ routes.account_url }}#account-settings" class="tab-link" data-tab="account-settings">
               {{- 'customer.account.settings' | t -}}
             </a>
           </li>
           <li role="presentation">
-            <a href="{{ routes.account_url }}#wishlist" class="tab-link">
+            <a href="{{ routes.account_url }}#wishlist" class="tab-link" data-tab="wishlist">
               {{- 'customer.account.wishlist' | t -}}
             </a>
           </li>
