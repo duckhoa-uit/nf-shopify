@@ -168,10 +168,12 @@
   {% endif %}
 
   {%- paginate blogs.video.articles by section.settings.posts_per_page -%}
+    <!-- Debug: Blog Handle: {{ blog.handle }}, Blog Articles Count: {{ blogs.video.articles.size }}, Posts Per Page: {{ section.settings.posts_per_page }}, Paginate Pages: {{ paginate.pages }}, Current Page: {{ paginate.current_page }}, Blog URL: {{ blogs.video.url }}, Current URL: {{ request.path }} -->
     <div class="blog-videos-grid"
          data-total-pages="{{ paginate.pages }}"
          data-current-page="{{ paginate.current_page }}"
-         data-posts-per-page="{{ section.settings.posts_per_page }}">
+         data-posts-per-page="{{ section.settings.posts_per_page }}"
+         data-total-articles="{{ blogs.video.articles.size }}">
       <div class="no-results-message">{{ 'blogs.main_blog.no_results' | t }}</div>
       {%- for article in blogs.video.articles -%}
         <div
@@ -269,17 +271,13 @@
 
     {% if section.settings.enable_load_more %}
       <div class="load-more-container">
-        <button class="button load-more-button" id="blog-videos-load-more-button" {% if paginate.pages <= 1 %}disabled{% endif %}>
+        <button class="button load-more-button" id="blog-videos-load-more-button" style="display: none;">
           <span class="button-text">{{ 'blogs.main_blog.view_more' | t }}</span>
           <span class="button-spinner" style="display: none;">
             {{- 'loading-spinner.svg' | inline_asset_content -}}
           </span>
         </button>
       </div>
-    {% else %}
-      {%- if paginate.pages > 1 -%}
-        {%- render 'pagination', paginate: paginate -%}
-      {%- endif -%}
     {% endif %}
   {%- endpaginate -%}
 </div>
@@ -330,6 +328,18 @@
     let currentPage = 1;
     let isLoadingPosts = false;
     let loadedPages = new Set([1]); // Track which pages we've loaded
+    
+    // Get pagination info directly from Liquid
+    const totalPagesFromShopify = {{ paginate.pages | default: 1 }};
+    const postsPerPage = {{ section.settings.posts_per_page | default: 4 }};
+    const totalArticles = {{ blogs.video.articles.size | default: 0 }};
+    const currentPageFromLiquid = {{ paginate.current_page | default: 1 }};
+    
+    // Calculate expected total pages as fallback
+    const calculatedTotalPages = Math.ceil(totalArticles / postsPerPage);
+    
+    // Use the higher value between Shopify's pagination and our calculation
+    const totalPages = Math.max(totalPagesFromShopify, calculatedTotalPages);
 
     // Initialize category from URL parameters for deep linking
     const urlParams = new URLSearchParams(window.location.search);
@@ -375,125 +385,45 @@
       }
     }
 
-    // Function to automatically load posts until we find matches for the current filter
-    async function loadPostsForFilter(maxPages = 3) {
-      if (currentCategory === 'all') {
-        return; // No need to load more for 'all' filter
-      }
-
-      const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
-      const totalPages = parseInt(gridContainer.getAttribute('data-total-pages')) || 1;
-      const loadMoreButton = document.getElementById('blog-videos-load-more-button');
-
-      // Show loading state on load more button if it exists
-      if (loadMoreButton) {
-        loadMoreButton.classList.add('loading');
-      }
-
-      let foundMatches = false;
-      let pagesToLoad = Math.min(maxPages, totalPages - loadedPages.size);
-
-      for (let i = 1; i <= pagesToLoad; i++) {
-        const nextPage = Math.max(...loadedPages) + 1;
-        if (nextPage > totalPages) break;
-
-        const newArticles = await loadPostsFromPage(nextPage);
-
-        if (newArticles.length > 0) {
-          // Add articles to DOM
-          newArticles.forEach((article) => {
-            const clonedArticle = article.cloneNode(true);
-            gridContainer.appendChild(clonedArticle);
-
-            // Check if this article matches current filter
-            if (currentCategory !== 'all') {
-              const tags = clonedArticle.getAttribute('data-tags') || '';
-              const categoryLower = currentCategory.toLowerCase().trim();
-              const tagsLower = tags.toLowerCase().trim();
-              const tagsArray = tagsLower.split(/\s+/).filter(tag => tag.length > 0);
-
-              if (tagsArray.includes(categoryLower)) {
-                foundMatches = true;
-              }
-            }
-          });
-
-          // Fix YouTube embeds in newly loaded content
-          fixYouTubeEmbeds();
-        }
-      }
-
-      // Remove loading state
-      if (loadMoreButton) {
-        loadMoreButton.classList.remove('loading');
-      }
-
-      // Update load more button visibility after loading
-      updateLoadMoreButton();
-
-      return foundMatches;
-    }
 
     // Function to update load more button visibility
     function updateLoadMoreButton() {
       const loadMoreButton = document.getElementById('blog-videos-load-more-button');
-      if (!loadMoreButton) return;
-
-      const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
-      const totalPages = parseInt(gridContainer.getAttribute('data-total-pages')) || 1;
-      const postsPerPage = parseInt(gridContainer.getAttribute('data-posts-per-page')) || 4;
-      const currentArticles = blogVideosSection.querySelectorAll('.blog-videos-grid__article');
-
-      // Count visible articles
-      let visibleCount = 0;
-      currentArticles.forEach((article) => {
-        if (article.style.display !== 'none') {
-          visibleCount++;
-        }
-      });
-
-      // New approach: Show button based on content availability rather than page tracking
-      const hasVisibleContent = visibleCount > 0;
-
-      // For "all" filter: show if we haven't loaded all pages OR if visible content suggests more pages
-      // For specific filters: show if visible count > posts per page (indicating more content available)
-      let shouldShowButton = false;
-
-      if (currentCategory === 'all') {
-        // For "all": show button if there are more pages to load OR if we have exactly posts-per-page visible (suggesting more)
-        const hasMorePagesToLoad = loadedPages.size < totalPages;
-        const hasFullPageOfContent = visibleCount >= postsPerPage && totalPages > 1;
-        shouldShowButton = hasVisibleContent && (hasMorePagesToLoad || hasFullPageOfContent);
-      } else {
-        // For specific filters: show if we have more than one page worth of visible content
-        shouldShowButton = hasVisibleContent && visibleCount > postsPerPage;
+      if (!loadMoreButton) {
+        console.log('⚠️ updateLoadMoreButton: Button not found!');
+        return;
       }
 
-      if (shouldShowButton) {
+      let shouldShow = false;
+      
+      if (currentCategory === 'all') {
+        // For "all" filter: show if there are more pages to load
+        shouldShow = loadedPages.size < totalPages;
+      } else {
+        // For specific filters: show only if there might be more matching articles
+        shouldShow = loadedPages.size < totalPages;
+        
+        // Additional check: if we have already loaded all pages, hide the button
+        if (loadedPages.size >= totalPages) {
+          shouldShow = false;
+        }
+      }
+      
+      console.log('🔄 updateLoadMoreButton called:', {
+        currentCategory,
+        loadedPagesSize: loadedPages.size,
+        totalPages,
+        shouldShow,
+        action: shouldShow ? 'SHOW button' : 'HIDE button'
+      });
+
+      // Show button if there are more pages to load
+      if (shouldShow) {
         loadMoreButton.style.display = 'flex';
         loadMoreButton.removeAttribute('disabled');
-        loadMoreButton.classList.remove('opacity-50', 'cursor-not-allowed');
       } else {
         loadMoreButton.style.display = 'none';
       }
-
-      // Debug info to understand the issue
-      console.log('Button visibility debug:', {
-        currentCategory,
-        hasVisibleContent,
-        visibleCount,
-        postsPerPage,
-        totalPages,
-        loadedPagesSize: loadedPages.size,
-        loadedPagesArray: Array.from(loadedPages),
-        shouldShowButton,
-        logic: currentCategory === 'all' ? 'all-filter' : 'specific-filter'
-      });
-
-
-
-
-
     }
 
     // Function to filter articles based on category
@@ -530,14 +460,53 @@
         }
       });
 
-      // If no results found and we have a specific category filter, try loading more posts
-      if (visibleCount === 0 && currentCategory !== 'all') {
-        const foundMatches = await loadPostsForFilter();
+      // Auto-load more articles if we have fewer visible than page size and more pages available
+      if (currentCategory !== 'all' && visibleCount < postsPerPage && loadedPages.size < totalPages) {
+        console.log(`🔄 Auto-loading: Only ${visibleCount} visible articles for "${currentCategory}" filter, need ${postsPerPage}. Loading more...`);
+        
+        // Try to load more pages until we have enough articles or run out of pages
+        let maxAttempts = 3; // Limit attempts to prevent infinite loops
+        let attempts = 0;
+        
+        while (visibleCount < postsPerPage && loadedPages.size < totalPages && attempts < maxAttempts) {
+          attempts++;
+          const nextPage = Math.max(...loadedPages) + 1;
+          
+          console.log(`📄 Auto-loading page ${nextPage} (attempt ${attempts})`);
+          
+          const newArticles = await loadPostsFromPage(nextPage);
+          
+          if (newArticles.length === 0) {
+            break; // No more articles available
+          }
 
-        if (foundMatches) {
-          // Re-run filtering after loading new posts
-          return filterArticles();
+          // Add new articles to the grid
+          const articlesContainer = blogVideosSection.querySelector('.blog-videos-grid');
+          newArticles.forEach((article) => {
+            const clonedArticle = article.cloneNode(true);
+            articlesContainer.appendChild(clonedArticle);
+
+            // Check if this article matches current filter
+            if (currentCategory !== 'all') {
+              const tags = clonedArticle.getAttribute('data-tags') || '';
+              const categoryLower = currentCategory.toLowerCase().trim();
+              const tagsLower = tags.toLowerCase().trim();
+              const tagsArray = tagsLower.split(/\s+/).filter(tag => tag.length > 0);
+              
+              if (tagsArray.includes(categoryLower)) {
+                clonedArticle.style.display = 'block';
+                visibleCount++;
+              } else {
+                clonedArticle.style.display = 'none';
+              }
+            }
+          });
+
+          // Fix YouTube embeds in newly loaded content
+          fixYouTubeEmbeds();
         }
+        
+        console.log(`✅ Auto-loading complete: ${visibleCount} visible articles after ${attempts} attempts`);
       }
 
       // Show/hide no results message
@@ -546,8 +515,6 @@
       } else {
         noResultsMessage.style.display = 'none';
       }
-
-      // Note: updateLoadMoreButton() will be called by the calling function
     }
 
     // Function to update URL with current category filter
@@ -587,16 +554,15 @@
         // Update current category
         const newCategory = this.getAttribute('data-category');
 
-        // If switching to "all" from a specific filter, reset pagination state
-        if (newCategory === 'all' && currentCategory !== 'all') {
+        // Reset article list to initial state when switching filters
+        if (newCategory !== currentCategory) {
           // Reset to initial state - only page 1 loaded
           loadedPages.clear();
           loadedPages.add(1);
 
-          // Remove any articles that were auto-loaded beyond the first page
+          // Remove any articles that were loaded beyond the first page
           const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
           const allArticles = gridContainer.querySelectorAll('.blog-videos-grid__article');
-          const postsPerPage = parseInt(gridContainer.getAttribute('data-posts-per-page')) || 4;
 
           // Keep only the first postsPerPage articles
           allArticles.forEach((article, index) => {
@@ -611,40 +577,34 @@
         // Update URL with current filter
         updateURL();
 
-        // Apply filters (now async)
+        // Apply filters
         await filterArticles();
 
-        // Ensure button visibility is updated after filtering
+        // Update button visibility after filtering
         updateLoadMoreButton();
       });
     });
 
     // Load more functionality
-    const loadMoreButton = document.getElementById('blog-videos-load-more-button');
-    const loadMoreText = loadMoreButton ? loadMoreButton.querySelector('.button-text') : null;
-    const loadingSpinner = loadMoreButton ? loadMoreButton.querySelector('.button-spinner') : null;
+    const blogVideosLoadMoreBtn = document.getElementById('blog-videos-load-more-button');
+    const blogVideosLoadMoreText = blogVideosLoadMoreBtn ? blogVideosLoadMoreBtn.querySelector('.button-text') : null;
+    const blogVideosLoadingSpinner = blogVideosLoadMoreBtn ? blogVideosLoadMoreBtn.querySelector('.button-spinner') : null;
 
-    if (loadMoreButton) {
-      // Remove any initial disabled state - we'll handle this in JavaScript
-      loadMoreButton.removeAttribute('disabled');
-      loadMoreButton.classList.remove('opacity-50', 'cursor-not-allowed');
-
-      loadMoreButton.addEventListener('click', async function () {
+    if (blogVideosLoadMoreBtn) {
+      blogVideosLoadMoreBtn.addEventListener('click', async function () {
         // Don't do anything if button is disabled
-        if (loadMoreButton.hasAttribute('disabled')) {
+        if (blogVideosLoadMoreBtn.hasAttribute('disabled')) {
           return;
         }
 
         // Show loading state using unified button system
-        loadMoreButton.classList.add('loading');
+        blogVideosLoadMoreBtn.classList.add('loading');
 
-        const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
-        const totalPages = parseInt(gridContainer.getAttribute('data-total-pages')) || 1;
         const nextPage = Math.max(...loadedPages) + 1;
 
         if (nextPage > totalPages) {
-          loadMoreButton.style.display = 'none';
-          loadMoreButton.classList.remove('loading');
+          blogVideosLoadMoreBtn.style.display = 'none';
+          blogVideosLoadMoreBtn.classList.remove('loading');
           return;
         }
 
@@ -654,9 +614,8 @@
 
           // Check if we got any new articles
           if (newArticles.length === 0) {
-            console.log('No more articles to load');
             // Hide the button completely
-            loadMoreButton.style.display = 'none';
+            blogVideosLoadMoreBtn.style.display = 'none';
             return;
           }
 
@@ -687,11 +646,11 @@
           updateLoadMoreButton();
         } catch (error) {
           console.error('Error loading more articles:', error);
-          // Update button visibility on error too
-          updateLoadMoreButton();
+          // Hide button on error
+          blogVideosLoadMoreBtn.style.display = 'none';
         } finally {
           // Reset loading state using unified button system
-          loadMoreButton.classList.remove('loading');
+          blogVideosLoadMoreBtn.classList.remove('loading');
         }
       });
     }
@@ -701,16 +660,15 @@
       if (event.state && event.state.video_category !== undefined) {
         const newCategory = event.state.video_category || 'all';
 
-        // If switching to "all" from a specific filter, reset pagination state
-        if (newCategory === 'all' && currentCategory !== 'all') {
+        // Reset article list to initial state when navigating with browser buttons
+        if (newCategory !== currentCategory) {
           // Reset to initial state - only page 1 loaded
           loadedPages.clear();
           loadedPages.add(1);
 
-          // Remove any articles that were auto-loaded beyond the first page
+          // Remove any articles that were loaded beyond the first page
           const gridContainer = blogVideosSection.querySelector('.blog-videos-grid');
           const allArticles = gridContainer.querySelectorAll('.blog-videos-grid__article');
-          const postsPerPage = parseInt(gridContainer.getAttribute('data-posts-per-page')) || 4;
 
           // Keep only the first postsPerPage articles
           allArticles.forEach((article, index) => {
@@ -730,18 +688,56 @@
           activeCategory.classList.add('active');
         }
 
-        // Apply filters (now async)
+        // Apply filters
         await filterArticles();
 
-        // Ensure button visibility is updated after filtering
+        // Update button visibility after filtering
         updateLoadMoreButton();
       }
     });
 
-    // Apply initial filters based on URL parameters (now async)
+    // Apply initial filters based on URL parameters
     filterArticles().then(() => {
       // Ensure load more button is visible initially if needed
       updateLoadMoreButton();
+    });
+    
+    // Debug info for initial state
+    const blogVideosLoadMoreButton = document.getElementById('blog-videos-load-more-button');
+    console.log('🔍 Blog Videos Debug - Initial state:', {
+      '📋 Blog Context': {
+        blogHandle: '{{ blogs.video.handle | default: "N/A" }}',
+        blogUrl: '{{ blogs.video.url | default: "N/A" }}',
+        currentUrl: '{{ request.path | default: "N/A" }}',
+        blogExists: {% if blogs.video %}'true'{% else %}'false'{% endif %},
+        blogTitle: '{{ blogs.video.title | default: "N/A" }}'
+      },
+      '📊 Pagination Info': {
+        totalPagesFromShopify,
+        calculatedTotalPages,
+        totalPages,
+        postsPerPage,
+        totalArticles,
+        currentPageFromLiquid,
+        articlesOnCurrentPage: blogVideosSection.querySelectorAll('.blog-videos-grid__article').length,
+        paginationLogic: totalPages === totalPagesFromShopify ? 'Using Shopify pagination' : 'Using calculated pagination'
+      },
+      '🔄 Load State': {
+        loadedPagesSize: loadedPages.size,
+        loadedPagesArray: Array.from(loadedPages),
+        shouldShowButton: loadedPages.size < totalPages
+      },
+      '🎯 Button State': {
+        buttonExists: !!blogVideosLoadMoreButton,
+        buttonVisible: blogVideosLoadMoreButton ? blogVideosLoadMoreButton.style.display !== 'none' : false,
+        buttonStyle: blogVideosLoadMoreButton ? blogVideosLoadMoreButton.style.display : 'N/A'
+      },
+      '📝 Logic Check': {
+        'loadedPages.size': loadedPages.size,
+        'totalPages': totalPages,
+        'loadedPages.size < totalPages': loadedPages.size < totalPages,
+        'Expected behavior': loadedPages.size < totalPages ? 'Button should show' : 'Button should hide'
+      }
     });
   });
 </script>
