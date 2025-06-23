@@ -268,33 +268,61 @@ class FacetFiltersForm extends HTMLElement {
       });
     });
 
+    // Fix mobile facets event rebinding after DOM updates
     const facetFormMobile = document.getElementById("FacetFiltersFormMobile");
     if (facetFormMobile) {
       const menuDrawer = facetFormMobile.closest("menu-drawer");
-      if (menuDrawer && typeof menuDrawer.bindEvents === 'function') {
-        menuDrawer.bindEvents();
+      if (menuDrawer) {
+        // Remove existing event listeners to prevent duplicates
+        const existingHandlers = menuDrawer._facetEventHandlers;
+        if (existingHandlers) {
+          existingHandlers.forEach(handler => {
+            handler.element.removeEventListener(handler.event, handler.listener);
+          });
+        }
+        
+        // Store handlers for cleanup
+        menuDrawer._facetEventHandlers = [];
+        
+        // Rebind summary click events for mobile facets details
+        menuDrawer.querySelectorAll('.mobile-facets__details summary').forEach((summary) => {
+          const clickHandler = menuDrawer.onSummaryClick.bind(menuDrawer);
+          summary.addEventListener('click', clickHandler);
+          menuDrawer._facetEventHandlers.push({
+            element: summary,
+            event: 'click', 
+            listener: clickHandler
+          });
+        });
+        
+        // Rebind mobile facets close button events
+        menuDrawer.querySelectorAll('.mobile-facets__close-button').forEach((button) => {
+          const clickHandler = menuDrawer.onCloseButtonClick.bind(menuDrawer);
+          button.addEventListener('click', clickHandler);
+          menuDrawer._facetEventHandlers.push({
+            element: button,
+            event: 'click',
+            listener: clickHandler
+          });
+        });
+        
+        // Rebind close elements
+        menuDrawer.querySelectorAll('.mobile-facets__close').forEach((closeElement) => {
+          const clickHandler = menuDrawer.onMobileFacetsCloseClick.bind(menuDrawer);
+          closeElement.addEventListener('click', clickHandler);
+          menuDrawer._facetEventHandlers.push({
+            element: closeElement,
+            event: 'click',
+            listener: clickHandler
+          });
+        });
+        
+        // Re-call bindEvents to ensure all other events are properly bound
+        if (typeof menuDrawer.bindEvents === 'function') {
+          menuDrawer.bindEvents();
+        }
       }
     }
-
-    // // Fix mobile facets submenu transitions
-    // const mobileSubmenus = document.querySelectorAll('.mobile-facets__submenu');
-    // mobileSubmenus.forEach(submenu => {
-    //   const closeButton = submenu.querySelector('.mobile-facets__close-button');
-    //   if (closeButton) {
-    //     closeButton.addEventListener('click', function() {
-    //       const details = this.closest('details');
-    //       if (details) {
-    //         submenu.style.transform = 'translateX(100%)';
-    //         submenu.style.visibility = 'hidden';
-
-    //         // Remove open attribute after transition completes
-    //         setTimeout(() => {
-    //           details.removeAttribute('open');
-    //         }, 300);
-    //       }
-    //     });
-    //   }
-    // });
   }
 
   static renderCounts(source, target) {
