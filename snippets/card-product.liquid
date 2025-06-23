@@ -18,12 +18,8 @@
   <div class="card-wrapper h-full">
     <div class="flex flex-col h-full relative">
       <div class="flex items-center gap-2 mb-1.5 h-8">
-        {%- if card_product.tags contains 'new' or card_product.tags contains 'new' -%}
-          <div class="bg-background border border-[#CCCCCC] text-[#4D4D4D] font-medium px-2 py-1.5 rounded-3 text-sm uppercase">
-            New
-          </div>
-        {%- endif -%}
-
+        {%- assign tag_count = 0 -%}
+        
         {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
           {%- assign savings = card_product.compare_at_price
             | minus: card_product.price
@@ -38,6 +34,27 @@
               SALE
             {%- endif -%}
           </div>
+        {%- endif -%}
+
+        <!-- Product tags (max 3) -->
+        {%- for tag in card_product.tags -%}
+          {%- unless tag == 'sale' -%}
+            {%- if tag_count < 3 -%}
+              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">{{ tag }}</span>
+              {%- assign tag_count = tag_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endunless -%}
+        {%- endfor -%}
+        
+        <!-- Promotion metafield -->
+        {%- if card_product.metafields.features.promotion.value -%}
+          {%- for promotion in card_product.metafields.features.promotion.value -%}
+            {%- assign promotion_name_lower = promotion.name | downcase -%}
+            {%- if promotion_name_lower == 'new release' and tag_count < 3 -%}
+              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">{{ promotion.name }}</span>
+              {%- assign tag_count = tag_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
         {%- endif -%}
       </div>
 
@@ -407,7 +424,7 @@
 
               <a
                 href="{{ card_product.url }}?variant={{ color_variant.id }}"
-                class="size-9 xl:size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors variant-swatch"
+                class="size-9 xl:size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors variant-swatch border-b-2 border-transparent hover:border-accent"
                 data-variant-id="{{ color_variant.id }}"
                 data-product-id="{{ card_product.id }}"
                 {%- if variant_image -%}

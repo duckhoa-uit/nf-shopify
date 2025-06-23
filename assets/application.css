@@ -1561,6 +1561,9 @@
   .text-\[\#4D4D4D\] {
     color: #4D4D4D !important;
   }
+  .text-\[\#4d4d4d\] {
+    color: #4d4d4d !important;
+  }
   .text-\[\#999\] {
     color: #999 !important;
   }
@@ -1870,10 +1873,25 @@
       }
     }
   }
+  .hover\:border-b-2 {
+    &:hover {
+      @media (hover: hover) {
+        border-bottom-style: var(--tw-border-style) !important;
+        border-bottom-width: 2px !important;
+      }
+    }
+  }
   .hover\:border-\[\#000\] {
     &:hover {
       @media (hover: hover) {
         border-color: #000 !important;
+      }
+    }
+  }
+  .hover\:border-accent {
+    &:hover {
+      @media (hover: hover) {
+        border-color: #ec0009 !important;
       }
     }
   }

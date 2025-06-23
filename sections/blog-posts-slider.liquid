@@ -64,7 +64,7 @@
                 class="swiper-slide blog-posts-slider__slide"
                 {{ block.shopify_attributes }}
               >
-                <div class="blog-posts-slider__card">
+                <a href="{{ article.url }}" class="blog-posts-slider__card" aria-label="Read article: {{ article.title | escape }}">
                   <div class="blog-posts-slider__image">
                     {%- if article.image -%}
                       <img
@@ -100,11 +100,11 @@
                         | truncatewords: 15
                       }}
                     </div>
-                    <a href="{{ article.url }}" class="blog-posts-slider__button" aria-label="Read full article: {{ article.title | escape }}">
+                    <span class="blog-posts-slider__button" aria-hidden="true">
                       {{ 'blogs.article.read_more' | t }}
-                    </a>
+                    </span>
                   </div>
-                </div>
+                </a>
               </div>
             {%- endif -%}
           {%- endfor -%}
