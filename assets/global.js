@@ -84,6 +84,41 @@ document.querySelectorAll('[id^="Details-"] summary').forEach((summary) => {
   summary.parentElement.addEventListener('keyup', onKeyUpEscape);
 });
 
+// Fallback mechanism for mobile facets menu-opening class
+// This ensures mobile facets animations work even after DOM updates
+(function mobileFacetsFallback() {
+  // Monitor for mobile facets that open without menu-opening class
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'open') {
+        const target = mutation.target;
+        if (target.classList.contains('mobile-facets__details') && target.hasAttribute('open')) {
+          // Check if menu-opening class is missing and add it immediately
+          if (!target.classList.contains('menu-opening')) {
+            // Use requestAnimationFrame for smooth animation without delay
+            requestAnimationFrame(() => {
+              if (target.hasAttribute('open') && !target.classList.contains('menu-opening')) {
+                target.classList.add('menu-opening');
+                const summary = target.querySelector('summary');
+                if (summary) {
+                  summary.setAttribute('aria-expanded', 'true');
+                }
+              }
+            });
+          }
+        }
+      }
+    });
+  });
+
+  // Start observing
+  observer.observe(document.body, {
+    attributes: true,
+    attributeFilter: ['open'],
+    subtree: true
+  });
+})();
+
 const trapFocusHandlers = {};
 
 function trapFocus(container, elementToFocus = container) {
@@ -436,6 +471,14 @@ class MenuDrawer extends HTMLElement {
     this.querySelectorAll(
       'button:not(.localization-selector):not(.country-selector__close-button):not(.country-filter__reset-button)'
     ).forEach((button) => button.addEventListener('click', this.onCloseButtonClick.bind(this)));
+    
+    // Add click handler for mobile facets close elements
+    this.querySelectorAll('.mobile-facets__close').forEach((closeElement) =>
+      closeElement.addEventListener('click', this.onMobileFacetsCloseClick.bind(this))
+    );
+    
+    // Add backdrop click detection for mobile facets
+    this.addEventListener('click', this.onBackdropClick.bind(this));
   }
 
   onKeyUp(event) {
@@ -469,14 +512,13 @@ class MenuDrawer extends HTMLElement {
         document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
       }
     } else {
-      setTimeout(() => {
-        detailsElement.classList.add('menu-opening');
-        summaryElement.setAttribute('aria-expanded', true);
-        parentMenuElement && parentMenuElement.classList.add('submenu-open');
-        !reducedMotion || reducedMotion.matches
-          ? addTrapFocus()
-          : summaryElement.nextElementSibling.addEventListener('transitionend', addTrapFocus);
-      }, 100);
+      // Remove delay for immediate response
+      detailsElement.classList.add('menu-opening');
+      summaryElement.setAttribute('aria-expanded', true);
+      parentMenuElement && parentMenuElement.classList.add('submenu-open');
+      !reducedMotion || reducedMotion.matches
+        ? addTrapFocus()
+        : summaryElement.nextElementSibling.addEventListener('transitionend', addTrapFocus);
     }
   }
 
@@ -517,6 +559,32 @@ class MenuDrawer extends HTMLElement {
   onCloseButtonClick(event) {
     const detailsElement = event.currentTarget.closest('details');
     this.closeSubmenu(detailsElement);
+  }
+
+  onMobileFacetsCloseClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.closeMenuDrawer(event, this.mainDetailsToggle.querySelector('summary'));
+  }
+
+  onBackdropClick(event) {
+    // Check if the drawer is open and this is a mobile facets drawer
+    if (!this.mainDetailsToggle.hasAttribute('open') || !this.querySelector('#FacetFiltersFormMobile')) {
+      return;
+    }
+    
+    // Check if the click is outside the mobile facets content area
+    const mobileFacetsInner = this.querySelector('.mobile-facets__inner');
+    const isClickOutsideContent = mobileFacetsInner && !mobileFacetsInner.contains(event.target);
+    
+    // Also check if clicking on the summary element itself (which contains the backdrop)
+    const isClickOnSummary = event.target === this.mainDetailsToggle.querySelector('summary');
+    
+    if (isClickOutsideContent || isClickOnSummary) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.closeMenuDrawer(event, this.mainDetailsToggle.querySelector('summary'));
+    }
   }
 
   closeSubmenu(detailsElement) {
