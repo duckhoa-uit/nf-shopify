@@ -270,7 +270,9 @@
 
     // Current search state
     let currentSearchQuery = '';
-    let currentPage = 1;
+    const initialPage = {{ paginate.current_page | default: 1 }};
+    let currentPage = initialPage;
+    const totalPages = {{ paginate.pages | default: 1 }};
     let searchTimeout;
 
     // Initialize search from URL parameters
@@ -453,12 +455,9 @@
             // Reset loading state using unified button system
             loadMoreButton.classList.remove('loading');
 
-            // Check if we've reached the last page
-            const paginationInfo = doc.querySelector('.pagination');
-            const nextPageExists = doc.querySelectorAll('.blog-articles__article').length > 0;
-
-            if (!nextPageExists || !paginationInfo) {
-              // Hide the button completely when no more articles or reached last page
+            // Check if we've reached the last page using pagination data
+            if (currentPage >= totalPages) {
+              // Hide the button completely when we've reached the last page
               loadMoreButton.style.display = 'none';
             }
           })
