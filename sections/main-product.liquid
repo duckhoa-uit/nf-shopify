@@ -342,7 +342,7 @@
   {% assign breathability_parent = breathability_data.parent %}
   <script>
     console.log({{ product | json }});
-    console.log({{ product.metafields.custom.color.value | json }});
+    console.log({{ product.metafields.features.promotion.value | json }});
   </script>
 
   <div class="page-width">
@@ -358,8 +358,8 @@
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
           <div class="flex items-center justify-between">
-            <!-- Discount badge -->
-            <div>
+            <!-- Discount badge and product tags -->
+            <div class="flex items-center gap-2">
               {% if product.compare_at_price > product.price %}
                 {%- assign savings = product.compare_at_price
                   | minus: product.price
@@ -375,6 +375,27 @@
                   {%- endif -%}
                 </div>
               {% endif %}
+
+              <!-- Product tags -->
+              {%- for tag in product.tags -%}
+                {%- unless tag == 'sale' -%}
+                  <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
+                    {{- tag -}}
+                  </span>
+                {%- endunless -%}
+              {%- endfor -%}
+
+              <!-- Promotion metafield -->
+              {%- if product.metafields.features.promotion.value -%}
+                {%- for promotion in product.metafields.features.promotion.value -%}
+                  {%- assign promotion_name_lower = promotion.name | downcase -%}
+                  {%- if promotion_name_lower == 'new release' -%}
+                    <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
+                      {{- promotion.name -}}
+                    </span>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
             </div>
             {% comment %} {% render 'wishlist-button', product: product, btn_class: 'bg-[#F5F5F5] size-10 rounded-full flex items-center justify-center' %} {% endcomment %}
           </div>
