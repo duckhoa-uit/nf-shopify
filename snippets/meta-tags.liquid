@@ -39,8 +39,10 @@
 <meta name="twitter:title" content="{{ og_title | escape }}">
 <meta name="twitter:description" content="{{ og_description | escape }}">
 
-{%- comment -%} Additional SEO meta tags {%- endcomment -%}
-<meta name="robots" content="index, follow">
+{%- comment -%} Additional SEO meta tags - BLOCKING SEARCH ENGINE INDEXING {%- endcomment -%}
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="bingbot" content="noindex, nofollow">
 {%- if request.page_type == 'product' -%}
   <meta name="product:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
   <meta name="product:price:currency" content="{{ cart.currency.iso_code }}">
