@@ -34,7 +34,17 @@ class AccountTabs {
       return;
     }
 
-    // This is a tab link, prevent default navigation
+    // Check if we're on the addresses page and trying to navigate to another tab
+    const isAddressesPage = window.location.pathname.includes('/account/addresses');
+    const tabContent = document.getElementById(tabId);
+
+    if (isAddressesPage && !tabContent) {
+      // We're on addresses page and the target tab content doesn't exist
+      // Let the default navigation happen (href should point to account page with hash)
+      return;
+    }
+
+    // This is a tab link on the main account page, prevent default navigation
     e.preventDefault();
 
     // Remove active class from all tabs
@@ -45,7 +55,6 @@ class AccountTabs {
     link.classList.add('active');
 
     // Find the tab content and make it active
-    const tabContent = document.getElementById(tabId);
     if (tabContent) {
       tabContent.classList.add('active');
     }
@@ -56,8 +65,25 @@ class AccountTabs {
 
   checkUrlHash() {
     const hash = window.location.hash.substring(1);
+    const isAddressesPage = window.location.pathname.includes('/account/addresses');
+
     if (hash) {
       const activeTab = document.querySelector(`.tab-link[data-tab="${hash}"]`);
+      const tabContent = document.getElementById(hash);
+
+      // If we're on addresses page and trying to access a hash that doesn't have content
+      if (isAddressesPage && hash !== 'addresses' && !tabContent) {
+        // Get the account URL from data attribute or construct it
+        const accountUrlElement = document.querySelector('[data-account-url]');
+        const accountUrl = accountUrlElement ?
+          accountUrlElement.textContent.trim() :
+          this.getAccountUrl();
+
+        // Redirect to main account page with the hash
+        window.location.href = `${accountUrl}#${hash}`;
+        return;
+      }
+
       if (activeTab) {
         // Only trigger click if it's a tab link (has data-tab attribute)
         if (activeTab.getAttribute('data-tab')) {
@@ -65,12 +91,22 @@ class AccountTabs {
         }
       }
     } else {
-      // If no hash, default to first tab
-      const firstTab = document.querySelector('.tab-link[data-tab]');
-      if (firstTab) {
-        firstTab.click();
+      // If no hash, default to first tab (only on main account page)
+      if (!isAddressesPage) {
+        const firstTab = document.querySelector('.tab-link[data-tab]');
+        if (firstTab) {
+          firstTab.click();
+        }
       }
     }
+  }
+
+  // Helper method to construct account URL with language prefix
+  getAccountUrl() {
+    const currentPath = window.location.pathname;
+    // Extract language prefix if it exists (e.g., /de/account/addresses -> /de)
+    const languageMatch = currentPath.match(/^\/([a-z]{2})\/account/);
+    return languageMatch ? `/${languageMatch[1]}/account` : '/account';
   }
 }
 
