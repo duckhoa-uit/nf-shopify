@@ -1,0 +1,38 @@
+{%- comment -%}
+  Renders hreflang tags for SEO and language targeting
+  
+  This snippet generates proper hreflang tags for all available languages
+  with the correct URL structure where German is the default language
+{%- endcomment -%}
+
+{%- if localization.available_languages.size > 1 -%}
+  {%- for language in localization.available_languages -%}
+    {%- liquid
+      assign language_url = request.origin
+      
+      # For German (default language), use root domain without language prefix
+      if language.iso_code == 'de'
+        assign language_url = request.origin | append: request.path
+      else
+        # For other languages, add language prefix
+        assign language_url = request.origin | append: '/' | append: language.iso_code | append: request.path
+      endif
+      
+      # Remove double slashes if any
+      assign language_url = language_url | replace: '//', '/'
+      assign language_url = language_url | replace: 'https:/', 'https://'
+      assign language_url = language_url | replace: 'http:/', 'http://'
+    -%}
+    
+    <link rel="alternate" hreflang="{{ language.iso_code }}" href="{{ language_url }}">
+  {%- endfor -%}
+  
+  {%- comment -%} Add x-default hreflang pointing to German version {%- endcomment -%}
+  {%- liquid
+    assign default_url = request.origin | append: request.path
+    assign default_url = default_url | replace: '//', '/'
+    assign default_url = default_url | replace: 'https:/', 'https://'
+    assign default_url = default_url | replace: 'http:/', 'http://'
+  -%}
+  <link rel="alternate" hreflang="x-default" href="{{ default_url }}">
+{%- endif -%}
