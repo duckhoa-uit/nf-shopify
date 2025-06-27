@@ -266,15 +266,24 @@
               </h2>
               <div class="block">
                 <div class="flex items-center gap-2">
+                  {%- liquid
+                    if localization.language.iso_code == 'de'
+                      assign flag_image = 'flag-de.png'
+                      assign flag_alt = 'Deutsch (Deutsch)'
+                    else
+                      assign flag_image = 'flag-' | append: localization.language.iso_code | downcase | append: '.png'
+                      assign flag_alt = localization.language.endonym_name
+                    endif
+                  -%}
                   <img
-                    src="{{ 'europeanunion.png' | asset_url }}"
+                    src="{{ flag_image | asset_url }}"
                     width="32"
                     height="20"
                     class="w-4 h-[11px]"
-                    alt="English (English)"
+                    alt="{{ flag_alt }}"
                   >
                   <span class="mr-2 border-r border-[#ccc] pr-2 text-gray-850 text-sm leading-[1.125rem]">
-                    {{- 'footer.language' | t | default: 'English (English)' -}}
+                    {{- 'footer.language' | t | default: localization.language.endonym_name -}}
                   </span>
                   <span class="font-semibold underline uppercase cursor-pointer text-sm">
                     {{- 'footer.change' | t | default: 'Change' -}}
