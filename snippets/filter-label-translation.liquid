@@ -1,0 +1,87 @@
+{% comment %}
+  Renders translated filter label from metaobject entries
+
+  Accepts:
+  - filter: {Object} Filter object from Shopify Search & Discovery
+  - fallback_label: {String} Optional fallback label (default: filter.label)
+
+  Usage:
+  {% render 'filter-label-translation', filter: filter %}
+
+  Returns translated label or falls back to original filter.label
+{% endcomment %}
+
+{%- liquid
+  # Initialize variables
+  assign translated_label = filter.label
+  assign fallback_label = fallback_label | default: filter.label
+  assign debug_info = ''
+
+  # Only process if filter has param_name (indicates metaobject filter)
+  if filter.param_name and filter.param_name contains 'filter.'
+    # Extract metaobject information from filter param
+    assign filter_param = filter.param_name | remove: 'filter.'
+
+    if filter_param contains '.'
+      assign metaobject_parts = filter_param | split: '.'
+      assign metaobject_type = metaobject_parts[0]
+      assign debug_info = 'Type: ' | append: metaobject_type
+
+      # Get metaobject entries for this type
+      assign metaobject_entries = shop.metaobjects[metaobject_type]
+
+      if metaobject_entries and metaobject_entries.size > 0
+        # Method 1: Try exact name match (product_feature_preset.name)
+        for entry in metaobject_entries
+          if entry.name and entry.name.value == filter.label
+            assign translated_label = entry.name.value
+            assign debug_info = debug_info | append: ' | Found exact name match'
+            break
+          endif
+        endfor
+
+        # Method 2: Try handle match if no exact match found
+        if translated_label == filter.label
+          assign filter_handle = filter.label | handleize
+          for entry in metaobject_entries
+            if entry.handle == filter_handle and entry.name and entry.name.value != blank
+              assign translated_label = entry.name.value
+              assign debug_info = debug_info | append: ' | Found handle match'
+              break
+            endif
+          endfor
+        endif
+
+        # Method 3: Try partial match on name if still no match
+        if translated_label == filter.label
+          for entry in metaobject_entries
+            if entry.name and entry.name.value contains filter.label
+              assign translated_label = entry.name.value
+              assign debug_info = debug_info | append: ' | Found partial match'
+              break
+            endif
+          endfor
+        endif
+      else
+        assign debug_info = debug_info | append: ' | No entries found'
+      endif
+    else
+      assign debug_info = 'Single param: ' | append: filter_param
+    endif
+  else
+    assign debug_info = 'Not a metaobject filter'
+  endif
+
+  # Final fallback safety check
+  if translated_label == blank or translated_label == ''
+    assign translated_label = fallback_label
+    assign debug_info = debug_info | append: ' | Using fallback'
+  endif
+-%}
+
+{%- comment -%}
+  Debug info (remove in production):
+  Filter: {{ filter.label }} | Param: {{ filter.param_name }} | {{ debug_info }}
+{%- endcomment -%}
+
+{{- translated_label -}}
