@@ -12,16 +12,14 @@
 
 {% assign post_limit = 6 %}
 
-<!-- Debug: Current article: {{ article.title }} -->
-<!-- Debug: Current blog: {{ blog.title }} -->
-<!-- Debug: Tags: {{ article.tags | join: ', ' }} -->
+
 
 {% if article != blank and blog != blank %}
   <div class="related_articles gradient">
     <div class="page-width isolate">
       <div class="flex items-center justify-between mb-4">
         <h2 class="font-extrabold font-archivo-expanded text-lg lg:text-2xl leading-7 text-[#0F0F0F] uppercase{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-          Related Articles
+          {{ 'blogs.article.related_articles' | t }}
         </h2>
 
         {%- if blog != blank -%}
@@ -53,7 +51,7 @@
 
               {% if has_matching_tag %}
                 {% assign related_count = related_count | plus: 1 %}
-                <!-- Debug: Rendering related article: {{ blog_article.title }} -->
+
                 <div class="swiper-slide blog__post grid__item article slider__slide slider__slide--full-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
                   {% render 'article-card',
                     blog: blog,
@@ -74,7 +72,7 @@
             {% for blog_article in blog.articles limit: post_limit %}
               {% if blog_article.handle != article.handle %}
                 {% assign related_count = related_count | plus: 1 %}
-                <!-- Debug: Rendering recent article: {{ blog_article.title }} -->
+
                 <div class="swiper-slide blog__post grid__item article slider__slide slider__slide--full-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
                   {% render 'article-card',
                     blog: blog,
@@ -93,7 +91,7 @@
             {% endfor %}
           {% endif %}
 
-          <!-- Debug: Total articles rendered: {{ related_count }} -->
+
         </div>
         <div class="swiper-scrollbar"></div>
       </div>

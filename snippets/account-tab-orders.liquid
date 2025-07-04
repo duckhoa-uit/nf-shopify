@@ -180,11 +180,10 @@
                     </div>
 
                     <div class="product-info">
-                      {% comment %} Extract just the product title without variants {% endcomment %}
-                      {% assign product_title_parts = line_item.title | split: ' - ' %}
+                      {% comment %} Use product.title directly - Shopify's native localization handles language switching {% endcomment %}
                       <h4 class="text-sm leading-5">
                         <a href="{{ line_item.product.url }}" class="hover:underline text-current">
-                          {{ product_title_parts[0] }}
+                          {{ line_item.product.title | escape }}
                         </a>
                       </h4>
 

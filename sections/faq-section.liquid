@@ -105,7 +105,7 @@
 
       {% if section.settings.view_all_link != blank %}
         <a href="{{ section.settings.view_all_link }}" class="view-all-link">
-          <span class="view-all-text">{{ section.settings.view_all_text | default: 'view all questions' }}</span>
+          <span class="view-all-text">{{ 'sections.faq.view_all_questions' | t }}</span>
 
           <span class="svg-wrapper size-3">
             {{- 'icon-chevron.svg' | inline_asset_content -}}
@@ -163,12 +163,7 @@
         "default": false,
         "label": "Open first FAQ item by default"
       },
-      {
-        "type": "text",
-        "id": "view_all_text",
-        "default": "view all questions",
-        "label": "View all text"
-      },
+
       {
         "type": "url",
         "id": "view_all_link",
