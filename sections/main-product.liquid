@@ -40,7 +40,7 @@
 
     /* Northfinder specific styles */
     .northfinder-product-page .product-discount-badge {
-      background-color: #EC0009;
+      background-color: #ec0009;
       color: white;
       padding: 4px 8px;
       font-size: 15px;
@@ -337,13 +337,7 @@
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
 
-  {% assign breathability_data = product.metafields.features.breathability.value %}
-  {% assign breathability_name = breathability_data.name %}
-  {% assign breathability_parent = breathability_data.parent %}
-  <script>
-    console.log({{ product | json }});
-    console.log({{ product.metafields.features.promotion.value | json }});
-  </script>
+
 
   <div class="page-width">
     <div class="product northfinder-product-page grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3{% if product.media.size == 0 %} product--no-media{% endif %}">
@@ -371,7 +365,7 @@
                   {%- if savings >= 15 -%}
                     -{{ savings }}%
                   {%- else -%}
-                    SALE
+                    {{ 'products.product.sale_badge' | t }}
                   {%- endif -%}
                 </div>
               {% endif %}
@@ -415,7 +409,7 @@
                   <h1 class="product-title">{{ product.title | escape }}</h1>
                   {% if product.metafields.custom.catalog_code or product.metafields.custom.reference_code %}
                     <div class="text-[#3D3D3D] text-sm leading-4 mt-1 mb-4">
-                      Product codes: <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span> /
+                      {{ 'products.product.product_codes_label' | t }} <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span> /
                       <span id="product-reference" itemprop="sku">{{ product.metafields.custom.reference_code }}</span>
                     </div>
                   {% endif %}
@@ -459,7 +453,7 @@
                           {% endif %}
                         </span>
                         <span class="price-label text-[14px] font-light font-['Archivo'] text-[#4D4D4D] leading-[1.14] ml-1"
-                          >- original recommended price</span
+                          >{{ 'products.product.original_recommended_price' | t }}</span
                         >
                       </div>
                     {% endif %}
@@ -558,10 +552,10 @@
                 <!-- Product Highlights -->
                 {% if product.metafields.custom.highlights %}
                   <div class="product-highlights">
-                    <h3 class="highlights-title">You will like it</h3>
+                    <h3 class="highlights-title">{{ 'sections.main_product.you_will_like_it' | t }}</h3>
                     <ul class="highlights-list">
                       {% for highlight in product.metafields.custom.highlights.value %}
-                        <li>{{ highlight }}</li>
+                        <li>{{ highlight | metafield_text }}</li>
                       {% endfor %}
                     </ul>
                   </div>
@@ -575,15 +569,15 @@
                         {% if benefit.icon %}
                           <img
                             src="{{ benefit.icon }}"
-                            alt="{{ benefit.title }}"
+                            alt="{{ benefit.title | metafield_text }}"
                             class="benefit-icon"
                             width="40"
                             height="40"
                           >
                         {% endif %}
                         <div class="benefit-content">
-                          <h4>{{ benefit.title }}</h4>
-                          <p>{{ benefit.description }}</p>
+                          <h4>{{ benefit.title | metafield_text }}</h4>
+                          <p>{{ benefit.description | metafield_text }}</p>
                         </div>
                       </div>
                     {% endfor %}
@@ -593,12 +587,12 @@
                 <!-- Product Parameters -->
                 {% if product.metafields.custom.parameters %}
                   <div class="product-parameters">
-                    <h3 class="parameters-title">Parameters</h3>
+                    <h3 class="parameters-title">{{ 'sections.main_product.parameters' | t }}</h3>
                     <div class="parameters-list">
                       {% for parameter in product.metafields.custom.parameters.value %}
                         <div class="parameter-item">
-                          <span class="parameter-name">{{ parameter.name }}:</span>
-                          <span class="parameter-value">{{ parameter.value }}</span>
+                          <span class="parameter-name">{{ parameter.name | metafield_text }}:</span>
+                          <span class="parameter-value">{{ parameter.value | metafield_text }}</span>
                         </div>
                       {% endfor %}
                     </div>
@@ -614,16 +608,16 @@
                           {% if element.icon %}
                             <img
                               src="{{ element.icon | asset_url }}"
-                              alt="{{ element.title }}"
+                              alt="{{ element.title | metafield_text }}"
                               class="main-element-icon"
                               width="40"
                               height="40"
                             >
                           {% endif %}
-                          <h3 class="main-element-title">{{ element.title }}</h3>
+                          <h3 class="main-element-title">{{ element.title | metafield_text }}</h3>
                         </div>
                         <div class="main-element-content">
-                          {{ element.content }}
+                          {{ element.content | metafield_text }}
                         </div>
                       </div>
                     {% endfor %}
@@ -806,7 +800,9 @@
 
           {%- if product.metafields.custom.short_description != blank -%}
             <div class="mt-3">
-              <h2 id="short_description_heading" class="mb-3 font-semibold text-base">You will like it</h2>
+              <h2 id="short_description_heading" class="mb-3 font-semibold text-base">
+                {{ 'sections.main_product.you_will_like_it' | t }}
+              </h2>
               <div
                 id="short_description"
                 class="text-[0.9375rem] font-medium text-[#0f0f0f] leading-6 [&_ul]:list-disc [&_ul]:pl-5"
@@ -817,8 +813,9 @@
                 <a
                   class="product_description_more scroll-more text-[#0F0F0F] border-b border-[#0F0F0F] cursor-pointer"
                   data-scroll_more="#description_and_parameters"
-                  >Detailed product description</a
                 >
+                  {{- 'sections.main_product.detailed_product_description' | t -}}
+                </a>
                 <span class="[&_svg]:rotate-90 [&_svg]:size-4">
                   {{- 'icon-arrow.svg' | inline_asset_content -}}
                 </span>
@@ -886,7 +883,9 @@
     -%}
 
     <div class="mt-10 flex flex-col w-full md:pb-12">
-      <h2 id="description_and_parameters" class="py-3 text-2xl font-bold leading-[1.5]">Description and Parameters</h2>
+      <h2 id="description_and_parameters" class="py-3 text-2xl font-bold leading-[1.5]">
+        {{ 'sections.main_product.description_and_parameters' | t }}
+      </h2>
       <div
         id="description-parameters-grid"
         class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20 relative overflow-hidden transition-all duration-300"
@@ -905,7 +904,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
           {% if product.metafields.features.size > 0 %}
             <div id="parameters-section" class="product-info flex flex-col">
-              <h3 class="text-lg font-bold leading-7 mb-4">Parameters</h3>
+              <h3 class="text-lg font-bold leading-7 mb-4">{{ 'sections.main_product.parameters' | t }}</h3>
               <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
                 {% for metafield in product.metafields.features %}
                   {% assign key = metafield | first %}
@@ -917,9 +916,21 @@
                         {{- key | replace: '_', ' ' | upcase }}:</strong
                       >
 
-                      {% assign items = arr_values.value | map: 'name' | join: ', ' %}
+                      {% assign items_array = arr_values.value | map: 'name' %}
+                      {% assign translated_items = '' %}
+                      {% for item in items_array %}
+                        {% if forloop.first %}
+                          {% assign translated_items = item | metafield_text %}
+                        {% else %}
+                          {% assign translated_items = translated_items
+                            | append: ', '
+                            | append: item
+                            | metafield_text
+                          %}
+                        {% endif %}
+                      {% endfor %}
                       <span class="text-[#3D3D3D] text-sm">
-                        {{ items }}
+                        {{ translated_items }}
                       </span>
                     </li>
                   {% endif %}
@@ -933,7 +944,7 @@
               <h3 class="text-lg font-bold leading-7 mb-4">{{ 'sections.main_product.main_elements' | t }}</h3>
               <div class="flex flex-col main-elements-container">
                 {% for field in product.metafields.custom.main_elements.value %}
-                  {% assign name = field.name %}
+                  {% assign name = field.name | metafield_text %}
                   {% assign logo = field.logo %}
                   {% assign description = field.description | metafield_text %}
 
@@ -1040,7 +1051,7 @@
     <!-- Product Reviews -->
     {% if product.metafields.custom.reviews %}
       <div id="product-reviews-section" class="product-reviews">
-        <h3 class="reviews-title">Customer Reviews</h3>
+        <h3 class="reviews-title">{{ 'sections.main_product.customer_reviews' | t }}</h3>
         {% for review in product.metafields.custom.reviews.value %}
           <div class="review-item">
             <div class="review-header">
