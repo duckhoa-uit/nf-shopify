@@ -10,13 +10,13 @@
           class="breadcrumb__link text-[#0F0F0F] flex items-center gap-2"
         >
           <span class="svg-wrapper size-3 rotate-180">{{ 'icon-arrow.svg' | inline_asset_content }}</span>
-          <span>{{ section.settings.back_text }}</span>
+          <span>{{ 'general.breadcrumbs.back' | t }}</span>
         </a>
         <span class="breadcrumb__divider">|</span>
       </li>
 
       <li class="breadcrumb__item">
-        <a class="breadcrumb__link" href="{{ routes.root_url }}">{{ section.settings.home_text }}</a>
+        <a class="breadcrumb__link" href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t }}</a>
         <span class="breadcrumb__divider" aria-hidden="true">›</span>
       </li>
 
@@ -236,18 +236,7 @@
 {
   "name": "Breadcrumb",
   "settings": [
-    {
-      "type": "text",
-      "id": "back_text",
-      "label": "Back button text",
-      "default": "Back"
-    },
-    {
-      "type": "text",
-      "id": "home_text",
-      "label": "Home link text",
-      "default": "Home"
-    },
+
     {
       "type": "select",
       "id": "divider_style",
