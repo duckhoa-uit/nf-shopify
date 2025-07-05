@@ -337,8 +337,6 @@
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
 
-
-
   <div class="page-width">
     <div class="product northfinder-product-page grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3{% if product.media.size == 0 %} product--no-media{% endif %}">
       <div class="product__media-wrapper col-span-1 md:col-span-1 lg:col-span-2">
@@ -409,7 +407,8 @@
                   <h1 class="product-title">{{ product.title | escape }}</h1>
                   {% if product.metafields.custom.catalog_code or product.metafields.custom.reference_code %}
                     <div class="text-[#3D3D3D] text-sm leading-4 mt-1 mb-4">
-                      {{ 'products.product.product_codes_label' | t }} <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span> /
+                      {{ 'products.product.product_codes_label' | t }}
+                      <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span> /
                       <span id="product-reference" itemprop="sku">{{ product.metafields.custom.reference_code }}</span>
                     </div>
                   {% endif %}
@@ -452,9 +451,9 @@
                             {{ current_variant.compare_at_price | money }}
                           {% endif %}
                         </span>
-                        <span class="price-label text-[14px] font-light font-['Archivo'] text-[#4D4D4D] leading-[1.14] ml-1"
-                          >{{ 'products.product.original_recommended_price' | t }}</span
-                        >
+                        <span class="price-label text-[14px] font-light font-['Archivo'] text-[#4D4D4D] leading-[1.14] ml-1">
+                          {{- 'products.product.original_recommended_price' | t -}}
+                        </span>
                       </div>
                     {% endif %}
                   </div>
@@ -912,8 +911,12 @@
                   {% assign arr_values = metafield | last %}
                   {% if arr_values.value != blank %}
                     <li class="leading-6">
+                      {%- liquid
+                        assign translated_label = shop.metaobjects.product_feature[key].name.value
+                      -%}
                       <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
-                        {{- key | replace: '_', ' ' | upcase }}:</strong
+                        {{- translated_label -}}
+                        :</strong
                       >
 
                       {% assign items_array = arr_values.value | map: 'name' %}
