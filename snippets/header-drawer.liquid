@@ -124,8 +124,17 @@
           </nav>
 
           <div class="my-[2.1875rem] w-full flex flex-col *:text-[#999] *:my-0.5 *:leading-7 *:text-base">
-            <a href="#">{{ 'general.navigation.blog' | t | default: 'Blog' }}</a>
-            <a href="#">{{ 'general.navigation.faq' | t | default: 'FAQ' }}</a>
+            {% assign announcement_bar_section = sections['announcement-bar'] %}
+            {% if announcement_bar_section.settings.blog_link != blank %}
+              <a href="{{ announcement_bar_section.settings.blog_link }}">{{ 'general.navigation.blog' | t | default: 'Blog' }}</a>
+            {% else %}
+              <a href="{{ blog.url | default: '/blogs/news' }}">{{ 'general.navigation.blog' | t | default: 'Blog' }}</a>
+            {% endif %}
+            {% if announcement_bar_section.settings.faq_link != blank %}
+              <a href="{{ announcement_bar_section.settings.faq_link }}">{{ 'general.navigation.faq' | t | default: 'FAQ' }}</a>
+            {% else %}
+              <a href="/pages/faq">{{ 'general.navigation.faq' | t | default: 'FAQ' }}</a>
+            {% endif %}
           </div>
 
           <div class="menu-drawer__utility-links mb-5">
