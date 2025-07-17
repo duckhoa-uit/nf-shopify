@@ -902,44 +902,63 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
           {% if product.metafields.features.size > 0 %}
-            <div id="parameters-section" class="product-info flex flex-col">
-              <h3 class="text-lg font-bold leading-7 mb-4">{{ 'sections.main_product.parameters' | t }}</h3>
-              <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
-                {% for metafield in product.metafields.features %}
-                  {% assign key = metafield | first %}
-                  {% comment %} Metafield key (e.g., "gender", "activities") {% endcomment %}
-                  {% assign arr_values = metafield | last %}
-                  {% if arr_values.value != blank %}
-                    <li class="leading-6">
-                      {%- liquid
-                        assign translated_label = shop.metaobjects.product_feature[key].name.value
-                      -%}
-                      <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
-                        {{- translated_label -}}
-                        :</strong
-                      >
-
-                      {% assign items_array = arr_values.value | map: 'name' %}
-                      {% assign translated_items = '' %}
-                      {% for item in items_array %}
-                        {% if forloop.first %}
-                          {% assign translated_items = item | metafield_text %}
-                        {% else %}
-                          {% assign translated_items = translated_items
-                            | append: ', '
-                            | append: item
-                            | metafield_text
-                          %}
-                        {% endif %}
-                      {% endfor %}
-                      <span class="text-[#3D3D3D] text-sm">
-                        {{ translated_items }}
-                      </span>
-                    </li>
+            {% comment %} Pre-filter features to display {% endcomment %}
+            {% assign displayable_features = '' %}
+            {% for metafield in product.metafields.features %}
+              {% assign key = metafield | first %}
+              {% assign arr_values = metafield | last %}
+              {% if arr_values.value != blank %}
+                {% assign feature_obj = shop.metaobjects.product_feature[key] %}
+                {% if feature_obj.display_on_product_page.value == true %}
+                  {% if displayable_features == '' %}
+                    {% assign displayable_features = key %}
+                  {% else %}
+                    {% assign displayable_features = displayable_features | append: ',' | append: key %}
                   {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% if displayable_features != '' %}
+              {% assign displayable_keys = displayable_features | split: ',' %}
+              <div id="parameters-section" class="product-info flex flex-col">
+                <h3 class="text-lg font-bold leading-7 mb-4">{{ 'sections.main_product.parameters' | t }}</h3>
+                <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
+                  {% for metafield in product.metafields.features %}
+                    {% assign key = metafield | first %}
+                    {% if displayable_keys contains key %}
+                      {% assign arr_values = metafield | last %}
+                      <li class="leading-6">
+                        {%- liquid
+                          assign translated_label = shop.metaobjects.product_feature[key].name.value
+                        -%}
+                        <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
+                          {{- translated_label -}}
+                          :</strong
+                        >
+
+                        {% assign items_array = arr_values.value | map: 'name' %}
+                        {% assign translated_items = '' %}
+                        {% for item in items_array %}
+                          {% if forloop.first %}
+                            {% assign translated_items = item | metafield_text %}
+                          {% else %}
+                            {% assign translated_items = translated_items
+                              | append: ', '
+                              | append: item
+                              | metafield_text
+                            %}
+                          {% endif %}
+                        {% endfor %}
+                        <span class="text-[#3D3D3D] text-sm">
+                          {{ translated_items }}
+                        </span>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
           {% endif %}
 
           <div id="main-elements-section" class="product-info flex flex-col">

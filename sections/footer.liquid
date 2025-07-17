@@ -334,16 +334,16 @@
             {%- endfor -%}
 
             {%- comment -%} Keep original language display UI with added functionality {%- endcomment -%}
-            <div
-              class="footer-block {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-              data-cascade
-              style="--animation-order: {{ section.blocks.size }};"
-            >
-              <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
-                {{ 'footer.shopping_from' | t | default: 'Shopping from' }}
-              </h2>
-              <div class="block">
-                {%- if localization.available_languages.size > 1 -%}
+            {%- if localization.available_languages.size > 1 -%}
+              <div
+                class="footer-block {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                data-cascade
+                style="--animation-order: {{ section.blocks.size }};"
+              >
+                <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
+                  {{ 'footer.shopping_from' | t | default: 'Shopping from' }}
+                </h2>
+                <div class="block">
                   <div class="footer-language-selector">
                     <div class="flex items-center gap-2">
                       {%- liquid
@@ -375,34 +375,9 @@
                       {%- endform -%}
                     </div>
                   </div>
-                {%- else -%}
-                  <div class="flex items-center gap-2">
-                    {%- liquid
-                      if localization.language.iso_code == 'de'
-                        assign flag_image = 'flag-de.png'
-                        assign flag_alt = 'Deutsch (Deutsch)'
-                      else
-                        assign flag_image = 'flag-' | append: localization.language.iso_code | downcase | append: '.png'
-                        assign flag_alt = localization.language.endonym_name
-                      endif
-                    -%}
-                    <img
-                      src="{{ flag_image | asset_url }}"
-                      width="32"
-                      height="20"
-                      class="w-4 h-[11px]"
-                      alt="{{ flag_alt }}"
-                    >
-                    <span class="mr-2 border-r border-[#ccc] pr-2 text-gray-850 text-sm leading-[1.125rem]">
-                      {{- 'footer.language' | t | default: localization.language.endonym_name -}}
-                    </span>
-                    <span class="font-semibold underline uppercase cursor-pointer text-sm">
-                      {{- 'footer.change' | t | default: 'Change' -}}
-                    </span>
-                  </div>
-                {%- endif -%}
+                </div>
               </div>
-            </div>
+            {%- endif -%}
           </div>
         {%- endif -%}
       </div>

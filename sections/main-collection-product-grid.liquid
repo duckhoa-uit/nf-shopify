@@ -55,7 +55,7 @@
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {% liquid
     comment
-      Since Shopify request.parameters don't work reliably, 
+      Since Shopify request.parameters don't work reliably,
       we'll handle products_per_page with JavaScript
     endcomment
     assign products_per_page = 24
@@ -117,6 +117,70 @@
                 </div>
               </div>
             </div>
+          {%- else -%}
+            {%- comment -%} Fallback: Render activities filter when no child collections exist {%- endcomment -%}
+            {%- liquid
+              assign activities_filter = null
+              for filter in collection.filters
+                if filter.param_name == 'filter.p.m.features.activities'
+                  assign activities_filter = filter
+                  break
+                endif
+              endfor
+            -%}
+
+            {%- if activities_filter and activities_filter.values.size > 0 -%}
+              <div class="child-collections-wrapper">
+                <div class="child-collections-scroll">
+                  <div class="child-collections-list">
+                    <a
+                      href="{{ collection.url }}"
+                      class="child-collection-link {% unless activities_filter.active_values.size > 0 %}active{% endunless %}"
+                    >
+                      <span class="child-collection-title">{{ 'collections.general.all' | t }}</span>
+                    </a>
+
+                    {%- for value in activities_filter.values -%}
+                      {%- unless value.count == 0 and value.active == false -%}
+                        <a
+                          href="{{ value.url_to_add }}"
+                          class="child-collection-link {% if value.active %}active{% endif %}"
+                        >
+                          <span class="child-collection-title">
+                            {%- liquid
+                              # Try to get translated label from metaobject entries
+                              assign translated_label = value.label
+                              assign metaobject_entries = shop.metaobjects['product_feature']
+
+                              if metaobject_entries and metaobject_entries.size > 0
+                                for entry in metaobject_entries
+                                  if entry.name and entry.name.value == value.label
+                                    assign translated_label = entry.name.value
+                                    break
+                                  endif
+                                endfor
+
+                                # Try handle match if no exact match found
+                                if translated_label == value.label
+                                  assign value_handle = value.label | handleize
+                                  for entry in metaobject_entries
+                                    if entry.handle == value_handle and entry.name and entry.name.value != blank
+                                      assign translated_label = entry.name.value
+                                      break
+                                    endif
+                                  endfor
+                                endif
+                              endif
+                            -%}
+                            {{- translated_label -}}
+                          </span>
+                        </a>
+                      {%- endunless -%}
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
           {%- endif -%}
         </div>
 
@@ -165,7 +229,7 @@
                       </span>
                     </div>
                   </div>
-                  
+
                   <!-- Hidden inputs will be populated by JavaScript -->
                 </form>
 
@@ -378,14 +442,14 @@
   function handleProductsPerPageChange(selectElement) {
     const newProductsPerPage = selectElement.value;
     const form = selectElement.closest('form');
-    
+
     // Clear existing hidden inputs
     const existingHiddenInputs = form.querySelectorAll('input[type="hidden"]');
     existingHiddenInputs.forEach(input => input.remove());
-    
+
     // Get current URL parameters to preserve filters/sorting
     const currentParams = new URLSearchParams(window.location.search);
-    
+
     // Add all current parameters except products_per_page and page
     currentParams.forEach((value, key) => {
       if (key !== 'products_per_page' && key !== 'page') {
@@ -396,7 +460,7 @@
         form.appendChild(hiddenInput);
       }
     });
-    
+
     // Submit the form
     form.submit();
   }
@@ -405,16 +469,16 @@
   window.handleProductsPerPageWithJS = function() {
     const urlParams = new URLSearchParams(window.location.search);
     const requestedProductsPerPage = urlParams.get('products_per_page');
-    
+
     if (requestedProductsPerPage && requestedProductsPerPage !== '24') {
       // If user requested different page size, we need to load the correct number of products
       const targetProductsPerPage = parseInt(requestedProductsPerPage);
       const currentProductGrid = document.querySelector('#product-grid');
-      
+
       if (currentProductGrid) {
         const currentProducts = currentProductGrid.querySelectorAll('.grid__item');
         console.log(`Current products: ${currentProducts.length}, Requested: ${targetProductsPerPage}`);
-        
+
         if (currentProducts.length < targetProductsPerPage) {
           // Need to load more products via AJAX
           window.loadMoreProductsToReachTarget(targetProductsPerPage, currentProducts.length);
@@ -423,7 +487,7 @@
           window.hideExcessProducts(targetProductsPerPage);
         }
       }
-      
+
       // Update the select to show correct value
       const productsPerPageSelect = document.querySelector('#ProductsPerPage');
       if (productsPerPageSelect) {
@@ -436,19 +500,19 @@
     // Update the product count text to reflect current displayed products
     const productGrid = document.querySelector('#product-grid');
     const productCountElement = document.querySelector('.product-count-text');
-    
+
     if (productGrid && productCountElement) {
       const visibleProducts = productGrid.querySelectorAll('.grid__item:not([style*="display: none"])');
       const totalProducts = {{ paginate.items | default: collection.products_count | default: 0 }};
-      
+
       // Create the updated text using the same pattern as the Liquid template
       const productCountTemplate = {{ 'products.facets.product_count' | t: viewed: '__VIEWED__', total: '__TOTAL__' | json }};
       const productCountText = productCountTemplate
         .replace('__VIEWED__', visibleProducts.length)
         .replace('__TOTAL__', totalProducts);
-      
+
       productCountElement.innerHTML = productCountText;
-      
+
       // Update progress bar
       const progressBar = document.querySelector('.product-count-progress-bar');
       if (progressBar && totalProducts > 0) {
@@ -463,7 +527,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const productsPerPage = urlParams.get('products_per_page');
     const viewMoreButton = document.querySelector('.view-more-button');
-    
+
     if (viewMoreButton && productsPerPage) {
       const currentUrl = viewMoreButton.dataset.url;
       if (currentUrl) {
@@ -472,13 +536,13 @@
         viewMoreButton.dataset.url = url.pathname + url.search;
       }
     }
-    
+
     // Check if we should hide the view-more button
     const productGrid = document.querySelector('#product-grid');
     if (productGrid && viewMoreButton) {
       const visibleProducts = productGrid.querySelectorAll('.grid__item:not([style*="display: none"])');
       const totalProducts = {{ paginate.items | default: collection.products_count | default: 0 }};
-      
+
       if (totalProducts > 0 && visibleProducts.length >= totalProducts) {
         viewMoreButton.style.display = 'none';
       } else if (totalProducts > 0) {
@@ -490,7 +554,7 @@
   // Helper functions for loading products (global scope)
   window.loadMoreProductsToReachTarget = function(targetCount, currentCount) {
     const pagesToLoad = Math.ceil((targetCount - currentCount) / 24); // Load in chunks of 24
-    
+
     let loadedPages = 0;
     function loadNextPage() {
       if (loadedPages >= pagesToLoad) {
@@ -498,12 +562,12 @@
         window.updateViewMoreButton();
         return;
       }
-      
+
       const nextPage = Math.floor(currentCount / 24) + 2 + loadedPages; // Calculate next page
       const url = new URL(window.location);
       url.searchParams.set('page', nextPage);
       url.searchParams.delete('products_per_page'); // Remove to get default 24 per page
-      
+
       fetch(url.toString())
         .then(response => response.text())
         .then(html => {
@@ -511,14 +575,14 @@
           const doc = parser.parseFromString(html, 'text/html');
           const newItems = doc.querySelectorAll('#product-grid .grid__item');
           const productGrid = document.querySelector('#product-grid');
-          
+
           if (newItems.length && productGrid) {
             newItems.forEach((item) => {
               productGrid.appendChild(item.cloneNode(true));
             });
-            
+
             loadedPages++;
-            
+
             // Check if we need to load more
             const updatedItems = productGrid.querySelectorAll('.grid__item');
             if (updatedItems.length < targetCount && newItems.length === 24) {
@@ -534,10 +598,10 @@
           console.error('Error loading more products:', error);
         });
     }
-    
+
     loadNextPage();
   };
-  
+
   window.hideExcessProducts = function(targetCount) {
     const productGrid = document.querySelector('#product-grid');
     if (productGrid) {
@@ -716,8 +780,8 @@
     }
 
 
-    
-    
+
+
     // View more functionality
     function handleViewMoreClick(e) {
       const viewMoreButton = e.target.closest('.view-more-button');
@@ -742,23 +806,23 @@
       const pagesToLoad = Math.ceil(targetProductsPerPage / 24);
       const basePageUrl = new URL(baseUrl, window.location.origin);
       const currentPage = parseInt(basePageUrl.searchParams.get('page') || '2');
-      
+
       let loadedProducts = 0;
       let pagesLoaded = 0;
-      
+
       function loadNextBatch() {
         if (pagesLoaded >= pagesToLoad) {
           // Finished loading all required pages
           updateViewMoreButtonState();
           return;
         }
-        
+
         const pageToLoad = currentPage + pagesLoaded;
         const fetchUrl = new URL(baseUrl, window.location.origin);
         fetchUrl.searchParams.set('page', pageToLoad.toString());
         // Don't set products_per_page in the fetch URL to get default 24 per page
         fetchUrl.searchParams.delete('products_per_page');
-        
+
         console.log(`Loading page ${pageToLoad}, URL:`, fetchUrl.toString());
 
         fetch(fetchUrl.toString())
@@ -775,7 +839,7 @@
               // Add products but don't exceed the target amount
               const remainingToLoad = targetProductsPerPage - loadedProducts;
               let addedCount = 0;
-              
+
               newItems.forEach((item, index) => {
                 if (addedCount < remainingToLoad && addedCount < 24) {
                   productGrid.appendChild(item.cloneNode(true));
@@ -783,12 +847,12 @@
                   loadedProducts++;
                 }
               });
-              
+
               console.log(`Added ${addedCount} products, total loaded: ${loadedProducts}`);
             }
 
             pagesLoaded++;
-            
+
             // Check if we need to load more pages
             if (loadedProducts < targetProductsPerPage && newItems.length === 24) {
               loadNextBatch(); // Load next page
@@ -802,28 +866,28 @@
             viewMoreButton.disabled = false;
           });
       }
-      
+
       function updateViewMoreButtonState() {
         // Check if there are more pages available
         const lastPageToCheck = currentPage + pagesLoaded;
         const checkUrl = new URL(baseUrl, window.location.origin);
         checkUrl.searchParams.set('page', lastPageToCheck.toString());
         checkUrl.searchParams.delete('products_per_page');
-        
+
         fetch(checkUrl.toString())
           .then(response => response.text())
           .then(html => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const nextPageButton = doc.querySelector('.view-more-button');
-            
+
             if (nextPageButton?.dataset.url) {
               // Update current button with new URL, preserving products_per_page
               const nextUrl = new URL(nextPageButton.dataset.url, window.location.origin);
               if (currentProductsPerPage) {
                 nextUrl.searchParams.set('products_per_page', currentProductsPerPage);
               }
-              
+
               viewMoreButton.dataset.url = nextUrl.pathname + nextUrl.search;
               viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
               viewMoreButton.disabled = false;
@@ -853,12 +917,12 @@
 
     // Add view more event listener
     document.addEventListener('click', handleViewMoreClick);
-    
+
     // Initialize everything on page load
     function initializePage() {
       console.log('Initializing page...');
       window.handleProductsPerPageWithJS();
-      
+
       // Update counts and button state after JS manipulation
       setTimeout(() => {
         window.updateProductCount();
@@ -866,7 +930,7 @@
         console.log('Page initialization complete');
       }, 200);
     }
-    
+
     // Initialize when everything is ready
     initializePage();
   });
