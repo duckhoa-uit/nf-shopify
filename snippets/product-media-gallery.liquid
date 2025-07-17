@@ -565,10 +565,14 @@
 
   <!-- See More/Less Button -->
   <div id="gallery-toggle-container" class="hidden md:flex justify-end">
-    <button id="gallery-toggle-btn">MORE IMAGES</button>
+    <button id="gallery-toggle-btn">{{ 'sections.main_product.more_images' | t }}</button>
   </div>
 
   <script>
+    // Translation variables
+    const moreImagesText = {{ 'sections.main_product.more_images' | t | json }};
+    const lessImagesText = {{ 'sections.main_product.less_images' | t | json }};
+
     // Function to create media item element
     function createMediaItem(url, index) {
       const allMedia = {{ product.media | json }};
@@ -1003,7 +1007,7 @@
 
         // Set button text based on current expanded state
         if (toggleBtn) {
-          toggleBtn.textContent = window.isGalleryExpanded ? 'LESS IMAGES' : 'MORE IMAGES';
+          toggleBtn.textContent = window.isGalleryExpanded ? lessImagesText : moreImagesText;
         }
 
         if (window.slidesToCreate.length > 0) {
@@ -1054,7 +1058,7 @@
               });
 
               // Update button text
-              newBtn.textContent = window.isGalleryExpanded ? 'LESS IMAGES' : 'MORE IMAGES';
+              newBtn.textContent = window.isGalleryExpanded ? lessImagesText : moreImagesText;
             });
           } else {
             toggleContainer.classList.add('hidden');
@@ -1187,7 +1191,7 @@
           // Reset expanded state when color changes
           const toggleBtn = document.getElementById('gallery-toggle-btn');
           if (toggleBtn) {
-            toggleBtn.textContent = 'MORE IMAGES';
+            toggleBtn.textContent = moreImagesText;
             window.isGalleryExpanded = false;
           }
 
