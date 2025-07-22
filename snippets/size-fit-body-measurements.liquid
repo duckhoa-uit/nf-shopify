@@ -60,7 +60,7 @@
       <tbody>
         <tr class="size-fit-table__header-row">
           <th class="size-fit-table__header-cell size-fit-table__sticky-cell">
-            {% if is_shoes %}Size{% else %}Size{% endif %}
+            {{ 'size_guide.size_fit.table_headers.size' | t }}
           </th>
           {% comment %} Define sizes based on category {% endcomment %}
           {% if category == 'clothing_men' %}
@@ -228,7 +228,9 @@
 
           <!-- Chest Row -->
           <tr class="size-fit-table__data-row">
-            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">CHEST</td>
+            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">
+              {{ 'size_guide.size_fit.table_headers.chest' | t }}
+            </td>
             {% if category == 'clothing_men' %}
               <td class="size-fit-table__data-cell" data-measurement="chest">
                 <span class="measurement-value" data-cm="86-94" data-in="33.9-37.0">86-94</span>
@@ -297,7 +299,9 @@
 
           <!-- Waist Row -->
           <tr class="size-fit-table__data-row">
-            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">WAIST</td>
+            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">
+              {{ 'size_guide.size_fit.table_headers.waist' | t }}
+            </td>
             {% if category == 'clothing_men' %}
               <td class="size-fit-table__data-cell" data-measurement="waist">
                 <span class="measurement-value" data-cm="72-80" data-in="28.3-31.5">72-80</span>
@@ -366,7 +370,9 @@
 
           <!-- Hip Row -->
           <tr class="size-fit-table__data-row">
-            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">HIP</td>
+            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">
+              {{ 'size_guide.size_fit.table_headers.hip' | t }}
+            </td>
             {% if category == 'clothing_men' %}
               <td class="size-fit-table__data-cell" data-measurement="hip">
                 <span class="measurement-value" data-cm="88-96" data-in="34.6-37.8">88-96</span>
@@ -435,7 +441,9 @@
 
           <!-- Height Row -->
           <tr class="size-fit-table__data-row">
-            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">HEIGHT</td>
+            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">
+              {{ 'size_guide.size_fit.table_headers.height' | t }}
+            </td>
             {% if category == 'clothing_men' %}
               <td class="size-fit-table__data-cell" data-measurement="height">
                 <span class="measurement-value" data-cm="170-176" data-in="66.9-69.3">170-176</span>
@@ -504,7 +512,9 @@
 
           <!-- Inseam Length Row -->
           <tr class="size-fit-table__data-row">
-            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">INSEAM LENGTH</td>
+            <td class="size-fit-table__data-cell size-fit-table__sticky-cell">
+              {{ 'size_guide.size_fit.table_headers.inseam_length' | t }}
+            </td>
             {% if category == 'clothing_men' %}
               <td class="size-fit-table__data-cell" data-measurement="inseam">
                 <span class="measurement-value" data-cm="79-80" data-in="31.1-31.5">79-80</span>
@@ -578,15 +588,17 @@
   <!-- How to Measure Section -->
   <div class="measurement-guide mb-10 mt-8">
     {% if is_shoes %}
-      <h3 class="text-xl text-left mb-4 font-archivo-expanded">How to Measure the Product's Size?</h3>
+      <h3 class="text-xl text-left mb-4 font-archivo-expanded">
+        {{ 'size_guide.headings.footwear_measurement_guide' | t }}
+      </h3>
 
       <div class="measurement-content flex flex-col md:flex-row items-center gap-8">
         <div class="measurement-instructions flex-1">
           <div class="rte">
             <ol>
-              <li>FOOT LENGTH</li>
+              <li>{{ 'size_guide.measurements.foot_length' | t }}</li>
             </ol>
-            <p class="text-gray-600 mt-4">*Hiking shoes are sized according to the human foot</p>
+            <p class="text-gray-600 mt-4">{{ 'size_guide.descriptions.hiking_shoes' | t }}</p>
           </div>
         </div>
 
@@ -614,17 +626,17 @@
       </div>
 
     {% else %}
-      <h3 class="text-xl text-left mb-4 font-archivo-expanded">How to Measure your Body?</h3>
+      <h3 class="text-xl text-left mb-4 font-archivo-expanded">{{ 'size_guide.headings.measurement_guide' | t }}</h3>
 
       <div class="measurement-content flex flex-col md:flex-row items-center gap-8">
         <div class="measurement-instructions flex-1">
           <div class="rte">
             <ol>
-              <li>CHEST</li>
-              <li>WAIST</li>
-              <li>HIP</li>
-              <li>HEIGHT</li>
-              <li>INSEAM LENGTH</li>
+              <li>{{ 'size_guide.measurements.chest' | t }}</li>
+              <li>{{ 'size_guide.measurements.waist' | t }}</li>
+              <li>{{ 'size_guide.measurements.hip' | t }}</li>
+              <li>{{ 'size_guide.measurements.height' | t }}</li>
+              <li>{{ 'size_guide.measurements.inseam_length' | t }}</li>
             </ol>
           </div>
         </div>

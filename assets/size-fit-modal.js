@@ -217,7 +217,8 @@ class SizeFitModal {
     const { chest, waist, fit_preference } = measurements;
 
     if (!chest || !waist) {
-      throw new Error('Chest and waist measurements are required');
+      const errorMessage = window.theme?.strings?.size_fit?.measurements_required || 'Chest and waist measurements are required';
+      throw new Error(errorMessage);
     }
 
     // Get size chart from product metafields (new schema structure)
@@ -363,12 +364,15 @@ class SizeFitModal {
 
   getExplanation(recommendation, fitPreference) {
     const fitText = {
-      'tight': 'snug fit',
-      'regular': 'comfortable fit',
-      'loose': 'relaxed fit'
+      'tight': window.theme?.strings?.size_fit?.snug_fit || 'snug fit',
+      'regular': window.theme?.strings?.size_fit?.comfortable_fit || 'comfortable fit',
+      'loose': window.theme?.strings?.size_fit?.relaxed_fit || 'relaxed fit'
     };
 
-    return `Based on your measurements and preference for ${fitText[fitPreference]}, size ${recommendation.size} should provide the best fit.`;
+    const template = window.theme?.strings?.size_fit?.recommendation_explanation || 'Based on your measurements and preference for PLACEHOLDER_FIT, size PLACEHOLDER_SIZE should provide the best fit.';
+    return template
+      .replace('PLACEHOLDER_FIT', fitText[fitPreference])
+      .replace('PLACEHOLDER_SIZE', recommendation.size);
   }
 
   showLoading() {
