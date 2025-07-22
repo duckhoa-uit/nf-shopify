@@ -21,11 +21,17 @@
   <div class="modal-content fixed inset-4 md:inset-8 lg:inset-16 bg-white rounded-lg shadow-xl overflow-hidden flex flex-col">
     <!-- Modal Header -->
     <div class="modal-header flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
-      <h2 class="text-xl md:text-2xl font-bold text-gray-900">Size Guide - Men's</h2>
+      {% comment %} Determine gender based on product tags or default to Men's {% endcomment %}
+      {% assign gender = "Men\'s" %}
+      {% if product.tags contains 'women' or product.tags contains 'female' %}
+        {% assign gender = "Women\'s" %}
+      {% endif %}
+      <h2 class="text-xl md:text-2xl font-bold text-gray-900">{{ 'size_guide.size_fit.modal.title' | t: gender: gender }}</h2>
       <button
         type="button"
         class="modal-close-btn p-2 hover:bg-gray-100 rounded-full transition-colors"
         data-modal-close
+        aria-label="{{ 'general.accessibility.close_modal' | t }}"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -38,21 +44,21 @@
       <!-- Unit Converter -->
       <div class="unit-converter flex justify-center p-4 border-b border-gray-100">
         <div class="flex items-center space-x-4">
-          <span class="text-sm font-medium text-gray-700">Unit:</span>
+          <span class="text-sm font-medium text-gray-700">{{ 'size_guide.size_fit.unit_converter.label' | t }}</span>
           <div class="flex bg-gray-100 rounded-lg p-1">
             <button
               type="button"
               class="unit-btn px-3 py-1 text-sm font-medium rounded-md transition-colors active"
               data-unit="cm"
             >
-              CM
+              {{ 'size_guide.size_fit.unit_converter.cm' | t }}
             </button>
             <button
               type="button"
               class="unit-btn px-3 py-1 text-sm font-medium rounded-md transition-colors"
               data-unit="in"
             >
-              INCHES
+              {{ 'size_guide.size_fit.unit_converter.inches' | t }}
             </button>
           </div>
         </div>
@@ -66,21 +72,21 @@
             class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors active"
             data-tab="body-measurements"
           >
-            Body Measurements
+            {{ 'size_guide.size_fit.tabs.body_measurements' | t }}
           </button>
           <button
             type="button"
             class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors"
             data-tab="product-measurements"
           >
-            Product Measurements
+            {{ 'size_guide.size_fit.tabs.product_measurements' | t }}
           </button>
           <button
             type="button"
             class="tab-btn flex-1 px-4 py-3 text-center font-medium border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors"
             data-tab="size-recommender"
           >
-            Size Recommender
+            {{ 'size_guide.size_fit.tabs.size_recommender' | t }}
           </button>
         </div>
 

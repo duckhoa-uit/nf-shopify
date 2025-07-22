@@ -1,6 +1,6 @@
 <!doctype html>
 <html class="js" lang="{{ request.locale.iso_code }}">
-  <head>   
+  <head>
  {%- render 'ecom_header' -%}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -436,6 +436,15 @@
       // Account mobile menu strings
       window.theme.strings.menu = {{ 'customer.account.menu' | t | default: 'Menu' | json }};
       window.theme.strings.addresses = {{ 'customer.account.addresses' | t | default: 'Addresses' | json }};
+
+      // Size fit modal strings
+      window.theme.strings.size_fit = {
+        measurements_required: {{ 'size_guide.size_fit.recommender.measurements_required' | t | default: 'Chest and waist measurements are required' | json }},
+        snug_fit: {{ 'size_guide.size_fit.recommender.tight_fit_desc' | t | default: 'snug fit' | json }},
+        comfortable_fit: {{ 'size_guide.size_fit.recommender.regular_fit_desc' | t | default: 'comfortable fit' | json }},
+        relaxed_fit: {{ 'size_guide.size_fit.recommender.loose_fit_desc' | t | default: 'relaxed fit' | json }},
+        recommendation_explanation: {{ 'size_guide.size_fit.recommender.recommendation_explanation' | t | default: 'Based on your measurements and preference for PLACEHOLDER_FIT, size PLACEHOLDER_SIZE should provide the best fit.' | json }}
+      };
 
       // Order reorder strings
       window.theme.strings.reorder_error = {{ 'customer.orders.reorder_error' | t | default: 'Failed to reorder items. Please try again.' | json }};

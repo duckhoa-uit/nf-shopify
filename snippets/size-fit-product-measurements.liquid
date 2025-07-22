@@ -15,12 +15,29 @@
 {% assign size_order = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL' | split: ',' %}
 
 {% comment %}
-  Comprehensive measurement definition map
-  Format: field_name|alpha_label|display_name
+  Comprehensive measurement definition map with localization
+  Format: field_name|alpha_label|translation_key
 {% endcomment %}
-{% assign measurement_definitions = 'waist_girth|A|Waist girth,waist_girth_relaxed|A1|Waist girth - relaxed,waist_girth_stretched|A2|Waist girth - stretched,outside_length_end_waist|B|Out side length from the end waist,chest_girth_half|B|1/2 chest girth,outside_length_top_waist|B1|Out side length from the top waist,hip_girth|C|Hip girth,bottom_girth_half|C|1/2 bottom girth,bottom_girth_relaxed|C1|1/2 bottom girth - relaxed,bottom_girth_stretched_half|C2|1/2 bottom girth - stretched,shoulder_point_to_point|D|Shoulder point to point,front_rise_end_waist|D|Front rise length from the end waist,shoulder_sleeve_length|E|Shoulder & sleeve length,back_rise_end_waist|E|Back rise length - fr the end waist,inside_length|F|Inside length,center_back_length|F|Center back length,thigh_half_crotch|G|1/2 thigh - at crotch,sleeve_length|G|Sleeve length,front_rise_top_waist|H|Front rise length - fr the top waist,back_rise_top_waist|I|Back rise length - fr the top waist,bottom_legs_half|J|1/2 bottom legs,waist_girth_half|K|1/2 waist girth'
-  | split: ','
-%}
+{% assign measurement_definitions_raw = 'waist_girth|A,waist_girth_relaxed|A1,waist_girth_stretched|A2,outside_length_end_waist|B,chest_girth_half|B,outside_length_top_waist|B1,hip_girth|C,bottom_girth_half|C,bottom_girth_relaxed|C1,bottom_girth_stretched_half|C2,shoulder_point_to_point|D,front_rise_end_waist|D,shoulder_sleeve_length|E,back_rise_end_waist|E,inside_length|F,center_back_length|F,thigh_half_crotch|G,sleeve_length|G,front_rise_top_waist|H,back_rise_top_waist|I,bottom_legs_half|J,waist_girth_half|K' | split: ',' %}
+
+{% comment %} Build localized measurement definitions {% endcomment %}
+{% assign measurement_definitions = '' %}
+{% for definition in measurement_definitions_raw %}
+  {% assign parts = definition | split: '|' %}
+  {% assign field_name = parts[0] %}
+  {% assign alpha_label = parts[1] %}
+  {% capture translation_key %}size_guide.product_measurements.{{ field_name }}{% endcapture %}
+  {% assign display_name = translation_key | t %}
+
+  {% assign localized_definition = field_name | append: '|' | append: alpha_label | append: '|' | append: display_name %}
+  {% if forloop.first %}
+    {% assign measurement_definitions = localized_definition %}
+  {% else %}
+    {% assign measurement_definitions = measurement_definitions | append: ',' | append: localized_definition %}
+  {% endif %}
+{% endfor %}
+
+{% assign measurement_definitions = measurement_definitions | split: ',' %}
 
 {% comment %} Create measurement map for easy lookup {% endcomment %}
 {% assign measurement_map = blank %}
@@ -43,8 +60,8 @@
 <div class="product-measurements-section">
   <!-- Description -->
   <div class="mb-6 text-center">
-    <p class="text-gray-600">Approximate dimensions measured on the products</p>
-    <p class="text-sm text-gray-500">(use to compare with your clothes in the wardrobe)</p>
+    <p class="text-gray-600">{{ 'size_guide.size_fit.product_measurements.description' | t }}</p>
+    <p class="text-sm text-gray-500">{{ 'size_guide.size_fit.product_measurements.usage_note' | t }}</p>
   </div>
 
   <!-- Product Measurements Table -->
@@ -150,16 +167,16 @@
     </div>
   {% else %}
     <div class="text-center py-8">
-      <p class="text-gray-500">No product measurements available for this item.</p>
+      <p class="text-gray-500">{{ 'size_guide.size_fit.no_product_measurements' | t }}</p>
     </div>
   {% endif %}
 
   <!-- Product Measurement Guide -->
   <div class="mt-8">
-    <h3 class="text-lg font-bold mb-4">How to measure the product?</h3>
+    <h3 class="text-lg font-bold mb-4">{{ 'size_guide.size_fit.product_guide.title' | t }}</h3>
     <div class="text-sm text-gray-600">
       <p>
-        These measurements are taken directly from the garment and can be used to compare with your existing clothes.
+        {{ 'size_guide.size_fit.product_guide.description' | t }}
       </p>
     </div>
   </div>
