@@ -1,0 +1,283 @@
+{% comment %}
+  Enhanced Product Media Gallery for Parfums Template
+  
+  Accepts:
+  - variant_images: {Array} Array of variant image URLs
+  
+  Features:
+  - Enhanced mobile swiper with better touch gestures
+  - Video autoplay at 2nd position
+  - Lazy loading for performance
+  - Improved responsive design
+  
+  Usage:
+  {% render 'product-media-gallery-parfums', variant_images: variant_images %}
+{% endcomment %}
+
+{%- liquid
+  assign section_id = section.id | default: 'product-media-gallery'
+  assign media_count = product.media.size
+  
+  if media_count == 0
+    assign media_count = 1
+  endif
+-%}
+
+<!-- Enhanced Media Gallery with Performance Optimizations -->
+<div class="product-media-gallery-parfums" data-media-count="{{ media_count }}">
+  
+  <!-- Mobile Gallery with Enhanced Swiper -->
+  <div class="mobile-gallery md:hidden">
+    <div class="mobile-gallery-swiper swiper-container" data-swiper-config='{"slidesPerView": 1.2, "spaceBetween": 16, "centeredSlides": true, "grabCursor": true, "touchRatio": 1.5, "speed": 400}'>
+      <div class="swiper-wrapper">
+        {%- if product.media.size > 0 -%}
+          {%- liquid
+            # Sort media to put videos at 2nd position
+            assign sorted_media = product.media | sort: 'media_type'
+            assign first_image = null
+            assign videos = ''
+            assign other_images = ''
+            
+            for media in product.media
+              if media.media_type == 'image' and first_image == null
+                assign first_image = media
+              elsif media.media_type == 'video' or media.media_type == 'external_video'
+                if videos == ''
+                  assign videos = media.id
+                else
+                  assign videos = videos | append: ',' | append: media.id
+                endif
+              elsif media.media_type == 'image'
+                if other_images == ''
+                  assign other_images = media.id
+                else
+                  assign other_images = other_images | append: ',' | append: media.id
+                endif
+              endif
+            endfor
+          -%}
+          
+          <!-- First image -->
+          {%- if first_image -%}
+            <div class="swiper-slide media-item-image" data-media-id="{{ first_image.id }}">
+              <div class="media-container aspect-square">
+                <img
+                  src="{{ first_image | image_url: width: 800 }}"
+                  alt="{{ first_image.alt | escape }}"
+                  width="800"
+                  height="800"
+                  loading="eager"
+                  class="media-image w-full h-full object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  srcset="
+                    {{ first_image | image_url: width: 400 }} 400w,
+                    {{ first_image | image_url: width: 600 }} 600w,
+                    {{ first_image | image_url: width: 800 }} 800w,
+                    {{ first_image | image_url: width: 1200 }} 1200w
+                  "
+                >
+              </div>
+            </div>
+          {%- endif -%}
+          
+          <!-- Videos at 2nd position with autoplay -->
+          {%- if videos != '' -%}
+            {%- assign video_ids = videos | split: ',' -%}
+            {%- for video_id in video_ids -%}
+              {%- assign video_media = product.media | where: 'id', video_id | first -%}
+              <div class="swiper-slide media-item-video" data-media-id="{{ video_media.id }}">
+                <div class="media-container aspect-square">
+                  {%- case video_media.media_type -%}
+                    {%- when 'video' -%}
+                      <video
+                        class="media-video w-full h-full object-cover"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="metadata"
+                      >
+                        {%- for source in video_media.sources -%}
+                          <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                        {%- endfor -%}
+                      </video>
+                    {%- when 'external_video' -%}
+                      <div class="external-video-container w-full h-full">
+                        {{ video_media | external_video_tag: image_size: '800x800', loading: 'lazy' }}
+                      </div>
+                  {%- endcase -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+          
+          <!-- Remaining images -->
+          {%- if other_images != '' -%}
+            {%- assign image_ids = other_images | split: ',' -%}
+            {%- for image_id in image_ids -%}
+              {%- assign image_media = product.media | where: 'id', image_id | first -%}
+              <div class="swiper-slide media-item-image" data-media-id="{{ image_media.id }}">
+                <div class="media-container aspect-square">
+                  <img
+                    src="{{ image_media | image_url: width: 800 }}"
+                    alt="{{ image_media.alt | escape }}"
+                    width="800"
+                    height="800"
+                    loading="lazy"
+                    class="media-image w-full h-full object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    srcset="
+                      {{ image_media | image_url: width: 400 }} 400w,
+                      {{ image_media | image_url: width: 600 }} 600w,
+                      {{ image_media | image_url: width: 800 }} 800w,
+                      {{ image_media | image_url: width: 1200 }} 1200w
+                    "
+                  >
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- else -%}
+          <!-- Placeholder when no media -->
+          <div class="swiper-slide">
+            <div class="media-container aspect-square bg-gray-100 flex items-center justify-center">
+              <span class="text-gray-400">{{ 'products.product.media.no_media' | t }}</span>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+      
+      <!-- Swiper pagination -->
+      <div class="swiper-pagination mt-4"></div>
+    </div>
+  </div>
+
+  <!-- Desktop Gallery -->
+  <div class="desktop-gallery hidden md:grid grid-cols-2 gap-4">
+    {%- if product.media.size > 0 -%}
+      {%- for media in product.media -%}
+        <div
+          class="media-item{% if media.media_type == 'video' or media.media_type == 'external_video' %} media-item-video{% else %} media-item-image{% endif %}"
+          data-media-id="{{ media.id }}"
+        >
+          <div class="media-container aspect-square">
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                <img
+                  src="{{ media | image_url: width: 600 }}"
+                  alt="{{ media.alt | escape }}"
+                  width="600"
+                  height="600"
+                  {% if forloop.index > 2 %}loading="lazy"{% else %}loading="eager"{% endif %}
+                  class="media-image w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  srcset="
+                    {{ media | image_url: width: 300 }} 300w,
+                    {{ media | image_url: width: 600 }} 600w,
+                    {{ media | image_url: width: 900 }} 900w,
+                    {{ media | image_url: width: 1200 }} 1200w
+                  "
+                  onclick="openLightbox({{ forloop.index0 }})"
+                >
+              {%- when 'video' -%}
+                <video
+                  class="media-video w-full h-full object-cover cursor-pointer"
+                  {% if forloop.index == 2 %}autoplay{% endif %}
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  onclick="openLightbox({{ forloop.index0 }})"
+                >
+                  {%- for source in media.sources -%}
+                    <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                  {%- endfor -%}
+                </video>
+              {%- when 'external_video' -%}
+                <div class="external-video-container w-full h-full cursor-pointer" onclick="openLightbox({{ forloop.index0 }})">
+                  {{ media | external_video_tag: image_size: '600x600', loading: 'lazy' }}
+                </div>
+              {%- when 'model' -%}
+                <div class="model-container w-full h-full cursor-pointer" onclick="openLightbox({{ forloop.index0 }})">
+                  {{ media | model_viewer_tag: image_size: '600x600', reveal: 'interaction', toggleable: true }}
+                </div>
+            {%- endcase -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      <!-- Placeholder when no media -->
+      <div class="media-item col-span-2">
+        <div class="media-container aspect-square bg-gray-100 flex items-center justify-center">
+          <span class="text-gray-400">{{ 'products.product.media.no_media' | t }}</span>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<!-- Enhanced JavaScript for Media Gallery -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize enhanced mobile swiper
+    const mobileSwiper = document.querySelector('.mobile-gallery-swiper');
+    if (mobileSwiper && typeof Swiper !== 'undefined') {
+      new Swiper(mobileSwiper, {
+        slidesPerView: 1.2,
+        spaceBetween: 16,
+        centeredSlides: true,
+        grabCursor: true,
+        touchRatio: 1.5,
+        touchAngle: 45,
+        speed: 400,
+        effect: 'slide',
+        resistance: true,
+        resistanceRatio: 0.85,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        on: {
+          touchStart: function() {
+            this.allowTouchMove = true;
+          },
+          slideChange: function() {
+            // Enhanced slide change feedback
+            this.slides.forEach((slide, index) => {
+              if (index === this.activeIndex) {
+                slide.style.transform = 'scale(1)';
+                slide.style.opacity = '1';
+              } else {
+                slide.style.transform = 'scale(0.95)';
+                slide.style.opacity = '0.7';
+              }
+            });
+          }
+        }
+      });
+    }
+
+    // Video autoplay functionality
+    const videos = document.querySelectorAll('.media-item-video video');
+    videos.forEach((video, index) => {
+      video.addEventListener('loadeddata', function() {
+        if (this.readyState >= 2) {
+          // Autoplay videos at 2nd position (index 1)
+          if (index === 0 || this.closest('.swiper-slide-active')) {
+            this.play().catch(e => console.log('Autoplay prevented:', e));
+          }
+        }
+      });
+    });
+
+    // Lightbox functionality
+    window.openLightbox = function(index) {
+      // Implementation for lightbox opening
+      console.log('Opening lightbox for media index:', index);
+    };
+  });
+</script>
+
+<!-- CDN Optimization for Swiper -->
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>

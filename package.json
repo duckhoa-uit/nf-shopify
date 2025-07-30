@@ -12,8 +12,10 @@
     "test": "vitest",
     "test:ci": "vitest run",
     "start": "shopify theme dev -e development",
+    "start:parfums": "shopify theme dev -e perfumes",
     "watch": "npx @tailwindcss/cli -i ./assets/tailwind.css -o ./assets/application.css --watch",
-    "dev": "pnpm start & pnpm watch"
+    "dev": "pnpm start & pnpm watch",
+    "dev:parfums": "pnpm start:parfums & pnpm watch"
   },
   "keywords": [],
   "author": "",
