@@ -1,15 +1,15 @@
 {% comment %}
   Enhanced Product Media Gallery for Parfums Template
-  
+
   Accepts:
   - variant_images: {Array} Array of variant image URLs
-  
+
   Features:
   - Enhanced mobile swiper with better touch gestures
   - Video autoplay at 2nd position
   - Lazy loading for performance
   - Improved responsive design
-  
+
   Usage:
   {% render 'product-media-gallery-parfums', variant_images: variant_images %}
 {% endcomment %}
@@ -17,7 +17,7 @@
 {%- liquid
   assign section_id = section.id | default: 'product-media-gallery'
   assign media_count = product.media.size
-  
+
   if media_count == 0
     assign media_count = 1
   endif
@@ -25,7 +25,7 @@
 
 <!-- Enhanced Media Gallery with Performance Optimizations -->
 <div class="product-media-gallery-parfums" data-media-count="{{ media_count }}">
-  
+
   <!-- Mobile Gallery with Enhanced Swiper -->
   <div class="mobile-gallery md:hidden">
     <div class="mobile-gallery-swiper swiper-container" data-swiper-config='{"slidesPerView": 1.2, "spaceBetween": 16, "centeredSlides": true, "grabCursor": true, "touchRatio": 1.5, "speed": 400}'>
@@ -37,7 +37,7 @@
             assign first_image = null
             assign videos = ''
             assign other_images = ''
-            
+
             for media in product.media
               if media.media_type == 'image' and first_image == null
                 assign first_image = media
@@ -56,7 +56,7 @@
               endif
             endfor
           -%}
-          
+
           <!-- First image -->
           {%- if first_image -%}
             <div class="swiper-slide media-item-image" data-media-id="{{ first_image.id }}">
@@ -79,7 +79,7 @@
               </div>
             </div>
           {%- endif -%}
-          
+
           <!-- Videos at 2nd position with autoplay -->
           {%- if videos != '' -%}
             {%- assign video_ids = videos | split: ',' -%}
@@ -110,7 +110,7 @@
               </div>
             {%- endfor -%}
           {%- endif -%}
-          
+
           <!-- Remaining images -->
           {%- if other_images != '' -%}
             {%- assign image_ids = other_images | split: ',' -%}
@@ -141,12 +141,12 @@
           <!-- Placeholder when no media -->
           <div class="swiper-slide">
             <div class="media-container aspect-square bg-gray-100 flex items-center justify-center">
-              <span class="text-gray-400">{{ 'products.product.media.no_media' | t }}</span>
+              <span class="text-gray-400">No media available</span>
             </div>
           </div>
         {%- endif -%}
       </div>
-      
+
       <!-- Swiper pagination -->
       <div class="swiper-pagination mt-4"></div>
     </div>
@@ -209,7 +209,7 @@
       <!-- Placeholder when no media -->
       <div class="media-item col-span-2">
         <div class="media-container aspect-square bg-gray-100 flex items-center justify-center">
-          <span class="text-gray-400">{{ 'products.product.media.no_media' | t }}</span>
+          <span class="text-gray-400">No media available</span>
         </div>
       </div>
     {%- endif -%}

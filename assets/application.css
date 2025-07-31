@@ -801,6 +801,9 @@
   .flex-1 {
     flex: 1 !important;
   }
+  .flex-shrink {
+    flex-shrink: 1 !important;
+  }
   .flex-shrink-0 {
     flex-shrink: 0 !important;
   }
@@ -1089,6 +1092,9 @@
   }
   .border-\[\#e0dfdf\] {
     border-color: #e0dfdf !important;
+  }
+  .border-black {
+    border-color: #000000 !important;
   }
   .border-foreground {
     border-color: rgb(var(--color-base-foreground)) !important;
@@ -1719,6 +1725,10 @@
     --tw-duration: 150ms !important;
     transition-duration: 150ms !important;
   }
+  .duration-200 {
+    --tw-duration: 200ms !important;
+    transition-duration: 200ms !important;
+  }
   .duration-300 {
     --tw-duration: 300ms !important;
     transition-duration: 300ms !important;
@@ -1872,6 +1882,13 @@
     &:hover {
       @media (hover: hover) {
         border-color: #ebebeb !important;
+      }
+    }
+  }
+  .hover\:border-gray-400 {
+    &:hover {
+      @media (hover: hover) {
+        border-color: #e0dfdf !important;
       }
     }
   }
