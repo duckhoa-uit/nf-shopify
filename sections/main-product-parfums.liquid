@@ -361,11 +361,11 @@
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
 
   <div class="page-width">
-    <div class="product northfinder-product-page product-parfums-page{% if product.media.size == 0 %} product--no-media{% endif %}">
-      <div class="product__media-wrapper">
+    <div class="product northfinder-product-page grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3{% if product.media.size == 0 %} product--no-media{% endif %}">
+      <div class="product__media-wrapper col-span-1 md:col-span-1 lg:col-span-2">
         {% render 'product-media-gallery-parfums', variant_images: variant_images %}
       </div>
-      <div class="product__info-wrapper {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="product__info-wrapper col-span-1 md:col-span-1 lg:col-span-1 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
           id="ProductInfo-{{ section.id }}"
           class="product__info-container product-info-container"
@@ -486,7 +486,7 @@
                   </div>
                 {%- endif -%}
               {%- when 'variant_picker' -%}
-                {% render 'product-variant-picker-parfums',
+                {% render 'product-variant-picker-parfums-metafield',
                   product: product,
                   block: block,
                   product_form_id: product_form_id
@@ -726,8 +726,49 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
-
-
+              {%- when 'share' -%}
+                {% liquid
+                  assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin
+                  render 'share-button', block: block, share_link: share_url
+                %}
+              {%- when 'rating' -%}
+                {%- if product.metafields.reviews.rating.value != blank -%}
+                  <div class="rating-wrapper">
+                    {% liquid
+                      assign rating_decimal = 0
+                      assign decimal = product.metafields.reviews.rating.value.rating | modulo: 1
+                      if decimal >= 0.3 and decimal <= 0.7
+                        assign rating_decimal = 0.5
+                      elsif decimal > 0.7
+                        assign rating_decimal = 1
+                      endif
+                    %}
+                    <div
+                      class="rating"
+                      role="img"
+                      aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="rating-star"
+                        style="--rating: {{ product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+                      ></span>
+                    </div>
+                    <p class="rating-text caption">
+                      <span aria-hidden="true">
+                        {{- product.metafields.reviews.rating.value }} /
+                        {{ product.metafields.reviews.rating.value.scale_max -}}
+                      </span>
+                    </p>
+                    <p class="rating-count caption">
+                      <span aria-hidden="true">({{ product.metafields.reviews.rating_count }})</span>
+                      <span class="visually-hidden">
+                        {{- product.metafields.reviews.rating_count }}
+                        {{ 'accessibility.total_reviews' | t -}}
+                      </span>
+                    </p>
+                  </div>
+                {%- endif -%}
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
               {%- when 'popup' -%}
@@ -830,9 +871,7 @@
       <script src="{{ 'product-model.js' | asset_url }}" defer></script>
     {%- endif -%}
 
-    <!-- Size Fit Modal -->
-    {% render 'size-fit-modal', product: product, modal_id: 'size-fit-modal' %}
-    <script src="{{ 'size-fit-modal.js' | asset_url }}" defer></script>
+
 
     {%- liquid
       if product.selected_or_first_available_variant.featured_media
