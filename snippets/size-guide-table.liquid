@@ -30,7 +30,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.chest' | t | default: 'CHEST' }}
+                {% render 'get-measurement-label', type: 'body', key: 'chest' %}
               </td>
               <td class="size-guide-table__data-cell">86-94</td>
               <td class="size-guide-table__data-cell">94-102</td>
@@ -42,7 +42,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.waist' | t | default: 'WAIST' }}
+                {% render 'get-measurement-label', type: 'body', key: 'waist' %}
               </td>
               <td class="size-guide-table__data-cell">72-80</td>
               <td class="size-guide-table__data-cell">80-88</td>
@@ -54,7 +54,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.hip' | t | default: 'HIP' }}
+                {% render 'get-measurement-label', type: 'body', key: 'hip' %}
               </td>
               <td class="size-guide-table__data-cell">88-96</td>
               <td class="size-guide-table__data-cell">96-104</td>
@@ -66,7 +66,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.height' | t | default: 'HEIGHT' }}
+                {% render 'get-measurement-label', type: 'body', key: 'height' %}
               </td>
               <td class="size-guide-table__data-cell">170-176</td>
               <td class="size-guide-table__data-cell">176-182</td>
@@ -78,7 +78,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.inseam_length' | t | default: 'INSEAM LENGTH' }}
+                {% render 'get-measurement-label', type: 'body', key: 'inseam_length' %}
               </td>
               <td class="size-guide-table__data-cell">79-80</td>
               <td class="size-guide-table__data-cell">81-82</td>
@@ -118,7 +118,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.chest' | t | default: 'CHEST' }}
+                {% render 'get-measurement-label', type: 'body', key: 'chest' %}
               </td>
               <td class="size-guide-table__data-cell">74-78</td>
               <td class="size-guide-table__data-cell">78-86</td>
@@ -130,7 +130,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.waist' | t | default: 'WAIST' }}
+                {% render 'get-measurement-label', type: 'body', key: 'waist' %}
               </td>
               <td class="size-guide-table__data-cell">58-62</td>
               <td class="size-guide-table__data-cell">62-70</td>
@@ -142,7 +142,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.hip' | t | default: 'HIP' }}
+                {% render 'get-measurement-label', type: 'body', key: 'hip' %}
               </td>
               <td class="size-guide-table__data-cell">82-86</td>
               <td class="size-guide-table__data-cell">86-94</td>
@@ -154,7 +154,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.height' | t | default: 'HEIGHT' }}
+                {% render 'get-measurement-label', type: 'body', key: 'height' %}
               </td>
               <td class="size-guide-table__data-cell">154-158</td>
               <td class="size-guide-table__data-cell">158-162</td>
@@ -166,7 +166,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.inseam_length' | t | default: 'INSEAM LENGTH' }}
+                {% render 'get-measurement-label', type: 'body', key: 'inseam_length' %}
               </td>
               <td class="size-guide-table__data-cell">79</td>
               <td class="size-guide-table__data-cell">80</td>
@@ -234,7 +234,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.foot_length' | t | default: 'Foot Length (cm)' }}
+                {% render 'get-measurement-label', type: 'body', key: 'foot_length' %}
               </td>
               <td class="size-guide-table__data-cell">26.3</td>
               <td class="size-guide-table__data-cell">27.0</td>
@@ -295,7 +295,7 @@
             </tr>
             <tr class="size-guide-table__data-row">
               <td class="size-guide-table__data-cell size-guide-table__sticky-cell">
-                {{ 'size_guide.table_headers.foot_length' | t | default: 'Foot Length (cm)' }}
+                {% render 'get-measurement-label', type: 'body', key: 'foot_length' %}
               </td>
               <td class="size-guide-table__data-cell">23.5</td>
               <td class="size-guide-table__data-cell">24.0</td>
