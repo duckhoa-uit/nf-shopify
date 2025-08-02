@@ -20,14 +20,19 @@
 {% endcomment %}
 {% assign measurement_definitions_raw = 'waist_girth|A,waist_girth_relaxed|A1,waist_girth_stretched|A2,outside_length_end_waist|B,chest_girth_half|B,outside_length_top_waist|B1,hip_girth|C,bottom_girth_half|C,bottom_girth_relaxed|C1,bottom_girth_stretched_half|C2,shoulder_point_to_point|D,front_rise_end_waist|D,shoulder_sleeve_length|E,back_rise_end_waist|E,inside_length|F,center_back_length|F,thigh_half_crotch|G,sleeve_length|G,front_rise_top_waist|H,back_rise_top_waist|I,bottom_legs_half|J,waist_girth_half|K' | split: ',' %}
 
-{% comment %} Build localized measurement definitions {% endcomment %}
 {% assign measurement_definitions = '' %}
 {% for definition in measurement_definitions_raw %}
   {% assign parts = definition | split: '|' %}
   {% assign field_name = parts[0] %}
   {% assign alpha_label = parts[1] %}
-  {% capture translation_key %}size_guide.product_measurements.{{ field_name }}{% endcapture %}
-  {% assign display_name = translation_key | t %}
+
+  {% assign product_measurements = shop.metafields.size_guide.product_measurements.value %}
+  {% assign display_name = product_measurements[field_name] %}
+
+  {% unless display_name %}
+    {% assign fallback_key = 'size_guide.product_measurements.' | append: field_name %}
+    {% assign display_name = fallback_key | t %}
+  {% endunless %}
 
   {% assign localized_definition = field_name | append: '|' | append: alpha_label | append: '|' | append: display_name %}
   {% if forloop.first %}
@@ -39,7 +44,6 @@
 
 {% assign measurement_definitions = measurement_definitions | split: ',' %}
 
-{% comment %} Create measurement map for easy lookup {% endcomment %}
 {% assign measurement_map = blank %}
 {% assign measurement_map_array = '' %}
 {% for definition in measurement_definitions %}

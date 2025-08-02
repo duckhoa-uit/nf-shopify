@@ -1,0 +1,43 @@
+{% comment %}
+  Get Measurement Label Helper Snippet
+
+  This snippet provides access to size guide measurement labels using Shopify's metafield translation system.
+  It replaces the old locale-based translation approach with metafield-based translations.
+
+  SCOPE: Only handles actual measurement labels (body and product measurements)
+  UI texts (table headers, modal texts, etc.) remain in local translation files
+
+  Accepts:
+  - type: {String} 'body' or 'product' - determines which metafield to use
+  - key: {String} the measurement key (e.g., 'chest', 'waist_girth')
+
+  Usage:
+  {% render 'get-measurement-label', type: 'body', key: 'chest' %}
+  {% render 'get-measurement-label', type: 'product', key: 'waist_girth' %}
+
+  Returns the translated label for the measurement based on current locale.
+  Falls back to old translation system if metafields are not configured.
+{% endcomment %}
+
+{% comment %} Get the appropriate metafield based on type {% endcomment %}
+{% if type == 'body' %}
+  {% assign measurements = shop.metafields.size_guide.body_measurements.value %}
+{% elsif type == 'product' %}
+  {% assign measurements = shop.metafields.size_guide.product_measurements.value %}
+{% endif %}
+
+{% comment %} Try to get label from metafield first {% endcomment %}
+{% assign label = measurements[key] %}
+
+{% comment %} Fallback to old translation system if metafield not available {% endcomment %}
+{% unless label %}
+  {% if type == 'body' %}
+    {% assign fallback_key = 'size_guide.measurements.' | append: key %}
+  {% elsif type == 'product' %}
+    {% assign fallback_key = 'size_guide.product_measurements.' | append: key %}
+  {% endif %}
+  {% assign label = fallback_key | t %}
+{% endunless %}
+
+{% comment %} Output the label {% endcomment %}
+{{ label }}
