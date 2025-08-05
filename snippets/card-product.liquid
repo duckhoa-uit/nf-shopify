@@ -19,7 +19,7 @@
     <div class="flex flex-col h-full relative">
       <div class="flex items-center gap-2 mb-1.5 h-8">
         {%- assign tag_count = 0 -%}
-        
+
         {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
           {%- assign savings = card_product.compare_at_price
             | minus: card_product.price
@@ -45,7 +45,7 @@
             {%- endif -%}
           {%- endunless -%}
         {%- endfor -%}
-        
+
         <!-- Promotion metafield -->
         {%- if card_product.metafields.features.promotion.value -%}
           {%- for promotion in card_product.metafields.features.promotion.value -%}
@@ -179,12 +179,13 @@
             href="{{ card_product.url }}"
             class="card-product-northfinder__link"
             data-product-id="{{ card_product.id }}"
+            data-section-id="{{ section_id }}"
             data-main-image-src="{{ main_image | image_url: width: 400 }}"
             data-main-image-srcset="{%- if main_image.width >= 200 -%}{{ main_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if main_image.width >= 300 -%}{{ main_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if main_image.width >= 400 -%}{{ main_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if main_image.width >= 500 -%}{{ main_image | image_url: width: 500 }} 500w{%- endif -%}"
             data-has-real-main-image="{{ has_real_main_image }}"
           >
             <div
-              id="main-image-{{ card_product.id }}"
+              id="main-image-{{ section_id }}-{{ card_product.id }}"
               data-original-src="{{ model_image | image_url: width: 400 }}"
               data-original-srcset="{%- if model_image.width >= 200 -%}{{ model_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if model_image.width >= 300 -%}{{ model_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if model_image.width >= 400 -%}{{ model_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if model_image.width >= 500 -%}{{ model_image | image_url: width: 500 }} 500w{%- endif -%}"
             >
@@ -210,6 +211,7 @@
             href="{{ card_product.url }}"
             class="card-product-northfinder__link block"
             data-product-id="{{ card_product.id }}"
+            data-section-id="{{ section_id }}"
           >
             <div class="w-full aspect-square bg-gray-100 flex items-center justify-center">
               {{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}
@@ -427,6 +429,7 @@
                 class="size-9 xl:size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors variant-swatch border-b-2 border-transparent hover:border-accent"
                 data-variant-id="{{ color_variant.id }}"
                 data-product-id="{{ card_product.id }}"
+                data-section-id="{{ section_id }}"
                 {%- if variant_image -%}
                   data-variant-image="{{ variant_image | image_url: width: 120 }}"
                   data-variant-image-srcset="{%- if variant_image.width >= 200 -%}{{ variant_image | image_url: width: 200 }} 200w,{%- endif -%}{%- if variant_image.width >= 300 -%}{{ variant_image | image_url: width: 300 }} 300w,{%- endif -%}{%- if variant_image.width >= 400 -%}{{ variant_image | image_url: width: 400 }} 400w,{%- endif -%}{%- if variant_image.width >= 500 -%}{{ variant_image | image_url: width: 500 }} 500w{%- endif -%}"
