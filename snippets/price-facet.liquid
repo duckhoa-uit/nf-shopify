@@ -1,4 +1,4 @@
-<div class="price-filter-container" data-min-value="{% if filter.min_value.value != blank %}{{ filter.min_value.value | money_without_currency }}{% else %}0{% endif %}" data-max-value="{% if filter.max_value.value != blank %}{{ filter.max_value.value | money_without_currency }}{% elsif filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 1000 | money_without_currency }}{% endif %}">
+<div class="price-filter-container" data-min-value="{% if filter.min_value.value != blank %}{{ filter.min_value.value | money_without_currency }}{% else %}0{% endif %}" data-max-value="{% if filter.max_value.value != blank %}{{ filter.max_value.value | money_without_currency }}{% elsif filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 499 | money_without_currency }}{% endif %}">
   <div class="price-inputs-container">
     <div class="field price-field">
       <input
@@ -11,7 +11,7 @@
         placeholder="0.00"
         data-pattern="\d| |,|\."
         data-min="0"
-        data-max="{% if filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 1000 | money_without_currency }}{% endif %}"
+        data-max="{% if filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 499 | money_without_currency }}{% endif %}"
       >
       <span class="price-currency">{{ cart.currency.symbol }}</span>
     </div>
@@ -21,13 +21,13 @@
         class="field__input price-input"
         name="{{ filter.max_value.param_name }}"
         id="{{ id_prefix }}{{ filter.label | escape }}-LTE"
-        value="{% if filter.max_value.value != blank %}{{ filter.max_value.value | money_without_currency }}{% elsif filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 1000 | money_without_currency }}{% endif %}"
+        value="{% if filter.max_value.value != blank %}{{ filter.max_value.value | money_without_currency }}{% elsif filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 499 | money_without_currency }}{% endif %}"
         type="text"
         inputmode="decimal"
-        placeholder="{% if filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 1000 | money_without_currency }}{% endif %}"
+        placeholder="{% if filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 499 | money_without_currency }}{% endif %}"
         data-pattern="\d| |,|\."
         data-min="0"
-        data-max="{% if filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 1000 | money_without_currency }}{% endif %}"
+        data-max="{% if filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ 499 | money_without_currency }}{% endif %}"
       >
       <span class="price-currency">{{ cart.currency.symbol }}</span>
     </div>

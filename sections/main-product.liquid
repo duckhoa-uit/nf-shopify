@@ -730,7 +730,7 @@
                   </div>
                 </div>
               {%- when 'delivery_info' -%}
-                <div class="delivery_wrapper flex items-center gap-2 " {{ block.shopify_attributes }}>
+                <div class="delivery_wrapper flex items-center gap-2 mt-6 mb-4" {{ block.shopify_attributes }}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -924,8 +924,7 @@
       </h2>
       <div
         id="description-parameters-grid"
-        class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20 relative overflow-hidden transition-all duration-300"
-        style="max-height: 400px;"
+        class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20 relative transition-all duration-300"
       >
         <div class="[&_ul]:list-disc [&_ul]:pl-5 *:text-[#0F0F0F] *:text-[0.9375rem] [&_iframe]:max-w-full [&_p]:leading-[1.5]">
           <div class="">{{ product.description }}</div>
@@ -1009,12 +1008,20 @@
 
                   <div class="w-full flex items-start">
                     <div class="min-w-12 mr-4 size-12">
-                      <img
-                        class="block max-w-full h-auto"
-                        width="48"
-                        height="48"
-                        src="{{ logo | image_url: width: 48 }}"
-                      >
+                      {%- if logo != blank -%}
+                        <img
+                          class="block max-w-full h-auto"
+                          width="48"
+                          height="48"
+                          src="{{ logo | image_url: width: 48 }}"
+                          alt="{{ name | escape }}"
+                        >
+                      {%- else -%}
+                        {%- comment -%} Fallback placeholder when logo is missing {%- endcomment -%}
+                        <div class="w-full h-full bg-gray-100 flex items-center justify-center rounded">
+                          {{ 'image' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[70%] max-h-[70%]' }}
+                        </div>
+                      {%- endif -%}
                     </div>
                     <div class="flex-1">
                       <div class="flex flex-col">
@@ -1033,13 +1040,16 @@
           </div>
         </div>
 
+        {% comment %}
         <!-- Gradient overlay -->
         <div
           id="description-gradient-overlay"
           class="absolute bottom-0 left-0 right-0 h-[120px] bg-gradient-to-b from-transparent to-white pointer-events-none"
         ></div>
+        {% endcomment %}
       </div>
 
+      {% comment %}
       <!-- Toggle buttons -->
       <div class="flex justify-center mt-4">
         <button
@@ -1052,8 +1062,10 @@
           </span>
         </button>
       </div>
+      {% endcomment %}
     </div>
 
+    {% comment %}
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         const descriptionGrid = document.getElementById('description-parameters-grid');
@@ -1081,6 +1093,7 @@
         });
       });
     </script>
+    {% endcomment %}
 
     <!-- Mobile-only collapsible tabs, shown below the description/parameters section -->
     <div class="mobile-only-tabs mt-6">
