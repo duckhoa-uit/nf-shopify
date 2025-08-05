@@ -408,7 +408,7 @@
                 </div>
               {%- when 'product_code' -%}
                 {%- if product.metafields.custom.catalog_code or product.metafields.custom.reference_code -%}
-                  <div class="product__code text-[#3D3D3D] text-sm leading-4" {{ block.shopify_attributes }}>
+                  <div class="product__code text-[#3D3D3D] text-sm leading-4 mt-1" {{ block.shopify_attributes }}>
                     {{ 'products.product.product_codes_label' | t }}
                     {%- if product.metafields.custom.catalog_code -%}
                       <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span>
@@ -425,7 +425,7 @@
                 <div
                   id="price-{{ section.id }}"
                   role="status"
-                  class="product-price-container m-0"
+                  class="product-price-container m-0 mt-4"
                   {{ block.shopify_attributes }}
                 >
                   {%- liquid
@@ -747,9 +747,9 @@
                     {%- else -%}
                       {{ 'products.product.delivery_info.out_of_stock' | t }}
                     {%- endif -%}
-                    {%- if product.available and block.settings.delivery_time != blank -%}
+                    {%- if product.available and block.settings.delivery_days_range != blank -%}
                       - {{ 'products.product.delivery_info.delivery_time_prefix' | t }}
-                      <b>{{ block.settings.delivery_time }}</b>
+                      <b>{{ block.settings.delivery_days_range }} {{ 'products.product.delivery_info.business_days' | t }}</b>
                     {%- endif -%}
                   </div>
                 </div>
@@ -1327,9 +1327,10 @@
       "settings": [
         {
           "type": "text",
-          "id": "delivery_time",
-          "default": "2 - 3 business days",
-          "label": "t:sections.main-product.blocks.delivery_info.settings.delivery_time.label"
+          "id": "delivery_days_range",
+          "default": "2-3",
+          "label": "t:sections.main-product.blocks.delivery_info.settings.delivery_days_range.label",
+          "info": "t:sections.main-product.blocks.delivery_info.settings.delivery_days_range.info"
         }
       ]
     },
