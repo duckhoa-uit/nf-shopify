@@ -10,22 +10,22 @@ class ProductCardHover {
     this.preloadQueue = new Set();
     this.intersectionObserver = null;
     this.initialized = false;
-    
+
     this.init();
   }
 
   init() {
     if (this.initialized) return;
-    
+
     // Setup intersection observer for viewport-based preloading
     this.setupIntersectionObserver();
-    
+
     // Setup event delegation for hover effects
     this.setupEventDelegation();
-    
+
     // Initialize existing product cards
     this.initializeProductCards();
-    
+
     this.initialized = true;
   }
 
@@ -117,7 +117,8 @@ class ProductCardHover {
   // Preload images for a specific card
   preloadCardImages(card) {
     const productId = card.dataset.productId;
-    if (!productId) return;
+    const sectionId = card.dataset.sectionId;
+    if (!productId || !sectionId) return;
 
     // Preload main hover image
     const mainImageSrc = card.dataset.mainImageSrc;
@@ -127,8 +128,8 @@ class ProductCardHover {
       this.preloadImage(mainImageSrc, mainImageSrcset).catch(() => {});
     }
 
-    // Preload variant images
-    const variantSwatches = document.querySelectorAll(`[data-product-id="${productId}"].variant-swatch`);
+    // Preload variant images (scoped to this section)
+    const variantSwatches = document.querySelectorAll(`[data-product-id="${productId}"][data-section-id="${sectionId}"].variant-swatch`);
     variantSwatches.forEach((swatch) => {
       const variantImage = swatch.dataset.variantImage;
       const variantImageSrcset = swatch.dataset.variantImageSrcset;
@@ -173,9 +174,10 @@ class ProductCardHover {
   // Handle product card hover
   handleProductCardHover(card, isEntering) {
     const productId = card.dataset.productId;
-    if (!productId) return;
+    const sectionId = card.dataset.sectionId;
+    if (!productId || !sectionId) return;
 
-    const mainImageContainer = document.getElementById(`main-image-${productId}`);
+    const mainImageContainer = document.getElementById(`main-image-${sectionId}-${productId}`);
     if (!mainImageContainer) return;
 
     const mainImage = mainImageContainer.querySelector('img');
@@ -234,11 +236,12 @@ class ProductCardHover {
   // Handle variant swatch hover
   handleVariantSwatchHover(swatch, isEntering) {
     const productId = swatch.dataset.productId;
+    const sectionId = swatch.dataset.sectionId;
     const variantImage = swatch.dataset.variantImage;
     const variantImageSrcset = swatch.dataset.variantImageSrcset;
-    const mainImageContainer = document.getElementById(`main-image-${productId}`);
+    const mainImageContainer = document.getElementById(`main-image-${sectionId}-${productId}`);
 
-    if (!mainImageContainer || !variantImage) return;
+    if (!mainImageContainer || !variantImage || !sectionId) return;
 
     const mainImage = mainImageContainer.querySelector('img');
     if (!mainImage) return;
