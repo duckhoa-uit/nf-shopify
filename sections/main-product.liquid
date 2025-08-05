@@ -405,14 +405,22 @@
               {%- when 'title' -%}
                 <div class="product__title" {{ block.shopify_attributes }}>
                   <h1 class="product-title">{{ product.title | escape }}</h1>
-                  {% if product.metafields.custom.catalog_code or product.metafields.custom.reference_code %}
-                    <div class="text-[#3D3D3D] text-sm leading-4 mt-1 mb-4">
-                      {{ 'products.product.product_codes_label' | t }}
-                      <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span> /
-                      <span id="product-reference" itemprop="sku">{{ product.metafields.custom.reference_code }}</span>
-                    </div>
-                  {% endif %}
                 </div>
+              {%- when 'product_code' -%}
+                {%- if product.metafields.custom.catalog_code or product.metafields.custom.reference_code -%}
+                  <div class="product__code text-[#3D3D3D] text-sm leading-4" {{ block.shopify_attributes }}>
+                    {{ 'products.product.product_codes_label' | t }}
+                    {%- if product.metafields.custom.catalog_code -%}
+                      <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span>
+                    {%- endif -%}
+                    {%- if product.metafields.custom.catalog_code and product.metafields.custom.reference_code -%}
+                      <span class="product__code-separator"> / </span>
+                    {%- endif -%}
+                    {%- if product.metafields.custom.reference_code -%}
+                      <span id="product-reference" itemprop="sku">{{ product.metafields.custom.reference_code }}</span>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
               {%- when 'price' -%}
                 <div
                   id="price-{{ section.id }}"
@@ -462,6 +470,11 @@
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
                   </div>
+                {%- endif -%}
+                {%- if block.settings.show_vat_text -%}
+                  <span class="text-sm font-light text-[#ccc]">
+                    {{ 'products.product.price_includes_vat' | t }}
+                  </span>
                 {%- endif -%}
                 {% comment %}
                   {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
@@ -714,6 +727,30 @@
                         </span>
                       </button>
                     </quantity-input>
+                  </div>
+                </div>
+              {%- when 'delivery_info' -%}
+                <div class="delivery_wrapper flex items-center gap-2 " {{ block.shopify_attributes }}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    class="flex-shrink-0"
+                  >
+                    <path d="M8.05829 9.58438L14.6196 2.38266L15.4858 3.17184L8.11844 11.2583L4.10211 7.44031L4.90961 6.59097L8.05829 9.58438ZM15.0308 5.39218L14.117 6.39835C14.2496 6.90775 14.3203 7.44186 14.3203 7.99219C14.3203 11.4814 11.4814 14.3203 7.99219 14.3203C4.50293 14.3203 1.66406 11.4814 1.66406 7.99219C1.66406 4.50293 4.50293 1.66406 7.99219 1.66406C9.60864 1.66406 11.0852 2.27362 12.205 3.27448L12.995 2.40463C11.6178 1.16858 9.85703 0.492188 7.99219 0.492188C5.98892 0.492188 4.10541 1.27231 2.6889 2.6889C1.27231 4.10541 0.492188 5.98892 0.492188 7.99219C0.492188 9.99545 1.27231 11.879 2.6889 13.2955C4.10541 14.7121 5.98892 15.4922 7.99219 15.4922C9.99545 15.4922 11.879 14.7121 13.2955 13.2955C14.7121 11.879 15.4922 9.99545 15.4922 7.99219C15.4922 7.09058 15.3337 6.2135 15.0308 5.39218Z" fill="#EC0009"></path>
+                  </svg>
+                  <div class="date-delivery text-sm text-gray-950">
+                    {%- if product.available -%}
+                      {{ 'products.product.delivery_info.in_stock' | t }}
+                    {%- else -%}
+                      {{ 'products.product.delivery_info.out_of_stock' | t }}
+                    {%- endif -%}
+                    {%- if product.available and block.settings.delivery_time != blank -%}
+                      - {{ 'products.product.delivery_info.delivery_time_prefix' | t }}
+                      <b>{{ block.settings.delivery_time }}</b>
+                    {%- endif -%}
                   </div>
                 </div>
               {%- when 'buy_buttons' -%}
@@ -1163,7 +1200,20 @@
       ]
     },
     { "type": "title", "name": "t:sections.main-product.blocks.title.name", "limit": 1 },
-    { "type": "price", "name": "t:sections.main-product.blocks.price.name", "limit": 1 },
+    { "type": "product_code", "name": "t:sections.main-product.blocks.product_code.name", "limit": 1 },
+    {
+      "type": "price",
+      "name": "t:sections.main-product.blocks.price.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_vat_text",
+          "default": true,
+          "label": "t:sections.main-product.blocks.price.settings.show_vat_text.label"
+        }
+      ]
+    },
     {
       "type": "sku",
       "name": "t:sections.main-product.blocks.sku.name",
@@ -1267,6 +1317,19 @@
             }
           ],
           "default": "circle"
+        }
+      ]
+    },
+    {
+      "type": "delivery_info",
+      "name": "t:sections.main-product.blocks.delivery_info.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "delivery_time",
+          "default": "2 - 3 business days",
+          "label": "t:sections.main-product.blocks.delivery_info.settings.delivery_time.label"
         }
       ]
     },
