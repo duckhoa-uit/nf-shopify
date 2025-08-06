@@ -196,7 +196,7 @@
             {{- 'general.continue_shopping' | t -}}
           </a>
         {% endcomment %}
-        <h2 class="nf-cart-summary__title my-0">{{ 'sections.cart.summary' | t | default: 'Summary' }}</h2>
+        <h2 class="nf-cart-summary__title my-0 hidden lg:block">{{ 'sections.cart.summary' | t | default: 'Summary' }}</h2>
       {% endif %}
     </div>
 
@@ -499,6 +499,7 @@
         </div>
 
         <div class="nf-cart-sidebar">
+          <h2 class="nf-cart-summary__title my-0 lg:hidden">{{ 'sections.cart.summary' | t | default: 'Summary' }}</h2>
           <div class="nf-cart-summary">
             <div class="nf-cart-summary__total">
               <span class="nf-cart-summary__total-label">{{ 'cart.summary.total' | t | default: 'Total' }}</span>

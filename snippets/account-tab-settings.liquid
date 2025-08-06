@@ -13,7 +13,7 @@
       <input type="hidden" name="custom_form" value="true">
       {%- if form.posted_successfully? -%}
         <div class="success-message" tabindex="-1" autofocus>
-          {{ 'customer.account.success' | t | default: 'Basic information updated successfully!' }}
+          {{ 'customer.account.info_update_success' | t | default: 'Basic information updated successfully!' }}
         </div>
       {%- endif -%}
 
