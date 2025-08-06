@@ -24,9 +24,13 @@ class PredictiveSearch extends SearchForm {
       no_results_suggestion: this.decodeHtmlEntities(window.theme?.strings?.search?.no_results_suggestion || 'Try checking your spelling or using different words.')
     };
 
-
+    // Popper.js integration
+    this.popperInstance = null;
+    this.isPopperAvailable = typeof window.Popper !== 'undefined';
+    this.isMobile = window.innerWidth <= 749;
 
     this.setupEventListeners();
+    this.setupResizeListener();
   }
 
   setupEventListeners() {
@@ -35,6 +39,19 @@ class PredictiveSearch extends SearchForm {
     this.addEventListener('focusout', this.onFocusOut.bind(this));
     this.addEventListener('keyup', this.onKeyup.bind(this));
     this.addEventListener('keydown', this.onKeydown.bind(this));
+  }
+
+  setupResizeListener() {
+    // Update mobile state on resize
+    window.addEventListener('resize', () => {
+      const wasMobile = this.isMobile;
+      this.isMobile = window.innerWidth <= 749;
+
+      // If mobile state changed and dropdown is open, recreate positioning
+      if (wasMobile !== this.isMobile && this.isOpen) {
+        this.updatePositioning();
+      }
+    });
   }
 
   getQuery() {
@@ -489,12 +506,18 @@ class PredictiveSearch extends SearchForm {
   open() {
     this.predictiveSearchResults.style.maxHeight = this.resultsMaxHeight || `${this.getResultsMaxHeight()}px`;
 
+    // Setup positioning (Popper.js or fallback)
+    this.setupPositioning();
+
     this.setAttribute('open', true);
     this.input.setAttribute('aria-expanded', true);
     this.isOpen = true;
   }
 
   close(clearSearchTerm = false) {
+    // Cleanup Popper instance
+    this.destroyPopper();
+
     this.closeResults(clearSearchTerm);
     this.isOpen = false;
   }
@@ -513,6 +536,88 @@ class PredictiveSearch extends SearchForm {
     this.input.setAttribute('aria-expanded', false);
     this.resultsMaxHeight = false;
     this.predictiveSearchResults.removeAttribute('style');
+  }
+
+  setupPositioning() {
+    if (this.isMobile) {
+      this.setupMobilePositioning();
+    } else if (this.isPopperAvailable) {
+      this.createPopperInstance();
+    } else {
+      this.setupFallbackPositioning();
+    }
+  }
+
+  updatePositioning() {
+    this.destroyPopper();
+    this.setupPositioning();
+  }
+
+  setupMobilePositioning() {
+    // Mobile: use full-width positioning
+    this.predictiveSearchResults.classList.add('predictive-search--mobile');
+    this.predictiveSearchResults.classList.remove('predictive-search--popper');
+  }
+
+  createPopperInstance() {
+    if (this.popperInstance) {
+      this.destroyPopper();
+    }
+
+    const referenceElement = this.input;
+    const popperElement = this.predictiveSearchResults;
+
+    // Add Popper class for styling
+    popperElement.classList.add('predictive-search--popper');
+    popperElement.classList.remove('predictive-search--mobile');
+
+    this.popperInstance = window.Popper.createPopper(referenceElement, popperElement, {
+      placement: 'bottom-start',
+      strategy: 'absolute',
+      modifiers: [
+        {
+          name: 'preventOverflow',
+          options: {
+            boundary: 'viewport',
+            padding: 8,
+          },
+        },
+        {
+          name: 'flip',
+          options: {
+            fallbackPlacements: ['top-start', 'bottom-end', 'top-end'],
+          },
+        },
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 4],
+          },
+        },
+      ],
+    });
+  }
+
+  setupFallbackPositioning() {
+    // Fallback: use original absolute positioning
+    console.warn('Popper.js not available, using fallback positioning');
+    const popperElement = this.predictiveSearchResults;
+
+    popperElement.classList.remove('predictive-search--popper', 'predictive-search--mobile');
+    popperElement.style.position = 'absolute';
+    popperElement.style.top = 'calc(100% + 0.0625rem)';
+    popperElement.style.left = '0';
+    popperElement.style.width = '600px';
+  }
+
+  destroyPopper() {
+    if (this.popperInstance) {
+      this.popperInstance.destroy();
+      this.popperInstance = null;
+    }
+
+    // Clean up classes
+    this.predictiveSearchResults.classList.remove('predictive-search--popper', 'predictive-search--mobile');
   }
 }
 

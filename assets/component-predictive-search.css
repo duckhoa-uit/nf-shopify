@@ -1,8 +1,6 @@
 .predictive-search {
   display: none;
-  position: absolute;
-  top: calc(100% + 0.0625rem);
-  left: 0;
+  /* Popper.js will handle positioning - removed: position, top, left */
   border-width: var(--popup-border-width);
   border-style: solid;
   border-color: rgba(var(--color-base-foreground), var(--popup-border-opacity));
@@ -27,11 +25,19 @@
   padding-bottom: 1rem;
 }
 
+/* Mobile-specific styles */
+.predictive-search--mobile {
+  position: absolute !important;
+  right: 0;
+  left: 0;
+  top: 100%;
+  width: 100vw;
+  max-width: none;
+}
+
 @media screen and (max-width: 749px) {
   .predictive-search--header {
-    right: 0;
-    left: 0;
-    top: 100%;
+    /* Mobile positioning will be handled by .predictive-search--mobile class */
   }
 
   .predictive-search__results-groups-wrapper {
@@ -46,14 +52,26 @@
   }
 }
 
+/* Popper-specific styles for desktop positioning */
+.predictive-search--popper {
+  min-width: 300px;
+  max-width: 600px;
+  width: max-content;
+}
+
 @media screen and (min-width: 750px) {
   .predictive-search {
     border-top: none;
-    width: calc(100% + 0.2rem);
+    /* Removed fixed width - Popper.js will handle sizing */
   }
 
   .header predictive-search {
     position: relative;
+  }
+
+  .predictive-search--popper {
+    /* Desktop: use flexible width with constraints */
+    width: 600px;
   }
 }
 
@@ -111,7 +129,7 @@ predictive-search:not([loading]) .predictive-search-status__loading {
 predictive-search[loading] .predictive-search__loading-state {
   display: flex;
   justify-content: center;
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 predictive-search[loading] .predictive-search__search-for-button {
