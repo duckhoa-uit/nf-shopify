@@ -502,6 +502,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     {%- comment -%} Load dependencies before predictive-search.js to avoid dependency issues {%- endcomment -%}
     {%- if settings.predictive_search_enabled -%}
+      <script src="https://unpkg.com/@popperjs/core@2" defer="defer"></script>
       <script src="{{ 'hyperhtml.min.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
