@@ -16,23 +16,23 @@
 {% assign kind_values = '' %}
 {% assign gender_values = '' %}
 
-{% comment %} Check features.kind for shoes {% endcomment %}
+{% comment %} Check features.kind for shoes using system.handle for language-independent comparison {% endcomment %}
 {% if product.metafields.features.kind.value %}
   {% for kind_item in product.metafields.features.kind.value %}
-    {% assign kind_name = kind_item.name | downcase %}
-    {% assign kind_values = kind_values | append: kind_name | append: ',' %}
-    {% if kind_name == 'shoes' %}
+    {% assign kind_system_handle = kind_item.system.handle %}
+    {% assign kind_values = kind_values | append: kind_system_handle | append: ',' %}
+    {% if kind_system_handle == 'shoes' %}
       {% assign is_shoes = true %}
     {% endif %}
   {% endfor %}
 {% endif %}
 
-{% comment %} Check features.gender for men {% endcomment %}
+{% comment %} Check features.gender for men using system.handle for language-independent comparison {% endcomment %}
 {% if product.metafields.features.gender.value %}
   {% for gender_item in product.metafields.features.gender.value %}
-    {% assign gender_name = gender_item.name | downcase %}
-    {% assign gender_values = gender_values | append: gender_name | append: ',' %}
-    {% if gender_name == 'men' %}
+    {% assign gender_system_handle = gender_item.system.handle %}
+    {% assign gender_values = gender_values | append: gender_system_handle | append: ',' %}
+    {% if gender_system_handle == 'men' or gender_system_handle == 'man' %}
       {% assign is_men = true %}
     {% endif %}
   {% endfor %}

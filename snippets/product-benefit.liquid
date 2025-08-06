@@ -14,132 +14,112 @@
 {% assign has_windproofness = false %}
 {% assign has_warmth = false %}
 
-{% capture breathability_json %}{{ product.metafields.features.breathability.value | json }}{% endcapture %}
+{% comment %} Use system.handle for language-independent comparison {% endcomment %}
 {% assign breathability_name = '' %}
-{% if breathability_json contains 'extremely high' %}
-  {% assign breathability_name = 'extremely high' %}
-{% elsif breathability_json contains 'medium high' %}
-  {% assign breathability_name = 'medium high' %}
-{% elsif breathability_json contains 'high' %}
-  {% assign breathability_name = 'high' %}
-{% elsif breathability_json contains 'very low' %}
-  {% assign breathability_name = 'very low' %}
-{% elsif breathability_json contains 'low' %}
-  {% assign breathability_name = 'low' %}
+{% if product.metafields.features.breathability.value %}
+  {% for breathability_obj in product.metafields.features.breathability.value %}
+    {% assign breathability_name = breathability_obj.system.handle %}
+    {% break %}
+  {% endfor %}
 {% endif %}
 
 {% assign breathability_level_map = 0 %}
-{% case breathability_name %}
-  {% when 'very low' -%}
-    {%- assign breathability_level_map = 1 %}
-  {% when 'low' -%}
-    {%- assign breathability_level_map = 2 %}
-  {% when 'medium high' -%}
-    {%- assign breathability_level_map = 3 %}
-  {% when 'high' -%}
-    {%- assign breathability_level_map = 4 %}
-  {% when 'extremely high' -%}
-    {%- assign breathability_level_map = 5 %}
-{% endcase %}
+{% comment %} Use pattern matching for resilient data migration handling - maintain priority order {% endcomment %}
+{% if breathability_name contains 'extremely' and breathability_name contains 'high' -%}
+  {%- assign breathability_level_map = 5 %}
+{% elsif breathability_name contains 'medium' and breathability_name contains 'high' -%}
+  {%- assign breathability_level_map = 3 %}
+{% elsif breathability_name contains 'high' -%}
+  {%- assign breathability_level_map = 4 %}
+{% elsif breathability_name contains 'very' and breathability_name contains 'low' -%}
+  {%- assign breathability_level_map = 1 %}
+{% elsif breathability_name contains 'low' -%}
+  {%- assign breathability_level_map = 2 %}
+{% endif %}
 
 {% if breathability_level_map > 0 %}
   {% assign has_breathability = true %}
   {% assign benefits_count = benefits_count | plus: 1 %}
 {% endif %}
 
-{% capture elasticity_json %}{{ product.metafields.features.elasticity.value | json }}{% endcapture %}
+{% comment %} Use system.handle for language-independent comparison {% endcomment %}
 {% assign elasticity_name = '' %}
-{% if elasticity_json contains 'extremely high' %}
-  {% assign elasticity_name = 'extremely high' %}
-{% elsif elasticity_json contains 'medium high' %}
-  {% assign elasticity_name = 'medium high' %}
-{% elsif elasticity_json contains 'high' %}
-  {% assign elasticity_name = 'high' %}
-{% elsif elasticity_json contains 'very low' %}
-  {% assign elasticity_name = 'very low' %}
-{% elsif elasticity_json contains 'low' %}
-  {% assign elasticity_name = 'low' %}
+{% if product.metafields.features.elasticity.value %}
+  {% for elasticity_obj in product.metafields.features.elasticity.value %}
+    {% assign elasticity_name = elasticity_obj.system.handle %}
+    {% break %}
+  {% endfor %}
 {% endif %}
 
 {% assign elasticity_level_map = 0 %}
-{% case elasticity_name %}
-  {% when 'very low' -%}
-    {%- assign elasticity_level_map = 1 %}
-  {% when 'low' -%}
-    {%- assign elasticity_level_map = 2 %}
-  {% when 'medium high' -%}
-    {%- assign elasticity_level_map = 3 %}
-  {% when 'high' -%}
-    {%- assign elasticity_level_map = 4 %}
-  {% when 'extremely high' -%}
-    {%- assign elasticity_level_map = 5 %}
-{% endcase %}
+{% comment %} Use pattern matching for resilient data migration handling - maintain priority order {% endcomment %}
+{% if elasticity_name contains 'extremely' and elasticity_name contains 'high' -%}
+  {%- assign elasticity_level_map = 5 %}
+{% elsif elasticity_name contains 'medium' and elasticity_name contains 'high' -%}
+  {%- assign elasticity_level_map = 3 %}
+{% elsif elasticity_name contains 'high' -%}
+  {%- assign elasticity_level_map = 4 %}
+{% elsif elasticity_name contains 'very' and elasticity_name contains 'low' -%}
+  {%- assign elasticity_level_map = 1 %}
+{% elsif elasticity_name contains 'low' -%}
+  {%- assign elasticity_level_map = 2 %}
+{% endif %}
 
 {% if elasticity_level_map > 0 %}
   {% assign has_elasticity = true %}
   {% assign benefits_count = benefits_count | plus: 1 %}
 {% endif %}
 
-{% capture windproofness_json %}{{ product.metafields.features.windproofness.value | json }}{% endcapture %}
+{% comment %} Use system.handle for language-independent comparison {% endcomment %}
 {% assign windproofness_name = '' %}
-{% if windproofness_json contains 'extremely high' %}
-  {% assign windproofness_name = 'extremely high' %}
-{% elsif windproofness_json contains 'high' %}
-  {% assign windproofness_name = 'high' %}
-{% elsif windproofness_json contains 'medium high' %}
-  {% assign windproofness_name = 'medium high' %}
-{% elsif windproofness_json contains 'low' %}
-  {% assign windproofness_name = 'low' %}
-{% elsif windproofness_json contains 'very low' %}
-  {% assign windproofness_name = 'very low' %}
+{% if product.metafields.features.windproofness.value %}
+  {% for windproofness_obj in product.metafields.features.windproofness.value %}
+    {% assign windproofness_name = windproofness_obj.system.handle %}
+    {% break %}
+  {% endfor %}
 {% endif %}
 
 {% assign windproofness_level_map = 0 %}
-{% case windproofness_name %}
-  {% when 'very low' -%}
-    {%- assign windproofness_level_map = 1 %}
-  {% when 'low' -%}
-    {%- assign windproofness_level_map = 2 %}
-  {% when 'medium high' -%}
-    {%- assign windproofness_level_map = 3 %}
-  {% when 'extremely high' -%}
-    {%- assign windproofness_level_map = 5 %}
-  {% when 'high' -%}
-    {%- assign windproofness_level_map = 4 %}
-{% endcase %}
+{% comment %} Use pattern matching for resilient data migration handling - maintain priority order {% endcomment %}
+{% if windproofness_name contains 'extremely' and windproofness_name contains 'high' -%}
+  {%- assign windproofness_level_map = 5 %}
+{% elsif windproofness_name contains 'medium' and windproofness_name contains 'high' -%}
+  {%- assign windproofness_level_map = 3 %}
+{% elsif windproofness_name contains 'high' -%}
+  {%- assign windproofness_level_map = 4 %}
+{% elsif windproofness_name contains 'very' and windproofness_name contains 'low' -%}
+  {%- assign windproofness_level_map = 1 %}
+{% elsif windproofness_name contains 'low' -%}
+  {%- assign windproofness_level_map = 2 %}
+{% endif %}
 
 {% if windproofness_level_map > 0 %}
   {% assign has_windproofness = true %}
   {% assign benefits_count = benefits_count | plus: 1 %}
 {% endif %}
 
-{% capture warmth_json %}{{ product.metafields.features.warmth.value | json }}{% endcapture %}
+{% comment %} Use system.handle for language-independent comparison {% endcomment %}
 {% assign warmth_name = '' %}
-{% if warmth_json contains 'extremely high' %}
-  {% assign warmth_name = 'extremely high' %}
-{% elsif warmth_json contains 'medium high' %}
-  {% assign warmth_name = 'medium high' %}
-{% elsif warmth_json contains 'high' %}
-  {% assign warmth_name = 'high' %}
-{% elsif warmth_json contains 'very low' %}
-  {% assign warmth_name = 'very low' %}
-{% elsif warmth_json contains 'low' %}
-  {% assign warmth_name = 'low' %}
+{% if product.metafields.features.warmth.value %}
+  {% for warmth_obj in product.metafields.features.warmth.value %}
+    {% assign warmth_name = warmth_obj.system.handle %}
+    {% break %}
+  {% endfor %}
 {% endif %}
 
 {% assign warmth_level_map = 0 %}
-{% case warmth_name %}
-  {% when 'very low' -%}
-    {%- assign warmth_level_map = 1 %}
-  {% when 'low' -%}
-    {%- assign warmth_level_map = 2 %}
-  {% when 'medium high' -%}
-    {%- assign warmth_level_map = 3 %}
-  {% when 'high' -%}
-    {%- assign warmth_level_map = 4 %}
-  {% when 'extremely high' -%}
-    {%- assign warmth_level_map = 5 %}
-{% endcase %}
+{% comment %} Use pattern matching for resilient data migration handling - maintain priority order {% endcomment %}
+{% if warmth_name contains 'extremely' and warmth_name contains 'high' -%}
+  {%- assign warmth_level_map = 5 %}
+{% elsif warmth_name contains 'medium' and warmth_name contains 'high' -%}
+  {%- assign warmth_level_map = 3 %}
+{% elsif warmth_name contains 'high' -%}
+  {%- assign warmth_level_map = 4 %}
+{% elsif warmth_name contains 'very' and warmth_name contains 'low' -%}
+  {%- assign warmth_level_map = 1 %}
+{% elsif warmth_name contains 'low' -%}
+  {%- assign warmth_level_map = 2 %}
+{% endif %}
 
 {% if warmth_level_map > 0 %}
   {% assign has_warmth = true %}

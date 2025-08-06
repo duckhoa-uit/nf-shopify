@@ -21,10 +21,17 @@
   <div class="modal-content fixed inset-4 md:inset-8 lg:inset-16 bg-white rounded-lg shadow-xl overflow-hidden flex flex-col">
     <!-- Modal Header -->
     <div class="modal-header flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
-      {% comment %} Determine gender based on product tags or default to Men's {% endcomment %}
-      {% assign gender = "Men\'s" %}
-      {% if product.tags contains 'women' or product.tags contains 'female' %}
-        {% assign gender = "Women\'s" %}
+      {% comment %} Determine gender based on product metafield features.gender or default to Men's {% endcomment %}
+      {% assign gender = 'size_guide.gender.mens' | t %}
+      {% assign gender_metafield = product.metafields.features.gender.value %}
+      {% if gender_metafield %}
+        {% for gender_obj in gender_metafield %}
+          {% comment %} Use system.handle for language-independent comparison {% endcomment %}
+          {% if gender_obj.system.handle == 'women' or gender_obj.system.handle == 'woman' %}
+            {% assign gender = 'size_guide.gender.womens' | t %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
       {% endif %}
       <h2 class="text-xl md:text-2xl font-bold text-gray-900">{{ 'size_guide.size_fit.modal.title' | t: gender: gender }}</h2>
       <button
@@ -122,6 +129,8 @@
   {% if body_measurements %}
     window.sizeFitBodyMeasurements = {{ body_measurements | json }};
   {% endif %}
+
+
 </script>
 
 <style>
