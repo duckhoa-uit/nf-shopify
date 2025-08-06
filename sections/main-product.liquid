@@ -380,8 +380,8 @@
               <!-- Promotion metafield -->
               {%- if product.metafields.features.promotion.value -%}
                 {%- for promotion in product.metafields.features.promotion.value -%}
-                  {%- assign promotion_name_lower = promotion.name | downcase -%}
-                  {%- if promotion_name_lower == 'new release' -%}
+                  {%- comment -%} Use system.handle for language-independent comparison {%- endcomment -%}
+                  {%- if promotion.system.handle == 'new-release' or promotion.system.handle == 'new_release' -%}
                     <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
                       {{- promotion.name -}}
                     </span>
