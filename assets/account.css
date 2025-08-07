@@ -251,6 +251,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .address-section-header .section-title {
@@ -863,6 +864,20 @@
 .btn-delete .svg-wrapper {
   width: 1.5rem; /* 24px */
   height: 1.5rem; /* 24px */
+}
+
+@media screen and (max-width: 440px) {
+  .address-field {
+    flex-direction: column;
+  }
+  .address-actions {
+    flex-direction: column;
+  }
+
+  .address-actions .btn-edit,
+  .address-actions .btn-delete {
+    width: 100%;
+  }
 }
 
 .btn-default {
@@ -1715,7 +1730,6 @@ button.loading .btn-spinner {
   white-space: nowrap;
 }
 
-
 .order-product {
   display: grid;
   grid-template-columns: 1fr 1fr 0.5fr 1fr 1fr;
@@ -2141,6 +2155,6 @@ button.loading .btn-spinner svg {
 .wk-title {
   display: none;
 }
- wishlist-page .wk-page {
+wishlist-page .wk-page {
   padding: 0 !important;
- }
+}

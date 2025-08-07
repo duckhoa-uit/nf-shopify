@@ -42,10 +42,87 @@
           const form = document.getElementById('CustomerInfoForm');
           if (!form) return;
 
-          // Note: Form submission and validation is handled in assets/account-forms.js
+          // Form state tracking functionality
+          let initialFormState = {};
+          let isFormModified = false;
+          const submitButton = form.querySelector('button[type="submit"]');
+
+          // Function to get current form state
+          function getFormState() {
+            const state = {};
+            const formData = new FormData(form);
+
+            // Get all form inputs
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+              if (input.type === 'checkbox' || input.type === 'radio') {
+                state[input.name] = input.checked;
+              } else if (input.type === 'hidden' && input.classList.contains('phone-international-format')) {
+                // For phone international format, use the hidden input value
+                state[input.name] = input.value;
+              } else if (input.name && !input.name.includes('_display')) {
+                // Skip display inputs for phone fields
+                state[input.name] = input.value;
+              }
+            });
+
+            return state;
+          }
+
+          // Function to compare form states
+          function compareFormStates(state1, state2) {
+            const keys1 = Object.keys(state1);
+            const keys2 = Object.keys(state2);
+
+            if (keys1.length !== keys2.length) return false;
+
+            for (let key of keys1) {
+              if (state1[key] !== state2[key]) return false;
+            }
+
+            return true;
+          }
+
+          // Function to update submit button state
+          function updateSubmitButtonState() {
+            const currentState = getFormState();
+            isFormModified = !compareFormStates(initialFormState, currentState);
+
+            if (submitButton) {
+              submitButton.disabled = !isFormModified;
+              submitButton.style.opacity = isFormModified ? '1' : '0.6';
+              submitButton.style.cursor = isFormModified ? 'pointer' : 'not-allowed';
+            }
+          }
+
+          // Capture initial form state after a short delay to ensure all fields are initialized
+          setTimeout(function() {
+            initialFormState = getFormState();
+            updateSubmitButtonState();
+          }, 500);
+
+          // Add event listeners for form changes
+          const inputs = form.querySelectorAll('input, select, textarea');
+          inputs.forEach(input => {
+            // Use different events based on input type
+            if (input.type === 'checkbox' || input.type === 'radio') {
+              input.addEventListener('change', updateSubmitButtonState);
+            } else {
+              input.addEventListener('input', updateSubmitButtonState);
+              input.addEventListener('change', updateSubmitButtonState);
+            }
+          });
+
+          // Special handling for phone field changes
+          const phoneInput = document.getElementById('CustomerPhone');
+          if (phoneInput) {
+            // Listen for country changes in phone field
+            phoneInput.addEventListener('countrychange', function() {
+              setTimeout(updateSubmitButtonState, 100);
+            });
+          }
 
           // Add real-time validation for phone input
-          const phoneInput = document.getElementById('CustomerPhone');
           if (phoneInput && window.phoneInputHandler) {
             // Debounce function to avoid too many validations while typing
             function debounce(func, wait) {
@@ -155,7 +232,7 @@
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary" disabled style="opacity: 0.6; cursor: not-allowed;">
           <span class="btn-text">{{ 'customer.account.save' | t }}</span>
           <span class="btn-spinner">
             {{- 'loading-spinner.svg' | inline_asset_content -}}
@@ -237,13 +314,76 @@
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary" disabled style="opacity: 0.6; cursor: not-allowed;">
           <span class="btn-text">{{ 'customer.account.save' | t }}</span>
           <span class="btn-spinner">
             {{- 'loading-spinner.svg' | inline_asset_content -}}
           </span>
         </button>
       </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const passwordForm = document.getElementById('CustomerPasswordForm');
+          if (!passwordForm) return;
+
+          // Form state tracking for password form
+          let initialPasswordFormState = {};
+          let isPasswordFormModified = false;
+          const passwordSubmitButton = passwordForm.querySelector('button[type="submit"]');
+
+          // Function to get current password form state
+          function getPasswordFormState() {
+            const state = {};
+            const inputs = passwordForm.querySelectorAll('input[type="password"]');
+            inputs.forEach(input => {
+              if (input.name) {
+                state[input.name] = input.value;
+              }
+            });
+            return state;
+          }
+
+          // Function to compare password form states
+          function comparePasswordFormStates(state1, state2) {
+            const keys1 = Object.keys(state1);
+            const keys2 = Object.keys(state2);
+
+            if (keys1.length !== keys2.length) return false;
+
+            for (let key of keys1) {
+              if (state1[key] !== state2[key]) return false;
+            }
+
+            return true;
+          }
+
+          // Function to update password submit button state
+          function updatePasswordSubmitButtonState() {
+            const currentState = getPasswordFormState();
+
+            // Check if any password field has content
+            const hasContent = Object.values(currentState).some(value => value.trim() !== '');
+
+            if (passwordSubmitButton) {
+              passwordSubmitButton.disabled = !hasContent;
+              passwordSubmitButton.style.opacity = hasContent ? '1' : '0.6';
+              passwordSubmitButton.style.cursor = hasContent ? 'pointer' : 'not-allowed';
+            }
+          }
+
+          // Capture initial password form state
+          initialPasswordFormState = getPasswordFormState();
+          updatePasswordSubmitButtonState();
+
+          // Add event listeners for password form changes
+          const passwordInputs = passwordForm.querySelectorAll('input[type="password"]');
+          passwordInputs.forEach(input => {
+            input.addEventListener('input', updatePasswordSubmitButtonState);
+            input.addEventListener('change', updatePasswordSubmitButtonState);
+          });
+        });
+      </script>
     {%- endform -%}
   </div>
 </div>

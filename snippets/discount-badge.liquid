@@ -1,0 +1,58 @@
+{% comment %}
+  Renders a discount badge for products with compare_at_price
+
+  Accepts:
+  - product: {Object} Product Liquid object (required)
+  - variant: {Object} Variant Liquid object (optional, if provided will use variant prices instead of product prices)
+  - badge_class: {String} Additional CSS classes for the badge (optional)
+  - show_sale_text: {Boolean} Show "SALE" text for discounts under 15%. Default: true (optional)
+  - minimum_discount: {Number} Minimum discount percentage to show percentage. Default: 15 (optional)
+
+  Usage:
+  {% render 'discount-badge', product: product %}
+  {% render 'discount-badge', product: product, variant: current_variant %}
+  {% render 'discount-badge', product: product, badge_class: 'custom-badge-class' %}
+  {% render 'discount-badge', product: product, show_sale_text: false, minimum_discount: 10 %}
+{% endcomment %}
+
+{%- liquid
+  # Set default values
+  assign show_sale_text = show_sale_text | default: true
+  assign minimum_discount = minimum_discount | default: 15
+
+  # Determine which prices to use (variant or product)
+  if variant and variant != blank
+    assign compare_price = variant.compare_at_price
+    assign current_price = variant.price
+    assign is_available = variant.available
+  else
+    assign compare_price = product.compare_at_price
+    assign current_price = product.price
+    assign is_available = product.available
+  endif
+
+  # Only show discount badge if there's a discount and product/variant is available
+  if compare_price > current_price and is_available
+    # Calculate discount percentage using floating-point arithmetic
+    assign savings = compare_price | minus: current_price | times: 100.0 | divided_by: compare_price | round
+
+    # Set badge classes - use custom class if provided, otherwise use default Tailwind classes
+    if badge_class and badge_class != blank
+      assign final_classes = badge_class
+    else
+      assign final_classes = 'bg-[#EC0009] text-white font-bold px-2 py-1 rounded-[2px] text-[15px] leading-[16px]'
+    endif
+  endif
+-%}
+
+{%- if compare_price > current_price and is_available -%}
+  <div class="{{ final_classes }}">
+    {%- if savings >= minimum_discount -%}
+      -{{ savings }}%
+    {%- elsif show_sale_text -%}
+      {{ 'products.product.sale_badge' | t | default: 'SALE' }}
+    {%- else -%}
+      -{{ savings }}%
+    {%- endif -%}
+  </div>
+{%- endif -%}
