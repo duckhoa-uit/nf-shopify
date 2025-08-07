@@ -1,0 +1,55 @@
+{% comment %}
+  Get Measurement Label by Alpha Helper Snippet
+
+  This snippet provides access to measurement labels using alpha labels (A, B, C, etc.)
+  and retrieves the corresponding translated text from Shopify's metafield system.
+
+  Accepts:
+  - alpha: {String} the alpha label (e.g., 'A', 'B', 'C1')
+  - measurement_definitions: {Array} the measurement definitions array from parent
+
+  Usage:
+  {% render 'get-measurement-label-by-alpha', alpha: 'A', measurement_definitions: measurement_definitions %}
+
+  Returns the translated label for the measurement based on alpha label.
+  Falls back to old translation system if metafields are not configured.
+{% endcomment %}
+
+{% comment %} Find the field name for the given alpha label {% endcomment %}
+{% assign field_name = blank %}
+{% for definition in measurement_definitions %}
+  {% assign parts = definition | split: '|' %}
+  {% assign definition_field_name = parts[0] %}
+  {% assign definition_alpha_label = parts[1] %}
+  {% assign definition_display_name = parts[2] %}
+  
+  {% if definition_alpha_label == alpha %}
+    {% assign field_name = definition_field_name %}
+    {% assign display_name = definition_display_name %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} If field name found, get the translated label {% endcomment %}
+{% if field_name != blank %}
+  {% comment %} Try to get label from metafield first {% endcomment %}
+  {% assign product_measurements = shop.metafields.size_guide.product_measurements.value %}
+  {% assign label = product_measurements[field_name] %}
+
+  {% comment %} Fallback to old translation system if metafield not available {% endcomment %}
+  {% unless label %}
+    {% assign fallback_key = 'size_guide.product_measurements.' | append: field_name %}
+    {% assign label = fallback_key | t %}
+  {% endunless %}
+
+  {% comment %} Final fallback to display name from definitions {% endcomment %}
+  {% unless label %}
+    {% assign label = display_name %}
+  {% endunless %}
+{% else %}
+  {% comment %} If no field name found, return the alpha label itself {% endcomment %}
+  {% assign label = alpha %}
+{% endif %}
+
+{% comment %} Output the label {% endcomment %}
+{{ label }}
