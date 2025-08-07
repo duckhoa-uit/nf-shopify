@@ -260,7 +260,7 @@ table:has(td:nth-of-type(7):hover) tr:not(:first-of-type):has(~ tr:hover) td:nth
   background: var(--color-gray-100);
 }
 
-.measurement-instructions li {
+.measurement-instructions li, .product-measurement-instructions li {
   display: flex;
   color: var(--color-black);
   font-family: var(--font-body-family);
@@ -272,13 +272,13 @@ table:has(td:nth-of-type(7):hover) tr:not(:first-of-type):has(~ tr:hover) td:nth
   padding-top: 0.25rem;
 }
 
-.measurement-instructions ol {
+.measurement-instructions ol, .product-measurement-instructions ol {
   margin: 1rem 0;
-  padding-left: 2.5rem;
+  padding-left: 0rem;
   counter-reset: item;
 }
 
-.measurement-instructions ol > li:before {
+.measurement-instructions ol > li:before, .product-measurement-instructions ol li .alpha {
   content: counter(item, upper-latin);
   counter-increment: item;
   display: inline-flex;

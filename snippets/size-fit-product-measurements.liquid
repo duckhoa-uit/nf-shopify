@@ -175,15 +175,482 @@
     </div>
   {% endif %}
 
-  <!-- Product Measurement Guide -->
-  <div class="mt-8">
-    <h3 class="text-lg font-bold mb-4">{{ 'size_guide.size_fit.product_guide.title' | t }}</h3>
-    <div class="text-sm text-gray-600">
-      <p>
-        {{ 'size_guide.size_fit.product_guide.description' | t }}
-      </p>
+  <!-- Conditional Product Measurement Instructions -->
+  {% comment %} Check features.kind for supported product categories using system.handle for language-independent comparison {% endcomment %}
+  {% assign supported_categories = 'jackets,fleece-sweaters,trousers,shorts,t-shirts,vests,hoodies-sweatpants,shirts' | split: ',' %}
+  {% assign product_kind_handle = blank %}
+
+  {% if product.metafields.features.kind.value %}
+    {% for kind_item in product.metafields.features.kind.value %}
+      {% assign kind_system_handle = kind_item.system.handle %}
+      {% if supported_categories contains kind_system_handle %}
+        {% assign product_kind_handle = kind_system_handle %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% if product_kind_handle == 'jackets' %}
+    <div class="mt-8">
+      <h3 class="mb-4 text-gray-950 font-archivo-expanded text-xl leading-6">How to measure the product?</h3>
+
+      <!-- Front part of the jacket -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The front part of the jacket</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">A</span><span>Front body length from HSP</span></li>
+                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
+                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
+                <li><span class="alpha">C1</span><span>1/2 bottom girth <span style="white-space: nowrap;">- relaxed</span></span></li>
+                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
+                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
+                <li><span class="alpha">E</span><span>Shoulder & sleeve length</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/jacket-front.png"
+              alt="The front part of the jacket"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Back part of the jacket -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The back part of the jacket</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">F</span><span>Center back length</span></li>
+                <li><span class="alpha">G</span><span>Sleeve length</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/jacket-back.png"
+              alt="The back part of the jacket"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  {% endif %}
+
+  <!-- Conditional Product Measurement Instructions for Fleece Sweaters -->
+  {% if product_kind_handle == 'fleece-sweaters' %}
+    <div class="mt-8">
+      <h3 class="mb-4 text-gray-950 font-archivo-expanded text-xl leading-6">How to measure the product?</h3>
+
+      <!-- Front part of the t-shirt -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The front part of the t-shirt</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">A</span><span>Front body length from HSP</span></li>
+                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
+                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
+                <li><span class="alpha">C1</span><span>1/2 bottom girth <span style="white-space: nowrap;">- relaxed</span></span></li>
+                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
+                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
+                <li><span class="alpha">E</span><span>Shoulder & sleeve length</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/t-shirt-front.png"
+              alt="The front part of the t-shirt"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Back part of the t-shirt -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The back part of the t-shirt</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">F</span><span>Center back length</span></li>
+                <li><span class="alpha">G</span><span>Sleeve length</span></li>
+                <li><span class="alpha">H</span><span>Back body length from HSP</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/t-shirt-back.png"
+              alt="The back part of the t-shirt"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Conditional Product Measurement Instructions for Trousers -->
+  {% if product_kind_handle == 'trousers' %}
+    <div class="mt-8">
+      <h3 class="mb-4 text-gray-950 font-archivo-expanded text-xl leading-6">How to measure the product?</h3>
+
+      <!-- Front part of the pants -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The front part of the pants</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">A</span><span>Waist girth</span></li>
+                <li><span class="alpha">A1</span><span>Waist girth <span style="white-space: nowrap;">- relaxed</span></span></li>
+                <li><span class="alpha">A2</span><span>Waist girth <span style="white-space: nowrap;">- stretched</span></span></li>
+                <li><span class="alpha">C</span><span>Hip girth</span></li>
+                <li><span class="alpha">D</span><span>Front rise length from the end waist</span></li>
+                <li><span class="alpha">G</span><span>1/2 thigh at crotch</span></li>
+                <li><span class="alpha">H</span><span>Front rise length from the top waist</span></li>
+                <li><span class="alpha">J</span><span>1/2 bottom legs</span></li>
+                <li><span class="alpha">J1</span><span>1/2 bottom legs <span style="white-space: nowrap;">- open zipper</span></span></li>
+                <li><span class="alpha">J2</span><span>1/2 bottom legs <span style="white-space: nowrap;">- close zipper</span></span></li>
+                <li><span class="alpha">J3</span><span>1/2 bottom legs <span style="white-space: nowrap;">- opening relaxed</span></span></li>
+                <li><span class="alpha">J4</span><span>1/2 bottom legs <span style="white-space: nowrap;">- opening stretched</span></span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/pants-front.png"
+              alt="The front part of the pants"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Back part of the pants -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The back part of the pants</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">B</span><span>Out side length from the end waist</span></li>
+                <li><span class="alpha">B1</span><span>Out side length from the top waist</span></li>
+                <li><span class="alpha">C</span><span>Hip girth</span></li>
+                <li><span class="alpha">E</span><span>Back rise length from the end waist</span></li>
+                <li><span class="alpha">F</span><span>Inside length</span></li>
+                <li><span class="alpha">I</span><span>Back rise length from the top waist</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/pants-back.png"
+              alt="The back part of the pants"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Conditional Product Measurement Instructions for Shorts -->
+  {% if product_kind_handle == 'shorts' %}
+    <div class="mt-8">
+      <h3 class="mb-4 text-gray-950 font-archivo-expanded text-xl leading-6">How to measure the product?</h3>
+
+      <!-- Front part of the shorts -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The front part of the shorts</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">A</span><span>Waist girth</span></li>
+                <li><span class="alpha">A1</span><span>Waist girth <span style="white-space: nowrap;">- relaxed</span></span></li>
+                <li><span class="alpha">A2</span><span>Waist girth <span style="white-space: nowrap;">- stretched</span></span></li>
+                <li><span class="alpha">C</span><span>Hip girth</span></li>
+                <li><span class="alpha">D</span><span>Front rise length from the end waist</span></li>
+                <li><span class="alpha">G</span><span>1/2 thigh at crotch</span></li>
+                <li><span class="alpha">H</span><span>Front rise length from the top waist</span></li>
+                <li><span class="alpha">J</span><span>1/2 bottom legs</span></li>
+                <li><span class="alpha">J3</span><span>1/2 bottom legs <span style="white-space: nowrap;">- opening relaxed</span></span></li>
+                <li><span class="alpha">J4</span><span>1/2 bottom legs <span style="white-space: nowrap;">- opening stretched</span></span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/shorts-front.png"
+              alt="The front part of the shorts"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Back part of the shorts -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The back part of the shorts</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">B</span><span>Out side length from the end waist</span></li>
+                <li><span class="alpha">B1</span><span>Out side length from the top waist</span></li>
+                <li><span class="alpha">C</span><span>Hip girth</span></li>
+                <li><span class="alpha">E</span><span>Back rise length from the end waist</span></li>
+                <li><span class="alpha">F</span><span>Inside length</span></li>
+                <li><span class="alpha">I</span><span>Back rise length from the top waist</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/shorts-back.png"
+              alt="The back part of the shorts"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Conditional Product Measurement Instructions for T-Shirts -->
+  {% if product_kind_handle == 't-shirts' %}
+    <div class="mt-8">
+      <h3 class="mb-4 text-gray-950 font-archivo-expanded text-xl leading-6">How to measure the product?</h3>
+
+      <!-- Front part of the t-shirt -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The front part of the t-shirt</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">A</span><span>Front body length from HSP</span></li>
+                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
+                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
+                <li><span class="alpha">C1</span><span>1/2 bottom girth <span style="white-space: nowrap;">- relaxed</span></span></li>
+                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
+                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
+                <li><span class="alpha">E</span><span>Shoulder & sleeve length</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/t-shirt-front.png"
+              alt="The front part of the t-shirt"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Back part of the t-shirt -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The back part of the t-shirt</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">F</span><span>Center back length</span></li>
+                <li><span class="alpha">G</span><span>Sleeve length</span></li>
+                <li><span class="alpha">H</span><span>Back body length from HSP</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/t-shirt-back.png"
+              alt="The back part of the t-shirt"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Conditional Product Measurement Instructions for Vests -->
+  {% if product_kind_handle == 'vests' %}
+    <div class="mt-8">
+      <h3 class="mb-4 text-gray-950 font-archivo-expanded text-xl leading-6">How to measure the product?</h3>
+
+      <!-- Front part of the vest -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The front part of the vest</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
+                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
+                <li><span class="alpha">C1</span><span>1/2 bottom girth <span style="white-space: nowrap;">- relaxed</span></span></li>
+                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
+                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/vest-front.png"
+              alt="The front part of the vest"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Back part of the vest -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The back part of the vest</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">F</span><span>Center back length</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/vest-back.png"
+              alt="The back part of the vest"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Conditional Product Measurement Instructions for Hoodies-Sweatpants -->
+  {% if product_kind_handle == 'hoodies-sweatpants' %}
+    <div class="mt-8">
+      <h3 class="mb-4 text-gray-950 font-archivo-expanded text-xl leading-6">How to measure the product?</h3>
+
+      <!-- Placeholder content -->
+      <div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+        <div class="text-center">
+          <p class="text-gray-600 font-archivo-expanded text-base leading-6">
+            Measurement instructions for hoodies-sweatpants will be added soon.
+          </p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Conditional Product Measurement Instructions for Shirts -->
+  {% if product_kind_handle == 'shirts' %}
+    <div class="mt-8">
+      <h3 class="mb-4 text-gray-950 font-archivo-expanded text-xl leading-6">How to measure the product?</h3>
+
+      <!-- Front part of the shirt -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The front part of the shirt</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
+                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
+                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
+                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
+                <li><span class="alpha">E</span><span>Shoulder & sleeve length</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/shirt-front.png"
+              alt="The front part of the shirt"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Back part of the shirt -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The back part of the shirt</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">F</span><span>Center back length</span></li>
+                <li><span class="alpha">G</span><span>Sleeve length</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/shirt-back.png"
+              alt="The back part of the shirt"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
 </div>
 
 <style>
