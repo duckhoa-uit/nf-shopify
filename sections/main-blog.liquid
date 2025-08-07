@@ -190,30 +190,6 @@
           #{{ tag | downcase }}
         </a>
       {%- endfor -%}
-
-      {% comment %}Fallback to predefined categories if no tags found{% endcomment %}
-      {% if blog.all_tags.size == 0 %}
-        <a
-          href="{{ blog.url }}/tagged/skialp{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
-          class="blog-category"
-          >#{{ 'blogs.main_blog.categories.skialp' | t -}}
-        </a>
-        <a
-          href="{{ blog.url }}/tagged/adventure{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
-          class="blog-category"
-          >#{{ 'blogs.main_blog.categories.adventure' | t -}}
-        </a>
-        <a
-          href="{{ blog.url }}/tagged/tips{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
-          class="blog-category"
-          >#{{ 'blogs.main_blog.categories.tips' | t -}}
-        </a>
-        <a
-          href="{{ blog.url }}/tagged/gear{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
-          class="blog-category"
-          >#{{ 'blogs.main_blog.categories.gear' | t -}}
-        </a>
-      {% endif %}
     </div>
   {% endif %}
 
