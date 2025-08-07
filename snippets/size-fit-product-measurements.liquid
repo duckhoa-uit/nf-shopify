@@ -18,7 +18,9 @@
   Comprehensive measurement definition map with localization
   Format: field_name|alpha_label|translation_key
 {% endcomment %}
-{% assign measurement_definitions_raw = 'waist_girth|A,waist_girth_relaxed|A1,waist_girth_stretched|A2,outside_length_end_waist|B,chest_girth_half|B,outside_length_top_waist|B1,hip_girth|C,bottom_girth_half|C,bottom_girth_relaxed|C1,bottom_girth_stretched_half|C2,shoulder_point_to_point|D,front_rise_end_waist|D,shoulder_sleeve_length|E,back_rise_end_waist|E,inside_length|F,center_back_length|F,thigh_half_crotch|G,sleeve_length|G,front_rise_top_waist|H,back_rise_top_waist|I,bottom_legs_half|J,waist_girth_half|K' | split: ',' %}
+{% assign measurement_definitions_raw = 'waist_girth|A,waist_girth_relaxed|A1,waist_girth_stretched|A2,outside_length_end_waist|B,chest_girth_half|B,outside_length_top_waist|B1,hip_girth|C,bottom_girth_half|C,bottom_girth_relaxed|C1,bottom_girth_stretched_half|C2,shoulder_point_to_point|D,front_rise_end_waist|D,shoulder_sleeve_length|E,back_rise_end_waist|E,inside_length|F,center_back_length|F,thigh_half_crotch|G,sleeve_length|G,front_rise_top_waist|H,back_rise_top_waist|I,bottom_legs_half|J,bottom_legs_half_open_zipper|J1,bottom_legs_half_close_zipper|J2,bottom_legs_half_opening_relaxed|J3,bottom_legs_half_opening_stretched|J4,waist_girth_half|K'
+  | split: ','
+%}
 
 {% assign measurement_definitions = '' %}
 {% for definition in measurement_definitions_raw %}
@@ -34,7 +36,12 @@
     {% assign display_name = fallback_key | t %}
   {% endunless %}
 
-  {% assign localized_definition = field_name | append: '|' | append: alpha_label | append: '|' | append: display_name %}
+  {% assign localized_definition = field_name
+    | append: '|'
+    | append: alpha_label
+    | append: '|'
+    | append: display_name
+  %}
   {% if forloop.first %}
     {% assign measurement_definitions = localized_definition %}
   {% else %}
@@ -43,6 +50,27 @@
 {% endfor %}
 
 {% assign measurement_definitions = measurement_definitions | split: ',' %}
+
+{% comment %} Create alpha-to-field mapping for instruction labels {% endcomment %}
+{% assign alpha_to_field_map = blank %}
+{% assign alpha_to_field_array = '' %}
+{% for definition in measurement_definitions %}
+  {% assign parts = definition | split: '|' %}
+  {% assign field_name = parts[0] %}
+  {% assign alpha_label = parts[1] %}
+  {% assign display_name = parts[2] %}
+
+  {% comment %} Build alpha-to-field mapping {% endcomment %}
+  {% assign alpha_to_field_array = alpha_to_field_array
+    | append: alpha_label
+    | append: ':'
+    | append: field_name
+    | append: ','
+  %}
+{% endfor %}
+
+{% comment %} Helper function to get measurement label by alpha {% endcomment %}
+{% assign get_measurement_label_by_alpha = alpha_to_field_array %}
 
 {% assign measurement_map = blank %}
 {% assign measurement_map_array = '' %}
@@ -177,7 +205,9 @@
 
   <!-- Conditional Product Measurement Instructions -->
   {% comment %} Check features.kind for supported product categories using system.handle for language-independent comparison {% endcomment %}
-  {% assign supported_categories = 'jackets,fleece-sweaters,trousers,shorts,t-shirts,vests,hoodies-sweatpants,shirts' | split: ',' %}
+  {% assign supported_categories = 'jackets,fleece-sweaters,trousers,shorts,t-shirts,vests,hoodies-sweatpants,shirts'
+    | split: ','
+  %}
   {% assign product_kind_handle = blank %}
 
   {% if product.metafields.features.kind.value %}
@@ -201,13 +231,69 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">A</span><span>Front body length from HSP</span></li>
-                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
-                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
-                <li><span class="alpha">C1</span><span>1/2 bottom girth <span style="white-space: nowrap;">- relaxed</span></span></li>
-                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
-                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
-                <li><span class="alpha">E</span><span>Shoulder & sleeve length</span></li>
+                <li>
+                  <span class="alpha">A</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'A',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">B</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'B',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C1</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C1',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C2</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C2',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">D</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'D',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">E</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'E',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -231,8 +317,24 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">F</span><span>Center back length</span></li>
-                <li><span class="alpha">G</span><span>Sleeve length</span></li>
+                <li>
+                  <span class="alpha">F</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'F',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">G</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'G',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -263,13 +365,69 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">A</span><span>Front body length from HSP</span></li>
-                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
-                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
-                <li><span class="alpha">C1</span><span>1/2 bottom girth <span style="white-space: nowrap;">- relaxed</span></span></li>
-                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
-                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
-                <li><span class="alpha">E</span><span>Shoulder & sleeve length</span></li>
+                <li>
+                  <span class="alpha">A</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'A',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">B</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'B',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C1</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C1',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C2</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C2',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">D</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'D',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">E</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'E',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -293,9 +451,33 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">F</span><span>Center back length</span></li>
-                <li><span class="alpha">G</span><span>Sleeve length</span></li>
-                <li><span class="alpha">H</span><span>Back body length from HSP</span></li>
+                <li>
+                  <span class="alpha">F</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'F',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">G</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'G',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">H</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'H',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -326,18 +508,114 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">A</span><span>Waist girth</span></li>
-                <li><span class="alpha">A1</span><span>Waist girth <span style="white-space: nowrap;">- relaxed</span></span></li>
-                <li><span class="alpha">A2</span><span>Waist girth <span style="white-space: nowrap;">- stretched</span></span></li>
-                <li><span class="alpha">C</span><span>Hip girth</span></li>
-                <li><span class="alpha">D</span><span>Front rise length from the end waist</span></li>
-                <li><span class="alpha">G</span><span>1/2 thigh at crotch</span></li>
-                <li><span class="alpha">H</span><span>Front rise length from the top waist</span></li>
-                <li><span class="alpha">J</span><span>1/2 bottom legs</span></li>
-                <li><span class="alpha">J1</span><span>1/2 bottom legs <span style="white-space: nowrap;">- open zipper</span></span></li>
-                <li><span class="alpha">J2</span><span>1/2 bottom legs <span style="white-space: nowrap;">- close zipper</span></span></li>
-                <li><span class="alpha">J3</span><span>1/2 bottom legs <span style="white-space: nowrap;">- opening relaxed</span></span></li>
-                <li><span class="alpha">J4</span><span>1/2 bottom legs <span style="white-space: nowrap;">- opening stretched</span></span></li>
+                <li>
+                  <span class="alpha">A</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'A',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">A1</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'A1',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">A2</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'A2',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">D</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'D',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">G</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'G',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">H</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'H',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">J</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'J',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">J1</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'J1',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">J2</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'J2',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">J3</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'J3',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">J4</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'J4',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -361,12 +639,60 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">B</span><span>Out side length from the end waist</span></li>
-                <li><span class="alpha">B1</span><span>Out side length from the top waist</span></li>
-                <li><span class="alpha">C</span><span>Hip girth</span></li>
-                <li><span class="alpha">E</span><span>Back rise length from the end waist</span></li>
-                <li><span class="alpha">F</span><span>Inside length</span></li>
-                <li><span class="alpha">I</span><span>Back rise length from the top waist</span></li>
+                <li>
+                  <span class="alpha">B</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'B',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">B1</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'B1',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">E</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'E',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">F</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'F',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">I</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'I',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -397,16 +723,96 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">A</span><span>Waist girth</span></li>
-                <li><span class="alpha">A1</span><span>Waist girth <span style="white-space: nowrap;">- relaxed</span></span></li>
-                <li><span class="alpha">A2</span><span>Waist girth <span style="white-space: nowrap;">- stretched</span></span></li>
-                <li><span class="alpha">C</span><span>Hip girth</span></li>
-                <li><span class="alpha">D</span><span>Front rise length from the end waist</span></li>
-                <li><span class="alpha">G</span><span>1/2 thigh at crotch</span></li>
-                <li><span class="alpha">H</span><span>Front rise length from the top waist</span></li>
-                <li><span class="alpha">J</span><span>1/2 bottom legs</span></li>
-                <li><span class="alpha">J3</span><span>1/2 bottom legs <span style="white-space: nowrap;">- opening relaxed</span></span></li>
-                <li><span class="alpha">J4</span><span>1/2 bottom legs <span style="white-space: nowrap;">- opening stretched</span></span></li>
+                <li>
+                  <span class="alpha">A</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'A',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">A1</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'A1',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">A2</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'A2',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">D</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'D',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">G</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'G',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">H</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'H',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">J</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'J',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">J3</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'J3',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">J4</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'J4',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -430,12 +836,60 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">B</span><span>Out side length from the end waist</span></li>
-                <li><span class="alpha">B1</span><span>Out side length from the top waist</span></li>
-                <li><span class="alpha">C</span><span>Hip girth</span></li>
-                <li><span class="alpha">E</span><span>Back rise length from the end waist</span></li>
-                <li><span class="alpha">F</span><span>Inside length</span></li>
-                <li><span class="alpha">I</span><span>Back rise length from the top waist</span></li>
+                <li>
+                  <span class="alpha">B</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'B',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">B1</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'B1',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">E</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'E',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">F</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'F',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">I</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'I',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -466,13 +920,69 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">A</span><span>Front body length from HSP</span></li>
-                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
-                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
-                <li><span class="alpha">C1</span><span>1/2 bottom girth <span style="white-space: nowrap;">- relaxed</span></span></li>
-                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
-                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
-                <li><span class="alpha">E</span><span>Shoulder & sleeve length</span></li>
+                <li>
+                  <span class="alpha">A</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'A',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">B</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'B',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C1</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C1',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C2</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C2',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">D</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'D',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">E</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'E',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -496,9 +1006,33 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">F</span><span>Center back length</span></li>
-                <li><span class="alpha">G</span><span>Sleeve length</span></li>
-                <li><span class="alpha">H</span><span>Back body length from HSP</span></li>
+                <li>
+                  <span class="alpha">F</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'F',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">G</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'G',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">H</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'H',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -529,11 +1063,51 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
-                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
-                <li><span class="alpha">C1</span><span>1/2 bottom girth <span style="white-space: nowrap;">- relaxed</span></span></li>
-                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
-                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
+                <li>
+                  <span class="alpha">B</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'B',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C1</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C1',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C2</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C2',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">D</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'D',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -557,7 +1131,15 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">F</span><span>Center back length</span></li>
+                <li>
+                  <span class="alpha">F</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'F',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -604,11 +1186,51 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">B</span><span>1/2 chest girth</span></li>
-                <li><span class="alpha">C</span><span>1/2 bottom girth</span></li>
-                <li><span class="alpha">C2</span><span>1/2 bottom girth <span style="white-space: nowrap;">- stretched</span></span></li>
-                <li><span class="alpha">D</span><span>Shoulder point to point</span></li>
-                <li><span class="alpha">E</span><span>Shoulder & sleeve length</span></li>
+                <li>
+                  <span class="alpha">B</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'B',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">C2</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'C2',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">D</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'D',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">E</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'E',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
@@ -632,8 +1254,24 @@
           <div class="product-measurement-instructions flex-1">
             <div class="rte">
               <ol>
-                <li><span class="alpha">F</span><span>Center back length</span></li>
-                <li><span class="alpha">G</span><span>Sleeve length</span></li>
+                <li>
+                  <span class="alpha">F</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'F',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
+                <li>
+                  <span class="alpha">G</span
+                  ><span>
+                    {%- render 'get-measurement-label-by-alpha',
+                      alpha: 'G',
+                      measurement_definitions: measurement_definitions
+                    -%}
+                  </span>
+                </li>
               </ol>
             </div>
           </div>
