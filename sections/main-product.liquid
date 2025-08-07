@@ -352,21 +352,7 @@
           <div class="flex items-center justify-between">
             <!-- Discount badge and product tags -->
             <div class="flex items-center gap-2">
-              {% if product.compare_at_price > product.price %}
-                {%- assign savings = product.compare_at_price
-                  | minus: product.price
-                  | times: 100.0
-                  | divided_by: product.compare_at_price
-                  | round
-                -%}
-                <div class="product-discount-badge">
-                  {%- if savings >= 15 -%}
-                    -{{ savings }}%
-                  {%- else -%}
-                    {{ 'products.product.sale_badge' | t }}
-                  {%- endif -%}
-                </div>
-              {% endif %}
+              {% render 'discount-badge', product: product, badge_class: 'product-discount-badge' %}
 
               <!-- Product tags -->
               {%- for tag in product.tags -%}
