@@ -205,7 +205,7 @@
 
   <!-- Conditional Product Measurement Instructions -->
   {% comment %} Check features.kind for supported product categories using system.handle for language-independent comparison {% endcomment %}
-  {% assign supported_categories = 'jackets,fleece-sweaters,trousers,shorts,t-shirts,vests,hoodies-sweatpants,shirts'
+  {% assign supported_categories = 'jackets,fleece-sweaters,trousers,shorts,t-shirts,vests,hoodies-sweatpants,shirts,skirts'
     | split: ','
   %}
   {% assign product_kind_handle = blank %}
@@ -1280,6 +1280,65 @@
               loading="lazy"
               src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/shirt-back.png"
               alt="The back part of the shirt"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Conditional Product Measurement Instructions for Skirts -->
+  {% if product_kind_handle == 'skirts' %}
+    <div class="mt-8">
+      <h3 class="mb-4 text-gray-950 font-archivo-expanded text-xl leading-6">How to measure the product?</h3>
+
+      <!-- Front part of the skirt -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The front part of the skirt</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">A</span><span>Waist girth</span></li>
+                <li><span class="alpha">A1</span><span>Waist girth <span style="white-space: nowrap;">- relaxed</span></span></li>
+                <li><span class="alpha">A2</span><span>Waist girth <span style="white-space: nowrap;">- stretched</span></span></li>
+                <li><span class="alpha">C</span><span>Hip girth</span></li>
+                <li><span class="alpha">J</span><span>1/2 bottom legs</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/skirt-front.png"
+              alt="The front part of the skirt"
+              width="300"
+              height="400"
+              class="max-w-full h-auto"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Back part of the skirt -->
+      <div class="mb-8">
+        <h4 class="mb-4 font-archivo-expanded font-semibold leading-6 text-[#8b8b8b]">The back part of the skirt</h4>
+        <div class="measurement-content flex flex-col md:flex-row items-start gap-8">
+          <div class="product-measurement-instructions flex-1">
+            <div class="rte">
+              <ol>
+                <li><span class="alpha">B</span><span>Out side length from the end waist</span></li>
+              </ol>
+            </div>
+          </div>
+          <div class="measurement-figure flex-1 text-center flex items-center justify-center">
+            <img
+              loading="lazy"
+              src="https://northfinder.com/en/themes/northfinder_2023/images/size-table/skirt-back.png"
+              alt="The back part of the skirt"
               width="300"
               height="400"
               class="max-w-full h-auto"
