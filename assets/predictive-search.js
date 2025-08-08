@@ -355,9 +355,25 @@ class PredictiveSearch extends SearchForm {
                         <a href="${item.url}" class="predictive-search__item" tabindex="-1">
                           <div class="product">
                             <img src="${item.image}"/>
-                            <h3>${item.title}</h3>
+                            <h3>${item.title}
+                            <div class="meta flex justify-start gap-2 sm:hidden mt-1">
+                            ${discountPercent ? hyperHTML.wire()`<span class="discount text-sm px-1 py-0.5">${discountPercent >= 15 ? `-${Math.round(discountPercent)}%` : 'SALE'}</span>` : ''}
+                            <div class="flex gap-1 items-center">
+                              ${
+                                discountPercent > 0
+                                  ? hyperHTML.wire()`
+                                <span class="line-through text-[#666666] font-medium font-archivo-expanded text-sm leading-6">${formatMoney(originalPrice)}</span>
+                                <span class="text-black font-medium font-archivo-expanded text-sm leading-6">${formatMoney(discountPrice)}</span>
+                              `
+                                  : hyperHTML.wire()`
+                                <span class="text-black font-medium font-archivo-expanded text-sm leading-6">${formatMoney(originalPrice)}</span>
+                              `
+                              }
+                            </div>
                           </div>
-                          <div class="meta">
+                            </h3>
+                          </div>
+                          <div class="meta hidden sm:block">
                             ${discountPercent ? hyperHTML.wire()`<span class="discount">${discountPercent >= 15 ? `-${Math.round(discountPercent)}%` : 'SALE'}</span>` : ''}
                             <div class="flex gap-3 items-center mt-0.5">
                               ${
