@@ -1,0 +1,23 @@
+{% comment %}
+  Renders content with HTML entities that will be decoded by JavaScript
+
+  Accepts:
+  - content: {String} The content that may contain HTML entities
+
+  Usage:
+  {% render 'decode-html-entities', content: error_message %}
+
+  Outputs content in a span with data attribute for JavaScript processing
+{% endcomment %}
+
+{%- liquid
+  assign content = content | default: ''
+
+  # Check if content contains HTML entities (both single and double escaped)
+  if content contains '&lt;' or content contains '&amp;lt;'
+    # Output content in a span with data attribute for JavaScript decoding
+    echo '<span class="html-entity-content" data-encoded-content="' | append: content | append: '"></span>'
+  else
+    echo content | escape
+  endif
+-%}
