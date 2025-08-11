@@ -793,7 +793,7 @@
         });
 
         // Filter URLs by active color
-        let urlsToUse = allMediaUrls;
+        let urlsToUse = [];
         let exactMatches = [];
         let partialMatches = [];
 
@@ -855,9 +855,23 @@
             }
           }
 
-          // If still no matches found for the selected variant, show placeholder
+          // If still no matches found for the selected variant, fallback to first 2 media items by priority
           if (urlsToUse.length === 0) {
-            urlsToUse = ['placeholder'];
+            // Get all media URLs and sort them according to display rules
+            const allMediaForFallback = allMediaUrls.slice(); // Create a copy
+            const sortedFallbackImages = window.sortImagesByDisplayRules(allMediaForFallback, colorMappings);
+
+            // Take only the first 2 items according to priority order
+            const fallbackUrls = sortedFallbackImages.slice(0, 2).map(item =>
+              typeof item === 'string' ? item : item.url
+            );
+
+            // If we have at least one media item, use the fallback; otherwise use placeholder
+            if (fallbackUrls.length > 0) {
+              urlsToUse = fallbackUrls;
+            } else {
+              urlsToUse = ['placeholder'];
+            }
           }
         }
 
@@ -962,20 +976,47 @@
 
         // Ensure we have at least some images to display
         if (images.length === 0) {
+
+
           if (allMedia.length > 0) {
+
+            // Get all media URLs for sorting
             const allMediaUrls = allMedia.map(media => {
               // For videos, use the preview image URL
-              const url = media.media_type === 'video' && media.preview_image ?
+              return media.media_type === 'video' && media.preview_image ?
                 media.preview_image.src : media.src;
+            });
+
+
+
+            // Sort all media according to display rules and take first 2
+            const colorMappings = {% if product.metafields.custom.color.value %}{{ product.metafields.custom.color.value | json }}{% else %}null{% endif %};
+            const sortedFallbackImages = window.sortImagesByDisplayRules(allMediaUrls, colorMappings);
+
+
+            const fallbackUrls = sortedFallbackImages.slice(0, 2);
+
+
+            // Convert back to the expected format with media metadata
+            images = fallbackUrls.map((item, index) => {
+              const url = typeof item === 'string' ? item : item.url;
+
+              // Find the corresponding media object
+              const mediaObject = allMedia.find(media => {
+                const mediaSrc = media.media_type === 'video' && media.preview_image ?
+                  media.preview_image.src : media.src;
+                return mediaSrc === url;
+              });
 
               return {
                 url: url,
-                mediaId: media.id,
-                mediaType: media.media_type,
+                mediaId: mediaObject ? mediaObject.id : `fallback-${index}`,
+                mediaType: mediaObject ? mediaObject.media_type : 'image',
                 hidden: false
               };
             });
-            images = [allMediaUrls[0]];
+
+
           } else {
             // Product has no media at all - create placeholder
             images = [{
@@ -984,6 +1025,7 @@
               mediaType: 'placeholder',
               hidden: false
             }];
+
           }
         }
 
