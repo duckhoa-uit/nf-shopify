@@ -340,7 +340,12 @@
       {% assign image_url = first_model_image.preview_image | image_url: width: width, height: height, crop: crop %}
     {% endif %}
 
-    {% comment %} Step 7: Final fallback - use any random image from the product {% endcomment %}
+    {% comment %} Step 7: If still no image found, fallback to product featured image {% endcomment %}
+    {% if image_url == '' and product.featured_image %}
+      {% assign image_url = product.featured_image | image_url: width: width, height: height, crop: crop %}
+    {% endif %}
+
+    {% comment %} Step 8: Final fallback - use any random image from the product {% endcomment %}
     {% if image_url == '' and first_image != nil %}
       {% assign image_url = first_image.preview_image | image_url: width: width, height: height, crop: crop %}
     {% endif %}
