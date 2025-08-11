@@ -43,6 +43,28 @@
     endif
   endunless
 
+  # NEW: Stock-based filtering for color options
+  assign available_color_values = ''
+  assign available_colors_array = ''
+
+  if is_color_option
+    # Filter color options to only show those with available stock
+    for value in option.values
+      if value.available
+        if available_color_values == ''
+          assign available_color_values = value
+        else
+          assign available_color_values = available_color_values | append: ',' | append: value
+        endif
+      endif
+    endfor
+
+    # Convert to array for iteration
+    if available_color_values != ''
+      assign available_colors_array = available_color_values | split: ','
+    endif
+  endif
+
   # Only do sorting for Color and Size options
   if is_color_option and product.metafields.custom.color.value != blank
     assign metafield_colors = product.metafields.custom.color.value
@@ -125,16 +147,7 @@
           assign input_dataset = 'data-product-url="' | append: value.product_url | append: '" '
           assign input_dataset = input_dataset | append: 'data-option-value-id="' | append: value.id | append: '"'
 
-          # Set up any swatch properties for color options
-          assign swatch_value = null
-          assign swatch_focal_point = null
-          if value.swatch.image
-            assign image_url = value.swatch.image | image_url: width: 50
-            assign swatch_value = 'url(' | append: image_url | append: ')'
-            assign swatch_focal_point = value.swatch.image.presentation.focal_point
-          elsif value.swatch.color
-            assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
-          endif
+          # Note: Swatch properties handled in swatch-input component
         -%}
 
         {%- if is_size_option -%}
@@ -163,68 +176,7 @@
             </label>
           </div>
         {%- elsif is_color_option -%}
-          {%- capture help_text -%}
-            <span class="visually-hidden">{{ value | escape }}</span>
-            {% if option_disabled %}
-              <span class="visually-hidden label-unavailable">
-                {{- 'products.product.variant_sold_out_or_unavailable' | t -}}
-              </span>
-            {% endif %}
-          {%- endcapture -%}
-
-          {%- if show_thumbnails -%}
-            {%- liquid
-              assign color_value = value | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
-
-              # Use our improved get-variant-color-image snippet to find the image
-            -%}
-            {% capture thumbnail_url %}{% render 'get-variant-color-image',
-              product: product,
-              color_value: color_value,
-              width: 80,
-              height: 80,
-              crop: 'center',
-              image_type: 'M'
-            %}{% endcapture %}
-            {%- liquid
-              # Clean up any whitespace in the captured URL
-              assign thumbnail_url = thumbnail_url | strip
-
-              # If no thumbnail found, we'll let the swatch component handle the placeholder
-              # The swatch.liquid will show a placeholder when thumbnail_url is blank
-            -%}
-
-            <div class="color-option-with-thumbnail" data-color-name="{{ value }}">
-              {%
-                render 'swatch-input',
-                id: input_id,
-                name: input_name,
-                value: value | escape,
-                swatch: value.swatch,
-                product_form_id: product_form_id,
-                checked: value.selected,
-                visually_disabled: option_disabled,
-                shape: block.settings.swatch_shape,
-                help_text: help_text,
-                additional_props: input_dataset,
-                thumbnail_url: thumbnail_url
-              %}
-            </div>
-          {%- else -%}
-            {%
-              render 'swatch-input',
-              id: input_id,
-              name: input_name,
-              value: value | escape,
-              swatch: value.swatch,
-              product_form_id: product_form_id,
-              checked: value.selected,
-              visually_disabled: option_disabled,
-              shape: block.settings.swatch_shape,
-              help_text: help_text,
-              additional_props: input_dataset
-            %}
-          {%- endif -%}
+          {%- comment -%} Skip color rendering in sorted section - will be handled separately {%- endcomment -%}
         {%- endif -%}
       {%- endif -%}
     {%- endif -%}
@@ -246,16 +198,7 @@
       assign input_dataset = 'data-product-url="' | append: value.product_url | append: '" '
       assign input_dataset = input_dataset | append: 'data-option-value-id="' | append: value.id | append: '"'
 
-      # Set up any swatch properties for color options
-      assign swatch_value = null
-      assign swatch_focal_point = null
-      if value.swatch.image
-        assign image_url = value.swatch.image | image_url: width: 50
-        assign swatch_value = 'url(' | append: image_url | append: ')'
-        assign swatch_focal_point = value.swatch.image.presentation.focal_point
-      elsif value.swatch.color
-        assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
-      endif
+      # Note: Swatch properties handled in swatch-input component
     -%}
 
     {%- if is_size_option -%}
@@ -284,38 +227,73 @@
         </label>
       </div>
     {%- elsif is_color_option -%}
-      {%- capture help_text -%}
-        <span class="visually-hidden">{{ value | escape }}</span>
-        {% if option_disabled %}
-          <span class="visually-hidden label-unavailable">
-            {{- 'products.product.variant_sold_out_or_unavailable' | t -}}
-          </span>
-        {% endif %}
-      {%- endcapture -%}
+      {%- comment -%} Skip color rendering in unsorted section - will be handled separately {%- endcomment -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
 
-      {%- if show_thumbnails -%}
+{% comment %}
+  NEW: Stock-based color filtering implementation
+  Render color options separately with availability filtering
+{% endcomment %}
+{%- if is_color_option -%}
+  {%- if available_colors_array.size > 0 -%}
+    {%- comment -%} Render available colors only {%- endcomment -%}
+    {%- for color_name in available_colors_array -%}
+      {%- assign value = option.values | where: 'name', color_name | first -%}
+      {%- if value -%}
         {%- liquid
+          # Since we pre-filtered, all colors here are available
+          assign option_disabled = false
+
+          # Create input ID and names
+          assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0
+          assign input_name = option.name | append: '-' | append: option.position
+
+          # Set up dataset properties
+          assign input_dataset = 'data-product-url="' | append: value.product_url | append: '" '
+          assign input_dataset = input_dataset | append: 'data-option-value-id="' | append: value.id | append: '"'
+
+          # Color value processing for thumbnail
           assign color_value = value | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
-
-          # Use our improved get-variant-color-image snippet to find the image
-        -%}
-        {% capture thumbnail_url %}{% render 'get-variant-color-image',
-          product: product,
-          color_value: color_value,
-          width: 80,
-          height: 80,
-          crop: 'center',
-          image_type: 'M'
-        %}{% endcapture %}
-        {%- liquid
-          # Clean up any whitespace in the captured URL
-          assign thumbnail_url = thumbnail_url | strip
-
-          # If no thumbnail found, we'll let the swatch component handle the placeholder
-          # The swatch.liquid will show a placeholder when thumbnail_url is blank
         -%}
 
-        <div class="color-option-with-thumbnail" data-color-name="{{ value }}">
+        {%- capture help_text -%}
+          <span class="visually-hidden">{{ value | escape }}</span>
+        {%- endcapture -%}
+
+        {%- if show_thumbnails -%}
+          {% comment %} Generate thumbnail URL {% endcomment %}
+          {% capture thumbnail_url %}{% render 'get-variant-color-image',
+            product: product,
+            color_value: color_value,
+            width: 80,
+            height: 80,
+            crop: 'center',
+            image_type: 'M'
+          %}{% endcapture %}
+
+          {%- liquid
+            assign thumbnail_url = thumbnail_url | strip
+          -%}
+
+          <div class="color-option-with-thumbnail" data-color-name="{{ value }}" data-available="true">
+            {%
+              render 'swatch-input',
+              id: input_id,
+              name: input_name,
+              value: value | escape,
+              swatch: value.swatch,
+              product_form_id: product_form_id,
+              checked: value.selected,
+              visually_disabled: false,
+              shape: block.settings.swatch_shape,
+              help_text: help_text,
+              additional_props: input_dataset,
+              thumbnail_url: thumbnail_url
+            %}
+          </div>
+        {%- else -%}
           {%
             render 'swatch-input',
             id: input_id,
@@ -324,28 +302,30 @@
             swatch: value.swatch,
             product_form_id: product_form_id,
             checked: value.selected,
-            visually_disabled: option_disabled,
+            visually_disabled: false,
             shape: block.settings.swatch_shape,
             help_text: help_text,
-            additional_props: input_dataset,
-            thumbnail_url: thumbnail_url
+            additional_props: input_dataset
           %}
-        </div>
-      {%- else -%}
-        {%
-          render 'swatch-input',
-          id: input_id,
-          name: input_name,
-          value: value | escape,
-          swatch: value.swatch,
-          product_form_id: product_form_id,
-          checked: value.selected,
-          visually_disabled: option_disabled,
-          shape: block.settings.swatch_shape,
-          help_text: help_text,
-          additional_props: input_dataset
-        %}
+        {%- endif -%}
       {%- endif -%}
-    {%- endif -%}
-  {%- endfor -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- comment -%} No colors available - show message {%- endcomment -%}
+    <div class="color-options-unavailable">
+      <div class="no-stock-message bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+        <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2M4 13h2m0 0V9a2 2 0 012-2h2m0 0V6a2 2 0 012-2h2.09M9 9h6m6 0a2 2 0 012 2v1M9 9V6a2 2 0 012-2h2.09"></path>
+        </svg>
+        <p class="text-sm font-medium text-gray-900 mb-1">
+          All colors currently out of stock
+        </p>
+        <p class="text-xs text-gray-500">
+          Check back later for availability
+        </p>
+      </div>
+    </div>
+  {%- endif -%}
+
+
 {%- endif -%}
