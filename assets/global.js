@@ -471,12 +471,12 @@ class MenuDrawer extends HTMLElement {
     this.querySelectorAll(
       'button:not(.localization-selector):not(.country-selector__close-button):not(.country-filter__reset-button)'
     ).forEach((button) => button.addEventListener('click', this.onCloseButtonClick.bind(this)));
-    
+
     // Add click handler for mobile facets close elements
     this.querySelectorAll('.mobile-facets__close').forEach((closeElement) =>
       closeElement.addEventListener('click', this.onMobileFacetsCloseClick.bind(this))
     );
-    
+
     // Add backdrop click detection for mobile facets
     this.addEventListener('click', this.onBackdropClick.bind(this));
   }
@@ -572,14 +572,14 @@ class MenuDrawer extends HTMLElement {
     if (!this.mainDetailsToggle.hasAttribute('open') || !this.querySelector('#FacetFiltersFormMobile')) {
       return;
     }
-    
+
     // Check if the click is outside the mobile facets content area
     const mobileFacetsInner = this.querySelector('.mobile-facets__inner');
     const isClickOutsideContent = mobileFacetsInner && !mobileFacetsInner.contains(event.target);
-    
+
     // Also check if clicking on the summary element itself (which contains the backdrop)
     const isClickOnSummary = event.target === this.mainDetailsToggle.querySelector('summary');
-    
+
     if (isClickOutsideContent || isClickOnSummary) {
       event.preventDefault();
       event.stopPropagation();
@@ -1134,12 +1134,23 @@ customElements.define('slideshow-component', SlideshowComponent);
 class VariantSelects extends HTMLElement {
   constructor() {
     super();
+    this.variantData = null;
+    this.variantMap = null;
+    this.updateInProgress = false;
   }
 
   connectedCallback() {
+    this.initializeVariantData();
+    this.initializeInitialState();
+
     this.addEventListener('change', (event) => {
       const target = this.getInputForEventTarget(event.target);
       this.updateSelectionMetadata(event);
+
+      // Handle dynamic size filtering for color changes
+      if (this.isColorOption(target)) {
+        this.handleColorChange(target);
+      }
 
       publish(PUB_SUB_EVENTS.optionValueSelectionChange, {
         data: {
@@ -1149,6 +1160,18 @@ class VariantSelects extends HTMLElement {
         },
       });
     });
+  }
+
+  initializeInitialState() {
+    // Check if there's already a selected color and apply filtering
+    const colorFieldset = this.querySelector('fieldset[data-option-type="color"]');
+    if (colorFieldset) {
+      const selectedColorInput = colorFieldset.querySelector('input:checked');
+      if (selectedColorInput) {
+        // Apply filtering for initially selected color
+        this.handleColorChange(selectedColorInput);
+      }
+    }
   }
 
   updateSelectionMetadata({ target }) {
@@ -1191,6 +1214,167 @@ class VariantSelects extends HTMLElement {
     return Array.from(this.querySelectorAll('select option[selected], fieldset input:checked')).map(
       ({ dataset }) => dataset.optionValueId
     );
+  }
+
+  initializeVariantData() {
+    const variantScript = this.querySelector('script[data-product-variants]');
+    if (variantScript) {
+      try {
+        this.variantData = JSON.parse(variantScript.textContent);
+        this.variantMap = this.buildVariantMap();
+      } catch (error) {
+        console.warn('Failed to parse variant data:', error);
+      }
+    }
+  }
+
+  buildVariantMap() {
+    if (!this.variantData) return null;
+
+    const map = {};
+
+    this.variantData.forEach(variant => {
+      // Track ALL variants for each color, not just available ones
+      const color = variant.option1;
+      const size = variant.option2;
+
+      if (color && size) {
+        if (!map[color]) {
+          map[color] = {
+            allSizes: new Set(),
+            availableSizes: new Set()
+          };
+        }
+
+        // Add to all sizes for this color
+        map[color].allSizes.add(size);
+
+        // Add to available sizes only if variant is available
+        if (variant.available) {
+          map[color].availableSizes.add(size);
+        }
+      }
+    });
+
+    // Convert Sets to Arrays for easier handling
+    Object.keys(map).forEach(color => {
+      map[color].allSizes = Array.from(map[color].allSizes);
+      map[color].availableSizes = Array.from(map[color].availableSizes);
+    });
+
+    return map;
+  }
+
+  isColorOption(target) {
+    const fieldset = target.closest('fieldset');
+    return fieldset && fieldset.dataset.optionType === 'color';
+  }
+
+  handleColorChange(target) {
+    if (!this.variantMap || this.updateInProgress) return;
+
+    const selectedColor = target.value;
+    const colorData = this.variantMap[selectedColor];
+
+    if (!colorData) {
+      // If no data for this color, show all sizes as available
+      this.updateSizeOptions(null, null);
+      return;
+    }
+
+    this.updateSizeOptions(colorData.allSizes, colorData.availableSizes);
+  }
+
+  updateSizeOptions(allSizes, availableSizes) {
+    const sizeFieldset = this.querySelector('fieldset[data-option-type="size"]');
+    if (!sizeFieldset) return;
+
+    // Prevent concurrent updates
+    this.updateInProgress = true;
+
+    const sizeOptions = sizeFieldset.querySelectorAll('[data-size-option]');
+    let hasAvailableSize = false;
+    let firstAvailableInput = null;
+    let currentSelectedInput = sizeFieldset.querySelector('input:checked');
+
+    sizeOptions.forEach(optionDiv => {
+      const input = optionDiv.querySelector('input[data-size-value]');
+      const sizeValue = input.dataset.sizeValue;
+
+      // Determine visibility and availability
+      let shouldShow = true;
+      let isAvailable = true;
+
+      if (allSizes && availableSizes) {
+        // Show only sizes that exist for this color
+        shouldShow = allSizes.includes(sizeValue);
+        // Enable only sizes that are available for this color
+        isAvailable = availableSizes.includes(sizeValue);
+      }
+      // If no color data, show all sizes as available (fallback)
+
+      // Update visibility (only hide if size doesn't exist for selected color)
+      optionDiv.style.display = shouldShow ? 'block' : 'none';
+
+      if (shouldShow) {
+        // Update availability state
+        input.disabled = !isAvailable;
+
+        if (isAvailable) {
+          hasAvailableSize = true;
+          if (!firstAvailableInput) {
+            firstAvailableInput = input;
+          }
+          optionDiv.classList.remove('unavailable');
+          input.classList.remove('disabled');
+        } else {
+          optionDiv.classList.add('unavailable');
+          input.classList.add('disabled');
+          // Uncheck if currently selected and unavailable
+          if (input.checked) {
+            input.checked = false;
+            currentSelectedInput = null;
+          }
+        }
+      }
+    });
+
+    // Auto-select first available size if none is selected
+    if (!currentSelectedInput && firstAvailableInput) {
+      // Use setTimeout to avoid triggering change event during current update
+      setTimeout(() => {
+        firstAvailableInput.checked = true;
+        // Don't dispatch change event to avoid recursive calls
+        this.updateInProgress = false;
+      }, 0);
+    } else {
+      this.updateInProgress = false;
+    }
+
+    // Show message if no sizes available
+    this.updateNoSizesMessage(sizeFieldset, hasAvailableSize);
+  }
+
+  updateNoSizesMessage(sizeFieldset, hasAvailableSize) {
+    let messageDiv = sizeFieldset.querySelector('.no-sizes-message');
+
+    if (!hasAvailableSize) {
+      if (!messageDiv) {
+        messageDiv = document.createElement('div');
+        messageDiv.className = 'no-sizes-message bg-gray-50 border border-gray-200 rounded-lg p-4 text-center mt-2';
+        messageDiv.innerHTML = `
+          <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2M4 13h2m0 0V9a2 2 0 012-2h2m0 0V6a2 2 0 012-2h2.09M9 9h6m6 0a2 2 0 012 2v1M9 9V6a2 2 0 012-2h2.09"></path>
+          </svg>
+          <p class="text-sm font-medium text-gray-900 mb-1">No sizes available</p>
+          <p class="text-xs text-gray-500">This color is currently out of stock in all sizes</p>
+        `;
+        sizeFieldset.appendChild(messageDiv);
+      }
+      messageDiv.style.display = 'block';
+    } else if (messageDiv) {
+      messageDiv.style.display = 'none';
+    }
   }
 }
 
