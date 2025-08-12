@@ -1211,7 +1211,7 @@ class VariantSelects extends HTMLElement {
   }
 
   get selectedOptionValues() {
-    return Array.from(this.querySelectorAll('select option[selected], fieldset input:checked')).map(
+    return Array.from(this.querySelectorAll('select option[selected], fieldset input:checked, input[data-single-size-input]')).map(
       ({ dataset }) => dataset.optionValueId
     );
   }
@@ -1287,6 +1287,13 @@ class VariantSelects extends HTMLElement {
 
   updateSizeOptions(allSizes, availableSizes) {
     const sizeFieldset = this.querySelector('fieldset[data-option-type="size"]');
+    const singleSizeInput = this.querySelector('input[data-single-size-input]');
+
+    // If single size product, no need to update size options
+    if (singleSizeInput && !sizeFieldset) {
+      return;
+    }
+
     if (!sizeFieldset) return;
 
     // Prevent concurrent updates
