@@ -924,22 +924,27 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
           {% if product.metafields.features.size > 0 %}
-            {% comment %} Pre-filter features to display {% endcomment %}
-            {% assign displayable_features = '' %}
-            {% for metafield in product.metafields.features %}
-              {% assign key = metafield | first %}
-              {% assign arr_values = metafield | last %}
-              {% if arr_values.value != blank %}
-                {% assign feature_obj = shop.metaobjects.product_feature[key] %}
-                {% if feature_obj.display_on_product_page.value == true %}
-                  {% if displayable_features == '' %}
-                    {% assign displayable_features = key %}
-                  {% else %}
-                    {% assign displayable_features = displayable_features | append: ',' | append: key %}
-                  {% endif %}
+            {% comment %} Pre-filter features to display - Using pagination hack to overcome 50-item limit {% endcomment %}
+            {% paginate shop.metaobjects.product_feature.values by 250 %}
+              {% assign displayable_features = '' %}
+              {% for metafield in product.metafields.features %}
+                {% assign key = metafield | first %}
+                {% assign arr_values = metafield | last %}
+                {% if arr_values.value != blank %}
+                  {% comment %} Find matching metaobject by handle {% endcomment %}
+                  {% for feature in shop.metaobjects.product_feature.values %}
+                    {% if feature.system.handle == key and feature.display_on_product_page.value == true %}
+                      {% if displayable_features == '' %}
+                        {% assign displayable_features = key %}
+                      {% else %}
+                        {% assign displayable_features = displayable_features | append: ',' | append: key %}
+                      {% endif %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
                 {% endif %}
-              {% endif %}
-            {% endfor %}
+              {% endfor %}
+            {% endpaginate %}
 
             {% if displayable_features != '' %}
               {% assign displayable_keys = displayable_features | split: ',' %}
