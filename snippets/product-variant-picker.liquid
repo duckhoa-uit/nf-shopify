@@ -17,6 +17,9 @@
     {{ block.shopify_attributes }}
   >
     {%- liquid
+      # Set up form ID for inputs
+      assign product_form_id = 'product-form-' | append: section.id
+
       # Position-based option sorting for internationalization
       # Color is typically position 1, Size is typically position 2
       assign sorted_options = ''
@@ -144,6 +147,17 @@
       -%}
 
       {%- if is_size_option -%}
+        {%- comment -%} Check if this is a single-size product {%- endcomment -%}
+        {%- assign is_single_size_product = false -%}
+        {%- assign single_size_value = null -%}
+        {%- assign single_size_input_id = null -%}
+
+        {%- if option.values.size == 1 -%}
+          {%- assign is_single_size_product = true -%}
+          {%- assign single_size_value = option.values.first -%}
+          {%- assign single_size_input_id = section.id | append: '-' | append: option.position | append: '-single-size' -%}
+        {%- endif -%}
+
         {%- comment -%} Check product kind to hide size-fit-button for scarfs {%- endcomment -%}
         {%- assign is_scarfs = false -%}
         {%- if product.metafields.features.kind.value -%}
@@ -156,31 +170,52 @@
           {%- endfor -%}
         {%- endif -%}
 
-        <fieldset class="js product-form__input product-form__input--pill product-form__input--pill-size" data-option-type="size" data-option-position="{{ option.position }}">
-          <div class="flex items-center justify-between mb-2">
-            <legend class="form__label m-0">{{ option.name }}</legend>
-            {%- unless is_scarfs -%}
-              <button
-                type="button"
-                class="size-fit-button flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                data-size-fit-modal
-              >
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                </svg>
-                {{ 'products.product.size_guide_fit_recommender' | t }}
-              </button>
-            {%- endunless -%}
-          </div>
-          <div class="grid grid-cols-5 gap-5">
-            {% render 'product-variant-options',
-              product: product,
-              option: option,
-              block: block,
-              picker_type: picker_type
-            %}
-          </div>
-        </fieldset>
+        {%- if is_single_size_product -%}
+          {%- comment -%} Single size product: render hidden input instead of fieldset {%- endcomment -%}
+          <input
+            type="hidden"
+            id="{{ single_size_input_id }}"
+            name="options[{{ option.name | escape }}]"
+            value="{{ single_size_value | escape }}"
+            form="{{ product_form_id }}"
+            data-single-size-input
+            data-option-type="size"
+            data-option-position="{{ option.position }}"
+            data-size-value="{{ single_size_value | escape }}"
+            checked
+          >
+          {%- comment -%} Optional: Add a visually hidden label for accessibility {%- endcomment -%}
+          <span class="visually-hidden" aria-live="polite">
+            {{ option.name }}: {{ single_size_value }}
+          </span>
+        {%- else -%}
+          {%- comment -%} Multiple sizes: render normal fieldset {%- endcomment -%}
+          <fieldset class="js product-form__input product-form__input--pill product-form__input--pill-size" data-option-type="size" data-option-position="{{ option.position }}">
+            <div class="flex items-center justify-between mb-2">
+              <legend class="form__label m-0">{{ option.name }}</legend>
+              {%- unless is_scarfs -%}
+                <button
+                  type="button"
+                  class="size-fit-button flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                  data-size-fit-modal
+                >
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                  </svg>
+                  {{ 'products.product.size_guide_fit_recommender' | t }}
+                </button>
+              {%- endunless -%}
+            </div>
+            <div class="grid grid-cols-5 gap-5">
+              {% render 'product-variant-options',
+                product: product,
+                option: option,
+                block: block,
+                picker_type: picker_type
+              %}
+            </div>
+          </fieldset>
+        {%- endif -%}
       {%- elsif is_color_option -%}
         <fieldset class="js product-form__input product-form__input--swatch product-form__input--pill-color" data-option-type="color" data-option-position="{{ option.position }}">
           <legend class="form__label">
