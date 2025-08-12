@@ -151,7 +151,7 @@
         -%}
 
         {%- if is_size_option -%}
-          <div class="attribute_radio">
+          <div class="attribute_radio" data-size-option="{{ value | escape }}">
             <input
               type="radio"
               id="{{ input_id }}"
@@ -165,6 +165,7 @@
                 class="disabled" disabled
               {% endif %}
               {{ input_dataset }}
+              data-size-value="{{ value | escape }}"
             >
             <label for="{{ input_id }}">
               {{ value }}
@@ -202,7 +203,7 @@
     -%}
 
     {%- if is_size_option -%}
-      <div class="attribute_radio">
+      <div class="attribute_radio" data-size-option="{{ value | escape }}">
         <input
           type="radio"
           id="{{ input_id }}"
@@ -216,6 +217,7 @@
             class="disabled" disabled
           {% endif %}
           {{ input_dataset }}
+          data-size-value="{{ value | escape }}"
         >
         <label for="{{ input_id }}">
           {{ value }}
