@@ -4,6 +4,7 @@
 {{ 'swiper.css' | asset_url | stylesheet_tag }}
 
 <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+<script src="{{ 'product-card-hover.js' | asset_url }}" defer></script>
 
 {%- style -%}
   /* Initial styling for swiper slides to prevent layout shift */
@@ -32,7 +33,9 @@
 {%- endstyle -%}
 
 <div class="page-width mt-4">
-  <h2 class="product-recommendations__heading font-archivo-expanded text-base lg:text-2xl font-semibold text-[#0f0f0f] mb-7">{{ section.settings.heading | escape }}</h2>
+  <h2 class="product-recommendations__heading font-archivo-expanded text-base lg:text-2xl font-semibold text-[#0f0f0f] mb-7">
+    {{ section.settings.heading | escape }}
+  </h2>
 
   <div class="swiper recently-viewed-swiper w-full pb-5">
     <div class="swiper-wrapper recently-viewed">
@@ -57,19 +60,239 @@
 </div>
 
 <script>
+  // Function to detect and clean corrupted product data from localStorage
+  function cleanCorruptedLocalStorageData() {
+    const localData = localStorage.getItem('recentlyViewedProduct');
+    if (!localData) return;
+
+    try {
+      const productData = JSON.parse(localData);
+      if (!Array.isArray(productData)) {
+        localStorage.removeItem('recentlyViewedProduct');
+        return;
+      }
+
+      // Filter out corrupted products
+      const cleanedData = productData.filter((product) => {
+        const isCorrupted =
+          // Check for Liquid error strings
+          (product.productImg && product.productImg.includes('Liquid error')) ||
+          (product.productImgSrcset && product.productImgSrcset.includes('Liquid error')) ||
+          (product.mainImg && product.mainImg.includes('Liquid error')) ||
+          (product.mainImgSrcset && product.mainImgSrcset.includes('Liquid error')) ||
+          // Check for missing required properties
+          !product.productTitle ||
+          !product.productId ||
+          !product.productUrl ||
+          // Check for invalid image URLs (not placeholder and not valid URL)
+          (product.productImg && product.productImg !== 'placeholder' && !product.productImg.startsWith('/') && !product.productImg.startsWith('http'));
+
+        return !isCorrupted;
+      });
+
+      if (cleanedData.length !== productData.length) {
+        localStorage.setItem('recentlyViewedProduct', JSON.stringify(cleanedData));
+      }
+
+    } catch (error) {
+      localStorage.removeItem('recentlyViewedProduct');
+    }
+  }
+
+  // Generate Shopify placeholder HTML for use in JavaScript
+  const shopifyPlaceholderHTML = `<div class="w-full aspect-square bg-gray-100 flex items-center justify-center">{{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}</div>`;
+
   function setRecentlyViewedProducts() {
+    // Product media data for image priority system
+    const productMedia = [
+      {%- for media in product.media -%}
+        {
+          id: '{{ media.id }}',
+          src: '{{ media.src }}',
+          alt: '{{ media.alt | escape }}',
+          width: {{ media.width | default: 0 }},
+          height: {{ media.height | default: 0 }},
+          url_200: '{{ media | image_url: width: 200 }}',
+          url_300: '{{ media | image_url: width: 300 }}',
+          url_400: '{{ media | image_url: width: 400 }}',
+          url_500: '{{ media | image_url: width: 500 }}'
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ];
+
+    // Find model image using priority system - matches card-product.liquid exactly
+    const findModelImage = (mediaArray) => {
+      if (!mediaArray || mediaArray.length === 0) return null;
+
+      let modelImage = null;
+      let lowestSequence = 999;
+      let foundModelImage = false;
+
+      // First look for model images without sequence (just -M) - matches card-product.liquid
+      for (const media of mediaArray) {
+        const filename = media.src.split('/').pop();
+        if (filename.includes('-M') && !filename.includes('-M_')) {
+          modelImage = media;
+          foundModelImage = true;
+          break; // Break immediately like card-product.liquid
+        }
+      }
+
+      // If no model image without sequence found, look for one with lowest sequence
+      if (!foundModelImage) {
+        let bestModelMedia = null;
+        for (const media of mediaArray) {
+          const filename = media.src.split('/').pop();
+          if (filename.includes('-M_')) {
+            const sequencePart = filename.split('-M_')[1]?.split('.')[0];
+            const sequenceNumber = parseInt(sequencePart) || 0;
+
+            // Only update if this sequence is lower than current lowest - matches card-product.liquid
+            if (sequenceNumber > 0 && sequenceNumber < lowestSequence) {
+              lowestSequence = sequenceNumber;
+              bestModelMedia = media;
+              foundModelImage = true;
+            }
+          }
+        }
+
+        // Set the model image from the best model media found
+        if (bestModelMedia) {
+          modelImage = bestModelMedia;
+        }
+      }
+
+      // If still no model image found, try other image types in priority order - matches card-product.liquid
+      if (!foundModelImage) {
+        const imageTypes = ['H', 'B', 'BV', 'D']; // Exact same order as card-product.liquid
+        for (const type of imageTypes) {
+          if (modelImage === null) {
+            for (const media of mediaArray) {
+              const filename = media.src.split('/').pop();
+              const typeCode = `-${type}`;
+              if (filename.includes(typeCode)) {
+                modelImage = media;
+                break; // Break inner loop like card-product.liquid
+              }
+            }
+          }
+        }
+      }
+
+      // Final fallback - return null here, will be handled by fallback logic later
+      return modelImage;
+    };
+
+    // Find main image (-H) for hover effect - matches card-product.liquid exactly
+    const findMainImage = (mediaArray, modelImage) => {
+      if (!mediaArray || mediaArray.length === 0) return modelImage;
+
+      let mainImage = null;
+
+      // First pass: Look for main image with -H suffix (matches card-product.liquid logic)
+      for (const media of mediaArray) {
+        const filename = media.src.split('/').pop();
+        // Match card-product.liquid: contains '-H' or contains '-H.'
+        if (filename.includes('-H') || filename.includes('-H.')) {
+          mainImage = media;
+          // Note: card-product.liquid doesn't break here, it continues the loop
+          // This allows for potential overwriting if multiple -H images exist
+        }
+      }
+
+      // If no main image found, try to find alternative model images for hover effect
+      if (!mainImage) {
+        let alternativeMainImage = null;
+        let lowestSequence = 999;
+
+        for (const media of mediaArray) {
+          const filename = media.src.split('/').pop();
+          // Look for model images with sequence that are different from current model image
+          if (filename.includes('-M_') && media.id !== modelImage?.id) {
+            const sequencePart = filename.split('-M_')[1]?.split('.')[0];
+            const sequenceNumber = parseInt(sequencePart) || 0;
+
+            // Find the lowest sequence number for consistent behavior
+            if (sequenceNumber > 0 && sequenceNumber < lowestSequence) {
+              lowestSequence = sequenceNumber;
+              alternativeMainImage = media;
+            }
+          }
+        }
+
+        // Use alternative model image if found, otherwise fallback to current model image
+        if (alternativeMainImage) {
+          mainImage = alternativeMainImage;
+        } else {
+          mainImage = modelImage;
+        }
+      }
+
+      return mainImage;
+    };
+
+    const modelImage = findModelImage(productMedia);
+    const mainImage = findMainImage(productMedia, modelImage);
+    const hasRealMainImage = mainImage && modelImage && mainImage.id !== modelImage.id;
+
+    // Generate srcset strings - handle placeholder case
+    const generateSrcset = (image) => {
+      if (!image) return '';
+      if (image.isPlaceholder) return ''; // Don't generate srcset for placeholder
+      return `${image.url_200} 200w, ${image.url_300} 300w, ${image.url_400} 400w, ${image.url_500} 500w`;
+    };
+
+    // Check if product has featured_media to avoid Liquid errors
+    const hasFeaturedMedia = {% if product.featured_media and product.featured_media.src %}true{% else %}false{% endif %};
+
+    const fallbackSrcset = hasFeaturedMedia ?
+      '{%- if product.featured_media and product.featured_media.src and product.featured_media.width >= 200 -%}{{ product.featured_media | image_url: width: 200 }} 200w,{%- endif -%}{%- if product.featured_media and product.featured_media.src and product.featured_media.width >= 300 -%}{{ product.featured_media | image_url: width: 300 }} 300w,{%- endif -%}{%- if product.featured_media and product.featured_media.src and product.featured_media.width >= 400 -%}{{ product.featured_media | image_url: width: 400 }} 400w,{%- endif -%}{%- if product.featured_media and product.featured_media.src and product.featured_media.width >= 500 -%}{{ product.featured_media | image_url: width: 500 }} 500w{%- endif -%}' :
+      '';
+
+    // Fallback to featured_media if no images found, or use placeholder data
+    const finalModelImage = modelImage || (hasFeaturedMedia ? {
+      url_200: '{%- if product.featured_media and product.featured_media.src -%}{{ product.featured_media | image_url: width: 200 }}{%- else -%}placeholder{%- endif -%}',
+      url_300: '{%- if product.featured_media and product.featured_media.src -%}{{ product.featured_media | image_url: width: 300 }}{%- else -%}placeholder{%- endif -%}',
+      url_400: '{%- if product.featured_media and product.featured_media.src -%}{{ product.featured_media | image_url: width: 400 }}{%- else -%}placeholder{%- endif -%}',
+      url_500: '{%- if product.featured_media and product.featured_media.src -%}{{ product.featured_media | image_url: width: 500 }}{%- else -%}placeholder{%- endif -%}',
+      width: {% if product.featured_media and product.featured_media.width %}{{ product.featured_media.width }}{% else %}400{% endif %},
+      height: {% if product.featured_media and product.featured_media.height %}{{ product.featured_media.height }}{% else %}400{% endif %},
+      alt: {% if product.featured_media and product.featured_media.alt %}{{ product.featured_media.alt | json }}{% else %}'Product placeholder'{% endif %},
+      isPlaceholder: {% if product.featured_media and product.featured_media.src %}false{% else %}true{% endif %}
+    } : {
+      // Placeholder data for products with no media
+      url_200: 'placeholder',
+      url_300: 'placeholder',
+      url_400: 'placeholder',
+      url_500: 'placeholder',
+      width: 400,
+      height: 400,
+      alt: 'Product placeholder',
+      isPlaceholder: true
+    });
+
+    const finalMainImage = mainImage || finalModelImage;
+
     const productData = {
-      productTitle: `{{ product.title }}`,
-      productImg: '{{ product.featured_media | image_url: width: 533 }}',
-      imgWidth: '{{ product.featured_media.width }}',
-      imgHeight: '{{ product.featured_media.height }}',
-      productPrice: '{{ product.price | money_with_currency }}',
-      productUrl: '{{ product.url }}',
-      productImageAltText: '{{product.featured_media.alt | escape }}',
-      compareAtPrice: '{{ product.compare_at_price | money }}',
-      onSale: {% if product.compare_at_price > product.price %}true{% else %}false{% endif %},
-      isNew: {% if product.tags contains 'new' %}true{% else %}false{% endif %},
-      savings: '{{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round }}',
+      productTitle: {{ product.title | json }},
+      productImg: finalModelImage.url_400,
+      productImgSrcset: generateSrcset(finalModelImage),
+      mainImg: finalMainImage.url_400,
+      mainImgSrcset: generateSrcset(finalMainImage),
+      hasRealMainImage: hasRealMainImage,
+      imgWidth: finalModelImage.width,
+      imgHeight: finalModelImage.height,
+      productPrice: {{ product.price | money | json }},
+      productUrl: {{ product.url | json }},
+      productImageAltText: finalModelImage.alt,
+      compareAtPrice: {{ product.compare_at_price | money | json }},
+      onSale: {% if product.compare_at_price > product.price and product.available %}true{% else %}false{% endif %},
+      isAvailable: {{ product.available | json }},
+      savings: {% if product.compare_at_price > product.price and product.available %}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round | json }}{% else %}'0'{% endif %},
+      tags: {{ product.tags | json }},
+      promotions: {% if product.metafields.features.promotion.value %}{{ product.metafields.features.promotion.value | json }}{% else %}[]{% endif %},
+      productId: {{ product.id | json }},
+      isPlaceholder: finalModelImage.isPlaceholder || false,
     };
 
     const productList = [];
@@ -113,40 +336,64 @@
   const localViewed = localStorage.recentlyViewedProduct;
 
   function getRecentlyViewedProducts() {
+    // Clean corrupted data before rendering
+    cleanCorruptedLocalStorageData();
+
     const productData = JSON.parse(localStorage.getItem('recentlyViewedProduct'));
 
     const recentlyViewedHtml = [];
 
-    productData.map((item) => {
+    productData.map((item, index) => {
+
       recentlyViewedHtml.unshift(`
     <div class="swiper-slide">
       <div class="card-wrapper h-full">
         <div class="flex flex-col h-full relative">
           <div class="flex items-center gap-2 mb-1.5 h-8">
-            ${item.isNew ? `
-              <div class="bg-background border border-[#CCCCCC] text-[#4D4D4D] font-medium px-2 py-1.5 rounded-3 text-sm uppercase">
-                New
+            ${item.onSale && item.isAvailable ? `
+              <div class="bg-[#EC0009] text-white font-bold px-2 py-1 rounded-[2px] text-[15px] leading-[16px]">
+                ${parseInt(item.savings) >= 15 ? `-${item.savings}%` : 'SALE'}
               </div>
             ` : ''}
 
-            ${item.onSale ? `
-              <div class="bg-accent text-background font-medium px-2 py-1.5 rounded-3 text-sm">
-                -${item.savings}%
-              </div>
-            ` : ''}
+            ${item.tags && item.tags.length > 0 ? item.tags.filter(tag => tag !== 'sale').slice(0, 3).map(tag => `
+              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">${tag}</span>
+            `).join('') : ''}
+
+            ${item.promotions && item.promotions.length > 0 ? item.promotions.filter(promo => promo.name && promo.name.toLowerCase() === 'new release').slice(0, 1).map(promo => `
+              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">${promo.name}</span>
+            `).join('') : ''}
           </div>
 
           <div class="relative overflow-hidden mb-3">
-            <a href="${item.productUrl}" class="card-product-northfinder__link">
-              <img
-                srcset="${item.productImg}"
-                src="${item.productImg}"
-                alt="${item.productImageAltText}"
-                class="w-full h-auto object-cover aspect-square transition-transform duration-500 ease-in-out hover:scale-105"
-                loading="lazy"
-                width="${item.imgWidth}"
-                height="${item.imgHeight}"
-              >
+            <a
+              href="${item.productUrl || ''}"
+              class="card-product-northfinder__link"
+              data-product-id="${item.productId || ''}"
+              data-section-id="recent-products"
+              data-main-image-src="${item.mainImg || ''}"
+              data-main-image-srcset="${item.mainImgSrcset || ''}"
+              data-has-real-main-image="${item.hasRealMainImage || false}"
+            >
+              ${item.isPlaceholder ? shopifyPlaceholderHTML : `
+                <div
+                  id="main-image-recent-products-${item.productId || ''}"
+                  data-original-src="${item.productImg || ''}"
+                  data-original-srcset="${item.productImgSrcset || ''}"
+                >
+                  <img
+                    src="${item.productImg || ''}"
+                    ${item.productImgSrcset ? `srcset="${item.productImgSrcset}"` : ''}
+                    sizes="(min-width: 990px) calc(33.33vw - 2rem), (min-width: 750px) calc(50vw - 1.5rem), calc(50vw - 1rem)"
+                    alt="${item.productImageAltText || ''}"
+                    loading="lazy"
+                    decoding="async"
+                    width="${item.imgWidth || 400}"
+                    height="${item.imgHeight || 400}"
+                    class="w-full h-auto object-cover aspect-square transition-opacity duration-300 ease-in-out"
+                  >
+                </div>
+              `}
             </a>
           </div>
 
@@ -155,12 +402,12 @@
               <h3 class="text-base font-semibold leading-[1.625rem] text-[#0F0F0F]">${item.productTitle}</h3>
             </a>
 
-            <div class="flex gap-3 items-center mt-0.5 text-lg font-semibold leading-7">
-              ${item.onSale ? `
-                <span class="line-through text-[#666666]">${item.compareAtPrice}</span>
-                <span class="text-[#0f0f0f]">${item.productPrice}</span>
+            <div class="flex gap-3 items-center mt-0.5">
+              ${item.onSale && item.isAvailable ? `
+                <span class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">${item.compareAtPrice}</span>
+                <span class="text-black font-medium font-archivo-expanded text-base leading-6">${item.productPrice}</span>
               ` : `
-                <span class="text-[#0f0f0f]">${item.productPrice}</span>
+                <span class="text-black font-medium font-archivo-expanded text-base leading-6">${item.productPrice}</span>
               `}
             </div>
           </div>
@@ -177,6 +424,15 @@
 
   document.addEventListener('DOMContentLoaded', function (event) {
     getRecentlyViewedProducts();
+
+    // Initialize ProductCardHover if not already initialized
+    const initProductCardHover = function() {
+      if (!window.productCardHover && window.ProductCardHover) {
+        window.productCardHover = new ProductCardHover();
+      } else if (window.productCardHover && window.productCardHover.reinitialize) {
+        window.productCardHover.reinitialize();
+      }
+    };
 
     // Initialize Swiper after products are loaded
     const initSwiper = function() {
@@ -209,22 +465,43 @@
           el: '.swiper-scrollbar',
         },
       });
+
+      // Initialize ProductCardHover after Swiper is loaded
+      setTimeout(initProductCardHover, 100);
     };
 
-    // Check if Swiper is loaded
-    if (typeof Swiper === 'undefined') {
-      // Wait for Swiper to load since we're using defer
-      const swiperScript = document.querySelector('script[src*="swiper-bundle.min.js"]');
-      if (swiperScript) {
-        swiperScript.addEventListener('load', function() {
-          // Allow a small delay for the DOM to update with product data
-          setTimeout(initSwiper, 100);
-        });
+    // Check if both Swiper and ProductCardHover are loaded
+    const checkAndInit = function() {
+      const swiperLoaded = typeof Swiper !== 'undefined';
+      const productCardHoverLoaded = typeof ProductCardHover !== 'undefined';
+
+      if (swiperLoaded) {
+        setTimeout(initSwiper, 100);
+      } else {
+        // Wait for Swiper to load since we're using defer
+        const swiperScript = document.querySelector('script[src*="swiper-bundle.min.js"]');
+        if (swiperScript) {
+          swiperScript.addEventListener('load', function() {
+            setTimeout(initSwiper, 100);
+          });
+        }
       }
-    } else {
-      // Allow a small delay for the DOM to update with product data
-      setTimeout(initSwiper, 100);
-    }
+
+      // Initialize ProductCardHover independently if loaded
+      if (productCardHoverLoaded) {
+        setTimeout(initProductCardHover, 50);
+      } else {
+        // Wait for ProductCardHover to load
+        const productCardHoverScript = document.querySelector('script[src*="product-card-hover.js"]');
+        if (productCardHoverScript) {
+          productCardHoverScript.addEventListener('load', function() {
+            setTimeout(initProductCardHover, 50);
+          });
+        }
+      }
+    };
+
+    checkAndInit();
   });
 </script>
 
