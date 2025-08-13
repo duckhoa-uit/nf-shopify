@@ -1282,6 +1282,7 @@ class VariantSelects extends HTMLElement {
       return;
     }
 
+    // Update size options with auto-selection for new color
     this.updateSizeOptions(colorData.allSizes, colorData.availableSizes);
   }
 
@@ -1303,6 +1304,7 @@ class VariantSelects extends HTMLElement {
     let hasAvailableSize = false;
     let firstAvailableInput = null;
     let currentSelectedInput = sizeFieldset.querySelector('input:checked');
+    let currentSelectedIsAvailable = false;
 
     sizeOptions.forEach(optionDiv => {
       const input = optionDiv.querySelector('input[data-size-value]');
@@ -1334,6 +1336,11 @@ class VariantSelects extends HTMLElement {
           }
           optionDiv.classList.remove('unavailable');
           input.classList.remove('disabled');
+
+          // Check if current selected size is still available
+          if (input.checked) {
+            currentSelectedIsAvailable = true;
+          }
         } else {
           optionDiv.classList.add('unavailable');
           input.classList.add('disabled');
@@ -1346,12 +1353,28 @@ class VariantSelects extends HTMLElement {
       }
     });
 
-    // Auto-select first available size if none is selected
-    if (!currentSelectedInput && firstAvailableInput) {
+    // Auto-selection logic: select first available size if needed
+    let shouldAutoSelect = false;
+
+    if (!currentSelectedInput) {
+      // No size selected - auto-select first available
+      shouldAutoSelect = true;
+    } else if (!currentSelectedIsAvailable) {
+      // Current size is not available for new color - auto-select first available
+      shouldAutoSelect = true;
+    }
+
+    if (shouldAutoSelect && firstAvailableInput) {
       // Use setTimeout to avoid triggering change event during current update
       setTimeout(() => {
+        const selectedSizeValue = firstAvailableInput.dataset.sizeValue;
         firstAvailableInput.checked = true;
-        // Don't dispatch change event to avoid recursive calls
+
+        // Announce auto-selection for screen readers
+        this.announceAutoSelection(selectedSizeValue);
+
+        // Dispatch change event to update variant selection and product info
+        firstAvailableInput.dispatchEvent(new Event('change', { bubbles: true }));
         this.updateInProgress = false;
       }, 0);
     } else {
@@ -1369,8 +1392,10 @@ class VariantSelects extends HTMLElement {
       if (!messageDiv) {
         messageDiv = document.createElement('div');
         messageDiv.className = 'no-sizes-message bg-gray-50 border border-gray-200 rounded-lg p-4 text-center mt-2';
+        messageDiv.setAttribute('role', 'alert');
+        messageDiv.setAttribute('aria-live', 'polite');
         messageDiv.innerHTML = `
-          <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2M4 13h2m0 0V9a2 2 0 012-2h2m0 0V6a2 2 0 012-2h2.09M9 9h6m6 0a2 2 0 012 2v1M9 9V6a2 2 0 012-2h2.09"></path>
           </svg>
           <p class="text-sm font-medium text-gray-900 mb-1">No sizes available</p>
@@ -1382,6 +1407,26 @@ class VariantSelects extends HTMLElement {
     } else if (messageDiv) {
       messageDiv.style.display = 'none';
     }
+  }
+
+  announceAutoSelection(selectedSize) {
+    // Create or update screen reader announcement for auto-selection
+    let announcement = document.getElementById('size-auto-selection-announcement');
+    if (!announcement) {
+      announcement = document.createElement('div');
+      announcement.id = 'size-auto-selection-announcement';
+      announcement.setAttribute('aria-live', 'polite');
+      announcement.setAttribute('aria-atomic', 'true');
+      announcement.className = 'sr-only';
+      document.body.appendChild(announcement);
+    }
+
+    announcement.textContent = `Size ${selectedSize} automatically selected`;
+
+    // Clear announcement after a short delay
+    setTimeout(() => {
+      announcement.textContent = '';
+    }, 1000);
   }
 }
 
