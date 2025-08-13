@@ -356,14 +356,6 @@
 </script>
 
 {%- liquid
-  if section.settings.hide_variants and variant_images.size == product.media.size
-    assign single_media_visible = true
-  endif
-
-  if limit == 1
-    assign single_media_visible = true
-  endif
-
   # Get currently selected or first available variant
   assign first_variant = product.selected_or_first_available_variant
   assign active_color = first_variant.option_values | where: 'name', 'Color' | first
@@ -467,22 +459,7 @@
     assign media_count = media_count | minus: variant_images.size | plus: 1
   endif
 
-  if media_count == 1 or single_media_visible
-    assign single_media_visible_mobile = true
-  endif
-
-  if media_count == 0 or single_media_visible_mobile or section.settings.mobile_thumbnails == 'show' or section.settings.mobile_thumbnails == 'columns' and media_count < 3
-    assign hide_mobile_slider = true
-  endif
-
-  assign media_width = 0.65
-
-  # Calculate discount percentage if product is on sale
-  if product.compare_at_price > product.price
-    assign savings_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round
-  else
-    assign savings_percentage = 0
-  endif
+  # Variables removed as they were unused in the template
 -%}
 
 <media-gallery
@@ -525,42 +502,14 @@
   </div>
 
   <div id="desktop-gallery" class="hidden md:grid grid-cols-2 gap-4 loading-media relative">
-    {%- if product.media.size > 0 -%}
-      {%- for media in product.media -%}
-        <div
-          id="Grid-{{ section.id }}-{{ media.id }}"
-          class="product__media-item{% if forloop.first %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %} scroll-trigger animate--fade-in"
-          data-media-id="{{ section.id }}-{{ media.id }}"
-        >
-          {%
-            render 'product-thumbnail',
-            media: media,
-            position: forloop.index,
-            loop: section.settings.enable_video_looping,
-            modal_id: section.id,
-            xr_button: true,
-            media_width: media_width,
-            lazy_load: forloop.index > 1
-          %}
-        </div>
-      {%- endfor -%}
-    {%- else -%}
-      {%- comment -%} Product has no media - show placeholder {%- endcomment -%}
-      <div
-        id="Grid-{{ section.id }}-placeholder"
-        class="product__media-item is-active scroll-trigger animate--fade-in col-span-2"
-        data-media-id="{{ section.id }}-placeholder"
-      >
-        <div
-          class="product__media media relative w-full h-0"
-          style="--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;"
-        >
-          <div class="absolute inset-0 w-full h-full bg-gray-100 flex items-center justify-center">
-            {{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}
-          </div>
-        </div>
+    {%- comment -%} Desktop gallery content will be rendered entirely by JavaScript {%- endcomment -%}
+    {%- comment -%} This eliminates server-side vs client-side sorting conflicts {%- endcomment -%}
+    <div id="desktop-gallery-loading" class="col-span-2 flex items-center justify-center py-8">
+      <div class="text-center">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mb-2"></div>
+        <p class="text-sm text-gray-600">Loading gallery...</p>
       </div>
-    {%- endif -%}
+    </div>
   </div>
 
   <!-- See More/Less Button -->
@@ -579,10 +528,9 @@
       let mediaObject = null;
 
       // Find matching media object by comparing filenames
-      for (const media of allMedia) {
-        // Clean up URLs for comparison
-        const urlFilename = url.split('/').pop().split('?')[0].toLowerCase();
+      const urlFilename = url.split('/').pop().split('?')[0].toLowerCase();
 
+      for (const media of allMedia) {
         // For video media type, compare with preview image
         let mediaSrc, mediaFilename;
         if (media.media_type === 'video') {
@@ -593,10 +541,8 @@
 
         mediaFilename = mediaSrc.split('/').pop().split('?')[0].toLowerCase();
 
-        // Check if filenames match or contain each other (more flexible matching)
-        if (urlFilename === mediaFilename ||
-            urlFilename.includes(mediaFilename.split('.')[0]) ||
-            mediaFilename.includes(urlFilename.split('.')[0])) {
+        // Check for exact filename match only (prevent cross-matching like M_1 with M_12)
+        if (urlFilename === mediaFilename) {
           mediaObject = media;
           break;
         }
@@ -746,10 +692,10 @@
       const sliderWrapper = document.querySelector('#Slider-Gallery-{{ section.id }}');
       const grid = document.querySelector('#desktop-gallery');
       const mobileGallery = document.querySelector('.product-swiper');
+      const loadingIndicator = document.querySelector('#desktop-gallery-loading');
 
       // Check if elements exist and parseImageUrl is available
       if (!gallery || !sliderWrapper || !grid || !mobileGallery) {
-        console.error('Required gallery elements not found, retrying...');
         setTimeout(initProductGallery, 100);
         return;
       }
@@ -855,22 +801,70 @@
             }
           }
 
-          // If still no matches found for the selected variant, fallback to first 2 media items by priority
+          // If still no matches found for the selected variant, implement priority-based fallback
           if (urlsToUse.length === 0) {
-            // Get all media URLs and sort them according to display rules
-            const allMediaForFallback = allMediaUrls.slice(); // Create a copy
-            const sortedFallbackImages = window.sortImagesByDisplayRules(allMediaForFallback, colorMappings);
+            // Priority-based fallback: look for specific image types
+            const fallbackCandidates = [];
 
-            // Take only the first 2 items according to priority order
-            const fallbackUrls = sortedFallbackImages.slice(0, 2).map(item =>
-              typeof item === 'string' ? item : item.url
-            );
+            // Priority 1: Main image ending with -H.jpg (highest priority)
+            const mainImages = allMediaUrls.filter(url => {
+              const filename = url.split('/').pop().split('?')[0].toLowerCase();
+              return filename.includes('-h.jpg') || filename.endsWith('-h.jpg');
+            });
 
-            // If we have at least one media item, use the fallback; otherwise use placeholder
-            if (fallbackUrls.length > 0) {
-              urlsToUse = fallbackUrls;
+            if (mainImages.length > 0) {
+              fallbackCandidates.push(mainImages[0]);
+            }
+
+            // Priority 2: Back variant (-BV.jpg) or back main (-B.jpg) as fallback
+            const backVariantImages = allMediaUrls.filter(url => {
+              const filename = url.split('/').pop().split('?')[0].toLowerCase();
+              return filename.includes('-bv.jpg') || filename.endsWith('-bv.jpg');
+            });
+
+            const backMainImages = allMediaUrls.filter(url => {
+              const filename = url.split('/').pop().split('?')[0].toLowerCase();
+              return filename.includes('-b.jpg') || filename.endsWith('-b.jpg');
+            });
+
+            if (backVariantImages.length > 0) {
+              fallbackCandidates.push(backVariantImages[0]);
+            } else if (backMainImages.length > 0) {
+              fallbackCandidates.push(backMainImages[0]);
+            }
+
+            // Priority 2 alternative: Check for video media
+            const productMedia = {{ product.media | json }};
+            const videoMedia = productMedia.filter(media => media.media_type === 'video');
+
+            if (videoMedia.length > 0) {
+              // Add video preview images to candidates
+              videoMedia.forEach(video => {
+                if (video.preview_image) {
+                  fallbackCandidates.push(video.preview_image.src);
+                }
+              });
+            }
+
+            // If we have fallback candidates, use them; otherwise fallback to sorted media
+            if (fallbackCandidates.length > 0) {
+              urlsToUse = fallbackCandidates;
             } else {
-              urlsToUse = ['placeholder'];
+              // Last resort: get all media URLs and sort them according to display rules
+              const allMediaForFallback = allMediaUrls.slice(); // Create a copy
+              const sortedFallbackImages = window.sortImagesByDisplayRules(allMediaForFallback, colorMappings);
+
+              // Take only the first 2 items according to priority order
+              const fallbackUrls = sortedFallbackImages.slice(0, 2).map(item =>
+                typeof item === 'string' ? item : item.url
+              );
+
+              // If we have at least one media item, use the fallback; otherwise use placeholder
+              if (fallbackUrls.length > 0) {
+                urlsToUse = fallbackUrls;
+              } else {
+                urlsToUse = ['placeholder'];
+              }
             }
           }
         }
@@ -879,7 +873,7 @@
         const productMedia = {{ product.media | json }};
         const videoMedia = productMedia.filter(media => media.media_type === 'video');
 
-        // If we have videos, make sure they're included in our filtered list
+        // Enhanced video handling for both normal filtering and fallback scenarios
         if (videoMedia.length > 0 && urlsToUse.length > 0) {
           // Create video preview image URLs for comparison
           const videoPreviewUrls = videoMedia.map(video =>
@@ -968,18 +962,21 @@
 
       // Update gallery with the given URLs or image objects
       function updateGallery(images) {
+        // Clear existing content
         sliderWrapper.innerHTML = '';
         grid.innerHTML = '';
+
+        // Hide loading indicator
+        if (loadingIndicator) {
+          loadingIndicator.style.display = 'none';
+        }
 
         // Get all media for reference (needed to check for videos)
         const allMedia = {{ product.media | json }};
 
         // Ensure we have at least some images to display
         if (images.length === 0) {
-
-
           if (allMedia.length > 0) {
-
             // Get all media URLs for sorting
             const allMediaUrls = allMedia.map(media => {
               // For videos, use the preview image URL
@@ -987,13 +984,9 @@
                 media.preview_image.src : media.src;
             });
 
-
-
             // Sort all media according to display rules and take first 2
             const colorMappings = {% if product.metafields.custom.color.value %}{{ product.metafields.custom.color.value | json }}{% else %}null{% endif %};
             const sortedFallbackImages = window.sortImagesByDisplayRules(allMediaUrls, colorMappings);
-
-
             const fallbackUrls = sortedFallbackImages.slice(0, 2);
 
 
@@ -1026,6 +1019,26 @@
               hidden: false
             }];
 
+            // Show placeholder message in desktop gallery
+            const placeholderDiv = document.createElement('div');
+            placeholderDiv.className = 'col-span-2 flex items-center justify-center py-12';
+            placeholderDiv.innerHTML = `
+              <div class="text-center">
+                <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
+                  {{ 'product-apparel-2' | placeholder_svg_tag: 'w-12 h-12 text-gray-400' }}
+                </div>
+                <p class="text-gray-600">No images available</p>
+              </div>
+            `;
+            grid.appendChild(placeholderDiv);
+
+            // Show galleries immediately since we have placeholder
+            requestAnimationFrame(() => {
+              mobileGallery.classList.add('loaded');
+              grid.classList.add('loaded');
+            });
+
+            return; // Exit early for placeholder case
           }
         }
 
