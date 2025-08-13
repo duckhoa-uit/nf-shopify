@@ -12,8 +12,6 @@
   {% render 'card-product', card_product: product, section_id: section.id %}
 {% endcomment %}
 
-
-
 {%- if card_product and card_product != empty -%}
   <div class="card-wrapper h-full">
     <div class="flex flex-col h-full relative">
@@ -26,7 +24,9 @@
         {%- for tag in card_product.tags -%}
           {%- unless tag == 'sale' -%}
             {%- if tag_count < 3 -%}
-              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">{{ tag }}</span>
+              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
+                {{- tag -}}
+              </span>
               {%- assign tag_count = tag_count | plus: 1 -%}
             {%- endif -%}
           {%- endunless -%}
@@ -37,7 +37,9 @@
           {%- for promotion in card_product.metafields.features.promotion.value -%}
             {%- assign promotion_name_lower = promotion.name | downcase -%}
             {%- if promotion_name_lower == 'new release' and tag_count < 3 -%}
-              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">{{ promotion.name }}</span>
+              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
+                {{- promotion.name -}}
+              </span>
               {%- assign tag_count = tag_count | plus: 1 -%}
             {%- endif -%}
           {%- endfor -%}
@@ -246,6 +248,11 @@
 
         {%- assign available_colors = available_colors | split: ',' -%}
 
+        {%- comment -%} Fallback: if no colors have stock, show first color for visual consistency {%- endcomment -%}
+        {%- if available_colors.size == 0 and unique_colors.size > 0 -%}
+          {%- assign available_colors = unique_colors | slice: 0, 1 -%}
+        {%- endif -%}
+
         {%- comment -%} Sort available_colors by position from metafields.custom.color.value {%- endcomment -%}
         {%- if card_product.metafields.custom.color.value != blank and available_colors.size > 0 -%}
           {%- assign color_positions = '' -%}
@@ -296,14 +303,26 @@
 
         <div class="grid mb-0 grid-cols-5 w-fit gap-0.5">
           {%- for color in available_colors limit: display_count -%}
-            {%- comment -%} Find first available variant with this color {%- endcomment -%}
+            {%- comment -%} Find variant with this color (available first, fallback to any if needed) {%- endcomment -%}
             {%- assign color_variant = null -%}
+
+            {%- comment -%} First try to find available variant {%- endcomment -%}
             {%- for variant in card_product.variants -%}
               {%- if variant.option1 == color and variant.available -%}
                 {%- assign color_variant = variant -%}
                 {%- break -%}
               {%- endif -%}
             {%- endfor -%}
+
+            {%- comment -%} If no available variant found, use any variant with this color {%- endcomment -%}
+            {%- if color_variant == null -%}
+              {%- for variant in card_product.variants -%}
+                {%- if variant.option1 == color -%}
+                  {%- assign color_variant = variant -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
 
             {%- if color_variant -%}
               {%- assign variant_image = null -%}
@@ -526,7 +545,3 @@
     </div>
   </div>
 {%- endif -%}
-
-
-
-
