@@ -208,9 +208,11 @@
 
       {%- comment -%} Show variants regardless of whether product has media or not {%- endcomment -%}
       {%- if card_product.has_only_default_variant == false or card_product.variants.size > 1 -%}
-        {%- comment -%} Group variants by color (option1) {%- endcomment -%}
+        {%- comment -%} Group variants by color (option1) with stock-based filtering {%- endcomment -%}
         {%- assign unique_colors = '' -%}
+        {%- assign available_colors = '' -%}
 
+        {%- comment -%} First pass: collect all unique colors {%- endcomment -%}
         {%- for variant in card_product.variants -%}
           {%- assign color = variant.option1 -%}
           {%- unless unique_colors contains color -%}
@@ -220,11 +222,35 @@
 
         {%- assign unique_colors = unique_colors | remove_first: ',' | split: ',' -%}
 
-        {%- comment -%} Sort unique_colors by position from metafields.custom.color.value {%- endcomment -%}
-        {%- if card_product.metafields.custom.color.value != blank -%}
+        {%- comment -%} Second pass: filter colors to only show those with available stock {%- endcomment -%}
+        {%- for color in unique_colors -%}
+          {%- assign color_has_stock = false -%}
+
+          {%- comment -%} Check if this color has at least one available variant {%- endcomment -%}
+          {%- for variant in card_product.variants -%}
+            {%- if variant.option1 == color and variant.available -%}
+              {%- assign color_has_stock = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- comment -%} Add color to available list if it has stock {%- endcomment -%}
+          {%- if color_has_stock -%}
+            {%- if available_colors == '' -%}
+              {%- assign available_colors = color -%}
+            {%- else -%}
+              {%- assign available_colors = available_colors | append: ',' | append: color -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- assign available_colors = available_colors | split: ',' -%}
+
+        {%- comment -%} Sort available_colors by position from metafields.custom.color.value {%- endcomment -%}
+        {%- if card_product.metafields.custom.color.value != blank and available_colors.size > 0 -%}
           {%- assign color_positions = '' -%}
 
-          {%- for color in unique_colors -%}
+          {%- for color in available_colors -%}
             {%- assign position = 999 -%}
             {%- assign color_downcase = color | downcase | strip -%}
 
@@ -256,10 +282,10 @@
             {%- endif -%}
           {%- endfor -%}
 
-          {%- assign unique_colors = sorted_colors | remove_first: ',' | split: ',' -%}
+          {%- assign available_colors = sorted_colors | remove_first: ',' | split: ',' -%}
         {%- endif -%}
 
-        {%- assign colors_count = unique_colors.size -%}
+        {%- assign colors_count = available_colors.size -%}
         {%- assign display_count = colors_count -%}
         {%- assign remaining_count = 0 -%}
 
@@ -269,11 +295,11 @@
         {%- endif -%}
 
         <div class="grid mb-0 grid-cols-5 w-fit gap-0.5">
-          {%- for color in unique_colors limit: display_count -%}
-            {%- comment -%} Find first variant with this color {%- endcomment -%}
+          {%- for color in available_colors limit: display_count -%}
+            {%- comment -%} Find first available variant with this color {%- endcomment -%}
             {%- assign color_variant = null -%}
             {%- for variant in card_product.variants -%}
-              {%- if variant.option1 == color -%}
+              {%- if variant.option1 == color and variant.available -%}
                 {%- assign color_variant = variant -%}
                 {%- break -%}
               {%- endif -%}
