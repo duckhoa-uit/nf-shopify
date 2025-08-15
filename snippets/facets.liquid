@@ -7,9 +7,10 @@
   - enable_sorting: {Boolean} Show sorting when true
   - filter_type: {String} Type of filter
   - paginate: {Object}
+  - price_filter_range_max: {Number} Maximum price for price filter fallback
 
   Usage:
-  {% render 'facets', results: collection, enable_filtering: true, enable_sorting: true, filter_type: 'vertical', paginate: paginate %}
+  {% render 'facets', results: collection, enable_filtering: true, enable_sorting: true, filter_type: 'vertical', paginate: paginate, price_filter_range_max: settings.price_filter_max %}
 {% endcomment %}
 
 {{ 'component-show-more.css' | asset_url | stylesheet_tag }}
@@ -340,7 +341,7 @@
                           {%- endif -%}
                         </div>
                         <price-range class="facets__price">
-                          {% render 'price-facet', filter: filter, id_prefix: 'Filter-', filter_type: filter_type %}
+                          {% render 'price-facet', filter: filter, id_prefix: 'Filter-', filter_type: filter_type, price_filter_range_max: price_filter_range_max %}
                         </price-range>
                       </div>
                     </details>
