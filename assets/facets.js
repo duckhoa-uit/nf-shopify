@@ -542,7 +542,7 @@ class PriceRange extends HTMLElement {
 
     // Store default values
     this.defaultMin = Number(this.minInput.getAttribute("data-min") || 0);
-    this.defaultMax = Number(this.maxInput.getAttribute("data-max")) || 500;
+    this.defaultMax = Number(this.maxInput.getAttribute("data-max")) || 499;
 
     // Prioritize values in this order: URL params > pre-rendered values > input values > defaults
     let initialMin = preRenderedMin !== null && !isNaN(preRenderedMin) ? preRenderedMin : this.defaultMin;
@@ -562,7 +562,7 @@ class PriceRange extends HTMLElement {
     // Ensure we don't have NaN values
     if (isNaN(initialMin)) initialMin = this.defaultMin;
     if (isNaN(initialMax)) initialMax = this.defaultMax;
-    if (isNaN(this.defaultMax)) this.defaultMax = 500;
+    if (isNaN(this.defaultMax)) this.defaultMax = 499;
 
     // Set input values immediately
     this.minInput.value = initialMin;
@@ -570,7 +570,7 @@ class PriceRange extends HTMLElement {
 
     // Ensure data-max attribute is set correctly for slider calculations
     // This is crucial for proper slider positioning
-    if (!this.maxInput.getAttribute("data-max") || this.maxInput.getAttribute("data-max") === "1000") {
+    if (!this.maxInput.getAttribute("data-max") || this.maxInput.getAttribute("data-max") === "1000" || this.maxInput.getAttribute("data-max") === "500") {
       this.maxInput.setAttribute("data-max", this.defaultMax);
     }
 
@@ -681,15 +681,7 @@ class PriceRange extends HTMLElement {
 
   updateSliderFromInputs() {
     const min = Number(this.minInput.getAttribute("data-min") || 0);
-    const max = Number(this.maxInput.getAttribute("data-max")) || 500;
-
-    // Debug log to check values
-    console.log('Price slider debug:', {
-      min,
-      max,
-      dataMaxAttr: this.maxInput.getAttribute("data-max"),
-      inputValue: this.maxInput.value
-    });
+    const max = Number(this.maxInput.getAttribute("data-max")) || 499;
 
     // Get current values directly from the input fields
     let currentMin = Number(this.minInput.value || min);
@@ -732,7 +724,7 @@ class PriceRange extends HTMLElement {
     if (this.pendingUpdate) return;
 
     const min = Number(this.minInput.getAttribute("data-min") || 0);
-    const max = Number(this.maxInput.getAttribute("data-max")) || 500;
+    const max = Number(this.maxInput.getAttribute("data-max")) || 499;
     const range = max - min;
 
     // Ensure position is a valid number
