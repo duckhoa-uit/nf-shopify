@@ -189,7 +189,7 @@ class FacetFiltersForm extends HTMLElement {
 
     FacetFiltersForm.renderActiveFacets(parsedHTML);
     FacetFiltersForm.renderAdditionalElements(parsedHTML);
-    
+
     // Update all mobile facets summaries to ensure counters are current
     FacetFiltersForm.updateAllMobileFacetsSummaries(parsedHTML);
 
@@ -280,21 +280,21 @@ class FacetFiltersForm extends HTMLElement {
             handler.element.removeEventListener(handler.event, handler.listener);
           });
         }
-        
+
         // Store handlers for cleanup
         menuDrawer._facetEventHandlers = [];
-        
+
         // Rebind summary click events for mobile facets details
         menuDrawer.querySelectorAll('.mobile-facets__details summary').forEach((summary) => {
           const clickHandler = menuDrawer.onSummaryClick.bind(menuDrawer);
           summary.addEventListener('click', clickHandler);
           menuDrawer._facetEventHandlers.push({
             element: summary,
-            event: 'click', 
+            event: 'click',
             listener: clickHandler
           });
         });
-        
+
         // Rebind mobile facets close button events
         menuDrawer.querySelectorAll('.mobile-facets__close-button').forEach((button) => {
           const clickHandler = menuDrawer.onCloseButtonClick.bind(menuDrawer);
@@ -305,7 +305,7 @@ class FacetFiltersForm extends HTMLElement {
             listener: clickHandler
           });
         });
-        
+
         // Rebind close elements
         menuDrawer.querySelectorAll('.mobile-facets__close').forEach((closeElement) => {
           const clickHandler = menuDrawer.onMobileFacetsCloseClick.bind(menuDrawer);
@@ -316,7 +316,7 @@ class FacetFiltersForm extends HTMLElement {
             listener: clickHandler
           });
         });
-        
+
         // Re-call bindEvents to ensure all other events are properly bound
         if (typeof menuDrawer.bindEvents === 'function') {
           menuDrawer.bindEvents();
@@ -542,7 +542,7 @@ class PriceRange extends HTMLElement {
 
     // Store default values
     this.defaultMin = Number(this.minInput.getAttribute("data-min") || 0);
-    this.defaultMax = Number(this.maxInput.getAttribute("data-max")) || 1000;
+    this.defaultMax = Number(this.maxInput.getAttribute("data-max")) || 500;
 
     // Prioritize values in this order: URL params > pre-rendered values > input values > defaults
     let initialMin = preRenderedMin !== null && !isNaN(preRenderedMin) ? preRenderedMin : this.defaultMin;
@@ -718,7 +718,7 @@ class PriceRange extends HTMLElement {
     if (this.pendingUpdate) return;
 
     const min = Number(this.minInput.getAttribute("data-min") || 0);
-    const max = Number(this.maxInput.getAttribute("data-max")) || 1000;
+    const max = Number(this.maxInput.getAttribute("data-max")) || 500;
     const range = max - min;
 
     // Ensure position is a valid number
