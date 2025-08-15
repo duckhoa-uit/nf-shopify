@@ -562,11 +562,17 @@ class PriceRange extends HTMLElement {
     // Ensure we don't have NaN values
     if (isNaN(initialMin)) initialMin = this.defaultMin;
     if (isNaN(initialMax)) initialMax = this.defaultMax;
-    if (isNaN(this.defaultMax)) this.defaultMax = 1000;
+    if (isNaN(this.defaultMax)) this.defaultMax = 500;
 
     // Set input values immediately
     this.minInput.value = initialMin;
     this.maxInput.value = initialMax;
+
+    // Ensure data-max attribute is set correctly for slider calculations
+    // This is crucial for proper slider positioning
+    if (!this.maxInput.getAttribute("data-max") || this.maxInput.getAttribute("data-max") === "1000") {
+      this.maxInput.setAttribute("data-max", this.defaultMax);
+    }
 
     // Add event listeners for inputs
     this.minInput.addEventListener("change", this.onRangeInputChange.bind(this));
@@ -675,7 +681,15 @@ class PriceRange extends HTMLElement {
 
   updateSliderFromInputs() {
     const min = Number(this.minInput.getAttribute("data-min") || 0);
-    const max = Number(this.maxInput.getAttribute("data-max")) || 1000;
+    const max = Number(this.maxInput.getAttribute("data-max")) || 500;
+
+    // Debug log to check values
+    console.log('Price slider debug:', {
+      min,
+      max,
+      dataMaxAttr: this.maxInput.getAttribute("data-max"),
+      inputValue: this.maxInput.value
+    });
 
     // Get current values directly from the input fields
     let currentMin = Number(this.minInput.value || min);
