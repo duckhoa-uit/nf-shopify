@@ -6,9 +6,6 @@ class AccountForms {
     this.deleteAccountBtn = document.getElementById('DeleteAccountBtn');
     this.birthdateField = document.getElementById('CustomerBirthdate');
     this.datePickerIcon = document.querySelector('.date-picker-icon');
-    this.newPasswordField = document.getElementById('CustomerNewPassword');
-    this.confirmPasswordField = document.getElementById('CustomerConfirmPassword');
-    this.passwordForm = document.getElementById('CustomerPasswordForm');
     this.customerInfoForm = document.getElementById('CustomerInfoForm');
     this.init();
   }
@@ -22,11 +19,6 @@ class AccountForms {
     // Set up date picker for birthdate field
     if (this.birthdateField) {
       this.initDatePicker();
-    }
-
-    // Set up password confirmation validation
-    if (this.passwordForm && this.newPasswordField && this.confirmPasswordField) {
-      this.setupPasswordConfirmation();
     }
 
     // Set up customer info form submission
@@ -64,18 +56,7 @@ class AccountForms {
     }
   }
 
-  setupPasswordConfirmation() {
-    // Handle password form submission
-    this.passwordForm.addEventListener('submit', (e) => {
-      // Check if passwords match
-      if (this.newPasswordField.value !== this.confirmPasswordField.value) {
-        e.preventDefault();
-        const passwordMismatchMsg = window.theme?.strings?.password_mismatch || 'New password and confirmation do not match!';
-        alert(passwordMismatchMsg);
-        return;
-      }
-    });
-  }
+
 
   validateCustomerInfoForm() {
     // Basic validation for the customer info form
