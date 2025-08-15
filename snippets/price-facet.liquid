@@ -1,5 +1,5 @@
 {%- liquid
-  assign fallback_max = price_filter_range_max | default: settings.price_filter_max | default: 500
+  assign fallback_max = price_filter_range_max | default: settings.price_filter_max | default: 499
 -%}
 <div class="price-filter-container" data-min-value="{% if filter.min_value.value != blank %}{{ filter.min_value.value | money_without_currency }}{% else %}0{% endif %}" data-max-value="{% if filter.max_value.value != blank %}{{ filter.max_value.value | money_without_currency }}{% elsif filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ fallback_max | money_without_currency }}{% endif %}">
   <div class="price-inputs-container">
