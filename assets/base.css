@@ -3266,10 +3266,24 @@ details-disclosure > details {
   margin-bottom: 0;
 }
 
+.rte .container {
+  padding: 0 !important;
+}
+
 .rte table {
   table-layout: fixed;
 }
+.rte table td {
+  padding: 0;
+}
 
+@media screen and (max-width: 375px) {
+  /* A little tricky to fix the em element make content overflow in smallest devices */
+  .rte table td p em {
+    word-wrap: break-word;
+    margin-right: -2rem;
+  }
+}
 @media screen and (min-width: 750px) {
   .rte table td {
     padding-left: 1.2rem;
