@@ -1,7 +1,11 @@
 {%- liquid
   assign fallback_max = price_filter_range_max | default: settings.price_filter_max | default: 500
 -%}
-<div class="price-filter-container" data-min-value="{% if filter.min_value.value != blank %}{{ filter.min_value.value | money_without_currency }}{% else %}0{% endif %}" data-max-value="{% if filter.max_value.value != blank %}{{ filter.max_value.value | money_without_currency }}{% elsif filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ fallback_max | money_without_currency }}{% endif %}">
+<div
+  class="price-filter-container"
+  data-min-value="{% if filter.min_value.value != blank %}{{ filter.min_value.value | money_without_currency }}{% else %}0{% endif %}"
+  data-max-value="{% if filter.max_value.value != blank %}{{ filter.max_value.value | money_without_currency }}{% elsif filter.range_max %}{{ filter.range_max | money_without_currency }}{% else %}{{ fallback_max | money_without_currency }}{% endif %}"
+>
   <div class="price-inputs-container">
     <div class="field price-field">
       <input
@@ -47,9 +51,9 @@
 
   <div class="discount-filter">
     <label for="discount-filter-checkbox" class="discount-filter-label flex items-center w-full gap-2 justify-between">
-      <span class="discount-filter-text text-[#000] text-xs md:text-sm font-medium uppercase leading-[1.3125rem] text-left"
-        >{{ 'products.facets.show_only_discounted' | t }}</span
-      >
+      <span class="discount-filter-text text-[#000] text-xs md:text-sm font-medium uppercase leading-[1.3125rem] text-left">
+        {{- 'products.facets.show_only_discounted' | t -}}
+      </span>
       <input
         type="checkbox"
         id="discount-filter-checkbox"
