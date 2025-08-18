@@ -582,21 +582,6 @@
                   </div>
                 {% endif %}
 
-                <!-- Product Parameters -->
-                {% if product.metafields.custom.parameters %}
-                  <div class="product-parameters">
-                    <h3 class="parameters-title">{{ 'sections.main_product.parameters' | t }}</h3>
-                    <div class="parameters-list">
-                      {% for parameter in product.metafields.custom.parameters.value %}
-                        <div class="parameter-item">
-                          <span class="parameter-name">{{ parameter.name | metafield_text }}:</span>
-                          <span class="parameter-value">{{ parameter.value | metafield_text }}</span>
-                        </div>
-                      {% endfor %}
-                    </div>
-                  </div>
-                {% endif %}
-
                 <!-- Main Elements -->
                 {% if product.metafields.custom.main_elements %}
                   <div class="main-elements">
@@ -931,9 +916,14 @@
                 {% assign key = metafield | first %}
                 {% assign arr_values = metafield | last %}
                 {% if arr_values.value != blank %}
-                  {% comment %} Find matching metaobject by handle {% endcomment %}
+                  {% comment %} Find matching metaobject by handle - Support both underscore and dash naming {% endcomment %}
                   {% for feature in shop.metaobjects.product_feature.values %}
-                    {% if feature.system.handle == key and feature.display_on_product_page.value == true %}
+                    {% assign key_dash = key | replace: '_', '-' %}
+                    {% assign handle_matches = false %}
+                    {% if feature.system.handle == key or feature.system.handle == key_dash %}
+                      {% assign handle_matches = true %}
+                    {% endif %}
+                    {% if handle_matches and feature.display_on_product_page.value == true %}
                       {% if displayable_features == '' %}
                         {% assign displayable_features = key %}
                       {% else %}
@@ -957,7 +947,12 @@
                       {% assign arr_values = metafield | last %}
                       <li class="leading-6">
                         {%- liquid
-                          assign translated_label = shop.metaobjects.product_feature[key].name.value
+                          assign feature_obj = shop.metaobjects.product_feature[key]
+                          unless feature_obj
+                            assign key_dash = key | replace: '_', '-'
+                            assign feature_obj = shop.metaobjects.product_feature[key_dash]
+                          endunless
+                          assign translated_label = feature_obj.name.value
                         -%}
                         <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
                           {{- translated_label -}}
