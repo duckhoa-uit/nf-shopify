@@ -20,23 +20,22 @@
 
         {% render 'discount-badge', product: card_product %}
 
-        <!-- Product tags (max 3) -->
-        {%- for tag in card_product.tags -%}
-          {%- unless tag == 'sale' -%}
+        <!-- Product tags from metafields (max 3) -->
+        {%- if card_product.metafields.features.extra.value -%}
+          {%- for extra_tag in card_product.metafields.features.extra.value -%}
             {%- if tag_count < 3 -%}
               <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
-                {{- tag -}}
+                {{- extra_tag.name -}}
               </span>
               {%- assign tag_count = tag_count | plus: 1 -%}
             {%- endif -%}
-          {%- endunless -%}
-        {%- endfor -%}
+          {%- endfor -%}
+        {%- endif -%}
 
         <!-- Promotion metafield -->
         {%- if card_product.metafields.features.promotion.value -%}
           {%- for promotion in card_product.metafields.features.promotion.value -%}
-            {%- assign promotion_name_lower = promotion.name | downcase -%}
-            {%- if promotion_name_lower == 'new release' and tag_count < 3 -%}
+            {%- if tag_count < 3 -%}
               <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
                 {{- promotion.name -}}
               </span>

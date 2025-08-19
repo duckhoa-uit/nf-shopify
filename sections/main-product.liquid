@@ -354,24 +354,21 @@
             <div class="flex items-center gap-2">
               {% render 'discount-badge', product: product, badge_class: 'product-discount-badge' %}
 
-              <!-- Product tags -->
-              {%- for tag in product.tags -%}
-                {%- unless tag == 'sale' -%}
+              <!-- Product tags from metafields -->
+              {%- if product.metafields.features.extra.value -%}
+                {%- for extra_tag in product.metafields.features.extra.value -%}
                   <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
-                    {{- tag -}}
+                    {{- extra_tag.name -}}
                   </span>
-                {%- endunless -%}
-              {%- endfor -%}
+                {%- endfor -%}
+              {%- endif -%}
 
               <!-- Promotion metafield -->
               {%- if product.metafields.features.promotion.value -%}
                 {%- for promotion in product.metafields.features.promotion.value -%}
-                  {%- comment -%} Use system.handle for language-independent comparison {%- endcomment -%}
-                  {%- if promotion.system.handle == 'new-release' or promotion.system.handle == 'new_release' -%}
-                    <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
-                      {{- promotion.name -}}
-                    </span>
-                  {%- endif -%}
+                  <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
+                    {{- promotion.name -}}
+                  </span>
                 {%- endfor -%}
               {%- endif -%}
             </div>
