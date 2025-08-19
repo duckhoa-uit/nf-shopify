@@ -35,7 +35,11 @@
       pattern="{{ pattern }}"
     {% endif %}
     {% if title %}
-      title="{{ title }}"
+      {% if title contains 'customer.' or title contains 'general.' or title contains 'templates.' %}
+        title="{{ title | t }}"
+      {% else %}
+        title="{{ title }}"
+      {% endif %}
     {% endif %}
     {% if min_length %}
       minlength="{{ min_length }}"
