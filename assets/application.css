@@ -797,6 +797,12 @@
   .max-w-\[100px\] {
     max-width: 100px !important;
   }
+  .max-w-\[120px\] {
+    max-width: 120px !important;
+  }
+  .max-w-\[132px\] {
+    max-width: 132px !important;
+  }
   .max-w-\[350px\] {
     max-width: 350px !important;
   }
@@ -817,6 +823,9 @@
   }
   .flex-1 {
     flex: 1 !important;
+  }
+  .flex-shrink {
+    flex-shrink: 1 !important;
   }
   .flex-shrink-0 {
     flex-shrink: 0 !important;
@@ -1211,6 +1220,14 @@
     --tw-gradient-position: to bottom in oklab !important;
     background-image: linear-gradient(var(--tw-gradient-stops)) !important;
   }
+  .bg-gradient-to-l {
+    --tw-gradient-position: to left in oklab !important;
+    background-image: linear-gradient(var(--tw-gradient-stops)) !important;
+  }
+  .bg-gradient-to-r {
+    --tw-gradient-position: to right in oklab !important;
+    background-image: linear-gradient(var(--tw-gradient-stops)) !important;
+  }
   .bg-gradient-to-t {
     --tw-gradient-position: to top in oklab !important;
     background-image: linear-gradient(var(--tw-gradient-stops)) !important;
@@ -1228,6 +1245,10 @@
   }
   .from-transparent {
     --tw-gradient-from: transparent !important;
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
+  }
+  .from-white {
+    --tw-gradient-from: #ffffff !important;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)) !important;
   }
   .to-\[\#EC0009\] {
@@ -1753,6 +1774,10 @@
   .duration-150 {
     --tw-duration: 150ms !important;
     transition-duration: 150ms !important;
+  }
+  .duration-200 {
+    --tw-duration: 200ms !important;
+    transition-duration: 200ms !important;
   }
   .duration-300 {
     --tw-duration: 300ms !important;
