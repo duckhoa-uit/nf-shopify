@@ -93,25 +93,20 @@
             <div class="child-collections-wrapper">
               <div class="child-collections-scroll">
                 <div class="child-collections-list">
-                  <a
-                    href="{{ collection.url }}"
-                    class="child-collection-link {% if request.path == collection.url %}active{% endif %}"
-                  >
-                    <span class="child-collection-title">{{ 'collections.general.all' | t }}</span>
-                  </a>
-
                   {%- for child_collection in collections -%}
                     {%- if child_collection.metafields.custom.parent_collection.value.handle == collection.handle
                       or child_collection.metafields.custom.parent_collection.value.id == collection.id
                     -%}
-                      <a
-                        href="{{ child_collection.url }}"
-                        class="child-collection-link {% if request.path == child_collection.url %}active{% endif %}"
-                      >
-                        <span class="child-collection-title">
-                          {{- child_collection.metafields.custom.display_name | default: child_collection.title -}}
-                        </span>
-                      </a>
+                      {%- if child_collection.products.size > 0 -%}
+                        <a
+                          href="{{ child_collection.url }}"
+                          class="child-collection-link {% if request.path == child_collection.url %}active{% endif %}"
+                        >
+                          <span class="child-collection-title">
+                            {{- child_collection.metafields.custom.display_name | default: child_collection.title -}}
+                          </span>
+                        </a>
+                      {%- endif -%}
                     {%- endif -%}
                   {%- endfor -%}
                 </div>
@@ -133,13 +128,6 @@
               <div class="child-collections-wrapper">
                 <div class="child-collections-scroll">
                   <div class="child-collections-list">
-                    <a
-                      href="{{ collection.url }}"
-                      class="child-collection-link {% unless activities_filter.active_values.size > 0 %}active{% endunless %}"
-                    >
-                      <span class="child-collection-title">{{ 'collections.general.all' | t }}</span>
-                    </a>
-
                     {%- for value in activities_filter.values -%}
                       {%- unless value.count == 0 and value.active == false -%}
                         <a
