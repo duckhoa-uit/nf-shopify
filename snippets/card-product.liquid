@@ -15,7 +15,10 @@
 {%- if card_product and card_product != empty -%}
   <div class="card-wrapper h-full">
     <div class="flex flex-col h-full relative">
-      <div class="flex items-center gap-2 mb-1.5 h-8">
+      <div class="relative">
+        <div class="flex items-center gap-2 mb-1.5 h-8 overflow-x-auto scrollbar-hide tag-container"
+             style="scrollbar-width: none; -ms-overflow-style: none;"
+             onscroll="this.style.setProperty('--scroll-shadow-left', this.scrollLeft > 0 ? '1' : '0'); this.style.setProperty('--scroll-shadow-right', this.scrollLeft < this.scrollWidth - this.clientWidth ? '1' : '0')">
         {%- assign tag_count = 0 -%}
 
         {% render 'discount-badge', product: card_product %}
@@ -24,7 +27,7 @@
         {%- if card_product.metafields.features.extra.value -%}
           {%- for extra_tag in card_product.metafields.features.extra.value -%}
             {%- if tag_count < 3 -%}
-              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
+              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">
                 {{- extra_tag.name -}}
               </span>
               {%- assign tag_count = tag_count | plus: 1 -%}
@@ -36,13 +39,18 @@
         {%- if card_product.metafields.features.promotion.value -%}
           {%- for promotion in card_product.metafields.features.promotion.value -%}
             {%- if tag_count < 3 -%}
-              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
+              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">
                 {{- promotion.name -}}
               </span>
               {%- assign tag_count = tag_count | plus: 1 -%}
             {%- endif -%}
           {%- endfor -%}
         {%- endif -%}
+        </div>
+
+        <!-- Shadow indicators for scrollable content -->
+        <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none opacity-0 transition-opacity duration-200 shadow-left"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none opacity-100 transition-opacity duration-200 shadow-right"></div>
       </div>
 
       {%- if card_product.media.size > 0 -%}
@@ -544,3 +552,80 @@
     </div>
   </div>
 {%- endif -%}
+
+<style>
+  /* Hide scrollbar for tag container while maintaining scroll functionality */
+  .scrollbar-hide {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Ensure tags don't wrap and maintain minimum width */
+  .scrollbar-hide .text-medium {
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: fit-content;
+  }
+
+  /* Smooth scrolling behavior */
+  @media (prefers-reduced-motion: no-preference) {
+    .scrollbar-hide {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Shadow indicators for scrollable content */
+  .tag-container[style*="--scroll-shadow-left: 1"] ~ .shadow-left {
+    opacity: 1 !important;
+  }
+
+  .tag-container[style*="--scroll-shadow-right: 0"] ~ .shadow-right {
+    opacity: 0 !important;
+  }
+
+  /* Initial state - show right shadow only if content overflows */
+  .tag-container {
+    position: relative;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize shadow visibility for all tag containers
+    const tagContainers = document.querySelectorAll('.tag-container');
+
+    tagContainers.forEach(function(container) {
+      const parent = container.parentElement;
+      const leftShadow = parent.querySelector('.shadow-left');
+      const rightShadow = parent.querySelector('.shadow-right');
+
+      function updateShadows() {
+        const isScrollable = container.scrollWidth > container.clientWidth;
+        const isAtStart = container.scrollLeft <= 0;
+        const isAtEnd = container.scrollLeft >= container.scrollWidth - container.clientWidth - 1;
+
+        if (!isScrollable) {
+          // No scrolling needed, hide both shadows
+          leftShadow.style.opacity = '0';
+          rightShadow.style.opacity = '0';
+        } else {
+          // Show/hide shadows based on scroll position
+          leftShadow.style.opacity = isAtStart ? '0' : '1';
+          rightShadow.style.opacity = isAtEnd ? '0' : '1';
+        }
+      }
+
+      // Initial check
+      updateShadows();
+
+      // Update on scroll
+      container.addEventListener('scroll', updateShadows);
+
+      // Update on resize (in case content changes)
+      window.addEventListener('resize', updateShadows);
+    });
+  });
+</script>
