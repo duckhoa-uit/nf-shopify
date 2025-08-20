@@ -552,9 +552,10 @@
           return;
         }
 
-        // Update active tab with animation
+        // Update active tab with animation - update ALL tabs in both forms
         loginTabs.forEach(t => {
-          if (t === currentTab) {
+          const isActiveTab = t.getAttribute('data-tab') === tabType;
+          if (isActiveTab) {
             t.classList.add('border-[#0F0F0F]');
             t.classList.remove('border-transparent');
           } else {
@@ -736,7 +737,7 @@
         // Fade in
         loginForm.style.opacity = '1';
 
-        // Ensure login tab is active with animation
+        // Ensure login tab is active with animation in ALL tab sets
         loginTabs.forEach(function(tab) {
           const isLoginTab = tab.getAttribute('data-tab') === 'login';
           tab.classList.toggle('border-[#0F0F0F]', isLoginTab);
@@ -799,7 +800,7 @@
       // Show requested form
       if (formType === 'login') {
         loginForm.classList.remove('hidden');
-        // Ensure login tab is active
+        // Ensure login tab is active in ALL tab sets
         loginTabs.forEach(function(tab) {
           const isLoginTab = tab.getAttribute('data-tab') === 'login';
           tab.classList.toggle('border-[#0F0F0F]', isLoginTab);
@@ -807,7 +808,7 @@
         });
       } else if (formType === 'register') {
         registerForm.classList.remove('hidden');
-        // Ensure register tab is active
+        // Ensure register tab is active in ALL tab sets
         loginTabs.forEach(function(tab) {
           const isRegisterTab = tab.getAttribute('data-tab') === 'register';
           tab.classList.toggle('border-[#0F0F0F]', isRegisterTab);

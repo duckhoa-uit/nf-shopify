@@ -338,6 +338,9 @@
   .top-1\/2 {
     top: calc(1/2 * 100%) !important;
   }
+  .top-4 {
+    top: calc(var(--spacing) * 4) !important;
+  }
   .top-6 {
     top: calc(var(--spacing) * 6) !important;
   }
@@ -352,6 +355,9 @@
   }
   .right-3 {
     right: calc(var(--spacing) * 3) !important;
+  }
+  .right-4 {
+    right: calc(var(--spacing) * 4) !important;
   }
   .right-8 {
     right: calc(var(--spacing) * 8) !important;
@@ -818,6 +824,9 @@
   .max-w-full {
     max-width: 100% !important;
   }
+  .max-w-md {
+    max-width: var(--container-md) !important;
+  }
   .min-w-12 {
     min-width: calc(var(--spacing) * 12) !important;
   }
@@ -882,6 +891,12 @@
   }
   .resize {
     resize: both !important;
+  }
+  .list-inside {
+    list-style-position: inside !important;
+  }
+  .list-decimal {
+    list-style-type: decimal !important;
   }
   .list-disc {
     list-style-type: disc !important;
@@ -964,11 +979,25 @@
   .gap-\[20px\] {
     gap: 20px !important;
   }
+  .space-y-1 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0 !important;
+      margin-block-start: calc(calc(var(--spacing) * 1) * var(--tw-space-y-reverse)) !important;
+      margin-block-end: calc(calc(var(--spacing) * 1) * calc(1 - var(--tw-space-y-reverse))) !important;
+    }
+  }
   .space-y-2 {
     :where(& > :not(:last-child)) {
       --tw-space-y-reverse: 0 !important;
       margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse)) !important;
       margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse))) !important;
+    }
+  }
+  .space-y-4 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0 !important;
+      margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse)) !important;
+      margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse))) !important;
     }
   }
   .space-y-6 {
@@ -1121,6 +1150,9 @@
   }
   .border-\[\#e0dfdf\] {
     border-color: #e0dfdf !important;
+  }
+  .border-black {
+    border-color: #000000 !important;
   }
   .border-foreground {
     border-color: rgb(var(--color-base-foreground)) !important;
