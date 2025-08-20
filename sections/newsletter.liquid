@@ -1,8 +1,6 @@
 {{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
 {{ 'newsletter-section.css' | asset_url | stylesheet_tag }}
 
-{% comment %} Check if current page is cart or account page and hide newsletter if true {% endcomment %}
-{% unless template == 'cart' or template == 'customers/account' %}
 <div class=" pt-[10rem] md:pt-20">
   <div class="newsletter bg-[#2B3C48] ">
     <div class="newsletter__wrapper relative page-width content-container isolate section-{{ section.id }}-padding">
@@ -149,7 +147,6 @@
     </div>
   </div>
 </div>
-{% endunless %}
 {% schema %}
 {
   "name": "t:sections.newsletter.name",
