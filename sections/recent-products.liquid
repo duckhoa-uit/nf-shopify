@@ -299,7 +299,7 @@
 
     let jsonResp, jsonRespArr, jsonRespArrStr;
 
-    const numberOfProducts = 4;
+    // Remove the numberOfProducts limit - now unlimited
     productList.push(productData);
 
     const currProductPageTitle = productData.productTitle;
@@ -311,22 +311,15 @@
       localStorage.setItem('recentlyViewedProduct', productDataString);
     } else if (localData) {
       const oldProductData = localStorage.getItem('recentlyViewedProduct');
-      const countProductData = (oldProductData.match(/productTitle/g) || []).length;
       const sameProduct = oldProductData.includes(currProductPageTitle);
 
-      if (countProductData < numberOfProducts && sameProduct == false) {
+      // Only add if it's not the same product (avoid duplicates)
+      if (sameProduct == false) {
         jsonResp = JSON.parse(oldProductData);
         jsonRespArr = jsonResp.concat(productList);
         jsonRespArrStr = JSON.stringify(jsonRespArr);
 
         localStorage.setItem('recentlyViewedProduct', jsonRespArrStr);
-      } else if (countProductData >= numberOfProducts && sameProduct == false) {
-        jsonResp = JSON.parse(oldProductData);
-        jsonResp.shift();
-
-        jsonRespArr = jsonResp.concat(productList);
-        jsonRespArr = JSON.stringify(jsonRespArr);
-        localStorage.setItem('recentlyViewedProduct', jsonRespArr);
       }
     }
   }
@@ -446,15 +439,15 @@
         breakpoints: {
           // when window width is >= 320px
           320: {
-            slidesPerView: 1,
+            slidesPerView: 1.1,
           },
           // when window width is >= 640px
           640: {
-            slidesPerView: 2.2,
+            slidesPerView: 3,
           },
           // when window width is >= 1024px
-          1024: {
-            slidesPerView: 3.2,
+          1200: {
+            slidesPerView: 4,
           },
         },
         navigation: {
