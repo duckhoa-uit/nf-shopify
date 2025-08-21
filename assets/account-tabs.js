@@ -14,8 +14,8 @@ class AccountTabs {
       link.addEventListener('click', this.handleTabClick.bind(this));
     });
 
-    // Check URL hash on page load
-    this.checkUrlHash();
+    // Check URL hash immediately to prevent flash
+    this.checkUrlHashImmediate();
   }
 
   handleTabClick(e) {
@@ -61,6 +61,59 @@ class AccountTabs {
 
     // Update URL hash
     window.history.replaceState(null, null, '#' + tabId);
+
+    // Dispatch custom event for mobile menu sync
+    document.dispatchEvent(new CustomEvent('accountTabChanged'));
+  }
+
+  checkUrlHashImmediate() {
+    const hash = window.location.hash.substring(1);
+    const isAddressesPage = window.location.pathname.includes('/account/addresses');
+
+    if (hash) {
+      const activeTab = document.querySelector(`.tab-link[data-tab="${hash}"]`);
+      const tabContent = document.getElementById(hash);
+
+      // If we're on addresses page and trying to access a hash that doesn't have content
+      if (isAddressesPage && hash !== 'addresses' && !tabContent) {
+        // Get the account URL from data attribute or construct it
+        const accountUrlElement = document.querySelector('[data-account-url]');
+        const accountUrl = accountUrlElement ?
+          accountUrlElement.textContent.trim() :
+          this.getAccountUrl();
+
+        // Redirect to main account page with the hash
+        window.location.href = `${accountUrl}#${hash}`;
+        return;
+      }
+
+      if (activeTab && tabContent) {
+        // Set active states immediately without triggering click event
+        this.setActiveTabImmediate(activeTab, tabContent);
+      }
+    } else {
+      // If no hash, default to first tab (only on main account page)
+      if (!isAddressesPage) {
+        const firstTab = document.querySelector('.tab-link[data-tab]');
+        const firstTabContent = firstTab ? document.getElementById(firstTab.getAttribute('data-tab')) : null;
+        if (firstTab && firstTabContent) {
+          this.setActiveTabImmediate(firstTab, firstTabContent);
+        }
+      }
+    }
+  }
+
+  setActiveTabImmediate(activeTab, tabContent) {
+    // Remove active class from all tabs and content
+    this.tabLinks.forEach(tab => tab.classList.remove('active'));
+    this.tabContents.forEach(content => content.classList.remove('active'));
+
+    // Add active class to the target tab and content
+    activeTab.classList.add('active');
+    tabContent.classList.add('active');
+
+    // Dispatch custom event for mobile menu sync
+    document.dispatchEvent(new CustomEvent('accountTabChanged'));
   }
 
   checkUrlHash() {
