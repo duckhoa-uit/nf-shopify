@@ -14,6 +14,7 @@ class AccountMobileMenu {
     if (!this.mobileMenu || !this.mobileMenuButton) return;
 
     this.init();
+    this.initTabSync();
   }
 
   init() {
@@ -85,7 +86,7 @@ class AccountMobileMenu {
     // Check if we need to navigate to a different page
     const correspondingTab = document.querySelector(`.tab-link[data-tab="${tabId}"]`);
     const isAddressesPage = window.location.pathname.includes('/account/addresses');
-    
+
     if (isAddressesPage && correspondingTab) {
       // On addresses page, navigate to the account page with hash
       this.closeMobileMenu();
@@ -172,7 +173,7 @@ class AccountMobileMenu {
   updateMobileActiveStates(activeTabId) {
     // Remove active class from all mobile menu tabs
     this.mobileMenuTabs.forEach(tab => tab.classList.remove('active'));
-    
+
     // Add active class to the specified tab
     const activeTab = document.querySelector(`.account-mobile-menu__tab-link[data-tab="${activeTabId}"]`);
     if (activeTab) {
@@ -187,6 +188,18 @@ class AccountMobileMenu {
       const tabId = activeDesktopTab.getAttribute('data-tab');
       this.updateMobileActiveStates(tabId);
     }
+  }
+
+  initTabSync() {
+    // Listen for custom events from AccountTabs class
+    document.addEventListener('accountTabChanged', () => {
+      this.syncMobileMenuWithDesktop();
+    });
+
+    // Initial sync with a small delay to ensure desktop tabs are initialized first
+    setTimeout(() => {
+      this.syncMobileMenuWithDesktop();
+    }, 10);
   }
 }
 

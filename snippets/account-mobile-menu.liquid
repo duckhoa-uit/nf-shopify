@@ -26,7 +26,7 @@
         <li>
           <a
             href="#settings"
-            class="account-mobile-menu__tab-link{% if request.path contains '/account' and request.path != '/account/addresses' %} active{% endif %}"
+            class="account-mobile-menu__tab-link"
             data-tab="settings"
             data-account-mobile-menu-tab
           >
@@ -98,13 +98,16 @@
           }
         };
 
-        // Initial sync
-        syncActiveTab();
+        // Initial sync - use a small delay to ensure desktop tabs are initialized first
+        setTimeout(syncActiveTab, 10);
 
         // Listen for tab changes
         document.querySelectorAll('.tab-link[data-tab]').forEach((tab) => {
           tab.addEventListener('click', syncActiveTab);
         });
+
+        // Also listen for custom events from AccountTabs class
+        document.addEventListener('accountTabChanged', syncActiveTab);
       });
     </script>
   </div>

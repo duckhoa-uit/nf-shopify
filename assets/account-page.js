@@ -5,64 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupCountryProvinceSelectors();
   }, 100);
 
-  // Tab functionality
-  const tabLinks = document.querySelectorAll('.tab-link');
-  const tabContents = document.querySelectorAll('.tab-content');
-
-  tabLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      const tabId = this.getAttribute('data-tab');
-
-      // Check if this is an external link (no data-tab attribute)
-      if (!tabId) {
-        // This is an external link, let the default navigation happen
-        return;
-      }
-
-      // Skip addresses tab as it should navigate to a separate page
-      if (tabId === 'addresses') {
-        // Let the default navigation happen
-        return;
-      }
-
-      // This is a tab link, prevent default navigation
-      e.preventDefault();
-
-      // Remove active class from all tabs
-      tabLinks.forEach(tab => tab.classList.remove('active'));
-      tabContents.forEach(content => content.classList.remove('active'));
-
-      // Add active class to clicked tab
-      this.classList.add('active');
-
-      // Find the tab content and make it active
-      const tabContent = document.getElementById(tabId);
-      if (tabContent) {
-        tabContent.classList.add('active');
-      }
-
-      // Update URL hash
-      window.history.replaceState(null, null, '#' + tabId);
-    });
-  });
-
-  // Check URL hash on page load
-  const hash = window.location.hash.substring(1);
-  if (hash) {
-    const activeTab = document.querySelector(`.tab-link[data-tab="${hash}"]`);
-    if (activeTab) {
-      // Only trigger click if it's a tab link (has data-tab attribute)
-      if (activeTab.getAttribute('data-tab')) {
-        activeTab.click();
-      }
-    }
-  } else {
-    // If no hash, default to first tab
-    const firstTab = document.querySelector('.tab-link[data-tab]');
-    if (firstTab) {
-      firstTab.click();
-    }
-  }
+  // Tab functionality is now handled by account-tabs.js
 
   // Form submissions are now handled by Shopify's native form handling
 
@@ -73,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const deleteConfirmMsg = document.querySelector('[data-delete-account-confirm]')?.getAttribute('data-delete-account-confirm') || 'Are you sure you want to delete your account? This action cannot be undone.';
       if (confirm(deleteConfirmMsg)) {
         // Here you would typically send the request to the server
-        // For now, just show an alert
         const deleteSuccessMsg = document.querySelector('[data-delete-account-success]')?.getAttribute('data-delete-account-success') || 'Account deletion request submitted.';
         alert(deleteSuccessMsg);
       }
@@ -304,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function() {
             addressWrapper.remove();
           }
         } else {
-          console.error('Error:', xhr.statusText);
           const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
           alert(errorMsg);
         }
@@ -318,7 +259,6 @@ document.addEventListener('DOMContentLoaded', function() {
       };
 
       xhr.onerror = function() {
-        console.error('Request error');
         const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
         alert(errorMsg);
         button.classList.remove('loading');
@@ -344,28 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const formCard = form.closest('.address-form-card, .address-edit-form');
     const addressId = form.querySelector('[name="address[id]"]')?.value;
 
-    console.log('Form submission started:', {
-      formId: form.id,
-      formAction: form.action,
-      formMethod: form.method,
-      formCardId: formCard ? formCard.id : 'null',
-      addressId: addressId
-    });
 
-    // Log form data for debugging
-    console.log('Form data:');
-    for (const pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
-    // Add debug info
-    console.log('Form details:', {
-      action: form.action,
-      method: form.method,
-      id: form.id,
-      className: form.className,
-      enctype: form.enctype
-    });
 
     // Custom validation
     let isValid = true;
@@ -463,7 +382,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // For newly added addresses that are being edited, we need to handle the form submission differently
     if (isNewlyAddedAddress && formCard && formCard.id.startsWith('EditAddress_')) {
-      console.log('Handling edit for newly added address');
 
       // Update the address card content
       if (addressCard) {
@@ -509,15 +427,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // For regular forms, submit to server
-    console.log('Submitting form to:', form.action, 'with method:', form.method || 'POST');
-
     // Check if this is a new address form
     const isNewAddressForm = form.id === 'AddAddressForm';
 
     // For new address forms, we need to ensure the form action is correct
     if (isNewAddressForm && !form.action.includes('/account/addresses')) {
       form.action = '/account/addresses';
-      console.log('Updated form action to:', form.action);
     }
 
     // For normal forms, use the standard fetch approach
@@ -529,20 +444,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     })
     .then(response => {
-      console.log('Response received:', {
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok,
-        redirected: response.redirected,
-        url: response.url
-      });
-
-      // Clone the response to inspect its content
-      response.clone().text().then(text => {
-        console.log('Response content:', text.substring(0, 500) + (text.length > 500 ? '...' : ''));
-      }).catch(err => {
-        console.error('Error reading response content:', err);
-      });
       // Remove loading state regardless of response status
       if (submitButton) {
         submitButton.classList.remove('loading');
@@ -553,7 +454,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       if (response.ok) {
-        console.log('Form submission successful');
 
         // Show success message
         const successMessage = document.createElement('div');
@@ -566,7 +466,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
           // For new addresses, refresh the page to show the server-generated address
           // This ensures we get the correct address ID from Shopify
-          console.log('New address added, refreshing page in 1 second...');
           setTimeout(() => {
             window.location.reload();
           }, 1000);
@@ -603,22 +502,11 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
       } else {
-        console.error('Form submission failed with status:', response.status);
         throw new Error(`Form submission failed with status: ${response.status}`);
       }
     })
     .catch(error => {
-      console.error('Error during form submission:', error);
-      console.error('Error stack:', error.stack);
-      console.error('Form details:', {
-        action: form.action,
-        method: form.method,
-        id: form.id,
-        className: form.className
-      });
-
       // Try direct form submission as a fallback
-      console.log('Trying direct form submission as fallback...');
 
       // Create a hidden form and submit it
       const fallbackForm = document.createElement('form');
@@ -666,52 +554,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const containerElement = document.getElementById('AddressProvinceContainerNew');
 
         if (countryElement && provinceElement) {
-          console.log('Initializing new address form selector:', {
-            countryElement: countryElement.id,
-            provinceElement: provinceElement.id,
-            containerElement: containerElement ? containerElement.id : 'null'
-          });
-
-          // Add change event listener to log provinces
-          countryElement.addEventListener('change', function() {
-            console.log('Country changed to:', this.value);
-            console.log('Province element:', provinceElement);
-
-            // Log the provinces after a short delay to allow them to be populated
-            setTimeout(() => {
-              const provinces = Array.from(provinceElement.options).map(option => ({
-                value: option.value,
-                text: option.text
-              }));
-              console.log('Provinces for', this.value, ':', provinces);
-              console.log('Province container visibility:', containerElement ? containerElement.style.display : 'N/A');
-            }, 100);
-          });
 
           // Initialize the new address form
           new Shopify.CountryProvinceSelector('AddressCountryNew', 'AddressProvinceNew', {
             hideElement: containerElement ? 'AddressProvinceContainerNew' : null,
           });
-        } else {
-          console.warn('New address form elements not found:', {
-            countryElement: countryElement ? countryElement.id : 'null',
-            provinceElement: provinceElement ? provinceElement.id : 'null',
-            containerElement: containerElement ? containerElement.id : 'null'
-          });
         }
       } catch (e) {
-        console.warn('Error initializing new address form selector:', e);
+        // Error initializing new address form selector
       }
 
       // Initialize existing address forms
       const countrySelects = document.querySelectorAll('[data-address-country-select]');
-      console.log('Found country selects:', countrySelects.length);
 
       countrySelects.forEach((select) => {
         try {
           if (select.id === 'AddressCountryNew') return; // Skip the new form as it's already initialized
 
-          console.log('Processing country select:', select.id);
           const formId = select.id.match(/EditAddress_(\d+)_Country/);
           if (formId && formId[1]) {
             const addressId = formId[1];
@@ -722,27 +581,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const provinceElement = document.getElementById(provinceId);
             const containerElement = document.getElementById(containerId);
 
-            console.log('Edit form elements:', {
-              addressId,
-              provinceElement: provinceElement ? provinceElement.id : 'null',
-              containerElement: containerElement ? containerElement.id : 'null'
-            });
-
             if (provinceElement) {
-              // Add change event listener to log provinces
-              select.addEventListener('change', function() {
-                console.log('Country changed to:', this.value, 'for address ID:', addressId);
-
-                // Log the provinces after a short delay to allow them to be populated
-                setTimeout(() => {
-                  const provinces = Array.from(provinceElement.options).map(option => ({
-                    value: option.value,
-                    text: option.text
-                  }));
-                  console.log('Provinces for', this.value, 'in address', addressId, ':', provinces);
-                  console.log('Province container visibility:', containerElement ? containerElement.style.display : 'N/A');
-                }, 100);
-              });
 
               new Shopify.CountryProvinceSelector(
                 select.id,
@@ -751,18 +590,12 @@ document.addEventListener('DOMContentLoaded', function() {
                   hideElement: containerElement ? containerId : null,
                 }
               );
-            } else {
-              console.warn('Province element not found for address ID:', addressId);
             }
-          } else {
-            console.warn('Could not extract address ID from select ID:', select.id);
           }
         } catch (e) {
-          console.warn('Error initializing country selector:', e, select.id);
+          // Error initializing country selector
         }
       });
-    } else {
-      console.warn('Shopify.CountryProvinceSelector is not available');
     }
   }
 
@@ -851,8 +684,8 @@ document.addEventListener('DOMContentLoaded', function() {
     addFormValidationListeners(form);
   });
 
-  // Helper function to create HTML for a new address card
-  function createAddressCardHtml(addressData, addressId) {
+  // Helper function to create HTML for a new address card (UNUSED)
+  /* function createAddressCardHtml(addressData, addressId) {
     const fullName = `${addressData.first_name} ${addressData.last_name}`.trim();
     const addressSummary = addressData.address1 ?
       `${addressData.address1}${addressData.city ? ', ' + addressData.city : ''}` :
@@ -1136,7 +969,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </form>
       </div>
     `;
-  }
+  } */
 
   // Helper function to update an existing address card content
   function updateAddressCardContent(addressCard, addressData) {
@@ -1203,8 +1036,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize order toggle functionality
   initializeOrderToggle();
 
-  // Helper function to add event listeners to buttons in a new address card
-  function addButtonEventListeners(addressWrapper) {
+  // Helper function to add event listeners to buttons in a new address card (UNUSED)
+  /* function addButtonEventListeners(addressWrapper) {
     // Add edit button event listener
     const editButton = addressWrapper.querySelector('.btn-edit');
     if (editButton) {
@@ -1275,7 +1108,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const wrapper = this.closest('.address-wrapper');
             if (wrapper) wrapper.remove();
           } else {
-            console.error('Error:', xhr.statusText);
             const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
             alert(errorMsg);
           }
@@ -1287,7 +1119,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         xhr.onerror = () => {
-          console.error('Request error');
           const errorMsg = document.querySelector('[data-form-error]')?.getAttribute('data-form-error') || 'There was an error processing your request. Please try again.';
           alert(errorMsg);
           this.classList.remove('loading');
@@ -1316,7 +1147,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
     }
-  }
+  } */
 
   // We're now using Shopify's built-in CountryProvinceSelector
 });
