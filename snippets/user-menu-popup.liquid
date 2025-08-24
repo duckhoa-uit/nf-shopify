@@ -1,0 +1,98 @@
+{% comment %}
+  Renders user menu hover popup with account navigation
+  Based on reusable BaseHoverPopup component
+
+  Usage:
+  {% render 'user-menu-popup' %}
+{% endcomment %}
+
+<user-menu-popup class="user-menu-popup base-hover-popup" style="display: none;">
+  <div
+    class="user-menu-popup__content base-hover-popup__content"
+    role="dialog"
+    aria-modal="false"
+    aria-label="{{ 'customer.account.title' | t }}"
+    tabindex="-1"
+  >
+    <!-- Popper.js Arrow -->
+    <div class="base-hover-popup__arrow" data-popper-arrow></div>
+
+    <!-- Header -->
+    <div class="user-menu-popup__header base-hover-popup__header">
+      <h2 class="user-menu-popup__title base-hover-popup__title">
+        {{ 'customer.account.customer_zone' | t }}
+      </h2>
+    </div>
+
+    {%- if customer -%}
+      <!-- Logged in state -->
+      <div class="user-menu-popup__logged-in">
+        <!-- Menu Items - Based on main-account.liquid tab structure -->
+        <ul class="user-menu-popup__items">
+          <!-- Basic Information (Settings Tab) -->
+          <li class="user-menu-popup__item">
+            <a href="{{ routes.account_url }}#settings" data-tab="settings">
+              {{ 'customer.account.basic_info' | t }}
+            </a>
+          </li>
+
+          <!-- Addresses -->
+          <li class="user-menu-popup__item">
+            <a href="{{ routes.account_addresses_url }}">
+              {{ 'customer.account.addresses' | t }}
+            </a>
+          </li>
+
+          <!-- Orders -->
+          <li class="user-menu-popup__item">
+            <a href="{{ routes.account_url }}#orders" data-tab="orders">
+              {{ 'customer.account.orders' | t }}
+            </a>
+          </li>
+
+          <!-- Loyalty Bonus -->
+          <li class="user-menu-popup__item">
+            <a href="{{ routes.account_url }}#bonus" data-tab="bonus">
+              {{ 'customer.account.loyalty_bonus' | t }}
+            </a>
+          </li>
+
+          <!-- Account Settings -->
+          <li class="user-menu-popup__item">
+            <a href="{{ routes.account_url }}#account-settings" data-tab="account-settings">
+              {{ 'customer.account.settings' | t }}
+            </a>
+          </li>
+
+          <!-- Wishlist -->
+          <li class="user-menu-popup__item">
+            <a href="{{ routes.account_url }}#wishlist" data-tab="wishlist">
+              {{ 'customer.account.wishlist' | t }}
+            </a>
+          </li>
+
+          <!-- Logout -->
+          <li class="user-menu-popup__item user-menu-popup__item--logout">
+            <a href="{{ routes.account_logout_url }}" class="user-menu-popup__logout">
+              <span class="svg-wrapper user-menu-popup__logout-icon">
+                {{ 'logout.svg' | inline_asset_content }}
+              </span>
+
+              {{ 'customer.log_out' | t }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    {%- else -%}
+      <!-- Not logged in state -->
+      <div class="user-menu-popup__login-prompt">
+        <p class="user-menu-popup__login-text">
+          {{ 'customer.login.please_login' | t }}
+        </p>
+        <a href="{{ routes.account_login_url }}" class="user-menu-popup__login-button">
+          {{ 'customer.login.sign_in' | t }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</user-menu-popup>

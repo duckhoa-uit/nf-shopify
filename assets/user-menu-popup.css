@@ -1,0 +1,208 @@
+/* User Menu Popup Styles - Based on Figma Design */
+
+/* Note: base-hover-popup.css is loaded separately in theme.liquid */
+
+/* User Menu Specific Variables */
+:root {
+  --user-menu-width: 280px;
+  --user-menu-item-height: 48px;
+  --user-menu-item-padding: 0.5rem 1rem;
+  --user-menu-item-font-size: 14px;
+  --user-menu-item-color: #3d3d3d;
+  --user-menu-item-hover-bg: #f8f8f8;
+  --user-menu-item-active-color: #d32f2f;
+  --user-menu-item-border: 1px solid #e0e0e0;
+
+  /* User info section */
+  --user-info-padding: 20px;
+  --user-info-bg: #ffffff;
+  --user-name-font-size: 16px;
+  --user-name-font-weight: 600;
+  --user-name-color: #000000;
+  --user-email-font-size: 14px;
+  --user-email-color: #666666;
+
+  --logout-icon-size: 1rem;
+}
+
+/* Override base popup width for user menu */
+.user-menu-popup {
+  --popup-width: var(--user-menu-width);
+  --popup-z-index: 1001; /* Higher than cart popup */
+}
+
+.user-menu-popup__content {
+  width: var(--user-menu-width);
+  min-width: var(--user-menu-width);
+  max-width: var(--user-menu-width);
+}
+
+/* User Menu Header - "ZÁKAZNÍCKA ZÓNA" */
+.user-menu-popup__header {
+  background: var(--popup-header-background);
+  border-bottom: var(--popup-divider-height) solid var(--popup-divider-color);
+}
+
+.user-menu-popup__title {
+  font-weight: var(--popup-title-font-weight);
+  font-size: var(--popup-title-font-size);
+  line-height: var(--popup-title-line-height);
+  text-transform: var(--popup-title-transform);
+  color: var(--popup-title-color);
+  text-align: center;
+  margin: 0;
+  padding: var(--popup-header-padding);
+  height: var(--popup-header-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* User Info Section (when logged in) */
+.user-menu-popup__user-info {
+  padding: var(--user-info-padding);
+  background: var(--user-info-bg);
+  border-bottom: var(--user-menu-item-border);
+}
+
+.user-menu-popup__user-name {
+  font-size: var(--user-name-font-size);
+  font-weight: var(--user-name-font-weight);
+  color: var(--user-name-color);
+  margin: 0 0 4px 0;
+}
+
+.user-menu-popup__user-email {
+  font-size: var(--user-email-font-size);
+  color: var(--user-email-color);
+  margin: 0;
+}
+
+/* Menu Items Container */
+.user-menu-popup__items {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* Individual Menu Items */
+.user-menu-popup__item {
+  border-bottom: var(--user-menu-item-border);
+  margin: 0;
+}
+
+.user-menu-popup__item:last-child {
+  border-bottom: none;
+}
+
+.user-menu-popup__item a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--user-menu-item-padding);
+  height: var(--user-menu-item-height);
+  font-size: var(--user-menu-item-font-size);
+  line-height: 1.5rem;
+  color: var(--user-menu-item-color);
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.user-menu-popup__item a:hover {
+  background-color: var(--user-menu-item-hover-bg);
+}
+
+.user-menu-popup__item--active a {
+  color: var(--user-menu-item-active-color);
+  font-weight: 500;
+}
+
+/* Menu Item Icons (if present) */
+.user-menu-popup__item-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.user-menu-popup__item-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.user-menu-popup__logout-icon {
+  width: var(--logout-icon-size);
+  height: var(--logout-icon-size);
+  margin-right: 0.5rem;
+}
+
+/* Login Prompt (when not logged in) */
+.user-menu-popup__login-prompt {
+  padding: var(--user-info-padding);
+  text-align: center;
+}
+
+.user-menu-popup__login-text {
+  font-size: var(--user-menu-item-font-size);
+  color: var(--user-menu-item-color);
+  margin: 0 0 16px 0;
+}
+
+.user-menu-popup__login-button {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--user-menu-item-active-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: var(--user-menu-item-font-size);
+  font-weight: 500;
+}
+
+.user-menu-popup__login-button:hover {
+  background-color: #b71c1c;
+}
+
+/* Empty state */
+.user-menu-popup__empty {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.user-menu-popup__empty-text {
+  font-size: var(--user-menu-item-font-size);
+  color: var(--user-menu-item-color);
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 749px) {
+  .user-menu-popup {
+    display: none !important;
+  }
+}
+
+/* Focus states for accessibility */
+.user-menu-popup__item a:focus {
+  outline: 2px solid var(--user-menu-item-active-color);
+  outline-offset: -2px;
+}
+
+.user-menu-popup__login-button:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .user-menu-popup__item {
+    border-bottom-width: 2px;
+  }
+
+  .user-menu-popup__item a:hover {
+    background-color: #e0e0e0;
+  }
+}
+
+/* No transitions - instant hover effects */
