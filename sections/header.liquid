@@ -2,6 +2,7 @@
 {{ 'component-search.css' | asset_url | stylesheet_tag }}
 {{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}
 {{ 'component-cart-notification.css' | asset_url | stylesheet_tag }}
+{{ 'cart-hover-popup.css' | asset_url | stylesheet_tag }}
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -84,8 +85,12 @@
   }
 {%- endstyle -%}
 
+{%- comment -%} Load Popper.js for cart hover popup {%- endcomment -%}
+<script src="https://unpkg.com/@popperjs/core@2" defer="defer"></script>
+
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'menu-dropdown.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'cart-hover-popup.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   for block in section.blocks
@@ -178,6 +183,7 @@
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
           class="header__icon px-3 header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
           rel="nofollow"
+          id="user-menu-trigger"
         >
           {%- if section.settings.enable_customer_avatar -%}
             <account-icon>
@@ -200,6 +206,11 @@
             -%}
           </span>
         </a>
+
+        {%- if customer -%}
+          <!-- User Menu Popup - Only for logged in users -->
+          {% render 'user-menu-popup' %}
+        {%- endif -%}
       {%- endif -%}
 
       <a
@@ -232,6 +243,9 @@
     desktop_menu_type: section.settings.menu_type_desktop
   -%}
 {%- endif -%}
+
+{%- comment -%} Cart Hover Popup {%- endcomment -%}
+{%- render 'cart-hover-popup' -%}
 
 <script type="application/ld+json">
   {

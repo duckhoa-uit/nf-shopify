@@ -1,0 +1,128 @@
+{% comment %}
+  Renders cart hover popup with server-side cart items rendering
+  Optimized for performance - eliminates 2-second loading delays
+
+  Usage:
+  {% render 'cart-hover-popup' %}
+{% endcomment %}
+
+<cart-hover-popup class="cart-hover-popup base-hover-popup" style="display: none;">
+  <div
+    class="cart-hover-popup__content base-hover-popup__content"
+    role="dialog"
+    aria-modal="false"
+    aria-label="{{ 'sections.cart.title' | t }}"
+    tabindex="-1"
+  >
+    <!-- Popper.js Arrow -->
+    <div class="base-hover-popup__arrow" data-popper-arrow></div>
+    <!-- Header -->
+    <div class="cart-hover-popup__header base-hover-popup__header">
+      <h2 class="cart-hover-popup__title base-hover-popup__title">{{ 'sections.cart.title' | t }}</h2>
+    </div>
+
+    <!-- Divider line after header -->
+    <div class="base-hover-popup__divider"></div>
+
+    <!-- Server-side rendered cart content -->
+    {%- if cart == empty -%}
+      <!-- Empty state -->
+      <div class="base-hover-popup__empty">
+        <p class="base-hover-popup__empty-text">{{ 'sections.cart.empty' | t }}</p>
+      </div>
+    {%- else -%}
+      <!-- Cart items with server-side rendering -->
+      <div class="cart-hover-popup__items base-hover-popup__content-area">
+        {%- for item in cart.items limit: 5 -%}
+          <div class="cart-hover-popup__item" data-item-key="{{ item.key }}">
+            <!-- Product image -->
+            <div class="cart-hover-popup__item-image">
+              {%- if item.image -%}
+                <img
+                  src="{{ item.image | image_url: width: 84 }}"
+                  alt="{{ item.image.alt | escape }}"
+                  width="84"
+                  height="84"
+                  loading="lazy"
+                >
+              {%- endif -%}
+            </div>
+
+            <!-- Product details -->
+            <div class="cart-hover-popup__item-details">
+              <h3 class="cart-hover-popup__item-title">{{ item.product.title | escape }}</h3>
+
+              <!-- Quantity -->
+              <div class="cart-hover-popup__item-quantity">
+                <span class="cart-hover-popup__item-quantity-label">{{ 'sections.cart.headings.quantity' | t }}:</span>
+                <span class="cart-hover-popup__item-quantity-value">{{ item.quantity }}</span>
+              </div>
+
+              <!-- Price display matching Figma design -->
+              <div class="cart-hover-popup__item-price">
+                <span class="cart-hover-popup__item-price-label">Cena:</span>
+                {%- if item.original_price != item.final_price -%}
+                  <span class="cart-hover-popup__item-price-value">
+                    {{ item.final_price | money }} / {{ item.original_price | money }}
+                  </span>
+                {%- else -%}
+                  <span class="cart-hover-popup__item-price-value">
+                    {{ item.original_price | money }}
+                  </span>
+                {%- endif -%}
+              </div>
+            </div>
+
+            <!-- Remove button -->
+            <button
+              class="cart-hover-popup__item-remove"
+              type="button"
+              aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}"
+              data-item-key="{{ item.key }}"
+            >
+              <span class="cart-hover-popup__item-remove-icon">
+                {{ 'icon-close.svg' | inline_asset_content }}
+              </span>
+            </button>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <!-- Cart summary with server-side calculations -->
+    {%- unless cart == empty -%}
+      <!-- Divider line before summary -->
+      <div class="cart-hover-popup__divider"></div>
+
+      <!-- Cart summary section -->
+      <div class="cart-hover-popup__summary">
+        {%- assign total_savings = 0 -%}
+        {%- for item in cart.items -%}
+          {%- if item.original_price != item.final_price -%}
+            {%- assign item_savings = item.original_price | minus: item.final_price | times: item.quantity -%}
+            {%- assign total_savings = total_savings | plus: item_savings -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if total_savings > 0 -%}
+          <div class="cart-hover-popup__summary-savings">
+            <span class="cart-hover-popup__summary-label">{{ 'sections.cart.savings' | t }}:</span>
+            <span class="cart-hover-popup__summary-savings-value">-{{ total_savings | money }}</span>
+          </div>
+        {%- endif -%}
+
+        <div class="cart-hover-popup__summary-total">
+          <span class="cart-hover-popup__summary-total-label">{{ 'sections.cart.estimated_total' | t }}</span>
+          <span class="cart-hover-popup__summary-total-value">{{ cart.total_price | money }}</span>
+        </div>
+      </div>
+    {%- endunless -%}
+
+    <!-- Footer with view cart button -->
+    <div class="cart-hover-popup__footer base-hover-popup__footer">
+      <a href="{{ routes.cart_url }}" class="cart-hover-popup__view-cart">
+        {{ 'sections.cart.view_cart' | t | default: 'prejsť do košíka' }}
+      </a>
+    </div>
+  </div>
+</cart-hover-popup>

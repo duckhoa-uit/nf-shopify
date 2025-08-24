@@ -316,6 +316,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="stylesheet" href="{{ 'checkbox-field.css' | asset_url }}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
+    {%- comment -%} Popup System CSS {%- endcomment -%}
+    <link rel="stylesheet" href="{{ 'base-hover-popup.css' | asset_url }}" media="print" onload="this.media='all'">
+    {%- if shop.customer_accounts_enabled -%}
+      <link rel="stylesheet" href="{{ 'user-menu-popup.css' | asset_url }}" media="print" onload="this.media='all'">
+    {%- endif -%}
+
     {%- comment -%} Conditional CSS loading for phone input (only when needed) {%- endcomment -%}
     {%- if template.name == 'customers/register' or template.name == 'customers/account' or template.name == 'customers/addresses' -%}
       <link rel="stylesheet" href="{{ 'intl-tel-input.min.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -327,6 +333,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       {{ 'application.css' | asset_url | stylesheet_tag }}
       {{ 'base.css' | asset_url | stylesheet_tag }}
       {{ 'checkbox-field.css' | asset_url | stylesheet_tag }}
+      {{ 'base-hover-popup.css' | asset_url | stylesheet_tag }}
+      {%- if shop.customer_accounts_enabled -%}
+        {{ 'user-menu-popup.css' | asset_url | stylesheet_tag }}
+      {%- endif -%}
       {%- if template.name == 'customers/register' or template.name == 'customers/account' or template.name == 'customers/addresses' -%}
         {{ 'intl-tel-input.min.css' | asset_url | stylesheet_tag }}
         {{ 'phone-input.css' | asset_url | stylesheet_tag }}
@@ -504,6 +514,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <script src="https://unpkg.com/@popperjs/core@2" defer="defer"></script>
       <script src="{{ 'hyperhtml.min.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+
+    {%- comment -%} Popup System Dependencies - Load Popper.js for all popups {%- endcomment -%}
+    {%- unless settings.predictive_search_enabled -%}
+      <script src="https://unpkg.com/@popperjs/core@2" defer="defer"></script>
+    {%- endunless -%}
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.predictive_search_enabled -%}
@@ -554,6 +569,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'checkbox-handler.js' | asset_url }}" defer="defer"></script>
+
+    {%- comment -%} Popup System JavaScript {%- endcomment -%}
+    <script src="{{ 'base-hover-popup.js' | asset_url }}" defer="defer"></script>
+    {%- if shop.customer_accounts_enabled -%}
+      <script src="{{ 'user-menu-popup.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
 
     {%- comment -%} Performance monitoring - Load in production only {%- endcomment -%}
     {%- unless Shopify.designMode -%}

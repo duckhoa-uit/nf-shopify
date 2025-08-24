@@ -1,0 +1,249 @@
+/* Base Hover Popup Styles - Reusable Foundation */
+
+/* CSS Custom Properties for Customization */
+:root {
+  --popup-width: 300px;
+  --popup-max-height: 80vh;
+  --popup-background: #ffffff;
+  --popup-border: 1px solid #dbdbdb;
+  --popup-border-radius: 3px;
+  --popup-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --popup-z-index: 1000;
+
+  /* Arrow styling */
+  --popup-arrow-size: 8px;
+  --popup-arrow-background: var(--popup-background);
+  --popup-arrow-border: var(--popup-border);
+
+  /* Header styling */
+  --popup-header-height: 58px;
+  --popup-header-background: var(--popup-background);
+  --popup-header-padding: 0 16px;
+
+  /* Title styling */
+  --popup-title-font-weight: 600;
+  --popup-title-font-size: 16px;
+  --popup-title-line-height: 1.5;
+  --popup-title-color: #000000;
+  --popup-title-transform: uppercase;
+
+  /* Divider styling */
+  --popup-divider-color: #dbdbdb;
+  --popup-divider-height: 1px;
+
+  /* Content styling */
+  --popup-content-padding: 16px;
+  --popup-content-gap: 12px;
+
+  /* Footer styling */
+  --popup-footer-padding: 16px;
+  --popup-footer-background: var(--popup-background);
+}
+
+/* Base popup container */
+.base-hover-popup {
+  display: none;
+  position: absolute;
+  z-index: var(--popup-z-index);
+}
+
+.base-hover-popup[open] {
+  display: block !important;
+}
+
+/* Base popup content */
+.base-hover-popup__content {
+  width: var(--popup-width);
+  max-height: var(--popup-max-height);
+  background-color: var(--popup-background);
+  border: var(--popup-border);
+  border-radius: var(--popup-border-radius);
+  box-shadow: var(--popup-shadow);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Popper-specific styles */
+.base-hover-popup--popper {
+  min-width: var(--popup-width);
+  max-width: var(--popup-width);
+  width: var(--popup-width);
+}
+
+/* Fallback positioning */
+.base-hover-popup--fallback {
+  position: absolute !important;
+}
+
+/* Popper.js Arrow */
+.base-hover-popup__arrow,
+.base-hover-popup__arrow::before {
+  position: absolute;
+  width: var(--popup-arrow-size);
+  height: var(--popup-arrow-size);
+  background: inherit;
+}
+
+.base-hover-popup__arrow {
+  visibility: hidden;
+}
+
+.base-hover-popup__arrow::before {
+  visibility: visible;
+  content: "";
+  transform: rotate(45deg);
+  background-color: var(--popup-arrow-background);
+  border: var(--popup-arrow-border);
+}
+
+/* Arrow positioning for different placements */
+.base-hover-popup[data-popper-placement^="top"] > .base-hover-popup__content > .base-hover-popup__arrow {
+  bottom: calc(var(--popup-arrow-size) / -2);
+}
+
+.base-hover-popup[data-popper-placement^="bottom"] > .base-hover-popup__content > .base-hover-popup__arrow {
+  top: calc(var(--popup-arrow-size) / -2);
+}
+
+.base-hover-popup[data-popper-placement^="left"] > .base-hover-popup__content > .base-hover-popup__arrow {
+  right: calc(var(--popup-arrow-size) / -2);
+}
+
+.base-hover-popup[data-popper-placement^="right"] > .base-hover-popup__content > .base-hover-popup__arrow {
+  left: calc(var(--popup-arrow-size) / -2);
+}
+
+/* Header */
+.base-hover-popup__header {
+  background: var(--popup-header-background);
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.base-hover-popup__title {
+  font-weight: var(--popup-title-font-weight);
+  font-size: var(--popup-title-font-size);
+  line-height: var(--popup-title-line-height);
+  text-transform: var(--popup-title-transform);
+  text-align: center;
+  color: var(--popup-title-color);
+  margin: 0;
+  padding: var(--popup-header-padding);
+  height: var(--popup-header-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Divider lines */
+.base-hover-popup__divider {
+  width: 100%;
+  height: var(--popup-divider-height);
+  background-color: var(--popup-divider-color);
+  flex-shrink: 0;
+}
+
+/* Loading state */
+.base-hover-popup__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.base-hover-popup__loading-spinner {
+  width: 24px;
+  height: 24px;
+}
+
+/* Empty state */
+.base-hover-popup__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.base-hover-popup__empty-text {
+  font-size: 14px;
+  color: #3d3d3d;
+  text-align: center;
+  margin: 0;
+}
+
+/* Content area */
+.base-hover-popup__content-area {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Items container */
+.base-hover-popup__items {
+  padding: var(--popup-content-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--popup-content-gap);
+}
+
+/* Footer */
+.base-hover-popup__footer {
+  background: var(--popup-footer-background);
+  padding: var(--popup-footer-padding);
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 749px) {
+  .base-hover-popup {
+    display: none !important;
+  }
+}
+
+/* Instant show/hide - no animations */
+.base-hover-popup:not([open]) {
+  display: none;
+}
+
+.base-hover-popup[open] {
+  display: block;
+}
+
+/* Focus management */
+.base-hover-popup__content:focus {
+  outline: none;
+}
+
+/* Scrollbar styling */
+.base-hover-popup__content-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.base-hover-popup__content-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.base-hover-popup__content-area::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.base-hover-popup__content-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .base-hover-popup__content {
+    border-width: 2px;
+  }
+
+  .base-hover-popup__divider {
+    height: 2px;
+  }
+}
+
+/* No animations - instant show/hide behavior */
