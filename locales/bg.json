@@ -156,12 +156,7 @@
     "article": {
       "blog": "Блог",
       "read_more_title": "Прочетете още: {{ title }}",
-      "comments": {
-        "one": "{{ count }} коментар",
-        "other": "{{ count }} коментара",
-        "few": "{{ count }} коментара",
-        "many": "{{ count }} коментара"
-      },
+      "comments": "Коментари",
       "moderated": "Моля, имайте предвид, че коментарите трябва да бъдат одобрени преди публикуване",
       "comment_form_title": "Остави коментар",
       "name": "Име",
@@ -322,10 +317,7 @@
         "few": "Избрани: {{ count }}"
       },
       "max_price": "Най-високата цена е {{ price }}",
-      "product_count": {
-        "one": "{{ product_count }} от {{ count }} продукт",
-        "other": "{{ product_count }} от {{ count }} продукта"
-      },
+      "product_count": "Прегледани {{ viewed }} от {{ total }} продукта",
       "product_count_simple": {
         "one": "{{ count }} продукт",
         "other": "{{ count }} продукта",
@@ -1231,6 +1223,41 @@
         "recommendation_explanation": "Based on your measurements and preference for PLACEHOLDER_FIT, size PLACEHOLDER_SIZE should provide the best fit."
       },
       "no_product_measurements": "Няма налични размери на продукта за този артикул."
+    }
+  },
+  "shopify": {
+    "checkout": {
+      "order_summary": {
+        "unconfirmed_label": "Непотвърдено"
+      },
+      "processing": {
+        "remote_shops_payments_processing": "Обработка на плащания",
+        "remote_checkout_count": "%{current} от %{total}"
+      },
+      "thank_you": {
+        "confirmed_items_count": "%{confirmed_count} от %{total_count} артикула са потвърдени",
+        "thank_you_confirmed_orders_with_email": "Скоро ще получите отделни имейли за потвърждение с номерата на вашите поръчки",
+        "thank_you_confirmed_orders_with_phone": "Скоро ще получите отделни текстови съобщения за потвърждение с номерата на вашите поръчки",
+        "thank_you_confirmed_orders_with_email_and_phone": "Скоро ще получите отделни имейли за потвърждение с номерата на вашите поръчки",
+        "thank_you_unconfirmed_items_heading": {
+          "one": "Елементът не е потвърден",
+          "other": "Някои елементи не са потвърдени"
+        },
+        "thank_you_unconfirmed_items_description": {
+          "one": "Не сте таксувани за това",
+          "other": "Не сте таксувани за това"
+        },
+        "track_your_order_link_text": "Проследете поръчката си",
+        "checkout_on_remote_shop_link_text": "Плащане на %{remoteShopName}",
+        "confirmed_orders_title": "Вашите поръчки са потвърдени"
+      }
+    }
+  },
+  "customer_accounts": {
+    "account_information": {
+      "profile_card": {
+        "invalid_email_format": "Въведете валиден имейл адрес"
+      }
     }
   }
 }
