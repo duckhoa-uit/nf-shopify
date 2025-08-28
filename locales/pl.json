@@ -166,12 +166,7 @@
       "share": "Udostępnij ten artykuł",
       "success": "Twój komentarz został opublikowany pomyślnie! Dziękujemy!",
       "success_moderated": "Twój komentarz został opublikowany pomyślnie. Opublikujemy go za chwilę, ponieważ nasz blog jest moderowany.",
-      "comments": {
-        "one": "{{ count }} komentarz",
-        "other": "{{ count }} komentarze(-y)",
-        "few": "{{ count }} komentarze(-y)",
-        "many": "{{ count }} komentarze(-y)"
-      },
+      "comments": "Uwagi",
       "view_all": "Zobacz wszystkie",
       "all_topics": "Wszystkie tematy",
       "by_author": "przez {{ author }}",
@@ -326,10 +321,7 @@
         "few": "Wybrane: {{ count }}",
         "many": "Wybrane: {{ count }}"
       },
-      "product_count": {
-        "one": "{{ product_count }} z {{ count }} produktu",
-        "other": "{{ product_count }} z {{ count }} produktów"
-      },
+      "product_count": "Wyświetlono {{ viewed }} z {{ total }} produktów",
       "product_count_simple": {
         "one": "{{ count }} produkt",
         "other": "{{ count }} produktów",
@@ -1231,6 +1223,41 @@
         "recommendation_explanation": "Na podstawie Twoich wymiarów i preferencji dla PLACEHOLDER_FIT, rozmiar PLACEHOLDER_SIZE powinien zapewnić najlepsze dopasowanie."
       },
       "no_product_measurements": "Brak dostępnych wymiarów produktu dla tego artykułu."
+    }
+  },
+  "shopify": {
+    "checkout": {
+      "order_summary": {
+        "unconfirmed_label": "Niepotwierdzone"
+      },
+      "processing": {
+        "remote_shops_payments_processing": "Przetwarzanie płatności",
+        "remote_checkout_count": "%{aktualne} z %{całkowitej}"
+      },
+      "thank_you": {
+        "confirmed_items_count": "Potwierdzono %{confirmed_count} z %{total_count} pozycji",
+        "thank_you_confirmed_orders_with_email": "Wkrótce otrzymasz oddzielne e-maile z potwierdzeniem zawierające numery zamówień",
+        "thank_you_confirmed_orders_with_phone": "Wkrótce otrzymasz oddzielne SMS-y z potwierdzeniem zawierające numery zamówień",
+        "thank_you_confirmed_orders_with_email_and_phone": "Wkrótce otrzymasz oddzielne e-maile z potwierdzeniem zawierające numery zamówień",
+        "thank_you_unconfirmed_items_heading": {
+          "one": "Pozycja nie jest potwierdzona",
+          "other": "Niektóre pozycje nie są potwierdzone"
+        },
+        "thank_you_unconfirmed_items_description": {
+          "one": "Nie pobrano od Ciebie opłaty za to",
+          "other": "Nie pobrano od Ciebie opłat za te usługi"
+        },
+        "track_your_order_link_text": "Śledź swoje zamówienie",
+        "checkout_on_remote_shop_link_text": "Przejdź do kasy w %{remoteShopName}",
+        "confirmed_orders_title": "Twoje zamówienia zostały potwierdzone"
+      }
+    }
+  },
+  "customer_accounts": {
+    "account_information": {
+      "profile_card": {
+        "invalid_email_format": "Podaj prawidłowy adres e-mail"
+      }
     }
   }
 }
