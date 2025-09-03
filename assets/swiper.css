@@ -8,6 +8,12 @@
   transition: opacity 0.2s ease-in-out !important;
 }
 
+.products-wiper .swiper-button-next,
+.products-wiper .swiper-button-prev {
+  --swiper-navigation-top-offset: 35%;
+  --swiper-navigation-bottom-offset: 35%;
+}
+
 @media (max-width: 768px) {
   .swiper-button-next,
   .swiper-button-prev {
@@ -92,7 +98,7 @@
 .swiper-pagination-bullet {
   width: 5px !important;
   height: 5px !important;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   margin: 0 3px !important;
   opacity: 0.7;

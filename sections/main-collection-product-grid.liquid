@@ -45,11 +45,6 @@
     margin-right: 1rem;
   }
 
-  .sorting-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
@@ -175,7 +170,7 @@
         <div class="collection-header-right">
           <div class="filter-controls">
             {%- if section.settings.enable_sorting and collection.products.size > 0 -%}
-              <div class="sorting-container">
+              <div class="sorting-container hidden md:flex">
                 <!-- Separate form for products per page (full page reload) -->
                 <form method="get" action="{{ collection.url }}" id="ProductsPerPageForm" class="products-per-page-form">
                   <div class="products-per-page">
@@ -320,6 +315,109 @@
                 price_filter_range_max: settings.price_filter_max
               %}
             </aside>
+            {%- if section.settings.enable_sorting and collection.products.size > 0 -%}
+              <div class="sorting-container mt-2 md:hidden">
+                <!-- Separate form for products per page (full page reload) -->
+                <form method="get" action="{{ collection.url }}" id="ProductsPerPageForm" class="products-per-page-form">
+                  <div class="products-per-page">
+                    <label for="ProductsPerPage">{{ 'products.facets.products_per_page' | t }}</label>
+                    <div class="select after:border-0 after:shadow-none">
+                      <select
+                        name="products_per_page"
+                        id="ProductsPerPage"
+                        class="select__select pl-[5px]"
+                        onchange="handleProductsPerPageChange(this);"
+                      >
+                        <option
+                          value="24"
+                          {% if products_per_page == 24 %}
+                            selected
+                          {% endif %}
+                        >
+                          24
+                        </option>
+                        <option
+                          value="48"
+                          {% if products_per_page == 48 %}
+                            selected
+                          {% endif %}
+                        >
+                          48
+                        </option>
+                        <option
+                          value="120"
+                          {% if products_per_page == 120 %}
+                            selected
+                          {% endif %}
+                        >
+                          120
+                        </option>
+                      </select>
+                      <span class="svg-wrapper">
+                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Hidden inputs will be populated by JavaScript -->
+                </form>
+
+                <!-- Facets form for sorting only (AJAX) -->
+                <facet-filters-form class="facets">
+                  <form class="facets-form" id="FacetSortForm">
+                    <div class="facet-filters sorting">
+                      <div class="facet-filters__field">
+                        <div class="select after:border-0 after:shadow-none">
+                          {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                          <select
+                            name="sort_by"
+                            class="facet-filters__sort select__select"
+                            id="SortBy"
+                            aria-describedby="a11y-refresh-page-message"
+                          >
+                            <option
+                              value="manual"
+                              {% if collection.sort_by == 'manual' %}
+                                selected="selected"
+                              {% endif %}
+                            >
+                              {{ 'products.facets.sort_by.manual' | t }}
+                            </option>
+                            <option
+                              value="created-descending"
+                              {% if collection.sort_by == 'created-descending' %}
+                                selected="selected"
+                              {% endif %}
+                            >
+                              {{ 'products.facets.sort_by.created_descending' | t }}
+                            </option>
+                            <option
+                              value="price-ascending"
+                              {% if collection.sort_by == 'price-ascending' %}
+                                selected="selected"
+                              {% endif %}
+                            >
+                              {{ 'products.facets.sort_by.price_ascending' | t }}
+                            </option>
+                            <option
+                              value="price-descending"
+                              {% if collection.sort_by == 'price-descending' %}
+                                selected="selected"
+                              {% endif %}
+                            >
+                              {{ 'products.facets.sort_by.price_descending' | t }}
+                            </option>
+                          </select>
+                          <span class="svg-wrapper">
+                            {{- 'icon-caret.svg' | inline_asset_content -}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </facet-filters-form>
+              </div>
+            {%- endif -%}
           </div>
         {%- endif -%}
 
