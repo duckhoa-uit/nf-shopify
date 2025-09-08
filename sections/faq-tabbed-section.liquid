@@ -1,0 +1,493 @@
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+{{ 'faq-tabbed-section.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
+  }
+
+  .shopify-section.section{
+    height: 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign categories = section.blocks | where: 'type', 'faq_category'
+  assign default_category = section.settings.default_category
+  if categories.size > 0 and default_category == blank
+    assign default_category = categories.first.settings.category_id
+  endif
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient bg-[#f7f7f7] h-full">
+  <div class="faq-tabbed-section page-width section-{{ section.id }}-padding">
+    <div class="faq-tabbed-section__container">
+      <!-- Category Navigation (Left Column) -->
+      <div class="faq-tabbed-section__navigation" role="tablist" aria-label="FAQ Categories">
+        {%- if section.settings.heading != blank -%}
+          <h1 class="faq-tabbed-section__heading">
+            {{ section.settings.heading }}
+          </h1>
+        {%- endif -%}
+        {%- for category in categories -%}
+          <button
+            type="button"
+            class="faq-tab-button{% if category.settings.category_id == default_category %} faq-tab-button--active{% endif %}"
+            data-category="{{ category.settings.category_id }}"
+            role="tab"
+            id="tab-{{ category.settings.category_id }}"
+            aria-controls="faq-content-{{ category.settings.category_id }}"
+            {% if category.settings.category_id == default_category %}
+              aria-selected="true"
+            {% else %}
+              aria-selected="false"
+            {% endif %}
+          >
+            {{ category.settings.category_name }}
+
+            <span class="md:hidden absolute right-4 top-1/2 -translate-y-1/2">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        {%- endfor -%}
+
+        <!-- Contact Help Block -->
+        <div class="faq-contact-block md:bg-transparent">
+          <div class="faq-contact-block__content md:px-0">
+            <h3 class="faq-contact-block__heading">
+              {{ 'sections.faq.contact_heading' | t }}
+            </h3>
+            <p class="faq-contact-block__subtext">
+              {{ 'sections.faq.contact_subtext' | t }}
+            </p>
+            <a
+              href="{{ 'pages.contact' | t }}"
+              class="faq-contact-block__button"
+              role="button"
+              aria-label="{{ 'sections.faq.contact_button_aria' | t }}"
+            >
+              {{ 'sections.faq.contact_button' | t }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Content (Right Column) -->
+      <div class="faq-tabbed-section__content">
+        {%- for category in categories -%}
+          <div
+            id="faq-content-{{ category.settings.category_id }}"
+            class="faq-category-content{% if category.settings.category_id == default_category %} faq-category-content--active{% endif %}"
+            role="tabpanel"
+            aria-labelledby="tab-{{ category.settings.category_id }}"
+          >
+            <!-- Category Title -->
+            <h2 class="faq-category-title">
+              {{ category.settings.category_name }}
+            </h2>
+
+            <!-- Mobile Back Button (Hidden by default) -->
+            <div class="faq-mobile-header">
+              <button type="button" class="faq-back-button md:hidden" aria-label="Back to categories">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <h2 class="faq-mobile-category-title">{{ category.settings.category_name }}</h2>
+            </div>
+            {%- assign current_category_id = category.settings.category_id | strip | downcase -%}
+            {%- assign matching_faqs = 0 -%}
+
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'faq_item' -%}
+                {%- assign block_category = block.settings.category | strip | downcase -%}
+                {%- if block_category == current_category_id -%}
+                  {%- assign matching_faqs = matching_faqs | plus: 1 -%}
+                  <div class="accordion" {{ block.shopify_attributes }}>
+                    <details id="Details-{{ block.id }}-{{ section.id }}">
+                      <summary id="Summary-{{ block.id }}-{{ section.id }}">
+                        <h3 class="accordion__title inline-richtext">
+                          {{ block.settings.question }}
+                        </h3>
+                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                      </summary>
+                      <div
+                        class="accordion__content rte"
+                        id="FAQAccordion-{{ block.id }}-{{ section.id }}"
+                        role="region"
+                        aria-labelledby="Summary-{{ block.id }}-{{ section.id }}"
+                      >
+                        {{ block.settings.answer }}
+                      </div>
+                    </details>
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if matching_faqs == 0 -%}
+              <p class="faq-empty-message">{{ 'sections.faq.no_questions' | t }}</p>
+            {%- endif -%}
+
+            <div class="faq-contact-block md:hidden">
+              <div class="faq-contact-block__content">
+                <h3 class="faq-contact-block__heading">
+                  {{ 'sections.faq.contact_heading' | t }}
+                </h3>
+                <p class="faq-contact-block__subtext">
+                  {{ 'sections.faq.contact_subtext' | t }}
+                </p>
+                <a
+                  href="{{ 'pages.contact' | t }}"
+                  class="faq-contact-block__button"
+                  role="button"
+                  aria-label="{{ 'sections.faq.contact_button_aria' | t }}"
+                >
+                  {{ 'sections.faq.contact_button' | t }}
+                </a>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const tabButtons = document.querySelectorAll('.faq-tab-button');
+    const contentPanels = document.querySelectorAll('.faq-category-content');
+    const navigation = document.querySelector('.faq-tabbed-section__navigation');
+    const content = document.querySelector('.faq-tabbed-section__content');
+    const mobileHeader = document.querySelector('.faq-mobile-header');
+    const backButton = document.querySelector('.faq-back-button');
+    const defaultCategory = '{{ default_category }}';
+
+    // Get category data for mobile title lookup
+    const categoryData = {
+      {%- for category in categories -%}
+        '{{ category.settings.category_id }}': '{{ category.settings.category_name }}'{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    };
+
+    function isMobile() {
+      return window.innerWidth <= 749;
+    }
+
+    function activateTab(categoryId, updateHash = true, focusButton = false) {
+      // Remove active class from all buttons and panels
+      tabButtons.forEach((btn) => {
+        btn.classList.remove('faq-tab-button--active');
+        btn.setAttribute('aria-selected', 'false');
+        btn.setAttribute('tabindex', '-1');
+      });
+      contentPanels.forEach((panel) => {
+        panel.classList.remove('faq-category-content--active');
+      });
+
+      // Find and activate the target button and panel
+      const targetButton = document.querySelector(`[data-category="${categoryId}"]`);
+      const targetPanel = document.getElementById('faq-content-' + categoryId);
+
+      if (targetButton && targetPanel) {
+        targetButton.classList.add('faq-tab-button--active');
+        targetButton.setAttribute('aria-selected', 'true');
+        targetButton.setAttribute('tabindex', '0');
+
+        if (focusButton && !isMobile()) {
+          targetButton.focus();
+        }
+
+        targetPanel.classList.add('faq-category-content--active');
+
+        // Update URL hash
+        if (updateHash) {
+          history.pushState(null, null, '#' + categoryId);
+        }
+
+        // Handle mobile view
+        updateMobileView(categoryId);
+      }
+    }
+
+    function updateMobileView(categoryId) {
+      if (isMobile()) {
+        if (categoryId && categoryData[categoryId]) {
+          // Show FAQ content, hide navigation
+          navigation.style.display = 'none';
+          content.style.display = 'block';
+          mobileHeader.style.display = 'flex';
+        } else {
+          // Show navigation, hide FAQ content
+          navigation.style.display = 'flex';
+          content.style.display = 'none';
+          mobileHeader.style.display = 'none';
+        }
+      } else {
+        // Desktop: always show both
+        navigation.style.display = 'flex';
+        // content.style.display = 'block';
+        mobileHeader.style.display = 'none';
+      }
+    }
+
+    function handleHashChange() {
+      const hash = window.location.hash.substring(1); // Remove #
+
+      if (hash && categoryData[hash]) {
+        activateTab(hash, false); // Don't update hash since we're responding to hash change
+      } else if (!hash && !isMobile()) {
+        // Desktop: show default category when no hash
+        const defaultCat = defaultCategory || Object.keys(categoryData)[0];
+        if (defaultCat) {
+          activateTab(defaultCat, false);
+        }
+      } else if (!hash && isMobile()) {
+        // Mobile: show category list when no hash
+        updateMobileView(null);
+      }
+    }
+
+    // Click event handlers
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', function () {
+        const categoryId = this.getAttribute('data-category');
+        activateTab(categoryId, true, true);
+      });
+
+      // Keyboard navigation
+      button.addEventListener('keydown', function (e) {
+        let targetButton = null;
+        const currentIndex = Array.from(tabButtons).indexOf(this);
+
+        switch (e.key) {
+          case 'ArrowDown':
+          case 'ArrowRight':
+            e.preventDefault();
+            targetButton = tabButtons[currentIndex + 1] || tabButtons[0];
+            break;
+          case 'ArrowUp':
+          case 'ArrowLeft':
+            e.preventDefault();
+            targetButton = tabButtons[currentIndex - 1] || tabButtons[tabButtons.length - 1];
+            break;
+          case 'Home':
+            e.preventDefault();
+            targetButton = tabButtons[0];
+            break;
+          case 'End':
+            e.preventDefault();
+            targetButton = tabButtons[tabButtons.length - 1];
+            break;
+          case 'Enter':
+          case ' ':
+            e.preventDefault();
+            const categoryId = this.getAttribute('data-category');
+            activateTab(categoryId, true, true);
+            return;
+        }
+
+        if (targetButton) {
+          const targetCategoryId = targetButton.getAttribute('data-category');
+          activateTab(targetCategoryId, true, true);
+        }
+      });
+    });
+
+    // Back button handler for mobile
+    if (backButton) {
+      backButton.addEventListener('click', function() {
+        // Clear hash to show category list on mobile
+        history.pushState(null, null, window.location.pathname);
+        updateMobileView(null);
+      });
+    }
+
+    // Hash change listener
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Resize listener to handle mobile/desktop transitions
+    window.addEventListener('resize', function() {
+      const hash = window.location.hash.substring(1);
+      if (hash && categoryData[hash]) {
+        updateMobileView(hash);
+      } else {
+        updateMobileView(null);
+      }
+    });
+
+    // Initialize first tab as focusable
+    if (tabButtons.length > 0) {
+      const activeButton = document.querySelector('.faq-tab-button--active') || tabButtons[0];
+      activeButton.setAttribute('tabindex', '0');
+      tabButtons.forEach((btn) => {
+        if (btn !== activeButton) {
+          btn.setAttribute('tabindex', '-1');
+        }
+      });
+    }
+
+    // Initialize based on current hash or default
+    const initialHash = window.location.hash.substring(1);
+    if (initialHash && categoryData[initialHash]) {
+      // Hash present: activate that category
+      activateTab(initialHash, false);
+    } else if (!isMobile()) {
+      // Desktop without hash: show default category
+      const defaultCat = defaultCategory || Object.keys(categoryData)[0];
+      if (defaultCat) {
+        activateTab(defaultCat, false);
+      }
+    } else {
+      // Mobile without hash: show category list
+      updateMobileView(null);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "FAQ Tabbed Section",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "FAQ",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "default_category",
+      "label": "Default active category ID",
+      "info": "The category ID that should be active by default"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_category",
+      "name": "FAQ Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "category_name",
+          "default": "Category Name",
+          "label": "Category Name"
+        },
+        {
+          "type": "text",
+          "id": "category_id",
+          "default": "category",
+          "label": "Category ID",
+          "info": "Unique identifier for this category (use lowercase, no spaces)"
+        }
+      ]
+    },
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "category",
+          "default": "category",
+          "label": "Category ID",
+          "info": "Must match a category ID from the FAQ Category blocks"
+        },
+        {
+          "type": "text",
+          "id": "question",
+          "default": "When will my order be shipped?",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "default": "<p>Provide the answer to the question here.</p>",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Tabbed Section",
+      "blocks": [
+        {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Shipping & Delivery",
+            "category_id": "shipping"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "shipping",
+            "question": "When will my order be shipped?",
+            "answer": "<p>We process and ship orders on business days within 24 hours of receiving payment.</p>"
+          }
+        },
+        {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Returns & Exchanges",
+            "category_id": "returns"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "returns",
+            "question": "How can I return an item?",
+            "answer": "<p>You can return items within 14 days of receipt. Simply fill out the return form and send it along with the item.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
