@@ -1,71 +1,357 @@
 {
   "sections": {
-    "main": {
-      "type": "main-page",
+    "breadcrumb": {
+      "type": "breadcrumb",
       "settings": {
-        "padding_top": 36,
-        "padding_bottom": 36
+        "back_text": "Back",
+        "home_text": "Home",
+        "divider_style": "arrow"
       }
     },
-    "faq": {
-      "type": "faq-section",
+    "faq_tabbed": {
+      "type": "faq-tabbed-section",
       "blocks": {
+        "category-1": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "EXPEDITION, DELIVERY, DEADLINES, TRANSPORT",
+            "category_id": "expedition-delivery-deadlines-transport"
+          }
+        },
         "faq-1": {
           "type": "faq_item",
           "settings": {
-            "question": "When will my order be shipped?",
-            "answer": "<p>We process and ship orders on business days within 24 hours of receiving payment. For cash on delivery orders, we ship within 24 hours of order confirmation.</p>"
+            "category": "expedition-delivery-deadlines-transport",
+            "question": "When will the shipment be sent?",
+            "answer": "<p>We send the shipment within 5 days of receiving the order. The deadline only applies to working days.</p>"
           }
         },
         "faq-2": {
           "type": "faq_item",
           "settings": {
-            "question": "How long does delivery take?",
-            "answer": "<p>Delivery usually takes 1-3 business days from shipment, depending on the chosen shipping method and destination.</p>"
+            "category": "expedition-delivery-deadlines-transport",
+            "question": "When will the shipment be delivered?",
+            "answer": "<p>In general, the shipment is delivered 1-5 days after dispatch.</p>"
           }
         },
         "faq-3": {
           "type": "faq_item",
           "settings": {
-            "question": "What payment options are available?",
-            "answer": "<p>We offer several payment options: online credit card payment, bank transfer, or cash on delivery when receiving the goods.</p>"
+            "category": "expedition-delivery-deadlines-transport",
+            "question": "Can I choose an exact delivery date?",
+            "answer": "<p>No, unfortunately choosing an exact date is not possible. However, you can have the shipment stored at a delivery point (valid for SK, CZ, HU, PL, RO). So you can easily get it when convenient. The package will be stored for 7 days.</p>"
           }
         },
         "faq-4": {
           "type": "faq_item",
           "settings": {
-            "question": "How can I return an item?",
-            "answer": "<p>You can return items within 14 days of receipt. Simply fill out the return form found in the 'Returns' section and send it along with the item to our address.</p>"
+            "category": "expedition-delivery-deadlines-transport",
+            "question": "Where can I track the order status?",
+            "answer": "<p>We inform you about changes in the order status via e-mail. If you are a registered customer, you can also see the order status in the \"My orders\" section of your customer account on the website. Status can be: Payment received, Order processing, Sent order, Delivered order.</p>"
           }
         },
         "faq-5": {
           "type": "faq_item",
           "settings": {
-            "question": "What warranty do your products have?",
-            "answer": "<p>All our products come with a standard 24-month legal warranty. Some products may have an extended warranty, which is specified in the product description.</p>"
+            "category": "expedition-delivery-deadlines-transport",
+            "question": "Where can I find outlets?",
+            "answer": "<p>If you chose collection at a delivery point, you choose this delivery point directly in the order. You can also find a list of delivery points at the following links: <strong>SLOVAKIA:</strong> https://www.packeta.sk/pobocky <strong>CZECH REPUBLIC:</strong> https://www.zasilkovna.cz/pobocky <strong>ROMANIA:</strong> https://sameday.ro/easybox/ <strong>HUNGARY:</strong> https://www.packeta.hu/atvevohelyek <strong>POLAND:</strong> https://inpost.pl/znajdz-paczkomat <strong>SLOVENIA:</strong> We deliver in Slovenia via couriers and the postal service. Northfinder does not plan other outlets yet.</p>"
+          }
+        },
+        "category-2": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "PAYMENTS AND BILLING",
+            "category_id": "payments-and-billing"
+          }
+        },
+        "faq-6": {
+          "type": "faq_item",
+          "settings": {
+            "category": "payments-and-billing",
+            "question": "Can an invoice be issued to a company?",
+            "answer": "<p>Unfortunately, we do not have B2B sales available. We only sell to end customers.</p>"
+          }
+        },
+        "faq-7": {
+          "type": "faq_item",
+          "settings": {
+            "category": "payments-and-billing",
+            "question": "How can I pay for my order?",
+            "answer": "<p>You can pay for your order by card online, by bank transfer or by cash on delivery (only in Slovakia and Czech Republic).</p>"
+          }
+        },
+        "faq-8": {
+          "type": "faq_item",
+          "settings": {
+            "category": "payments-and-billing",
+            "question": "Can I pay by cash on delivery?",
+            "answer": "<p>Yes, cash on delivery is available in Slovakia and Czech Republic.</p>"
+          }
+        },
+        "faq-9": {
+          "type": "faq_item",
+          "settings": {
+            "category": "payments-and-billing",
+            "question": "Payment through the payment gateway failed. What are my options?",
+            "answer": "<p>If the payment fails, you need to create a new order. The system does not allow you to pay for an order that has already failed.</p>"
+          }
+        },
+        "faq-10": {
+          "type": "faq_item",
+          "settings": {
+            "category": "payments-and-billing",
+            "question": "What is the shipping cost?",
+            "answer": "<p>The shipping cost depends on the delivery method and destination. You can check the exact shipping cost in your cart before completing the order.</p>"
+          }
+        },
+        "category-3": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "CHANGES AND CANCELLATION OF ORDER",
+            "category_id": "changes-and-cancellation-of-order"
+          }
+        },
+        "faq-11": {
+          "type": "faq_item",
+          "settings": {
+            "category": "changes-and-cancellation-of-order",
+            "question": "Can I change the content of an order after confirmed? Add or remove goods from the order?",
+            "answer": "<p>Unfortunately, it is not possible to change the content of the order after confirmation. If you want to change something, you need to cancel the order and create a new one.</p>"
+          }
+        },
+        "faq-12": {
+          "type": "faq_item",
+          "settings": {
+            "category": "changes-and-cancellation-of-order",
+            "question": "Can I merge multiple orders into one?",
+            "answer": "<p>Unfortunately, it is not possible to merge orders.</p>"
+          }
+        },
+        "faq-13": {
+          "type": "faq_item",
+          "settings": {
+            "category": "changes-and-cancellation-of-order",
+            "question": "Can I split one order into several with a different delivery address?",
+            "answer": "<p>Unfortunately, it is not possible to split the order.</p>"
+          }
+        },
+        "faq-14": {
+          "type": "faq_item",
+          "settings": {
+            "category": "changes-and-cancellation-of-order",
+            "question": "How can I cancel my order?",
+            "answer": "<p>You can cancel your order only before we start processing it. Contact us as soon as possible at info@northfinder.com or by phone +421 948 632 252.</p>"
+          }
+        },
+        "category-4": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "GOODS, PRODUCTS, AVAILABILITY",
+            "category_id": "goods-products-availability"
+          }
+        },
+        "faq-15": {
+          "type": "faq_item",
+          "settings": {
+            "category": "goods-products-availability",
+            "question": "Do you have a physical store or place where I can try the goods?",
+            "answer": "<p>No, we only operate as an e-shop. We do not have a physical store.</p>"
+          }
+        },
+        "faq-16": {
+          "type": "faq_item",
+          "settings": {
+            "category": "goods-products-availability",
+            "question": "Which stores stock your brand?",
+            "answer": "<p>You can find our products in selected partner stores. For a current list of stores, please contact us at info@northfinder.com.</p>"
+          }
+        },
+        "faq-17": {
+          "type": "faq_item",
+          "settings": {
+            "category": "goods-products-availability",
+            "question": "If the goods are not available, how do I know if/when they'll be in stock?",
+            "answer": "<p>If a product is sold out, it will be marked as \"Out of Stock\" on the product page. We recommend subscribing to our newsletter or following our social media for updates on new arrivals and restocks.</p>"
+          }
+        },
+        "faq-18": {
+          "type": "faq_item",
+          "settings": {
+            "category": "goods-products-availability",
+            "question": "Can you verify the availability of a specific product in a partner's store?",
+            "answer": "<p>Unfortunately, our warehouse is not connected to partner stores' systems, so we cannot verify availability in their stores. Please contact the specific store directly.</p>"
+          }
+        },
+        "faq-19": {
+          "type": "faq_item",
+          "settings": {
+            "category": "goods-products-availability",
+            "question": "Can I try on goods and collect from your company address?",
+            "answer": "<p>Unfortunately, this is not possible. We operate only as an e-shop and do not have facilities for trying on products.</p>"
+          }
+        },
+        "category-5": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "EXCHANGE, RETURN AND CLAIM OF GOODS",
+            "category_id": "exchange-return-and-claim-of-goods"
+          }
+        },
+        "faq-20": {
+          "type": "faq_item",
+          "settings": {
+            "category": "exchange-return-and-claim-of-goods",
+            "question": "What is the warranty period for the goods?",
+            "answer": "<p>The warranty period for all goods is 24 months from the date of purchase.</p>"
+          }
+        },
+        "faq-21": {
+          "type": "faq_item",
+          "settings": {
+            "category": "exchange-return-and-claim-of-goods",
+            "question": "How can I return an order?",
+            "answer": "<p><strong>SLOVAKIA:</strong> Fill out the return form and send it with the goods to our address. <strong>CZECH REPUBLIC:</strong> Fill out the return form and send it with the goods to our address. <strong>OTHER COUNTRIES:</strong> Contact us at info@northfinder.com for return instructions.</p>"
+          }
+        },
+        "faq-22": {
+          "type": "faq_item",
+          "settings": {
+            "category": "exchange-return-and-claim-of-goods",
+            "question": "When and how will I get my money back?",
+            "answer": "<p>We will refund your money using the same payment method you used for the original purchase. The refund will be processed within 14 days of receiving the returned goods.</p>"
+          }
+        },
+        "faq-23": {
+          "type": "faq_item",
+          "settings": {
+            "category": "exchange-return-and-claim-of-goods",
+            "question": "Where can I find the claim form?",
+            "answer": "<p>You can find the claim form on our website in the customer service section or contact us at info@northfinder.com and we will send it to you.</p>"
+          }
+        },
+        "faq-24": {
+          "type": "faq_item",
+          "settings": {
+            "category": "exchange-return-and-claim-of-goods",
+            "question": "How long does it take to process a return?",
+            "answer": "<p>We process returns within 14 days of receiving the returned goods.</p>"
+          }
+        },
+        "faq-25": {
+          "type": "faq_item",
+          "settings": {
+            "category": "exchange-return-and-claim-of-goods",
+            "question": "How long does it take to exchange goods? When will I receive exchanged goods?",
+            "answer": "<p>The exchange process takes approximately 14 days from when we receive the returned goods. We will send the replacement item once we have processed your return.</p>"
+          }
+        },
+        "faq-26": {
+          "type": "faq_item",
+          "settings": {
+            "category": "exchange-return-and-claim-of-goods",
+            "question": "Can I exchange the purchased goods for completely different goods in your e-shop?",
+            "answer": "<p>No, you can only exchange goods for the same model in a different size or color, subject to availability.</p>"
+          }
+        },
+        "category-6": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "E-SHOP: REGISTRATION, LOGIN, USING DISCOUNTS",
+            "category_id": "e-shop-registration-login-using-discounts"
+          }
+        },
+        "faq-27": {
+          "type": "faq_item",
+          "settings": {
+            "category": "e-shop-registration-login-using-discounts",
+            "question": "Where is my order number?",
+            "answer": "<p>Your order number is included in the confirmation email sent to you after placing the order. You can also find it in your customer account under \"My Orders\".</p>"
+          }
+        },
+        "faq-28": {
+          "type": "faq_item",
+          "settings": {
+            "category": "e-shop-registration-login-using-discounts",
+            "question": "How can I register for the e-shop?",
+            "answer": "<p>You can register by clicking the \"Register\" button on our website and filling out the registration form with your details.</p>"
+          }
+        },
+        "faq-29": {
+          "type": "faq_item",
+          "settings": {
+            "category": "e-shop-registration-login-using-discounts",
+            "question": "I forgot my login information, what now?",
+            "answer": "<p>Click on \"Forgot Password\" on the login page and enter your email address. We will send you instructions to reset your password.</p>"
+          }
+        },
+        "faq-30": {
+          "type": "faq_item",
+          "settings": {
+            "category": "e-shop-registration-login-using-discounts",
+            "question": "How do I use a discount coupon?",
+            "answer": "<p>Enter your discount coupon code in the designated field during the checkout process before completing your payment.</p>"
+          }
+        },
+        "faq-31": {
+          "type": "faq_item",
+          "settings": {
+            "category": "e-shop-registration-login-using-discounts",
+            "question": "Where is the purchase invoice?",
+            "answer": "<p>The purchase invoice is sent to your email address after the order is completed. You can also download it from your customer account.</p>"
           }
         }
       },
       "block_order": [
+        "category-1",
         "faq-1",
         "faq-2",
         "faq-3",
         "faq-4",
-        "faq-5"
+        "faq-5",
+        "category-2",
+        "faq-6",
+        "faq-7",
+        "faq-8",
+        "faq-9",
+        "faq-10",
+        "category-3",
+        "faq-11",
+        "faq-12",
+        "faq-13",
+        "faq-14",
+        "category-4",
+        "faq-15",
+        "faq-16",
+        "faq-17",
+        "faq-18",
+        "faq-19",
+        "category-5",
+        "faq-20",
+        "faq-21",
+        "faq-22",
+        "faq-23",
+        "faq-24",
+        "faq-25",
+        "faq-26",
+        "category-6",
+        "faq-27",
+        "faq-28",
+        "faq-29",
+        "faq-30",
+        "faq-31"
       ],
       "settings": {
-        "heading": "Frequently Asked Questions",
-        "open_first_item": false,
-        "view_all_text": "view all questions",
-        "view_all_link": "/pages/faq",
+        "heading": "FAQ",
+        "default_category": "expedition-delivery-deadlines-transport",
         "color_scheme": "background-1",
         "padding_top": 36,
         "padding_bottom": 36
       }
-    }
+    },
   },
   "order": [
-    "main",
-    "faq"
+    "breadcrumb",
+    "faq_tabbed"
   ]
 }
