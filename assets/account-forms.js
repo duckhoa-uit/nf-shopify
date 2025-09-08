@@ -273,7 +273,10 @@ class AccountForms {
         this.customerInfoForm.insertBefore(successMessage, this.customerInfoForm.firstChild);
       }
 
-      successMessage.textContent = data.message || 'Basic information updated successfully!';
+      // Get localized success message from data attribute
+      const accountContainer = document.querySelector('.customer.account');
+      const localizedMessage = accountContainer ? accountContainer.dataset.infoUpdateSuccess : null;
+      successMessage.textContent = data.message || localizedMessage || 'Basic information updated successfully!';
       successMessage.style.display = 'block';
 
       // Scroll to success message
