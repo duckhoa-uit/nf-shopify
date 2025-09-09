@@ -10,7 +10,7 @@
     {% for sentence in sentences %}
       {% assign trimmed_sentence = sentence | strip %}
       {% if trimmed_sentence != '' %}
-        <li>{{ trimmed_sentence }}{% unless forloop.last %}.{% endunless %}</li>
+        <li>{{ trimmed_sentence | remove_first: '• ' }}{% unless forloop.last %}.{% endunless %}</li>
       {% endif %}
     {% endfor %}
   </ul>
