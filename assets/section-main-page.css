@@ -87,3 +87,13 @@ table:not([class]) th {
 table:not([class]) tr {
   border-bottom: 1px solid #eaeaea;
 }
+
+@media screen and (max-width: 440px) {
+  table:not([class]) td {
+    display: block;
+    padding: 0.5rem 0;
+  }
+  table:not([class]) td * {
+    word-break: break-all;
+  }
+}
