@@ -100,14 +100,35 @@ class FacetFiltersForm extends HTMLElement {
     // Re-run products per page JavaScript after AJAX update
     if (window.handleProductsPerPageWithJS && typeof window.handleProductsPerPageWithJS === 'function') {
       setTimeout(() => {
-        window.handleProductsPerPageWithJS();
-        if (window.updateProductCount && typeof window.updateProductCount === 'function') {
-          window.updateProductCount();
+        try {
+          console.log('Updating pagination after filter change...');
+
+          if (window.handleProductsPerPageWithJS) {
+            window.handleProductsPerPageWithJS();
+          }
+
+          if (window.updateProductCount && typeof window.updateProductCount === 'function') {
+            window.updateProductCount();
+          }
+
+          if (window.updateViewMoreButton && typeof window.updateViewMoreButton === 'function') {
+            window.updateViewMoreButton();
+          }
+
+          console.log('Pagination update completed successfully');
+        } catch (error) {
+          console.error('Error updating pagination after filter change:', error);
+
+          // Fallback: try to update at least the product count
+          try {
+            if (window.updateProductCount) {
+              window.updateProductCount();
+            }
+          } catch (fallbackError) {
+            console.error('Fallback product count update also failed:', fallbackError);
+          }
         }
-        if (window.updateViewMoreButton && typeof window.updateViewMoreButton === 'function') {
-          window.updateViewMoreButton();
-        }
-      }, 100);
+      }, 200); // Increased timeout from 100ms to 200ms for better reliability
     }
   }
 
@@ -129,11 +150,18 @@ class FacetFiltersForm extends HTMLElement {
     if (container) {
       container.innerHTML = count;
       container.classList.remove("loading");
+
+      // Mark that this was updated by facets system (filtered results)
+      container.setAttribute('data-facets-updated', 'true');
+      console.log('renderProductCount: Updated with filtered results');
     }
 
     if (containerDesktop) {
       containerDesktop.innerHTML = count;
       containerDesktop.classList.remove("loading");
+
+      // Mark that this was updated by facets system (filtered results)
+      containerDesktop.setAttribute('data-facets-updated', 'true');
     }
 
     const loadingSpinners = document.querySelectorAll(

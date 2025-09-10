@@ -482,7 +482,7 @@
                   {%- endfor -%}
                 </ul>
 
-                <div class="product-count">
+                <div class="product-count" id="ProductCount">
                   <p class="product-count-text">
                     {% assign viewed_items = paginate.current_page | times: products_per_page %}
                     {% if viewed_items > paginate.items %}
@@ -587,14 +587,44 @@
     }
   };
 
-  window.updateProductCount = function() {
+  window.updateProductCount = function(preserveFilteredCount = true) {
     // Update the product count text to reflect current displayed products
     const productGrid = document.querySelector('#product-grid');
     const productCountElement = document.querySelector('.product-count-text');
+    const productCountContainer = document.getElementById('ProductCount');
 
     if (productGrid && productCountElement) {
       const visibleProducts = productGrid.querySelectorAll('.grid__item:not([style*="display: none"])');
-      const totalProducts = {{ paginate.items | default: collection.products_count | default: 0 }};
+
+      // Check if this was recently updated by facets system (filtered results)
+      const wasFacetsUpdated = productCountContainer && productCountContainer.getAttribute('data-facets-updated') === 'true';
+
+      // Try to preserve filtered count from facets system if available
+      let totalProducts = {{ paginate.items | default: collection.products_count | default: 0 }};
+
+      if (preserveFilteredCount && wasFacetsUpdated) {
+        // If facets system updated this, extract the total from current text
+        const currentText = productCountElement.textContent || productCountElement.innerHTML;
+        const currentTotalMatch = currentText.match(/of (\d+)/);
+
+        if (currentTotalMatch) {
+          totalProducts = parseInt(currentTotalMatch[1]);
+          console.log('updateProductCount: Using facets-provided filtered count:', totalProducts);
+        }
+      } else if (preserveFilteredCount) {
+        // Check if we have filtered results by looking for "of X" pattern in current text
+        const currentText = productCountElement.textContent || productCountElement.innerHTML;
+        const currentTotalMatch = currentText.match(/of (\d+)/);
+
+        if (currentTotalMatch) {
+          const currentTotal = parseInt(currentTotalMatch[1]);
+          // Only use the current total if it's different from static count (indicating filtered results)
+          if (currentTotal !== totalProducts) {
+            totalProducts = currentTotal;
+            console.log('updateProductCount: Preserving existing filtered count:', totalProducts);
+          }
+        }
+      }
 
       // Create the updated text using the same pattern as the Liquid template
       const productCountTemplate = {{ 'products.facets.product_count' | t: viewed: '__VIEWED__', total: '__TOTAL__' | json }};
@@ -610,7 +640,39 @@
         const percentage = (visibleProducts.length / totalProducts) * 100;
         progressBar.style.width = `${percentage}%`;
       }
+
+      // Clear the facets-updated flag after we've used it
+      if (productCountContainer && wasFacetsUpdated) {
+        productCountContainer.removeAttribute('data-facets-updated');
+      }
+
+      console.log('updateProductCount: Updated count -', {
+        visible: visibleProducts.length,
+        total: totalProducts,
+        preserveFilteredCount,
+        wasFacetsUpdated
+      });
     }
+  };
+
+  // Helper function to get current filtered product count
+  window.getCurrentFilteredProductCount = function() {
+    // Try to get count from facets system first (most accurate for filtered results)
+    const productCountElement = document.querySelector('.product-count-text');
+    if (productCountElement) {
+      const currentText = productCountElement.textContent || productCountElement.innerHTML;
+      const match = currentText.match(/of (\d+)/);
+      if (match) {
+        const count = parseInt(match[1]);
+        console.log('getCurrentFilteredProductCount: Found count in text:', count);
+        return count;
+      }
+    }
+
+    // Fallback to original paginate count
+    const fallbackCount = {{ paginate.items | default: collection.products_count | default: 0 }};
+    console.log('getCurrentFilteredProductCount: Using fallback count:', fallbackCount);
+    return fallbackCount;
   };
 
   window.updateViewMoreButton = function() {
@@ -632,7 +694,13 @@
     const productGrid = document.querySelector('#product-grid');
     if (productGrid && viewMoreButton) {
       const visibleProducts = productGrid.querySelectorAll('.grid__item:not([style*="display: none"])');
-      const totalProducts = {{ paginate.items | default: collection.products_count | default: 0 }};
+      const totalProducts = window.getCurrentFilteredProductCount();
+
+      console.log('updateViewMoreButton:', {
+        visibleProducts: visibleProducts.length,
+        totalProducts: totalProducts,
+        shouldHide: totalProducts > 0 && visibleProducts.length >= totalProducts
+      });
 
       if (totalProducts > 0 && visibleProducts.length >= totalProducts) {
         viewMoreButton.style.display = 'none';
@@ -959,7 +1027,25 @@
       }
 
       function updateViewMoreButtonState() {
-        // Check if there are more pages available
+        // Get current filtered product count for accurate comparison
+        const totalProducts = window.getCurrentFilteredProductCount();
+        const currentVisibleProducts = document.querySelectorAll('#product-grid .grid__item:not([style*="display: none"])').length;
+
+        console.log('updateViewMoreButtonState:', {
+          totalProducts,
+          currentVisibleProducts,
+          loadedProducts,
+          targetProductsPerPage
+        });
+
+        // If we've loaded all available products, hide the button
+        if (totalProducts > 0 && currentVisibleProducts >= totalProducts) {
+          viewMoreButton.style.display = 'none';
+          console.log('Hiding view more button: all products loaded');
+          return;
+        }
+
+        // Check if there are more pages available by trying to fetch next page
         const lastPageToCheck = currentPage + pagesLoaded;
         const checkUrl = new URL(baseUrl, window.location.origin);
         checkUrl.searchParams.set('page', lastPageToCheck.toString());
@@ -971,20 +1057,27 @@
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const nextPageButton = doc.querySelector('.view-more-button');
+            const nextPageProducts = doc.querySelectorAll('#product-grid .grid__item');
 
-            if (nextPageButton?.dataset.url) {
+            // Check if next page has products or if there's a next page button
+            if ((nextPageButton?.dataset.url) || (nextPageProducts && nextPageProducts.length > 0)) {
               // Update current button with new URL, preserving products_per_page
-              const nextUrl = new URL(nextPageButton.dataset.url, window.location.origin);
-              if (currentProductsPerPage) {
-                nextUrl.searchParams.set('products_per_page', currentProductsPerPage);
+              if (nextPageButton?.dataset.url) {
+                const nextUrl = new URL(nextPageButton.dataset.url, window.location.origin);
+                if (currentProductsPerPage) {
+                  nextUrl.searchParams.set('products_per_page', currentProductsPerPage);
+                }
+                viewMoreButton.dataset.url = nextUrl.pathname + nextUrl.search;
               }
 
-              viewMoreButton.dataset.url = nextUrl.pathname + nextUrl.search;
               viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
               viewMoreButton.disabled = false;
+              viewMoreButton.style.display = 'block';
+              console.log('Showing view more button: more pages available');
             } else {
               // No more pages - hide the button
               viewMoreButton.style.display = 'none';
+              console.log('Hiding view more button: no more pages available');
             }
 
             // Update product count and progress bar
@@ -997,8 +1090,10 @@
           })
           .catch(error => {
             console.error('Error checking next page:', error);
+            // On error, keep the button visible to allow user to try again
             viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
             viewMoreButton.disabled = false;
+            viewMoreButton.style.display = 'block';
           });
       }
 
