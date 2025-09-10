@@ -317,14 +317,14 @@
             </aside>
             {%- if section.settings.enable_sorting and collection.products.size > 0 -%}
               <div class="sorting-container mt-2 md:hidden">
-                <!-- Separate form for products per page (full page reload) -->
-                <form method="get" action="{{ collection.url }}" id="ProductsPerPageForm" class="products-per-page-form">
+                <!-- Separate form for products per page (full page reload) - Mobile Version -->
+                <form method="get" action="{{ collection.url }}" id="ProductsPerPageFormMobile" class="products-per-page-form">
                   <div class="products-per-page">
-                    <label for="ProductsPerPage">{{ 'products.facets.products_per_page' | t }}</label>
+                    <label for="ProductsPerPageMobile">{{ 'products.facets.products_per_page' | t }}</label>
                     <div class="select after:border-0 after:shadow-none">
                       <select
                         name="products_per_page"
-                        id="ProductsPerPage"
+                        id="ProductsPerPageMobile"
                         class="select__select pl-[5px]"
                         onchange="handleProductsPerPageChange(this);"
                       >
@@ -574,10 +574,15 @@
         }
       }
 
-      // Update the select to show correct value
-      const productsPerPageSelect = document.querySelector('#ProductsPerPage');
-      if (productsPerPageSelect) {
-        productsPerPageSelect.value = requestedProductsPerPage;
+      // Update both desktop and mobile selectors to show correct value
+      const desktopSelect = document.querySelector('#ProductsPerPage');
+      const mobileSelect = document.querySelector('#ProductsPerPageMobile');
+
+      if (desktopSelect) {
+        desktopSelect.value = requestedProductsPerPage;
+      }
+      if (mobileSelect) {
+        mobileSelect.value = requestedProductsPerPage;
       }
     }
   };
