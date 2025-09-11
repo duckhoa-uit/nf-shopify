@@ -2634,7 +2634,12 @@ input[type="checkbox"]:checked + label a {
   display: flex;
   justify-self: end;
   transition: width 0.3s cubic-bezier(0.52, 0, 0.61, 0.99);
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
+}
+@media screen and (min-width: 750px) {
+  .header__icons {
+    overflow-x: unset;
+  }
 }
 
 .header__icons:has(input:focus, input:not(:placeholder-shown)) {
