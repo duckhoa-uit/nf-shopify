@@ -587,7 +587,7 @@
     }
   };
 
-  window.updateProductCount = function(preserveFilteredCount = true) {
+  window.updateProductCount = function(preserveFilteredCount = true, context = 'default') {
     // Update the product count text to reflect current displayed products
     const productGrid = document.querySelector('#product-grid');
     const productCountElement = document.querySelector('.product-count-text');
@@ -602,7 +602,7 @@
       // Try to preserve filtered count from facets system if available
       let totalProducts = {{ paginate.items | default: collection.products_count | default: 0 }};
 
-      if (preserveFilteredCount && wasFacetsUpdated) {
+      if (preserveFilteredCount && wasFacetsUpdated && context !== 'load-more') {
         // If facets system updated this, extract the total from current text
         const currentText = productCountElement.textContent || productCountElement.innerHTML;
         const currentTotalMatch = currentText.match(/of (\d+)/);
@@ -611,7 +611,7 @@
           totalProducts = parseInt(currentTotalMatch[1]);
           console.log('updateProductCount: Using facets-provided filtered count:', totalProducts);
         }
-      } else if (preserveFilteredCount) {
+      } else if (preserveFilteredCount && context !== 'load-more') {
         // Check if we have filtered results by looking for "of X" pattern in current text
         const currentText = productCountElement.textContent || productCountElement.innerHTML;
         const currentTotalMatch = currentText.match(/of (\d+)/);
@@ -623,6 +623,15 @@
             totalProducts = currentTotal;
             console.log('updateProductCount: Preserving existing filtered count:', totalProducts);
           }
+        }
+      } else if (context === 'load-more') {
+        // For Load More context, always use the current filtered count from text
+        const currentText = productCountElement.textContent || productCountElement.innerHTML;
+        const currentTotalMatch = currentText.match(/of (\d+)/);
+
+        if (currentTotalMatch) {
+          totalProducts = parseInt(currentTotalMatch[1]);
+          console.log('updateProductCount: Load More context - using current total:', totalProducts);
         }
       }
 
@@ -650,7 +659,8 @@
         visible: visibleProducts.length,
         total: totalProducts,
         preserveFilteredCount,
-        wasFacetsUpdated
+        wasFacetsUpdated,
+        context: context
       });
     }
   };
@@ -1008,6 +1018,10 @@
               });
 
               console.log(`Added ${addedCount} products, total loaded: ${loadedProducts}`);
+
+              // Immediately update pagination text and progress bar after adding products
+              window.updateProductCount(true, 'load-more'); // Use Load More context
+              console.log('Load More: Updated pagination text immediately after adding products');
             }
 
             pagesLoaded++;
@@ -1027,8 +1041,12 @@
       }
 
       function updateViewMoreButtonState() {
+        // First, ensure pagination text is up to date
+        window.updateProductCount(true, 'load-more'); // Use Load More context
+
         // Get current filtered product count for accurate comparison
         const totalProducts = window.getCurrentFilteredProductCount();
+        // Recalculate visible products AFTER updateProductCount to ensure accuracy
         const currentVisibleProducts = document.querySelectorAll('#product-grid .grid__item:not([style*="display: none"])').length;
 
         console.log('updateViewMoreButtonState:', {
@@ -1075,13 +1093,30 @@
               viewMoreButton.style.display = 'block';
               console.log('Showing view more button: more pages available');
             } else {
-              // No more pages - hide the button
+              // No more pages available - but check if total count needs adjustment
+              const actualTotalProducts = currentVisibleProducts;
+
+              // Update the pagination text with correct total
+              const productCountElement = document.querySelector('.product-count-text');
+              if (productCountElement && actualTotalProducts !== totalProducts) {
+                const productCountTemplate = {{ 'products.facets.product_count' | t: viewed: '__VIEWED__', total: '__TOTAL__' | json }};
+                const correctedText = productCountTemplate
+                  .replace('__VIEWED__', actualTotalProducts)
+                  .replace('__TOTAL__', actualTotalProducts);
+
+                productCountElement.innerHTML = correctedText;
+
+                // Update progress bar to 100%
+                const progressBar = document.querySelector('.product-count-progress-bar');
+                if (progressBar) {
+                  progressBar.style.width = '100%';
+                }
+              }
+
+              // Hide the button
               viewMoreButton.style.display = 'none';
               console.log('Hiding view more button: no more pages available');
             }
-
-            // Update product count and progress bar
-            window.updateProductCount();
 
             // Re-initialize product card hover functionality if available
             if (window.ProductCardHover && typeof window.ProductCardHover.reinitialize === 'function') {
