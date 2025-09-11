@@ -637,7 +637,7 @@ class CartSyncManager {
             <h3>${window.theme?.strings?.stock_validation_warning || 'Stock Validation Warning'}</h3>
             <p>${window.theme?.strings?.stock_validation_error || 'We couldn\'t verify stock availability'}: ${errorMessage}</p>
             <p>${window.theme?.strings?.stock_validation_continue || 'Your order may be subject to stock availability. Do you want to continue?'}</p>
-            <div class="stock-warning-modal__actions">
+            <div class="flex flex-col gap-2">
               <button class="button button--secondary" data-action="cancel">${window.theme?.strings?.cancel_checkout || 'Cancel Checkout'}</button>
               <button class="button button--primary" data-action="proceed">${window.theme?.strings?.continue_anyway || 'Continue Anyway'}</button>
             </div>
