@@ -31,9 +31,9 @@ class PhoneInputHandler {
     this.phoneInputs.forEach(input => {
       if (input.classList.contains('iti-initialized')) return;
 
-      // Get Shopify country data
+      // Get Shopify country data (market-aware via localization.country.iso_code)
       const countriesSelect = document.getElementById(`${input.id}_countries`);
-      const shopCountry = input.getAttribute('data-shop-country') || 'US';
+      const marketCountry = input.getAttribute('data-shop-country') || 'US';
 
       // Build country data from Shopify's country list
       if (countriesSelect) {
@@ -41,28 +41,32 @@ class PhoneInputHandler {
           return {
             name: option.getAttribute('data-name'),
             iso2: option.value,
-            priority: option.value.toLowerCase() === shopCountry.toLowerCase() ? 1 : 0
+            priority: option.value.toLowerCase() === marketCountry.toLowerCase() ? 1 : 0
           };
         });
       }
 
-      // Determine preferred countries based on shop location
-      let preferredCountries = [shopCountry.toLowerCase()];
+      // Determine preferred countries based on market location
+      let preferredCountries = [marketCountry.toLowerCase()];
 
-      // Add common European countries if shop is in Europe
+      // Add common European countries if market is in Europe
       const europeanCountries = ['at', 'be', 'bg', 'hr', 'cy', 'cz', 'dk', 'ee', 'fi', 'fr', 'de', 'gr', 'hu', 'ie', 'it', 'lv', 'lt', 'lu', 'mt', 'nl', 'pl', 'pt', 'ro', 'sk', 'si', 'es', 'se'];
-      if (europeanCountries.includes(shopCountry.toLowerCase())) {
-        // Add neighboring European countries but keep shop country first
+      if (europeanCountries.includes(marketCountry.toLowerCase())) {
+        // Add neighboring European countries but keep market country first
         preferredCountries = preferredCountries.concat(
-          europeanCountries.filter(c => c !== shopCountry.toLowerCase())
+          europeanCountries.filter(c => c !== marketCountry.toLowerCase())
         );
       }
+
+      // Only set initial country if input is empty (no existing value)
+      const hasExistingValue = input.value && input.value.trim() !== '';
+      const initialCountryOption = hasExistingValue ? 'auto' : marketCountry.toLowerCase();
 
       // Initialize intl-tel-input with Shopify country data
       const iti = window.intlTelInput(input, {
         utilsScript: window.theme && window.theme.assets ? window.theme.assets.utilsScript : '/assets/intl-tel-input-utils.js',
         preferredCountries: preferredCountries,
-        initialCountry: shopCountry.toLowerCase(),
+        initialCountry: initialCountryOption,
         autoPlaceholder: 'aggressive',
         separateDialCode: true,
         formatOnDisplay: false, // Disable automatic formatting to handle it ourselves
