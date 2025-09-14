@@ -68,7 +68,7 @@
         readonly
       {% endif %}
       data-intl-tel-input
-      data-shop-country="{{ shop.country }}"
+      data-shop-country="{{ localization.country.iso_code }}"
       {% if error_id %}
         data-error-for="{{ error_id }}"
       {% endif %}
@@ -160,15 +160,19 @@
       utilsScript: '{{ "intl-tel-input-utils.js" | asset_url }}'
     };
 
-    // Get shop country and preferred countries
-    const shopCountry = input.getAttribute('data-shop-country') || 'DE';
+    // Get market country and preferred countries (market-aware via localization.country.iso_code)
+    const marketCountry = input.getAttribute('data-shop-country') || 'DE';
     const preferredCountries = ['de', 'at', 'ch', 'us', 'gb'];
+
+    // Only set initial country if input is empty (no existing value)
+    const hasExistingValue = input.value && input.value.trim() !== '';
+    const initialCountryOption = hasExistingValue ? 'auto' : marketCountry.toLowerCase();
 
     // Initialize intl-tel-input
     const iti = window.intlTelInput(input, {
       utilsScript: window.theme.assets.utilsScript,
       preferredCountries: preferredCountries,
-      initialCountry: shopCountry.toLowerCase(),
+      initialCountry: initialCountryOption,
       autoPlaceholder: 'aggressive',
       separateDialCode: true,
       formatOnDisplay: false,
