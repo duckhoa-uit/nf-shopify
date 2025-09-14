@@ -109,6 +109,7 @@ class PhoneInputHandler {
 
       // Handle input changes
       input.addEventListener('input', () => {
+        // Clear validation message as user types
         input.setCustomValidity('');
         // Update the hidden input with the international format
         this.updateHiddenInput(input, iti, hiddenInput);
@@ -239,9 +240,9 @@ class PhoneInputHandler {
       if (input.hasAttribute('required')) {
         const errorMsg = window.theme?.strings?.phone_required || 'Please enter a phone number';
         input.setCustomValidity(errorMsg);
-        this.showErrorMessage(input, errorMsg);
         return false;
       }
+      input.setCustomValidity('');
       return true;
     }
 
@@ -272,51 +273,14 @@ class PhoneInputHandler {
       }
 
       input.setCustomValidity(errorMsg);
-      this.showErrorMessage(input, errorMsg);
       return false;
     }
 
     input.setCustomValidity('');
-    this.hideErrorMessage(input);
     return true;
   }
 
-  showErrorMessage(input, message) {
-    // Find the error message element
-    let errorId = input.getAttribute('data-error-for');
-    if (!errorId) {
-      errorId = `${input.id}-error`;
-    }
 
-    const errorElement = document.getElementById(errorId);
-
-    // If error element exists, update it
-    if (errorElement) {
-      errorElement.textContent = message;
-      errorElement.style.display = 'block';
-
-      // Add error class to input
-      input.classList.add('field__input--error');
-    }
-  }
-
-  hideErrorMessage(input) {
-    // Find the error message element
-    let errorId = input.getAttribute('data-error-for');
-    if (!errorId) {
-      errorId = `${input.id}-error`;
-    }
-
-    const errorElement = document.getElementById(errorId);
-
-    // If error element exists, hide it
-    if (errorElement) {
-      errorElement.style.display = 'none';
-
-      // Remove error class from input
-      input.classList.remove('field__input--error');
-    }
-  }
 }
 
 // Function to handle backend error responses
@@ -332,14 +296,12 @@ function handlePhoneBackendErrors(form, responseData) {
       phoneInputs.forEach(input => {
         const instance = window.intlTelInputGlobals.getInstance(input);
         if (instance) {
-          // Show the backend error message
-          window.phoneInputHandler.showErrorMessage(input, responseData.message);
+          // Set custom validity with backend error message
+          input.setCustomValidity(responseData.message);
 
-          // Add error class to the input
-          input.classList.add('field__input--error');
-
-          // Focus on the first invalid input
+          // Focus on the first invalid input and show validation message
           input.focus();
+          input.reportValidity();
         }
       });
 
