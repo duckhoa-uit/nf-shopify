@@ -207,9 +207,7 @@
             name: 'customer[phone]',
             value: customer.phone,
             label: 'customer.account.phone' | t,
-            required: true,
-            error_id: 'CustomerPhone-error',
-            error_message: form.errors contains 'phone' | default: false | ternary: form.errors.messages['phone'], ''
+            required: true
           %}
         </div>
       </div>

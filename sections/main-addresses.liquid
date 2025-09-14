@@ -407,15 +407,13 @@
 
                       <div class="form-group">
                         {% capture phone_id %}EditAddress_{{ default_address.id }}_Phone{% endcapture %}
-                        {% capture phone_error_id %}EditAddress_{{ default_address.id }}_Phone_error{% endcapture %}
                         {%
                           render 'phone-field',
                           id: phone_id,
                           name: 'address[phone]',
                           value: default_address.phone,
                           label: 'customer.addresses.phone' | t,
-                          required: true,
-                          error_id: phone_error_id
+                          required: true
                         %}
                       </div>
                     </div>
@@ -707,15 +705,13 @@
 
                         <div class="form-group">
                           {% capture phone_id %}EditAddress_{{ address.id }}_Phone{% endcapture %}
-                          {% capture phone_error_id %}EditAddress_{{ address.id }}_Phone_error{% endcapture %}
                           {%
                             render 'phone-field',
                             id: phone_id,
                             name: 'address[phone]',
                             value: address.phone,
                             label: 'customer.addresses.phone' | t,
-                            required: true,
-                            error_id: phone_error_id
+                            required: true
                           %}
                         </div>
                       </div>
@@ -890,8 +886,7 @@
                       name: 'address[phone]',
                       value: '',
                       label: 'customer.addresses.phone' | t,
-                      required: true,
-                      error_id: 'AddressPhone_new_error'
+                      required: true
                     %}
                   </div>
                 </div>

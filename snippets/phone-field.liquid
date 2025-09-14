@@ -12,8 +12,8 @@
   - required: Whether the field is required (default: false)
   - readonly: Whether the field is readonly (default: false)
   - class: Additional CSS classes
-  - error_id: ID for the error message element (optional)
-  - error_message: Error message to display (optional)
+  - error_id: ID for the error message element (optional, deprecated)
+  - error_message: Error message to display (optional, deprecated - now uses setCustomValidity)
 {% endcomment %}
 
 {% comment %} Load intl-tel-input CSS inline {% endcomment %}
@@ -57,7 +57,7 @@
       type="tel"
       id="{{ id }}"
       name="{{ name }}_display"
-      class="field__input phone-input{% if error_message %} field__input--error{% endif %}"
+      class="field__input phone-input"
       value="{{ formatted_value }}"
       placeholder="Phone number"
       {% if required %}
@@ -83,16 +83,7 @@
         required
       {% endif %}
     >
-    {% if error_message %}
-      <div class="form__message field__message" id="{{ error_id | default: id | append: '-error' }}">
-        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-error" viewBox="0 0 13 13">
-          <circle cx="6.5" cy="6.5" r="6.5" fill="none" stroke="currentColor"/>
-          <path d="M7 9V5" stroke="currentColor" stroke-width="2"/>
-          <path d="M7 12.5V11" stroke="currentColor" stroke-width="2"/>
-        </svg>
-        {{ error_message }}
-      </div>
-    {% endif %}
+
   </div>
 
   {% comment %}
@@ -214,26 +205,28 @@
     }
 
     // Event listeners
-    input.addEventListener('input', updateHiddenInput);
+    input.addEventListener('input', function() {
+      updateHiddenInput();
+      // Clear validation message as user types
+      input.setCustomValidity('');
+    });
     input.addEventListener('countrychange', updateHiddenInput);
 
     // Initial update
     updateHiddenInput();
 
-    // Validation function
+    // Validation function using setCustomValidity
     function validatePhoneInput() {
-      const isValid = iti.isValidNumber();
-      const errorMessage = input.parentNode.querySelector('.form__message');
-
       if (input.value.trim() === '') {
         if (input.hasAttribute('required')) {
-          showError(window.theme.strings.phone_required);
+          input.setCustomValidity(window.theme.strings.phone_required);
           return false;
         }
-        hideError();
+        input.setCustomValidity('');
         return true;
       }
 
+      const isValid = iti.isValidNumber();
       if (!isValid) {
         const errorCode = iti.getValidationError();
         let message = window.theme.strings.phone_validation.invalid;
@@ -250,33 +243,15 @@
             break;
         }
 
-        showError(message);
+        input.setCustomValidity(message);
         return false;
       }
 
-      hideError();
+      input.setCustomValidity('');
       return true;
     }
 
-    function showError(message) {
-      input.classList.add('field__input--error');
-      let errorElement = input.parentNode.querySelector('.form__message');
-      if (!errorElement) {
-        errorElement = document.createElement('div');
-        errorElement.className = 'form__message field__message';
-        errorElement.innerHTML = '<svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-error" viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="6.5" fill="none" stroke="currentColor"/><path d="M7 9V5" stroke="currentColor" stroke-width="2"/><path d="M7 12.5V11" stroke="currentColor" stroke-width="2"/></svg>';
-        input.parentNode.appendChild(errorElement);
-      }
-      errorElement.innerHTML = '<svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-error" viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="6.5" fill="none" stroke="currentColor"/><path d="M7 9V5" stroke="currentColor" stroke-width="2"/><path d="M7 12.5V11" stroke="currentColor" stroke-width="2"/></svg>' + message;
-    }
 
-    function hideError() {
-      input.classList.remove('field__input--error');
-      const errorElement = input.parentNode.querySelector('.form__message');
-      if (errorElement) {
-        errorElement.remove();
-      }
-    }
 
     // Form submission validation
     const form = input.closest('form');
@@ -300,7 +275,7 @@
       if (input.value.length >= 3) {
         validationTimeout = setTimeout(validatePhoneInput, 500);
       } else {
-        hideError();
+        input.setCustomValidity('');
       }
     });
   }
