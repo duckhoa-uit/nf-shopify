@@ -107,8 +107,18 @@ class FacetFiltersForm extends HTMLElement {
             window.handleProductsPerPageWithJS();
           }
 
-          if (window.updateProductCount && typeof window.updateProductCount === 'function') {
+          // Check if facets system already updated pagination text correctly
+          const productCountElement = document.getElementById('ProductCount');
+          const wasFacetsUpdated = productCountElement?.getAttribute('data-facets-updated') === 'true';
+
+          console.log('Facets update check:', { wasFacetsUpdated, hasProductCount: !!productCountElement });
+
+          // Only call updateProductCount if facets didn't already update it correctly
+          if (!wasFacetsUpdated && window.updateProductCount && typeof window.updateProductCount === 'function') {
+            console.log('Calling updateProductCount because facets did not update');
             window.updateProductCount();
+          } else if (wasFacetsUpdated) {
+            console.log('Skipping updateProductCount because facets already updated correctly');
           }
 
           if (window.updateViewMoreButton && typeof window.updateViewMoreButton === 'function') {
@@ -119,9 +129,13 @@ class FacetFiltersForm extends HTMLElement {
         } catch (error) {
           console.error('Error updating pagination after filter change:', error);
 
-          // Fallback: try to update at least the product count
+          // Fallback: try to update at least the product count if facets didn't
           try {
-            if (window.updateProductCount) {
+            const productCountElement = document.getElementById('ProductCount');
+            const wasFacetsUpdated = productCountElement?.getAttribute('data-facets-updated') === 'true';
+
+            if (!wasFacetsUpdated && window.updateProductCount) {
+              console.log('Fallback: Calling updateProductCount');
               window.updateProductCount();
             }
           } catch (fallbackError) {
@@ -151,6 +165,13 @@ class FacetFiltersForm extends HTMLElement {
       container.innerHTML = count;
       container.classList.remove("loading");
 
+      // CRITICAL: Extract and store filtered total count as data attribute
+      const filteredTotalCount = productCountElement.getAttribute('data-total-count');
+      if (filteredTotalCount) {
+        container.setAttribute('data-total-count', filteredTotalCount);
+        console.log('renderProductCount: Updated data-total-count to:', filteredTotalCount);
+      }
+
       // Mark that this was updated by facets system (filtered results)
       container.setAttribute('data-facets-updated', 'true');
       console.log('renderProductCount: Updated with filtered results');
@@ -159,6 +180,12 @@ class FacetFiltersForm extends HTMLElement {
     if (containerDesktop) {
       containerDesktop.innerHTML = count;
       containerDesktop.classList.remove("loading");
+
+      // Also update desktop container data attribute if it exists
+      const filteredTotalCount = productCountElement.getAttribute('data-total-count');
+      if (filteredTotalCount) {
+        containerDesktop.setAttribute('data-total-count', filteredTotalCount);
+      }
 
       // Mark that this was updated by facets system (filtered results)
       containerDesktop.setAttribute('data-facets-updated', 'true');
