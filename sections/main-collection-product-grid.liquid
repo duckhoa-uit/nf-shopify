@@ -482,7 +482,7 @@
                   {%- endfor -%}
                 </ul>
 
-                <div class="product-count" id="ProductCount">
+                <div class="product-count" id="ProductCount" data-total-count="{{ paginate.items }}">
                   <p class="product-count-text">
                     {% assign viewed_items = paginate.current_page | times: products_per_page %}
                     {% if viewed_items > paginate.items %}
@@ -596,42 +596,45 @@
     if (productGrid && productCountElement) {
       const visibleProducts = productGrid.querySelectorAll('.grid__item:not([style*="display: none"])');
 
-      // Check if this was recently updated by facets system (filtered results)
-      const wasFacetsUpdated = productCountContainer && productCountContainer.getAttribute('data-facets-updated') === 'true';
-
-      // Try to preserve filtered count from facets system if available
+      // Simplified logic: Always try to preserve existing filtered count first
       let totalProducts = {{ paginate.items | default: collection.products_count | default: 0 }};
 
-      if (preserveFilteredCount && wasFacetsUpdated && context !== 'load-more') {
-        // If facets system updated this, extract the total from current text
-        const currentText = productCountElement.textContent || productCountElement.innerHTML;
-        const currentTotalMatch = currentText.match(/of (\d+)/);
+      console.log('updateProductCount:', {
+        context,
+        preserveFilteredCount,
+        visibleCount: visibleProducts.length,
+        staticTotal: totalProducts
+      });
 
-        if (currentTotalMatch) {
-          totalProducts = parseInt(currentTotalMatch[1]);
-          console.log('updateProductCount: Using facets-provided filtered count:', totalProducts);
-        }
-      } else if (preserveFilteredCount && context !== 'load-more') {
-        // Check if we have filtered results by looking for "of X" pattern in current text
-        const currentText = productCountElement.textContent || productCountElement.innerHTML;
-        const currentTotalMatch = currentText.match(/of (\d+)/);
+      if (preserveFilteredCount) {
+        // HYBRID APPROACH: Use data attribute first, then fallback to text parsing
+        let extractedTotal = null;
 
-        if (currentTotalMatch) {
-          const currentTotal = parseInt(currentTotalMatch[1]);
-          // Only use the current total if it's different from static count (indicating filtered results)
-          if (currentTotal !== totalProducts) {
-            totalProducts = currentTotal;
-            console.log('updateProductCount: Preserving existing filtered count:', totalProducts);
+        // PRIMARY: Try data attribute (most reliable)
+        if (productCountContainer) {
+          const dataCount = productCountContainer.getAttribute('data-total-count');
+          if (dataCount && !isNaN(dataCount)) {
+            extractedTotal = parseInt(dataCount);
+            console.log('updateProductCount: Found total in data attribute:', extractedTotal);
           }
         }
-      } else if (context === 'load-more') {
-        // For Load More context, always use the current filtered count from text
-        const currentText = productCountElement.textContent || productCountElement.innerHTML;
-        const currentTotalMatch = currentText.match(/of (\d+)/);
 
-        if (currentTotalMatch) {
-          totalProducts = parseInt(currentTotalMatch[1]);
-          console.log('updateProductCount: Load More context - using current total:', totalProducts);
+        // SECONDARY: Fallback to getCurrentFilteredProductCount() if data attribute fails
+        if (!extractedTotal) {
+          extractedTotal = window.getCurrentFilteredProductCount();
+          console.log('updateProductCount: Using getCurrentFilteredProductCount fallback:', extractedTotal);
+        }
+
+        if (extractedTotal && extractedTotal !== totalProducts) {
+          if (context === 'load-more') {
+            // CRITICAL: In load-more context, ALWAYS preserve the extracted total
+            totalProducts = extractedTotal;
+            console.log('updateProductCount: Load More - preserving total:', totalProducts);
+          } else if (extractedTotal !== totalProducts) {
+            // For non-load-more contexts, use extracted total if different from static
+            totalProducts = extractedTotal;
+            console.log('updateProductCount: Using preserved filtered count:', totalProducts, 'context:', context);
+          }
         }
       }
 
@@ -651,7 +654,7 @@
       }
 
       // Clear the facets-updated flag after we've used it
-      if (productCountContainer && wasFacetsUpdated) {
+      if (productCountContainer) {
         productCountContainer.removeAttribute('data-facets-updated');
       }
 
@@ -659,29 +662,57 @@
         visible: visibleProducts.length,
         total: totalProducts,
         preserveFilteredCount,
-        wasFacetsUpdated,
         context: context
       });
     }
   };
 
-  // Helper function to get current filtered product count
+  // Helper function to get current filtered product count - HYBRID APPROACH
   window.getCurrentFilteredProductCount = function() {
-    // Try to get count from facets system first (most accurate for filtered results)
-    const productCountElement = document.querySelector('.product-count-text');
-    if (productCountElement) {
-      const currentText = productCountElement.textContent || productCountElement.innerHTML;
-      const match = currentText.match(/of (\d+)/);
-      if (match) {
-        const count = parseInt(match[1]);
-        console.log('getCurrentFilteredProductCount: Found count in text:', count);
+    const productCountContainer = document.getElementById('ProductCount');
+
+    // PRIMARY: Get count from data attribute (most reliable)
+    if (productCountContainer) {
+      const dataCount = productCountContainer.getAttribute('data-total-count');
+      if (dataCount && !isNaN(dataCount)) {
+        const count = parseInt(dataCount);
+        console.log('getCurrentFilteredProductCount: Found count in data attribute:', count);
         return count;
       }
     }
 
-    // Fallback to original paginate count
+    // SECONDARY: Universal number extraction from pagination text (language-independent)
+    const productCountElement = document.querySelector('.product-count-text');
+    if (productCountElement) {
+      const currentText = productCountElement.textContent || productCountElement.innerHTML;
+      const numbers = currentText.match(/\d+/g);
+
+      if (numbers && numbers.length >= 2) {
+        // Logic: Find the largest number that could be a total count
+        const numberValues = numbers.map(n => parseInt(n));
+        const visibleCount = document.querySelectorAll('#product-grid .grid__item:not([style*="display: none"])').length;
+
+        // Look for a number that's >= visible count (likely the total)
+        const potentialTotals = numberValues.filter(n => n >= visibleCount);
+        if (potentialTotals.length > 0) {
+          const totalCount = Math.max(...potentialTotals);
+          console.log('getCurrentFilteredProductCount: Extracted from numbers:', totalCount);
+          return totalCount;
+        }
+      }
+
+      // TERTIARY: Multi-language regex fallback (backward compatibility)
+      const match = currentText.match(/(?:von|of|de|di)\s+(\d+)/i);
+      if (match) {
+        const count = parseInt(match[1]);
+        console.log('getCurrentFilteredProductCount: Found count via regex:', count);
+        return count;
+      }
+    }
+
+    // FINAL FALLBACK: Static count
     const fallbackCount = {{ paginate.items | default: collection.products_count | default: 0 }};
-    console.log('getCurrentFilteredProductCount: Using fallback count:', fallbackCount);
+    console.log('getCurrentFilteredProductCount: Using static fallback count:', fallbackCount);
     return fallbackCount;
   };
 
@@ -704,18 +735,27 @@
     const productGrid = document.querySelector('#product-grid');
     if (productGrid && viewMoreButton) {
       const visibleProducts = productGrid.querySelectorAll('.grid__item:not([style*="display: none"])');
+
+      // Primary check: Does the button have a valid next page URL?
+      const hasNextPageUrl = viewMoreButton.dataset.url && viewMoreButton.dataset.url.trim() !== '';
+
+      // Secondary check: Compare visible vs total products
       const totalProducts = window.getCurrentFilteredProductCount();
+      const allProductsLoaded = totalProducts > 0 && visibleProducts.length >= totalProducts;
 
       console.log('updateViewMoreButton:', {
         visibleProducts: visibleProducts.length,
         totalProducts: totalProducts,
-        shouldHide: totalProducts > 0 && visibleProducts.length >= totalProducts
+        hasNextPageUrl: hasNextPageUrl,
+        allProductsLoaded: allProductsLoaded,
+        shouldShow: hasNextPageUrl && !allProductsLoaded
       });
 
-      if (totalProducts > 0 && visibleProducts.length >= totalProducts) {
-        viewMoreButton.style.display = 'none';
-      } else if (totalProducts > 0) {
+      // Show button if there's a next page URL AND not all products are loaded
+      if (hasNextPageUrl && !allProductsLoaded) {
         viewMoreButton.style.display = 'block';
+      } else {
+        viewMoreButton.style.display = 'none';
       }
     }
   };
@@ -991,6 +1031,17 @@
         fetchUrl.searchParams.set('page', pageToLoad.toString());
         // Don't set products_per_page in the fetch URL to get default 24 per page
         fetchUrl.searchParams.delete('products_per_page');
+
+        // CRITICAL FIX: Preserve current filter parameters to maintain filtered results
+        const currentUrlParams = new URLSearchParams(window.location.search);
+        currentUrlParams.forEach((value, key) => {
+          // Preserve all filter parameters except page and products_per_page
+          if (key !== 'page' && key !== 'products_per_page') {
+            fetchUrl.searchParams.set(key, value);
+          }
+        });
+
+        console.log('Load More: Preserving filter params:', Array.from(currentUrlParams.entries()));
 
         console.log(`Loading page ${pageToLoad}, URL:`, fetchUrl.toString());
 
