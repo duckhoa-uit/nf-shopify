@@ -68,6 +68,28 @@
   .product-grid-wrapper {
     width: 100%;
   }
+
+  /* Mobile facets visibility - prevent layout shifts */
+  .facets-wrapper {
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    transition:
+      transform 0.3s ease-in-out,
+      opacity 0.3s ease-in-out,
+      visibility 0.3s ease-in-out,
+      height 0.3s ease-in-out;
+  }
+
+  .facets-wrapper.visible {
+    transform: scaleY(1);
+    opacity: 1;
+    visibility: visible;
+    height: auto;
+  }
 }
 
 @media screen and (min-width: 990px) {
@@ -81,6 +103,7 @@
     opacity: 1;
     visibility: visible;
     transform: none;
+    height: auto;
   }
 
   .product-grid-wrapper:not(.full-width) {
