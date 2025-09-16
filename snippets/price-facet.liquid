@@ -1,6 +1,40 @@
 {%- liquid
   assign fallback_max = price_filter_range_max | default: settings.price_filter_max | default: 500
 -%}
+
+<!-- Sale Filter URL State Synchronization -->
+<script>
+  function syncSaleFilterCheckbox() {
+    const checkbox = document.getElementById('discount-filter-checkbox');
+    if (checkbox) {
+      // Check URL parameters using JavaScript
+      const urlParams = new URLSearchParams(window.location.search);
+      const saleFilterActive = urlParams.get('filter.p.m.custom.sale_off') === 'true';
+
+      // Sync checkbox state with URL
+      if (saleFilterActive && !checkbox.checked) {
+        checkbox.checked = true;
+      } else if (!saleFilterActive && checkbox.checked) {
+        checkbox.checked = false;
+      }
+    }
+  }
+
+  // Sync on DOM load
+  document.addEventListener('DOMContentLoaded', syncSaleFilterCheckbox);
+
+  // Sync on URL changes (for AJAX updates)
+  window.addEventListener('popstate', syncSaleFilterCheckbox);
+
+  // Sync on facet updates (Shopify theme events)
+  document.addEventListener('facet:updated', syncSaleFilterCheckbox);
+
+  // Additional sync after a short delay (for AJAX content replacement)
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(syncSaleFilterCheckbox, 100);
+    setTimeout(syncSaleFilterCheckbox, 500);
+  });
+</script>
 <div
   class="price-filter-container"
   data-min-value="{% if filter.min_value.value != blank %}{{ filter.min_value.value | money_without_currency }}{% else %}0{% endif %}"
@@ -58,8 +92,8 @@
         type="checkbox"
         id="discount-filter-checkbox"
         class="discount-filter-checkbox"
-        name="filter.p.tag"
-        value="sale"
+        name="filter.p.m.custom.sale_off"
+        value="true"
       >
     </label>
   </div>

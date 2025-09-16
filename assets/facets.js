@@ -497,13 +497,14 @@ class FacetFiltersForm extends HTMLElement {
           if (key.includes("-LTE") && Number(value) === priceRange.defaultMax) continue;
         }
 
-        // Handle metaobject filter parameters
-        if (key.startsWith("filter.v.meta.")) {
+        // Handle product metafield/metaobject filter parameters (production-proven format)
+        if (key.startsWith("filter.p.m.")) {
           const filterGroup = key.split(".").pop();
-          const existingValue = params.get(`filter.v.meta.${filterGroup}`);
+          const filterPrefix = "filter.p.m.";
+          const existingValue = params.get(`${filterPrefix}${filterGroup}`);
           if (existingValue) {
             // If we already have values for this filter group, append the new value
-            params.set(`filter.v.meta.${filterGroup}`, `${existingValue},${value}`);
+            params.set(`${filterPrefix}${filterGroup}`, `${existingValue},${value}`);
           } else {
             params.append(key, value);
           }
