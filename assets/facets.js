@@ -541,15 +541,19 @@ class FacetFiltersForm extends HTMLElement {
     } else {
       const forms = [];
       const targetForm = event.target.closest("form");
-      const isMobile = targetForm && targetForm.id === "FacetFiltersFormMobile";
+      const isMobile = targetForm && (targetForm.id === "FacetFiltersFormMobile" || targetForm.id === "FacetSortFormMobile");
 
       sortFilterForms.forEach((form) => {
         if (!isMobile) {
+          // Desktop: only process desktop forms
           if (form.id === "FacetSortForm" || form.id === "FacetFiltersForm" || form.id === "FacetSortDrawerForm") {
             forms.push(this.createSearchParams(form));
           }
-        } else if (form.id === "FacetFiltersFormMobile") {
-          forms.push(this.createSearchParams(form));
+        } else {
+          // Mobile: only process mobile forms
+          if (form.id === "FacetFiltersFormMobile" || form.id === "FacetSortFormMobile") {
+            forms.push(this.createSearchParams(form));
+          }
         }
       });
       this.onSubmitForm(forms.join("&"), event);
