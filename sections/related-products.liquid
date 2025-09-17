@@ -104,7 +104,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const initSwiper = function() {
+    const initSwiper = function () {
       const swiperContainer = document.querySelector('.related-products-swiper');
       if (!swiperContainer) return;
 
@@ -115,7 +115,7 @@
         breakpoints: {
           // when window width is >= 320px
           320: {
-            slidesPerView: 1.1,
+            slidesPerView: 1,
           },
           // when window width is >= 640px
           640: {
@@ -150,7 +150,7 @@
     // Initialize when product recommendations are loaded
     const productRecommendations = document.querySelector('product-recommendations');
     if (productRecommendations) {
-      const observer = new MutationObserver(function(mutations) {
+      const observer = new MutationObserver(function (mutations) {
         if (document.querySelector('.related-products-swiper')) {
           if (typeof Swiper !== 'undefined') {
             initSwiper();
