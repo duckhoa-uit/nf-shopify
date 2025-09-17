@@ -12,7 +12,7 @@
   data-reorder-error="{{ 'customer.orders.reorder_error' | t }}"
 >
   <h2 class="section-title">{{ 'customer.orders.title' | t }}</h2>
-  {% paginate customer.orders by 20 %}
+  {% paginate customer.orders by 5 %}
     {%- if customer.orders.size > 0 -%}
       <div class="order-header-labels">
         <div>{{ 'customer.orders.order_number' | t }}</div>
@@ -510,7 +510,7 @@
           <ul role="list">
             {%- if paginate.previous -%}
               <li>
-                <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
+                <a href="{{ paginate.previous.url }}#orders" aria-label="{{ 'general.pagination.previous' | t }}">
                   <span class="svg-wrapper">
                     {{ 'chevron-left.svg' | inline_asset_content }}
                   </span>
@@ -521,7 +521,7 @@
             {%- for part in paginate.parts -%}
               <li>
                 {%- if part.is_link -%}
-                  <a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+                  <a href="{{ part.url }}#orders" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
                     {{- part.title -}}
                   </a>
                 {%- else -%}
@@ -541,7 +541,7 @@
 
             {%- if paginate.next -%}
               <li>
-                <a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">
+                <a href="{{ paginate.next.url }}#orders" aria-label="{{ 'general.pagination.next' | t }}">
                   <span class="svg-wrapper">
                     {{ 'chevron-right.svg' | inline_asset_content }}
                   </span>
