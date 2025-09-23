@@ -1,429 +1,198 @@
 {% comment %}
-  Enhanced Product Variant Picker for Parfums Template
-  
+  Enhanced Product Variant Picker for Parfums Template with Metafield Support
+
   Accepts:
   - product: {Object} product object.
   - block: {Object} passing the block information.
   - product_form_id: {String} Id of the product form to which the variant picker is associated.
-  
+
   Features:
-  - Image-based color swatches instead of text-only options
+  - Uses custom.product_in_group metafield for size variants only
+  - Navigation behavior for size variant clicks
   - Enhanced hover effects and interactions
   - Better mobile responsiveness
-  - Performance optimizations
-  
+  - Consistent UI styling with Shopify native variants
+
   Usage:
   {% render 'product-variant-picker-parfums', product: product, block: block, product_form_id: product_form_id %}
 {% endcomment %}
 
-{%- unless product.has_only_default_variant -%}
-  <variant-selects
-    id="variant-selects-{{ section.id }}"
-    data-section="{{ section.id }}"
-    class="mt-3"
-    {{ block.shopify_attributes }}
-  >
-    {%- liquid
-      # Position-based option sorting for internationalization
-      # Color is typically position 1, Size is typically position 2
-      assign sorted_options = ''
-      assign color_option = null
-      assign size_option = null
-      
-      for option in product.options_with_values
-        assign option_name_downcase = option.name | downcase
-        if option_name_downcase contains 'color' or option_name_downcase contains 'colour' or option_name_downcase contains 'farbe'
-          assign color_option = option
-        elsif option_name_downcase contains 'size' or option_name_downcase contains 'größe' or option_name_downcase contains 'taille'
-          assign size_option = option
-        endif
-      endfor
-      
-      # Build sorted options array: color first, then size, then others
-      if color_option
-        assign sorted_options = color_option.position
-      endif
-      if size_option
-        if sorted_options == ''
-          assign sorted_options = size_option.position
-        else
-          assign sorted_options = sorted_options | append: ',' | append: size_option.position
-        endif
-      endif
-      
-      for option in product.options_with_values
-        unless option == color_option or option == size_option
-          if sorted_options == ''
-            assign sorted_options = option.position
-          else
-            assign sorted_options = sorted_options | append: ',' | append: option.position
-          endif
-        endunless
-      endfor
-      
-      assign sorted_positions = sorted_options | split: ','
-    -%}
+{%- liquid
+  assign has_size_variants = false
+  assign size_variants = null
 
-    {%- for position_str in sorted_positions -%}
-      {%- assign position = position_str | plus: 0 -%}
-      {%- assign option = product.options_with_values[position] -%}
-      {%- if option == blank -%}
-        {%- continue -%}
-      {%- endif -%}
-      
-      {%- liquid
-        assign option_name_downcase = option.name | downcase
-        assign is_color_option = false
-        assign is_size_option = false
-        assign picker_type = block.settings.picker_type | default: 'button'
-        
-        if option_name_downcase contains 'color' or option_name_downcase contains 'colour' or option_name_downcase contains 'farbe'
-          assign is_color_option = true
-        elsif option_name_downcase contains 'size' or option_name_downcase contains 'größe' or option_name_downcase contains 'taille'
-          assign is_size_option = true
-        endif
-      -%}
+  # Check if product has size variants in metafield
+  if product.metafields.custom.product_in_group.value != blank
+    assign size_variants = product.metafields.custom.product_in_group.value
+    assign has_size_variants = true
+  endif
+-%}
 
-      {%- if is_size_option -%}
-        <fieldset class="js product-form__input product-form__input--pill product-form__input--size">
-          <legend class="form__label">
-            {{ option.name }}:
-            <span data-selected-value>
-              {{- option.selected_value -}}
-            </span>
-          </legend>
-          <div class="size-guide-container flex items-center justify-between mb-2">
-            <span class="text-sm text-gray-600">{{ 'products.product.size_guide' | t }}</span>
-            <button type="button" class="size-guide-button text-sm underline" onclick="openSizeFitModal()">
-              {{ 'products.product.size_guide_fit_recommender' | t }}
-            </button>
-          </div>
-          <div class="grid grid-cols-5 gap-5">
-            {% render 'product-variant-options',
-              product: product,
-              option: option,
-              block: block,
-              picker_type: picker_type
-            %}
-          </div>
-        </fieldset>
-      {%- elsif is_color_option -%}
-        <!-- Enhanced Color Picker with Image Swatches -->
-        <fieldset class="js product-form__input product-form__input--swatch product-form__input--pill-color">
-          <legend class="form__label">
-            {{ option.name }}:
-            <span data-selected-value>
-              {{- option.selected_value -}}
-            </span>
-          </legend>
-          <div class="color-swatch-container" data-color-thumbnails>
-            {%- for value in option.values -%}
-              {%- liquid
-                # Find variant for this color option
-                assign variant_for_color = null
-                for variant in product.variants
-                  assign variant_option_value = variant.options[option.position] | default: variant.option1
-                  if variant_option_value == value
-                    assign variant_for_color = variant
-                    break
+{%- comment -%} Metafield-based Size Variants {%- endcomment -%}
+{%- if has_size_variants -%}
+  <div class="product-variant-picker-parfums-metafield mt-3" {{ block.shopify_attributes }}>
+    <fieldset class="js product-form__input product-form__input--pill product-form__input--size">
+      <legend class="form__label">
+        Size:
+        <span data-selected-value>
+          {%- liquid
+            assign current_size = ''
+
+            # Priority 1: Extract from current product's Shopify size variants
+            for option in product.options_with_values
+              assign option_name_downcase = option.name | downcase
+              if option_name_downcase contains 'size' or option_name_downcase contains 'größe' or option_name_downcase contains 'taille'
+                if option.selected_value != blank
+                  assign current_size = option.selected_value
+                  break
+                endif
+              endif
+            endfor
+
+            # Priority 2: Extract from current product's custom size metafield
+            if current_size == blank and product.metafields.custom.size.value != blank
+              if product.metafields.custom.size.type == 'single_line_text_field'
+                assign current_size = product.metafields.custom.size.value
+              elsif product.metafields.custom.size.type == 'list.single_line_text_field'
+                assign current_size = product.metafields.custom.size.value | first
+              endif
+            endif
+
+            # Priority 3: Fallback to title-based extraction
+            if current_size == blank
+              assign title_parts = product.title | split: ' - '
+              if title_parts.size > 1
+                assign current_size = title_parts | last
+              else
+                assign title_parts = product.title | split: ' | '
+                if title_parts.size > 1
+                  assign current_size = title_parts | last
+                else
+                  assign title_parts = product.title | split: ' ('
+                  if title_parts.size > 1
+                    assign last_part = title_parts | last
+                    assign current_size = last_part | replace: ')', ''
+                  else
+                    assign current_size = product.handle | split: '-' | last | capitalize
                   endif
-                endfor
-                
-                # Get the best image for this color variant
-                assign swatch_image = null
-                if variant_for_color and variant_for_color.featured_image
-                  assign swatch_image = variant_for_color.featured_image
-                elsif variant_for_color
-                  # Try to find an image attached to this variant
-                  for image in product.images
-                    if image.attached_to_variant? and image.variants contains variant_for_color
-                      assign swatch_image = image
-                      break
-                    endif
-                  endfor
                 endif
-                
-                # Fallback to first product image if no variant image found
-                if swatch_image == null and product.featured_image
-                  assign swatch_image = product.featured_image
+              endif
+            endif
+
+            # Ensure we have a size value
+            if current_size == blank
+              assign current_size = 'Current Size'
+            endif
+          -%}
+          {{- current_size -}}
+        </span>
+      </legend>
+
+      <div class="product-form__buttons">
+        {%- for variant_product in size_variants -%}
+          {%- liquid
+            assign variant_size = ''
+            assign is_current = false
+            if variant_product.id == product.id
+              assign is_current = true
+            endif
+
+            # Priority 1: Extract from Shopify's native product size variants
+            for option in variant_product.options_with_values
+              assign option_name_downcase = option.name | downcase
+              if option_name_downcase contains 'size' or option_name_downcase contains 'größe' or option_name_downcase contains 'taille'
+                if option.selected_value != blank
+                  assign variant_size = option.selected_value
+                  break
                 endif
-              -%}
-              
-              <label class="color-swatch{% if value == option.selected_value %} selected{% endif %}" data-value="{{ value | escape }}">
-                <input
-                  type="radio"
-                  name="options[{{ option.name | escape }}]"
-                  value="{{ value | escape }}"
-                  form="{{ product_form_id }}"
-                  {% if value == option.selected_value %}checked{% endif %}
-                  class="sr-only"
-                  data-variant-id="{% if variant_for_color %}{{ variant_for_color.id }}{% endif %}"
-                >
-                
-                {%- if swatch_image -%}
-                  <img
-                    src="{{ swatch_image | image_url: width: 80 }}"
-                    alt="{{ value | escape }}"
-                    class="swatch-image"
-                    width="80"
-                    height="80"
-                    loading="lazy"
-                    srcset="
-                      {{ swatch_image | image_url: width: 40 }} 40w,
-                      {{ swatch_image | image_url: width: 80 }} 80w,
-                      {{ swatch_image | image_url: width: 120 }} 120w
-                    "
-                    sizes="80px"
-                  >
-                {%- else -%}
-                  <!-- Fallback color swatch -->
-                  <div class="swatch-color-fallback" style="background-color: {{ value | handle | prepend: '#' }}"></div>
-                {%- endif -%}
-                
-                <span class="swatch-label">{{ value }}</span>
-                
-                <!-- Selection indicator -->
-                <span class="swatch-checkmark">
-                  <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1 4.5L4.5 8L11 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </span>
-              </label>
-            {%- endfor -%}
-          </div>
-        </fieldset>
-      {%- elsif picker_type == 'swatch' -%}
-        <fieldset class="js product-form__input product-form__input--swatch">
-          <legend class="form__label">
-            {{ option.name }}:
-            <span data-selected-value>
-              {{- option.selected_value -}}
-            </span>
-          </legend>
-          {% render 'product-variant-options',
-            product: product,
-            option: option,
-            block: block,
-            picker_type: picker_type
-          %}
-        </fieldset>
-      {%- elsif picker_type == 'button' -%}
-        <fieldset class="js product-form__input product-form__input--pill">
-          <legend class="form__label">{{ option.name }}</legend>
-          {% render 'product-variant-options',
-            product: product,
-            option: option,
-            block: block,
-            picker_type: picker_type
-          %}
-        </fieldset>
-      {%- else -%}
-        <div class="product-form__input product-form__input--dropdown">
-          <label class="form__label" for="Option-{{ section.id }}-{{ option.position | minus: 1 }}">
-            {{ option.name }}
+              endif
+            endfor
+
+            # Priority 2: Extract from custom size metafield
+            if variant_size == blank and variant_product.metafields.custom.size.value != blank
+              if variant_product.metafields.custom.size.type == 'single_line_text_field'
+                assign variant_size = variant_product.metafields.custom.size.value
+              elsif variant_product.metafields.custom.size.type == 'list.single_line_text_field'
+                assign variant_size = variant_product.metafields.custom.size.value | first
+              endif
+            endif
+
+            # Priority 3: Fallback to title-based extraction
+            if variant_size == blank
+              assign title_parts = variant_product.title | split: ' - '
+              if title_parts.size > 1
+                assign variant_size = title_parts | last
+              else
+                # Try other common separators
+                assign title_parts = variant_product.title | split: ' | '
+                if title_parts.size > 1
+                  assign variant_size = title_parts | last
+                else
+                  assign title_parts = variant_product.title | split: ' ('
+                  if title_parts.size > 1
+                    assign last_part = title_parts | last
+                    assign variant_size = last_part | replace: ')', ''
+                  else
+                    # Final fallback - use product handle or title
+                    assign variant_size = variant_product.handle | split: '-' | last | capitalize
+                  endif
+                endif
+              endif
+            endif
+
+            # Ensure we have a size value
+            if variant_size == blank
+              assign variant_size = 'Size'
+            endif
+          -%}
+
+          <input
+            type="radio"
+            id="size-variant-{{ variant_product.id }}"
+            name="size-variant"
+            value="{{ variant_product.handle }}"
+            class="sr-only size-variant-input"
+            {% if is_current %}
+              checked
+            {% endif %}
+            data-product-url="{{ variant_product.url }}"
+            data-product-id="{{ variant_product.id }}"
+            data-size="{{ variant_size }}"
+          >
+          <label
+            for="size-variant-{{ variant_product.id }}"
+            class="product-form__input-label{% if is_current %} product-form__input-label--active{% endif %}"
+          >
+            {{ variant_size }}
           </label>
-          <div class="select">
-            {%- if picker_type == 'swatch_dropdown' -%}
-              <span
-                data-selected-value
-                class="dropdown-swatch"
-              >
-                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
-              </span>
-            {%- endif -%}
-            <select
-              id="Option-{{ section.id }}-{{ option.position | minus: 1 }}"
-              class="select__select"
-              name="options[{{ option.name | escape }}]"
-              form="{{ product_form_id }}"
-            >
-              {% render 'product-variant-options',
-                product: product,
-                option: option,
-                block: block,
-                picker_type: picker_type
-              %}
-            </select>
-            <span class="svg-wrapper">
-              {{- 'icon-caret.svg' | inline_asset_content -}}
-            </span>
-          </div>
-        </div>
-      {%- endif -%}
-    {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </fieldset>
+  </div>
+{%- endif -%}
 
-    <script type="application/json">
-      {{ product.variants | json }}
-    </script>
-  </variant-selects>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const sizeVariantInputs = document.querySelectorAll('.size-variant-input');
 
-  <!-- Enhanced JavaScript for Color Swatch Interactions -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const colorSwatches = document.querySelectorAll('.color-swatch');
-      const mediaGallery = document.querySelector('.product-media-gallery-parfums');
-      
-      colorSwatches.forEach(swatch => {
-        const input = swatch.querySelector('input[type="radio"]');
-        const variantId = input.dataset.variantId;
-        
-        // Enhanced hover effects
-        swatch.addEventListener('mouseenter', function() {
-          this.style.transform = 'scale(1.05)';
-          this.style.zIndex = '10';
-        });
-        
-        swatch.addEventListener('mouseleave', function() {
-          this.style.transform = 'scale(1)';
-          this.style.zIndex = '1';
-        });
-        
-        // Selection handling
-        input.addEventListener('change', function() {
-          // Remove selected class from all swatches
-          colorSwatches.forEach(s => s.classList.remove('selected'));
-          
-          // Add selected class to current swatch
-          swatch.classList.add('selected');
-          
-          // Update selected value display
-          const selectedValueSpan = swatch.closest('fieldset').querySelector('[data-selected-value]');
-          if (selectedValueSpan) {
-            selectedValueSpan.textContent = this.value;
+    sizeVariantInputs.forEach((input) => {
+      input.addEventListener('change', function () {
+        if (this.checked) {
+          const productUrl = this.dataset.productUrl;
+          const selectedSize = this.dataset.size;
+
+          // Update selected size display
+          const selectedSizeSpan = document.querySelector('[data-selected-value]');
+          if (selectedSizeSpan) {
+            selectedSizeSpan.textContent = selectedSize;
           }
-          
-          // Update media gallery if variant has specific images
-          if (variantId && mediaGallery) {
-            updateMediaGallery(variantId);
+
+          // Navigate to the selected variant product
+          if (productUrl && productUrl !== window.location.pathname) {
+            window.location.href = productUrl;
           }
-        });
-      });
-      
-      // Function to update media gallery based on variant selection
-      function updateMediaGallery(variantId) {
-        // Implementation for updating gallery based on variant
-        console.log('Updating media gallery for variant:', variantId);
-      }
-      
-      // Size fit modal opener
-      window.openSizeFitModal = function() {
-        const modal = document.getElementById('size-fit-modal');
-        if (modal) {
-          modal.classList.remove('hidden');
-          document.body.style.overflow = 'hidden';
         }
-      };
+      });
     });
-  </script>
-
-  <!-- Enhanced CSS for Color Swatches -->
-  <style>
-    .color-swatch-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-      gap: 0.75rem;
-      max-width: 400px;
-    }
-    
-    .color-swatch {
-      position: relative;
-      cursor: pointer;
-      border-radius: 12px;
-      overflow: hidden;
-      aspect-ratio: 1;
-      border: 2px solid transparent;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      background: #f8f9fa;
-    }
-    
-    .color-swatch:hover {
-      transform: scale(1.05);
-      border-color: #0f0f0f;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    
-    .color-swatch.selected {
-      border-color: #0f0f0f;
-      box-shadow: 0 0 0 3px rgba(15, 15, 15, 0.1);
-    }
-    
-    .color-swatch input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      z-index: 2;
-    }
-    
-    .swatch-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-    
-    .color-swatch:hover .swatch-image {
-      transform: scale(1.1);
-    }
-    
-    .swatch-color-fallback {
-      width: 100%;
-      height: 100%;
-      border-radius: 8px;
-    }
-    
-    .swatch-label {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(transparent, rgba(0,0,0,0.8));
-      color: white;
-      font-size: 0.75rem;
-      padding: 0.5rem 0.25rem 0.25rem;
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      font-weight: 500;
-    }
-    
-    .color-swatch:hover .swatch-label {
-      opacity: 1;
-    }
-    
-    .swatch-checkmark {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 20px;
-      height: 20px;
-      background: #0f0f0f;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.3s ease;
-    }
-    
-    .color-swatch.selected .swatch-checkmark {
-      opacity: 1;
-      transform: scale(1);
-    }
-    
-    @media (max-width: 768px) {
-      .color-swatch-container {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.5rem;
-      }
-      
-      .swatch-label {
-        font-size: 0.625rem;
-        padding: 0.25rem;
-      }
-    }
-  </style>
-{%- endunless -%}
+  });
+</script>
