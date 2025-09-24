@@ -1,0 +1,220 @@
+{% comment %}
+  Renders an embedded video component for YouTube or Vimeo videos
+  
+  Accepts:
+  - video_id: {String} The YouTube or Vimeo video ID
+  - video_type: {String} 'youtube' or 'vimeo' (default: 'youtube')
+  - poster_image: {Object} Optional poster image to show before video loads
+  - title: {String} Video title for accessibility
+  - autoplay: {Boolean} Whether to autoplay the video (default: false)
+  - loop: {Boolean} Whether to loop the video (default: false)
+  - controls: {Boolean} Whether to show video controls (default: true)
+  - class: {String} Additional CSS classes
+  - width: {String} Video width (default: '100%')
+  - height: {String} Video height (default: 'auto')
+
+  Usage:
+  {% render 'embedded-video', video_id: 'ZQb7XU6RxR0', video_type: 'youtube', title: 'About Perfumes' %}
+{% endcomment %}
+
+{%- liquid
+  assign video_id = video_id | default: ''
+  assign video_type = video_type | default: 'youtube'
+  assign title = title | default: 'Video'
+  assign autoplay = autoplay | default: false
+  assign loop = loop | default: false
+  assign controls = controls | default: true
+  assign class = class | default: ''
+  assign width = width | default: '100%'
+  assign height = height | default: 'auto'
+  
+  if video_id == blank
+    assign video_id = 'ZQb7XU6RxR0'
+  endif
+  
+  assign autoplay_param = ''
+  if autoplay
+    assign autoplay_param = '&autoplay=1'
+  endif
+  
+  assign loop_param = ''
+  if loop and video_type == 'youtube'
+    assign loop_param = '&loop=1&playlist=' | append: video_id
+  elsif loop and video_type == 'vimeo'
+    assign loop_param = '&loop=1'
+  endif
+  
+  assign controls_param = ''
+  if controls == false and video_type == 'youtube'
+    assign controls_param = '&controls=0'
+  elsif controls == false and video_type == 'vimeo'
+    assign controls_param = '&controls=0'
+  endif
+-%}
+
+<div class="embedded-video {{ class }}" style="width: {{ width }}; height: {{ height }};">
+  <div class="embedded-video__container">
+    {%- if poster_image -%}
+      <div class="embedded-video__poster">
+        <img
+          src="{{ poster_image | image_url: width: 1200 }}"
+          alt="{{ title | escape }}"
+          class="embedded-video__poster-image"
+          loading="lazy"
+        >
+        <button class="embedded-video__play-button" type="button" aria-label="Play video: {{ title | escape }}">
+          <svg class="embedded-video__play-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+      </div>
+    {%- endif -%}
+    
+    <div class="embedded-video__iframe-container" {% unless poster_image %}style="display: block;"{% else %}style="display: none;"{% endunless %}>
+      {%- if video_type == 'youtube' -%}
+        <iframe
+          src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1{{ autoplay_param }}{{ loop_param }}{{ controls_param }}"
+          class="embedded-video__iframe"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          title="{{ title | escape }}"
+          frameborder="0"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+      {%- elsif video_type == 'vimeo' -%}
+        <iframe
+          src="https://player.vimeo.com/video/{{ video_id }}?{{ autoplay_param }}{{ loop_param }}{{ controls_param }}"
+          class="embedded-video__iframe"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+          title="{{ title | escape }}"
+          frameborder="0"
+        ></iframe>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- if poster_image -%}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const playButton = document.querySelector('.embedded-video__play-button');
+    const poster = document.querySelector('.embedded-video__poster');
+    const iframeContainer = document.querySelector('.embedded-video__iframe-container');
+    
+    if (playButton && poster && iframeContainer) {
+      playButton.addEventListener('click', function() {
+        poster.style.display = 'none';
+        iframeContainer.style.display = 'block';
+        
+        // Update iframe src to include autoplay
+        const iframe = iframeContainer.querySelector('iframe');
+        if (iframe) {
+          const currentSrc = iframe.src;
+          if (currentSrc.includes('youtube.com')) {
+            iframe.src = currentSrc.includes('autoplay=1') ? currentSrc : currentSrc + '&autoplay=1';
+          } else if (currentSrc.includes('vimeo.com')) {
+            iframe.src = currentSrc.includes('autoplay=1') ? currentSrc : currentSrc + '&autoplay=1';
+          }
+        }
+      });
+    }
+  });
+</script>
+{%- endif -%}
+
+<style>
+  .embedded-video {
+    position: relative;
+    width: 100%;
+    margin: 1.25rem 0;
+  }
+  
+  .embedded-video__container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    background-color: #000;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .embedded-video__poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .embedded-video__poster-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .embedded-video__play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4rem;
+    height: 4rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .embedded-video__play-button:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  
+  .embedded-video__play-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 0.125rem; /* Slight offset to center the play icon visually */
+  }
+  
+  .embedded-video__iframe-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .embedded-video__iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  /* Responsive adjustments */
+  @media screen and (max-width: 768px) {
+    .embedded-video {
+      margin: 1rem 0;
+    }
+    
+    .embedded-video__play-button {
+      width: 3rem;
+      height: 3rem;
+    }
+    
+    .embedded-video__play-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+</style>
