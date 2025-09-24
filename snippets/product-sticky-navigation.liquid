@@ -1,0 +1,70 @@
+{% comment %}
+  Product Sticky Navigation Component
+
+  Usage:
+  {% render 'product-sticky-navigation',
+    product: product,
+    section_id: section.id,
+    navigation_items: navigation_items
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign default_items = 'composition,about_fragrance,usage,certificates,warnings,about_perfumes,reviews' | split: ','
+  assign nav_items = navigation_items | default: default_items
+-%}
+
+<nav
+  class="product-sticky-nav"
+  id="ProductStickyNav-{{ section_id }}"
+  role="navigation"
+  aria-label="{{ 'products.product.navigation_aria_label' | t }}"
+>
+  <div class="product-sticky-nav__container">
+    <ul class="product-sticky-nav__list" role="list">
+      {%- for item in nav_items -%}
+        {%- liquid
+          case item
+            when 'composition'
+              assign label = 'products.product.sections.composition' | t
+              assign target = 'composition'
+            when 'about_fragrance'
+              assign label = 'products.product.sections.about_fragrance' | t
+              assign target = 'about-fragrance'
+            when 'usage'
+              assign label = 'products.product.sections.usage' | t
+              assign target = 'usage'
+            when 'certificates'
+              assign label = 'products.product.sections.certificates' | t
+              assign target = 'certificates'
+            when 'warnings'
+              assign label = 'products.product.sections.warnings' | t
+              assign target = 'warnings'
+            when 'about_perfumes'
+              assign label = 'products.product.sections.about_perfumes' | t
+              assign target = 'about-perfumes'
+            when 'reviews'
+              assign label = 'products.product.sections.reviews' | t
+              assign target = 'reviews'
+            else
+              assign label = item
+              assign target = item | handleize
+          endcase
+        -%}
+
+        <li class="product-sticky-nav__item" role="listitem">
+          <a
+            href="#{{ target }}"
+            class="product-sticky-nav__link"
+            data-target="{{ target }}"
+            aria-label="{{ 'products.product.scroll_to_section' | t: section: label }}"
+          >
+            {{ label }}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</nav>
+
+{{ 'product-sticky-navigation.css' | asset_url | stylesheet_tag }}

@@ -63,12 +63,491 @@
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
 
   <div class="page-width">
-    <div class="parfum-product">
+    <div class="parfum-product product">
       <div class="product__media-wrapper">
         {% render 'product-media-gallery', variant_images: variant_images %}
       </div>
       <div class="product__description-wrapper">
+        {%- if section.settings.enable_sticky_navigation -%}
+          {% render 'product-sticky-navigation', product: product, section_id: section.id %}
+        {%- endif -%}
 
+        <!-- Placeholder sections for testing sticky navigation -->
+        <div class="product-sections-container">
+          <!-- Composition Section -->
+          <section id="composition" class="product-section">
+            <div class="product-section__content">
+              <h2 class="product-section__title">{{ 'products.product.composition.characteristics' | t }}</h2>
+              <div class="product-section__body">
+                <!-- Characteristic cards -->
+                <div class="composition-cards">
+                  <div class="composition-card">
+                    <div class="composition-card-image">
+                      <img
+                        src="{{ 'composition-fresh.png' | asset_url }}"
+                        alt="Fresh"
+                        width="321"
+                        height="321"
+                        loading="lazy"
+                      >
+                    </div>
+                    <h4 class="composition-card-title">Svieža</h4>
+                  </div>
+                  <div class="composition-card">
+                    <div class="composition-card-image">
+                      <img
+                        src="{{ 'composition-woody.png' | asset_url }}"
+                        alt="Woody"
+                        width="322"
+                        height="321"
+                        loading="lazy"
+                      >
+                    </div>
+                    <h4 class="composition-card-title">Drevitá</h4>
+                  </div>
+                  <div class="composition-card">
+                    <div class="composition-card-image">
+                      <img
+                        src="{{ 'composition-citrus.png' | asset_url }}"
+                        alt="Citrus"
+                        width="322"
+                        height="321"
+                        loading="lazy"
+                      >
+                    </div>
+                    <h4 class="composition-card-title">Citrusová</h4>
+                  </div>
+                </div>
+
+                <!-- Description paragraphs -->
+                <div class="composition-description">
+                  <p>
+                    Vôňa Active Fresh je svieža, čistá a povzbudzujúca. Vďaka spojeniu citrusových tónov, aromatických
+                    bylín a jemnej bylinkovej horkosti pôsobí mimoriadne energizujúco. Ideálna pre tých, ktorí majú radi
+                    aktívny životný štýl a chcú, aby ich oblečenie aj domácnosť pôsobili rovnako sviežo ako oni sami.
+                    Parfum na pranie je koncentrovaný vonný prípravok, ktorý dodáva vašej bielizni dlhotrvajúcu a
+                    intenzívnu vôňu aj po usušení. Nepôsobí ako klasická aviváž – nezmäkčuje textílie, ale prevonia ich
+                    jemne a pritom výrazne. Je vhodný na všetky typy prania vrátane športového oblečenia, uterákov či
+                    posteľnej bielizne.
+                  </p>
+                  <p>
+                    Stačí pridať len malé množstvo do priehradky na aviváž a váš šatník aj domácnosť budú dýchať
+                    čerstvosťou, čistotou či obľúbenou vôňou prírody. Parfumy na pranie sú obľúbenou alternatívou pre
+                    tých, ktorí hľadajú intenzívnejší a sofistikovanejší vonný zážitok z každodenného prania.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- About Fragrance Section -->
+          <section id="about-fragrance" class="product-section">
+            <div class="product-section__content">
+              <h2 class="product-section__title">
+                {{ 'products.product.about_fragrance.title' | t }}
+              </h2>
+              <div class="product-section__body">
+                <!-- Feature cards -->
+                <div class="about-fragrance-cards">
+                  <div class="about-fragrance-card">
+                    <div class="about-fragrance-card-image">
+                      <img
+                        src="{{ 'about-fragrance-freshness.png' | asset_url }}"
+                        alt="Long-lasting freshness"
+                        width="238"
+                        height="238"
+                        loading="lazy"
+                      >
+                    </div>
+                    <p class="about-fragrance-card-text">Prevonia vašu bielizeň dlhotrvajúcou sviežosťou</p>
+                  </div>
+                  <div class="about-fragrance-card">
+                    <div class="about-fragrance-card-image">
+                      <img
+                        src="{{ 'about-fragrance-dosage-5df08e.png' | asset_url }}"
+                        alt="Small amount needed"
+                        width="238"
+                        height="238"
+                        loading="lazy"
+                      >
+                    </div>
+                    <p class="about-fragrance-card-text">Stačí len malé množstvo – 5 ml na jedno pranie</p>
+                  </div>
+                  <div class="about-fragrance-card">
+                    <div class="about-fragrance-card-image">
+                      <img
+                        src="{{ 'about-fragrance-lasting-12922b.png' | asset_url }}"
+                        alt="Long-lasting scent"
+                        width="238"
+                        height="238"
+                        loading="lazy"
+                      >
+                    </div>
+                    <p class="about-fragrance-card-text">Vôňa pretrvá aj po usušení, dodá energiu každému dňu</p>
+                  </div>
+                  <div class="about-fragrance-card">
+                    <div class="about-fragrance-card-image">
+                      <img
+                        src="{{ 'about-fragrance-versatile-40e579.png' | asset_url }}"
+                        alt="Versatile use"
+                        width="238"
+                        height="238"
+                        loading="lazy"
+                      >
+                    </div>
+                    <p class="about-fragrance-card-text">Vhodná pre športové oblečenie, uteráky aj každodenné kúsky</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Usage Section -->
+          <section id="usage" class="product-section">
+            <div class="product-section__content">
+              <h2 class="product-section__title">
+                {{ 'products.product.usage.title' | t }}
+              </h2>
+              <div class="product-section__body">
+                <!-- Dosage cards -->
+                <div class="usage-dosage-cards">
+                  <div class="usage-dosage-card">
+                    <div class="usage-dosage-content">
+                      <div class="usage-icon-container">
+                        <img
+                          src="{{ 'washing-machine-icon.svg' | asset_url }}"
+                          alt="Washing machine"
+                          class="usage-washing-machine-icon"
+                          width="56"
+                          height="56"
+                          loading="lazy"
+                        >
+                        <div class="usage-dosage-badge">
+                          <span class="usage-dosage-amount"> 5ml </span>
+                        </div>
+                      </div>
+                      <p class="usage-dosage-text">1 pranie</p>
+                    </div>
+                  </div>
+                  <div class="usage-dosage-card">
+                    <div class="usage-dosage-content">
+                      <div class="usage-icon-container">
+                        <img
+                          src="{{ 'washing-machine-icon.svg' | asset_url }}"
+                          alt="Washing machine"
+                          class="usage-washing-machine-icon"
+                          width="56"
+                          height="56"
+                          loading="lazy"
+                        >
+                        <div class="usage-dosage-badge">
+                          <span class="usage-dosage-amount"> 50ml </span>
+                        </div>
+                      </div>
+                      <p class="usage-dosage-text">10 praní</p>
+                    </div>
+                  </div>
+                  <div class="usage-dosage-card">
+                    <div class="usage-dosage-content">
+                      <div class="usage-icon-container">
+                        <img
+                          src="{{ 'washing-machine-icon.svg' | asset_url }}"
+                          alt="Washing machine"
+                          class="usage-washing-machine-icon"
+                          width="56"
+                          height="56"
+                          loading="lazy"
+                        >
+                        <div class="usage-dosage-badge">
+                          <span class="usage-dosage-amount"> 150ml </span>
+                        </div>
+                      </div>
+                      <p class="usage-dosage-text">30 praní</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Usage instructions -->
+                <div class="usage-instructions">
+                  <p class="usage-description">
+                    Nalejte 5 ml parfumu (jedna dávka) do priehradky na aviváž v práčke (na cca 4 kg bielizne).
+                    Nepoužívajte priamo do bubna práčky ani do sušičky.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Warnings Section -->
+          <section id="warnings" class="product-section">
+            <div class="product-section__content">
+              <h2 class="product-section__title">
+                {{ 'products.product.warnings.title' | t }}
+              </h2>
+              <div class="product-section__body">
+                <div class="warnings-content">
+                  <p class="warnings-text">
+                    V prípade kontaktu s povrchmi ich okamžite utrite navlhčenou handrou alebo opláchnite vodou. Pozor!
+                    Obsahuje: 1-(1,2,3,4,5,6,7,8-oktahydro-2,3,8,8-tetramethyl-2-naftyl)ethan-1-on; Linalol; d-limonén;
+                    7-Hydroxycitronellal. Môže vyvolať alergickú kožnú reakciu. Ak je potrebná lekárska pomoc, majte k
+                    dispozícii obal alebo etiketu výrobku. Uchovávajte mimo dosahu detí. PRI KONTAKTE S POKOŽKOU: Umyte
+                    veľkým množstvom vody a mydla. Ak sa prejaví podráždenie pokožky alebo sa vytvoria vyrážky:
+                    vyhľadajte lekársku pomoc. Zneškodnite obsah/nádobu podľa platných predpisov.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Certificates Section -->
+          <section id="certificates" class="product-section">
+            <div class="product-section__content">
+              <h2 class="product-section__title">
+                {{ 'products.product.certificates.title' | t }}
+              </h2>
+              <div class="product-section__body">
+                <!-- Certificate cards -->
+                <div class="certificates-grid">
+                  <div class="certificate-card">
+                    <div class="certificate-content">
+                      <div class="certificate-icon-container">
+                        <img
+                          src="{{ 'certificate-icon-1.svg' | asset_url }}"
+                          alt="Dermatologically tested"
+                          class="certificate-icon"
+                          width="26"
+                          height="26"
+                          loading="lazy"
+                        >
+                      </div>
+                      <p class="certificate-text">Dermatologicky testované</p>
+                    </div>
+                  </div>
+                  <div class="certificate-card">
+                    <div class="certificate-content">
+                      <div class="certificate-icon-container">
+                        <img
+                          src="{{ 'certificate-icon-2.svg' | asset_url }}"
+                          alt="Long-lasting fragrance"
+                          class="certificate-icon"
+                          width="26"
+                          height="26"
+                          loading="lazy"
+                        >
+                      </div>
+                      <p class="certificate-text">Dlhotrvajúce vône</p>
+                    </div>
+                  </div>
+                  <div class="certificate-card">
+                    <div class="certificate-content">
+                      <div class="certificate-icon-container">
+                        <img
+                          src="{{ 'certificate-icon-3.svg' | asset_url }}"
+                          alt="Highest quality"
+                          class="certificate-icon"
+                          width="26"
+                          height="26"
+                          loading="lazy"
+                        >
+                      </div>
+                      <p class="certificate-text">Najvyššia kvalita</p>
+                    </div>
+                  </div>
+                  <div class="certificate-card">
+                    <div class="certificate-content">
+                      <div class="certificate-icon-container">
+                        <img
+                          src="{{ 'certificate-icon-4.svg' | asset_url }}"
+                          alt="No heavy metals"
+                          class="certificate-icon"
+                          width="26"
+                          height="26"
+                          loading="lazy"
+                        >
+                      </div>
+                      <p class="certificate-text">Neobsahuje ťažké kovy</p>
+                    </div>
+                  </div>
+                  <div class="certificate-card">
+                    <div class="certificate-content">
+                      <div class="certificate-icon-container">
+                        <img
+                          src="{{ 'certificate-icon-5.svg' | asset_url }}"
+                          alt="Vegan friendly"
+                          class="certificate-icon"
+                          width="26"
+                          height="26"
+                          loading="lazy"
+                        >
+                      </div>
+                      <p class="certificate-text">Vhodné pre vegánov</p>
+                    </div>
+                  </div>
+                  <div class="certificate-card">
+                    <div class="certificate-content">
+                      <div class="certificate-icon-container">
+                        <img
+                          src="{{ 'certificate-icon-6.svg' | asset_url }}"
+                          alt="No nano substances and microplastics"
+                          class="certificate-icon"
+                          width="26"
+                          height="26"
+                          loading="lazy"
+                        >
+                      </div>
+                      <p class="certificate-text">Bez nano látok a mikroplastov</p>
+                    </div>
+                  </div>
+                  <div class="certificate-card">
+                    <div class="certificate-content">
+                      <div class="certificate-icon-container">
+                        <img
+                          src="{{ 'certificate-icon-7.svg' | asset_url }}"
+                          alt="Paraben free"
+                          class="certificate-icon"
+                          width="26"
+                          height="26"
+                          loading="lazy"
+                        >
+                      </div>
+                      <p class="certificate-text">Bez parabénov</p>
+                    </div>
+                  </div>
+                  <div class="certificate-card">
+                    <div class="certificate-content">
+                      <div class="certificate-icon-container">
+                        <img
+                          src="{{ 'certificate-icon-8.svg' | asset_url }}"
+                          alt="Fresh feeling after every wash"
+                          class="certificate-icon"
+                          width="26"
+                          height="26"
+                          loading="lazy"
+                        >
+                      </div>
+                      <p class="certificate-text">Pocit sviežosti po každom praní</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="perfumes-video">
+              {% render 'embedded-video',
+                video_id: 'ZQb7XU6RxR0',
+                video_type: 'youtube',
+                title: 'About Our Perfumes',
+                autoplay: false,
+                loop: false,
+                controls: true,
+                class: 'perfumes-video-player'
+              %}
+            </div>
+          </section>
+
+          <!-- About Perfumes Section -->
+          <section id="about-perfumes" class="product-section about-perfumes-section">
+            <div class="product-section__content">
+              <div class="about-perfumes-header">
+                <h2 class="product-section__title">{{ 'products.product.about_perfumes.title' | t }}</h2>
+                <p class="about-perfumes-description">
+                  Parfumy na pranie NORTHFINDER sú koncentrované vône, vyvinuté pre výkonnostné aj každodenné oblečenie.
+                  Na rozdiel od aviváží zachovávajú priedušnosť a vlastnosti tkaniny, pričom poskytujú dlhotrvajúcu
+                  sviežosť.
+                </p>
+              </div>
+
+              <div class="product-section__body">
+                <div class="about-perfumes-features">
+                  <div class="about-perfumes-feature-card">
+                    <div class="about-perfumes-feature-icon">
+                      <img
+                        src="{{ 'about-perfumes-icon-1.svg' | asset_url }}"
+                        alt="Developed to support your activity"
+                        class="feature-icon"
+                        width="52"
+                        height="52"
+                        loading="lazy"
+                      >
+                    </div>
+                    <div class="about-perfumes-feature-text">
+                      <p>Vyvinuté pre podporu vašej aktivity</p>
+                    </div>
+                  </div>
+
+                  <div class="about-perfumes-feature-card">
+                    <div class="about-perfumes-feature-icon">
+                      <img
+                        src="{{ 'about-perfumes-icon-2.svg' | asset_url }}"
+                        alt="Long-lasting fragrances inspired by nature"
+                        class="feature-icon"
+                        width="54"
+                        height="54"
+                        loading="lazy"
+                      >
+                    </div>
+                    <div class="about-perfumes-feature-text">
+                      <p>Dlhotrvajúce vône inšpirované prírodou</p>
+                    </div>
+                  </div>
+
+                  <div class="about-perfumes-feature-card">
+                    <div class="about-perfumes-feature-icon">
+                      <img
+                        src="{{ 'about-perfumes-icon-3.svg' | asset_url }}"
+                        alt="No settling or residue on textiles"
+                        class="feature-icon"
+                        width="54"
+                        height="54"
+                        loading="lazy"
+                      >
+                    </div>
+                    <div class="about-perfumes-feature-text">
+                      <p>Bez usadzovania alebo zvyškov na textile</p>
+                    </div>
+                  </div>
+
+                  <div class="about-perfumes-feature-card">
+                    <div class="about-perfumes-feature-icon">
+                      <img
+                        src="{{ 'about-perfumes-icon-4.svg' | asset_url }}"
+                        alt="Vegan"
+                        class="feature-icon"
+                        width="52"
+                        height="52"
+                        loading="lazy"
+                      >
+                    </div>
+                    <div class="about-perfumes-feature-text">
+                      <p>Vegan</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Reviews Section -->
+          <section id="reviews" class="product-section">
+            <div class="product-section__content">
+              <h2 class="product-section__title">{{ 'products.product.sections.reviews' | t }}</h2>
+              <div class="product-section__body">
+                <!-- Start of Judge.me code -->
+                <div style="clear:both"></div>
+                <div
+                  id="judgeme_product_reviews"
+                  class="jdgm-widget jdgm-review-widget"
+                  data-product-title="{{ product.title | escape }}"
+                  data-id="{{ product.id }}"
+                  data-auto-install="false"
+                >
+                  {{ product.metafields.judgeme.widget }}
+                </div>
+                <!-- End of Judge.me code -->
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
       <div class="product__info-wrapper {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -276,91 +755,6 @@
                   </div>
                 {%- endif -%}
 
-                <!-- Product Highlights -->
-                {% if product.metafields.custom.highlights %}
-                  <div class="product-highlights">
-                    <h3 class="highlights-title">{{ 'sections.main_product.you_will_like_it' | t }}</h3>
-                    <ul class="highlights-list">
-                      {% for highlight in product.metafields.custom.highlights.value %}
-                        <li>{{ highlight | metafield_text }}</li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                {% endif %}
-
-                <!-- Product Benefits -->
-                {% if product.metafields.custom.benefits %}
-                  <div class="product-benefits">
-                    {% for benefit in product.metafields.custom.benefits.value %}
-                      <div class="benefit-item">
-                        {% if benefit.icon %}
-                          <img
-                            src="{{ benefit.icon }}"
-                            alt="{{ benefit.title | metafield_text }}"
-                            class="benefit-icon"
-                            width="40"
-                            height="40"
-                          >
-                        {% endif %}
-                        <div class="benefit-content">
-                          <h4>{{ benefit.title | metafield_text }}</h4>
-                          <p>{{ benefit.description | metafield_text }}</p>
-                        </div>
-                      </div>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-
-                <!-- Main Elements -->
-                {% if product.metafields.custom.main_elements %}
-                  <div class="main-elements">
-                    {% for element in product.metafields.custom.main_elements.value %}
-                      <div class="main-element">
-                        <div class="main-element-header">
-                          {% if element.icon %}
-                            <img
-                              src="{{ element.icon | asset_url }}"
-                              alt="{{ element.title | metafield_text }}"
-                              class="main-element-icon"
-                              width="40"
-                              height="40"
-                            >
-                          {% endif %}
-                          <h3 class="main-element-title">{{ element.title | metafield_text }}</h3>
-                        </div>
-                        <div class="main-element-content">
-                          {{ element.content | metafield_text }}
-                        </div>
-                      </div>
-                    {% endfor %}
-                  </div>
-                {% endif %}
-
-                <!-- Main Elements -->
-                {% if product.metafields.custom.main_elements %}
-                  <div class="main-elements">
-                    {% for element in product.metafields.custom.main_elements.value %}
-                      <div class="main-element">
-                        <div class="main-element-header">
-                          {% if element.icon %}
-                            <img
-                              src="{{ element.icon | asset_url }}"
-                              alt="{{ element.title | metafield_text }}"
-                              class="main-element-icon"
-                              width="40"
-                              height="40"
-                              loading="lazy"
-                            >
-                          {% endif %}
-                          <h3 class="main-element-title">{{ element.title | metafield_text }}</h3>
-                        </div>
-                        <div class="main-element-content">
-                          {{ element.content | metafield_text }}
-                        </div>
-                      </div>
-                    {% endfor %}
-                  </div>
-                {% endif %}
               {%- when 'sku' -%}
                 <p
                   class="product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
@@ -374,8 +768,14 @@
               {%- when 'custom_liquid' -%}
                 {{ block.settings.custom_liquid }}
               {%- when 'collapsible_tab' -%}
+                {%- liquid
+                  assign section_id = block.settings.heading | default: block.settings.page.title | handleize
+                  if section_id == blank
+                    assign section_id = 'section-' | append: forloop.index
+                  endif
+                -%}
                 <div
-                  id="collapsible-tabs-section"
+                  id="{{ section_id }}"
                   class="product__accordion accordion quick-add-hidden product-tabs-container hidden md:block"
                   {{ block.shopify_attributes }}
                 >
@@ -1168,6 +1568,16 @@
       ],
       "default": "lightbox",
       "label": "t:sections.main-product.settings.image_zoom.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.settings.sticky_navigation.header"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_navigation",
+      "default": true,
+      "label": "t:sections.main-product.settings.sticky_navigation.enable_label"
     },
     {
       "type": "header",

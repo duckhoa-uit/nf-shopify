@@ -1,0 +1,312 @@
+/* Product Sticky Navigation Component Styles - CSS-Only Version */
+
+.product-sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgb(var(--color-base-background));
+  border-bottom: var(--border-thin) solid #e5e5e5;
+}
+
+/* Enhanced backdrop blur for modern browsers */
+@supports (backdrop-filter: blur(10px)) {
+  .product-sticky-nav {
+    backdrop-filter: blur(10px);
+    background-color: rgba(var(--color-base-background), 0.95);
+  }
+}
+
+.product-sticky-nav__container {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  position: relative;
+}
+
+.product-sticky-nav__container::-webkit-scrollbar {
+  display: none;
+}
+
+.product-sticky-nav__container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.product-sticky-nav__list {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  list-style: none;
+  white-space: nowrap;
+  min-width: max-content;
+}
+
+.product-sticky-nav__item {
+  flex-shrink: 0;
+}
+.product-sticky-nav__item a {
+  padding: 24px 16px;
+}
+.product-sticky-nav__item:first-child a {
+  padding-left: 0;
+}
+.product-sticky-nav__item:last-child a {
+  /* padding-right: 0; */
+}
+.product-sticky-nav__item a:after {
+  content: "";
+  background: #e5e5e5;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  height: 20px;
+  width: 1px;
+}
+.product-sticky-nav__item:first-child a:after {
+  display: none;
+}
+
+.product-sticky-nav__link {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.219;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #999;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-default) var(--ease-out-slow);
+  position: relative;
+}
+
+.product-sticky-nav__link:hover {
+  color: rgb(var(--color-base-foreground));
+}
+
+.product-sticky-nav__link:focus-visible {
+  outline: none;
+}
+
+/* CSS-only active state using :target pseudo-class */
+/* Active state when section is targeted via URL hash */
+#composition:target ~ * .product-sticky-nav__link[href="#composition"],
+#about-fragrance:target ~ * .product-sticky-nav__link[href="#about-fragrance"],
+#usage:target ~ * .product-sticky-nav__link[href="#usage"],
+#certificates:target ~ * .product-sticky-nav__link[href="#certificates"],
+#warnings:target ~ * .product-sticky-nav__link[href="#warnings"],
+#about-perfumes:target ~ * .product-sticky-nav__link[href="#about-perfumes"],
+#reviews:target ~ * .product-sticky-nav__link[href="#reviews"] {
+  font-weight: 600;
+  color: rgb(var(--color-base-foreground));
+}
+
+/* Active state underline animation */
+#composition:target ~ * .product-sticky-nav__link[href="#composition"]::after,
+#about-fragrance:target ~ * .product-sticky-nav__link[href="#about-fragrance"]::after,
+#usage:target ~ * .product-sticky-nav__link[href="#usage"]::after,
+#certificates:target ~ * .product-sticky-nav__link[href="#certificates"]::after,
+#warnings:target ~ * .product-sticky-nav__link[href="#warnings"]::after,
+#about-perfumes:target ~ * .product-sticky-nav__link[href="#about-perfumes"]::after,
+#reviews:target ~ * .product-sticky-nav__link[href="#reviews"]::after {
+  content: "";
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  height: 2px;
+  background-color: rgb(var(--color-base-foreground));
+  border-radius: var(--radius-full);
+  animation: expandWidth var(--duration-default) var(--ease-out-slow);
+}
+
+@keyframes expandWidth {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Ensure proper scroll offset for targeted sections */
+.product-section {
+  scroll-margin-top: calc(1.5rem * 2 + 2rem);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 749px) {
+  .product-sticky-nav__container {
+    padding: 0 0.75rem;
+  }
+
+  .product-sticky-nav__list {
+    gap: 0.75rem;
+    padding: 1rem 0;
+  }
+
+  .product-sticky-nav__link {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
+
+  .product-section {
+    scroll-margin-top: calc(1rem * 2 + 1.5rem);
+  }
+
+  /* Mobile active state adjustments */
+  #composition:target ~ * .product-sticky-nav__link[href="#composition"]::after,
+  #about-fragrance:target ~ * .product-sticky-nav__link[href="#about-fragrance"]::after,
+  #usage:target ~ * .product-sticky-nav__link[href="#usage"]::after,
+  #certificates:target ~ * .product-sticky-nav__link[href="#certificates"]::after,
+  #warnings:target ~ * .product-sticky-nav__link[href="#warnings"]::after,
+  #about-perfumes:target ~ * .product-sticky-nav__link[href="#about-perfumes"]::after,
+  #reviews:target ~ * .product-sticky-nav__link[href="#reviews"]::after {
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .product-sticky-nav {
+    border-bottom-width: 2px;
+  }
+
+  #composition:target ~ * .product-sticky-nav__link[href="#composition"]::after,
+  #about-fragrance:target ~ * .product-sticky-nav__link[href="#about-fragrance"]::after,
+  #usage:target ~ * .product-sticky-nav__link[href="#usage"]::after,
+  #certificates:target ~ * .product-sticky-nav__link[href="#certificates"]::after,
+  #warnings:target ~ * .product-sticky-nav__link[href="#warnings"]::after,
+  #about-perfumes:target ~ * .product-sticky-nav__link[href="#about-perfumes"]::after,
+  #reviews:target ~ * .product-sticky-nav__link[href="#reviews"]::after {
+    height: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .product-sticky-nav__link {
+    transition: none;
+  }
+
+  #composition:target ~ * .product-sticky-nav__link[href="#composition"]::after,
+  #about-fragrance:target ~ * .product-sticky-nav__link[href="#about-fragrance"]::after,
+  #usage:target ~ * .product-sticky-nav__link[href="#usage"]::after,
+  #certificates:target ~ * .product-sticky-nav__link[href="#certificates"]::after,
+  #warnings:target ~ * .product-sticky-nav__link[href="#warnings"]::after,
+  #about-perfumes:target ~ * .product-sticky-nav__link[href="#about-perfumes"]::after,
+  #reviews:target ~ * .product-sticky-nav__link[href="#reviews"]::after {
+    animation: none;
+  }
+
+  .product-sticky-nav__link:hover {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .product-sticky-nav {
+    display: none;
+  }
+}
+
+/* Dark mode support (if theme supports it) */
+@media (prefers-color-scheme: dark) {
+  .product-sticky-nav--sticky {
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Focus management for keyboard navigation */
+.product-sticky-nav__link:focus {
+  z-index: 1;
+}
+
+/* Smooth scrolling for supported browsers */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Product Sections Styling */
+.product-sections-container {
+  margin-top: 3.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+
+.product-section__content {
+  letter-spacing: 0em;
+}
+
+.product-section__title {
+  font-size: 2.375rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgb(var(--color-base-foreground));
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+}
+
+.product-section__body {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-gray-800);
+}
+
+.product-section__body p {
+  /* margin-bottom: 1.25rem; */
+}
+
+.product-section__body h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgb(var(--color-base-foreground));
+}
+
+.product-section__body h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--color-base-foreground));
+}
+
+.product-section__body ul {
+  margin: 0.75rem 0;
+  padding-left: 1.25rem;
+}
+
+.product-section__body li {
+  margin-bottom: 0.5rem;
+}
+
+.product-section__body strong {
+  font-weight: 600;
+  color: rgb(var(--color-base-foreground));
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 749px) {
+  .product-section__content {
+    padding: 0 0.75rem;
+  }
+
+  .product-section__title {
+    font-size: 1.25rem;
+  }
+
+  .product-section {
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+  }
+}
