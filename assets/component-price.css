@@ -27,7 +27,7 @@
   font-size: 0.9375rem;
   font-weight: 600;
   line-height: 1;
-  color: rgb(var(--color-base-foreground));  /* Uses theme foreground color */
+  color: rgb(var(--color-base-foreground)); /* Uses theme foreground color */
 }
 
 .price:not(.price--show-badge) .price-item--last:last-of-type {
@@ -101,4 +101,29 @@
   margin-top: 0.2rem;
   text-transform: uppercase;
   color: rgba(var(--color-base-foreground), 0.7);
+}
+
+.price-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.current-price {
+  font-size: 1.3125rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  color: #0f0f0f;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #0f0f0f;
+  margin-right: 0.5rem;
+}
+
+.price-label {
+  font-size: 0.875rem;
+  color: #666;
 }
