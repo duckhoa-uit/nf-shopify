@@ -1,0 +1,177 @@
+/* Parfum Features Section */
+.parfum-features {
+  --parfum-features-bg: rgb(var(--color-background));
+  --parfum-features-text: rgb(var(--color-foreground));
+  --parfum-features-card-bg: rgb(var(--color-base-background-1));
+  --parfum-features-card-border: rgb(var(--color-base-outline-button-labels));
+  --parfum-features-icon-bg: rgb(var(--color-base-accent-1));
+  --parfum-features-icon-color: rgb(var(--color-base-solid-button-labels));
+  
+  background-color: var(--parfum-features-bg);
+  color: var(--parfum-features-text);
+}
+
+.parfum-features__header {
+  text-align: center;
+  margin-bottom: 6rem;
+}
+
+.parfum-features__heading {
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.parfum-features__description {
+  max-width: 60rem;
+  margin: 0 auto;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  color: rgb(var(--color-foreground), 0.75);
+}
+
+.parfum-features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.parfum-features__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 3rem 2rem;
+  background-color: var(--parfum-features-card-bg);
+  border: 1px solid var(--parfum-features-card-border);
+  border-radius: 1rem;
+  text-align: center;
+  width: 100%;
+  max-width: 30rem;
+  min-height: 24rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.parfum-features__card:hover {
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.1);
+}
+
+.parfum-features__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.parfum-features__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 8rem;
+  height: 8rem;
+  background-color: var(--parfum-features-icon-bg);
+  border-radius: 50%;
+  padding: 1.7rem;
+}
+
+.parfum-features__icon-wrapper svg {
+  width: 100%;
+  height: 100%;
+  color: var(--parfum-features-icon-color);
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2px;
+}
+
+.parfum-features__title {
+  font-family: var(--font-heading-family);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  text-transform: uppercase;
+  margin: 0;
+  max-width: 30rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 749px) {
+  .parfum-features__header {
+    margin-bottom: 4rem;
+  }
+  
+  .parfum-features__heading {
+    font-size: 2.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .parfum-features__description {
+    font-size: 1.4rem;
+    padding: 0 1rem;
+  }
+  
+  .parfum-features__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .parfum-features__card {
+    max-width: 100%;
+    padding: 2.5rem 2rem;
+    gap: 2.5rem;
+    min-height: 20rem;
+  }
+  
+  .parfum-features__icon-wrapper {
+    width: 7rem;
+    height: 7rem;
+    padding: 1.5rem;
+  }
+  
+  .parfum-features__title {
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .parfum-features__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .parfum-features__card {
+    max-width: 100%;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .parfum-features__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  
+  .parfum-features__card {
+    max-width: 30rem;
+  }
+}
+
+/* Color Scheme Support */
+.color-scheme-1 {
+  --parfum-features-bg: rgb(var(--color-scheme-1-background));
+  --parfum-features-text: rgb(var(--color-scheme-1-text));
+  --parfum-features-card-bg: rgb(var(--color-scheme-1-card-background, var(--color-background)));
+  --parfum-features-card-border: rgb(var(--color-scheme-1-outline, var(--color-border)));
+  --parfum-features-icon-bg: rgb(var(--color-scheme-1-accent, var(--color-base-accent-1)));
+  --parfum-features-icon-color: rgb(var(--color-scheme-1-accent-contrast, var(--color-base-solid-button-labels)));
+}
+
+.color-scheme-2 {
+  --parfum-features-bg: rgb(var(--color-scheme-2-background));
+  --parfum-features-text: rgb(var(--color-scheme-2-text));
+  --parfum-features-card-bg: rgb(var(--color-scheme-2-card-background, var(--color-background)));
+  --parfum-features-card-border: rgb(var(--color-scheme-2-outline, var(--color-border)));
+  --parfum-features-icon-bg: rgb(var(--color-scheme-2-accent, var(--color-base-accent-1)));
+  --parfum-features-icon-color: rgb(var(--color-scheme-2-accent-contrast, var(--color-base-solid-button-labels)));
+}
