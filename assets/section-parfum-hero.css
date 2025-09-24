@@ -1,0 +1,256 @@
+/* Parfum Hero Section */
+.parfum-hero-section {
+  position: relative;
+  min-height: var(--parfum-hero-min-height, 600px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.parfum-hero-section.parfum-hero--has-media {
+  color: rgb(var(--color-base-background));
+}
+
+/* Background Media */
+.parfum-hero__media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+
+.parfum-hero__image-wrapper,
+.parfum-hero__video-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.parfum-hero__image,
+.parfum-hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Overlay */
+.parfum-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, calc(var(--parfum-hero-overlay-opacity, 30) / 100));
+  z-index: -1;
+}
+
+/* Content Container */
+.parfum-hero__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.parfum-hero__box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 2rem 1.5rem;
+}
+
+/* Content is now fixed to left-aligned positioning */
+
+/* Content Blocks */
+.parfum-hero__text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 50rem;
+}
+
+/* Typography */
+.parfum-hero__heading {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-weight: 700;
+  line-height: 1.5;
+  color: inherit;
+  text-transform: uppercase;
+}
+
+.parfum-hero__heading.h0 {
+  font-size: clamp(2.5rem, 5vw, 2.875rem); /* 46px target */
+}
+
+.parfum-hero__heading.h1 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+}
+
+.parfum-hero__heading.h2 {
+  font-size: clamp(1.75rem, 3vw, 2rem);
+}
+
+.parfum-hero__heading.hxl {
+  font-size: clamp(3rem, 6vw, 3.5rem);
+}
+
+.parfum-hero__description {
+  margin: 0;
+  font-size: 1rem; /* 16px to match Figma */
+  font-weight: 500;
+  line-height: 1.5;
+  color: inherit;
+  max-width: 40rem;
+}
+
+/* Buttons */
+.parfum-hero__button-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.parfum-hero__button {
+  padding: 1.1875rem 2rem; /* 19px 32px to match Figma */
+  font-size: 0.875rem; /* 14px to match Figma */
+  font-weight: 700;
+  font-family: "Montserrat", var(--font-heading-family); /* Montserrat as specified in Figma */
+  line-height: 0.7; /* Match Figma line-height */
+  text-transform: none;
+  letter-spacing: normal;
+  border-radius: 0.5rem; /* 8px to match Figma */
+  background-color: #e3350e; /* Exact Figma color Red/500 */
+  color: #ffffff; /* Exact Figma color White/100 */
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.parfum-hero__button::after {
+  content: none;
+}
+
+.parfum-hero__button:hover {
+  background-color: #cc2f0c; /* Darker shade for hover */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(227, 53, 14, 0.3);
+}
+
+.parfum-hero__button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(227, 53, 14, 0.3);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 749px) {
+  .parfum-hero-section {
+    min-height: calc(var(--parfum-hero-min-height, 600px) * 0.75);
+  }
+
+  .parfum-hero__box {
+    padding: 1.5rem 1rem;
+  }
+
+  .parfum-hero__text-content {
+    gap: 2rem;
+  }
+
+  .parfum-hero__heading.h0 {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+  }
+
+  .parfum-hero__heading.h1 {
+    font-size: clamp(2rem, 7vw, 3rem);
+  }
+
+  .parfum-hero__heading.h2 {
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+  }
+
+  .parfum-hero__heading.hxl {
+    font-size: clamp(3rem, 9vw, 4rem);
+  }
+
+  .parfum-hero__description {
+    font-size: 0.875rem;
+  }
+
+  .parfum-hero__button-wrapper {
+    width: 100%;
+  }
+
+  .parfum-hero__button {
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  /* Keep left alignment on mobile for consistency */
+  .parfum-hero__content {
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .parfum-hero__box {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .parfum-hero__box {
+    padding: 3rem 3.75rem; /* 60px to match Figma */
+  }
+
+  .parfum-hero__text-content {
+    gap: 2.5rem; /* 40px to match Figma */
+  }
+
+  .parfum-hero__description {
+    font-size: 1rem; /* Keep 16px on desktop */
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .parfum-hero__box {
+    padding: 4rem 3.75rem;
+  }
+
+  .parfum-hero__text-content {
+    gap: 2.5rem;
+  }
+}
+
+/* Animation Support */
+@media (prefers-reduced-motion: no-preference) {
+  .parfum-hero__heading,
+  .parfum-hero__text,
+  .parfum-hero__buttons {
+    opacity: 0;
+    transform: translateY(2rem);
+    animation: fadeInUp 0.8s ease forwards;
+  }
+
+  .parfum-hero__text {
+    animation-delay: 0.2s;
+  }
+
+  .parfum-hero__buttons {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
