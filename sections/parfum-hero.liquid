@@ -1,0 +1,248 @@
+{{ 'section-parfum-hero.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign section_id = section.settings.custom_id | default: section.id
+  assign section_class = 'parfum-hero-section'
+  assign has_background_media = false
+
+  if section.settings.background_image != blank or section.settings.background_video != blank
+    assign has_background_media = true
+  endif
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <section
+    id="{{ section_id }}"
+    class="{{ section_class }} isolate{% unless section.settings.full_width %} page-width{% endunless %} section-{{ section.id }}-padding{% if has_background_media %} parfum-hero--has-media{% endif %}"
+    style="
+      --parfum-hero-min-height: {{ section.settings.section_height }}px;
+      --parfum-hero-overlay-opacity: {{ section.settings.overlay_opacity }}%;
+    "
+  >
+    {%- if has_background_media -%}
+      <div class="parfum-hero__media">
+        {%- if section.settings.background_video != blank -%}
+          <div class="parfum-hero__video-wrapper">
+            <video
+              class="parfum-hero__video"
+              autoplay
+              muted
+              loop
+              playsinline
+              poster="{{ section.settings.background_image | image_url: width: 1920 }}"
+            >
+              <source src="{{ section.settings.background_video | asset_url }}" type="video/mp4">
+            </video>
+          </div>
+        {%- elsif section.settings.background_image != blank -%}
+          <div class="parfum-hero__image-wrapper">
+            {%- render 'optimized-image',
+              image: section.settings.background_image,
+              sizes: '100vw',
+              loading: 'eager',
+              class: 'parfum-hero__image',
+              alt: section.settings.background_image.alt
+            -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_overlay -%}
+          <div class="parfum-hero__overlay"></div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="parfum-hero__content page-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="parfum-hero__box content-container content-container--full-width-mobile color-{{ section.settings.color_scheme }} gradient">
+        <div class="parfum-hero__text-content">
+          {%- if section.settings.heading != blank -%}
+            <h1 class="parfum-hero__heading {{ section.settings.heading_size }}">
+              {{ section.settings.heading }}
+            </h1>
+          {%- endif -%}
+
+          {%- if section.settings.description != blank -%}
+            <div class="parfum-hero__description">
+              {{ section.settings.description }}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.button_text != blank -%}
+            <div class="parfum-hero__button-wrapper">
+              <a
+                href="{{ section.settings.button_url | default: '#' }}"
+                class="button button--primary parfum-hero__button"
+              >
+                {{ section.settings.button_text }}
+              </a>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Parfum Hero",
+  "tag": "section",
+  "class": "section-parfum-hero",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "video",
+      "id": "background_video",
+      "label": "Background video",
+      "info": "Video will take priority over background image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "default": true,
+      "label": "Show overlay"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Elevate Your Laundry Routine with NORTHFINDER Laundry Perfumes",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "hxl",
+          "label": "Extra large"
+        }
+      ],
+      "default": "h0",
+      "label": "Heading size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "default": "<p>Inspired by nature. Designed for movement.<br>Freshness that stays with you - on the trail, at the gym, or in the city.</p>",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "default": "Explore Scents",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 400,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "label": "Section height",
+      "default": 750
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "Make section full width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Parfum Hero"
+    }
+  ]
+}
+{% endschema %}
