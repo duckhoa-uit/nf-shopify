@@ -1,0 +1,406 @@
+{{ 'section-parfum-scents.css' | asset_url | stylesheet_tag }}
+
+<div class="parfum-scents section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.tag_text != blank
+      or section.settings.heading != blank
+      or section.settings.description != blank
+    -%}
+      <div class="parfum-scents__header">
+        <div class="parfum-scents__header-container">
+          {%- if section.settings.tag_text != blank -%}
+            <div class="parfum-scents__tag">
+              <span class="parfum-scents__tag-text">{{ section.settings.tag_text }}</span>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="parfum-scents__heading {{ section.settings.heading_size }}">
+              {{ section.settings.heading }}
+            </h2>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.description != blank -%}
+          <div class="parfum-scents__description">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="parfum-scents__grid">
+      <!-- Active Fresh Card -->
+      <div class="parfum-scents__card parfum-scents__card--active-fresh">
+        <div class="parfum-scents__image">
+          <img
+            src="{{ 'parfum_active_fresh-73cee9.png' | asset_url }}"
+            alt="{{ 'sections.parfum_scents.cards.active_fresh.name' | t }}"
+            loading="lazy"
+            width="461"
+            height="430"
+          >
+        </div>
+        <div class="parfum-scents__content">
+          <div class="parfum-scents__info">
+            <h3 class="parfum-scents__name">{{ 'sections.parfum_scents.cards.active_fresh.name' | t }}</h3>
+
+            <div class="parfum-scents__details">
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'flask-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.fragrance_profile' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">
+                  {{ 'sections.parfum_scents.cards.active_fresh.fragrance' | t }}
+                </p>
+              </div>
+
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'dumbbells-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.best_for' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">{{ 'sections.parfum_scents.cards.active_fresh.best_for' | t }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="parfum-scents__button-wrapper">
+            <a
+              href="{{ section.settings.active_fresh_url | default: '#' }}"
+              class="button button--secondary parfum-scents__button"
+            >
+              {{ 'sections.parfum_scents.explore_scent' | t }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outdoor Flow Card -->
+      <div class="parfum-scents__card parfum-scents__card--outdoor-flow">
+        <div class="parfum-scents__content">
+          <div class="parfum-scents__info">
+            <h3 class="parfum-scents__name">{{ 'sections.parfum_scents.cards.outdoor_flow.name' | t }}</h3>
+
+            <div class="parfum-scents__details">
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'flask-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.fragrance_profile' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">
+                  {{ 'sections.parfum_scents.cards.outdoor_flow.fragrance' | t }}
+                </p>
+              </div>
+
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'alpine-skiing-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.best_for' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">{{ 'sections.parfum_scents.cards.outdoor_flow.best_for' | t }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="parfum-scents__button-wrapper">
+            <a
+              href="{{ section.settings.outdoor_flow_url | default: '#' }}"
+              class="button button--secondary parfum-scents__button"
+            >
+              {{ 'sections.parfum_scents.explore_scent' | t }}
+            </a>
+          </div>
+        </div>
+        <div class="parfum-scents__image">
+          <img
+            src="{{ 'parfum_outdoor_flow-53b46c.png' | asset_url }}"
+            alt="{{ 'sections.parfum_scents.cards.outdoor_flow.name' | t }}"
+            loading="lazy"
+            width="461"
+            height="430"
+          >
+        </div>
+      </div>
+
+      <!-- Adventure Mist Card -->
+      <div class="parfum-scents__card parfum-scents__card--adventure-mist">
+        <div class="parfum-scents__image">
+          <img
+            src="{{ 'parfum_adventure_mist-5b8838.png' | asset_url }}"
+            alt="{{ 'sections.parfum_scents.cards.adventure_mist.name' | t }}"
+            loading="lazy"
+            width="461"
+            height="430"
+          >
+        </div>
+        <div class="parfum-scents__content">
+          <div class="parfum-scents__info">
+            <h3 class="parfum-scents__name">{{ 'sections.parfum_scents.cards.adventure_mist.name' | t }}</h3>
+
+            <div class="parfum-scents__details">
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'flask-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.fragrance_profile' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">
+                  {{ 'sections.parfum_scents.cards.adventure_mist.fragrance' | t }}
+                </p>
+              </div>
+
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'tent-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.best_for' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">
+                  {{ 'sections.parfum_scents.cards.adventure_mist.best_for' | t }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="parfum-scents__button-wrapper">
+            <a
+              href="{{ section.settings.adventure_mist_url | default: '#' }}"
+              class="button button--secondary parfum-scents__button"
+            >
+              {{ 'sections.parfum_scents.explore_scent' | t }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Classic Fresh Card -->
+      <div class="parfum-scents__card parfum-scents__card--classic-fresh">
+        <div class="parfum-scents__content">
+          <div class="parfum-scents__info">
+            <h3 class="parfum-scents__name">{{ 'sections.parfum_scents.cards.classic_fresh.name' | t }}</h3>
+
+            <div class="parfum-scents__details">
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'flask-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.fragrance_profile' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">
+                  {{ 'sections.parfum_scents.cards.classic_fresh.fragrance' | t }}
+                </p>
+              </div>
+
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'tshirt-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.best_for' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">
+                  {{ 'sections.parfum_scents.cards.classic_fresh.best_for' | t }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="parfum-scents__button-wrapper">
+            <a
+              href="{{ section.settings.classic_fresh_url | default: '#' }}"
+              class="button button--secondary parfum-scents__button"
+            >
+              {{ 'sections.parfum_scents.explore_scent' | t }}
+            </a>
+          </div>
+        </div>
+        <div class="parfum-scents__image">
+          <img
+            src="{{ 'parfum_classic_fresh-37ff15.png' | asset_url }}"
+            alt="{{ 'sections.parfum_scents.cards.classic_fresh.name' | t }}"
+            loading="lazy"
+            width="461"
+            height="430"
+          >
+        </div>
+      </div>
+
+      <!-- Pure Essence Card -->
+      <div class="parfum-scents__card parfum-scents__card--pure-essence">
+        <div class="parfum-scents__image">
+          <img
+            src="{{ 'parfum_pure_essence-1529c9.png' | asset_url }}"
+            alt="{{ 'sections.parfum_scents.cards.pure_essence.name' | t }}"
+            loading="lazy"
+            width="461"
+            height="430"
+          >
+        </div>
+        <div class="parfum-scents__content">
+          <div class="parfum-scents__info">
+            <h3 class="parfum-scents__name">{{ 'sections.parfum_scents.cards.pure_essence.name' | t }}</h3>
+
+            <div class="parfum-scents__details">
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'flask-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.fragrance_profile' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">
+                  {{ 'sections.parfum_scents.cards.pure_essence.fragrance' | t }}
+                </p>
+              </div>
+
+              <div class="parfum-scents__detail">
+                <div class="parfum-scents__detail-header">
+                  <div class="parfum-scents__icon">
+                    {{ 'socks-light.svg' | inline_asset_content }}
+                  </div>
+                  <span class="parfum-scents__detail-label">{{ 'sections.parfum_scents.best_for' | t }}</span>
+                </div>
+                <p class="parfum-scents__detail-text">{{ 'sections.parfum_scents.cards.pure_essence.best_for' | t }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="parfum-scents__button-wrapper">
+            <a
+              href="{{ section.settings.pure_essence_url | default: '#' }}"
+              class="button button--secondary parfum-scents__button"
+            >
+              {{ 'sections.parfum_scents.explore_scent' | t }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.parfum_scents.name",
+  "tag": "section",
+  "class": "section-parfum-scents",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag_text",
+      "default": "t:sections.parfum_scents.settings.tag_text.default",
+      "label": "t:sections.parfum_scents.settings.tag_text.label"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "t:sections.parfum_scents.settings.heading.default",
+      "label": "t:sections.parfum_scents.settings.heading.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "default": "t:sections.parfum_scents.settings.description.default",
+      "label": "t:sections.parfum_scents.settings.description.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.parfum_scents.settings.urls.header"
+    },
+    {
+      "type": "url",
+      "id": "active_fresh_url",
+      "label": "t:sections.parfum_scents.settings.active_fresh_url.label"
+    },
+    {
+      "type": "url",
+      "id": "outdoor_flow_url",
+      "label": "t:sections.parfum_scents.settings.outdoor_flow_url.label"
+    },
+    {
+      "type": "url",
+      "id": "adventure_mist_url",
+      "label": "t:sections.parfum_scents.settings.adventure_mist_url.label"
+    },
+    {
+      "type": "url",
+      "id": "classic_fresh_url",
+      "label": "t:sections.parfum_scents.settings.classic_fresh_url.label"
+    },
+    {
+      "type": "url",
+      "id": "pure_essence_url",
+      "label": "t:sections.parfum_scents.settings.pure_essence_url.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.parfum_scents.presets.name"
+    }
+  ]
+}
+{% endschema %}

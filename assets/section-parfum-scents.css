@@ -1,0 +1,325 @@
+/* Parfum Scents Section Styles */
+
+.parfum-scents {
+  --parfum-active-fresh: #4b9957;
+  --parfum-outdoor-flow: #459a9f;
+  --parfum-adventure-mist: #9e4461;
+  --parfum-classic-fresh: #d96b34;
+  --parfum-pure-essence: #3d5d89;
+}
+
+.parfum-scents__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem; /* 20px */
+  margin-bottom: 4rem;
+  padding: 6.25rem 9.375rem 0 3.75rem; /* 0px 150px 0px 60px */
+}
+
+.parfum-scents__header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem; /* 4px */
+}
+
+.parfum-scents__tag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem; /* 10px */
+  padding: 0.25rem 0.625rem; /* 4px 10px */
+}
+
+.parfum-scents__tag-text {
+  font-family: var(--font-heading-family);
+  font-weight: 600;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.219; /* 1.2189999989100866em */
+  text-transform: uppercase;
+  color: #999999;
+}
+
+.parfum-scents__heading {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  font-size: 2.375rem; /* 38px */
+  line-height: 1.5;
+  text-transform: uppercase;
+  text-align: center;
+  color: #000000;
+}
+
+.parfum-scents__description {
+  font-family: var(--font-body-family);
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
+  text-align: center;
+  color: #808080;
+  margin: 0;
+  max-width: 100%;
+}
+
+.parfum-scents__grid {
+  display: flex;
+  flex-direction: column;
+  border-top-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  overflow: hidden;
+}
+
+.parfum-scents__card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 430px;
+}
+
+.parfum-scents__card--active-fresh .parfum-scents__content {
+  background-color: var(--parfum-active-fresh);
+}
+
+.parfum-scents__card--outdoor-flow .parfum-scents__content {
+  background-color: var(--parfum-outdoor-flow);
+}
+
+.parfum-scents__card--adventure-mist .parfum-scents__content {
+  background-color: var(--parfum-adventure-mist);
+}
+
+.parfum-scents__card--classic-fresh .parfum-scents__content {
+  background-color: var(--parfum-classic-fresh);
+}
+
+.parfum-scents__card--pure-essence .parfum-scents__content {
+  background-color: var(--parfum-pure-essence);
+}
+
+.parfum-scents__image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.parfum-scents__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.parfum-scents__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem;
+  color: white;
+}
+
+.parfum-scents__info {
+  flex: 1;
+}
+
+.parfum-scents__name {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 1.78125;
+  text-transform: uppercase;
+  margin: 0 0 1.875rem 0;
+  letter-spacing: 0.02em;
+  color: white;
+}
+
+.parfum-scents__details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.parfum-scents__detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.parfum-scents__detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.parfum-scents__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.875rem;
+  height: 2.875rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 0.25rem;
+  flex-shrink: 0;
+}
+
+.parfum-scents__icon svg {
+  width: 2.375rem;
+  height: 2.375rem;
+  color: white;
+}
+
+.parfum-scents__detail-label {
+  font-family: var(--font-heading-family);
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.2857;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.parfum-scents__detail-text {
+  font-family: var(--font-body-family);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.parfum-scents__button-wrapper {
+  margin-top: 1.875rem;
+}
+
+.parfum-scents__button {
+  background-color: white;
+  color: var(--color-foreground);
+  border: none;
+  padding: 1.1875rem 2rem;
+  font-family: var(--font-heading-family);
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 10px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.parfum-scents__card--active-fresh .parfum-scents__button {
+  color: var(--parfum-active-fresh);
+}
+
+.parfum-scents__card--outdoor-flow .parfum-scents__button {
+  color: var(--parfum-outdoor-flow);
+}
+
+.parfum-scents__card--adventure-mist .parfum-scents__button {
+  color: var(--parfum-adventure-mist);
+}
+
+.parfum-scents__card--classic-fresh .parfum-scents__button {
+  color: var(--parfum-classic-fresh);
+}
+
+.parfum-scents__card--pure-essence .parfum-scents__button {
+  color: var(--parfum-pure-essence);
+}
+
+/* Mobile responsive adjustments */
+@media screen and (max-width: 749px) {
+  .parfum-scents__header {
+    padding: 3.75rem 1rem 0; /* Reduce padding on mobile */
+  }
+
+  .parfum-scents__heading {
+    font-size: 1.75rem; /* Smaller heading on mobile */
+  }
+
+  .parfum-scents__description {
+    font-size: 0.875rem; /* Smaller description on mobile */
+  }
+}
+
+/* Tablet and up */
+@media screen and (min-width: 750px) {
+  .parfum-scents__grid {
+    gap: 0;
+  }
+
+  .parfum-scents__grid:nth-child(2n) .parfum-scents__image {
+    order: 1;
+  }
+  .parfum-scents__grid:nth-child(2n) .parfum-scents__content {
+    order: 2;
+  }
+  .parfum-scents__grid:nth-child(2n + 1) .parfum-scents__image {
+    order: 2;
+  }
+  .parfum-scents__grid:nth-child(2n + 1) .parfum-scents__content {
+    order: 1;
+  }
+
+  .parfum-scents__card {
+    flex-direction: row;
+    min-height: 430px;
+  }
+
+  .parfum-scents__card--outdoor-flow,
+  .parfum-scents__card--classic-fresh {
+    flex-direction: row-reverse;
+  }
+
+  .parfum-scents__card--outdoor-flow .parfum-scents__content {
+    border-radius: 0;
+  }
+
+  .parfum-scents__card--classic-fresh .parfum-scents__content {
+    border-radius: 0;
+  }
+
+  .parfum-scents__image,
+  .parfum-scents__content {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .parfum-scents__content {
+    padding: 3.125rem;
+  }
+
+  .parfum-scents__name {
+    font-size: 2rem;
+    margin-bottom: 1.875rem;
+  }
+
+  .parfum-scents__detail-text {
+    font-size: 1rem;
+    line-height: 1.375;
+  }
+}
+
+/* Desktop */
+@media screen and (min-width: 990px) {
+  .parfum-scents__content {
+    padding: 3.75rem;
+  }
+
+  .parfum-scents__name {
+    font-size: 2rem;
+  }
+
+  .parfum-scents__detail-text {
+    font-size: 1rem;
+  }
+}
+
+/* Large desktop */
+@media screen and (min-width: 1200px) {
+  .parfum-scents__grid {
+    max-width: 922px;
+    margin: 0 auto;
+  }
+}
