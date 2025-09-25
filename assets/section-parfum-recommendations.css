@@ -1,0 +1,239 @@
+/* Parfum Recommendations Section */
+.parfum-recommendations-section {
+  --parfum-recommendations-gap: 3.75rem; /* 60px */
+  --parfum-recommendations-padding: 6.25rem 0; /* 100px vertical */
+  --parfum-recommendations-card-gap: 1.25rem; /* 20px */
+  --parfum-recommendations-card-padding: 1.875rem; /* 30px */
+  --parfum-recommendations-icon-size: 2.75rem; /* 44px */
+  --parfum-recommendations-border-radius: 1rem; /* 16px */
+
+  /* Colors based on Figma design */
+  --parfum-recommendations-positive: #429364;
+  --parfum-recommendations-negative: #e3350e;
+  --parfum-recommendations-text: #333333;
+  --parfum-recommendations-text-secondary: #808080;
+  --parfum-recommendations-text-light: #999999;
+  --parfum-recommendations-bg: #fff;
+  --parfum-recommendations-border: #e5e5e5;
+  --parfum-recommendations-badge-bg: transparent;
+
+  padding: var(--parfum-recommendations-padding);
+}
+
+.parfum-recommendations-section .page-width {
+  display: flex;
+  flex-direction: column;
+  gap: var(--parfum-recommendations-gap);
+}
+
+/* Header Section */
+.parfum-recommendations__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* 20px */
+  padding-right: 9.375rem; /* 150px - matching Figma design */
+}
+
+.parfum-recommendations__title-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem; /* 4px */
+}
+
+.parfum-recommendations__heading {
+  font-weight: 500;
+  font-size: 2.375rem; /* 38px */
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--parfum-recommendations-text);
+  margin: 0;
+}
+
+.parfum-recommendations__badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem; /* 10px */
+  padding: 0.25rem 0.625rem; /* 4px 10px */
+  background-color: var(--parfum-recommendations-badge-bg);
+  border-radius: 6.25rem; /* 100px */
+}
+
+.parfum-recommendations__badge-text {
+  font-weight: 600;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.219;
+  text-transform: uppercase;
+  color: var(--parfum-recommendations-text-light);
+}
+
+.parfum-recommendations__description {
+  font-family: "Manrope", sans-serif;
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
+  color: var(--parfum-recommendations-text-secondary);
+}
+
+/* Cards Section */
+.parfum-recommendations__cards {
+  background-color: #f5f5f5;
+  border-radius: var(--parfum-recommendations-border-radius);
+  padding: var(--parfum-recommendations-card-gap);
+}
+
+.parfum-recommendations__cards-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--parfum-recommendations-card-gap);
+}
+
+/* Individual Cards */
+.parfum-recommendations__card {
+  background-color: var(--parfum-recommendations-bg);
+  border: 1px solid var(--parfum-recommendations-border);
+  border-radius: var(--parfum-recommendations-border-radius);
+  padding: var(--parfum-recommendations-card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--parfum-recommendations-card-gap);
+}
+
+.parfum-recommendations__card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem; /* 10px */
+}
+
+.parfum-recommendations__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--parfum-recommendations-icon-size);
+  height: var(--parfum-recommendations-icon-size);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.parfum-recommendations__card--positive .parfum-recommendations__icon {
+  background-color: var(--parfum-recommendations-positive);
+  color: var(--parfum-recommendations-bg);
+}
+
+.parfum-recommendations__card--negative .parfum-recommendations__icon {
+  background-color: var(--parfum-recommendations-negative);
+  color: var(--parfum-recommendations-bg);
+}
+
+.parfum-recommendations__card-title {
+  font-weight: 600;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.5;
+  color: var(--parfum-recommendations-text);
+  margin: 0;
+}
+
+.parfum-recommendations__card-content {
+  font-weight: 400;
+  font-size: 0.875rem; /* 14px */
+  line-height: 2.3;
+  color: var(--parfum-recommendations-text-secondary);
+}
+
+.parfum-recommendations__card-content ul {
+  margin: 0;
+  padding: 0;
+  list-style: disc;
+  padding-left: 1rem;
+}
+
+.parfum-recommendations__card-content li {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.parfum-recommendations__card-content p {
+  margin: 0;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 989px) {
+  .parfum-recommendations__header {
+    padding-right: 4.6875rem; /* 75px - reduced for tablet */
+  }
+
+  .parfum-recommendations__heading {
+    font-size: 2rem; /* 32px */
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .parfum-recommendations-section {
+    --parfum-recommendations-gap: 2.5rem; /* 40px */
+    --parfum-recommendations-card-padding: 1.5rem; /* 24px */
+  }
+
+  .parfum-recommendations__header {
+    padding-right: 0;
+    text-align: center;
+  }
+
+  .parfum-recommendations__title-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem; /* 12px */
+  }
+
+  .parfum-recommendations__badge {
+    margin-left: 0;
+  }
+
+  .parfum-recommendations__heading {
+    font-size: 1.75rem; /* 28px */
+  }
+
+  .parfum-recommendations__cards-container {
+    grid-template-columns: 1fr;
+    gap: 1rem; /* 16px */
+  }
+
+  .parfum-recommendations__card {
+    padding: 1.25rem; /* 20px */
+  }
+
+  .parfum-recommendations__card-header {
+    gap: 0.5rem; /* 8px */
+  }
+
+  .parfum-recommendations__icon {
+    --parfum-recommendations-icon-size: 2.5rem; /* 40px */
+  }
+
+  .parfum-recommendations__card-title {
+    font-size: 1rem; /* 16px */
+  }
+
+  .parfum-recommendations__card-content {
+    font-size: 0.8125rem; /* 13px */
+    line-height: 2;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .parfum-recommendations-section {
+    --parfum-recommendations-gap: 2rem; /* 32px */
+  }
+
+  .parfum-recommendations__heading {
+    font-size: 1.5rem; /* 24px */
+  }
+
+  .parfum-recommendations__cards {
+    padding: 1rem; /* 16px */
+  }
+
+  .parfum-recommendations__card {
+    padding: 1rem; /* 16px */
+  }
+}

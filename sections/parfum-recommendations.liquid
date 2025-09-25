@@ -1,0 +1,271 @@
+{{ 'section-parfum-recommendations.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = 'ParfumRecommendations-' | append: section.id
+  assign section_class = 'parfum-recommendations-section'
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <section
+    id="{{ section_id }}"
+    class="{{ section_class }} section-{{ section.id }}-padding"
+  >
+    <div class="page-width">
+      <!-- Header Section -->
+      <div class="parfum-recommendations__header">
+        <div class="parfum-recommendations__title-container">
+          <h2 class="parfum-recommendations__heading {{ section.settings.heading_size }}">
+            {{ section.settings.heading | default: 'sections.parfum_recommendations.heading' }}
+          </h2>
+          <div class="parfum-recommendations__badge">
+            <span class="parfum-recommendations__badge-text">
+              {{ 'sections.parfum_recommendations.badge' | t | default: 'FAQ' }}
+            </span>
+          </div>
+        </div>
+        {%- if section.settings.description != blank -%}
+          <div class="parfum-recommendations__description">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Recommendations Cards -->
+      <div class="parfum-recommendations__cards">
+        <div class="parfum-recommendations__cards-container">
+          <!-- Do Card -->
+          <div class="parfum-recommendations__card parfum-recommendations__card--positive">
+            <div class="parfum-recommendations__card-header">
+              <div class="parfum-recommendations__icon parfum-recommendations__icon--check">
+                <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.542 1C15.5126 1 19.542 5.02944 19.542 10C19.542 14.9706 15.5126 19 10.542 19C5.57143 19 1.54199 14.9706 1.54199 10C1.54199 5.02944 5.57143 1 10.542 1ZM9.47461 11.5176L7.24902 9.29297L5.83496 10.707L9.60938 14.4814L10.3105 13.6406L15.3105 7.64062L13.7734 6.35938L9.47461 11.5176Z" fill="white"/>
+                </svg>
+              </div>
+              <h3 class="parfum-recommendations__card-title">
+                {{ 'sections.parfum_recommendations.do.title' | t | default: 'Do:' }}
+              </h3>
+            </div>
+            <div class="parfum-recommendations__card-content">
+              <ul>
+                <li>
+                  {{
+                    'sections.parfum_recommendations.do.item_1'
+                    | t
+                    | default: 'Use with synthetic, cotton, or technical fabrics'
+                  }}
+                </li>
+                <li>{{ 'sections.parfum_recommendations.do.item_2' | t | default: 'Store at room temperature' }}</li>
+                <li>
+                  {{ 'sections.parfum_recommendations.do.item_3' | t | default: 'Test first for sensitive skin' }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Don't Card -->
+          <div class="parfum-recommendations__card parfum-recommendations__card--negative">
+            <div class="parfum-recommendations__card-header">
+              <div class="parfum-recommendations__icon parfum-recommendations__icon--cross">
+                <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.406 3.6374C19.9207 7.15212 19.9207 12.8506 16.406 16.3653C12.8912 19.88 7.19275 19.88 3.67803 16.3653C0.163313 12.8506 0.163313 7.15212 3.67803 3.6374C7.19275 0.12268 12.8912 0.12268 16.406 3.6374ZM10.042 8.58715L6.50577 5.05092L5.09155 6.46513L8.62778 10.0014L5.09155 13.5376L6.50577 14.9518L10.042 11.4156L13.5768 14.9504L14.991 13.5362L11.4562 10.0014L14.991 6.46652L13.5768 5.0523L10.042 8.58715Z" fill="white"/>
+                </svg>
+              </div>
+              <h3 class="parfum-recommendations__card-title">
+                {{ 'sections.parfum_recommendations.dont.title' | t | default: "Don't:" }}
+              </h3>
+            </div>
+            <div class="parfum-recommendations__card-content">
+              <ul>
+                <li>
+                  {{ 'sections.parfum_recommendations.dont.item_1' | t | default: 'Do not apply directly on clothes' }}
+                </li>
+                <li>
+                  {{
+                    'sections.parfum_recommendations.dont.item_2'
+                    | t
+                    | default: 'Avoid contact with eyes and mucous membranes'
+                  }}
+                </li>
+                <li>
+                  {{ 'sections.parfum_recommendations.dont.item_3' | t | default: 'Keep out of reach of children' }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Recommended Card -->
+          <div class="parfum-recommendations__card parfum-recommendations__card--positive">
+            <div class="parfum-recommendations__card-header">
+              <div class="parfum-recommendations__icon parfum-recommendations__icon--star">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m10 1.5 2.5 5.5h6l-4.5 4 1.5 6-5.5-3.5L4 16.5l1.5-6L1 6.5h6L10 1.5Z" fill="currentColor"/>
+                </svg>
+              </div>
+              <h3 class="parfum-recommendations__card-title">
+                {{ 'sections.parfum_recommendations.recommended.title' | t | default: 'Recommended for:' }}
+              </h3>
+            </div>
+            <div class="parfum-recommendations__card-content">
+              <ul>
+                <li>
+                  {{
+                    'sections.parfum_recommendations.recommended.item_1'
+                    | t
+                    | default: 'Sportswear and outdoor gear'
+                  }}
+                </li>
+                <li>
+                  {{
+                    'sections.parfum_recommendations.recommended.item_2'
+                    | t
+                    | default: 'Casualwear and everyday laundry'
+                  }}
+                </li>
+                <li>
+                  {{
+                    'sections.parfum_recommendations.recommended.item_3'
+                    | t
+                    | default: 'Those seeking long-lasting fragrance without softener residue'
+                  }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Avoid Card -->
+          <div class="parfum-recommendations__card parfum-recommendations__card--negative">
+            <div class="parfum-recommendations__card-header">
+              <div class="parfum-recommendations__icon parfum-recommendations__icon--info">
+                <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M19.042 10C19.042 5.02944 15.0126 1 10.042 1C5.07143 1 1.04199 5.02944 1.04199 10C1.04199 14.9706 5.07143 19 10.042 19C15.0126 19 19.042 14.9706 19.042 10ZM11.042 14.0005C11.042 13.4482 10.5943 13.0005 10.042 13.0005C9.48971 13.0005 9.04199 13.4482 9.04199 14.0005C9.04199 14.5528 9.48971 15.0005 10.042 15.0005C10.5943 15.0005 11.042 14.5528 11.042 14.0005ZM11.042 4.99961V10.9996H9.04199V4.99961H11.042Z" fill="white"/>
+                </svg>
+              </div>
+              <h3 class="parfum-recommendations__card-title">
+                {{ 'sections.parfum_recommendations.avoid.title' | t | default: 'Avoid' }}
+              </h3>
+            </div>
+            <div class="parfum-recommendations__card-content">
+              <ul>
+                <li>
+                  {{ 'sections.parfum_recommendations.avoid.item_1' | t | default: 'Direct application on clothes' }}
+                </li>
+                <li>
+                  {{
+                    'sections.parfum_recommendations.avoid.item_2'
+                    | t
+                    | default: 'Eye and skin contact (rinse if contact occurs)'
+                  }}
+                </li>
+                <li>
+                  {{
+                    'sections.parfum_recommendations.avoid.item_3'
+                    | t
+                    | default: 'Use on delicate silk or untreated wool'
+                  }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "t:sections.parfum_recommendations.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Recommendations & Warnings",
+      "label": "t:sections.parfum_recommendations.settings.heading.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "default": "<p>Instructions:</p>",
+      "label": "t:sections.parfum_recommendations.settings.description.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.parfum_recommendations.presets.name"
+    }
+  ]
+}
+{% endschema %}
