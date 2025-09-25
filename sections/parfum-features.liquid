@@ -17,30 +17,71 @@
       </div>
     {%- endif -%}
 
-    {%- if section.blocks.size > 0 -%}
-      <div class="parfum-features__grid">
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
-            {%- when 'feature' -%}
-              <div class="parfum-features__card" {{ block.shopify_attributes }}>
-                {%- if block.settings.icon != blank -%}
-                  <div class="parfum-features__icon">
-                    <div class="parfum-features__icon-wrapper">
-                      {%- assign icon_file = block.settings.icon | append: '.svg' -%}
-                      {{ icon_file | inline_asset_content }}
-                    </div>
-                  </div>
-                {%- endif -%}
-                {%- if block.settings.title != blank -%}
-                  <h3 class="parfum-features__title">
-                    {{ block.settings.title }}
-                  </h3>
-                {%- endif -%}
-              </div>
-          {%- endcase -%}
-        {%- endfor -%}
+    <div class="perfumes-features">
+      <div class="perfumes-feature-card">
+        <div class="perfumes-feature-icon">
+          <img
+            src="{{ 'about-perfumes-icon-1.svg' | asset_url }}"
+            alt="{{ 'sections.parfum_features.cards.activity_support.alt' | t }}"
+            class="feature-icon"
+            width="52"
+            height="52"
+            loading="lazy"
+          >
+        </div>
+        <div class="perfumes-feature-text">
+          <p>{{ 'sections.parfum_features.cards.activity_support.text' | t }}</p>
+        </div>
       </div>
-    {%- endif -%}
+
+      <div class="perfumes-feature-card">
+        <div class="perfumes-feature-icon">
+          <img
+            src="{{ 'about-perfumes-icon-2.svg' | asset_url }}"
+            alt="{{ 'sections.parfum_features.cards.nature_fragrances.alt' | t }}"
+            class="feature-icon"
+            width="54"
+            height="54"
+            loading="lazy"
+          >
+        </div>
+        <div class="perfumes-feature-text">
+          <p>{{ 'sections.parfum_features.cards.nature_fragrances.text' | t }}</p>
+        </div>
+      </div>
+
+      <div class="perfumes-feature-card">
+        <div class="perfumes-feature-icon">
+          <img
+            src="{{ 'about-perfumes-icon-3.svg' | asset_url }}"
+            alt="{{ 'sections.parfum_features.cards.no_residue.alt' | t }}"
+            class="feature-icon"
+            width="54"
+            height="54"
+            loading="lazy"
+          >
+        </div>
+        <div class="perfumes-feature-text">
+          <p>{{ 'sections.parfum_features.cards.no_residue.text' | t }}</p>
+        </div>
+      </div>
+
+      <div class="perfumes-feature-card">
+        <div class="perfumes-feature-icon">
+          <img
+            src="{{ 'about-perfumes-icon-4.svg' | asset_url }}"
+            alt="{{ 'sections.parfum_features.cards.vegan.alt' | t }}"
+            class="feature-icon"
+            width="52"
+            height="52"
+            loading="lazy"
+          >
+        </div>
+        <div class="perfumes-feature-text">
+          <p>{{ 'sections.parfum_features.cards.vegan.text' | t }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -99,77 +140,26 @@
       "type": "range",
       "id": "padding_top",
       "min": 0,
-      "max": 100,
+      "max": 200,
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "default": 100
     },
     {
       "type": "range",
       "id": "padding_bottom",
       "min": 0,
-      "max": 100,
+      "max": 200,
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
-    }
-  ],
-  "blocks": [
-    {
-      "type": "feature",
-      "name": "t:sections.parfum-features.blocks.feature.name",
-      "limit": 6,
-      "settings": [
-        {
-          "type": "text",
-          "id": "icon",
-          "label": "t:sections.parfum-features.blocks.feature.settings.icon.label",
-          "info": "t:sections.parfum-features.blocks.feature.settings.icon.info"
-        },
-        {
-          "type": "inline_richtext",
-          "id": "title",
-          "default": "t:sections.parfum-features.blocks.feature.settings.title.default",
-          "label": "t:sections.parfum-features.blocks.feature.settings.title.label"
-        }
-      ]
+      "default": 100
     }
   ],
   "presets": [
     {
-      "name": "t:sections.parfum-features.presets.name",
-      "blocks": [
-        {
-          "type": "feature",
-          "settings": {
-            "icon": "basket-light",
-            "title": "Developed to support your activity"
-          }
-        },
-        {
-          "type": "feature",
-          "settings": {
-            "icon": "flask-light",
-            "title": "Long-lasting outdoor-inspired fragrances"
-          }
-        },
-        {
-          "type": "feature",
-          "settings": {
-            "icon": "materials-light",
-            "title": "No fabric buildup or residue"
-          }
-        },
-        {
-          "type": "feature",
-          "settings": {
-            "icon": "seedling-light",
-            "title": "Vegan"
-          }
-        }
-      ]
+      "name": "t:sections.parfum-features.presets.name"
     }
   ]
 }
