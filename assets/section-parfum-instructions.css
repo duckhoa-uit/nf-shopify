@@ -1,0 +1,260 @@
+/* Parfum Instructions Section */
+.parfum-instructions-section {
+  --parfum-instructions-gap: 3.75rem; /* 60px */
+  --parfum-instructions-padding: 6.25rem 0; /* 100px vertical */
+  --parfum-instructions-step-gap: 1rem; /* 16px */
+  --parfum-instructions-step-padding: 1.5rem; /* 24px */
+  --parfum-instructions-step-height: 15rem; /* 240px */
+  --parfum-instructions-warning-padding: 1.5rem; /* 24px */
+
+  /* Color variables following theme conventions */
+  --parfum-instructions-text: #333;
+  --parfum-instructions-text-secondary: rgba(var(--color-base-foreground), 0.75);
+  --parfum-instructions-bg: rgb(var(--color-base-background));
+  --parfum-instructions-border: var(--color-border-light);
+  --parfum-instructions-accent: var(--color-accent);
+  --parfum-instructions-warning-bg: #e3350e;
+  --parfum-instructions-warning-border: var(--color-error);
+  --parfum-instructions-warning-text: var(--color-white);
+
+  padding: var(--parfum-instructions-padding);
+}
+
+.parfum-instructions-section .page-width {
+  display: flex;
+  flex-direction: column;
+  gap: var(--parfum-instructions-gap);
+}
+
+/* Header Section */
+.parfum-instructions__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* 20px */
+}
+
+.parfum-instructions__title-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem; /* 4px */
+}
+
+.parfum-instructions__heading {
+  margin: 0;
+  font-weight: 500;
+  font-size: 2.375rem; /* 38px */
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--parfum-instructions-text);
+}
+
+.parfum-instructions__badge {
+  padding: 0.25rem 0.625rem; /* 4px 10px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.parfum-instructions__badge-text {
+  font-weight: 600;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.219;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.parfum-instructions__description {
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
+  color: #4d4d4d;
+}
+
+/* Instructions Steps */
+.parfum-instructions__steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+  gap: var(--parfum-instructions-step-gap);
+}
+
+.parfum-instructions__step {
+  background-color: var(--parfum-instructions-bg);
+  border: 1px solid var(--parfum-instructions-border);
+  border-radius: 0.875rem; /* 14px */
+  padding: var(--parfum-instructions-step-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* 20px */
+  height: var(--parfum-instructions-step-height);
+}
+
+.parfum-instructions__step-number {
+  font-weight: 600;
+  font-size: 3.75rem; /* 60px */
+  line-height: 2.625rem;
+  color: var(--parfum-instructions-accent);
+}
+
+.parfum-instructions__step-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem; /* 6px */
+}
+
+.parfum-instructions__step-content p {
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.5;
+  color: var(--parfum-instructions-text);
+}
+
+/* Important Warnings */
+.parfum-instructions__warnings {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* 16px */
+}
+
+.parfum-instructions__warnings-header {
+  display: flex;
+  align-items: stretch;
+}
+
+.parfum-instructions__warnings-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.5;
+  color: var(--parfum-instructions-text);
+}
+
+.parfum-instructions__warnings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+  gap: var(--parfum-instructions-step-gap);
+}
+
+.parfum-instructions__warning {
+  background-color: var(--parfum-instructions-warning-bg);
+  border: 1px solid var(--parfum-instructions-warning-border);
+  border-radius: 0.875rem; /* 14px */
+  padding: var(--parfum-instructions-warning-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* 20px */
+  min-height: 7.875rem; /* 126px */
+}
+
+.parfum-instructions__warning-icon {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.625rem; /* 10px */
+  position: relative;
+}
+
+.parfum-instructions__warning-icon svg {
+  width: 5.125rem; /* 82px */
+  height: 5.125rem; /* 82px */
+  color: var(--parfum-instructions-warning-text);
+}
+
+.parfum-instructions__warning-icon-badge {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translateX(3.125rem);
+  width: 2.125rem;
+  height: 2.125rem;
+  background-color: var(--parfum-instructions-warning-text);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.parfum-instructions__warning-icon-badge svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.parfum-instructions__warning-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem; /* 6px */
+  opacity: 0.8;
+}
+
+.parfum-instructions__warning-content p {
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.5;
+  color: var(--parfum-instructions-warning-text);
+  height: 7.875rem; /* 126px */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 989px) {
+  .parfum-instructions-section {
+    --parfum-instructions-header-padding: 0 6rem; /* Symmetric padding */
+    --parfum-instructions-step-height: 15rem; /* Keep same height */
+  }
+
+  .parfum-instructions__steps {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 6rem;
+  }
+
+  .parfum-instructions__warnings {
+    padding: 0 6rem;
+  }
+
+  .parfum-instructions__warnings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .parfum-instructions-section {
+    --parfum-instructions-header-padding: 0 1rem; /* Minimal padding */
+    --parfum-instructions-step-height: 12.5rem; /* Reduced height */
+    --parfum-instructions-gap: 2.5rem; /* Reduced gap */
+  }
+
+  .parfum-instructions__heading {
+    font-size: 1.75rem; /* 28px */
+  }
+
+  .parfum-instructions__steps {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+
+  .parfum-instructions__warnings {
+    padding: 0 1rem;
+  }
+
+  .parfum-instructions__warnings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .parfum-instructions__step-number {
+    font-size: 2.5rem; /* 40px */
+  }
+
+  .parfum-instructions__warning-content p {
+    height: auto;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+}

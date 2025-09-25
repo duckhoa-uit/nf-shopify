@@ -1,0 +1,272 @@
+{{ 'section-parfum-instructions.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = 'ParfumInstructions-' | append: section.id
+  assign section_class = 'parfum-instructions-section'
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <section
+    id="{{ section_id }}"
+    class="{{ section_class }} section-{{ section.id }}-padding"
+  >
+    <div class="page-width">
+      <!-- Header Section -->
+      <div class="parfum-instructions__header">
+        <div class="parfum-instructions__title-container">
+          <h2 class="parfum-instructions__heading {{ section.settings.heading_size }}">
+            {{ section.settings.heading | default: 'sections.parfum_instructions.heading' }}
+          </h2>
+          <div class="parfum-instructions__badge">
+            <span class="parfum-instructions__badge-text">
+              {{ 'sections.parfum_instructions.badge' | t | default: 'Instructions' }}
+            </span>
+          </div>
+        </div>
+        {%- if section.settings.description != blank -%}
+          <div class="parfum-instructions__description">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Instructions Steps -->
+      <div class="parfum-instructions__steps">
+        <div class="parfum-instructions__step">
+          <div class="parfum-instructions__step-number">01</div>
+          <div class="parfum-instructions__step-content">
+            <p>{{ 'sections.parfum_instructions.steps.step_1' | t | default: 'Shake the bottle well before use.' }}</p>
+          </div>
+        </div>
+
+        <div class="parfum-instructions__step">
+          <div class="parfum-instructions__step-number">02</div>
+          <div class="parfum-instructions__step-content">
+            <p>
+              {{
+                'sections.parfum_instructions.steps.step_2'
+                | t
+                | default: 'Pour 5 ml (1 dose) into the fabric softener compartment of your washing machine for every 4 kg of laundry.'
+              }}
+            </p>
+          </div>
+        </div>
+
+        <div class="parfum-instructions__step">
+          <div class="parfum-instructions__step-number">03</div>
+          <div class="parfum-instructions__step-content">
+            <p>
+              {{
+                'sections.parfum_instructions.steps.step_3'
+                | t
+                | default: 'Do not pour directly into the drum or into the dryer.'
+              }}
+            </p>
+          </div>
+        </div>
+
+        <div class="parfum-instructions__step">
+          <div class="parfum-instructions__step-number">04</div>
+          <div class="parfum-instructions__step-content">
+            <p>{{ 'sections.parfum_instructions.steps.step_4' | t | default: 'Start the wash cycle as usual.' }}</p>
+          </div>
+        </div>
+
+        <div class="parfum-instructions__step">
+          <div class="parfum-instructions__step-number">05</div>
+          <div class="parfum-instructions__step-content">
+            <p>
+              {{
+                'sections.parfum_instructions.steps.step_5'
+                | t
+                | default: 'If the product spills on any surface, immediately wipe it with a damp cloth or rinse with water.'
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Important Warnings -->
+      <div class="parfum-instructions__warnings">
+        <div class="parfum-instructions__warnings-header">
+          <h3 class="parfum-instructions__warnings-title">
+            {{ 'sections.parfum_instructions.important_title' | t | default: 'IMPORTANT:' }}
+          </h3>
+        </div>
+
+        <div class="parfum-instructions__warnings-grid">
+          <div class="parfum-instructions__warning">
+            <div class="parfum-instructions__warning-icon">
+              {{ 'washing-machine-light.svg' | inline_asset_content }}
+              <span class="parfum-instructions__warning-icon-badge">
+                {{ 'washing-machine-light-badge.svg' | inline_asset_content }}
+              </span>
+            </div>
+            <div class="parfum-instructions__warning-content">
+              <p>
+                {{
+                  'sections.parfum_instructions.warnings.washing_machine'
+                  | t
+                  | default: 'For washing machine use only.'
+                }}
+              </p>
+            </div>
+          </div>
+
+          <div class="parfum-instructions__warning">
+            <div class="parfum-instructions__warning-icon">
+              {{ 'accessible-light.svg' | inline_asset_content }}
+              <span class="parfum-instructions__warning-icon-badge">
+                {{ 'accessible-light-badge.svg' | inline_asset_content }}
+              </span>
+            </div>
+            <div class="parfum-instructions__warning-content">
+              <p>
+                {{
+                  'sections.parfum_instructions.warnings.children'
+                  | t
+                  | default: 'Keep away from children. DO NOT wash children&apos;s clothes with the laundry perfume, as their skin is too sensitive for the strong oils used in the perfume.'
+                }}
+              </p>
+            </div>
+          </div>
+
+          <div class="parfum-instructions__warning">
+            <div class="parfum-instructions__warning-icon">
+              {{ 'eye-light.svg' | inline_asset_content }}
+              <span class="parfum-instructions__warning-icon-badge">
+                {{ 'eye-light-badge.svg' | inline_asset_content }}
+              </span>
+            </div>
+            <div class="parfum-instructions__warning-content">
+              <p>
+                {{
+                  'sections.parfum_instructions.warnings.contact'
+                  | t
+                  | default: 'Avoid direct contact with skin or eyes.'
+                }}
+              </p>
+            </div>
+          </div>
+
+          <div class="parfum-instructions__warning">
+            <div class="parfum-instructions__warning-icon">
+              {{ 'soap-light.svg' | inline_asset_content }}
+              <span class="parfum-instructions__warning-icon-badge">
+                {{ 'accessible-light-badge.svg' | inline_asset_content }}
+              </span>
+            </div>
+            <div class="parfum-instructions__warning-content">
+              <p>
+                {{
+                  'sections.parfum_instructions.warnings.irritation'
+                  | t
+                  | default: 'In case of skin irritation or rash, wash with plenty of soap and water. Seek medical advice if symptoms persist.'
+                }}
+              </p>
+            </div>
+          </div>
+
+          <div class="parfum-instructions__warning">
+            <div class="parfum-instructions__warning-icon">
+              {{ 'trash-can-light.svg' | inline_asset_content }}
+            </div>
+            <div class="parfum-instructions__warning-content">
+              <p>
+                {{
+                  'sections.parfum_instructions.warnings.disposal'
+                  | t
+                  | default: 'Dispose of container according to local regulations.'
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.parfum_instructions.name",
+  "tag": "section",
+  "class": "section-parfum-instructions",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "How to Use Laundry Parfume",
+      "label": "t:sections.parfum_instructions.settings.heading.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "default": "<p>Let the smell of your clothes inspire you for an everyday adventure with these 5 easy steps.</p>",
+      "label": "t:sections.parfum_instructions.settings.description.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.parfum_instructions.presets.name"
+    }
+  ]
+}
+{% endschema %}
