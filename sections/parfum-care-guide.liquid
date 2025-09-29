@@ -1,0 +1,396 @@
+{{ 'section-parfum-care-guide.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = 'ParfumCareGuide-' | append: section.id
+  assign section_class = 'parfum-care-guide-section'
+  assign categories = section.blocks | where: 'type', 'faq_category'
+  assign default_category = section.settings.default_category
+  if categories.size > 0 and default_category == blank
+    assign default_category = categories.first.settings.category_id
+  endif
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <section
+    id="{{ section_id }}"
+    class="{{ section_class }} section-{{ section.id }}-padding"
+  >
+    <div class="page-width">
+      <!-- Header Section -->
+      <div class="parfum-care-guide__header">
+        <div class="parfum-care-guide__title-container">
+          <h2 class="parfum-care-guide__heading {{ section.settings.heading_size }}">
+            {{ section.settings.heading | default: 'sections.parfum_care_guide.heading' }}
+          </h2>
+          <div class="parfum-care-guide__badge">
+            <span class="parfum-care-guide__badge-text">
+              {{ 'sections.parfum_care_guide.badge' | t | default: 'FAQ' }}
+            </span>
+          </div>
+        </div>
+        {%- if section.settings.description != blank -%}
+          <div class="parfum-care-guide__description">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="parfum-care-guide__tabs" role="tablist" aria-label="FAQ Categories">
+        {%- for category in categories -%}
+          <button
+            type="button"
+            class="parfum-care-guide__tab{% if category.settings.category_id == default_category %} parfum-care-guide__tab--active{% endif %}"
+            data-category="{{ category.settings.category_id }}"
+            role="tab"
+            id="tab-{{ category.settings.category_id }}"
+            aria-controls="content-{{ category.settings.category_id }}"
+            {% if category.settings.category_id == default_category %}
+              aria-selected="true"
+            {% else %}
+              aria-selected="false"
+            {% endif %}
+          >
+            {{ category.settings.category_name }}
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <!-- FAQ Content -->
+      <div class="parfum-care-guide__content">
+        {%- for category in categories -%}
+          <div
+            id="content-{{ category.settings.category_id }}"
+            class="parfum-care-guide__category{% if category.settings.category_id == default_category %} parfum-care-guide__category--active{% endif %}"
+            role="tabpanel"
+            aria-labelledby="tab-{{ category.settings.category_id }}"
+          >
+            <div class="parfum-care-guide__cards">
+              {%- assign current_category_id = category.settings.category_id | strip | downcase -%}
+              {%- assign matching_faqs = 0 -%}
+
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'faq_item' -%}
+                  {%- assign block_category = block.settings.category | strip | downcase -%}
+                  {%- if block_category == current_category_id -%}
+                    {%- assign matching_faqs = matching_faqs | plus: 1 -%}
+                    <div class="parfum-care-guide__card" {{ block.shopify_attributes }}>
+                      <button
+                        type="button"
+                        class="parfum-care-guide__card-header"
+                        data-card-toggle
+                        aria-expanded="false"
+                        aria-controls="card-content-{{ block.id }}"
+                      >
+                        <h3 class="parfum-care-guide__card-title">
+                          {{ block.settings.question }}
+                        </h3>
+                        <div class="parfum-care-guide__card-icon">
+                          <div class="svg-wrapper">
+                            {{ 'icon-plus.svg' | inline_asset_content }}
+                          </div>
+                        </div>
+                      </button>
+                      <div
+                        id="card-content-{{ block.id }}"
+                        class="parfum-care-guide__card-content"
+                        aria-hidden="true"
+                      >
+                        <div class="parfum-care-guide__card-answer">
+                          {{ block.settings.answer }}
+                        </div>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- if matching_faqs == 0 -%}
+                <p class="parfum-care-guide__empty-message">
+                  {{
+                    'sections.parfum_care_guide.no_questions'
+                    | t
+                    | default: 'No questions available for this category.'
+                  }}
+                </p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const section = document.querySelector('#{{ section_id }}');
+    if (!section) return;
+
+    const tabButtons = section.querySelectorAll('.parfum-care-guide__tab');
+    const contentPanels = section.querySelectorAll('.parfum-care-guide__category');
+    const cardToggles = section.querySelectorAll('[data-card-toggle]');
+
+    // Tab switching functionality
+    function activateTab(categoryId) {
+      // Remove active class from all tabs and panels
+      tabButtons.forEach((btn) => {
+        btn.classList.remove('parfum-care-guide__tab--active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      contentPanels.forEach((panel) => {
+        panel.classList.remove('parfum-care-guide__category--active');
+      });
+
+      // Activate target tab and panel
+      const targetTab = section.querySelector(`[data-category="${categoryId}"]`);
+      const targetPanel = section.querySelector(`#content-${categoryId}`);
+
+      if (targetTab && targetPanel) {
+        targetTab.classList.add('parfum-care-guide__tab--active');
+        targetTab.setAttribute('aria-selected', 'true');
+        targetPanel.classList.add('parfum-care-guide__category--active');
+      }
+    }
+
+    // Card expansion functionality
+    function toggleCard(cardToggle) {
+      const isExpanded = cardToggle.getAttribute('aria-expanded') === 'true';
+      const cardContent = cardToggle.nextElementSibling;
+
+      cardToggle.setAttribute('aria-expanded', !isExpanded);
+      cardContent.setAttribute('aria-hidden', isExpanded);
+
+      if (isExpanded) {
+        cardToggle.parentElement.classList.remove('parfum-care-guide__card--expanded');
+      } else {
+        cardToggle.parentElement.classList.add('parfum-care-guide__card--expanded');
+      }
+    }
+
+    // Event listeners
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', function () {
+        const categoryId = this.getAttribute('data-category');
+        activateTab(categoryId);
+      });
+    });
+
+    cardToggles.forEach((toggle) => {
+      toggle.addEventListener('click', function () {
+        toggleCard(this);
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.parfum_care_guide.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Questions? We Have Answers.",
+      "label": "t:sections.parfum_care_guide.settings.heading.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "default": "<p>Our FAQs cover a spectrum of topics, ensuring you have the information you need for a seamless shopping experience.</p>",
+      "label": "t:sections.parfum_care_guide.settings.description.label"
+    },
+    {
+      "type": "text",
+      "id": "default_category",
+      "label": "t:sections.parfum_care_guide.settings.default_category.label",
+      "info": "t:sections.parfum_care_guide.settings.default_category.info"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 100
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_category",
+      "name": "t:sections.parfum_care_guide.blocks.faq_category.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "category_name",
+          "default": "All",
+          "label": "t:sections.parfum_care_guide.blocks.faq_category.settings.category_name.label"
+        },
+        {
+          "type": "text",
+          "id": "category_id",
+          "default": "all",
+          "label": "t:sections.parfum_care_guide.blocks.faq_category.settings.category_id.label",
+          "info": "t:sections.parfum_care_guide.blocks.faq_category.settings.category_id.info"
+        }
+      ]
+    },
+    {
+      "type": "faq_item",
+      "name": "t:sections.parfum_care_guide.blocks.faq_item.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "category",
+          "default": "all",
+          "label": "t:sections.parfum_care_guide.blocks.faq_item.settings.category.label",
+          "info": "t:sections.parfum_care_guide.blocks.faq_item.settings.category.info"
+        },
+        {
+          "type": "text",
+          "id": "question",
+          "default": "Can I use laundry perfumes with softeners?",
+          "label": "t:sections.parfum_care_guide.blocks.faq_item.settings.question.label"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "default": "<p>They are not recommended for sensitive skin of children.</p>",
+          "label": "t:sections.parfum_care_guide.blocks.faq_item.settings.answer.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.parfum_care_guide.presets.name",
+      "blocks": [
+        {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "All",
+            "category_id": "all"
+          }
+        },
+        {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Ordering",
+            "category_id": "ordering"
+          }
+        },
+        {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Shipping",
+            "category_id": "shipping"
+          }
+        },
+        {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Returns",
+            "category_id": "returns"
+          }
+        },
+        {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Customer Support",
+            "category_id": "support"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "all",
+            "question": "Can I use laundry perfumes with softeners?",
+            "answer": "<p>Yes, you can use laundry perfumes with softeners, but we recommend testing first to ensure compatibility.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "all",
+            "question": "Are Northfinder perfumes safe for sensitive skin?",
+            "answer": "<p>They are not recommended for sensitive skin of children.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "all",
+            "question": "Do they affect waterproof membranes or breathability?",
+            "answer": "<p>No, our laundry perfumes are designed to preserve fabric properties including waterproofing and breathability.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

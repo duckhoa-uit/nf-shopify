@@ -3425,6 +3425,53 @@
       "presets": {
         "name": "Elenco ordini rapido"
       }
+    },
+    "parfum_care_guide": {
+      "name": "Guida alla cura dei profumi",
+      "settings": {
+        "heading": {
+          "label": "Titolo"
+        },
+        "description": {
+          "label": "Descrizione"
+        },
+        "default_category": {
+          "label": "ID categoria attiva predefinita",
+          "info": "L'ID della categoria che dovrebbe essere attiva per impostazione predefinita"
+        }
+      },
+      "blocks": {
+        "faq_category": {
+          "name": "Categoria FAQ",
+          "settings": {
+            "category_name": {
+              "label": "Nome categoria"
+            },
+            "category_id": {
+              "label": "ID categoria",
+              "info": "Identificatore unico per questa categoria (usa minuscole, nessuno spazio)"
+            }
+          }
+        },
+        "faq_item": {
+          "name": "Elemento FAQ",
+          "settings": {
+            "category": {
+              "label": "ID categoria",
+              "info": "Deve corrispondere a un ID categoria dai blocchi categoria FAQ"
+            },
+            "question": {
+              "label": "Domanda"
+            },
+            "answer": {
+              "label": "Risposta"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Guida alla cura dei profumi"
+      }
     }
   }
 }

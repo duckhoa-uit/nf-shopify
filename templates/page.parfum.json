@@ -74,6 +74,89 @@
         "padding_top": 100,
         "padding_bottom": 100
       }
+    },
+    "parfum_care_guide": {
+      "type": "parfum-care-guide",
+      "blocks": {
+        "category_all": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "All",
+            "category_id": "all"
+          }
+        },
+        "category_ordering": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Ordering",
+            "category_id": "ordering"
+          }
+        },
+        "category_shipping": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Shipping",
+            "category_id": "shipping"
+          }
+        },
+        "category_returns": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Returns",
+            "category_id": "returns"
+          }
+        },
+        "category_support": {
+          "type": "faq_category",
+          "settings": {
+            "category_name": "Customer Support",
+            "category_id": "support"
+          }
+        },
+        "faq_1": {
+          "type": "faq_item",
+          "settings": {
+            "category": "all",
+            "question": "Can I use laundry perfumes with softeners?",
+            "answer": "<p>Yes, you can use laundry perfumes with softeners, but we recommend testing first to ensure compatibility.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq_item",
+          "settings": {
+            "category": "all",
+            "question": "Are Northfinder perfumes safe for sensitive skin?",
+            "answer": "<p>They are not recommended for sensitive skin of children.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq_item",
+          "settings": {
+            "category": "all",
+            "question": "Do they affect waterproof membranes or breathability?",
+            "answer": "<p>No, our laundry perfumes are designed to preserve fabric properties including waterproofing and breathability.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "category_all",
+        "category_ordering",
+        "category_shipping",
+        "category_returns",
+        "category_support",
+        "faq_1",
+        "faq_2",
+        "faq_3"
+      ],
+      "settings": {
+        "heading": "Questions? We Have Answers.",
+        "heading_size": "h1",
+        "description": "<p>Our FAQs cover a spectrum of topics, ensuring you have the information you need for a seamless shopping experience.</p>",
+        "default_category": "all",
+        "color_scheme": "scheme-1",
+        "padding_top": 100,
+        "padding_bottom": 100
+      }
     }
   },
   "order": [
@@ -81,6 +164,7 @@
     "parfum_features",
     "parfum_scents",
     "parfum_instructions",
-    "parfum_recommendations"
+    "parfum_recommendations",
+    "parfum_care_guide"
   ]
 }
