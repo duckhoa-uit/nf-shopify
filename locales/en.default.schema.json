@@ -3570,6 +3570,53 @@
       "presets": {
         "name": "Parfum Recommendations"
       }
+    },
+    "parfum_care_guide": {
+      "name": "Parfum Care Guide",
+      "settings": {
+        "heading": {
+          "label": "Heading"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "default_category": {
+          "label": "Default active category ID",
+          "info": "The category ID that should be active by default"
+        }
+      },
+      "blocks": {
+        "faq_category": {
+          "name": "FAQ Category",
+          "settings": {
+            "category_name": {
+              "label": "Category Name"
+            },
+            "category_id": {
+              "label": "Category ID",
+              "info": "Unique identifier for this category (use lowercase, no spaces)"
+            }
+          }
+        },
+        "faq_item": {
+          "name": "FAQ Item",
+          "settings": {
+            "category": {
+              "label": "Category ID",
+              "info": "Must match a category ID from the FAQ Category blocks"
+            },
+            "question": {
+              "label": "Question"
+            },
+            "answer": {
+              "label": "Answer"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Parfum Care Guide"
+      }
     }
   }
 }

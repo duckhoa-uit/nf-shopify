@@ -3455,6 +3455,53 @@
       "presets": {
         "name": "Parfums de lessive"
       }
+    },
+    "parfum_care_guide": {
+      "name": "Guide d'entretien des parfums",
+      "settings": {
+        "heading": {
+          "label": "Titre"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "default_category": {
+          "label": "ID de catégorie active par défaut",
+          "info": "L'ID de catégorie qui doit être actif par défaut"
+        }
+      },
+      "blocks": {
+        "faq_category": {
+          "name": "Catégorie FAQ",
+          "settings": {
+            "category_name": {
+              "label": "Nom de la catégorie"
+            },
+            "category_id": {
+              "label": "ID de catégorie",
+              "info": "Identifiant unique pour cette catégorie (utilisez des minuscules, pas d'espaces)"
+            }
+          }
+        },
+        "faq_item": {
+          "name": "Élément FAQ",
+          "settings": {
+            "category": {
+              "label": "ID de catégorie",
+              "info": "Doit correspondre à un ID de catégorie des blocs de catégorie FAQ"
+            },
+            "question": {
+              "label": "Question"
+            },
+            "answer": {
+              "label": "Réponse"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Guide d'entretien des parfums"
+      }
     }
   }
 }

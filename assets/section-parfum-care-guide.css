@@ -1,0 +1,329 @@
+.parfum-care-guide-section {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+.parfum-care-guide__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 3.75rem;
+}
+
+.parfum-care-guide__title-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.parfum-care-guide__heading {
+  font-weight: 500;
+  font-size: 2.375rem;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--color-black);
+  margin: 0;
+  min-width: 0;
+}
+
+.parfum-care-guide__badge {
+  flex-shrink: 0;
+}
+
+.parfum-care-guide__badge-text {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.219;
+  text-transform: uppercase;
+  color: var(--color-gray-600);
+}
+
+.parfum-care-guide__description {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-gray-700);
+}
+
+.parfum-care-guide__description p {
+  margin: 0;
+}
+
+.parfum-care-guide__tabs {
+  display: flex;
+  align-items: center;
+  padding: 1.875rem 0;
+  border-top: 1px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-gray-200);
+  margin-bottom: 3.75rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.parfum-care-guide__tab {
+  background: none;
+  border: none;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--color-gray-600);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.2s ease font-weight 0.2s ease;
+  position: relative;
+  padding: 0 1rem;
+}
+.parfum-care-guide__tab::after {
+  content: "";
+  position: absolute;
+  background-color: #e5e5e5;
+  width: 1px;
+  height: 1.25rem;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.parfum-care-guide__tab:last-child::after {
+  content: none;
+}
+
+.parfum-care-guide__tab:hover {
+  color: var(--color-black);
+}
+
+.parfum-care-guide__tab--active {
+  color: var(--color-black);
+  font-weight: 600;
+}
+
+.parfum-care-guide__content {
+  position: relative;
+}
+
+.parfum-care-guide__category {
+  display: none;
+}
+
+.parfum-care-guide__category--active {
+  display: block;
+}
+
+.parfum-care-guide__cards {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  grid-template-columns: 1fr;
+  align-items: start;
+  justify-content: center;
+}
+
+@media screen and (min-width: 750px) {
+  .parfum-care-guide__cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .parfum-care-guide__cards {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  @supports selector(:has(*)) {
+    .parfum-care-guide__cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .parfum-care-guide__cards:has(.parfum-care-guide__card:nth-child(2):last-child) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .parfum-care-guide__cards:has(.parfum-care-guide__card:nth-child(1):last-child) {
+      grid-template-columns: 1fr;
+      max-width: 28rem;
+    }
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 990px) {
+  .parfum-care-guide__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .parfum-care-guide__cards {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  @supports selector(:has(*)) {
+    .parfum-care-guide__cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .parfum-care-guide__cards:has(.parfum-care-guide__card:nth-child(2):last-child) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .parfum-care-guide__cards:has(.parfum-care-guide__card:nth-child(1):last-child) {
+      grid-template-columns: 1fr;
+      max-width: 28rem;
+    }
+  }
+}
+
+.parfum-care-guide__card {
+  border: 1px solid var(--color-gray-200);
+  border-radius: 0.875rem;
+  background-color: var(--color-white);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+}
+
+.parfum-care-guide__card--expanded {
+  background-color: #fceae1;
+}
+
+.parfum-care-guide__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  padding: 1.5rem;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.parfum-care-guide__card-header:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.parfum-care-guide__card--expanded .parfum-care-guide__card-header {
+  padding: 1.875rem;
+  padding-bottom: 1.25rem;
+}
+
+.parfum-care-guide__card-title {
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-black);
+  margin: 0;
+  flex: 1;
+  transition: font-size 0.2s ease;
+}
+
+.parfum-care-guide__card--expanded .parfum-care-guide__card-title {
+  font-size: 1.125rem;
+}
+
+.parfum-care-guide__card-icon {
+  flex-shrink: 0;
+  color: var(--color-black);
+  transition: transform 0.3s ease;
+}
+
+.parfum-care-guide__card--expanded .parfum-care-guide__card-icon {
+  transform: rotate(45deg);
+}
+
+.parfum-care-guide__card-content {
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.3s ease,
+    padding 0.3s ease;
+}
+
+.parfum-care-guide__card--expanded .parfum-care-guide__card-content {
+  max-height: 20rem;
+  padding: 0 1.875rem 1.875rem;
+}
+
+.parfum-care-guide__card-answer {
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-black);
+}
+.parfum-care-guide__card-answer p {
+  margin: 0;
+}
+
+.parfum-care-guide__empty-message {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-gray-600);
+  text-align: center;
+  padding: 2rem;
+}
+
+@media screen and (max-width: 749px) {
+  .parfum-care-guide__header {
+    margin-bottom: 2.5rem;
+  }
+
+  .parfum-care-guide__heading {
+    font-size: 1.875rem;
+  }
+
+  .parfum-care-guide__title-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .parfum-care-guide__badge {
+    margin-top: 0;
+  }
+
+  .parfum-care-guide__tabs {
+    gap: 0.75rem;
+    padding: 1.25rem 0;
+  }
+
+  .parfum-care-guide__tab {
+    font-size: 0.875rem;
+  }
+
+  .parfum-care-guide__cards {
+    grid-template-columns: 1fr !important;
+    gap: 0.875rem;
+    max-width: none;
+  }
+
+  .parfum-care-guide__card-header {
+    padding: 1.25rem;
+    gap: 1.5rem;
+  }
+  .parfum-care-guide__card--expanded .parfum-care-guide__card-header {
+    padding: 1.5rem;
+  }
+  .parfum-care-guide__card--expanded .parfum-care-guide__card-content {
+    padding: 0 1.5rem 1.5rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .parfum-care-guide__heading {
+    font-size: 1.5rem;
+  }
+
+  .parfum-care-guide__card-header {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .parfum-care-guide__card--expanded .parfum-care-guide__card-header {
+    padding: 1.25rem;
+  }
+  .parfum-care-guide__card--expanded .parfum-care-guide__card-content {
+    padding: 0 1.25rem 1.25rem;
+  }
+}
