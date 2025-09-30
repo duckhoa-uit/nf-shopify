@@ -1381,32 +1381,6 @@ class VariantSelects extends HTMLElement {
       this.updateInProgress = false;
     }
 
-    // Show message if no sizes available
-    this.updateNoSizesMessage(sizeFieldset, hasAvailableSize);
-  }
-
-  updateNoSizesMessage(sizeFieldset, hasAvailableSize) {
-    let messageDiv = sizeFieldset.querySelector('.no-sizes-message');
-
-    if (!hasAvailableSize) {
-      if (!messageDiv) {
-        messageDiv = document.createElement('div');
-        messageDiv.className = 'no-sizes-message bg-gray-50 border border-gray-200 rounded-lg p-4 text-center mt-2';
-        messageDiv.setAttribute('role', 'alert');
-        messageDiv.setAttribute('aria-live', 'polite');
-        messageDiv.innerHTML = `
-          <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2M4 13h2m0 0V9a2 2 0 012-2h2m0 0V6a2 2 0 012-2h2.09M9 9h6m6 0a2 2 0 012 2v1M9 9V6a2 2 0 012-2h2.09"></path>
-          </svg>
-          <p class="text-sm font-medium text-gray-900 mb-1">No sizes available</p>
-          <p class="text-xs text-gray-500">This color is currently out of stock in all sizes</p>
-        `;
-        sizeFieldset.appendChild(messageDiv);
-      }
-      messageDiv.style.display = 'block';
-    } else if (messageDiv) {
-      messageDiv.style.display = 'none';
-    }
   }
 
   announceAutoSelection(selectedSize) {
