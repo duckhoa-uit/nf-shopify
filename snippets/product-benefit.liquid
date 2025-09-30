@@ -128,7 +128,7 @@
 
 {% if benefits_count > 0 %}
   <div class="mt-12 flex flex-col w-full">
-    <h5 class="text-lg my-2 text-[#0F0F0F] font-bold leading-7">Benefits</h5>
+    <h5 class="text-lg my-2 text-[#0F0F0F] font-bold leading-7">{{ 'snippets.product_benefit.title' | t }}</h5>
 
     <style>
       /* Hide benefits beyond first 2 by default to prevent flash */
@@ -159,18 +159,18 @@
           >
 
           <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
-            Breathability
+            {{ 'snippets.product_benefit.breathability.name' | t }}
             <span class="font-medium">({{ breathability_level_map }}/5)</span>
           </div>
 
           {% capture breathability_descriptions %}
         {% case breathability_level_map %}
-          {% when 1 %}The material offers minimal breathability, suitable for casual use
-          {% when 2 %}The material provides basic breathability, allowing some air circulation
-          {% when 3 %}The material offers good breathability, ensuring comfortable air flow during activity
-          {% when 4 %}The material delivers excellent breathability with enhanced moisture-wicking properties
-          {% when 5 %}The material features superior breathability, ideal for high-intensity activities
-          {% else %}No breathability information available
+          {% when 1 %}{{ 'snippets.product_benefit.breathability.level_1' | t }}
+          {% when 2 %}{{ 'snippets.product_benefit.breathability.level_2' | t }}
+          {% when 3 %}{{ 'snippets.product_benefit.breathability.level_3' | t }}
+          {% when 4 %}{{ 'snippets.product_benefit.breathability.level_4' | t }}
+          {% when 5 %}{{ 'snippets.product_benefit.breathability.level_5' | t }}
+          {% else %}{{ 'snippets.product_benefit.breathability.no_info' | t }}
         {% endcase %}
       {% endcapture %}
 
@@ -192,18 +192,18 @@
           >
 
           <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
-            Elasticity
+            {{ 'snippets.product_benefit.elasticity.name' | t }}
             <span class="font-medium">({{ elasticity_level_map }}/5)</span>
           </div>
 
           {% capture elasticity_descriptions %}
         {% case elasticity_level_map %}
-          {% when 1 %}The material has minimal stretch properties, best suited for structured garments
-          {% when 2 %}The material has limited stretch properties, providing basic movement flexibility
-          {% when 3 %}The material offers good stretch properties, allowing comfortable range of motion
-          {% when 4 %}The material provides excellent stretch properties with enhanced movement flexibility
-          {% when 5 %}The material features superior 4-way stretch properties, offering maximum flexibility and comfort
-          {% else %}No elasticity information available
+          {% when 1 %}{{ 'snippets.product_benefit.elasticity.level_1' | t }}
+          {% when 2 %}{{ 'snippets.product_benefit.elasticity.level_2' | t }}
+          {% when 3 %}{{ 'snippets.product_benefit.elasticity.level_3' | t }}
+          {% when 4 %}{{ 'snippets.product_benefit.elasticity.level_4' | t }}
+          {% when 5 %}{{ 'snippets.product_benefit.elasticity.level_5' | t }}
+          {% else %}{{ 'snippets.product_benefit.elasticity.no_info' | t }}
         {% endcase %}
       {% endcapture %}
 
@@ -225,18 +225,18 @@
           >
 
           <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
-            Windproofness
+            {{ 'snippets.product_benefit.windproofness.name' | t }}
             <span class="font-medium">({{ windproofness_level_map }}/5)</span>
           </div>
 
           {% capture windproofness_descriptions %}
         {% case windproofness_level_map %}
-          {% when 1 %}Provides minimal protection against light breezes
-          {% when 2 %}Offers basic protection against everyday wind conditions
-          {% when 3 %}Provides good protection in moderate wind conditions
-          {% when 4 %}Delivers strong protection in windy conditions with specialized materials
-          {% when 5 %}Offers superior protection against strong winds with advanced wind-blocking technology
-          {% else %}No windproofness information available
+          {% when 1 %}{{ 'snippets.product_benefit.windproofness.level_1' | t }}
+          {% when 2 %}{{ 'snippets.product_benefit.windproofness.level_2' | t }}
+          {% when 3 %}{{ 'snippets.product_benefit.windproofness.level_3' | t }}
+          {% when 4 %}{{ 'snippets.product_benefit.windproofness.level_4' | t }}
+          {% when 5 %}{{ 'snippets.product_benefit.windproofness.level_5' | t }}
+          {% else %}{{ 'snippets.product_benefit.windproofness.no_info' | t }}
         {% endcase %}
       {% endcapture %}
 
@@ -258,18 +258,18 @@
           >
 
           <div class="text-[#0F0F0F] text-base font-semibold leading-4 capitalize">
-            Warmth
+            {{ 'snippets.product_benefit.warmth.name' | t }}
             <span class="font-medium">({{ warmth_level_map }}/5)</span>
           </div>
 
           {% capture warmth_descriptions %}
         {% case warmth_level_map %}
-          {% when 1 %}The material provides minimal insulation, best for mild conditions or high activity
-          {% when 2 %}The material offers light insulation, suitable for cool weather activities
-          {% when 3 %}The material provides moderate insulation, ideal for everyday cold weather use
-          {% when 4 %}The material provides good insulation, keeping you warm in cold conditions
-          {% when 5 %}The material offers superior insulation, designed for extreme cold weather protection
-          {% else %}No warmth information available
+          {% when 1 %}{{ 'snippets.product_benefit.warmth.level_1' | t }}
+          {% when 2 %}{{ 'snippets.product_benefit.warmth.level_2' | t }}
+          {% when 3 %}{{ 'snippets.product_benefit.warmth.level_3' | t }}
+          {% when 4 %}{{ 'snippets.product_benefit.warmth.level_4' | t }}
+          {% when 5 %}{{ 'snippets.product_benefit.warmth.level_5' | t }}
+          {% else %}{{ 'snippets.product_benefit.warmth.no_info' | t }}
         {% endcase %}
       {% endcapture %}
 
@@ -283,14 +283,14 @@
       {% if benefits_count > 2 %}
         <li class="break-inside-avoid mb-9 ml-8">
           <button id="show-more-benefits" class="text-[#0F0F0F] text-base leading-7 underline cursor-pointer">
-            Show all benefits
+            {{ 'snippets.product_benefit.show_all' | t }}
           </button>
           <button
             id="show-less-benefits"
             class="text-[#0F0F0F] text-base leading-7 underline cursor-pointer"
             style="display: none;"
           >
-            Show less benefits
+            {{ 'snippets.product_benefit.show_less' | t }}
             <span class="*:-rotate-90 *:inline *:ml-1 *:size-3">
               {{- 'icon-chevron.svg' | inline_asset_content -}}
             </span>
