@@ -46,6 +46,24 @@
   # NEW: Stock-based filtering for color options
   assign available_color_values = ''
   assign available_colors_array = ''
+  assign fallback_color_value = null
+  assign fallback_color_name = ''
+  assign fallback_render_mode = false
+
+  # Determine fallback color to display if all variants are unavailable
+  assign selected_color_name = option.selected_value
+
+  if selected_color_name
+    assign fallback_color_value = option.values | where: 'name', selected_color_name | first
+  endif
+
+  if fallback_color_value == null
+    assign fallback_color_value = option.values.first
+  endif
+
+  if fallback_color_value
+    assign fallback_color_name = fallback_color_value.name | default: fallback_color_value
+  endif
 
   if is_color_option
     # Filter color options to only show those with available stock
@@ -62,6 +80,11 @@
     # Convert to array for iteration
     if available_color_values != ''
       assign available_colors_array = available_color_values | split: ','
+    endif
+
+    if available_colors_array == '' and fallback_color_name != ''
+      assign fallback_render_mode = true
+      assign available_colors_array = fallback_color_name | split: '|||'
     endif
   endif
 
@@ -239,24 +262,34 @@
   Render color options separately with availability filtering
 {% endcomment %}
 {%- if is_color_option -%}
-  {%- if available_colors_array.size > 0 -%}
-    {%- comment -%} Render available colors only {%- endcomment -%}
+  {%- if available_colors_array != '' and available_colors_array.size > 0 -%}
+    {%- comment -%} Render available colors or fallback color {%- endcomment -%}
     {%- for color_name in available_colors_array -%}
-      {%- assign value = option.values | where: 'name', color_name | first -%}
+      {%- assign color_name_normalized = color_name | strip -%}
+      {%- assign value = option.values | where: 'name', color_name_normalized | first -%}
+      {%- if value == blank and fallback_render_mode and color_name_normalized == fallback_color_name -%}
+        {%- assign value = fallback_color_value -%}
+      {%- endif -%}
+
       {%- if value -%}
         {%- liquid
-          # Since we pre-filtered, all colors here are available
-          assign option_disabled = false
+          assign is_fallback_color = false
+          if fallback_render_mode and color_name_normalized == fallback_color_name
+            assign is_fallback_color = true
+          endif
 
-          # Create input ID and names
+          assign option_disabled = false
+          assign data_available_state = 'false'
+          if value.available
+            assign data_available_state = 'true'
+          endif
+
           assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0
           assign input_name = option.name | append: '-' | append: option.position
 
-          # Set up dataset properties
           assign input_dataset = 'data-product-url="' | append: value.product_url | append: '" '
           assign input_dataset = input_dataset | append: 'data-option-value-id="' | append: value.id | append: '"'
 
-          # Color value processing for thumbnail
           assign color_value = value | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
         -%}
 
@@ -279,7 +312,7 @@
             assign thumbnail_url = thumbnail_url | strip
           -%}
 
-          <div class="color-option-with-thumbnail" data-color-name="{{ value }}" data-available="true">
+          <div class="color-option-with-thumbnail" data-color-name="{{ value }}" data-available="{{ data_available_state }}">
             {%
               render 'swatch-input',
               id: input_id,
@@ -288,7 +321,6 @@
               swatch: value.swatch,
               product_form_id: product_form_id,
               checked: value.selected,
-              visually_disabled: false,
               shape: block.settings.swatch_shape,
               help_text: help_text,
               additional_props: input_dataset,
@@ -304,7 +336,6 @@
             swatch: value.swatch,
             product_form_id: product_form_id,
             checked: value.selected,
-            visually_disabled: false,
             shape: block.settings.swatch_shape,
             help_text: help_text,
             additional_props: input_dataset
@@ -312,22 +343,6 @@
         {%- endif -%}
       {%- endif -%}
     {%- endfor -%}
-  {%- else -%}
-    {%- comment -%} No colors available - show message {%- endcomment -%}
-    <div class="color-options-unavailable">
-      <div class="no-stock-message bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-        <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2M4 13h2m0 0V9a2 2 0 012-2h2m0 0V6a2 2 0 012-2h2.09M9 9h6m6 0a2 2 0 012 2v1M9 9V6a2 2 0 012-2h2.09"></path>
-        </svg>
-        <p class="text-sm font-medium text-gray-900 mb-1">
-          All colors currently out of stock
-        </p>
-        <p class="text-xs text-gray-500">
-          Check back later for availability
-        </p>
-      </div>
-    </div>
+
   {%- endif -%}
-
-
 {%- endif -%}
