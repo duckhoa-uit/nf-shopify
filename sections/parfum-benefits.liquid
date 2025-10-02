@@ -1,0 +1,144 @@
+{% comment %}
+  Parfum Benefits Section
+  Displays 4 feature blocks with icons and text in a horizontal layout
+  Matches Figma design: https://www.figma.com/design/g3AZxNYVeOtoj96UgzK2kB/NF-WEB-2025?node-id=762-33249
+{% endcomment %}
+
+{{ 'section-parfum-benefits.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="parfum-benefits color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+  <div class="parfum-benefits__container page-width w-full">
+    <!-- Free Returns Feature -->
+    <div
+      class="parfum-benefits__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade style="--animation-order: 1;"
+      {% endif %}
+    >
+      <div class="parfum-benefits__icon">
+        <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21.7305 20.043V13.3763L15.7305 10.043L9.73047 13.3763V20.043L15.7305 23.3763L21.7305 20.043Z" stroke="white" stroke-width="2.13333" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21.7305 14.043L15.7305 16.7096L9.73047 14.043" stroke="white" stroke-width="2.13333" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22.5574 28.7575C26.8546 26.4603 29.7863 21.9302 29.7863 16.7093C29.7863 11.4884 26.8546 6.9583 22.5574 4.66111L25.7702 3.05469" stroke="white" stroke-width="2.13333" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8.90227 5.14062C5.04684 7.55026 2.47656 11.8234 2.47656 16.7069C2.47656 21.5904 5.04684 25.8635 8.90227 28.2732L5.85006 29.7189" stroke="white" stroke-width="2.13333" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="parfum-benefits__text">
+        {{ 'sections.parfum_benefits.free_returns' | t }}
+      </div>
+    </div>
+
+    <!-- Certified Materials Feature -->
+    <div
+      class="parfum-benefits__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade style="--animation-order: 2;"
+      {% endif %}
+    >
+      <div class="parfum-benefits__icon">
+        <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.50342 7.05009V17.7207L16.8368 23.0521L26.1701 17.7207V7.05009L16.8368 1.71875L7.50342 7.05009Z" stroke="white" stroke-width="2.13333" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M11.5034 20.3867V31.0534L16.8327 28.7731L22.1701 31.0534V20.3867" stroke="white" stroke-width="2.13333" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18.2487 10.9747L20.8367 12.3916L18.2487 13.7988L16.8317 16.3867L15.4148 13.7988L12.8367 12.3916L15.4148 10.9747L16.8317 8.38672L18.2487 10.9747Z" stroke="white" stroke-width="2.13333" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="parfum-benefits__text">
+        {{ 'sections.parfum_benefits.certified_materials' | t }}
+      </div>
+    </div>
+
+    <!-- Tested by Athletes Feature -->
+    <div
+      class="parfum-benefits__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade style="--animation-order: 3;"
+      {% endif %}
+    >
+      <div class="parfum-benefits__icon">
+        <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21.4284 8.38802C22.9011 8.38802 24.0951 7.19411 24.0951 5.72135C24.0951 4.2486 22.9011 3.05469 21.4284 3.05469C19.9556 3.05469 18.7617 4.2486 18.7617 5.72135C18.7617 7.19411 19.9556 8.38802 21.4284 8.38802Z" stroke="white" stroke-width="2.13333" stroke-miterlimit="10"/>
+          <path d="M24.9894 15.5001C24.9894 15.5001 22.3228 16.3864 20.5424 11.9472C19.4757 9.28054 18.0875 9.17073 17.1541 9.51583C16.5737 9.7276 16.1032 10.1668 15.7816 10.7001L13.7424 14.0962C13.3894 14.6845 13.2404 15.3982 13.4286 16.057C13.6483 16.8335 14.3149 17.7198 16.0953 18.1668C19.6483 19.0531 17.8443 22.0178 17.8443 22.0178L16.0953 25.2805" stroke="white" stroke-width="2.13333" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7.53833 8.38672C7.53833 8.38672 14.3226 12.8338 16.103 12.8338" stroke="white" stroke-width="2.13333" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4.54199 20.8359L23.2087 28.8359C23.2087 28.8359 24.9891 29.7222 28.542 29.7222" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="parfum-benefits__text">
+        {{ 'sections.parfum_benefits.tested_athletes' | t }}
+      </div>
+    </div>
+
+    <!-- Member Benefits Feature -->
+    <div
+      class="parfum-benefits__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade style="--animation-order: 4;"
+      {% endif %}
+    >
+      <div class="parfum-benefits__icon">
+        <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16.2478 9.66699C19.0753 9.6672 21.3669 11.9595 21.3669 14.7871C21.3667 17.6145 19.0752 19.906 16.2478 19.9062C13.4202 19.9062 11.1279 17.6146 11.1277 14.7871C11.1277 11.9594 13.4201 9.66699 16.2478 9.66699Z" stroke="white" stroke-width="2.56" stroke-miterlimit="10"/>
+          <path d="M16.2471 20.4912C20.7712 20.4913 24.7229 22.9255 26.876 26.5566C24.1936 29.362 20.4268 31.1074 16.2471 31.1074C12.0674 31.1074 8.29964 29.3628 5.61719 26.5576C7.77769 22.9239 11.724 20.4912 16.2471 20.4912Z" stroke="white" stroke-width="2.56" stroke-miterlimit="10"/>
+          <path d="M16.2473 1.66699C24.378 1.66699 30.967 8.256 30.967 16.3867C30.967 24.5174 24.378 31.1064 16.2473 31.1064C8.11659 31.1064 1.52759 24.5174 1.52759 16.3867C1.52759 8.256 8.11659 1.66699 16.2473 1.66699Z" stroke="white" stroke-width="2.56" stroke-miterlimit="10"/>
+        </svg>
+      </div>
+      <div class="parfum-benefits__text">
+        {{ 'sections.parfum_benefits.member_benefits' | t }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.parfum_benefits.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.parfum_benefits.presets.name"
+    }
+  ]
+}
+{% endschema %}
