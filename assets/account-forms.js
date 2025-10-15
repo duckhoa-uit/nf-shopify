@@ -247,7 +247,7 @@ class AccountForms {
     }
 
     // Send data to proxy endpoint
-    fetch('/apps/nf-data-management/update_customer', {
+    fetch('/apps/nf-data-management/v1/shopify/proxy/update_customer', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

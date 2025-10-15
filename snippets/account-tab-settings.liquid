@@ -9,7 +9,7 @@
   <h2 class="section-title">{{ 'customer.account.basic_info' | t }}</h2>
 
   <div class="form-section">
-    {%- form 'customer', customer, id: 'CustomerInfoForm', data-proxy-form: '/apps/nf-data-management/update_customer' -%}
+    {%- form 'customer', customer, id: 'CustomerInfoForm', data-proxy-form: '/apps/nf-data-management/v1/shopify/proxy/update_customer' -%}
       <input type="hidden" name="custom_form" value="true">
       {%- if form.posted_successfully? -%}
         <div class="success-message" tabindex="-1" autofocus>

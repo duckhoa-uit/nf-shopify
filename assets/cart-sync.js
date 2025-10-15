@@ -261,7 +261,7 @@ class CartSyncManager {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
-      const response = await fetch('/apps/nf-data-management/sync_erp_at_checkout', {
+      const response = await fetch('/apps/nf-data-management/v1/shopify/proxy/sync_erp_at_checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
