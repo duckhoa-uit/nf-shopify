@@ -719,8 +719,30 @@
       // Create global reference for slidesToCreate
       window.slidesToCreate = [];
 
+      // Debounce timer for color changes to prevent race conditions
+      let processMediaTimeout = null;
+
+      // Debounced version of processMedia to prevent race conditions on rapid color changes
+      function debouncedProcessMedia() {
+        // Clear any pending processMedia call
+        if (processMediaTimeout) {
+          clearTimeout(processMediaTimeout);
+        }
+
+        // Schedule a new processMedia call after 300ms of inactivity
+        processMediaTimeout = setTimeout(() => {
+          processMediaInternal();
+          processMediaTimeout = null;
+        }, 300);
+      }
+
       // Process and filter media based on active color
       function processMedia() {
+        debouncedProcessMedia();
+      }
+
+      // Internal implementation of processMedia
+      function processMediaInternal() {
         if (!window.parseImageUrl) {
           setTimeout(processMedia, 50);
           return;
@@ -937,28 +959,22 @@
 
             // Replace the sorted images with our reordered list
             sortedImages = reorderedImages;
-
-            // Now mark the first 6 items as visible and the rest as hidden
-            // This ensures we maintain the 6-item limit while prioritizing videos
-            sortedImages.forEach((item, index) => {
-              // First 6 items are visible, rest are hidden
-              if (index < 6) {
-                item.hidden = false;
-              } else {
-                item.hidden = true;
-              }
-
-              // Special case: if this is a video, ensure it's visible if it's within the first 6 items
-              const isVideoItem = videoItems.some(videoItem => videoItem.url === item.url);
-              if (isVideoItem && index < 6) {
-                item.hidden = false;
-              }
-            });
           }
         }
 
+        // Ensure all items have the hidden property set based on their index
+        // This applies to all cases: with videos, without videos, etc.
+        // First 6 items are visible (hidden: false), rest are hidden (hidden: true)
+        sortedImages.forEach((item, index) => {
+          if (index < 6) {
+            item.hidden = false;
+          } else {
+            item.hidden = true;
+          }
+        });
+
         updateGallery(sortedImages);
-      }
+      } // End of processMediaInternal
 
       // Update gallery with the given URLs or image objects
       function updateGallery(images) {
@@ -1070,7 +1086,17 @@
             const mediaItem = createMediaItem(imageObj.url, index);
             if (mediaItem) {
               // Add to mobile slider - all images are visible in the slider
-              sliderWrapper.appendChild(mediaItem.cloneNode(true));
+              // Clone the media item for mobile slider
+              const mobileMediaItem = mediaItem.cloneNode(true);
+
+              // Ensure video autoplay attributes are preserved in cloned element
+              const clonedVideo = mobileMediaItem.querySelector('video');
+              if (clonedVideo) {
+                clonedVideo.setAttribute('autoplay', '');
+                clonedVideo.autoplay = true;
+              }
+
+              sliderWrapper.appendChild(mobileMediaItem);
 
               // Add to desktop grid with visibility control
               if (index === 0 || imageObj.url !== window.slidesToCreate[0].url) {
@@ -1147,6 +1173,54 @@
           mobileGallery.classList.add('loaded');
           grid.classList.add('loaded');
 
+          // Ensure videos autoplay after gallery update
+          // This is necessary because browser autoplay policies may prevent autoplay
+          // after DOM manipulation during color changes
+          const allVideos = document.querySelectorAll('.product__media video');
+
+          allVideos.forEach((video, index) => {
+            // Set autoplay attributes if not already set
+            if (!video.hasAttribute('autoplay')) {
+              video.setAttribute('autoplay', '');
+              video.autoplay = true;
+            }
+
+            // Function to attempt playing the video
+            const attemptPlay = () => {
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                playPromise
+                  .then(() => {
+                    // Video playing successfully
+                  })
+                  .catch(error => {
+                    // Autoplay was prevented, which is expected in some cases
+                    // The video will still have the autoplay attribute for when user interacts
+                  });
+              }
+            };
+
+            // Wait for video to be ready before playing
+            if (video.readyState >= 2) {
+              // Video is ready to play
+              attemptPlay();
+            } else {
+              // Video is not ready yet, wait for canplay event
+              const onCanPlay = () => {
+                attemptPlay();
+                video.removeEventListener('canplay', onCanPlay);
+              };
+
+              video.addEventListener('canplay', onCanPlay);
+
+              // Timeout fallback in case canplay never fires
+              setTimeout(() => {
+                attemptPlay();
+                video.removeEventListener('canplay', onCanPlay);
+              }, 2000);
+            }
+          });
+
           // Show toggle button container if needed
           if (toggleContainer && window.slidesToCreate.length > 6) {
             toggleContainer.classList.add('visible');
@@ -1156,6 +1230,51 @@
               toggleContainer.classList.remove('visible');
             }
           }
+
+          // Additional autoplay trigger with retry mechanism
+          // This handles cases where pauseAllMedia() or other code pauses videos
+
+          // Helper function to safely play a video
+          const safePlay = (video, index, retryNum) => {
+            if (video.readyState >= 2) {
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                  // Autoplay prevented, expected in some cases
+                });
+              }
+            }
+          };
+
+          // Retry autoplay after a short delay (in case pauseAllMedia is called)
+          setTimeout(() => {
+            const retryVideos = document.querySelectorAll('.product__media video');
+            retryVideos.forEach((video, index) => {
+              if (video.paused && video.hasAttribute('autoplay')) {
+                safePlay(video, index, 1);
+              }
+            });
+          }, 100);
+
+          // Second retry after longer delay
+          setTimeout(() => {
+            const retryVideos = document.querySelectorAll('.product__media video');
+            retryVideos.forEach((video, index) => {
+              if (video.paused && video.hasAttribute('autoplay')) {
+                safePlay(video, index, 2);
+              }
+            });
+          }, 300);
+
+          // Third retry after even longer delay (for slow connections)
+          setTimeout(() => {
+            const retryVideos = document.querySelectorAll('.product__media video');
+            retryVideos.forEach((video, index) => {
+              if (video.paused && video.hasAttribute('autoplay')) {
+                safePlay(video, index, 3);
+              }
+            });
+          }, 800);
         });
       }
 
@@ -1243,11 +1362,12 @@
         if (colorForMatching !== gallery.dataset.activeColor) {
           gallery.dataset.activeColor = colorForMatching;
 
-          // Reset expanded state when color changes
+          // Preserve the expanded state when color changes
+          // Don't reset window.isGalleryExpanded - keep the user's preference
           const toggleBtn = document.getElementById('gallery-toggle-btn');
           if (toggleBtn) {
-            toggleBtn.textContent = moreImagesText;
-            window.isGalleryExpanded = false;
+            // Update button text based on current expanded state
+            toggleBtn.textContent = window.isGalleryExpanded ? lessImagesText : moreImagesText;
           }
 
           // Hide toggle container until new content loads
@@ -1380,7 +1500,6 @@
       // Get the gallery element
       const gallery = document.querySelector('#MediaGallery-{{ section.id }}');
       if (!gallery) {
-        console.error('Gallery element not found');
         return;
       }
 
@@ -1391,7 +1510,6 @@
 
       // Ensure Fancybox is loaded
       if (!allMedia || !window.Fancybox) {
-        console.error('Product media or Fancybox not available');
         return;
       }
 
@@ -1507,7 +1625,7 @@
                     mediaType = mediaObject.media_type || 'image';
                   }
                 } catch (e) {
-                  console.error('Error parsing media object data:', e);
+                  // Error parsing media object data
                 }
               }
             }
@@ -1557,7 +1675,7 @@
                       mediaType = mediaObject.media_type || 'image';
                     }
                   } catch (e) {
-                    console.error('Error parsing media object data:', e);
+                    // Error parsing media object data
                   }
                 }
               }
@@ -1595,7 +1713,7 @@
                 mediaObject = JSON.parse(mediaObjectStr);
               }
             } catch (e) {
-              console.error('Error parsing media object data:', e);
+              // Error parsing media object data
             }
           }
 
@@ -1728,13 +1846,17 @@
                   navigator.share({
                     title: document.title,
                     url: window.location.href
-                  }).catch(console.error);
+                  }).catch(() => {
+                    // Share failed
+                  });
                 } else {
                   // Fallback for browsers that don't support Web Share API
                   const url = window.location.href;
                   navigator.clipboard.writeText(url).then(() => {
                     alert('Link copied to clipboard!');
-                  }).catch(console.error);
+                  }).catch(() => {
+                    // Clipboard copy failed
+                  });
                 }
               });
 
@@ -1768,7 +1890,9 @@
               fullscreenBtn.title = 'Fullscreen';
               fullscreenBtn.addEventListener('click', () => {
                 if (!document.fullscreenElement) {
-                  container.requestFullscreen().catch(console.error);
+                  container.requestFullscreen().catch(() => {
+                    // Fullscreen request failed
+                  });
                   fullscreenBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M14,14H19V16H16V19H14V14M5,14H10V19H8V16H5V14M8,5H10V10H5V8H8V5M19,8V10H14V5H16V8H19Z"></path></svg>`;
                 } else {
                   document.exitFullscreen();
@@ -1828,7 +1952,7 @@
 
         });
       } catch (error) {
-        console.error('Error opening lightbox:', error);
+        // Error opening lightbox
       }
     }
 
