@@ -1,12 +1,26 @@
 {
   "name": "northfinder-template",
   "version": "1.0.0",
-  "description": "[![Build status](https://github.com/shopify/dawn/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Shopify/dawn/actions/workflows/ci.yml?query=branch%3Amain) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=informational)](/.github/CONTRIBUTING.md)",
+  "author": "",
   "main": "index.js",
+  "devDependencies": {
+    "@shopify/prettier-plugin-liquid": "^1.8.1",
+    "@shopify/shopify-api": "^12.1.0",
+    "@tailwindcss/cli": "^4.1.7",
+    "exceljs": "^4.4.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "tailwindcss": "^4.1.7",
+    "vitest": "^1.3.1",
+    "xml2js": "^0.6.2"
+  },
+  "description": "[![Build status](https://github.com/shopify/dawn/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Shopify/dawn/actions/workflows/ci.yml?query=branch%3Amain) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=informational)](/.github/CONTRIBUTING.md)",
   "engines": {
     "node": ">=20",
     "pnpm": ">=8"
   },
+  "keywords": [],
+  "license": "ISC",
   "packageManager": "pnpm@8.15.4",
   "scripts": {
     "test": "vitest",
@@ -16,16 +30,5 @@
     "watch": "npx @tailwindcss/cli -i ./assets/tailwind.css -o ./assets/application.css --watch",
     "dev": "pnpm start & pnpm watch",
     "dev:parfums": "pnpm start:parfums & pnpm watch"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@shopify/prettier-plugin-liquid": "^1.8.1",
-    "@tailwindcss/cli": "^4.1.7",
-    "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.1.7",
-    "vitest": "^1.3.1"
   }
 }
