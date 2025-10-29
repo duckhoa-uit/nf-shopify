@@ -9,6 +9,11 @@
  */
 {
   "general": {
+    "404": {
+      "title": "404 Stránka nenájdená",
+      "subtext": "Požadovaná stránka neexistuje.",
+      "link": "Pokračovať v nákupe"
+    },
     "password_page": {
       "login_form_heading": "Prejdite do obchodu s použitím hesla:",
       "login_password_button": "Prejsť s použitím hesla",
@@ -17,7 +22,11 @@
       "login_form_error": "Nesprávne heslo!",
       "login_form_submit": "Prejsť",
       "admin_link_html": "Ste vlastníkom obchodu? <a href=\"/admin\" class=\"link underlined-link\">Prihláste sa tu</a>",
-      "powered_by_shopify_html": "Tento obchod bude používať technológiu {{ shopify }}"
+      "powered_by_shopify_html": "Tento obchod bude používať technológiu {{ shopify }}",
+      "opening_soon": "Čoskoro otvárame",
+      "signup_form_email_label": "E-mail",
+      "signup_form_success": "Pošleme vám e-mail tesne pred otvorením!",
+      "password_link": "Vstúpiť pomocou hesla"
     },
     "social": {
       "alt_text": {
@@ -35,41 +44,99 @@
         "youtube": "YouTube",
         "vimeo": "Vimeo",
         "tiktok": "TikTok"
-      }
+      },
+      "share_on_facebook": "Zdieľať",
+      "share_on_twitter": "Tweet",
+      "share_on_pinterest": "Pripnúť"
     },
     "continue_shopping": "Pokračovať v nákupe",
     "pagination": {
       "label": "Stránkovanie",
       "page": "Stránka {{ number }}",
       "next": "Nasledujúca stránka",
-      "previous": "Predchádzajúca stránka"
+      "previous": "Predchádzajúca stránka",
+      "current_page": "Stránka {{ current }} z {{ total }}"
     },
     "search": {
       "search": "Vyhľadať",
-      "reset": "Vymazať hľadaný výraz"
+      "reset": "Vymazať hľadaný výraz",
+      "no_results_html": "Vaše vyhľadávanie \"{{ terms }}\" neprinieslo žiadne výsledky.",
+      "results_with_count": {
+        "one": "{{ count }} výsledok pre \"{{ terms }}\"",
+        "other": "{{ count }} výsledkov pre \"{{ terms }}\""
+      },
+      "title": "Prehľadať našu stránku",
+      "placeholder": "Hľadať",
+      "submit": "Odoslať",
+      "close": "Zavrieť vyhľadávanie"
     },
     "cart": {
       "view": "Zobraziť košík ({{ count }})",
       "item_added": "Položka sa pridala do vášho košíka",
-      "view_empty_cart": "Zobraziť košík"
+      "view_empty_cart": "Zobraziť košík",
+      "coupon": {
+        "placeholder": "Kod"
+      },
+      "save_for_later": "Uložiť na neskôr"
     },
     "share": {
       "copy_to_clipboard": "Kopírovať prepojenie",
       "share_url": "Prepojenie",
       "success_message": "Prepojenie sa skopírovalo do schránky",
-      "close": "Ukončiť zdieľanie"
+      "close": "Ukončiť zdieľanie",
+      "button": "Zdieľať"
     },
     "slider": {
       "of": "z",
       "next_slide": "Posunúť doprava",
       "previous_slide": "Posunúť doľava",
       "name": "Jazdec"
+    },
+    "accessibility": {
+      "skip_to_content": "Preskočiť na obsah",
+      "close_modal": "Zavrieť (esc)"
+    },
+    "discover_northfinder": {
+      "for_men": "Pre mužov",
+      "for_women": "Pre ženy"
+    },
+    "meta": {
+      "tags": "Oznaczone \"{{ tags }}\"",
+      "page": "Stránka {{ page }}"
+    },
+    "navigation": {
+      "blog": "blog",
+      "contact": "Kontakt",
+      "faq": "FAQ"
+    },
+    "breadcrumbs": {
+      "home": "Domovská stránka",
+      "back": "Späť",
+      "collections": "Kolekcje",
+      "products": "produkty"
+    },
+    "newsletter_form": {
+      "newsletter_email": "Pripojte sa k nášmu mailing listu",
+      "email_placeholder": "Adresa e-mail",
+      "confirmation": "ďakujeme za subskrypcje",
+      "submit": "Subskrybuj"
+    },
+    "filters": {
+      "show_more": "Pokaz viac",
+      "show_less": "Pokaz menej"
+    },
+    "text_truncation": {
+      "read_more": "Czytaj viac",
+      "read_less": "Czytaj menej"
     }
   },
   "newsletter": {
     "label": "E-mail",
-    "success": "Ďakujeme, že ste sa prihlásili na odber správ",
-    "button_label": "Prihlásiť sa na odber"
+    "success": "Ďakujeme za prihlásenie",
+    "button_label": "Prihlásiť sa",
+    "placeholder": "Zadajte svoj e-mail",
+    "policy_agreement": "Odoslaním svojho e-mailu súhlasíte so spracovaním osobných údajov.",
+    "discount_label": "Kupón rabatowy dla subskrybentów"
   },
   "accessibility": {
     "skip_to_text": "Prejsť na obsah",
@@ -91,8 +158,8 @@
   },
   "blogs": {
     "article": {
-      "blog": "Blog",
-      "read_more_title": "Prečítajte si viac: {{ title }}",
+      "blog": "blog",
+      "read_more_title": "Čítať viac: {{ title }}",
       "moderated": "Upozorňujeme, že komentáre musia byť pred publikovaním schválené.",
       "comment_form_title": "Pridať komentár",
       "name": "Meno",
@@ -103,11 +170,38 @@
       "share": "Zdieľať tento článok",
       "success": "Váš komentár sa úspešne uverejnil. Ďakujeme.",
       "success_moderated": "Váš komentár sa úspešne uverejnil. Publikujeme ho o chvíľu, keďže náš blog je moderovaný.",
-      "comments": {
+      "comments": "poznámky",
+      "view_all": "zobraziť wszystkie",
+      "all_topics": "Wszystkie tematy",
+      "by_author": "przez {{ author }}",
+      "posted_in": "Opublikowano w",
+      "read_more": "Čítať viac",
+      "related_articles": "súvisiace článoky"
+    },
+    "main_blog": {
+      "search_placeholder": "Hľadať články",
+      "all_articles": "Wszystkie článoky",
+      "view_more": "zobraziť viac",
+      "no_results": "Nenašli sa žiadne články spĺňajúce kritériá vyhľadávania.",
+      "categories": {
+        "skialp": "Skialpinizm",
+        "adventure": "Przygoda",
+        "tips": "Wskazówki",
+        "gear": "vybavenie"
+      }
+    },
+    "comments": {
+      "title": "Zostaw komentár",
+      "name": "Imie",
+      "email": "E-mail",
+      "message": "Wiadomosc",
+      "post": "Opublikuj komentár",
+      "moderated": "poznámka: komentáre musza zostac schválené pred publikacja",
+      "success_moderated": "Váš komentár bol úspešne odoslaný. Zverejníme ho čoskoro, pretože náš blog je moderovaný.",
+      "success": "váš komentár zostal úspešne zverejnený! ďakujeme!",
+      "comments_with_count": {
         "one": "{{ count }} komentár",
-        "other": "Počet komentárov: {{ count }}",
-        "few": "Počet komentárov: {{ count }}",
-        "many": "Počet komentárov: {{ count }}"
+        "other": "{{ count }} komentarzy"
       }
     }
   },
@@ -148,7 +242,7 @@
       "price": {
         "from_price_html": "Od {{ price }}",
         "regular_price": "Normálna cena",
-        "sale_price": "Cena po zľave",
+        "sale_price": "cena po zľave",
         "unit_price": "Jednotková cena"
       },
       "pickup_availability": {
@@ -168,7 +262,9 @@
         "load_image": "Načítať obrázok {{ index }} v zobrazení galérie",
         "load_model": "Načítať 3D model {{ index }} v zobrazení galérie",
         "load_video": "Prehrať video {{ index }} v zobrazení galérie",
-        "image_available": "Obrázok {{ index }} je teraz dostupný v zobrazení galérie"
+        "image_available": "Obrázok {{ index }} je teraz dostupný v zobrazení galérie",
+        "open_featured_media": "Otvoriť odporúčané media w zobrazení galérií",
+        "view_in_space": "zobraziť w swojej przestrzeni"
       },
       "view_full_details": "Zobraziť všetky podrobnosti",
       "shipping_policy_html": "<a href=\"{{ link }}\">Doprava</a> sa vypočíta pri platbe.",
@@ -221,7 +317,25 @@
       },
       "about_perfumes": {
         "title": "Čo sú parfumy na pranie?"
-      }
+      },
+      "regular_price": "cena regularna",
+      "new": "Nowosc",
+      "add_to_wishlist": "Pridať do zoznamu zyczen",
+      "related_products": "môže Ci sie tez spodobac",
+      "wishlist": "zoznam zyczen",
+      "price_includes_vat": "cena zawiera VAT.",
+      "delivery_info": {
+        "in_stock": "W magazynie",
+        "out_of_stock": "Brak w magazynie",
+        "delivery_time_prefix": "Bežný čas pridania:",
+        "business_days": "dni robocze"
+      },
+      "sale_badge": "WYPRZEDAZ",
+      "product_codes_label": "Kody produktov:",
+      "original_recommended_price": "- oryginalna cena rekomendowana",
+      "size_guide_fit_recommender": "Przewodnik veľkosťów i rekomendator dopasowania",
+      "size_label": "Veľkosť",
+      "load_video": "Načítať video v zobrazení galérie"
     },
     "modal": {
       "label": "Galéria médií"
@@ -245,12 +359,7 @@
         "few": "Vybrané: {{ count }}",
         "many": "Vybrané: {{ count }}"
       },
-      "product_count": {
-        "one": "Produkt {{ product_count }} z {{ count }}",
-        "other": "Produkty {{ product_count }} z {{ count }}",
-        "few": "Produkty {{ product_count }} z {{ count }}",
-        "many": "Produkty {{ product_count }} z {{ count }}"
-      },
+      "product_count": "Zobrazených {{ viewed }} z {{ total }} produktov",
       "product_count_simple": {
         "one": "{{ count }} produkt",
         "other": "Počet produktov: {{ count }}",
@@ -261,7 +370,21 @@
       "filter_selected_accessibility": "{{ type }} (vybrané filtre: {{ count }})",
       "show_more": "Zobraziť viac",
       "show_less": "Zobraziť menej",
-      "filter_and_operator_subtitle": "Spĺňať všetko"
+      "filter_and_operator_subtitle": "Spĺňať všetko",
+      "hide_filters": "Skryť filtry",
+      "product_count_status": "Zobrazených {{ viewed_count }} z {{ total_count }} produktov",
+      "products_per_page": "Pokaz:",
+      "remove_filter": "Usun filter {{ value }}",
+      "view_more": "zobraziť viac",
+      "loading": "LADOWANIE...",
+      "show_products": "POKAZ produkty",
+      "sort_by": {
+        "manual": "Ulubione",
+        "created_descending": "Nové produkty",
+        "price_ascending": "Najnižšia cena",
+        "price_descending": "Najwyzsza cena"
+      },
+      "show_only_discounted": "Pokaz tylko produkty z rabatem"
     }
   },
   "templates": {
@@ -279,7 +402,7 @@
         "many": "Počet výsledkov: {{ count }}"
       },
       "page": "Strana",
-      "products": "Produkty",
+      "products": "produkty",
       "search_for": "Vyhľadať výraz „{{ terms }}“",
       "results_with_count_and_term": {
         "one": "Pre výraz „{{ terms }}“ sa našiel {{ count }} výsledok",
@@ -306,7 +429,10 @@
         "other": "Počet návrhov: {{ count }}",
         "few": "Počet návrhov: {{ count }}",
         "many": "Počet návrhov: {{ count }}"
-      }
+      },
+      "categories": "Kategorie",
+      "articles": "Článoky",
+      "no_results_suggestion": "Spróbuj sprawdzic pisownie lub uzyc innych slów."
     },
     "cart": {
       "cart": "Košík"
@@ -320,10 +446,22 @@
         "send": "Odoslať",
         "post_success": "Ďakujeme, že ste nás kontaktovali. Budeme sa vám venovať čo najskôr.",
         "error_heading": "Upravte tieto údaje:",
-        "title": "Kontaktný formulár"
+        "title": "Kontaktný formulár",
+        "write_to_us": "Napisz do nas"
       },
       "info": {
-        "subtitle": "Radi vám poradíme"
+        "subtitle": "Radi vám poradíme",
+        "address": "Rastislavova 109, 951 41 Lužianky, Slowacja",
+        "phone": "+421 233 418 364",
+        "hours": "Poniedzialek - Piatek 8:00 – 16:00",
+        "email": "eshop@northfinder.sk"
+      },
+      "partnership": {
+        "heading": "Chcesz sprzedawac Northfinder?",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "contact_name": "Osoba kontaktowa",
+        "contact_email": "partners@northfinder.sk",
+        "contact_phone": "+421 944 111 222"
       }
     }
   },
@@ -349,8 +487,8 @@
       "cart_quantity_error_html": "Do košíka môžete túto položku pridať len v počte {{ quantity }}.",
       "update": "Aktualizovať",
       "headings": {
-        "product": "Produkt",
-        "price": "Cena",
+        "product": "produkt",
+        "price": "cena",
         "total": "Celkove",
         "quantity": "Množstvo",
         "image": "Obrázok produktu"
@@ -368,13 +506,33 @@
       "duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html": "Vrátane ciel. Dane, zľavy a <a href=\"{{ link }}\">doprava</a> sa vypočítajú pri platbe.",
       "duties_included_taxes_at_checkout_shipping_at_checkout_without_policy": "Vrátane ciel. Dane, zľavy a doprava sa vypočítajú pri platbe.",
       "taxes_at_checkout_shipping_at_checkout_with_policy_html": "Dane, zľavy a <a href=\"{{ link }}\">doprava</a> sa vypočítajú pri platbe.",
-      "taxes_at_checkout_shipping_at_checkout_without_policy": "Dane, zľavy a doprava sa vypočítajú pri platbe."
+      "taxes_at_checkout_shipping_at_checkout_without_policy": "Dane, zľavy a doprava sa vypočítajú pri platbe.",
+      "remove": "Usun",
+      "savings": "Oszczedzasz",
+      "summary": "Zhrnutie",
+      "item_added": "Przedmiot dodany do koszyka",
+      "view_cart": "zobraziť košík",
+      "validating_stock": "Sprawdzanie dostepnosci...",
+      "cart_updated_other_tab": "Košík zaktualizowany z innej karty",
+      "failed_remove_item": "Nie udalo sie usunac przedmiotu. Spróbuj ponownie.",
+      "failed_adjust_quantity": "Nie udalo sie dostosowac ilosci. Spróbuj ponownie.",
+      "stock_validation_warning": "Upozornenie o sprawdzeniu dostepnosci",
+      "stock_validation_error": "Nie mohlismy sprawdzic dostepnosci",
+      "stock_validation_continue": "vaše objednávka môže podlegac dostepnosci. Czy chcesz kontynuowac?",
+      "cancel_checkout": "Zrušiť objednávka",
+      "continue_anyway": "Pokračovať mimo to",
+      "cart_updated": "Košík zaktualizowany",
+      "cart_updated_review": "váš košík zostal zaktualizowany z innej karty. Przejrzyj zmiany pred przejsciem do kasy.",
+      "review_cart": "Przejrzyj košík",
+      "continue_to_checkout": "Pokračovať do kasy"
     },
     "footer": {
-      "payment": "Spôsoby platby"
+      "payment": "Spôsoby platby",
+      "contact_us": "Skontaktuj sie z nami",
+      "copyright": "© Copyright Northfinder 2025 / Wszelkie prawa zastrzezone"
     },
     "featured_blog": {
-      "heading": "Blog Northfinder",
+      "heading": "blog Northfinder",
       "view_all": "Zobraziť všetko",
       "onboarding_title": "Blogový príspevok",
       "onboarding_content": "Poskytnite svojim zákazníkom súhrn blogového príspevku"
@@ -384,7 +542,8 @@
     },
     "featured_collection": {
       "view_all": "Zobraziť všetko",
-      "view_all_label": "Pozrite si všetky produkty z kolekcie {{ collection_name }}"
+      "view_all_label": "Pozrite si všetky produkty z kolekcie {{ collection_name }}",
+      "title": "Kolekcje"
     },
     "collection_list": {
       "view_all": "Zobraziť všetko"
@@ -420,7 +579,7 @@
       "product_total": "Medzisúčet produktov",
       "view_cart": "Zobraziť košík",
       "each": "{{ money }}/kus",
-      "product": "Produkt",
+      "product": "produkt",
       "variant": "Variant",
       "variant_total": "Celková suma variantov",
       "items_added": {
@@ -586,6 +745,211 @@
       "presets": {
         "name": "Pokyny pre parfumy"
       }
+    },
+    "main-blog": {
+      "name": "hlavný blog",
+      "settings": {
+        "header": {
+          "content": "Nastavenia wpisu na blogu"
+        },
+        "show_image": {
+          "label": "Pokaz odporúčané zdjecie"
+        },
+        "image_height": {
+          "label": "Wysokosc polecanego zdjecia",
+          "info": "Ustaw proporcje polecanego zdjecia. To ustawienie nie ma zastosowania przy uživote opcji 'Dostosuj do zdjecia'.",
+          "options__1": {
+            "label": "Dostosuj do zdjecia"
+          },
+          "options__2": {
+            "label": "Small"
+          },
+          "options__3": {
+            "label": "Medium"
+          },
+          "options__4": {
+            "label": "Large"
+          }
+        },
+        "show_date": {
+          "label": "Pokaz date"
+        },
+        "show_author": {
+          "label": "Pokaz autora"
+        },
+        "enable_filtering": {
+          "label": "Wlacz filtrowanie kategorii"
+        },
+        "enable_search": {
+          "label": "Wlacz pole vyhľadávania"
+        },
+        "posts_per_page": {
+          "label": "Posts per page"
+        },
+        "enable_load_more": {
+          "label": "Wlacz przycisk načítať viac"
+        },
+        "paragraph": {
+          "content": "Aby zmienic uklad wpisów na blogu, upraviť szablon blogu."
+        }
+      }
+    },
+    "main_product": {
+      "inspiration": "Inspiracja",
+      "main_elements": "hlavné elementy",
+      "parameters": "Parametry",
+      "description_and_parameters": "Popis i parametry",
+      "detailed_product_description": "Szczególowy popis produktu",
+      "you_will_like_it": "Spodoba Ci sie",
+      "customer_reviews": "Opinie klientów",
+      "more_images": "viac ZDJEC",
+      "less_images": "MNIEJ ZDJEC"
+    },
+    "blog_posts_slider": {
+      "add_posts": "Pridať posty na blogu klikajac przycisk dostosuj"
+    },
+    "main-cart-items": {
+      "name": "Przedmioty w koszyku"
+    },
+    "unique-selling-point": {
+      "name": "Unique Selling Points",
+      "returns": {
+        "text": "Hassle-free returns and exchanges",
+        "alt": "Returns"
+      },
+      "materials": {
+        "text": "Uzywamy certyfikowanych materialów outdoorowych",
+        "alt": "Certified Materials"
+      },
+      "tested": {
+        "text": "Tested by athletes and mountain rescuers",
+        "alt": "Tested"
+      },
+      "members": {
+        "text": "Extra benefits for registered members",
+        "alt": "Members"
+      }
+    },
+    "discover-northfinder": {
+      "name": "Discover Northfinder",
+      "title": "Discover on northfinder"
+    },
+    "activities": {
+      "name": "Activities",
+      "title": "Activities"
+    },
+    "faq": {
+      "view_all_questions": "view all questions",
+      "no_questions": "No questions available for this category.",
+      "contact_heading": "Didn't find an answer?",
+      "contact_subtext": "We'll be happy to help",
+      "contact_button": "Write to us",
+      "contact_button_aria": "Contact us for help with your questions"
+    },
+    "parfum_recommendations": {
+      "name": "Rekomendacje perfum",
+      "heading": "Zalecenia i ostrzezenia",
+      "badge": "FAQ",
+      "do": {
+        "title": "Rób:",
+        "item_1": "Uzywaj z syntetycznymi, bawelnianymi lub technicznymi tkaninami",
+        "item_2": "Przechowuj w temperaturze pokojowej",
+        "item_3": "Najpierw przetestuj na wrazliwej skórze"
+      },
+      "dont": {
+        "title": "Nie rób:",
+        "item_1": "Nie nakladaj bezposrednio na ubrania",
+        "item_2": "Unikaj kontaktu z oczami i blonami sluzowymi",
+        "item_3": "Trzymaj poza zasiegiem dzieci"
+      },
+      "recommended": {
+        "title": "Zalecane do:",
+        "item_1": "Odziez sportowa i vybavenie outdoor",
+        "item_2": "Odziez codzienna i bežné pranie",
+        "item_3": "Dla osób poszukujacych dlugotrwalego zapachu bez pozostalosci plynu do plukania"
+      },
+      "avoid": {
+        "title": "Unikaj",
+        "item_1": "Bezposredniego nakladania na ubrania",
+        "item_2": "Kontaktu z oczami i skóra (splucz w przypadku kontaktu)",
+        "item_3": "Uzywania na delikatnym jedwabiu lub nieobrobionej welnie"
+      },
+      "settings": {
+        "heading": {
+          "label": "Naglówek"
+        },
+        "description": {
+          "label": "Popis"
+        }
+      },
+      "presets": {
+        "name": "Rekomendacje perfum"
+      }
+    },
+    "parfum_care_guide": {
+      "name": "Przewodnik pielegnacji perfum",
+      "heading": "Pytania? Mamy odpowiedzi.",
+      "badge": "FAQ",
+      "no_questions": "Brak pytan dla tej kategorii.",
+      "settings": {
+        "heading": {
+          "label": "Naglówek"
+        },
+        "description": {
+          "label": "Popis"
+        },
+        "default_category": {
+          "label": "Domyslne ID aktywnej kategorii",
+          "info": "ID kategorii, która powinna byc domyslnie aktywna"
+        }
+      },
+      "blocks": {
+        "faq_category": {
+          "name": "Kategoria FAQ",
+          "settings": {
+            "category_name": {
+              "label": "Názov kategorii"
+            },
+            "category_id": {
+              "label": "ID kategorii",
+              "info": "Unikalny identyfikator dla tej kategorii (uzywaj malych liter, bez spacji)"
+            }
+          }
+        },
+        "faq_item": {
+          "name": "Element FAQ",
+          "settings": {
+            "category": {
+              "label": "ID kategorii",
+              "info": "musí pasowac do ID kategorii z bloków Kategoria FAQ"
+            },
+            "question": {
+              "label": "Pytanie"
+            },
+            "answer": {
+              "label": "Odpowiedz"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Przewodnik pielegnacji perfum"
+      }
+    },
+    "parfum_benefits": {
+      "name": "Korzysci parfumów",
+      "free_returns": "Bezplatne vrátenie\nw ciagu 14 dni",
+      "certified_materials": "Certyfikowane\nmaterialy outdoor",
+      "tested_athletes": "Testowane przez sportowców\ni ratowników górskich",
+      "member_benefits": "Korzysci dla\nzarejestrowanych czlonków",
+      "settings": {
+        "heading": {
+          "label": "Naglówek"
+        }
+      },
+      "presets": {
+        "name": "Korzysci parfumów"
+      }
     }
   },
   "localization": {
@@ -602,7 +966,37 @@
       "title": "Konto",
       "details": "Podrobnosti o konte",
       "view_addresses": "Zobraziť adresy",
-      "return": "Späť na podrobnosti o konte"
+      "return": "Späť na podrobnosti o konte",
+      "back_to_shopping": "Návrat do zakupów",
+      "orders": "Objednávky",
+      "addresses": "Adresy",
+      "settings": "Nastavenia",
+      "wishlist": "zoznam ulubionych produktov",
+      "loyalty_bonus": "Bonus lojalnosciowy",
+      "available_bonus": "Dostupný bonus",
+      "bonus_amount": "48,64 €",
+      "bonus_details": "Jak uzywac bonusu",
+      "bonus_detail_1": "môžete uzyc bonusu przy nastepnym zakupie.",
+      "bonus_detail_2": "Bonus mozna zastosowac do 25% calkowitej wartosci zakupu.",
+      "bonus_detail_3": "Zalecamy uživot bonusu w ciagu 150 dni od otrzymania.",
+      "menu": "Menu",
+      "basic_info": "Podstawowe informacje",
+      "customer_zone": "STREFA KLIENTA",
+      "first_name": "Imie",
+      "last_name": "Priezvisko",
+      "birthdate": "Data urodzenia",
+      "phone": "Telefónne číslo",
+      "email": "E-mail",
+      "save": "Uložiť",
+      "wishlist_empty": "Nie masz jeszcze zadnych produktov na zozname ulubionych.",
+      "account_settings": "Nastavenia konta",
+      "settings_description": "môžete usunac svoje účet i wszystkie súvisiace dane. Ta akcja nie môže byc cofnieta.",
+      "delete_account": "Usun účet",
+      "delete_confirm": "Czy na pewno chcesz usunac svoje účet? Ta akcja nie môže byc cofnieta.",
+      "delete_success": "Zgloszenie odstránenia konta bolo przeslane.",
+      "info_update_success": "Podstawowe informacje boli úspešne zaktualizowane!",
+      "password_changed": "Heslo bolo úspešne zaktualizowane!",
+      "password_update_success": "Heslo bolo úspešne zaktualizowane!"
     },
     "account_fallback": "Konto",
     "log_in": "Prihlásiť sa",
@@ -636,7 +1030,22 @@
       "cancel": "Zrušiť",
       "edit": "Upraviť",
       "delete": "Odstrániť",
-      "delete_confirm": "Naozaj chcete túto adresu odstrániť?"
+      "delete_confirm": "Naozaj chcete túto adresu odstrániť?",
+      "update_success": "Adresa zostal úspešne zaktualizowany",
+      "add_success": "Adresa zostal úspešne dodany",
+      "delivery_address": "Adresa pridania",
+      "billing_address": "Adresa rozliczeniowy",
+      "name": "Name",
+      "email": "E-mail",
+      "company_id": "Company ID",
+      "tax_id": "Tax ID",
+      "error": "There was an error processing your request. Please try again.",
+      "phone_min_length": "Please enter a valid phone number",
+      "first_name_min_length": "First name should contain at least 2 characters",
+      "last_name_min_length": "Last name should contain at least 2 characters",
+      "address_min_length": "Address should be at least 5 characters long",
+      "city_min_length": "City name should contain at least 2 characters",
+      "zip_min_length": "Postal/ZIP code should be 3-10 characters"
     },
     "login_page": {
       "cancel": "Zrušiť",
@@ -649,7 +1058,10 @@
       "title": "Prihlásiť sa",
       "sign_in": "Prihlásiť sa",
       "submit": "Odoslať",
-      "alternate_provider_separator": "alebo"
+      "alternate_provider_separator": "alebo",
+      "forgot_password_message": "Jesli zgubiles heslo, przejdz do strony",
+      "facebook_login": "Log in via Facebook",
+      "google_login": "Log in via Google"
     },
     "orders": {
       "title": "História objednávok",
@@ -659,12 +1071,44 @@
       "payment_status": "Stav platby",
       "fulfillment_status": "Stav vybavenia",
       "total": "Celkove",
-      "none": "Zatiaľ ste nezadali žiadne objednávky."
+      "none": "Zatiaľ ste nezadali žiadne objednávky.",
+      "quantity": "Ilosc",
+      "status": "Status",
+      "cancelled": "Cancelled",
+      "delivered": "Delivered",
+      "detail": "Details",
+      "partially_refunded": "Partially Refunded",
+      "pending_payment": "Oczekuje na platnosc",
+      "processing": "Processing",
+      "refunded": "Refunded",
+      "shipped": "Shipped",
+      "billing_address": "Adresa rozliczeniowy",
+      "no_billing_address": "No billing address available",
+      "shipping_address": "Adresa pridania",
+      "no_shipping_address": "Brak dostepnego adresu pridania",
+      "original_price": "cena pierwotna",
+      "discount": "Discount",
+      "product_discount": "Rabat na produkt",
+      "shipping_discount": "Rabat na dostawe",
+      "purchase_price": "cena zakupu",
+      "shipping": "Dodanie",
+      "including_vat": "Including VAT",
+      "tax": "Tax",
+      "final_price": "cena koncowa",
+      "size": "Veľkosť",
+      "color": "Farba",
+      "download_invoice": "Download Invoice",
+      "reorder": "Reorder",
+      "reorder_error": "Failed to reorder items. Please try again.",
+      "price_details": "cena"
     },
     "recover_password": {
       "title": "Resetovať heslo",
       "subtext": "Odošleme vám e-mail, aby ste si mohli resetovať heslo",
-      "success": "Odoslali sme vám e-mail s prepojením, aby ste si mohli aktualizovať heslo."
+      "success": "Odoslali sme vám e-mail s prepojením, aby ste si mohli aktualizovať heslo.",
+      "email": "E-mail",
+      "submit": "Odoslať",
+      "cancel": "Zrušiť"
     },
     "form_errors": {
       "error": "Pri spracovaní vašej žiadosti sa vyskytla chyba. Skúste to znova.",
@@ -686,7 +1130,15 @@
       "password_requirement_uppercase": "Najmenej jedno veľké písmeno",
       "password_requirement_number": "Najmenej jednu číslicu",
       "password_requirement_special": "Najmenej jeden špeciálny znak",
-      "submit": "Vytvoriť"
+      "submit": "Vytvoriť",
+      "phone": "Phone Number",
+      "accepts_marketing": "W przyszlosci chcialbym otrzymywac informacje e-mailem o aktualnych trendach, ofertach i rabatach NORTHFINDER. Subskrypcje mozna anulowac bezplatnie w dowolnym momencie.",
+      "privacy_policy_message": "Jak w kazdym sklepie internetowym, bedziesz otrzymywac od nas wszystkie wazne aktualizacje e-mailem (potwierdzenie objednávky, potwierdzenie pridania, informacje o zwrocie, rekomendacje). Koniecznie przeczytaj",
+      "privacy_policy": "Privacy Policy",
+      "recaptcha_message": "Ta stránka je chroniona przez reCAPTCHA i Google",
+      "and": "and",
+      "terms_of_service": "Terms of Service",
+      "apply": "apply."
     },
     "reset_password": {
       "title": "Resetovať heslo konta",
@@ -707,9 +1159,9 @@
       "discount": "Zľava",
       "shipping": "Doprava",
       "tax": "Daň",
-      "product": "Produkt",
+      "product": "produkt",
       "sku": "Jednotka SKU",
-      "price": "Cena",
+      "price": "cena",
       "quantity": "Množstvo",
       "total": "Celkove",
       "fulfilled_at_html": "Vybavená {{ date }}",
@@ -720,6 +1172,18 @@
       "subtotal": "Medzisúčet",
       "total_duties": "Clá",
       "total_refunded": "Refundovaná suma"
+    },
+    "login": {
+      "title": "Logowanie",
+      "email": "E-mail",
+      "password": "Heslo",
+      "forgot_password": "Zapomniales hasla?",
+      "sign_in": "Sign In",
+      "please_login": "Prosze prihlásiť sie na svoje účet",
+      "guest_title": "Continue as a guest",
+      "guest_continue": "Pokračovať",
+      "submit": "Odoslať",
+      "alternate_provider_separator": "or"
     }
   },
   "gift_cards": {
@@ -734,7 +1198,12 @@
       "expired": "Platnosť uplynula",
       "copy_code_success": "Kód sa úspešne skopíroval",
       "how_to_use_gift_card": "Použite online kód darčekového poukazu alebo QR kód v obchode",
-      "expiration_date": "Platnosť skončí {{ expires_on }}"
+      "expiration_date": "Platnosť skončí {{ expires_on }}",
+      "disabled": "Wylaczona",
+      "active": "Wygasa {{ expiry }}",
+      "redeem_html": "Uzyj tego kodu przy kasie, aby wykorzystac karte podarunkowa o wartosci {{ value }}",
+      "print": "Wydrukuj te karte podarunkowa",
+      "remaining_html": "Pozostalo {{ balance }}"
     }
   },
   "recipient": {
@@ -841,5 +1310,286 @@
         "no_info": "Informácie o teple nie sú k dispozícii"
       }
     }
+  },
+  "collections": {
+    "general": {
+      "all": "Wszystkie"
+    }
+  },
+  "video": {
+    "no_support": "vaša przegladarka nie obsluguje tagu video."
+  },
+  "cart": {
+    "summary": {
+      "title": "Zhrnutie",
+      "subtotal_excluding_tax": "Suma czesciowa bez podatku",
+      "tax": "Daň",
+      "subtotal": "Suma czesciowa z podatkiem",
+      "shipping": "Dodanie",
+      "total": "Szacowana suma",
+      "calculated_at_checkout": "Obliczane przy kasie",
+      "savings": "Oszczedzasz"
+    },
+    "save_for_later": "Uložiť na pózniej",
+    "benefits": {
+      "title": "Korzysci dla zarejestrowanych klientów",
+      "loyalty": "Bonus lojalnosciowy",
+      "loyalty_text_1": "Registrovať sie i zdobywaj bonus lojalnosciowy za kazdy zakup.",
+      "loyalty_text_2": "Bonus zostanie przypisany do vášho konta 15. dnia po dodaní.",
+      "loyalty_text_3": "môžete go odjac od nastepnego zakupu, do 25% jego wartosci.",
+      "loyalty_text_4": "Zalecamy uživot bonusu w ciagu najblizszych 150 dni."
+    },
+    "coupon": {
+      "title": "Kupón rabatowy / Karta podarunkowa",
+      "placeholder": "Kod",
+      "apply": "Zastosuj"
+    },
+    "general": {
+      "title": "váš košík",
+      "note": "Pridať notatke do objednávky",
+      "remove": "Usun",
+      "subtotal": "Suma czesciowa",
+      "savings": "Oszczedzasz",
+      "shipping_at_checkout": "Dodanie i podatki obliczane przy kasie",
+      "update": "Aktualizovať",
+      "checkout": "Przejdz do kasy",
+      "empty": "váš košík je obecnie pusty.",
+      "cookies_required": "Wlacz pliki cookie, aby korzystac z koszyka",
+      "edit": "Upraviť",
+      "cancel": "Zrušiť",
+      "continue_shopping": "Pokračovať zakupy"
+    },
+    "label": {
+      "product": "produkt",
+      "price": "cena",
+      "quantity": "Ilosc",
+      "total": "Suma"
+    }
+  },
+  "phone_validation": {
+    "invalid": "Nieprawidlowy telefónne číslo",
+    "invalid_country_code": "Nieprawidlowy kod kraju",
+    "too_short": "Telefónne číslo je za krótki",
+    "too_long": "Telefónne číslo je za dlugi",
+    "local_only": "Prosze wprowadzic format miedzynarodowy",
+    "required": "Prosze wprowadzic telefónne číslo"
+  },
+  "date_formats": {
+    "month_day_year": "%d %B %Y"
+  },
+  "footer": {
+    "shopping_from": "Zakupy z",
+    "language": "Polski (Polish)",
+    "change": "Zmien",
+    "copyright": "© Copyright Northfinder 2025 / Wszelkie prawa zastrzezone",
+    "contact_us": "Skontaktuj sie z nami",
+    "contact": {
+      "phone": "+421 233 418 364",
+      "email": "eshop@northfinder.com",
+      "contact_us": "Skontaktuj sie z nami"
+    }
+  },
+  "size_guide": {
+    "headings": {
+      "men_clothing": "Przewodnik veľkosťów - Meski",
+      "women_clothing": "Przewodnik veľkosťów - Damski",
+      "men_footwear": "Rozmiary butów trekkingowych - Meskie",
+      "women_footwear": "Rozmiary butów trekkingowych - Damskie",
+      "measurement_guide": "Jak zmierzyc svoje cialo?",
+      "footwear_measurement_guide": "Jak zmierzyc veľkosť produktu?"
+    },
+    "instructions": {
+      "body_measurements": "<ol><li>KLATKA PIERSIOWA</li><li>TALIA</li><li>BIODRA</li><li>WZROST</li><li>DLUGOSC WEWNETRZNA NOGAWKI</li></ol>",
+      "foot_measurements": "<ol><li>DLUGOSC STOPY</li></ol>"
+    },
+    "measurements": {
+      "chest": "KLATKA PIERSIOWA",
+      "waist": "TALIA",
+      "hip": "BIODRA",
+      "height": "WZROST",
+      "inseam_length": "DLUGOSC WEWNETRZNA NOGAWKI",
+      "foot_length": "DLUGOSC STOPY"
+    },
+    "product_measurements": {
+      "waist_girth": "Obwód talii",
+      "waist_girth_relaxed": "Obwód talii - rozluzniony",
+      "waist_girth_stretched": "Obwód talii - rozciagniety",
+      "outside_length_end_waist": "Zewnetrzna dlugosc od konca talii",
+      "chest_girth_half": "1/2 obwodu klatki piersiowej",
+      "outside_length_top_waist": "Zewnetrzna dlugosc od góry talii",
+      "hip_girth": "Obwód bioder",
+      "bottom_girth_half": "1/2 obwodu dolu",
+      "bottom_girth_relaxed": "1/2 obwodu dolu - rozluzniony",
+      "bottom_girth_stretched_half": "1/2 obwodu dolu - rozciagniety",
+      "shoulder_point_to_point": "Od ramienia do ramienia",
+      "front_rise_end_waist": "Dlugosc przodu od konca talii",
+      "shoulder_sleeve_length": "Dlugosc ramienia i rekawa",
+      "back_rise_end_waist": "Dlugosc tylu od konca talii",
+      "inside_length": "Dlugosc wewnetrzna",
+      "center_back_length": "Dlugosc srodka pleców",
+      "thigh_half_crotch": "1/2 uda - przy kroku",
+      "sleeve_length": "Dlugosc rekawa",
+      "front_rise_top_waist": "Dlugosc przodu od góry talii",
+      "back_rise_top_waist": "Dlugosc tylu od góry talii",
+      "bottom_legs_half": "1/2 dolnych nogawek",
+      "waist_girth_half": "1/2 obwodu talii"
+    },
+    "descriptions": {
+      "hiking_shoes": "*Buty trekkingowe sa dopasowane do ludzkiej stopy"
+    },
+    "table_headers": {
+      "size": "Veľkosť",
+      "measurement": "Wymiar",
+      "eu": "EU",
+      "chest": "KLATKA PIERSIOWA",
+      "waist": "TALIA",
+      "hip": "BIODRA",
+      "height": "WZROST",
+      "inseam_length": "DLUGOSC WEWNETRZNA NOGAWKI",
+      "uk": "UK",
+      "us": "US",
+      "foot_length": "Dlugosc stopy (cm)"
+    },
+    "gender": {
+      "mens": "Meskie",
+      "womens": "Damskie"
+    },
+    "size_fit": {
+      "button_text": "Przewodnik veľkosťów i rekomendator dopasowania",
+      "modal": {
+        "title": "Przewodnik veľkosťów - {{ gender }}"
+      },
+      "unit_converter": {
+        "label": "Jednostka:",
+        "cm": "CM",
+        "inches": "CALE"
+      },
+      "tabs": {
+        "body_measurements": "Wymiary ciala",
+        "product_measurements": "Wymiary produktu",
+        "size_recommender": "Rekomendator rozmiaru"
+      },
+      "table_headers": {
+        "size": "Veľkosť",
+        "eu": "EU",
+        "chest": "KLATKA PIERSIOWA",
+        "waist": "TALIA",
+        "hip": "BIODRA",
+        "height": "WZROST",
+        "inseam_length": "DLUGOSC WEWNETRZNA NOGAWKI"
+      },
+      "measurement_guide": {
+        "title": "Jak zmierzyc svoje cialo?",
+        "chest": {
+          "title": "KLATKA PIERSIOWA",
+          "description": "Zmierz wokól najszerszej czesci klatki piersiowej, utrzymujac tasme poziomo"
+        },
+        "waist": {
+          "title": "TALIA",
+          "description": "Zmierz wokól naturalnej linii talii, najwezszej czesci torsu"
+        },
+        "hip": {
+          "title": "BIODRA",
+          "description": "Zmierz wokól najszerszej czesci bioder, okolo 20 cm ponizej talii"
+        },
+        "height": {
+          "title": "WZROST",
+          "description": "Zmierz od czubka glowy do podlogi bez butów"
+        },
+        "inseam": {
+          "title": "DLUGOSC WEWNETRZNA NOGAWKI",
+          "description": "Zmierz od krocza do kostki"
+        }
+      },
+      "product_measurements": {
+        "description": "Przyblizone wymiary zmierzone na produktoch",
+        "usage_note": "(uzyj do porównania z ubraniami w swojej szafie)",
+        "chest_girth_half": "1/2 OBWODU KLATKI PIERSIOWEJ (CM)",
+        "bottom_girth_half": "1/2 OBWODU DOLU (CM)",
+        "shoulder_point_to_point": "OD RAMIENIA DO RAMIENIA (CM)",
+        "shoulder_sleeve_length": "DLUGOSC RAMIENIA I REKAWA (CM)",
+        "center_back_length": "DLUGOSC SRODKA PLECÓW (CM)",
+        "sleeve_length": "DLUGOSC REKAWA (CM)",
+        "waist_girth": "OBWÓD TALII (CM)",
+        "hip_girth": "OBWÓD BIODER (CM)",
+        "inside_length": "DLUGOSC WEWNETRZNA (CM)"
+      },
+      "product_guide": {
+        "title": "Jak zmierzyc produkt?",
+        "description": "Te wymiary sa pobierane bezposrednio z odziezy i moga byc použité do porównania z istniejacymi ubraniami.",
+        "front_part": "Przednia czesc kurtki",
+        "back_part": "Tylna czesc kurtki",
+        "front_body_length": "DLUGOSC PRZODU OD HSP",
+        "chest_girth_half": "1/2 OBWODU KLATKI PIERSIOWEJ",
+        "bottom_girth_half": "1/2 OBWODU DOLU",
+        "bottom_girth_relaxed": "1/2 OBWODU DOLU - ROZLUZNIONY",
+        "bottom_girth_stretched": "1/2 OBWODU DOLU - ROZCIAGNIETY",
+        "shoulder_point_to_point": "OD RAMIENIA DO RAMIENIA",
+        "shoulder_sleeve_length": "DLUGOSC RAMIENIA I REKAWA",
+        "center_back_length": "DLUGOSC SRODKA PLECÓW",
+        "sleeve_length": "DLUGOSC REKAWA",
+        "waist_girth": "OBWÓD TALII",
+        "hip_girth": "OBWÓD BIODER",
+        "inside_length": "DLUGOSC WEWNETRZNA",
+        "outside_length": "DLUGOSC ZEWNETRZNA"
+      },
+      "recommender": {
+        "title": "Znajdz svoj idealny veľkosť",
+        "description": "Wprowadz svoje wymiary, aby otrzymac spersonalizowana rekomendacje rozmiaru",
+        "chest": "Klatka piersiowa",
+        "waist": "Talia",
+        "height": "Wzrost",
+        "weight": "Waga",
+        "fit_preference": "Jak wolisz, zeby Ci sie ubrania nosily?",
+        "tight_fit": "Dopasowany krój",
+        "tight_fit_desc": "Obcisly, dopasowany do sylwetki",
+        "regular_fit": "Regularny krój",
+        "regular_fit_desc": "Standardowe wygodne dopasowanie",
+        "loose_fit": "Luzny krój",
+        "loose_fit_desc": "Swobodny, przestronny krój",
+        "get_recommendation": "Otrzymaj rekomendacje rozmiaru",
+        "calculating": "Obliczanie vášho idealnego rozmiaru...",
+        "recommendation_title": "váš rekomendowany veľkosť",
+        "alternative_sizes": "Alternatywne rozmiary do rozwazenia:",
+        "error_title": "Nie mozna obliczyc rozmiaru",
+        "measurements_required": "Wymagane sa wymiary klatki piersiowej i talii",
+        "recommendation_explanation": "Na podstawie vašich wymiarów i preferencji dla PLACEHOLDER_FIT, veľkosť PLACEHOLDER_SIZE powinien zapewnic najlepšie dopasowanie."
+      },
+      "no_product_measurements": "Brak dostepnych wymiarów produktu dla tego článoku."
+    },
+    "parfum-features": {
+      "name": "Wlasciwosci perfum",
+      "settings": {
+        "heading": {
+          "label": "Naglówek",
+          "default": "Czym sa perfumy do prania?"
+        },
+        "description": {
+          "label": "Popis",
+          "default": "<p>Perfumy do prania NORTHFINDER to skoncentrowane wzmacniacze zapachu opracowane z mysla o wydajnosci i codziennym uzytkowaniu.</p><p>W przeciwienstwie do plynów do plukania, zachowuja oddychalnosc i wlasciwosci tkanin, zapewniajac jednoczesnie dlugotrwala swiezosc.</p>"
+        }
+      },
+      "blocks": {
+        "feature": {
+          "name": "Wlasciwosc",
+          "settings": {
+            "icon": {
+              "label": "Názov ikony",
+              "info": "Wprowadz nazwe pliku ikony SVG (bez rozszerzenia .svg)"
+            },
+            "title": {
+              "label": "Tytul",
+              "default": "Tytul wlasciwosci"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Wlasciwosci perfum"
+      }
+    }
+  },
+  "pages": {
+    "contact": "/pages/contact"
   }
 }

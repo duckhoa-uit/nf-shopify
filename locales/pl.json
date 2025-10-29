@@ -73,7 +73,11 @@
     "cart": {
       "view": "Pokaż koszyk ({{ count }})",
       "item_added": "Pozycję dodano do koszyka",
-      "view_empty_cart": "Pokaż koszyk"
+      "view_empty_cart": "Pokaż koszyk",
+      "coupon": {
+        "placeholder": "Kod"
+      },
+      "save_for_later": "Zapisz na później"
     },
     "share": {
       "copy_to_clipboard": "Kopiuj link",
@@ -524,7 +528,8 @@
     },
     "footer": {
       "payment": "Metody płatności",
-      "contact_us": "Skontaktuj się z nami"
+      "contact_us": "Skontaktuj się z nami",
+      "copyright": "© Copyright Northfinder 2025 / Wszelkie prawa zastrzeżone"
     },
     "featured_blog": {
       "view_all": "Zobacz więcej postów na blogu",
@@ -793,6 +798,127 @@
       "presets": {
         "name": "Korzyści parfumów"
       }
+    },
+    "parfum_instructions": {
+      "name": "Instrukcje perfum",
+      "heading": "Jak używać perfum do prania",
+      "badge": "Instrukcje",
+      "steps": {
+        "step_1": "Dobrze wstrząśnij butelką przed użyciem.",
+        "step_2": "Wlej 5 ml (1 dawkę) do przegródki na płyn do płukania w pralce na każde 4 kg prania.",
+        "step_3": "Nie wlewaj bezpośrednio do bębna ani do suszarki.",
+        "step_4": "Uruchom cykl prania jak zwykle.",
+        "step_5": "Jeśli produkt rozleje się na jakąkolwiek powierzchnię, natychmiast wytrzyj go wilgotną szmatką lub spłucz wodą."
+      },
+      "important_title": "WAŻNE:",
+      "warnings": {
+        "washing_machine": "Tylko do użytku w pralce.",
+        "children": "Trzymać z dala od dzieci. NIE prać ubrań dziecięcych z perfumami do prania, ponieważ ich skóra jest zbyt wrażliwa na silne olejki używane w perfumach.",
+        "contact": "Unikać bezpośredniego kontaktu ze skórą lub oczami.",
+        "irritation": "W przypadku podrażnienia skóry lub wysypki, umyć dużą ilością mydła i wody. Zasięgnąć porady lekarskiej, jeśli objawy utrzymują się.",
+        "disposal": "Utylizować pojemnik zgodnie z lokalnymi przepisami."
+      },
+      "settings": {
+        "heading": {
+          "label": "Nagłówek"
+        },
+        "description": {
+          "label": "Opis"
+        }
+      },
+      "presets": {
+        "name": "Instrukcje perfum"
+      }
+    },
+    "parfum_recommendations": {
+      "name": "Rekomendacje perfum",
+      "heading": "Zalecenia i ostrzeżenia",
+      "badge": "FAQ",
+      "do": {
+        "title": "Rób:",
+        "item_1": "Używaj z syntetycznymi, bawełnianymi lub technicznymi tkaninami",
+        "item_2": "Przechowuj w temperaturze pokojowej",
+        "item_3": "Najpierw przetestuj na wrażliwej skórze"
+      },
+      "dont": {
+        "title": "Nie rób:",
+        "item_1": "Nie nakładaj bezpośrednio na ubrania",
+        "item_2": "Unikaj kontaktu z oczami i błonami śluzowymi",
+        "item_3": "Trzymaj poza zasięgiem dzieci"
+      },
+      "recommended": {
+        "title": "Zalecane do:",
+        "item_1": "Odzież sportowa i sprzęt outdoor",
+        "item_2": "Odzież codzienna i zwykłe pranie",
+        "item_3": "Dla osób poszukujących długotrwałego zapachu bez pozostałości płynu do płukania"
+      },
+      "avoid": {
+        "title": "Unikaj",
+        "item_1": "Bezpośredniego nakładania na ubrania",
+        "item_2": "Kontaktu z oczami i skórą (spłucz w przypadku kontaktu)",
+        "item_3": "Używania na delikatnym jedwabiu lub nieobrobionej wełnie"
+      },
+      "settings": {
+        "heading": {
+          "label": "Nagłówek"
+        },
+        "description": {
+          "label": "Opis"
+        }
+      },
+      "presets": {
+        "name": "Rekomendacje perfum"
+      }
+    },
+    "parfum_care_guide": {
+      "name": "Przewodnik pielęgnacji perfum",
+      "heading": "Pytania? Mamy odpowiedzi.",
+      "badge": "FAQ",
+      "no_questions": "Brak pytań dla tej kategorii.",
+      "settings": {
+        "heading": {
+          "label": "Nagłówek"
+        },
+        "description": {
+          "label": "Opis"
+        },
+        "default_category": {
+          "label": "Domyślne ID aktywnej kategorii",
+          "info": "ID kategorii, która powinna być domyślnie aktywna"
+        }
+      },
+      "blocks": {
+        "faq_category": {
+          "name": "Kategoria FAQ",
+          "settings": {
+            "category_name": {
+              "label": "Nazwa kategorii"
+            },
+            "category_id": {
+              "label": "ID kategorii",
+              "info": "Unikalny identyfikator dla tej kategorii (używaj małych liter, bez spacji)"
+            }
+          }
+        },
+        "faq_item": {
+          "name": "Element FAQ",
+          "settings": {
+            "category": {
+              "label": "ID kategorii",
+              "info": "Musi pasować do ID kategorii z bloków Kategoria FAQ"
+            },
+            "question": {
+              "label": "Pytanie"
+            },
+            "answer": {
+              "label": "Odpowiedź"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Przewodnik pielęgnacji perfum"
+      }
     }
   },
   "localization": {
@@ -837,7 +963,9 @@
       "delete_account": "Usuń konto",
       "delete_confirm": "Czy na pewno chcesz usunąć swoje konto? Ta akcja nie może być cofnięta.",
       "delete_success": "Zgłoszenie usunięcia konta zostało przesłane.",
-      "info_update_success": "Podstawowe informacje zostały pomyślnie zaktualizowane!"
+      "info_update_success": "Podstawowe informacje zostały pomyślnie zaktualizowane!",
+      "password_changed": "Hasło zostało pomyślnie zaktualizowane!",
+      "password_update_success": "Hasło zostało pomyślnie zaktualizowane!"
     },
     "account_fallback": "Konto",
     "log_in": "Zaloguj się",
@@ -1125,7 +1253,8 @@
       "subtotal": "Suma częściowa z podatkiem",
       "shipping": "Dostawa",
       "total": "Szacowana suma",
-      "calculated_at_checkout": "Obliczane przy kasie"
+      "calculated_at_checkout": "Obliczane przy kasie",
+      "savings": "Oszczędzasz"
     },
     "save_for_later": "Zapisz na później",
     "benefits": {
@@ -1353,6 +1482,37 @@
         "recommendation_explanation": "Na podstawie Twoich wymiarów i preferencji dla PLACEHOLDER_FIT, rozmiar PLACEHOLDER_SIZE powinien zapewnić najlepsze dopasowanie."
       },
       "no_product_measurements": "Brak dostępnych wymiarów produktu dla tego artykułu."
+    },
+    "parfum-features": {
+      "name": "Właściwości perfum",
+      "settings": {
+        "heading": {
+          "label": "Nagłówek",
+          "default": "Czym są perfumy do prania?"
+        },
+        "description": {
+          "label": "Opis",
+          "default": "<p>Perfumy do prania NORTHFINDER to skoncentrowane wzmacniacze zapachu opracowane z myślą o wydajności i codziennym użytkowaniu.</p><p>W przeciwieństwie do płynów do płukania, zachowują oddychalność i właściwości tkanin, zapewniając jednocześnie długotrwałą świeżość.</p>"
+        }
+      },
+      "blocks": {
+        "feature": {
+          "name": "Właściwość",
+          "settings": {
+            "icon": {
+              "label": "Nazwa ikony",
+              "info": "Wprowadź nazwę pliku ikony SVG (bez rozszerzenia .svg)"
+            },
+            "title": {
+              "label": "Tytuł",
+              "default": "Tytuł właściwości"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Właściwości perfum"
+      }
     }
   },
   "snippets": {
