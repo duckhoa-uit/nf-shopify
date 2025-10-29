@@ -72,331 +72,23 @@
           {% render 'product-sticky-navigation', product: product, section_id: section.id %}
         {%- endif -%}
 
-        <!-- Placeholder sections for testing sticky navigation -->
-        <div class="product-sections-container">
-          <!-- Composition Section -->
-          {%- assign composition_cards = product.metafields.parfum.composition_cards.value -%}
-          {%- assign composition_description = product.metafields.parfum.composition_description -%}
-          {%- if composition_cards != blank or composition_description != blank -%}
-            <section id="composition" class="product-section">
-              <div class="product-section__content">
-                <h2 class="product-section__title">{{ 'products.product.composition.characteristics' | t }}</h2>
-                <div class="product-section__body">
-                  {% if composition_cards != blank %}
-                    <div class="composition-cards">
-                      {%- for card in composition_cards -%}
-                        {%- if card != blank -%}
-                          <div class="composition-card">
-                            <div class="composition-card-image">
-                              {%- if card.image != blank -%}
-                                {%- assign card_alt = card.alt_text | default: card.title -%}
-                                {{ card.image | image_url: width: 640 | image_tag: alt: card_alt, loading: 'lazy' }}
-                              {%- endif -%}
-                            </div>
-                            {%- if card.title != blank -%}
-                              <h4 class="composition-card-title">{{ card.title }}</h4>
-                            {%- endif -%}
-                          </div>
-                        {%- endif -%}
-                      {%- endfor -%}
-                    </div>
-                  {% endif %}
 
-                  {% if composition_description != blank %}
-                    <div class="composition-description">
-                      {{ composition_description | metafield_tag }}
-                    </div>
-                  {% endif %}
-                </div>
-              </div>
-            </section>
-          {%- endif -%}
-
-          <!-- About Fragrance Section -->
-          {%- assign about_fragrance_cards = product.metafields.parfum.about_fragrance_cards.value -%}
-          {%- if about_fragrance_cards != blank -%}
-            <section id="about-fragrance" class="product-section">
-              <div class="product-section__content">
-                <h2 class="product-section__title">
-                  {{ 'products.product.about_fragrance.title' | t }}
-                </h2>
-                <div class="product-section__body">
-                  <div class="about-fragrance-cards">
-                    {%- for feature in about_fragrance_cards -%}
-                      {%- if feature != blank -%}
-                        <div class="about-fragrance-card">
-                          <div class="about-fragrance-card-image">
-                            {%- if feature.icon != blank -%}
-                              {%- assign feature_alt = feature.alt_text | default: feature.label -%}
-                              {{ feature.icon | image_url: width: 480 | image_tag: alt: feature_alt, loading: 'lazy' }}
-                            {%- endif -%}
-                          </div>
-                          {%- if feature.label != blank -%}
-                            <p class="about-fragrance-card-text">{{ feature.label }}</p>
-                          {%- endif -%}
-                          {%- if feature.description != blank -%}
-                            <p class="about-fragrance-card-text mt-1 text-sm leading-5">{{ feature.description | newline_to_br }}</p>
-                          {%- endif -%}
-                        </div>
-                      {%- endif -%}
-                    {%- endfor -%}
-                  </div>
-                </div>
-              </div>
-            </section>
-          {%- endif -%}
-
-          <!-- Usage Section -->
-          {%- assign usage_products = product.metafields.custom.product_in_group.value -%}
-          {%- assign usage_description = product.metafields.parfum.usage_description -%}
-          {%- if usage_products != blank or usage_description != blank -%}
-            <section id="usage" class="product-section">
-              <div class="product-section__content">
-                <h2 class="product-section__title">
-                  {{ 'products.product.usage.title' | t }}
-                </h2>
-                <div class="product-section__body">
-                  {% if usage_products != blank %}
-                    <div class="usage-dosage-cards">
-                      {%- for usage_product in usage_products -%}
-                        {%- if usage_product != blank -%}
-                          {%- liquid
-                            assign dosage_amount = ''
-                            assign dosage_caption = ''
-
-                            for option in usage_product.options_with_values
-                              assign option_name_downcase = option.name | downcase
-                              if option_name_downcase contains 'size' or option_name_downcase contains 'größe' or option_name_downcase contains 'taille'
-                                if option.selected_value != blank
-                                  assign dosage_amount = option.selected_value
-                                  break
-                                endif
-                              endif
-                            endfor
-
-                            if dosage_amount == '' and usage_product.metafields.custom.size and usage_product.metafields.custom.size.value != blank
-                              if usage_product.metafields.custom.size.type == 'single_line_text_field'
-                                assign dosage_amount = usage_product.metafields.custom.size.value
-                              elsif usage_product.metafields.custom.size.type == 'list.single_line_text_field'
-                                assign dosage_amount = usage_product.metafields.custom.size.value | first
-                              endif
-                            endif
-
-                            if dosage_amount == ''
-                              assign title_parts = usage_product.title | split: ' - '
-                              if title_parts.size > 1
-                                assign dosage_amount = title_parts | last
-                              else
-                                assign title_parts = usage_product.title | split: ' | '
-                                if title_parts.size > 1
-                                  assign dosage_amount = title_parts | last
-                                else
-                                  assign title_parts = usage_product.title | split: ' ('
-                                  if title_parts.size > 1
-                                    assign last_part = title_parts | last
-                                    assign dosage_amount = last_part | replace: ')', ''
-                                  else
-                                    assign dosage_amount = usage_product.handle | split: '-' | last | capitalize
-                                  endif
-                                endif
-                              endif
-                            endif
-
-                            if dosage_amount == ''
-                              assign dosage_amount = usage_product.title
-                            endif
-
-                            if usage_product.metafields.custom.product_in_group_caption and usage_product.metafields.custom.product_in_group_caption.value != blank
-                              assign dosage_caption = usage_product.metafields.custom.product_in_group_caption.value
-                            endif
-
-                            assign usage_icon_alt = dosage_amount | strip
-                            if dosage_caption != ''
-                              assign usage_icon_alt = usage_icon_alt | append: ' ' | append: dosage_caption
-                            endif
-                            assign usage_icon_alt = usage_icon_alt | strip
-                          -%}
-
-                          <div class="usage-dosage-card">
-                            <div class="usage-dosage-content">
-                              <div class="usage-icon-container">
-                                <img
-                                  src="{{ 'washing-machine-icon.svg' | asset_url }}"
-                                  alt="{{ usage_icon_alt }}"
-                                  class="usage-washing-machine-icon"
-                                  width="56"
-                                  height="56"
-                                  loading="lazy"
-                                >
-                                <div class="usage-dosage-badge">
-                                  <span class="usage-dosage-amount">{{ dosage_amount }}</span>
-                                </div>
-                              </div>
-                              {% if dosage_caption != '' %}
-                                <p class="usage-dosage-text">{{ dosage_caption }}</p>
-                              {% endif %}
-                            </div>
-                          </div>
-                        {%- endif -%}
-                      {%- endfor -%}
-                    </div>
-                  {% endif %}
-
-                  {% if usage_description != blank %}
-                    <div class="usage-instructions">
-                      <div class="usage-description">
-                        {{ usage_description | metafield_tag }}
-                      </div>
-                    </div>
-                  {% endif %}
-                </div>
-              </div>
-            </section>
-          {%- endif -%}
-
-          <!-- Warnings Section -->
-          {%- assign warnings_content = product.metafields.parfum.warnings -%}
-          {%- if warnings_content != blank -%}
-            <section id="warnings" class="product-section">
-              <div class="product-section__content">
-                <h2 class="product-section__title">
-                  {{ 'products.product.warnings.title' | t }}
-                </h2>
-                <div class="product-section__body">
-                  <div class="warnings-content">
-                    <div class="warnings-text">
-                      {{ warnings_content | metafield_tag }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-          {%- endif -%}
-
-          <!-- Certificates Section -->
-          {%- assign certificates = product.metafields.parfum.certificates.value -%}
-          {%- assign certificates_video_url = product.metafields.parfum.certificates_video_url.value | strip -%}
-          {%- if certificates != blank or certificates_video_url != blank -%}
-            <section id="certificates" class="product-section">
-              <div class="product-section__content">
-                <h2 class="product-section__title">
-                  {{ 'products.product.certificates.title' | t }}
-                </h2>
-                <div class="product-section__body">
-                  {% if certificates != blank %}
-                    <div class="certificates-grid">
-                      {%- for certificate in certificates -%}
-                        {%- if certificate != blank -%}
-                          <div class="certificate-card">
-                            <div class="certificate-content">
-                              <div class="certificate-icon-container">
-                                {%- if certificate.icon != blank -%}
-                                  {%- assign certificate_alt = certificate.alt_text | default: certificate.label -%}
-                                  {{ certificate.icon | image_url: width: 128 | image_tag: alt: certificate_alt, loading: 'lazy', class: 'certificate-icon' }}
-                                {%- endif -%}
-                              </div>
-                              {%- if certificate.label != blank -%}
-                                <p class="certificate-text">{{ certificate.label }}</p>
-                              {%- endif -%}
-                            </div>
-                          </div>
-                        {%- endif -%}
-                      {%- endfor -%}
-                    </div>
-                  {% endif %}
-                </div>
-              </div>
-
-              {% if certificates_video_url != blank %}
-                {%- assign video_url = certificates_video_url -%}
-                {%- assign video_host = video_url | split: '://' | last | split: '/' | first | downcase -%}
-                {%- assign video_host = video_host | replace: 'www.', '' -%}
-                {%- assign video_type = '' -%}
-                {%- assign video_id = '' -%}
-
-                {%- if video_host contains 'youtu.be' -%}
-                  {%- assign video_type = 'youtube' -%}
-                  {%- assign video_id = video_url | split: '/' | last | split: '?' | first | split: '&' | first -%}
-                {%- elsif video_host contains 'youtube.com' -%}
-                  {%- assign video_type = 'youtube' -%}
-                  {%- if video_url contains 'watch?v=' -%}
-                    {%- assign video_id = video_url | split: 'watch?v=' | last | split: '&' | first -%}
-                  {%- elsif video_url contains '/embed/' -%}
-                    {%- assign video_id = video_url | split: '/embed/' | last | split: '?' | first -%}
-                  {%- elsif video_url contains '/shorts/' -%}
-                    {%- assign video_id = video_url | split: '/shorts/' | last | split: '?' | first -%}
-                  {%- else -%}
-                    {%- assign video_id = video_url | split: '/' | last | split: '?' | first -%}
-                  {%- endif -%}
-                {%- elsif video_host contains 'vimeo.com' -%}
-                  {%- assign video_type = 'vimeo' -%}
-                  {%- assign video_id = video_url | split: '/' | last | split: '?' | first -%}
-                {%- endif -%}
-
-                {%- if video_type != blank and video_id != blank -%}
-                  <div class="perfumes-video">
-                    {% render 'embedded-video',
-                      video_id: video_id,
-                      video_type: video_type,
-                      title: blank,
-                      autoplay: false,
-                      loop: false,
-                      controls: true,
-                      class: 'perfumes-video-player'
-                    %}
-                  </div>
-                {%- endif -%}
-              {% endif %}
-            </section>
-          {%- endif -%}
-
-          <!-- About Perfumes Section -->
-          {%- assign about_perfumes_description = product.metafields.parfum.about_perfumes_description -%}
-          {%- assign about_perfumes_features = product.metafields.parfum.about_perfumes_features.value -%}
-          {%- if about_perfumes_description != blank or about_perfumes_features != blank -%}
-            <section id="about-perfumes" class="product-section about-perfumes-section">
-              <div class="product-section__content">
-                <div class="about-perfumes-header">
-                  <h2 class="product-section__title">{{ 'products.product.about_perfumes.title' | t }}</h2>
-                  {% if about_perfumes_description != blank %}
-                    <div class="about-perfumes-description">
-                      {{ about_perfumes_description | metafield_tag }}
-                    </div>
-                  {% endif %}
-                </div>
-
-                {% if about_perfumes_features != blank %}
-                  <div class="product-section__body">
-                    <div class="about-perfumes-features">
-                      {%- for feature in about_perfumes_features -%}
-                        {%- if feature != blank -%}
-                          <div class="about-perfumes-feature-card">
-                            <div class="about-perfumes-feature-icon">
-                              {%- if feature.icon != blank -%}
-                                {%- assign feature_alt = feature.alt_text | default: feature.label -%}
-                                {{ feature.icon | image_url: width: 160 | image_tag: alt: feature_alt, loading: 'lazy', class: 'feature-icon' }}
-                              {%- endif -%}
-                            </div>
-                            <div class="about-perfumes-feature-text">
-                              {%- if feature.label != blank -%}
-                                <p>{{ feature.label }}</p>
-                              {%- endif -%}
-                              {%- if feature.description != blank -%}
-                                <p class="mt-1 text-sm leading-5">{{ feature.description | newline_to_br }}</p>
-                              {%- endif -%}
-                            </div>
-                          </div>
-                        {%- endif -%}
-                      {%- endfor -%}
-                    </div>
+        <!-- Dynamic blocks container -->
+        <div class="product-blocks-container">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'pagefly_section' -%}
+                {% if block.settings.section_id.size > 0 %}
+                  <div class="product-block pagefly-block" {{ block.shopify_attributes }}>
+                    {% render 'pagefly-main-js' %}
+                    {% render 'pagefly-main-css' %}
+                    {% include block.settings.section_id %}
                   </div>
                 {% endif %}
-              </div>
-            </section>
-          {%- endif -%}
-
-          <!-- Reviews Section -->
-          <section id="reviews" class="product-section">
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+        <section id="reviews" class="product-section">
             <div class="product-section__content">
               <h2 class="product-section__title">{{ 'products.product.sections.reviews' | t }}</h2>
               <div class="product-section__body">
@@ -415,7 +107,6 @@
               </div>
             </div>
           </section>
-        </div>
       </div>
       <div class="product__info-wrapper {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -1209,6 +900,27 @@
           "id": "custom_liquid",
           "label": "t:sections.custom-liquid.settings.custom_liquid.label",
           "info": "t:sections.custom-liquid.settings.custom_liquid.info"
+        }
+      ]
+    },
+    {
+      "type": "pagefly_section",
+      "name": "PageFly Section",
+      "settings": [
+        {
+          "id": "section_id",
+          "type": "select",
+          "label": "PageFly Section",
+          "options": [
+            {
+              "label": "Select section",
+              "value": ""
+            },
+            {
+              "label": "parfum",
+              "value": "pf-ee602e7d"
+            }
+          ]
         }
       ]
     },
