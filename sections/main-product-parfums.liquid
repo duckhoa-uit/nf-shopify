@@ -67,47 +67,7 @@
       <div class="product__media-wrapper">
         {% render 'product-media-gallery', variant_images: variant_images %}
       </div>
-      <div class="product__description-wrapper">
-        {%- if section.settings.enable_sticky_navigation -%}
-          {% render 'product-sticky-navigation', product: product, section_id: section.id %}
-        {%- endif -%}
 
-
-        <!-- Dynamic blocks container -->
-        <div class="product-blocks-container">
-          {%- for block in section.blocks -%}
-            {%- case block.type -%}
-              {%- when 'pagefly_section' -%}
-                {% if block.settings.section_id.size > 0 %}
-                  <div class="product-block pagefly-block" {{ block.shopify_attributes }}>
-                    {% render 'pagefly-main-js' %}
-                    {% render 'pagefly-main-css' %}
-                    {% include block.settings.section_id %}
-                  </div>
-                {% endif %}
-            {%- endcase -%}
-          {%- endfor -%}
-        </div>
-        <section id="reviews" class="product-section">
-            <div class="product-section__content">
-              <h2 class="product-section__title">{{ 'products.product.sections.reviews' | t }}</h2>
-              <div class="product-section__body">
-                <!-- Start of Judge.me code -->
-                <div style="clear:both"></div>
-                <div
-                  id="judgeme_product_reviews"
-                  class="jdgm-widget jdgm-review-widget"
-                  data-product-title="{{ product.title | escape }}"
-                  data-id="{{ product.id }}"
-                  data-auto-install="false"
-                >
-                  {{ product.metafields.judgeme.widget }}
-                </div>
-                <!-- End of Judge.me code -->
-              </div>
-            </div>
-          </section>
-      </div>
       <div class="product__info-wrapper {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
           id="ProductInfo-{{ section.id }}"
@@ -900,27 +860,6 @@
           "id": "custom_liquid",
           "label": "t:sections.custom-liquid.settings.custom_liquid.label",
           "info": "t:sections.custom-liquid.settings.custom_liquid.info"
-        }
-      ]
-    },
-    {
-      "type": "pagefly_section",
-      "name": "PageFly Section",
-      "settings": [
-        {
-          "id": "section_id",
-          "type": "select",
-          "label": "PageFly Section",
-          "options": [
-            {
-              "label": "Select section",
-              "value": ""
-            },
-            {
-              "label": "parfum",
-              "value": "pf-ee602e7d"
-            }
-          ]
         }
       ]
     },
