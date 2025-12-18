@@ -1,0 +1,27 @@
+# Northfinder Shopify Theme - Git Attributes
+# Prevents merge conflicts for store-specific configuration files
+
+# Always keep the current branch version when merging (ours strategy)
+# This ensures store-specific configs are never overwritten during merges
+config/settings_data.json merge=ours
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+
+# Ensure consistent line endings
+*.liquid text eol=lf
+*.json text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
