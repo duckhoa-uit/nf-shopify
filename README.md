@@ -22,38 +22,43 @@ This repository uses an **Environment Branch Strategy** to manage multiple produ
 ### Branch Structure
 
 ```
-main ─────────────────────────────────────────────────► Germany Production (northfinder-1.myshopify.com)
-                                                        ⚠️ Protected - direct sync with live store
-
-develop (integration branch for shared UI/features) ──► Development Store (sportfinder-international.myshopify.com)
-├── feature/new-product-card
-├── feature/checkout-improvements
-├── hotfix/critical-bug-fix
+main (integration branch) ────────────────────────────► Shared codebase - no direct store connection
+│                                                       ✅ Safe to merge features here
 │
-├── store/sportfinder-de ─────────────────────────────► Germany Production (synced from main)
-├── store/international ──────────────────────────────► Future: International Multi-Market Store
-├── store/poland ─────────────────────────────────────► Poland Production
-└── store/perfumes ───────────────────────────────────► Perfumes Production
+├── develop ──────────────────────────────────────────► Development Store (sportfinder-international.myshopify.com)
+│   ├── feature/new-product-card                        🟡 Testing & staging
+│   ├── feature/checkout-improvements
+│   └── hotfix/critical-bug-fix
+│
+├── store/sportfinder-de ─────────────────────────────► Germany Production (northfinder-1.myshopify.com)
+│                                                       🔴 Live store
+├── store/international ──────────────────────────────► International (sportfinder-international.myshopify.com)
+│                                                       🟢 Future multi-market
+├── store/poland ─────────────────────────────────────► Poland Production (poland-northfinder-2.myshopify.com)
+│                                                       🔴 Live store
+└── store/perfumes ───────────────────────────────────► Perfumes Production (northfinder-parfums.myshopify.com)
+                                                        🔴 Live store
 ```
 
 ### Store-Branch Mapping
 
-| Store | Branch | Shopify Store | Purpose |
-|-------|--------|---------------|---------|
-| **Germany (Live)** | `main` | northfinder-1.myshopify.com | 🔴 Production |
-| **Development** | `develop` | sportfinder-international.myshopify.com | 🟡 Staging/Testing |
-| **International** | `store/international` | sportfinder-international.myshopify.com | 🟢 Future multi-market |
-| **Poland** | `store/poland` | poland-northfinder-2.myshopify.com | 🔴 Production |
-| **Perfumes** | `store/perfumes` | northfinder-parfums.myshopify.com | 🔴 Production |
+| Store | Branch | Shopify Store | CLI Environment | Status |
+|-------|--------|---------------|-----------------|--------|
+| **Germany** | `store/sportfinder-de` | northfinder-1.myshopify.com | `germany` | 🔴 Production |
+| **Development** | `develop` | sportfinder-international.myshopify.com | `development` | 🟡 Staging |
+| **International** | `store/international` | sportfinder-international.myshopify.com | `development` | 🟢 Future |
+| **Poland** | `store/poland` | poland-northfinder-2.myshopify.com | `poland` | 🔴 Production |
+| **Perfumes** | `store/perfumes` | northfinder-parfums.myshopify.com | `perfumes` | 🔴 Production |
+| **Integration** | `main` | *(no direct connection)* | - | ✅ Safe |
 
 ### Key Principles
 
-1. **`main` = Germany Production**: Never push directly to `main` unless deploying to Germany
+1. **`main` = Integration Branch**: Shared codebase, no direct store connection - safe for merging
 2. **`develop` = Safe Testing**: All feature development happens here, connected to development store
-3. **Shared UI, Isolated Configs**: All UI/features developed in `develop`, store-specific configs stay in `store/*` branches
-4. **Never Merge Configs Up**: Store configurations never merge back to `develop`
-5. **Always Merge Features Down**: Changes in `develop` always propagate to all store branches
-6. **Hotfixes Propagate**: Emergency fixes must reach all stores
+3. **`store/*` = Production**: Each store has its own branch with store-specific configs
+4. **Shared UI, Isolated Configs**: All UI/features developed in `develop`, store-specific configs stay in `store/*` branches
+5. **Never Merge Configs Up**: Store configurations never merge back to `main` or `develop`
+6. **Always Merge Features Down**: Changes in `main` propagate to all `store/*` branches
 
 ### Quick Decision Tree
 
@@ -61,18 +66,20 @@ develop (integration branch for shared UI/features) ──► Development Store 
 
 - **New UI/Feature** (sections, snippets, assets, etc.)
   - Create `feature/*` branch from `develop`
+  - Test on development store
   - Merge to `develop` via PR
-  - Then merge `develop` to `main` and other `store/*` branches
+  - Merge `develop` to `main`
+  - Then merge `main` to all `store/*` branches
 
 - **Store-Specific Config** (apps, theme settings)
-  - Checkout `main` or `store/*` branch directly
+  - Checkout `store/*` branch directly (e.g., `store/sportfinder-de` for Germany)
   - Commit changes to that store branch only
-  - Do NOT merge back to `develop`
+  - Do NOT merge back to `main` or `develop`
 
 - **Emergency Fix**
-  - Create `hotfix/*` from `main` (for Germany) or affected `store/*` branch
+  - Create `hotfix/*` from affected `store/*` branch
   - Merge to store branch first (deploy immediately)
-  - Then merge to `develop`
+  - Then merge to `main` and `develop`
   - Then merge to other store branches
 
 ## Development Setup
@@ -161,65 +168,81 @@ git push origin feature/new-product-card
 git checkout develop
 git pull origin develop
 
-# 2. Merge to main (triggers Germany deployment)
+# 2. Merge to main (integration branch)
 git checkout main
 git pull origin main
 git merge develop
-
-# 3. Push to deploy (Shopify sync will update Germany store)
 git push origin main
 
-# Or manually push theme:
+# 3. Merge to Germany store branch
+git checkout store/sportfinder-de
+git pull origin store/sportfinder-de
+git merge main
+git push origin store/sportfinder-de
+
+# 4. Deploy to Germany store
 shopify theme push -e germany --allow-live
 ```
 
 ### For Store-Specific Configuration Changes
 
 ```bash
-# 1. Checkout the specific store branch (or main for Germany)
-git checkout main  # For Germany-specific config
+# 1. Checkout the specific store branch
+git checkout store/sportfinder-de  # For Germany-specific config
 
 # 2. Make configuration changes
 # - Update config/settings_data.json (app embeds, theme settings)
 # - Update templates/*.json if needed
 
-# 3. Test with Shopify CLI (use development store if possible)
-shopify theme dev -e development  # Test on dev store first
-# Then verify on production:
+# 3. Test with Shopify CLI
 shopify theme dev -e germany
 
-# 4. Commit directly to main (for Germany)
+# 4. Commit directly to store branch
 git add config/settings_data.json
 git commit -m "config(germany): add reviews app embed"
-git push origin main
+git push origin store/sportfinder-de
 
-# ⚠️ DO NOT merge store configs back to develop
+# 5. Deploy to store
+shopify theme push -e germany --allow-live
+
+# ⚠️ DO NOT merge store configs back to main or develop
 ```
 
 ### For Emergency Hotfixes
 
 ```bash
-# 1. Create hotfix from main (Germany production)
-git checkout main
+# 1. Create hotfix from affected store branch
+git checkout store/sportfinder-de
 git checkout -b hotfix/fix-checkout-bug
 
 # 2. Fix the bug
 # ... make your fix ...
 
-# 3. Test on development store first
+# 3. Test on development store first (if possible)
 shopify theme dev -e development
 
-# 4. Commit and create PR to main (urgent)
+# 4. Commit and merge to store branch (urgent)
 git commit -m "fix: resolve checkout button not working"
-git push origin hotfix/fix-checkout-bug
-# Create PR: hotfix/fix-checkout-bug → main
+git checkout store/sportfinder-de
+git merge hotfix/fix-checkout-bug
+git push origin store/sportfinder-de
 
-# 5. After deploying to Germany, propagate to develop and other stores
+# 5. Deploy immediately
+shopify theme push -e germany --allow-live
+
+# 6. Propagate to main and develop
+git checkout main
+git merge hotfix/fix-checkout-bug
+git push origin main
+
 git checkout develop
 git merge hotfix/fix-checkout-bug
 git push origin develop
 
-# Then merge to other store branches as needed
+# 7. Merge to other store branches as needed
+git checkout store/poland
+git merge main
+git push origin store/poland
 ```
 
 ## Store Information
@@ -228,11 +251,12 @@ git push origin develop
 
 | Store | Branch | Shopify Store | CLI Environment | Primary Language | Status |
 |-------|--------|---------------|-----------------|------------------|--------|
-| Germany Production | `main` | northfinder-1.myshopify.com | `germany` | German (de) | 🔴 Live |
-| Development/Staging | `develop` | sportfinder-international.myshopify.com | `development` | Multiple | 🟡 Testing |
+| Germany | `store/sportfinder-de` | northfinder-1.myshopify.com | `germany` | German (de) | 🔴 Live |
+| Development | `develop` | sportfinder-international.myshopify.com | `development` | Multiple | 🟡 Testing |
 | Poland | `store/poland` | poland-northfinder-2.myshopify.com | `poland` | Polish (pl) | 🔴 Live |
 | Perfumes | `store/perfumes` | northfinder-parfums.myshopify.com | `perfumes` | Multiple | 🔴 Live |
 | International | `store/international` | sportfinder-international.myshopify.com | `development` | Multiple | 🟢 Future |
+| Integration | `main` | *(no direct connection)* | - | - | ✅ Safe |
 
 ## Testing
 
@@ -257,15 +281,14 @@ Before merging to `develop`:
 - [ ] Verify no breaking changes
 - [ ] Run automated tests
 
-Before merging to `main` (Germany Production):
+Before merging to `main`:
 - [ ] All changes tested on development store
-- [ ] Test on unpublished theme in Germany store if needed
-- [ ] Verify store-specific configs intact
-- [ ] Check app functionality
-- [ ] Verify no visual regressions
+- [ ] Run automated tests
+- [ ] Verify no breaking changes
 
-Before merging to other `store/*` branches:
-- [ ] Test on staging theme (unpublished)
+Before merging to `store/*` branches (Production):
+- [ ] Changes merged to `main` first
+- [ ] Test on unpublished theme if needed
 - [ ] Verify store-specific configs intact
 - [ ] Check app functionality
 - [ ] Verify no visual regressions
@@ -379,22 +402,23 @@ git add config/settings_data.json
 git commit
 ```
 
-**Issue: Main branch missing latest develop changes**
+**Issue: Store branch missing latest main changes**
 ```bash
-git checkout main
-git pull origin main
-git merge develop
-# Resolve conflicts (keep main's config/settings_data.json)
-git push origin main
+git checkout store/sportfinder-de
+git pull origin store/sportfinder-de
+git merge main
+# Resolve conflicts (keep store's config/settings_data.json)
+git push origin store/sportfinder-de
 ```
 
 **Issue: Can't deploy to Germany store**
 ```bash
 # Pull latest config from live store first
+git checkout store/sportfinder-de
 shopify theme pull -e germany --only config/settings_data.json
 git add config/settings_data.json
 git commit -m "config(germany): sync with live store"
-git push origin main
+git push origin store/sportfinder-de
 ```
 
 **Issue: Development store out of sync**
