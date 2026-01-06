@@ -500,7 +500,10 @@
       "title": "Connexion",
       "sign_in": "Se connecter",
       "submit": "Soumettre",
-      "alternate_provider_separator": "ou"
+      "alternate_provider_separator": "ou",
+      "forgot_password_message": "Si vous avez oublié votre mot de passe, passez à la page suivante",
+      "facebook_login": "Se connecter via Facebook",
+      "google_login": "Se connecter via Google"
     },
     "order": {
       "title": "Commande {{ name }}",
@@ -556,7 +559,8 @@
       "last_name": "Nom de famille",
       "email": "E-mail",
       "password": "Mot de passe",
-      "submit": "Créer"
+      "submit": "Créer",
+      "password_requirement_special": "Au moins un caractère spécial"
     },
     "reset_password": {
       "title": "Réinitialiser le mot de passe du compte",
@@ -583,7 +587,8 @@
       "active": "Expire le {{ expiry }}",
       "redeem_html": "Utilisez ce code à la caisse pour utiliser votre {{ value }} carte-cadeau",
       "expiration_date": "Expire le {{ expires_on }}",
-      "how_to_use_gift_card": "Comment utiliser votre carte-cadeau"
+      "how_to_use_gift_card": "Comment utiliser votre carte-cadeau",
+      "print": "Imprimez cette carte-cadeau"
     }
   },
   "pagefly": {
@@ -635,7 +640,26 @@
     "product_measurements": {
       "back_rise_top_waist": "Longueur dos - à partir du haut de la taille",
       "bottom_legs_half": "1/2 pieds inférieurs",
-      "waist_girth_half": "1/2 tour de taille"
+      "waist_girth_half": "1/2 tour de taille",
+      "waist_girth": "tour de taille",
+      "waist_girth_relaxed": "Tour de taille - au repos",
+      "waist_girth_stretched": "Tour de taille - étiré",
+      "outside_length_end_waist": "longueur extérieure à partir de la taille",
+      "chest_girth_half": "1/2 tour de poitrine",
+      "outside_length_top_waist": "longueur extérieure à partir du haut de la taille",
+      "hip_girth": "tour de hanches",
+      "bottom_girth_half": "1/2 circonférence inférieure",
+      "bottom_girth_relaxed": "1/2 circonférence du bas - au repos",
+      "bottom_girth_stretched_half": "1/2 circonférence inférieure - étirée",
+      "shoulder_point_to_point": "Épaule point à point",
+      "front_rise_end_waist": "Longueur de la fourche avant à partir de la taille",
+      "shoulder_sleeve_length": "longueur des épaules et des manches",
+      "back_rise_end_waist": "Longueur dos - à partir de la taille",
+      "inside_length": "Longueur intérieure",
+      "center_back_length": "Longueur du milieu du dos",
+      "thigh_half_crotch": "1/2 cuisse - à l'entrejambe",
+      "sleeve_length": "Longueur des manches",
+      "front_rise_top_waist": "Longueur de la fourche avant - à partir du haut de la taille"
     },
     "descriptions": {
       "hiking_shoes": "Les chaussures de randonnée sont taillées en fonction de la morphologie du pied."
@@ -781,6 +805,104 @@
           }
         }
       }
+    },
+    "headings": {
+      "men_clothing": "Guide des tailles - Homme",
+      "women_clothing": "Guide des tailles - Femme",
+      "men_footwear": "Guide des pointures de chaussures de randonnée - Homme",
+      "women_footwear": "Guide des pointures de chaussures de randonnée - Femme",
+      "measurement_guide": "Comment mesurer son corps ?",
+      "footwear_measurement_guide": "Comment mesurer la taille du produit ?"
+    },
+    "instructions": {
+      "body_measurements": "<ol>\n<li>POITRINE</li>\n<li> TAILLE</li>\n<li> HANCHE</li>\n<li> HAUTEUR</li>\n<li> LONGUEUR D'ENTREJAMBE</li>\n</ol>",
+      "foot_measurements": "<ol><li>LONGUEUR DU PIED</li></ol>"
+    },
+    "measurements": {
+      "chest": "POITRINE",
+      "waist": "TAILLE",
+      "hip": "HANCHE",
+      "height": "HAUTEUR",
+      "inseam_length": "LONGUEUR D'ENTREJAMBE",
+      "foot_length": "LONGUEUR DU PIED"
+    }
+  },
+  "cart": {
+    "summary": {
+      "title": "Résumé",
+      "subtotal_excluding_tax": "Sous-total hors taxes",
+      "tax": "Impôt",
+      "subtotal": "Sous-total taxes comprises",
+      "shipping": "Expédition",
+      "total": "Total estimé",
+      "calculated_at_checkout": "Calculé lors du paiement"
+    },
+    "save_for_later": "Enregistrer pour plus tard",
+    "benefits": {
+      "title": "Avantages pour les clients inscrits",
+      "loyalty": "Bonus de fidélité",
+      "loyalty_text_1": "Inscrivez-vous et gagnez un bonus de fidélité à chaque achat.",
+      "loyalty_text_2": "Le bonus sera crédité sur votre compte le 15e jour après la livraison.",
+      "loyalty_text_3": "Vous pouvez la déduire de votre prochain achat, jusqu'à 25 % de sa valeur.",
+      "loyalty_text_4": "Nous vous recommandons d'utiliser le bonus dans les 150 prochains jours."
+    },
+    "coupon": {
+      "title": "Coupon de réduction / Carte-cadeau",
+      "apply": "Appliquer"
+    },
+    "general": {
+      "title": "Votre panier",
+      "note": "Ajoutez une note à votre commande",
+      "remove": "Retirer",
+      "subtotal": "Total",
+      "savings": "Vous économisez",
+      "shipping_at_checkout": "Frais de livraison et taxes calculés lors du paiement",
+      "update": "Mise à jour",
+      "checkout": "Vérifier",
+      "empty": "Votre panier est actuellement vide.",
+      "cookies_required": "Activez les cookies pour utiliser le panier d'achat",
+      "edit": "Modifier",
+      "cancel": "Annuler",
+      "continue_shopping": "Continuez vos achats"
+    },
+    "label": {
+      "product": "Produit",
+      "price": "Prix",
+      "quantity": "Quantité"
+    }
+  },
+  "recipient": {
+    "form": {
+      "checkbox": "Envoyer en cadeau",
+      "email": "Courriel du destinataire",
+      "email_label": "Courriel du destinataire",
+      "email_label_optional_for_no_js_behavior": "Adresse électronique du destinataire (facultatif)",
+      "name": "Nom du destinataire",
+      "name_label": "Nom du destinataire",
+      "message_label": "Message (facultatif)",
+      "max_characters": "Nombre maximum de caractères : {{ max_chars }}",
+      "expanded": "Formulaire de message cadeau étendu",
+      "collapsed": "Formulaire de message cadeau réduit",
+      "send_on": "Envoyer",
+      "send_on_label": "Envoyer (facultatif)"
+    }
+  },
+  "phone_validation": {
+    "invalid": "Numéro de téléphone invalide",
+    "invalid_country_code": "Code pays invalide",
+    "too_short": "Le numéro de téléphone est trop court.",
+    "too_long": "Le numéro de téléphone est trop long.",
+    "local_only": "Veuillez saisir un format international",
+    "required": "Veuillez saisir un numéro de téléphone"
+  },
+  "footer": {
+    "shopping_from": "Achats auprès de",
+    "language": "Anglais (anglais)",
+    "change": "Changement",
+    "copyright": "© Copyright Northfinder 2025 / Tous droits réservés",
+    "contact_us": "Contactez-nous",
+    "contact": {
+      "contact_us": "Contactez-nous"
     }
   }
 }
