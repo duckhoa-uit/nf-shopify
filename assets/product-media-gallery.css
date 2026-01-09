@@ -1,0 +1,334 @@
+/**
+ * Product Media Gallery Styles
+ *
+ * Styles for the product media gallery component including:
+ * - Loading states for media elements
+ * - Gallery toggle button
+ * - Fancybox v5 customization (close, prev/next buttons, toolbar)
+ * - Video container styling
+ * - Thumbnail customization
+ *
+ * Note: Set --icon-close-url CSS variable to the icon-close.svg asset URL
+ */
+
+.loading-media {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.loading-media.loaded {
+  opacity: 1;
+}
+
+#gallery-toggle-btn {
+  padding: 12px 24px;
+  background-color: #ffffff;
+  color: #0f0f0f;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-body-family);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.14;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+#gallery-toggle-btn:hover {
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+#gallery-toggle-container {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  z-index: 2;
+  right: 1rem;
+  bottom: 1rem;
+}
+
+#gallery-toggle-container.visible {
+  opacity: 1;
+}
+
+/* Custom close button with icon for Fancybox v5 */
+.f-button.is-close {
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  width: 3.75rem;
+  height: 3.75rem;
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+.f-button.is-close:hover {
+  background-color: #e0e0e0;
+}
+
+.f-button.is-close svg {
+  display: none;
+}
+
+.f-button.is-close::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  background-image: var(--icon-close-url);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Custom navigation buttons for Fancybox v5 */
+.f-button.is-prev svg,
+.f-button.is-next svg {
+  display: none;
+}
+
+.f-button.is-prev,
+.f-button.is-next {
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background-color: white;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+
+/* Position buttons relative to fancybox__content with higher specificity */
+.is-horizontal .f-carousel__nav .f-button.is-prev,
+.is-horizontal .fancybox__nav .f-button.is-prev,
+.f-button.is-prev {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: var(--f-button-prev-pos) !important; /* Use !important to override default styles */
+}
+
+.is-horizontal .f-carousel__nav .f-button.is-next,
+.is-horizontal .fancybox__nav .f-button.is-next,
+.f-button.is-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: var(--f-button-next-pos) !important; /* Use !important to override default styles */
+}
+
+/* Set default values for the CSS variables */
+:root {
+  --f-button-prev-pos: -60px; /* 60px gap on desktop */
+  --f-button-next-pos: -60px; /* 60px gap on desktop */
+}
+
+/* Responsive gaps for tablet and mobile */
+@media screen and (max-width: 990px) and (min-width: 768px) {
+  :root {
+    --f-button-prev-pos: -40px; /* 40px gap on tablet */
+    --f-button-next-pos: -40px; /* 40px gap on tablet */
+  }
+}
+
+@media screen and (max-width: 767px) {
+  :root {
+    --f-button-prev-pos: -20px; /* 20px gap on mobile */
+    --f-button-next-pos: -20px; /* 20px gap on mobile */
+  }
+}
+
+/* Hide navigation buttons on tablet and mobile */
+@media screen and (max-width: 990px) {
+  .f-button.is-prev,
+  .f-button.is-next {
+    display: none;
+  }
+}
+
+.f-button.is-prev:hover,
+.f-button.is-next:hover {
+  opacity: 0.9;
+}
+
+.f-button.is-prev::before,
+.f-button.is-next::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 24px;
+  stroke: #0f0f0f;
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+
+.f-button.is-next::before {
+  transform: translate(-50%, -50%);
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='24' viewBox='0 0 16 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 24L10 12L2 0' stroke='%230F0F0F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.f-button.is-prev::before {
+  transform: translate(-50%, -50%);
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='24' viewBox='0 0 16 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14 24L6 12L14 0' stroke='%230F0F0F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Custom toolbar for Fancybox */
+.custom-fancybox-toolbar {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 10px;
+  z-index: 40;
+  background-color: rgba(128, 128, 128, 0.7);
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+.custom-fancybox-toolbar button {
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.custom-fancybox-toolbar button:hover {
+  opacity: 1;
+}
+
+.custom-fancybox-toolbar button svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+}
+
+.custom-fancybox-toolbar button.active {
+  opacity: 1;
+}
+
+/* Hide default close button and caption */
+.f-button.is-close {
+  display: none !important;
+}
+
+/* Hide Fancybox caption */
+.fancybox__caption {
+  display: none !important;
+}
+
+/* Video styling */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none; /* Prevent any interaction with the video */
+  -webkit-user-select: none; /* Prevent selection */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide all video controls completely */
+.video-container video::-webkit-media-controls,
+.video-container video::-webkit-media-controls-enclosure,
+.video-container video::-webkit-media-controls-panel,
+.video-container video::-webkit-media-controls-overlay-play-button,
+.video-container video::-webkit-media-controls-play-button,
+.video-container video::-webkit-media-controls-timeline,
+.video-container video::-webkit-media-controls-current-time-display,
+.video-container video::-webkit-media-controls-time-remaining-display,
+.video-container video::-webkit-media-controls-mute-button,
+.video-container video::-webkit-media-controls-toggle-closed-captions-button,
+.video-container video::-webkit-media-controls-volume-slider,
+.video-container video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Footer transition for smooth show/hide */
+.fancybox__footer {
+  transition: transform 0.3s ease, opacity 0.3s ease, margin-bottom 0.3s ease;
+  transform-origin: bottom;
+}
+
+.fancybox__footer.is-hidden {
+  transform: scaleY(0);
+  opacity: 0;
+  margin-bottom: -100px;
+  pointer-events: none;
+}
+
+/* Custom thumbnail sizes */
+.f-thumbs__slide {
+  width: 60px !important;
+  height: 60px !important;
+  border: none !important; /* Remove default border */
+  position: relative; /* For positioning the bottom border */
+}
+
+.f-thumbs__slide__button {
+  width: 60px !important;
+  height: 60px !important;
+}
+
+/* Remove default active state styling */
+.f-thumbs__slide.is-nav-selected {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Override Fancybox's default active thumbnail styling */
+.is-classic .is-nav-selected .f-thumbs__slide__button::after {
+  content: '' !important;
+  position: absolute !important;
+  top: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 2px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background-color: #ec0009 !important;
+  z-index: 10 !important;
+  animation: none !important;
+}
+
+/* Tablet and mobile thumbnail sizes */
+@media screen and (max-width: 990px) {
+  .f-thumbs__slide,
+  .f-thumbs__slide__button {
+    width: 48px !important;
+    height: 48px !important;
+  }
+}

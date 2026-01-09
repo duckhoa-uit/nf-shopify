@@ -446,3 +446,133 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
 
   return sortedImages;
 }
+
+/**
+ * Filters media URLs by active color, implementing matching priority:
+ * 1. Exact matches (parsedColor === activeColor)
+ * 2. Partial matches (includes)
+ * 3. Reference ID matching
+ * 4. Flexible matching (split by '-' for compound colors)
+ * 5. Priority-based fallback (-H.jpg, -BV.jpg, -B.jpg)
+ *
+ * @param {Array<string>} allMediaUrls - List of all media URLs to filter
+ * @param {string} activeColor - The active color to filter by
+ * @param {Array} colorMappings - Array of color mappings from product.metafields.custom.color.value
+ * @returns {Array<string>} - Filtered URLs matching the active color
+ */
+export function filterMediaByColor(allMediaUrls, activeColor, colorMappings) {
+  if (!allMediaUrls || allMediaUrls.length === 0) {
+    return [];
+  }
+
+  if (!activeColor || !colorMappings) {
+    return allMediaUrls;
+  }
+
+  let urlsToUse = [];
+  let exactMatches = [];
+  let partialMatches = [];
+
+  // First try to get normalized color key - this converts reference_id to color name if needed
+  const normalizedColorKey = getNormalizedColorKey(activeColor, colorMappings);
+  const normalizedActiveColor = normalizedColorKey.toLowerCase().trim();
+
+  // Check each URL for matches using the active color
+  for (const url of allMediaUrls) {
+    // Use parseImageUrl with colorMappings to properly handle reference_ids
+    const parsed = parseImageUrl(url, colorMappings);
+    const parsedColor = parsed.color.toLowerCase().trim();
+
+    // Collect exact and partial matches
+    if (parsedColor === normalizedActiveColor) {
+      exactMatches.push(url);
+    } else if (parsedColor.includes(normalizedActiveColor) || normalizedActiveColor.includes(parsedColor)) {
+      partialMatches.push(url);
+    }
+
+    // If we didn't find a match but we have reference_id and colorMappings, try direct reference_id matching
+    if (exactMatches.length === 0 && partialMatches.length === 0 && parsed.reference_id && colorMappings) {
+      // Check if the active color is actually a reference_id
+      const activeRefId = parseInt(activeColor, 10);
+
+      if (!isNaN(activeRefId) && parsed.reference_id === activeRefId) {
+        exactMatches.push(url);
+      }
+    }
+  }
+
+  // Prioritize exact matches, fall back to partial matches
+  if (exactMatches.length > 0) {
+    urlsToUse = exactMatches;
+  } else if (partialMatches.length > 0) {
+    urlsToUse = partialMatches;
+  }
+
+  // If no matches found, try more flexible matching (just try parts of the color name)
+  if (urlsToUse.length === 0 && normalizedColorKey.includes('-')) {
+    const colorParts = normalizedColorKey.split('-');
+
+    for (const part of colorParts) {
+      if (part.length < 3) {
+        continue; // Skip very short parts
+      }
+
+      const flexibleMatches = allMediaUrls.filter(url => {
+        const parsed = parseImageUrl(url, colorMappings);
+        return parsed.color.toLowerCase().includes(part.toLowerCase());
+      });
+
+      if (flexibleMatches.length > 0) {
+        urlsToUse = flexibleMatches;
+        break;
+      }
+    }
+  }
+
+  // If still no matches found, implement priority-based fallback
+  if (urlsToUse.length === 0) {
+    const fallbackCandidates = [];
+
+    // Priority 1: Main image ending with -H.jpg (highest priority)
+    const mainImages = allMediaUrls.filter(url => {
+      const filename = url.split('/').pop().split('?')[0].toLowerCase();
+      return filename.includes('-h.jpg') || filename.endsWith('-h.jpg');
+    });
+
+    if (mainImages.length > 0) {
+      fallbackCandidates.push(mainImages[0]);
+    }
+
+    // Priority 2: Back variant (-BV.jpg) or back main (-B.jpg) as fallback
+    const backVariantImages = allMediaUrls.filter(url => {
+      const filename = url.split('/').pop().split('?')[0].toLowerCase();
+      return filename.includes('-bv.jpg') || filename.endsWith('-bv.jpg');
+    });
+
+    const backMainImages = allMediaUrls.filter(url => {
+      const filename = url.split('/').pop().split('?')[0].toLowerCase();
+      return filename.includes('-b.jpg') || filename.endsWith('-b.jpg');
+    });
+
+    if (backVariantImages.length > 0) {
+      fallbackCandidates.push(backVariantImages[0]);
+    } else if (backMainImages.length > 0) {
+      fallbackCandidates.push(backMainImages[0]);
+    }
+
+    // If we have fallback candidates, use them; otherwise return sorted media
+    if (fallbackCandidates.length > 0) {
+      urlsToUse = fallbackCandidates;
+    } else {
+      // Last resort: get all media URLs and sort them according to display rules
+      const sortedFallbackImages = sortImagesByDisplayRules(allMediaUrls.slice(), colorMappings);
+
+      // Take only the first 2 items according to priority order
+      urlsToUse = sortedFallbackImages.slice(0, 2).map(item =>
+        typeof item === 'string' ? item : item.url
+      );
+    }
+  }
+
+  return urlsToUse;
+}

@@ -8,10 +8,26 @@ class ProductCardHover {
   constructor() {
     this.imageCache = new Map();
     this.preloadQueue = new Set();
+    this.preloadLinks = new Set(); // Track link preload elements
     this.intersectionObserver = null;
     this.initialized = false;
+    this.shouldPreload = this.checkConnectionQuality();
 
     this.init();
+  }
+
+  // Check if we should preload based on connection quality
+  checkConnectionQuality() {
+    // Respect Save-Data preference
+    if (navigator.connection?.saveData) {
+      return false;
+    }
+    // Skip preload on slow connections
+    const effectiveType = navigator.connection?.effectiveType;
+    if (effectiveType === 'slow-2g' || effectiveType === '2g') {
+      return false;
+    }
+    return true;
   }
 
   init() {
@@ -30,12 +46,19 @@ class ProductCardHover {
   }
 
   // Preload image function with caching
-  preloadImage(src, srcset = '') {
+  preloadImage(src, srcset = '', useLinkPreload = false) {
+    if (!this.shouldPreload) return Promise.resolve();
+    
     if (this.imageCache.has(src) || this.preloadQueue.has(src)) {
       return this.imageCache.get(src) || Promise.resolve();
     }
 
     this.preloadQueue.add(src);
+
+    // Use link preload for high-priority above-fold images
+    if (useLinkPreload && !this.preloadLinks.has(src)) {
+      this.createLinkPreload(src, srcset);
+    }
 
     const promise = new Promise((resolve, reject) => {
       const img = new Image();
@@ -55,11 +78,32 @@ class ProductCardHover {
       if (srcset) {
         img.srcset = srcset;
       }
+      // Use low fetch priority for hover images
+      img.fetchPriority = 'low';
       img.src = src;
     });
 
     this.imageCache.set(src, promise);
     return promise;
+  }
+
+  // Create link preload element for critical hover images
+  createLinkPreload(src, srcset = '') {
+    if (this.preloadLinks.has(src)) return;
+    
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = src;
+    link.fetchPriority = 'low';
+    
+    if (srcset) {
+      link.imageSrcset = srcset;
+      link.imageSizes = '(min-width: 990px) calc(33.33vw - 2rem), (min-width: 750px) calc(50vw - 1.5rem), calc(50vw - 1rem)';
+    }
+    
+    document.head.appendChild(link);
+    this.preloadLinks.add(src);
   }
 
   // Hover intent detection with delay
@@ -96,26 +140,35 @@ class ProductCardHover {
   setupIntersectionObserver() {
     if (!('IntersectionObserver' in window)) return;
 
+    // Track which cards are above the fold for priority preloading
+    const viewportHeight = window.innerHeight;
+
     this.intersectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const card = entry.target;
-            this.preloadCardImages(card);
+            // Check if card is in the initial viewport (above fold)
+            const rect = card.getBoundingClientRect();
+            const isAboveFold = rect.top < viewportHeight;
+            
+            this.preloadCardImages(card, isAboveFold);
             // Stop observing this card after preloading
             this.intersectionObserver.unobserve(card);
           }
         });
       },
       {
-        rootMargin: '50px', // Start preloading 50px before entering viewport
+        rootMargin: '200px', // Start preloading 200px before entering viewport (increased from 50px)
         threshold: 0.1,
       }
     );
   }
 
   // Preload images for a specific card
-  preloadCardImages(card) {
+  preloadCardImages(card, useLinkPreload = false) {
+    if (!this.shouldPreload) return;
+    
     const productId = card.dataset.productId;
     const sectionId = card.dataset.sectionId;
     if (!productId || !sectionId) return;
@@ -123,19 +176,21 @@ class ProductCardHover {
     // Preload main hover image
     const mainImageSrc = card.dataset.mainImageSrc;
     const mainImageSrcset = card.dataset.mainImageSrcset;
+    const hasRealMainImage = card.dataset.hasRealMainImage === 'true';
 
-    if (mainImageSrc) {
-      this.preloadImage(mainImageSrc, mainImageSrcset).catch(() => {});
+    // Only preload if there's a real hover image different from the main image
+    if (mainImageSrc && hasRealMainImage) {
+      this.preloadImage(mainImageSrc, mainImageSrcset, useLinkPreload).catch(() => {});
     }
 
-    // Preload variant images (scoped to this section)
+    // Preload variant images (scoped to this section) - lower priority, no link preload
     const variantSwatches = document.querySelectorAll(`[data-product-id="${productId}"][data-section-id="${sectionId}"].variant-swatch`);
     variantSwatches.forEach((swatch) => {
       const variantImage = swatch.dataset.variantImage;
       const variantImageSrcset = swatch.dataset.variantImageSrcset;
 
       if (variantImage && variantImage !== 'placeholder') {
-        this.preloadImage(variantImage, variantImageSrcset).catch(() => {});
+        this.preloadImage(variantImage, variantImageSrcset, false).catch(() => {});
       }
     });
   }
