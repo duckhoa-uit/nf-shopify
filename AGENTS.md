@@ -14,9 +14,7 @@ alwaysApply: true
     * `item_count_for_variant`: `cart | item_count_for_variant: {variant_id}`
     * `line_items_for`: `cart | line_items_for: object`
 * **HTML**
-    * `class_list`: `settings.layout | class_list`
     * `time_tag`: `string | time_tag: string`
-    * `inline_asset_content`: `asset_name | inline_asset_content`
     * `highlight`: `string | highlight: string`
     * `link_to`: `string | link_to: string`
     * `placeholder_svg_tag`: `string | placeholder_svg_tag`
