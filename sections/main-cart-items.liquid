@@ -180,7 +180,7 @@
   <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
 
-<script src="{{ 'cart-sync.js' | asset_url }}" defer="defer"></script>
+{% comment %} cart-sync.js is loaded in theme.liquid with initialCartData {% endcomment %}
 
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
