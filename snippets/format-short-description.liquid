@@ -1,17 +1,18 @@
 {% comment %}
   Formats a short description text into a bulleted list
   Usage:
-  {% render 'format-short-description', text: product.metafields.custom.short_description %}
-{% endcomment %}
+  {%- render 'format-short-description', text: product.metafields.custom.short_description -%}
+{%- endcomment -%}
 
-{% assign sentences = text | split: '.' %}
+{%- assign sentences = text | split: '.'-%}
 <span class="metafield-multi_line_text_field">
   <ul>
-    {% for sentence in sentences %}
-      {% assign trimmed_sentence = sentence | strip %}
-      {% if trimmed_sentence != '' %}
-        <li>{{ trimmed_sentence | remove_first: '• ' }}{% unless forloop.last %}.{% endunless %}</li>
-      {% endif %}
-    {% endfor %}
+    {%- for sentence in sentences -%}
+      {%- assign display_sentence = sentence | strip | remove_first: '• ' -%}
+      {%- assign check_sentence = display_sentence | strip_html | strip | replace: ' ', '' | replace: ' ', '' -%}
+      {%- if check_sentence.size > 0 -%}
+        <li>{{ display_sentence }}{%- unless forloop.last -%}.{%- endunless -%}</li>
+      {%- endif -%}
+    {%- endfor -%}
   </ul>
 </span>
