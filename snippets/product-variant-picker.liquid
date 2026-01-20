@@ -20,38 +20,55 @@
       # Set up form ID for inputs
       assign product_form_id = 'product-form-' | append: section.id
 
-      # Position-based option sorting for internationalization
-      # Color is typically position 1, Size is typically position 2
+      # Option sorting based on content detection, not position
+      # Color options have swatches, Size options match standard size patterns
       assign sorted_options = ''
       assign color_option = null
       assign size_option = null
 
-      # First, identify Color and Size options by position and common patterns
+      # Standard size patterns for detection
+      assign standard_sizes_pattern = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
+
+      # First, identify Color and Size options by their characteristics
       for option in product.options_with_values
         assign is_color_option = false
         assign is_size_option = false
 
-        # Check if this is a color option (position 1 or has color-related values)
-        if option.position == 1
-          assign is_color_option = true
-        endif
-
-        # Additional check: if option has swatch values, it's likely a color option
+        # Check if this option has swatches - indicates it's a color option
         assign swatch_count = option.values | map: 'swatch' | compact | size
         if swatch_count > 0
           assign is_color_option = true
         endif
 
-        # Check if this is a size option (position 2 or has size-related patterns)
-        if option.position == 2
+        # Check if option values match standard size patterns
+        assign size_match_count = 0
+        for value in option.values
+          capture value_str
+            echo value
+          endcapture
+          assign value_upcase = value_str | upcase | strip
+          for standard_size in standard_sizes_pattern
+            if value_upcase == standard_size
+              assign size_match_count = size_match_count | plus: 1
+              break
+            endif
+          endfor
+        endfor
+
+        if size_match_count >= 2
           assign is_size_option = true
         endif
 
-        # Store the identified options
-        if is_color_option
-          assign color_option = option
-        elsif is_size_option
+        # Fallback: if position 1 and not detected as size, treat as color
+        if option.position == 1 and is_size_option == false
+          assign is_color_option = true
+        endif
+
+        # Store the identified options (size takes priority if both detected)
+        if is_size_option
           assign size_option = option
+        elsif is_color_option
+          assign color_option = option
         endif
       endfor
 
@@ -97,19 +114,13 @@
         endif
       -%}
       {%- liquid
-        # Determine option type based on position and characteristics
+        # Determine option type based on swatches and standard patterns
         assign is_size_option = false
         assign is_color_option = false
 
-        # Check if this is a color option FIRST (higher priority)
+        # Check if this option has swatches - indicates it's a color option
         assign swatch_count_check = option.values | map: 'swatch' | compact | size
 
-        # Primary detection: Position 1 (most reliable for color)
-        if option.position == 1
-          assign is_color_option = true
-        endif
-
-        # Secondary detection: Has swatch values
         if swatch_count_check > 0
           assign is_color_option = true
         endif
@@ -133,17 +144,37 @@
           assign is_color_option = true
         endif
 
-        # Only check for size option if it's NOT already identified as color
-        unless is_color_option
-          if option.position == 2
-            assign is_size_option = true
-          endif
+        # Check if option values match standard size patterns
+        assign standard_sizes_pattern = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
+        assign size_match_count = 0
 
-          # Additional check for size metafields only if not color
-          if product.metafields.size_fit.measurements.value or product.metafields.size_fit.body_measurements.value
-            assign is_size_option = true
-          endif
-        endunless
+        for value in option.values
+          capture value_str
+            echo value
+          endcapture
+          assign value_upcase = value_str | upcase | strip
+          for standard_size in standard_sizes_pattern
+            if value_upcase == standard_size
+              assign size_match_count = size_match_count | plus: 1
+              break
+            endif
+          endfor
+        endfor
+
+        # If at least 2 values match standard sizes, treat as size option
+        if size_match_count >= 2
+          assign is_size_option = true
+        endif
+
+        # Additional check for size metafields
+        if product.metafields.size_fit.measurements.value or product.metafields.size_fit.body_measurements.value
+          assign is_size_option = true
+        endif
+
+        # Fallback: if position 1 and not detected as size, treat as color
+        if option.position == 1 and is_size_option == false
+          assign is_color_option = true
+        endif
       -%}
 
       {%- if is_size_option -%}

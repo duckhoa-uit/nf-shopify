@@ -20,28 +20,45 @@
   assign product_form_id = 'product-form-' | append: section.id
   assign sorted_indices = ''
 
-  # Position-based option detection for internationalization
-  # Color is typically position 1, Size is typically position 2
+  # Option detection based on swatches and standard size patterns
   assign is_color_option = false
   assign is_size_option = false
 
-  # Check if this is a color option FIRST (higher priority)
+  # Check if this option has swatches - indicates it's a color option
   assign swatch_count = option.values | map: 'swatch' | compact | size
-
-  if option.position == 1
-    assign is_color_option = true
-  endif
 
   if swatch_count > 0
     assign is_color_option = true
   endif
 
-  # Only check for size option if it's NOT already identified as color
-  unless is_color_option
-    if option.position == 2
-      assign is_size_option = true
-    endif
-  endunless
+  # Check if option values match standard size patterns
+  # Standard sizes to detect: XXS, XS, S, M, L, XL, XXL, 2XL, 3XL, 4XL, 5XL, 6XL
+  assign standard_sizes_pattern = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
+  assign size_match_count = 0
+
+  for value in option.values
+    # Get string representation of value (works with both object and string)
+    capture value_str
+      echo value
+    endcapture
+    assign value_upcase = value_str | upcase | strip
+    for standard_size in standard_sizes_pattern
+      if value_upcase == standard_size
+        assign size_match_count = size_match_count | plus: 1
+        break
+      endif
+    endfor
+  endfor
+
+  # If at least 2 values match standard sizes, treat as size option
+  if size_match_count >= 2
+    assign is_size_option = true
+  endif
+
+  # Fallback: if position 1 and not detected as size, treat as color
+  if option.position == 1 and is_size_option == false
+    assign is_color_option = true
+  endif
 
   # NEW: Stock-based filtering for color options
   assign available_color_values = ''
@@ -115,28 +132,99 @@
 
     # Sort indices by position
     assign sorted_indices = sorted_indices | split: ',' | sort
-  elsif is_size_option and product.metafields.custom.size.value != blank
-    assign metafield_sizes = product.metafields.custom.size.value
+  elsif is_size_option
+    # Standard size order fallback (common clothing sizes)
+    assign standard_size_order = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
 
-    # Build position data for each value with index
-    for index in (0..option.values.size)
-      if option.values[index] != blank
-        assign value = option.values[index]
-        assign position = 999
+    if product.metafields.custom.size.value != blank
+      assign metafield_sizes = product.metafields.custom.size.value
+      
+      # Check if metafield has valid position data (not all zeros)
+      assign has_valid_positions = false
+      for metafield_size in metafield_sizes
+        if metafield_size.position > 0
+          assign has_valid_positions = true
+          break
+        endif
+      endfor
 
-        # Find matching metafield position
-        for metafield_size in metafield_sizes
-          if value == metafield_size.value
-            assign position = metafield_size.position
-            break
+      if has_valid_positions
+        # Build position data for each value with index using metafield
+        for index in (0..option.values.size)
+          if option.values[index] != blank
+            assign value = option.values[index]
+            capture value_str
+              echo value
+            endcapture
+            assign value_str = value_str | strip
+            assign position = 999
+
+            # Find matching metafield position
+            for metafield_size in metafield_sizes
+              assign metafield_size_str = metafield_size.value | strip
+              assign metafield_pos = metafield_size.position
+              if value_str == metafield_size_str
+                assign position = metafield_pos
+                break
+              endif
+            endfor
+
+            # Format for sorting
+            assign position_str = position | prepend: '00000' | slice: -5, 5
+            assign sorted_indices = sorted_indices | append: position_str | append: '_' | append: index | append: ','
           endif
         endfor
+      else
+        # Metafield exists but has no valid positions - use standard size order
+        for index in (0..option.values.size)
+          if option.values[index] != blank
+            assign value = option.values[index]
+            capture value_str
+              echo value
+            endcapture
+            assign value_upcase = value_str | upcase | strip
+            assign position = 999
 
-        # Format for sorting
-        assign position_str = position | prepend: '00000' | slice: -5, 5
-        assign sorted_indices = sorted_indices | append: position_str | append: '_' | append: index | append: ','
+            # Find position in standard size order
+            for standard_size in standard_size_order
+              if value_upcase == standard_size
+                assign position = forloop.index0
+                break
+              endif
+            endfor
+
+            # Format for sorting
+            assign position_str = position | prepend: '00000' | slice: -5, 5
+            assign sorted_indices = sorted_indices | append: position_str | append: '_' | append: index | append: ','
+          endif
+        endfor
       endif
-    endfor
+    else
+      # Fallback: Use standard size order when metafield is not available
+      for index in (0..option.values.size)
+        if option.values[index] != blank
+          assign value = option.values[index]
+          # Get string representation of value (works with both object and string)
+          capture value_str
+            echo value
+          endcapture
+          assign value_upcase = value_str | upcase | strip
+          assign position = 999
+
+          # Find position in standard size order
+          for standard_size in standard_size_order
+            if value_upcase == standard_size
+              assign position = forloop.index0
+              break
+            endif
+          endfor
+
+          # Format for sorting
+          assign position_str = position | prepend: '00000' | slice: -5, 5
+          assign sorted_indices = sorted_indices | append: position_str | append: '_' | append: index | append: ','
+        endif
+      endfor
+    endif
 
     # Sort indices by position
     assign sorted_indices = sorted_indices | split: ',' | sort
