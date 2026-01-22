@@ -1,0 +1,65 @@
+{% comment %}
+  Determines if a product option is a color option
+
+  Accepts:
+  - option: {Object} Product option object with values (required)
+  
+  Returns (via capture):
+  - 'true' if the option is a color option
+  - 'false' otherwise
+
+  Detection logic (in priority order):
+  1. Has swatches → color option
+  2. Matches standard size patterns (≥2 values) → NOT color (size option)
+  3. Position 1 fallback → treat as color if not size
+
+  Usage:
+  {%- capture is_color -%}
+    {%- render 'is-color-option', option: option -%}
+  {%- endcapture -%}
+  {%- if is_color == 'true' -%}
+    ...color-specific logic...
+  {%- endif -%}
+{% endcomment %}
+
+{%- liquid
+  assign is_color = false
+  assign is_size = false
+
+  # Priority 1: Check if this option has swatches - indicates it's a color option
+  assign swatch_count = option.values | map: 'swatch' | compact | size
+  if swatch_count > 0
+    assign is_color = true
+  endif
+
+  # Priority 2: Check if option values match standard size patterns
+  unless is_color
+    assign standard_sizes = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
+    assign size_match_count = 0
+
+    for value in option.values
+      capture value_str
+        echo value
+      endcapture
+      assign value_upcase = value_str | upcase | strip
+      
+      for standard_size in standard_sizes
+        if value_upcase == standard_size
+          assign size_match_count = size_match_count | plus: 1
+          break
+        endif
+      endfor
+    endfor
+
+    if size_match_count >= 2
+      assign is_size = true
+    endif
+  endunless
+
+  # Priority 3: Fallback - position 1 and not detected as size → treat as color
+  if is_color == false and is_size == false and option.position == 1
+    assign is_color = true
+  endif
+
+  echo is_color
+-%}

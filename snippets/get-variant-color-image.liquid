@@ -41,15 +41,11 @@
 
 {% comment %} Step 1: Try to find variant with matching color and get its direct image {% endcomment %}
 {% if product.variants and color_value_normalized != blank %}
-  {% comment %} Find the color option position {% endcomment %}
-  {% assign color_option_position = -1 %}
-  {% for option in product.options_with_values %}
-    {% assign swatch_count = option.values | map: 'swatch' | compact | size %}
-    {% if option.position == 1 or swatch_count > 0 %}
-      {% assign color_option_position = option.position %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
+  {% comment %} Find the color option position using centralized snippet {% endcomment %}
+  {% capture color_option_position_raw %}
+    {% render 'get-color-option-position', product: product %}
+  {% endcapture %}
+  {% assign color_option_position = color_option_position_raw | strip | plus: 0 %}
 
   {% comment %} Find variant that matches the color value {% endcomment %}
   {% if color_option_position > 0 %}

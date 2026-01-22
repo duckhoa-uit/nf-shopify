@@ -166,10 +166,9 @@
           assign is_size_option = true
         endif
 
-        # Additional check for size metafields
-        if product.metafields.size_fit.measurements.value or product.metafields.size_fit.body_measurements.value
-          assign is_size_option = true
-        endif
+        # Note: We removed the metafield check that was incorrectly overriding color detection
+        # Size options are detected by matching standard size patterns (XXS, XS, S, M, L, etc.)
+        # The presence of size_fit metafields doesn't determine if an option is a size option
 
         # Fallback: if position 1 and not detected as size, treat as color
         if option.position == 1 and is_size_option == false

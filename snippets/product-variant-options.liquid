@@ -84,8 +84,30 @@
 
   if is_color_option
     # Filter color options to only show those with available stock
+    # Must check at variant level to exclude variants with inventory_management: null
+    # (These show available=true but have no actual tracked stock)
     for value in option.values
-      if value.available
+      assign value_name = value.name | default: value
+      assign has_truly_available_variant = false
+      
+      # Check each variant to see if any has real stock (inventory_management != null)
+      for variant in product.variants
+        case option.position
+          when 1
+            assign variant_option_value = variant.option1
+          when 2
+            assign variant_option_value = variant.option2
+          when 3
+            assign variant_option_value = variant.option3
+        endcase
+        
+        if variant_option_value == value_name and variant.available and variant.inventory_management != blank
+          assign has_truly_available_variant = true
+          break
+        endif
+      endfor
+      
+      if has_truly_available_variant
         if available_color_values == ''
           assign available_color_values = value
         else

@@ -229,15 +229,48 @@
         {%- liquid
           # ============================================================
           # OPTIMIZATION: Efficient color extraction using Liquid filters
-          # Replace nested variant loops with map/uniq/where filters
+          # Uses centralized is-color-option snippet to detect color option position
           # ============================================================
           
-          # Get unique colors efficiently
-          assign all_colors = card_product.variants | map: 'option1' | uniq
+          # Detect which option position is the color option (1, 2, or 3)
+          capture color_option_position
+            render 'get-color-option-position', product: card_product
+          endcapture
+          assign color_option_position = color_option_position | strip | plus: 0
+          
+          # Get unique colors based on detected color option position
+          case color_option_position
+            when 2
+              assign all_colors = card_product.variants | map: 'option2' | uniq
+            when 3
+              assign all_colors = card_product.variants | map: 'option3' | uniq
+            else
+              assign all_colors = card_product.variants | map: 'option1' | uniq
+          endcase
           
           # Get available variants and their colors
-          assign available_variants = card_product.variants | where: 'available', true
-          assign available_color_list = available_variants | map: 'option1' | uniq
+          # Filter out variants where inventory_management is nil (not tracked)
+          # These variants show available=true but have no actual stock
+          assign truly_available_variants = ''
+          for variant in card_product.variants
+            if variant.available and variant.inventory_management != blank
+              case color_option_position
+                when 2
+                  assign variant_color = variant.option2
+                when 3
+                  assign variant_color = variant.option3
+                else
+                  assign variant_color = variant.option1
+              endcase
+              
+              if truly_available_variants == ''
+                assign truly_available_variants = variant_color
+              else
+                assign truly_available_variants = truly_available_variants | append: '|||' | append: variant_color
+              endif
+            endif
+          endfor
+          assign available_color_list = truly_available_variants | split: '|||' | uniq
           
           # Build available_colors string for compatibility with sorting logic
           assign available_colors = ''
@@ -309,16 +342,33 @@
             {%- liquid
               # ============================================================
               # OPTIMIZATION: Use where filter for variant lookup
+              # Uses dynamic color_option_position for correct option matching
               # ============================================================
               
-              # Try available variant first, then any variant
-              assign color_variants_available = card_product.variants | where: 'option1', color | where: 'available', true
-              assign color_variant = color_variants_available | first
-              
-              if color_variant == null
-                assign color_variants_any = card_product.variants | where: 'option1', color
-                assign color_variant = color_variants_any | first
-              endif
+              # Build option key based on color position
+              case color_option_position
+                when 2
+                  assign color_variants_available = card_product.variants | where: 'option2', color | where: 'available', true
+                  assign color_variant = color_variants_available | first
+                  if color_variant == null
+                    assign color_variants_any = card_product.variants | where: 'option2', color
+                    assign color_variant = color_variants_any | first
+                  endif
+                when 3
+                  assign color_variants_available = card_product.variants | where: 'option3', color | where: 'available', true
+                  assign color_variant = color_variants_available | first
+                  if color_variant == null
+                    assign color_variants_any = card_product.variants | where: 'option3', color
+                    assign color_variant = color_variants_any | first
+                  endif
+                else
+                  assign color_variants_available = card_product.variants | where: 'option1', color | where: 'available', true
+                  assign color_variant = color_variants_available | first
+                  if color_variant == null
+                    assign color_variants_any = card_product.variants | where: 'option1', color
+                    assign color_variant = color_variants_any | first
+                  endif
+              endcase
             -%}
 
             {%- if color_variant -%}

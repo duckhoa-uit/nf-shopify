@@ -1,0 +1,38 @@
+{% comment %}
+  Gets the position (1, 2, or 3) of the color option for a product
+
+  Accepts:
+  - product: {Object} Product object (required)
+  
+  Returns (via capture):
+  - Position number (1, 2, or 3) if color option found
+  - '1' as fallback if no color option detected
+
+  Usage:
+  {%- capture color_position -%}
+    {%- render 'get-color-option-position', product: product -%}
+  {%- endcapture -%}
+  {%- assign color_position = color_position | plus: 0 -%}
+  
+  Then use:
+  - variant.option1 if color_position == 1
+  - variant.option2 if color_position == 2
+  - variant.option3 if color_position == 3
+{% endcomment %}
+
+{%- liquid
+  assign color_position = 1
+  
+  for option in product.options_with_values
+    capture is_color
+      render 'is-color-option', option: option
+    endcapture
+    
+    if is_color == 'true'
+      assign color_position = option.position
+      break
+    endif
+  endfor
+
+  echo color_position
+-%}
