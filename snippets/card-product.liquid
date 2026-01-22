@@ -323,95 +323,108 @@
 
             {%- if color_variant -%}
               {%- liquid
+                # ============================================================
+                # PRIORITY ORDER (matches get-variant-color-image snippet):
+                # 1. variant.featured_image / variant.image (direct Shopify association)
+                # 2. reference_id from metafields + image naming patterns (-M, -M_N)
+                # 3. Color name matching in URL or alt text
+                # 4. featured_media fallback
+                # ============================================================
                 assign variant_image = null
                 assign color_value = color | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
-                assign reference_id = ''
-                
-                # Find reference_id from metafields
-                if card_product.metafields.custom.color.value != blank
-                  for color_item in card_product.metafields.custom.color.value
-                    if color_item.name == color_value
-                      assign reference_id = color_item.reference_id
-                      break
-                    endif
-                  endfor
+
+                # PRIORITY 1: Check variant.featured_image first (matching main product page logic)
+                if color_variant.featured_image
+                  assign variant_image = color_variant.featured_image
+                elsif color_variant.image
+                  assign variant_image = color_variant.image
                 endif
-                
-                # Try to find variant image using reference_id
-                if reference_id != '' and card_product.media.size > 0
-                  assign found_variant_image = false
-                  assign best_variant_seq = 999
-                  
-                  for media in card_product.media
-                    assign media_src = media.src | default: ''
-                    assign parsed_url = media_src | split: '/' | last
-                    
-                    if parsed_url contains reference_id
-                      # Priority 1: -M without sequence
-                      if parsed_url contains '-M'
-                        unless parsed_url contains '-M_'
-                          assign variant_image = media
-                          assign found_variant_image = true
-                          break
-                        endunless
-                      endif
-                      
-                      # Priority 2: -M_N with lowest sequence (collect during loop)
-                      if parsed_url contains '-M_' and found_variant_image == false
-                        assign seq_part = parsed_url | split: '-M_' | last | split: '.' | first
-                        assign seq_num = seq_part | plus: 0
-                        if seq_num > 0 and seq_num < best_variant_seq
-                          assign best_variant_seq = seq_num
-                          assign variant_image = media
-                        endif
-                      endif
-                      
-                      # Priority 3: Other image types (H, B, BV, D)
-                      if variant_image == null
-                        if parsed_url contains '-H' or parsed_url contains '-B' or parsed_url contains '-BV' or parsed_url contains '-D'
-                          assign variant_image = media
-                        endif
-                      endif
-                    endif
-                  endfor
-                endif
-                
-                # Fallback to variant.featured_image or product media matching
+
+                # PRIORITY 2: Use reference_id from metafields + image naming patterns
                 unless variant_image
-                  if color_variant.featured_image
-                    assign variant_image = color_variant.featured_image
-                  elsif card_product.media.size > 0
-                    # Try to find by color name in URL or alt text
+                  assign reference_id = ''
+
+                  if card_product.metafields.custom.color.value != blank
+                    for color_item in card_product.metafields.custom.color.value
+                      if color_item.name == color_value
+                        assign reference_id = color_item.reference_id
+                        break
+                      endif
+                    endfor
+                  endif
+
+                  if reference_id != '' and card_product.media.size > 0
+                    assign found_variant_image = false
+                    assign best_variant_seq = 999
+
                     for media in card_product.media
                       assign media_src = media.src | default: ''
                       assign parsed_url = media_src | split: '/' | last
-                      
+
+                      if parsed_url contains reference_id
+                        # Priority 2a: -M without sequence
+                        if parsed_url contains '-M'
+                          unless parsed_url contains '-M_'
+                            assign variant_image = media
+                            assign found_variant_image = true
+                            break
+                          endunless
+                        endif
+
+                        # Priority 2b: -M_N with lowest sequence
+                        if parsed_url contains '-M_' and found_variant_image == false
+                          assign seq_part = parsed_url | split: '-M_' | last | split: '.' | first
+                          assign seq_num = seq_part | plus: 0
+                          if seq_num > 0 and seq_num < best_variant_seq
+                            assign best_variant_seq = seq_num
+                            assign variant_image = media
+                          endif
+                        endif
+
+                        # Priority 2c: Other image types (H, B, BV, D)
+                        if variant_image == null
+                          if parsed_url contains '-H' or parsed_url contains '-B' or parsed_url contains '-BV' or parsed_url contains '-D'
+                            assign variant_image = media
+                          endif
+                        endif
+                      endif
+                    endfor
+                  endif
+                endunless
+
+                # PRIORITY 3: Try to find by color name in URL or alt text
+                unless variant_image
+                  if card_product.media.size > 0
+                    for media in card_product.media
+                      assign media_src = media.src | default: ''
+                      assign parsed_url = media_src | split: '/' | last
+
                       if parsed_url contains color_value
                         assign variant_image = media
                         break
                       endif
-                      
+
                       if media.alt contains color or media.alt contains color_variant.title
                         assign variant_image = media
                         break
                       endif
                     endfor
-                    
-                    # Try product.images as last resort
-                    unless variant_image
-                      for image in card_product.images
-                        if image.alt contains color or image.alt contains color_variant.title
-                          assign variant_image = image
-                          break
-                        endif
-                      endfor
-                    endunless
-                    
-                    # Final fallback to featured_media
-                    unless variant_image
-                      assign variant_image = card_product.featured_media
-                    endunless
                   endif
+                endunless
+
+                # PRIORITY 4: Try product.images as last resort
+                unless variant_image
+                  for image in card_product.images
+                    if image.alt contains color or image.alt contains color_variant.title
+                      assign variant_image = image
+                      break
+                    endif
+                  endfor
+                endunless
+
+                # PRIORITY 5: Final fallback to featured_media
+                unless variant_image
+                  assign variant_image = card_product.featured_media
                 endunless
               -%}
 
