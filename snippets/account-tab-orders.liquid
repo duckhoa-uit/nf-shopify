@@ -466,7 +466,7 @@
               <div class="order-actions">
                 {% if order.financial_status == 'paid' %}
                   <a
-                    href="https://northfinder-1.myshopify.com/apps/pdf-vify/pdf-preview/invoice?shop_domain={{ shop.permanent_domain }}&order_id={{ order.id }}&locale=en"
+                    href="https://{{ shop.permanent_domain }}/apps/pdf-vify/pdf-preview/invoice?shop_domain={{ shop.permanent_domain }}&order_id={{ order.id }}&locale={{ request.locale.iso_code }}"
                     class="order-action-btn btn-invoice"
                     target="_blank"
                   >
