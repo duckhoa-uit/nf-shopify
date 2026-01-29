@@ -32,8 +32,19 @@
     assign is_color = true
   endif
 
-  # Priority 2: Check if option values match standard size patterns
-  unless is_color
+  # Priority 2: Check if option name indicates it's a size option (multi-language support)
+  assign option_name_lower = option.name | downcase
+  assign size_keywords = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,размер,veľkosť,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ','
+  for size_keyword in size_keywords
+    if option_name_lower contains size_keyword
+      assign is_size = true
+      assign is_color = false
+      break
+    endif
+  endfor
+
+  # Priority 3: Check if option values match standard size patterns
+  unless is_size
     assign standard_sizes = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
     assign size_match_count = 0
 
@@ -56,7 +67,7 @@
     endif
   endunless
 
-  # Priority 3: Fallback - position 1 and not detected as size → treat as color
+  # Priority 4: Fallback - position 1 and not detected as size → treat as color
   if is_color == false and is_size == false and option.position == 1
     assign is_color = true
   endif

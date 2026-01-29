@@ -31,6 +31,16 @@
     assign is_color_option = true
   endif
 
+  # Check if option name indicates it's a size option (multi-language support)
+  assign option_name_lower = option.name | downcase
+  assign size_keywords = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,размер,veľkosť,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ','
+  for size_keyword in size_keywords
+    if option_name_lower contains size_keyword
+      assign is_size_option = true
+      break
+    endif
+  endfor
+
   # Check if option values match standard size patterns
   # Standard sizes to detect: XXS, XS, S, M, L, XL, XXL, 2XL, 3XL, 4XL, 5XL, 6XL
   assign standard_sizes_pattern = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
