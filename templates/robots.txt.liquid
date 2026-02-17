@@ -1,33 +1,4 @@
-# Robots.txt file to block all search engine crawlers
-# This file prevents search engines from indexing the entire store
-
 User-agent: *
-Disallow: /
+Disallow:
 
-# Block specific search engine bots
-User-agent: Googlebot
-Disallow: /
-
-User-agent: Bingbot
-Disallow: /
-
-User-agent: Slurp
-Disallow: /
-
-User-agent: DuckDuckBot
-Disallow: /
-
-User-agent: Baiduspider
-Disallow: /
-
-User-agent: YandexBot
-Disallow: /
-
-User-agent: facebookexternalhit
-Disallow: /
-
-User-agent: Twitterbot
-Disallow: /
-
-# No sitemap provided since we don't want indexing
-# Sitemap: {{ shop.url }}/sitemap.xml
+Sitemap: https://sportfinder.de/sitemap.xml
