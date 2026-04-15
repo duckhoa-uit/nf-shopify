@@ -1,0 +1,71 @@
+{%- liquid
+  assign title = section.settings.title | default: 'sections.main_product.inspiration' | t
+  assign image = section.settings.image
+  assign image_alt = section.settings.image_alt | default: 'Inspiration'
+-%}
+
+<!-- Inspiration Banner Section -->
+<div class="inspiration-banner-section w-full page-width">
+  <h2 class="text-base lg:text-2xl font-semibold text-[#0F0F0F] mb-6">
+    {{ title }}
+  </h2>
+  <div class="inspiration-banner-container">
+    <div
+      class="inspiration-banner-media w-full relative overflow-hidden"
+      style="padding-bottom: 56.25%;"
+    >
+      {% if image %}
+        <img
+          src="{{ image | image_url: width: 1500 }}"
+          alt="{{ image_alt }}"
+          loading="lazy"
+          width="1500"
+          height="844"
+          class="absolute inset-0 w-full h-full object-cover"
+        >
+      {% else %}
+        <img
+          src="{{ 'product-banner.webp' | asset_url }}"
+          alt="{{ image_alt }}"
+          loading="lazy"
+          width="1500"
+          height="844"
+          class="absolute inset-0 w-full h-full object-cover"
+        >
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Inspiration Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Inspiration"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Banner image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Inspiration"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Inspiration Banner"
+    }
+  ],
+  "templates": ["product"]
+}
+{% endschema %}
