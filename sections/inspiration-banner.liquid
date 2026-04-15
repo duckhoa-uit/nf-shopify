@@ -1,7 +1,11 @@
 {%- liquid
-  assign title = section.settings.title | default: 'sections.main_product.inspiration' | t
+  if section.settings.title != blank
+    assign title = section.settings.title
+  else
+    assign title = 'sections.main_product.inspiration' | t
+  endif
   assign image = section.settings.image
-  assign image_alt = section.settings.image_alt | default: 'Inspiration'
+  assign image_alt = section.settings.image_alt | default: title
 -%}
 
 <!-- Inspiration Banner Section -->
