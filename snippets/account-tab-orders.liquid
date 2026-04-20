@@ -108,18 +108,16 @@
                   <div class="order-product">
                     <div class="product-left">
                       <div class="product-image">
-                        {% comment %} Extract color value from variant options {% endcomment %}
+                        {% comment %} Extract color value using direct variant option properties {% endcomment %}
                         {% assign color_value = null %}
                         {% capture order_color_pos %}{% render 'get-color-option-position', product: line_item.product %}{% endcapture %}
                         {% assign order_color_pos = order_color_pos | strip | plus: 0 %}
-                        {% if line_item.variant.title contains '/' %}
-                          {% assign variant_options = line_item.variant.title | split: ' / ' %}
-                          {% assign color_index = order_color_pos | minus: 1 %}
-                          {% assign color_value = variant_options[color_index] | default: null %}
-                        {% elsif line_item.variant.title != 'Default Title' %}
-                          {% if order_color_pos == 1 %}
-                            {% assign color_value = line_item.variant.title %}
-                          {% endif %}
+                        {% if order_color_pos == 1 %}
+                          {% assign color_value = line_item.variant.option1 %}
+                        {% elsif order_color_pos == 2 %}
+                          {% assign color_value = line_item.variant.option2 %}
+                        {% elsif order_color_pos == 3 %}
+                          {% assign color_value = line_item.variant.option3 %}
                         {% endif %}
 
                         {% comment %} Try to get color-specific image {% endcomment %}
@@ -183,39 +181,46 @@
                       </h4>
 
                       <div class="product-meta">
-                        {% comment %} Extract variant options {% endcomment %}
-                        {% assign variant_options = line_item.variant.title | split: ' / ' %}
-
                         {% comment %} Detect size and color positions using language-agnostic detection {% endcomment %}
-                        {% assign display_size_index = -1 %}
-                        {% assign display_color_index = order_color_pos | minus: 1 %}
+                        {% assign display_size_pos = 0 %}
+                        {% assign display_color_pos = order_color_pos %}
                         {% for option in line_item.product.options_with_values %}
                           {% capture is_opt_color %}{% render 'is-color-option', option: option %}{% endcapture %}
                           {% unless is_opt_color == 'true' %}
                             {% assign opt_name_lower = option.name | downcase %}
-                            {% assign size_kw = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,размер,veľkosť,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ',' %}
+                            {% assign size_kw = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,velikost,размер,veľkosť,méret,mărime,suurus,dydis,izmērs,μέγεθος,beden,ขนาด,kích cỡ,ukuran,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ',' %}
                             {% for kw in size_kw %}
                               {% if opt_name_lower contains kw %}
-                                {% assign display_size_index = option.position | minus: 1 %}
+                                {% assign display_size_pos = option.position %}
                                 {% break %}
                               {% endif %}
                             {% endfor %}
                           {% endunless %}
                         {% endfor %}
 
+                        {% comment %} Get translated option values directly from variant object {% endcomment %}
+                        {% assign display_size_value = nil %}
+                        {% assign display_color_value = nil %}
+                        {% if display_size_pos == 1 %}
+                          {% assign display_size_value = line_item.variant.option1 %}
+                        {% elsif display_size_pos == 2 %}
+                          {% assign display_size_value = line_item.variant.option2 %}
+                        {% elsif display_size_pos == 3 %}
+                          {% assign display_size_value = line_item.variant.option3 %}
+                        {% endif %}
+                        {% if display_color_pos == 1 %}
+                          {% assign display_color_value = line_item.variant.option1 %}
+                        {% elsif display_color_pos == 2 %}
+                          {% assign display_color_value = line_item.variant.option2 %}
+                        {% elsif display_color_pos == 3 %}
+                          {% assign display_color_value = line_item.variant.option3 %}
+                        {% endif %}
+
                         {% comment %} Display size if available {% endcomment %}
                         <div class="product-meta-item">
                           <span class="meta-label">{{ 'customer.orders.size' | t }}:</span>
                           <span class="meta-value">
-                            {% if display_size_index >= 0 and variant_options.size > 0 %}
-                              {{ variant_options[display_size_index] | default: 'N/A' }}
-                            {% else %}
-                              {% if variant_options.size > 0 %}
-                                {{ variant_options.last | default: 'N/A' }}
-                              {% else %}
-                                N/A
-                              {% endif %}
-                            {% endif %}
+                            {{ display_size_value | default: 'N/A' }}
                           </span>
                         </div>
 
@@ -223,15 +228,7 @@
                         <div class="product-meta-item">
                           <span class="meta-label">{{ 'customer.orders.color' | t }}:</span>
                           <span class="meta-value">
-                            {% if display_color_index >= 0 and variant_options.size > 0 %}
-                              {{ variant_options[display_color_index] | default: 'N/A' }}
-                            {% else %}
-                              {% if variant_options.size > 0 and variant_options.first != 'Default Title' %}
-                                {{ variant_options.first | default: 'N/A' }}
-                              {% else %}
-                                N/A
-                              {% endif %}
-                            {% endif %}
+                            {{ display_color_value | default: 'N/A' }}
                           </span>
                         </div>
 
