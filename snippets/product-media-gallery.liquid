@@ -371,10 +371,26 @@
 {%- liquid
   # Get currently selected or first available variant
   assign first_variant = product.selected_or_first_available_variant
-  assign active_color = first_variant.option_values | where: 'name', 'Color' | first
 
-  if active_color == blank
-    assign active_color = first_variant.option_values | where: 'name', 'Colour' | first
+  # Detect color option using language-agnostic swatch/position detection
+  assign color_option_name = ''
+  assign color_option_index = -1
+  assign temp_index = 0
+  for option in product.options_with_values
+    capture is_color
+      render 'is-color-option', option: option
+    endcapture
+    if is_color == 'true'
+      assign color_option_name = option.name
+      assign color_option_index = temp_index
+      break
+    endif
+    assign temp_index = temp_index | plus: 1
+  endfor
+
+  assign active_color = blank
+  if color_option_name != ''
+    assign active_color = first_variant.option_values | where: 'name', color_option_name | first
   endif
 
   # Try different approaches to get color
@@ -547,6 +563,9 @@
     // Translation variables
     const moreImagesText = {{ 'sections.main_product.more_images' | t | json }};
     const lessImagesText = {{ 'sections.main_product.less_images' | t | json }};
+
+    // Language-agnostic color option index (0-based, -1 if not found)
+    const colorOptionIndex = {{ color_option_index }};
 
     // Function to create media item element
     function createMediaItem(url, index) {
@@ -933,15 +952,14 @@
               hidden: false
             }];
 
-            // Show placeholder message in desktop gallery
+            // Show placeholder in desktop gallery at 1st grid position
             const placeholderDiv = document.createElement('div');
-            placeholderDiv.className = 'col-span-2 flex items-center justify-center py-12';
+            placeholderDiv.className = 'product__media-item scroll-trigger animate--fade-in';
             placeholderDiv.innerHTML = `
-              <div class="text-center">
-                <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
-                  {{ 'product-apparel-2' | placeholder_svg_tag: 'w-12 h-12 text-gray-400' }}
+              <div class="product__media media relative w-full h-0" style="--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;">
+                <div class="absolute inset-0 w-full h-full bg-gray-100 flex items-center justify-center">
+                  {{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}
                 </div>
-                <p class="text-gray-600">No images available</p>
               </div>
             `;
             grid.appendChild(placeholderDiv);
@@ -1280,8 +1298,8 @@
 
       // Set up event listeners
       function setupEventListeners() {
-        // Listen for radio button changes
-        document.querySelectorAll('input[type="radio"][name^="Color"], input[type="radio"][name^="Colour"]')
+        // Listen for radio button changes (use data-option-type for language-agnostic detection)
+        document.querySelectorAll('[data-option-type="color"] input[type="radio"]')
           .forEach(radio => {
             radio.addEventListener('change', e => {
               const newColor = e.target.value;
@@ -1290,7 +1308,7 @@
           });
 
         // Listen for variant select changes
-        document.querySelectorAll('select[name^="Color"], select[name^="Colour"]')
+        document.querySelectorAll('[data-option-type="color"] select')
           .forEach(select => {
             select.addEventListener('change', e => {
               const newColor = e.target.value;
@@ -1301,9 +1319,8 @@
         // Listen for Shopify's variant change event
         document.addEventListener('variant:changed', function(event) {
           if (event.detail.variant) {
-            // Extract color from variant
-            const colorPosition = {{ product.options_with_values | json }}
-              .findIndex(option => option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour');
+            // Extract color from variant using pre-computed index
+            const colorPosition = colorOptionIndex;
 
             let newColor = '';
             if (colorPosition >= 0 && event.detail.variant.options) {
@@ -1330,9 +1347,8 @@
               const variant = variants.find(v => v.id.toString() === variantId);
 
               if (variant) {
-                // Extract color from variant
-                const colorPosition = {{ product.options_with_values | json }}
-                  .findIndex(option => option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour');
+                // Extract color from variant using pre-computed index
+                const colorPosition = colorOptionIndex;
 
                 let color = colorPosition >= 0 && variant.options ? variant.options[colorPosition] : '';
                 if (!color && variant.title) {
@@ -1369,10 +1385,9 @@
       // Directly hook into Shopify's variant change mechanism
       const originalOnVariantChange = window.onVariantChange;
       window.onVariantChange = function(variant) {
-        // Extract color from variant
         if (variant) {
-          const colorPosition = {{ product.options_with_values | json }}
-            .findIndex(option => option.name.toLowerCase() === 'color' || option.name.toLowerCase() === 'colour');
+          // Extract color from variant using pre-computed index
+          const colorPosition = colorOptionIndex;
 
           let newColor = '';
           if (colorPosition >= 0 && variant.options) {
