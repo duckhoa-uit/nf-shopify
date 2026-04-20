@@ -110,20 +110,15 @@
                       <div class="product-image">
                         {% comment %} Extract color value from variant options {% endcomment %}
                         {% assign color_value = null %}
-                        {% if line_item.product.options contains 'Color' and line_item.variant.title contains '/' %}
+                        {% capture order_color_pos %}{% render 'get-color-option-position', product: line_item.product %}{% endcapture %}
+                        {% assign order_color_pos = order_color_pos | strip | plus: 0 %}
+                        {% if line_item.variant.title contains '/' %}
                           {% assign variant_options = line_item.variant.title | split: ' / ' %}
-                          {% assign color_index = 0 %}
-                          {% for option in line_item.product.options %}
-                            {% if option == 'Color' %}
-                              {% break %}
-                            {% endif %}
-                            {% assign color_index = color_index | plus: 1 %}
-                          {% endfor %}
+                          {% assign color_index = order_color_pos | minus: 1 %}
                           {% assign color_value = variant_options[color_index] | default: null %}
-                        {% elsif line_item.variant.title contains '/' %}
-                          {% assign variant_options = line_item.variant.title | split: ' / ' %}
-                          {% if variant_options.first != 'Default Title' %}
-                            {% assign color_value = variant_options.first %}
+                        {% elsif line_item.variant.title != 'Default Title' %}
+                          {% if order_color_pos == 1 %}
+                            {% assign color_value = line_item.variant.title %}
                           {% endif %}
                         {% endif %}
 
@@ -191,22 +186,29 @@
                         {% comment %} Extract variant options {% endcomment %}
                         {% assign variant_options = line_item.variant.title | split: ' / ' %}
 
-                        {% comment %} Get product options {% endcomment %}
-                        {% assign product_options = line_item.product.options %}
+                        {% comment %} Detect size and color positions using language-agnostic detection {% endcomment %}
+                        {% assign display_size_index = -1 %}
+                        {% assign display_color_index = order_color_pos | minus: 1 %}
+                        {% for option in line_item.product.options_with_values %}
+                          {% capture is_opt_color %}{% render 'is-color-option', option: option %}{% endcapture %}
+                          {% unless is_opt_color == 'true' %}
+                            {% assign opt_name_lower = option.name | downcase %}
+                            {% assign size_kw = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,размер,veľkosť,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ',' %}
+                            {% for kw in size_kw %}
+                              {% if opt_name_lower contains kw %}
+                                {% assign display_size_index = option.position | minus: 1 %}
+                                {% break %}
+                              {% endif %}
+                            {% endfor %}
+                          {% endunless %}
+                        {% endfor %}
 
                         {% comment %} Display size if available {% endcomment %}
                         <div class="product-meta-item">
                           <span class="meta-label">{{ 'customer.orders.size' | t }}:</span>
                           <span class="meta-value">
-                            {% if product_options contains 'Size' and variant_options.size > 0 %}
-                              {% assign size_index = 0 %}
-                              {% for option in product_options %}
-                                {% if option == 'Size' %}
-                                  {% break %}
-                                {% endif %}
-                                {% assign size_index = size_index | plus: 1 %}
-                              {% endfor %}
-                              {{ variant_options[size_index] | default: 'N/A' }}
+                            {% if display_size_index >= 0 and variant_options.size > 0 %}
+                              {{ variant_options[display_size_index] | default: 'N/A' }}
                             {% else %}
                               {% if variant_options.size > 0 %}
                                 {{ variant_options.last | default: 'N/A' }}
@@ -221,15 +223,8 @@
                         <div class="product-meta-item">
                           <span class="meta-label">{{ 'customer.orders.color' | t }}:</span>
                           <span class="meta-value">
-                            {% if product_options contains 'Color' and variant_options.size > 0 %}
-                              {% assign color_index = 0 %}
-                              {% for option in product_options %}
-                                {% if option == 'Color' %}
-                                  {% break %}
-                                {% endif %}
-                                {% assign color_index = color_index | plus: 1 %}
-                              {% endfor %}
-                              {{ variant_options[color_index] | default: 'N/A' }}
+                            {% if display_color_index >= 0 and variant_options.size > 0 %}
+                              {{ variant_options[display_color_index] | default: 'N/A' }}
                             {% else %}
                               {% if variant_options.size > 0 and variant_options.first != 'Default Title' %}
                                 {{ variant_options.first | default: 'N/A' }}
@@ -299,8 +294,8 @@
                       <h3>{{ 'customer.orders.billing_address' | t }}</h3>
                       {% if order.billing_address %}
                         <ul class="address-list">
-                          {% if order.billing_address.name != blank %}
-                            <li>{{ order.billing_address.name }}</li>
+                          {% if order.billing_address.first_name != blank or order.billing_address.last_name != blank %}
+                            <li>{{ order.billing_address.first_name }} {{ order.billing_address.last_name }}</li>
                           {% endif %}
                           {% if order.billing_address.company != blank %}
                             <li>{{ order.billing_address.company }}</li>
@@ -336,8 +331,8 @@
                       <h3>{{ 'customer.orders.shipping_address' | t }}</h3>
                       {% if order.shipping_address %}
                         <ul class="address-list">
-                          {% if order.shipping_address.name != blank %}
-                            <li>{{ order.shipping_address.name }}</li>
+                          {% if order.shipping_address.first_name != blank or order.shipping_address.last_name != blank %}
+                            <li>{{ order.shipping_address.first_name }} {{ order.shipping_address.last_name }}</li>
                           {% endif %}
                           {% if order.shipping_address.company != blank %}
                             <li>{{ order.shipping_address.company }}</li>
