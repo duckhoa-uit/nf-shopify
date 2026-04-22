@@ -76,6 +76,16 @@
     {{ 'customer.login_page.title' | t }}
   </h1>
   <div>
+    {%- if section.settings.show_migration_notice -%}
+      <div class="migration-notice mb-4 p-4 rounded-lg border border-[#d4a574] bg-[#fef9f4] text-sm text-[#3d3d3d]">
+        <p class="font-medium mb-1">{{ 'customer.login_page.migration_notice_title' | t }}</p>
+        <p>{{ 'customer.login_page.migration_notice_body' | t }}</p>
+        <p class="mt-2">
+          <a href="#recover" class="underline font-medium">{{ 'customer.login_page.migration_notice_cta' | t }}</a>
+        </p>
+      </div>
+    {%- endif -%}
+
     {%- if recover_success == true -%}
       <div class="form__message mb-3" tabindex="-1" autofocus style="color: rgb(21, 128, 61);">
         <span class="svg-wrapper">
@@ -181,6 +191,12 @@
 {
   "name": "t:sections.main-login.name",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_migration_notice",
+      "label": "t:sections.main-login.migration_notice.label",
+      "default": true
+    },
     {
       "type": "checkbox",
       "id": "enable_shop_login_button",
