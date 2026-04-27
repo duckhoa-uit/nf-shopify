@@ -179,8 +179,38 @@
         {{ 'blogs.main_blog.all_articles' | t }}
       </a>
 
-      {% comment %}Use Shopify's built-in blog.all_tags with native tag filtering{% endcomment %}
+      {% comment %}
+        Use Shopify's built-in blog.all_tags with native tag filtering.
+        Hide internal tags used for the legacy-blog migration:
+          locale-*  → drives the per-locale article filter (functional)
+          ps-*      → maps to the original PrestaShop article id (audit)
+          legacy-blog → marks an article as imported from PrestaShop
+          qa-*      → temporary QA/test markers
+      {% endcomment %}
       {%- for tag in blog.all_tags -%}
+        {%- liquid
+          assign tag_lc = tag | downcase
+          assign hide_tag = false
+          if tag_lc == 'legacy-blog'
+            assign hide_tag = true
+          endif
+          if tag_lc contains 'locale-'
+            assign hide_tag = true
+          endif
+          if tag_lc contains 'ps-'
+            assign first_two = tag_lc | slice: 0, 3
+            if first_two == 'ps-'
+              assign hide_tag = true
+            endif
+          endif
+          if tag_lc contains 'qa-'
+            assign first_three = tag_lc | slice: 0, 3
+            if first_three == 'qa-'
+              assign hide_tag = true
+            endif
+          endif
+        -%}
+        {%- if hide_tag -%}{%- continue -%}{%- endif -%}
         {%- assign tag_handle = tag | handleize -%}
         <a
           href="{{ blog.url }}/tagged/{{ tag_handle }}{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
@@ -193,10 +223,29 @@
     </div>
   {% endif %}
 
+  {%- liquid
+    assign current_locale = request.locale.iso_code | downcase
+    assign legacy_locale_tag = 'locale-' | append: current_locale
+  -%}
   {%- paginate blog.articles by section.settings.posts_per_page -%}
     <div class="blog-articles">
       <div class="no-results-message">{{ 'blogs.main_blog.no_results' | t }}</div>
       {%- for article in blog.articles -%}
+        {%- liquid
+          assign article_tags_lc = article.tags | join: '|' | downcase
+          assign is_legacy = false
+          if article_tags_lc contains 'legacy-blog'
+            assign is_legacy = true
+          endif
+          assign locale_match = true
+          if is_legacy
+            assign locale_match = false
+            if article_tags_lc contains legacy_locale_tag
+              assign locale_match = true
+            endif
+          endif
+        -%}
+        {%- unless locale_match -%}{%- continue -%}{%- endunless -%}
         <div
           class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           {% if settings.animations_reveal_on_scroll %}
