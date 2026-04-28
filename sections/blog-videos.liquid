@@ -149,14 +149,88 @@
     {{ section.settings.heading | escape }}
   </h2>
 
+  {%- comment -%}
+    Locale-aware chip allow-list.
+    Video filtering is JS-side via data-category (not URL pre-filtering),
+    so the walk operates on the unfiltered `blogs.video.articles` and is
+    capped by Shopify's 50-iteration limit. Acceptable for typical video
+    blogs (≤50 entries); larger video blogs would need a paginated walk.
+  {%- endcomment -%}
+  {%- liquid
+    assign chip_locale = request.locale.iso_code | downcase
+    assign chip_locale_tag = 'locale-' | append: chip_locale
+    assign locale_cat_tags = '|'
+    for article in blogs.video.articles
+      assign a_tags_lc = article.tags | join: '|' | downcase
+      assign a_is_legacy = false
+      if a_tags_lc contains 'legacy-blog'
+        assign a_is_legacy = true
+      endif
+      if a_is_legacy
+        unless a_tags_lc contains chip_locale_tag
+          continue
+        endunless
+      endif
+      for t in article.tags
+        assign t_lc = t | downcase
+        assign t_prefix = t_lc | slice: 0, 4
+        if t_prefix == 'cat:'
+          assign t_needle = '|' | append: t_lc | append: '|'
+          unless locale_cat_tags contains t_needle
+            assign locale_cat_tags = locale_cat_tags | append: t_lc | append: '|'
+          endunless
+        endif
+      endfor
+    endfor
+  -%}
+
   {% if section.settings.enable_filtering %}
     <div class="blog-categories">
       <div class="blog-category active" data-category="all">{{ 'blogs.main_blog.all_articles' | t }}</div>
 
       {% comment %}Use Shopify's built-in blog.all_tags for better performance{% endcomment %}
       {%- for tag in blogs.video.all_tags -%}
-        {%- assign tag_lower = tag | downcase -%}
-        <div class="blog-category" data-category="{{ tag_lower }}">#{{ tag_lower }}</div>
+        {%- liquid
+          assign tag_lower = tag | downcase
+          assign hide_tag = false
+          if tag_lower == 'legacy-blog'
+            assign hide_tag = true
+          endif
+          if tag_lower contains 'locale-'
+            assign hide_tag = true
+          endif
+          assign ps_prefix = tag_lower | slice: 0, 3
+          if ps_prefix == 'ps-'
+            assign hide_tag = true
+          endif
+          assign qa_prefix = tag_lower | slice: 0, 3
+          if qa_prefix == 'qa-'
+            assign hide_tag = true
+          endif
+          assign cat_prefix = tag_lower | slice: 0, 4
+          if cat_prefix == 'cat:'
+            assign needle = '|' | append: tag_lower | append: '|'
+            unless locale_cat_tags contains needle
+              assign hide_tag = true
+            endunless
+          endif
+        -%}
+        {%- if hide_tag -%}{%- continue -%}{%- endif -%}
+        {%- liquid
+          assign chip_label = tag
+          if cat_prefix == 'cat:'
+            # Translatable label via `blog_category` metaobject. Fall back to
+            # humanized slug when no matching entry exists.
+            assign cat_slug = tag | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | downcase | handleize
+            assign cat_entry = shop.metaobjects.blog_category[cat_slug]
+            if cat_entry != blank and cat_entry.name != blank
+              assign chip_label = cat_entry.name
+            else
+              assign chip_label = tag | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | capitalize
+            endif
+          endif
+        -%}
+        <div class="blog-category" data-category="{{ tag_lower }}">#{{ chip_label }}</div>
       {%- endfor -%}
 
       {% comment %}Fallback to predefined categories if no tags found{% endcomment %}
@@ -176,6 +250,19 @@
          data-total-articles="{{ blogs.video.articles.size }}">
       <div class="no-results-message">{{ 'blogs.main_blog.no_results' | t }}</div>
       {%- for article in blogs.video.articles -%}
+        {%- liquid
+          assign _has_visible_tag = false
+          for _t in article.tags
+            assign _t_lc = _t | downcase
+            assign _t3 = _t_lc | slice: 0, 3
+            assign _t7 = _t_lc | slice: 0, 7
+            if _t_lc == 'legacy-blog' or _t3 == 'ps-' or _t3 == 'qa-' or _t7 == 'locale-'
+              continue
+            endif
+            assign _has_visible_tag = true
+            break
+          endfor
+        -%}
         <div
           class="blog-videos-grid__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           {% if settings.animations_reveal_on_scroll %}
@@ -241,10 +328,10 @@
               </div>
 
               <div class="article-video-card__content">
-                {% if article.tags.size > 0 %}
+                {% if _has_visible_tag %}
                   <div class="article-card__tags">
                     {% for tag in article.tags %}
-                      <span class="article-card__tag">#{{ tag }}</span>
+                      {%- render 'article-tag-label', tag: tag, class: 'article-card__tag' -%}
                     {% endfor %}
                   </div>
                 {% endif %}
