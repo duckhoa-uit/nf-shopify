@@ -430,8 +430,17 @@
 
           {%- liquid
             assign thumbnail_url = thumbnail_url | strip
+
+            # Skip rendering this color when the merchant chose "Only with thumbnail"
+            # and no thumbnail could be resolved for this variant.
+            assign color_thumbnail_display = block.settings.color_thumbnail_display | default: 'always'
+            assign skip_color_value = false
+            if color_thumbnail_display == 'thumbnail_only' and thumbnail_url == ''
+              assign skip_color_value = true
+            endif
           -%}
 
+          {%- unless skip_color_value -%}
           <div class="color-option-with-thumbnail" data-color-name="{{ value }}" data-available="{{ data_available_state }}">
             {%
               render 'swatch-input',
@@ -447,6 +456,7 @@
               thumbnail_url: thumbnail_url
             %}
           </div>
+          {%- endunless -%}
         {%- else -%}
           {%
             render 'swatch-input',
