@@ -6,8 +6,17 @@
 <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
 <script src="{{ 'product-card-hover.js' | asset_url }}" defer></script>
 
+{%- liquid
+  assign heading_setting = section.settings.heading | default: ''
+  assign heading_translated = 'sections.recent_products.heading' | t
+  if heading_setting != blank
+    assign heading_text = heading_setting
+  else
+    assign heading_text = heading_translated
+  endif
+-%}
+
 {%- style -%}
-  /* Initial styling for swiper slides to prevent layout shift */
   .recently-viewed-swiper:not(.swiper-initialized) .swiper-wrapper {
     display: flex;
     overflow-x: hidden;
@@ -31,8 +40,6 @@
     }
   }
 
-  /* Tag row: hide native scrollbar + drive fade-shadow indicators via CSS vars
-     written by inline onscroll handlers (matches snippets/card-product.liquid) */
   .recently-viewed .tag-container {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -46,29 +53,74 @@
   .recently-viewed .tag-container ~ .shadow-right {
     opacity: var(--scroll-shadow-right, 1);
   }
+
+  /* Skeleton placeholder shown while server-rendered cards are being fetched */
+  .recently-viewed__skeleton {
+    background: #f3f3f3;
+    border-radius: 4px;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    animation: recently-viewed-pulse 1.4s ease-in-out infinite;
+  }
+  .recently-viewed__skeleton-line {
+    background: #f3f3f3;
+    border-radius: 2px;
+    height: 14px;
+    margin-top: 12px;
+    animation: recently-viewed-pulse 1.4s ease-in-out infinite;
+  }
+  .recently-viewed__skeleton-line--short {
+    width: 40%;
+  }
+  @keyframes recently-viewed-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+
+  /* Fade-in for fetched cards */
+  .recently-viewed .swiper-slide > .recently-viewed__card-host {
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  .recently-viewed .swiper-slide > .recently-viewed__card-host.is-loaded {
+    opacity: 1;
+  }
+
+  /* Hide whole section when no recently-viewed entries exist */
+  .recently-viewed-section[hidden] {
+    display: none !important;
+  }
 {%- endstyle -%}
 
-<div class="page-width mt-4">
+<div
+  class="recently-viewed-section page-width mt-4"
+  data-recently-viewed-section
+  data-routes-root="{{ routes.root_url }}"
+  data-current-product-id="{% if product %}{{ product.id }}{% endif %}"
+  hidden
+>
   <h2 class="product-recommendations__heading font-archivo-expanded text-base lg:text-2xl font-semibold text-[#0f0f0f] mb-7">
-    {{ section.settings.heading | escape }}
+    {{ heading_text | escape }}
   </h2>
 
   <div class="swiper recently-viewed-swiper w-full pb-5">
     <div class="swiper-wrapper recently-viewed">
-      <!-- Recently viewed products will appear here -->
+      <!-- Skeleton + server-rendered cards injected here -->
     </div>
     <div class="swiper-scrollbar"></div>
     <div class="swiper-button-next">
       <span class="icon">
         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="56" height="56" rx="28" fill="white"></rect> <path d="M26 40L34 28L26 16" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round"></path>
+          <rect width="56" height="56" rx="28" fill="white"></rect>
+          <path d="M26 40L34 28L26 16" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round"></path>
         </svg>
       </span>
     </div>
     <div class="swiper-button-prev">
       <span class="icon">
         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="56" height="56" rx="28" transform="matrix(-1 0 0 1 56 0)" fill="white"></rect> <path d="M30 40L22 28L30 16" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round"></path>
+          <rect width="56" height="56" rx="28" transform="matrix(-1 0 0 1 56 0)" fill="white"></rect>
+          <path d="M30 40L22 28L30 16" stroke="#0F0F0F" stroke-width="2" stroke-linecap="round"></path>
         </svg>
       </span>
     </div>
@@ -76,498 +128,214 @@
 </div>
 
 <script>
-  // Schema version for the recently-viewed payload. Bump when the captured
-  // shape changes so older entries are wiped automatically on next load.
-  const RECENTLY_VIEWED_SCHEMA_VERSION = '2';
+(function () {
+  'use strict';
 
-  // Escape user-supplied strings (metafield names, etc.) before injecting
-  // into the HTML template literal — defensive against quotes/<>/&.
-  function escapeHTML(str) {
-    if (str == null) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+  // ---- Storage schema --------------------------------------------------
+  // v3 stores only locale-stable identifiers. Cards are server-rendered on
+  // demand via /products/{handle}?section_id=recent-product-card so they
+  // always reflect the active locale + market currency.
+  var STORAGE_KEY = 'recentlyViewedProduct';
+  var VERSION_KEY = 'recentlyViewedProductVersion';
+  var SCHEMA_VERSION = '3';
+  var MAX_PRODUCTS = 8;
+
+  function readList() {
+    if (localStorage.getItem(VERSION_KEY) !== SCHEMA_VERSION) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(VERSION_KEY, SCHEMA_VERSION);
+      return [];
+    }
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      var parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      // Filter to entries that match the v3 shape.
+      return parsed.filter(function (e) {
+        return e && typeof e.id !== 'undefined' && typeof e.handle === 'string' && e.handle.length > 0;
+      });
+    } catch (err) {
+      return [];
+    }
   }
 
-  // Function to detect and clean corrupted product data from localStorage
-  function cleanCorruptedLocalStorageData() {
-    // If the stored schema version doesn't match, wipe and start fresh.
-    const storedVersion = localStorage.getItem('recentlyViewedProductVersion');
-    if (storedVersion !== RECENTLY_VIEWED_SCHEMA_VERSION) {
-      localStorage.removeItem('recentlyViewedProduct');
-      localStorage.setItem('recentlyViewedProductVersion', RECENTLY_VIEWED_SCHEMA_VERSION);
+  function writeList(list) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    localStorage.setItem(VERSION_KEY, SCHEMA_VERSION);
+  }
+
+  // ---- Capture current PDP product ------------------------------------
+  {%- if product and product != empty -%}
+  (function captureCurrent() {
+    var entry = {
+      id: {{ product.id | json }},
+      handle: {{ product.handle | json }},
+      viewedAt: Date.now()
+    };
+    var list = readList().filter(function (e) { return String(e.id) !== String(entry.id); });
+    list.unshift(entry);
+    if (list.length > MAX_PRODUCTS) list.length = MAX_PRODUCTS;
+    writeList(list);
+  })();
+  {%- endif -%}
+
+  // ---- Render ---------------------------------------------------------
+  var section = document.querySelector('[data-recently-viewed-section]');
+  if (!section) return;
+
+  var routesRoot = section.getAttribute('data-routes-root') || '/';
+  if (routesRoot.charAt(routesRoot.length - 1) !== '/') routesRoot += '/';
+  var currentProductId = section.getAttribute('data-current-product-id') || '';
+  var wrapper = section.querySelector('.recently-viewed');
+
+  function buildSkeletonSlide() {
+    var slide = document.createElement('div');
+    slide.className = 'swiper-slide';
+    slide.innerHTML = [
+      '<div class="card-wrapper h-full">',
+      '  <div class="flex flex-col h-full relative">',
+      '    <div class="recently-viewed__skeleton"></div>',
+      '    <div class="recently-viewed__skeleton-line"></div>',
+      '    <div class="recently-viewed__skeleton-line recently-viewed__skeleton-line--short"></div>',
+      '  </div>',
+      '</div>'
+    ].join('\n');
+    return slide;
+  }
+
+  function buildCardSlide(html) {
+    var slide = document.createElement('div');
+    slide.className = 'swiper-slide';
+    var host = document.createElement('div');
+    host.className = 'recently-viewed__card-host';
+    host.innerHTML = html;
+    slide.appendChild(host);
+    requestAnimationFrame(function () { host.classList.add('is-loaded'); });
+    return slide;
+  }
+
+  function fetchCardHTML(handle) {
+    var url = routesRoot + 'products/' + encodeURIComponent(handle) + '?section_id=recent-product-card';
+    return fetch(url, { credentials: 'same-origin' })
+      .then(function (res) { return res.ok ? res.text() : null; })
+      .catch(function () { return null; });
+  }
+
+  function initSwiper() {
+    if (typeof Swiper === 'undefined') return null;
+    return new Swiper('.recently-viewed-swiper', {
+      direction: 'horizontal',
+      spaceBetween: 36,
+      grabCursor: true,
+      breakpoints: {
+        320:  { slidesPerView: 1 },
+        640:  { slidesPerView: 3 },
+        1200: { slidesPerView: 4 }
+      },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      scrollbar:  { el: '.swiper-scrollbar' }
+    });
+  }
+
+  function initHover() {
+    if (window.productCardHover && typeof window.productCardHover.reinitialize === 'function') {
+      window.productCardHover.reinitialize();
+    } else if (typeof window.ProductCardHover === 'function') {
+      window.productCardHover = new window.ProductCardHover();
+    }
+  }
+
+  function whenLibsReady() {
+    return new Promise(function (resolve) {
+      var swiperReady = typeof Swiper !== 'undefined';
+      var hoverReady  = typeof ProductCardHover !== 'undefined';
+      if (swiperReady && hoverReady) return resolve();
+
+      var swiperScript = document.querySelector('script[src*="swiper-bundle.min.js"]');
+      var hoverScript  = document.querySelector('script[src*="product-card-hover.js"]');
+      var pending = 0;
+
+      function done() { if (--pending <= 0) resolve(); }
+      if (!swiperReady && swiperScript) { pending++; swiperScript.addEventListener('load', done, { once: true }); }
+      if (!hoverReady && hoverScript)   { pending++; hoverScript.addEventListener('load', done, { once: true }); }
+      if (pending === 0) resolve();
+    });
+  }
+
+  function render() {
+    var list = readList().filter(function (e) {
+      return !currentProductId || String(e.id) !== String(currentProductId);
+    });
+    if (list.length === 0) {
+      section.setAttribute('hidden', '');
       return;
     }
+    section.removeAttribute('hidden');
 
-    const localData = localStorage.getItem('recentlyViewedProduct');
-    if (!localData) return;
+    // 1. Insert skeletons immediately to prevent CLS
+    wrapper.innerHTML = '';
+    var skeletons = list.map(function () {
+      var s = buildSkeletonSlide();
+      wrapper.appendChild(s);
+      return s;
+    });
 
-    try {
-      const productData = JSON.parse(localData);
-      if (!Array.isArray(productData)) {
-        localStorage.removeItem('recentlyViewedProduct');
-        return;
-      }
+    // 2. Init Swiper on skeletons so the carousel structure is stable
+    var swiperInstance = null;
+    whenLibsReady().then(function () {
+      swiperInstance = initSwiper();
 
-      // Filter out corrupted products
-      const cleanedData = productData.filter((product) => {
-        const isCorrupted =
-          // Check for Liquid error strings
-          (product.productImg && product.productImg.includes('Liquid error')) ||
-          (product.productImgSrcset && product.productImgSrcset.includes('Liquid error')) ||
-          (product.mainImg && product.mainImg.includes('Liquid error')) ||
-          (product.mainImgSrcset && product.mainImgSrcset.includes('Liquid error')) ||
-          // Check for missing required properties
-          !product.productTitle ||
-          !product.productId ||
-          !product.productUrl ||
-          // New v2 shape requires extraTags + promotions arrays (may be empty)
-          !Array.isArray(product.extraTags) ||
-          !Array.isArray(product.promotions) ||
-          // Check for invalid image URLs (not placeholder and not valid URL)
-          (product.productImg && product.productImg !== 'placeholder' && !product.productImg.startsWith('/') && !product.productImg.startsWith('http'));
+      // 3. Fetch all cards in parallel, replace skeletons as they arrive
+      Promise.all(list.map(function (entry, idx) {
+        return fetchCardHTML(entry.handle).then(function (html) {
+          if (!html) {
+            // Failed fetch: drop the skeleton
+            if (skeletons[idx] && skeletons[idx].parentNode) {
+              skeletons[idx].parentNode.removeChild(skeletons[idx]);
+            }
+            return;
+          }
+          var newSlide = buildCardSlide(html);
+          if (skeletons[idx] && skeletons[idx].parentNode) {
+            skeletons[idx].parentNode.replaceChild(newSlide, skeletons[idx]);
+          } else {
+            wrapper.appendChild(newSlide);
+          }
+        });
+      })).then(function () {
+        // 4. After all settled, refresh Swiper layout + hover bindings
+        if (swiperInstance && typeof swiperInstance.update === 'function') {
+          swiperInstance.update();
+        }
+        initHover();
 
-        return !isCorrupted;
+        // If everything failed and no slides remain, hide the section.
+        if (!wrapper.querySelector('.swiper-slide')) {
+          section.setAttribute('hidden', '');
+        }
       });
-
-      if (cleanedData.length !== productData.length) {
-        localStorage.setItem('recentlyViewedProduct', JSON.stringify(cleanedData));
-      }
-
-    } catch (error) {
-      localStorage.removeItem('recentlyViewedProduct');
-    }
-  }
-
-  // Generate Shopify placeholder HTML for use in JavaScript
-  const shopifyPlaceholderHTML = `<div class="w-full aspect-square bg-gray-100 flex items-center justify-center">{{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}</div>`;
-
-  function setRecentlyViewedProducts() {
-    // Product media data for image priority system
-    const productMedia = [
-      {%- for media in product.media -%}
-        {
-          id: '{{ media.id }}',
-          src: '{{ media.src }}',
-          alt: '{{ media.alt | escape }}',
-          width: {{ media.width | default: 0 }},
-          height: {{ media.height | default: 0 }},
-          url_200: '{{ media | image_url: width: 200 }}',
-          url_300: '{{ media | image_url: width: 300 }}',
-          url_400: '{{ media | image_url: width: 400 }}',
-          url_500: '{{ media | image_url: width: 500 }}'
-        }{%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    ];
-
-    // Find model image using priority system - matches card-product.liquid exactly
-    const findModelImage = (mediaArray) => {
-      if (!mediaArray || mediaArray.length === 0) return null;
-
-      let modelImage = null;
-      let lowestSequence = 999;
-      let foundModelImage = false;
-
-      // First look for model images without sequence (just -M) - matches card-product.liquid
-      for (const media of mediaArray) {
-        const filename = media.src.split('/').pop();
-        if (filename.includes('-M') && !filename.includes('-M_')) {
-          modelImage = media;
-          foundModelImage = true;
-          break; // Break immediately like card-product.liquid
-        }
-      }
-
-      // If no model image without sequence found, look for one with lowest sequence
-      if (!foundModelImage) {
-        let bestModelMedia = null;
-        for (const media of mediaArray) {
-          const filename = media.src.split('/').pop();
-          if (filename.includes('-M_')) {
-            const sequencePart = filename.split('-M_')[1]?.split('.')[0];
-            const sequenceNumber = parseInt(sequencePart) || 0;
-
-            // Only update if this sequence is lower than current lowest - matches card-product.liquid
-            if (sequenceNumber > 0 && sequenceNumber < lowestSequence) {
-              lowestSequence = sequenceNumber;
-              bestModelMedia = media;
-              foundModelImage = true;
-            }
-          }
-        }
-
-        // Set the model image from the best model media found
-        if (bestModelMedia) {
-          modelImage = bestModelMedia;
-        }
-      }
-
-      // If still no model image found, try other image types in priority order - matches card-product.liquid
-      if (!foundModelImage) {
-        const imageTypes = ['H', 'B', 'BV', 'D']; // Exact same order as card-product.liquid
-        for (const type of imageTypes) {
-          if (modelImage === null) {
-            for (const media of mediaArray) {
-              const filename = media.src.split('/').pop();
-              const typeCode = `-${type}`;
-              if (filename.includes(typeCode)) {
-                modelImage = media;
-                break; // Break inner loop like card-product.liquid
-              }
-            }
-          }
-        }
-      }
-
-      // Final fallback - return null here, will be handled by fallback logic later
-      return modelImage;
-    };
-
-    // Find main image (-H) for hover effect - matches card-product.liquid exactly
-    const findMainImage = (mediaArray, modelImage) => {
-      if (!mediaArray || mediaArray.length === 0) return modelImage;
-
-      let mainImage = null;
-
-      // First pass: Look for main image with -H suffix (matches card-product.liquid logic)
-      for (const media of mediaArray) {
-        const filename = media.src.split('/').pop();
-        // Match card-product.liquid: contains '-H' or contains '-H.'
-        if (filename.includes('-H') || filename.includes('-H.')) {
-          mainImage = media;
-          // Note: card-product.liquid doesn't break here, it continues the loop
-          // This allows for potential overwriting if multiple -H images exist
-        }
-      }
-
-      // If no main image found, try to find alternative model images for hover effect
-      if (!mainImage) {
-        let alternativeMainImage = null;
-        let lowestSequence = 999;
-
-        for (const media of mediaArray) {
-          const filename = media.src.split('/').pop();
-          // Look for model images with sequence that are different from current model image
-          if (filename.includes('-M_') && media.id !== modelImage?.id) {
-            const sequencePart = filename.split('-M_')[1]?.split('.')[0];
-            const sequenceNumber = parseInt(sequencePart) || 0;
-
-            // Find the lowest sequence number for consistent behavior
-            if (sequenceNumber > 0 && sequenceNumber < lowestSequence) {
-              lowestSequence = sequenceNumber;
-              alternativeMainImage = media;
-            }
-          }
-        }
-
-        // Use alternative model image if found, otherwise fallback to current model image
-        if (alternativeMainImage) {
-          mainImage = alternativeMainImage;
-        } else {
-          mainImage = modelImage;
-        }
-      }
-
-      return mainImage;
-    };
-
-    const modelImage = findModelImage(productMedia);
-    const mainImage = findMainImage(productMedia, modelImage);
-    const hasRealMainImage = mainImage && modelImage && mainImage.id !== modelImage.id;
-
-    // Generate srcset strings - handle placeholder case
-    const generateSrcset = (image) => {
-      if (!image) return '';
-      if (image.isPlaceholder) return ''; // Don't generate srcset for placeholder
-      return `${image.url_200} 200w, ${image.url_300} 300w, ${image.url_400} 400w, ${image.url_500} 500w`;
-    };
-
-    // Check if product has featured_media to avoid Liquid errors
-    const hasFeaturedMedia = {% if product.featured_media and product.featured_media.src %}true{% else %}false{% endif %};
-
-    const fallbackSrcset = hasFeaturedMedia ?
-      '{%- if product.featured_media and product.featured_media.src and product.featured_media.width >= 200 -%}{{ product.featured_media | image_url: width: 200 }} 200w,{%- endif -%}{%- if product.featured_media and product.featured_media.src and product.featured_media.width >= 300 -%}{{ product.featured_media | image_url: width: 300 }} 300w,{%- endif -%}{%- if product.featured_media and product.featured_media.src and product.featured_media.width >= 400 -%}{{ product.featured_media | image_url: width: 400 }} 400w,{%- endif -%}{%- if product.featured_media and product.featured_media.src and product.featured_media.width >= 500 -%}{{ product.featured_media | image_url: width: 500 }} 500w{%- endif -%}' :
-      '';
-
-    // Fallback to featured_media if no images found, or use placeholder data
-    const finalModelImage = modelImage || (hasFeaturedMedia ? {
-      url_200: '{%- if product.featured_media and product.featured_media.src -%}{{ product.featured_media | image_url: width: 200 }}{%- else -%}placeholder{%- endif -%}',
-      url_300: '{%- if product.featured_media and product.featured_media.src -%}{{ product.featured_media | image_url: width: 300 }}{%- else -%}placeholder{%- endif -%}',
-      url_400: '{%- if product.featured_media and product.featured_media.src -%}{{ product.featured_media | image_url: width: 400 }}{%- else -%}placeholder{%- endif -%}',
-      url_500: '{%- if product.featured_media and product.featured_media.src -%}{{ product.featured_media | image_url: width: 500 }}{%- else -%}placeholder{%- endif -%}',
-      width: {% if product.featured_media and product.featured_media.width %}{{ product.featured_media.width }}{% else %}400{% endif %},
-      height: {% if product.featured_media and product.featured_media.height %}{{ product.featured_media.height }}{% else %}400{% endif %},
-      alt: {% if product.featured_media and product.featured_media.alt %}{{ product.featured_media.alt | json }}{% else %}'Product placeholder'{% endif %},
-      isPlaceholder: {% if product.featured_media and product.featured_media.src %}false{% else %}true{% endif %}
-    } : {
-      // Placeholder data for products with no media
-      url_200: 'placeholder',
-      url_300: 'placeholder',
-      url_400: 'placeholder',
-      url_500: 'placeholder',
-      width: 400,
-      height: 400,
-      alt: 'Product placeholder',
-      isPlaceholder: true
-    });
-
-    const finalMainImage = mainImage || finalModelImage;
-
-    const productData = {
-      productTitle: {{ product.title | json }},
-      productImg: finalModelImage.url_400,
-      productImgSrcset: generateSrcset(finalModelImage),
-      mainImg: finalMainImage.url_400,
-      mainImgSrcset: generateSrcset(finalMainImage),
-      hasRealMainImage: hasRealMainImage,
-      imgWidth: finalModelImage.width,
-      imgHeight: finalModelImage.height,
-      productPrice: {{ product.price | money | json }},
-      productUrl: {{ product.url | json }},
-      productImageAltText: finalModelImage.alt,
-      compareAtPrice: {{ product.compare_at_price | money | json }},
-      onSale: {% if product.compare_at_price > product.price and product.available %}true{% else %}false{% endif %},
-      isAvailable: {{ product.available | json }},
-      savings: {% if product.compare_at_price > product.price and product.available %}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round | json }}{% else %}'0'{% endif %},
-      extraTags: {% if product.metafields.features.extra.value %}{{ product.metafields.features.extra.value | json }}{% else %}[]{% endif %},
-      promotions: {% if product.metafields.features.promotion.value %}{{ product.metafields.features.promotion.value | json }}{% else %}[]{% endif %},
-      saleBadgeText: {{ 'products.product.sale_badge' | t | default: 'SALE' | json }},
-      productId: {{ product.id | json }},
-      isPlaceholder: finalModelImage.isPlaceholder || false,
-    };
-
-    const productList = [];
-
-    let jsonResp, jsonRespArr, jsonRespArrStr;
-
-    // Remove the numberOfProducts limit - now unlimited
-    productList.push(productData);
-
-    const currProductPageTitle = productData.productTitle;
-    const productDataString = JSON.stringify(productList);
-
-    const localData = localStorage.getItem('recentlyViewedProduct');
-
-    if (localData === null) {
-      localStorage.setItem('recentlyViewedProduct', productDataString);
-    } else if (localData) {
-      const oldProductData = localStorage.getItem('recentlyViewedProduct');
-      const sameProduct = oldProductData.includes(currProductPageTitle);
-
-      // Only add if it's not the same product (avoid duplicates)
-      if (sameProduct == false) {
-        jsonResp = JSON.parse(oldProductData);
-        jsonRespArr = jsonResp.concat(productList);
-        jsonRespArrStr = JSON.stringify(jsonRespArr);
-
-        localStorage.setItem('recentlyViewedProduct', jsonRespArrStr);
-      }
-    }
-  }
-
-  setRecentlyViewedProducts();
-
-  const localViewed = localStorage.recentlyViewedProduct;
-
-  function getRecentlyViewedProducts() {
-    // Clean corrupted data before rendering
-    cleanCorruptedLocalStorageData();
-
-    const productData = JSON.parse(localStorage.getItem('recentlyViewedProduct'));
-
-    const recentlyViewedHtml = [];
-
-    productData.map((item, index) => {
-
-      recentlyViewedHtml.unshift(`
-    <div class="swiper-slide">
-      <div class="card-wrapper h-full">
-        <div class="flex flex-col h-full relative">
-          <div class="relative">
-            <div
-              class="flex items-center gap-2 mb-1.5 h-8 overflow-x-auto scrollbar-hide tag-container"
-              style="scrollbar-width: none; -ms-overflow-style: none;"
-              onscroll="this.style.setProperty('--scroll-shadow-left', this.scrollLeft > 0 ? '1' : '0'); this.style.setProperty('--scroll-shadow-right', this.scrollLeft < this.scrollWidth - this.clientWidth ? '1' : '0')"
-            >
-              ${item.onSale && item.isAvailable ? `
-                <div class="bg-[#EC0009] text-white font-bold px-2 py-1 rounded-[2px] text-[15px] leading-[16px] flex-shrink-0">
-                  ${parseInt(item.savings) >= 15 ? `-${item.savings}%` : escapeHTML(item.saleBadgeText || 'SALE')}
-                </div>
-              ` : ''}
-
-              ${item.extraTags && item.extraTags.length > 0 ? item.extraTags.slice(0, 3).map(tag => `
-                <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">${escapeHTML(tag.name || '')}</span>
-              `).join('') : ''}
-
-              ${item.promotions && item.promotions.length > 0 ? item.promotions.slice(0, 3).map(promo => `
-                <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">${escapeHTML(promo.name || '')}</span>
-              `).join('') : ''}
-            </div>
-            <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none opacity-0 transition-opacity duration-200 shadow-left"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none opacity-100 transition-opacity duration-200 shadow-right"></div>
-          </div>
-
-          <div class="relative overflow-hidden mb-3">
-            <a
-              href="${item.productUrl || ''}"
-              class="card-product-northfinder__link"
-              data-product-id="${item.productId || ''}"
-              data-section-id="recent-products"
-              data-main-image-src="${item.mainImg || ''}"
-              data-main-image-srcset="${item.mainImgSrcset || ''}"
-              data-has-real-main-image="${item.hasRealMainImage || false}"
-            >
-              ${item.isPlaceholder ? shopifyPlaceholderHTML : `
-                <div
-                  id="main-image-recent-products-${item.productId || ''}"
-                  data-original-src="${item.productImg || ''}"
-                  data-original-srcset="${item.productImgSrcset || ''}"
-                >
-                  <img
-                    src="${item.productImg || ''}"
-                    ${item.productImgSrcset ? `srcset="${item.productImgSrcset}"` : ''}
-                    sizes="(min-width: 990px) calc(33.33vw - 2rem), (min-width: 750px) calc(50vw - 1.5rem), calc(50vw - 1rem)"
-                    alt="${item.productImageAltText || ''}"
-                    loading="lazy"
-                    decoding="async"
-                    width="${item.imgWidth || 400}"
-                    height="${item.imgHeight || 400}"
-                    class="w-full h-auto object-cover aspect-square transition-opacity duration-300 ease-in-out"
-                  >
-                </div>
-              `}
-            </a>
-          </div>
-
-          <div class="flex flex-col gap-1 pt-3">
-            <a href="${item.productUrl}" class="card-product-northfinder__title-link">
-              <h3 class="text-base font-semibold leading-[1.625rem] text-[#0F0F0F]">${item.productTitle}</h3>
-            </a>
-
-            <div class="flex gap-3 items-center mt-0.5">
-              ${item.onSale && item.isAvailable ? `
-                <span class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">${item.compareAtPrice}</span>
-                <span class="text-black font-medium font-archivo-expanded text-base leading-6">${item.productPrice}</span>
-              ` : `
-                <span class="text-black font-medium font-archivo-expanded text-base leading-6">${item.productPrice}</span>
-              `}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-   `);
-    });
-
-    const newProductData = `${recentlyViewedHtml.join('')}`;
-    const fullContent = document.getElementsByClassName('recently-viewed');
-    fullContent[0].innerHTML = newProductData;
-
-    // Initialize scroll-shadow CSS vars on each tag row so the fade gradients
-    // render correctly without the user having to scroll first.
-    fullContent[0].querySelectorAll('.tag-container').forEach((el) => {
-      const hasOverflow = el.scrollWidth > el.clientWidth;
-      el.style.setProperty('--scroll-shadow-left', el.scrollLeft > 0 ? '1' : '0');
-      el.style.setProperty('--scroll-shadow-right', hasOverflow && el.scrollLeft < el.scrollWidth - el.clientWidth ? '1' : '0');
     });
   }
 
-  document.addEventListener('DOMContentLoaded', function (event) {
-    getRecentlyViewedProducts();
-
-    // Initialize ProductCardHover if not already initialized
-    const initProductCardHover = function() {
-      if (!window.productCardHover && window.ProductCardHover) {
-        window.productCardHover = new ProductCardHover();
-      } else if (window.productCardHover && window.productCardHover.reinitialize) {
-        window.productCardHover.reinitialize();
-      }
-    };
-
-    // Initialize Swiper after products are loaded
-    const initSwiper = function() {
-      const swiperContainer = document.querySelector('.recently-viewed-swiper');
-      if (!swiperContainer) return;
-
-      var mySwiper = new Swiper('.recently-viewed-swiper', {
-        direction: 'horizontal',
-        spaceBetween: 36,
-        grabCursor: true,
-        breakpoints: {
-          // when window width is >= 320px
-          320: {
-            slidesPerView: 1,
-          },
-          // when window width is >= 640px
-          640: {
-            slidesPerView: 3,
-          },
-          // when window width is >= 1024px
-          1200: {
-            slidesPerView: 4,
-          },
-        },
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        scrollbar: {
-          el: '.swiper-scrollbar',
-        },
-      });
-
-      // Initialize ProductCardHover after Swiper is loaded
-      setTimeout(initProductCardHover, 100);
-    };
-
-    // Check if both Swiper and ProductCardHover are loaded
-    const checkAndInit = function() {
-      const swiperLoaded = typeof Swiper !== 'undefined';
-      const productCardHoverLoaded = typeof ProductCardHover !== 'undefined';
-
-      if (swiperLoaded) {
-        setTimeout(initSwiper, 100);
-      } else {
-        // Wait for Swiper to load since we're using defer
-        const swiperScript = document.querySelector('script[src*="swiper-bundle.min.js"]');
-        if (swiperScript) {
-          swiperScript.addEventListener('load', function() {
-            setTimeout(initSwiper, 100);
-          });
-        }
-      }
-
-      // Initialize ProductCardHover independently if loaded
-      if (productCardHoverLoaded) {
-        setTimeout(initProductCardHover, 50);
-      } else {
-        // Wait for ProductCardHover to load
-        const productCardHoverScript = document.querySelector('script[src*="product-card-hover.js"]');
-        if (productCardHoverScript) {
-          productCardHoverScript.addEventListener('load', function() {
-            setTimeout(initProductCardHover, 50);
-          });
-        }
-      }
-    };
-
-    checkAndInit();
-  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+})();
 </script>
 
 {% schema %}
 {
   "name": "Recent Products",
-
   "settings": [
     {
       "type": "text",
       "id": "heading",
       "default": "Recently Viewed",
-      "label": "Title"
+      "label": "Title",
+      "info": "Leave blank to use the translated default (sections.recent_products.heading)."
     }
   ]
 }

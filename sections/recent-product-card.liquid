@@ -1,0 +1,16 @@
+{%- comment -%}
+  Server-rendered single product card for the recently-viewed slider.
+  Fetched by sections/recent-products.liquid via:
+    /{locale}/products/{handle}?section_id=recent-product-card
+  so the card is always returned in the active locale + market currency.
+{%- endcomment -%}
+{%- if product and product != empty -%}
+  {% render 'card-product', card_product: product, section_id: 'recent-products', show_vendor: false, show_rating: false, lazy_load: true %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Recent product card",
+  "settings": []
+}
+{% endschema %}
