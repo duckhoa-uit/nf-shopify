@@ -30,6 +30,22 @@
       width: calc((100% - 72px) / 3.2);
     }
   }
+
+  /* Tag row: hide native scrollbar + drive fade-shadow indicators via CSS vars
+     written by inline onscroll handlers (matches snippets/card-product.liquid) */
+  .recently-viewed .tag-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .recently-viewed .tag-container::-webkit-scrollbar {
+    display: none;
+  }
+  .recently-viewed .tag-container ~ .shadow-left {
+    opacity: var(--scroll-shadow-left, 0);
+  }
+  .recently-viewed .tag-container ~ .shadow-right {
+    opacity: var(--scroll-shadow-right, 1);
+  }
 {%- endstyle -%}
 
 <div class="page-width mt-4">
@@ -60,8 +76,32 @@
 </div>
 
 <script>
+  // Schema version for the recently-viewed payload. Bump when the captured
+  // shape changes so older entries are wiped automatically on next load.
+  const RECENTLY_VIEWED_SCHEMA_VERSION = '2';
+
+  // Escape user-supplied strings (metafield names, etc.) before injecting
+  // into the HTML template literal — defensive against quotes/<>/&.
+  function escapeHTML(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   // Function to detect and clean corrupted product data from localStorage
   function cleanCorruptedLocalStorageData() {
+    // If the stored schema version doesn't match, wipe and start fresh.
+    const storedVersion = localStorage.getItem('recentlyViewedProductVersion');
+    if (storedVersion !== RECENTLY_VIEWED_SCHEMA_VERSION) {
+      localStorage.removeItem('recentlyViewedProduct');
+      localStorage.setItem('recentlyViewedProductVersion', RECENTLY_VIEWED_SCHEMA_VERSION);
+      return;
+    }
+
     const localData = localStorage.getItem('recentlyViewedProduct');
     if (!localData) return;
 
@@ -84,6 +124,9 @@
           !product.productTitle ||
           !product.productId ||
           !product.productUrl ||
+          // New v2 shape requires extraTags + promotions arrays (may be empty)
+          !Array.isArray(product.extraTags) ||
+          !Array.isArray(product.promotions) ||
           // Check for invalid image URLs (not placeholder and not valid URL)
           (product.productImg && product.productImg !== 'placeholder' && !product.productImg.startsWith('/') && !product.productImg.startsWith('http'));
 
@@ -289,8 +332,9 @@
       onSale: {% if product.compare_at_price > product.price and product.available %}true{% else %}false{% endif %},
       isAvailable: {{ product.available | json }},
       savings: {% if product.compare_at_price > product.price and product.available %}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round | json }}{% else %}'0'{% endif %},
-      tags: {{ product.tags | json }},
+      extraTags: {% if product.metafields.features.extra.value %}{{ product.metafields.features.extra.value | json }}{% else %}[]{% endif %},
       promotions: {% if product.metafields.features.promotion.value %}{{ product.metafields.features.promotion.value | json }}{% else %}[]{% endif %},
+      saleBadgeText: {{ 'products.product.sale_badge' | t | default: 'SALE' | json }},
       productId: {{ product.id | json }},
       isPlaceholder: finalModelImage.isPlaceholder || false,
     };
@@ -342,20 +386,28 @@
     <div class="swiper-slide">
       <div class="card-wrapper h-full">
         <div class="flex flex-col h-full relative">
-          <div class="flex items-center gap-2 mb-1.5 h-8">
-            ${item.onSale && item.isAvailable ? `
-              <div class="bg-[#EC0009] text-white font-bold px-2 py-1 rounded-[2px] text-[15px] leading-[16px]">
-                ${parseInt(item.savings) >= 15 ? `-${item.savings}%` : 'SALE'}
-              </div>
-            ` : ''}
+          <div class="relative">
+            <div
+              class="flex items-center gap-2 mb-1.5 h-8 overflow-x-auto scrollbar-hide tag-container"
+              style="scrollbar-width: none; -ms-overflow-style: none;"
+              onscroll="this.style.setProperty('--scroll-shadow-left', this.scrollLeft > 0 ? '1' : '0'); this.style.setProperty('--scroll-shadow-right', this.scrollLeft < this.scrollWidth - this.clientWidth ? '1' : '0')"
+            >
+              ${item.onSale && item.isAvailable ? `
+                <div class="bg-[#EC0009] text-white font-bold px-2 py-1 rounded-[2px] text-[15px] leading-[16px] flex-shrink-0">
+                  ${parseInt(item.savings) >= 15 ? `-${item.savings}%` : escapeHTML(item.saleBadgeText || 'SALE')}
+                </div>
+              ` : ''}
 
-            ${item.tags && item.tags.length > 0 ? item.tags.filter(tag => tag !== 'sale').slice(0, 3).map(tag => `
-              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">${tag}</span>
-            `).join('') : ''}
+              ${item.extraTags && item.extraTags.length > 0 ? item.extraTags.slice(0, 3).map(tag => `
+                <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">${escapeHTML(tag.name || '')}</span>
+              `).join('') : ''}
 
-            ${item.promotions && item.promotions.length > 0 ? item.promotions.filter(promo => promo.name && promo.name.toLowerCase() === 'new release').slice(0, 1).map(promo => `
-              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">${promo.name}</span>
-            `).join('') : ''}
+              ${item.promotions && item.promotions.length > 0 ? item.promotions.slice(0, 3).map(promo => `
+                <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">${escapeHTML(promo.name || '')}</span>
+              `).join('') : ''}
+            </div>
+            <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none opacity-0 transition-opacity duration-200 shadow-left"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none opacity-100 transition-opacity duration-200 shadow-right"></div>
           </div>
 
           <div class="relative overflow-hidden mb-3">
@@ -413,6 +465,14 @@
     const newProductData = `${recentlyViewedHtml.join('')}`;
     const fullContent = document.getElementsByClassName('recently-viewed');
     fullContent[0].innerHTML = newProductData;
+
+    // Initialize scroll-shadow CSS vars on each tag row so the fade gradients
+    // render correctly without the user having to scroll first.
+    fullContent[0].querySelectorAll('.tag-container').forEach((el) => {
+      const hasOverflow = el.scrollWidth > el.clientWidth;
+      el.style.setProperty('--scroll-shadow-left', el.scrollLeft > 0 ? '1' : '0');
+      el.style.setProperty('--scroll-shadow-right', hasOverflow && el.scrollLeft < el.scrollWidth - el.clientWidth ? '1' : '0');
+    });
   }
 
   document.addEventListener('DOMContentLoaded', function (event) {
