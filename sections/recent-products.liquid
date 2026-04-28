@@ -166,7 +166,7 @@
   }
 
   // ---- Capture current PDP product ------------------------------------
-  {%- if product and product != empty -%}
+  {% if product and product != empty %}
   (function captureCurrent() {
     var entry = {
       id: {{ product.id | json }},
@@ -178,7 +178,7 @@
     if (list.length > MAX_PRODUCTS) list.length = MAX_PRODUCTS;
     writeList(list);
   })();
-  {%- endif -%}
+  {% endif %}
 
   // ---- Render ---------------------------------------------------------
   var section = document.querySelector('[data-recently-viewed-section]');
@@ -264,9 +264,9 @@
   }
 
   function render() {
-    var list = readList().filter(function (e) {
-      return !currentProductId || String(e.id) !== String(currentProductId);
-    });
+    // Render every stored entry, including the current product — matches the
+    // previous behavior where the just-viewed product appears as the first card.
+    var list = readList();
     if (list.length === 0) {
       section.setAttribute('hidden', '');
       return;
