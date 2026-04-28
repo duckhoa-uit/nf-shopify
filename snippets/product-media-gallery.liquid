@@ -474,6 +474,99 @@
     endif
   endif
 
+  # ---------------------------------------------------------------------------
+  # Locale-safe color matching: build option_value -> reference_id map.
+  #
+  # Variant option values may arrive in either form depending on whether the
+  # product uses Shopify's "linked metafield" option feature:
+  #   - Untranslated handle key  e.g. "black", "tyrkis"
+  #   - Localized metaobject name e.g. "črna" (sl), "noir" (fr)
+  #
+  # Image filenames always embed `reference_id`, so we resolve any of those
+  # variants to a reference_id and pass that to the gallery. We register both
+  # the metaobject's untranslated `system.handle` (with trailing -<digits>
+  # suffix stripped) AND the (possibly localized) `name` field for the
+  # current storefront locale.
+  # ---------------------------------------------------------------------------
+  assign active_color_reference_id = ''
+  assign color_value_to_ref_json = '{'
+  assign first_pair = true
+
+  if product.metafields.custom.color.value != blank
+    for color_item in product.metafields.custom.color.value
+      assign ref_id = color_item.reference_id | default: ''
+      if ref_id == ''
+        continue
+      endif
+
+      assign raw_handle = color_item.system.handle | default: ''
+      assign normalized_handle = ''
+
+      if raw_handle != ''
+        # Strip trailing -<digits> suffix that Shopify auto-appends to handles
+        # (e.g. `tyrkis-1`, `espresso-bronze-2` -> `tyrkis`, `espresso-bronze`).
+        assign handle_parts = raw_handle | split: '-'
+        assign last_part = handle_parts | last
+        assign last_as_int_str = last_part | plus: 0 | append: ''
+        if last_as_int_str == last_part
+          assign handle_parts_size = handle_parts.size | minus: 1
+          assign idx = 0
+          for piece in handle_parts
+            if idx < handle_parts_size
+              if normalized_handle == ''
+                assign normalized_handle = piece
+              else
+                assign normalized_handle = normalized_handle | append: '-' | append: piece
+              endif
+            endif
+            assign idx = idx | plus: 1
+          endfor
+        else
+          assign normalized_handle = raw_handle
+        endif
+      endif
+
+      # Localized name field (e.g. "tyrkis" in en, "turkizna" in sl).
+      assign localized_name = color_item.name | default: ''
+      assign normalized_localized_name = localized_name | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', '' | replace: '/', '-'
+
+      # Register both keys (when present and distinct) so JS can resolve
+      # whichever form `variant.option1` has at runtime.
+      if normalized_handle != ''
+        unless first_pair
+          assign color_value_to_ref_json = color_value_to_ref_json | append: ','
+        endunless
+        assign first_pair = false
+        assign color_value_to_ref_json = color_value_to_ref_json | append: '"' | append: normalized_handle | append: '":' | append: ref_id
+
+        if active_color_reference_id == '' and normalized_handle == active_color_value
+          assign active_color_reference_id = ref_id | append: ''
+        endif
+      endif
+
+      if normalized_localized_name != '' and normalized_localized_name != normalized_handle
+        unless first_pair
+          assign color_value_to_ref_json = color_value_to_ref_json | append: ','
+        endunless
+        assign first_pair = false
+        assign color_value_to_ref_json = color_value_to_ref_json | append: '"' | append: normalized_localized_name | append: '":' | append: ref_id
+
+        if active_color_reference_id == '' and normalized_localized_name == active_color_value
+          assign active_color_reference_id = ref_id | append: ''
+        endif
+      endif
+    endfor
+  endif
+
+  assign color_value_to_ref_json = color_value_to_ref_json | append: '}'
+
+  # Use reference_id when available; fall back to color value otherwise.
+  if active_color_reference_id != ''
+    assign active_color_data_attr = active_color_reference_id
+  else
+    assign active_color_data_attr = active_color_value
+  endif
+
   # Initialize media string with all media URLs
   assign all_media = ''
   for media in product.media
@@ -496,7 +589,7 @@
   role="region"
   aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
   data-desktop-layout="{{ section.settings.gallery_layout }}"
-  data-active-color="{{ active_color_value }}"
+  data-active-color="{{ active_color_data_attr }}"
   class="relative"
 >
   <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
@@ -510,7 +603,7 @@
       role="list"
       data-media-count="{{ product.media.size }}"
       data-media-urls="{{ all_media | escape }}"
-      data-active-color="{{ active_color_value }}"
+      data-active-color="{{ active_color_data_attr }}"
       aria-live="polite"
     >
       {%- if product.media.size == 0 -%}
@@ -566,6 +659,38 @@
 
     // Language-agnostic color option index (0-based, -1 if not found)
     const colorOptionIndex = {{ color_option_index }};
+
+    // Locale-safe map of un-localized option values -> reference_id
+    // Built server-side from metaobject system.handle so it never depends on
+    // the storefront language. Used by handleColorChange to keep filtering
+    // consistent across all locales (e.g. /sl/, /de/, /en/).
+    const colorOptionValueToReferenceId = {{ color_value_to_ref_json }};
+
+    function resolveActiveColor(rawValue) {
+      if (rawValue === null || rawValue === undefined || rawValue === '') return '';
+
+      // Already a reference_id (numeric)? Pass through.
+      const asNumber = parseInt(rawValue, 10);
+      if (!isNaN(asNumber) && asNumber.toString() === rawValue.toString().trim()) {
+        return asNumber.toString();
+      }
+
+      // Normalize the option value to match handle format (lowercase, dashes).
+      const normalized = rawValue.toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/'/g, '')
+        .replace(/\./g, '')
+        .replace(/,/g, '')
+        .replace(/\/+/g, '-')
+        .replace(/-+$/g, '');
+
+      const refId = colorOptionValueToReferenceId[normalized];
+      if (refId !== undefined && refId !== null) return refId.toString();
+
+      return normalized;
+    }
 
     // Function to create media item element
     function createMediaItem(url, index) {
@@ -1250,31 +1375,16 @@
 
       // Handle color change
       function handleColorChange(newColor) {
-        if (!newColor) return;
+        if (newColor === null || newColor === undefined || newColor === '') return;
 
-        // Check if the color is numeric (reference_id) or string (color name)
-        const isReferenceId = !isNaN(parseInt(newColor, 10));
+        // Resolve the option value (which may be a localized name, an
+        // untranslated handle, or a numeric reference_id) to a reference_id
+        // whenever possible. This keeps gallery filtering correct on every
+        // storefront locale because reference_ids match image filenames
+        // exactly while localized color names do not.
+        const colorForMatching = resolveActiveColor(newColor);
 
-        if (!isReferenceId) {
-          // Clean up the color value only if it's a color name
-          newColor = newColor.toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/'/g, '')
-            .replace(/\./g, '')
-            .replace(/,/g, '')
-            .trim();
-
-          // Remove trailing dash if present
-          if (newColor.endsWith('-')) {
-            newColor = newColor.slice(0, -1);
-          }
-        }
-
-        // For display and filtering, get a normalized color (either the name or reference_id)
-        // We don't convert reference_id to name here to keep the original value
-        let colorForMatching = newColor;
-
-        // If we have colorMappings and the active color isn't the same as before, update the gallery
+        // If the active color isn't the same as before, update the gallery
         if (colorForMatching !== gallery.dataset.activeColor) {
           gallery.dataset.activeColor = colorForMatching;
 
