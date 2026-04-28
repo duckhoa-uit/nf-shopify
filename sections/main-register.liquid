@@ -32,10 +32,21 @@
             {%- if field == 'form' -%}
               {% render 'decode-html-entities', content: form.errors.messages[field] %}
             {%- else -%}
-              <a href="#RegisterForm-{{ field }}">
-                {{ form.errors.translated_fields[field] | capitalize }}
-                {% render 'decode-html-entities', content: form.errors.messages[field] %}
-              </a>
+              {%- assign field_message = form.errors.messages[field] -%}
+              {%- capture decoded_message -%}
+                {% render 'decode-html-entities', content: field_message %}
+              {%- endcapture -%}
+              {%- if decoded_message contains '<a ' -%}
+                <a href="#RegisterForm-{{ field }}">
+                  {{ form.errors.translated_fields[field] | capitalize }}
+                </a>
+                {{ decoded_message }}
+              {%- else -%}
+                <a href="#RegisterForm-{{ field }}">
+                  {{ form.errors.translated_fields[field] | capitalize }}
+                  {{ decoded_message }}
+                </a>
+              {%- endif -%}
             {%- endif -%}
           </li>
         {%- endfor -%}
@@ -97,7 +108,7 @@
         </label>
       </div>
       {%- if form.errors contains 'email' -%}
-        <div id="RegisterForm-email-error" class="form__message">
+        <div id="RegisterForm-email-error" class="form__message [&_a]:text-gray-950 [&_a]:underline">
           <span class="svg-wrapper">
             {{- 'icon-error.svg' | inline_asset_content -}}
           </span>
@@ -407,26 +418,6 @@
       }
     }
   });
-
-  // Decode HTML entities in error messages
-  function decodeHtmlEntities() {
-    const entityElements = document.querySelectorAll('.html-entity-content');
-    entityElements.forEach(function(element) {
-      const encodedContent = element.getAttribute('data-encoded-content');
-      if (encodedContent) {
-        // Create a temporary textarea to decode HTML entities
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = encodedContent;
-        const decodedContent = textarea.value;
-
-        // Replace the element content with decoded HTML
-        element.outerHTML = decodedContent;
-      }
-    });
-  }
-
-  // Run decoding when DOM is ready
-  decodeHtmlEntities();
 </script>
 
 {% schema %}
