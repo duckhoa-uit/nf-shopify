@@ -1,23 +1,20 @@
 {% comment %}
-  Renders content with HTML entities that will be decoded by JavaScript
+  Renders Shopify-provided error/message content that may contain HTML
+  entities (e.g. an "email is taken, <a href='/account/login'>log in</a>"
+  message returned by Shopify's customer form). Decodes the entities
+  server-side so the resulting HTML is rendered directly by the browser.
+
+  Only use this with trusted content (Shopify form errors, locale strings),
+  never with raw user input.
 
   Accepts:
   - content: {String} The content that may contain HTML entities
 
   Usage:
   {% render 'decode-html-entities', content: error_message %}
-
-  Outputs content in a span with data attribute for JavaScript processing
 {% endcomment %}
 
-{%- liquid
-  assign content = content | default: ''
-
-  # Check if content contains HTML entities (both single and double escaped)
-  if content contains '&lt;' or content contains '&amp;lt;'
-    # Output content in a span with data attribute for JavaScript decoding
-    echo '<span class="html-entity-content" data-encoded-content="' | append: content | append: '"></span>'
-  else
-    echo content | escape
-  endif
--%}
+{%- assign content = content | default: '' -%}
+{%- comment -%} Decode double-escaped entities first, then single-escaped ones. {%- endcomment -%}
+{%- assign decoded = content | replace: '&amp;lt;', '<' | replace: '&amp;gt;', '>' | replace: '&amp;quot;', '"' | replace: '&amp;#39;', "'" | replace: '&amp;amp;', '&' | replace: '&lt;', '<' | replace: '&gt;', '>' | replace: '&quot;', '"' | replace: '&#39;', "'" -%}
+{{- decoded -}}
