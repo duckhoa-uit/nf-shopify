@@ -392,8 +392,9 @@
   >
     <div class="footer__content-bottom-wrapper page-width  w-full lg:max-w-[75rem]">
       <div class="flex flex-col md:flex-row items-center justify-between min-h-[3.75rem] w-full">
+        {%- assign current_year = 'now' | date: '%Y' -%}
         <span class="text-sm text-gray-850 leading-[1.125rem]">
-          {{ 'footer.copyright' | t }}
+          {{ 'footer.copyright' | t: year: current_year }}
         </span>
         <div class="md:border-l border-[#E0E0E0] h-[1.8125rem] pl-2">
           <ul class="ml-2 flex *:inline-block gap-4 ">
