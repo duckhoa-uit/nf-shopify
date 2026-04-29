@@ -535,16 +535,21 @@
         </a>
 
         <div class="flex gap-3 items-center mt-0.5">
-          {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
+          {%- liquid
+            assign display_variant = card_product.selected_or_first_available_variant
+            assign display_price = display_variant.price | default: card_product.price
+            assign display_compare_at_price = display_variant.compare_at_price | default: card_product.compare_at_price
+          -%}
+          {%- if display_compare_at_price > display_price and card_product.available -%}
             <span class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">
-              {{- card_product.compare_at_price | money -}}
+              {{- display_compare_at_price | money -}}
             </span>
             <span class="text-black font-medium font-archivo-expanded text-base leading-6">
-              {{- card_product.price | money -}}
+              {{- display_price | money -}}
             </span>
           {%- else -%}
             <span class="text-black font-medium font-archivo-expanded text-base leading-6">
-              {{- card_product.price | money -}}
+              {{- display_price | money -}}
             </span>
           {%- endif -%}
         </div>
