@@ -97,10 +97,16 @@
           "info": "This will be displayed as the tab title"
         },
         {
+          "type": "article",
+          "id": "article",
+          "label": "Blog article",
+          "info": "Auto-loads thumbnail, title, description and URL. Fields below override the article values."
+        },
+        {
           "type": "image_picker",
           "id": "image",
           "label": "Material image",
-          "info": "Displayed if no video URL is provided or as video poster"
+          "info": "Overrides article image. Displayed if no video URL is provided or as video poster"
         },
         {
           "type": "url",
@@ -112,13 +118,15 @@
           "type": "text",
           "id": "title",
           "default": "ULTIMATE PROTECTION FOR THE MOUNTAINS",
-          "label": "Title"
+          "label": "Title",
+          "info": "Overrides article title"
         },
         {
           "type": "richtext",
           "id": "description",
           "default": "<p>The ultralight and powerful Pertex® Shield material excels in its ability to protect against adverse weather and at the same time offers excellent comfort during active movement. It is one of the best membranes on the outdoor clothing market.</p>",
-          "label": "Description"
+          "label": "Description",
+          "info": "Overrides article excerpt"
         },
         {
           "type": "text",
@@ -130,7 +138,8 @@
         {
           "type": "url",
           "id": "button_url",
-          "label": "Button URL"
+          "label": "Button URL",
+          "info": "Overrides article URL"
         },
         {
           "type": "checkbox",

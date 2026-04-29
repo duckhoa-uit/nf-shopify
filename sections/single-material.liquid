@@ -29,10 +29,16 @@
   "class": "section",
   "settings": [
     {
+      "type": "article",
+      "id": "article",
+      "label": "Blog article",
+      "info": "Auto-loads thumbnail, title, description and URL. Fields below override the article values."
+    },
+    {
       "type": "image_picker",
       "id": "image",
       "label": "Image",
-      "info": "Displayed if no video URL is provided or as video poster"
+      "info": "Overrides article image. Displayed if no video URL is provided or as video poster"
     },
     {
       "type": "url",
@@ -44,13 +50,15 @@
       "type": "text",
       "id": "title",
       "label": "Heading",
-      "default": "Material Title"
+      "default": "Material Title",
+      "info": "Overrides article title"
     },
     {
       "type": "richtext",
       "id": "description",
       "label": "Description",
-      "default": "<p>Material description</p>"
+      "default": "<p>Material description</p>",
+      "info": "Overrides article excerpt"
     },
     {
       "type": "text",
@@ -60,7 +68,8 @@
     {
       "type": "url",
       "id": "button_url",
-      "label": "Button link"
+      "label": "Button link",
+      "info": "Overrides article URL"
     },
     {
       "type": "color_scheme",

@@ -1,10 +1,40 @@
 {%- liquid
   assign show_title_above_media_on_mobile = show_title_above_media_on_mobile | default: false
+
+  assign linked_article = block.settings.article
+
+  # Image: manual override → article image
+  assign resolved_image = block.settings.image
+  if resolved_image == blank and linked_article != blank
+    assign resolved_image = linked_article.image
+  endif
+
+  # Title: manual override → article title
+  assign resolved_title = block.settings.title
+  if resolved_title == blank and linked_article != blank
+    assign resolved_title = linked_article.title
+  endif
+
+  # Description: manual override → article excerpt → truncated content
+  assign resolved_description = block.settings.description
+  if resolved_description == blank and linked_article != blank
+    if linked_article.excerpt != blank
+      assign resolved_description = linked_article.excerpt
+    elsif linked_article.content != blank
+      assign resolved_description = linked_article.content | strip_html | truncatewords: 30
+    endif
+  endif
+
+  # Button URL: manual override → article URL (already locale-aware via Shopify)
+  assign resolved_button_url = block.settings.button_url
+  if resolved_button_url == blank and linked_article != blank
+    assign resolved_button_url = linked_article.url
+  endif
 -%}
 
 <div class="single-material{% if show_title_above_media_on_mobile %} title-above-media-mobile{% endif %}">
-  {%- if show_title_above_media_on_mobile and block.settings.title != blank -%}
-    <h3 class="material-title material-title-mobile text-sm mb-2">{{ block.settings.title }}</h3>
+  {%- if show_title_above_media_on_mobile and resolved_title != blank -%}
+    <h3 class="material-title material-title-mobile text-sm mb-2">{{ resolved_title }}</h3>
   {%- endif -%}
 
   {%- if block.settings.video_url != blank -%}
@@ -23,7 +53,7 @@
             frameborder="0"
             allowfullscreen
             loading="lazy"
-            title="{{ block.settings.title | escape }}"
+            title="{{ resolved_title | escape }}"
             class="w-full h-full">
           </iframe>
         </div>
@@ -36,7 +66,7 @@
             frameborder="0"
             allowfullscreen
             loading="lazy"
-            title="{{ block.settings.title | escape }}"
+            title="{{ resolved_title | escape }}"
             class="w-full h-full">
           </iframe>
         </div>
@@ -46,7 +76,7 @@
             controls
             class="w-full h-full"
             preload="metadata"
-            poster="{{ block.settings.image | image_url: width: 1100 }}"
+            poster="{{ resolved_image | image_url: width: 1100 }}"
           >
             <source src="{{ block.settings.video_url }}" type="video/mp4"><!-- Direct URL used for MP4 videos -->
             {{ 'video.no_support' | t }}
@@ -54,23 +84,23 @@
         </div>
       {%- endif -%}
     </div>
-  {%- elsif block.settings.image != blank -%}
+  {%- elsif resolved_image != blank -%}
     <div class="material-image-container">
       <img
         srcset="
-          {%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
-          {%- if block.settings.image.width >= 550 -%}{{ block.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
-          {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
-          {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
-          {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
-          {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
+          {%- if resolved_image.width >= 375 -%}{{ resolved_image | image_url: width: 375 }} 375w,{%- endif -%}
+          {%- if resolved_image.width >= 550 -%}{{ resolved_image | image_url: width: 550 }} 550w,{%- endif -%}
+          {%- if resolved_image.width >= 750 -%}{{ resolved_image | image_url: width: 750 }} 750w,{%- endif -%}
+          {%- if resolved_image.width >= 1100 -%}{{ resolved_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+          {%- if resolved_image.width >= 1500 -%}{{ resolved_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+          {{ resolved_image | image_url }} {{ resolved_image.width }}w
         "
-        src="{{ block.settings.image | image_url: width: 1100 }}"
+        src="{{ resolved_image | image_url: width: 1100 }}"
         sizes="(min-width: 750px) 50vw, 100vw"
-        alt="{{ block.settings.image.alt | escape }}"
+        alt="{{ resolved_image.alt | escape }}"
         loading="lazy"
-        width="{{ block.settings.image.width }}"
-        height="{{ block.settings.image.height }}"
+        width="{{ resolved_image.width }}"
+        height="{{ resolved_image.height }}"
         class="material-image aspect-video"
       >
     </div>
@@ -81,17 +111,17 @@
   {%- endif -%}
 
   <div class="material-content">
-    {%- if block.settings.title != blank -%}
-      <h3 class="material-title {% if show_title_above_media_on_mobile %}material-title-desktop{% endif %} text-sm lg:text-2xl mb-2 lg:mb-6">{{ block.settings.title }}</h3>
+    {%- if resolved_title != blank -%}
+      <h3 class="material-title {% if show_title_above_media_on_mobile %}material-title-desktop{% endif %} text-sm lg:text-2xl mb-2 lg:mb-6">{{ resolved_title }}</h3>
     {%- endif -%}
 
 
-    {%- if block.settings.description != blank -%}
-      <div class="material-description [&_p]:m-0 leading-5 text-sm lg:leading-6 lg:text-base">{{ block.settings.description }}</div>
+    {%- if resolved_description != blank -%}
+      <div class="material-description [&_p]:m-0 leading-5 text-sm lg:leading-6 lg:text-base">{{ resolved_description }}</div>
     {%- endif -%}
 
-    {%- if block.settings.button_url != blank -%}
-      <a href="{{ block.settings.button_url | default: '#' }}" class="button button--primary font-semibold text-sm uppercase mt-4 lg:mt-6 leading-4">
+    {%- if resolved_button_url != blank -%}
+      <a href="{{ resolved_button_url }}" class="button button--primary font-semibold text-sm uppercase mt-4 lg:mt-6 leading-4">
         {{ 'blogs.article.read_more' | t }}
       </a>
     {%- endif -%}
