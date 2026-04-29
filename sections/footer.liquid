@@ -290,15 +290,29 @@
                           <div class="rte">{{ settings.brand_description }}</div>
                         {%- endif -%}
                       {% endcomment %}
+                      {%- liquid
+                        assign contact_phone = 'footer.contact.phone' | t
+                        if contact_phone == 'translation missing' or contact_phone == blank
+                          assign contact_phone = settings.contact_phone
+                        endif
+                        assign contact_email = 'footer.contact.email' | t
+                        if contact_email == 'translation missing' or contact_email == blank
+                          assign contact_email = settings.contact_email
+                        endif
+                      -%}
                       <div class="flex flex-col w-full gap-y-3 [&_a]:flex [&_a]:items-center [&_a]:gap-2 [&_a]:text-gray-850 [&_a]:text-sm [&_a]:hover:text-accent [&_a]:transition-colors">
-                        <a href="tel:{{ settings.contact_phone }}" class="flex_address">
-                          <span class="svg-wrapper size-4">{{ 'icon-telephone.svg' | inline_asset_content }}</span>
-                          <span>{{ settings.contact_phone }}</span>
-                        </a>
-                        <a href="mailto:{{ settings.contact_email }}" class="flex_address">
-                          <span class="svg-wrapper size-4">{{ 'icon-email.svg' | inline_asset_content }}</span>
-                          <span itemprop="email">{{ settings.contact_email }}</span>
-                        </a>
+                        {%- if contact_phone != blank -%}
+                          <a href="tel:{{ contact_phone | remove: ' ' | escape }}" class="flex_address">
+                            <span class="svg-wrapper size-4">{{ 'icon-telephone.svg' | inline_asset_content }}</span>
+                            <span>{{ contact_phone }}</span>
+                          </a>
+                        {%- endif -%}
+                        {%- if contact_email != blank -%}
+                          <a href="mailto:{{ contact_email }}" class="flex_address">
+                            <span class="svg-wrapper size-4">{{ 'icon-email.svg' | inline_asset_content }}</span>
+                            <span itemprop="email">{{ contact_email }}</span>
+                          </a>
+                        {%- endif -%}
                         <a href="{{ settings.contact_page_url | default: '/pages/contact' }}">
                           <span class="svg-wrapper size-4">{{ 'icon-contact.svg' | inline_asset_content }}</span>
                           {{ 'footer.contact_us' | t -}}
