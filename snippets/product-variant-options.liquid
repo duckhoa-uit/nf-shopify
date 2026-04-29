@@ -418,6 +418,17 @@
         {%- endcapture -%}
 
         {%- if show_thumbnails -%}
+          {%- liquid
+            # When merchant chose "Only with thumbnail", request a strict, color-specific
+            # image so the generic product fallbacks (any model image, featured image,
+            # any image) do not produce a misleading thumbnail.
+            assign color_thumbnail_display = block.settings.color_thumbnail_display | default: 'always'
+            assign strict_thumbnail = false
+            if color_thumbnail_display == 'thumbnail_only'
+              assign strict_thumbnail = true
+            endif
+          -%}
+
           {% comment %} Generate thumbnail URL {% endcomment %}
           {% capture thumbnail_url %}{% render 'get-variant-color-image',
             product: product,
@@ -425,7 +436,8 @@
             width: 80,
             height: 80,
             crop: 'center',
-            image_type: 'M'
+            image_type: 'M',
+            strict: strict_thumbnail
           %}{% endcapture %}
 
           {%- liquid
@@ -433,7 +445,6 @@
 
             # Skip rendering this color when the merchant chose "Only with thumbnail"
             # and no thumbnail could be resolved for this variant.
-            assign color_thumbnail_display = block.settings.color_thumbnail_display | default: 'always'
             assign skip_color_value = false
             if color_thumbnail_display == 'thumbnail_only' and thumbnail_url == ''
               assign skip_color_value = true

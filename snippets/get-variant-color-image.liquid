@@ -13,6 +13,8 @@
   - height: {Number} height of the image (default: 100)
   - crop: {String} crop mode (default: 'center')
   - image_type: {String} optional image type to filter by (M, H, B, BV, D) - used in fallback only
+  - strict: {Boolean} when true, return blank if no color-specific image is found
+    (skips the generic fallbacks: first model image, featured image, any image)
 
   Usage:
   {% render 'get-variant-color-image',
@@ -21,7 +23,8 @@
     width: 100,
     height: 100,
     crop: 'center',
-    image_type: 'M'
+    image_type: 'M',
+    strict: true
   %}
 {% endcomment %}
 
@@ -122,7 +125,8 @@
     image_type: image_type,
     width: width,
     height: height,
-    crop: crop
+    crop: crop,
+    strict: strict
   %}{% endcapture %}
   {% assign image_url = fallback_image_url | strip %}
 {% endif %}
