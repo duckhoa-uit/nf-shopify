@@ -342,7 +342,7 @@
                 {{ block.settings.custom_liquid }}
               {%- when 'collapsible_tab' -%}
                 <div
-                  id="collapsible-tabs-section"
+                  id="collapsible-tabs-section-{{ block.id }}"
                   class="product__accordion accordion quick-add-hidden product-tabs-container hidden md:block"
                   {{ block.shopify_attributes }}
                 >
@@ -1032,23 +1032,6 @@
             }
           ],
           "default": "circle"
-        },
-        {
-          "type": "select",
-          "id": "color_thumbnail_display",
-          "label": "t:sections.main-product.blocks.variant_picker.settings.color_thumbnail_display.label",
-          "info": "t:sections.main-product.blocks.variant_picker.settings.color_thumbnail_display.info",
-          "options": [
-            {
-              "value": "always",
-              "label": "t:sections.main-product.blocks.variant_picker.settings.color_thumbnail_display.options__1.label"
-            },
-            {
-              "value": "thumbnail_only",
-              "label": "t:sections.main-product.blocks.variant_picker.settings.color_thumbnail_display.options__2.label"
-            }
-          ],
-          "default": "always"
         }
       ]
     },

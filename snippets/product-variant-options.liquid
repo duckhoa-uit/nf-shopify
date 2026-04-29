@@ -419,10 +419,11 @@
 
         {%- if show_thumbnails -%}
           {%- liquid
-            # When merchant chose "Only with thumbnail", request a strict, color-specific
-            # image so the generic product fallbacks (any model image, featured image,
-            # any image) do not produce a misleading thumbnail.
-            assign color_thumbnail_display = block.settings.color_thumbnail_display | default: 'always'
+            # When merchant chose "Only with thumbnail" (global Product cards setting),
+            # request a strict, color-specific image so the generic product fallbacks
+            # (any model image, featured image, any image) do not produce a misleading
+            # thumbnail.
+            assign color_thumbnail_display = settings.color_thumbnail_display | default: 'always'
             assign strict_thumbnail = false
             if color_thumbnail_display == 'thumbnail_only'
               assign strict_thumbnail = true

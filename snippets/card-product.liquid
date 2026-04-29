@@ -228,6 +228,16 @@
       {%- if card_product.has_only_default_variant == false or card_product.variants.size > 1 -%}
         {%- liquid
           # ============================================================
+          # Global setting: hide color swatches without a real thumbnail
+          # Mirrors the per-block "thumbnail_only" behavior on the variant picker.
+          # ============================================================
+          assign card_color_thumbnail_display = settings.color_thumbnail_display | default: 'always'
+          assign card_strict_thumbnail = false
+          if card_color_thumbnail_display == 'thumbnail_only'
+            assign card_strict_thumbnail = true
+          endif
+
+          # ============================================================
           # OPTIMIZATION: Efficient color extraction using Liquid filters
           # Uses centralized is-color-option snippet to detect color option position
           # ============================================================
@@ -381,13 +391,16 @@
                 # 4. featured_media fallback
                 # ============================================================
                 assign variant_image = null
+                assign variant_image_is_color_match = false
                 assign color_value = color | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
 
                 # PRIORITY 1: Check variant.featured_image first (matching main product page logic)
                 if color_variant.featured_image
                   assign variant_image = color_variant.featured_image
+                  assign variant_image_is_color_match = true
                 elsif color_variant.image
                   assign variant_image = color_variant.image
+                  assign variant_image_is_color_match = true
                 endif
 
                 # PRIORITY 2: Use reference_id from metafields + image naming patterns
@@ -416,6 +429,7 @@
                         if parsed_url contains '-M'
                           unless parsed_url contains '-M_'
                             assign variant_image = media
+                            assign variant_image_is_color_match = true
                             assign found_variant_image = true
                             break
                           endunless
@@ -428,6 +442,7 @@
                           if seq_num > 0 and seq_num < best_variant_seq
                             assign best_variant_seq = seq_num
                             assign variant_image = media
+                            assign variant_image_is_color_match = true
                           endif
                         endif
 
@@ -435,6 +450,7 @@
                         if variant_image == null
                           if parsed_url contains '-H' or parsed_url contains '-B' or parsed_url contains '-BV' or parsed_url contains '-D'
                             assign variant_image = media
+                            assign variant_image_is_color_match = true
                           endif
                         endif
                       endif
@@ -451,11 +467,13 @@
 
                       if parsed_url contains color_value
                         assign variant_image = media
+                        assign variant_image_is_color_match = true
                         break
                       endif
 
                       if media.alt contains color or media.alt contains color_variant.title
                         assign variant_image = media
+                        assign variant_image_is_color_match = true
                         break
                       endif
                     endfor
@@ -467,16 +485,28 @@
                   for image in card_product.images
                     if image.alt contains color or image.alt contains color_variant.title
                       assign variant_image = image
+                      assign variant_image_is_color_match = true
                       break
                     endif
                   endfor
                 endunless
 
-                # PRIORITY 5: Final fallback to featured_media
+                # PRIORITY 5: Final fallback to featured_media (NOT a color-specific match)
                 unless variant_image
                   assign variant_image = card_product.featured_media
                 endunless
+
+                # Strict mode: when merchant chose "Only with thumbnail", skip colors
+                # whose image could not be resolved by a color-specific match (P1-P4).
+                assign skip_card_color_value = false
+                if card_strict_thumbnail and variant_image_is_color_match == false
+                  assign skip_card_color_value = true
+                endif
               -%}
+
+              {%- if skip_card_color_value -%}
+                {%- continue -%}
+              {%- endif -%}
 
               <a
                 href="{{ card_product.url }}?variant={{ color_variant.id }}"
