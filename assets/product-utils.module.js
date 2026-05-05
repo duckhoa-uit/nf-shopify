@@ -1,3 +1,27 @@
+// Pre-compiled patterns for better performance
+const TYPE_CODES = ['H', 'D', 'M', 'B', 'BV', 'X'];
+const TYPE_CODE_PATTERN = /^(H|D|M|B|BV|X)(_\d+)?$/;
+const URL_SPLIT_QUERY = /\?v=/;
+const PATH_SPLIT_SLASH = /\//;
+const EXTENSION_PATTERN = /\.[^/.]+$/;
+const HYPHEN_PATTERN = /-/;
+
+// Memoization cache for parseImageUrl
+const parseCache = new Map();
+const MAX_CACHE_SIZE = 1000;
+
+// Priority lookup table - avoids function call overhead in sorting
+const PRIORITY_MAP = {
+  main: { no_seq: 1, with_seq: (seq) => 1 + seq * 0.1 },
+  back_variant: 2,
+  back_main: { fallback: 2, normal: 11 },
+  model: { seq_1: 3, seq_n: (seq) => 3 + seq },
+  video: 12,
+  details: { seq_1: 13, seq_n: (seq) => 13 + seq, no_seq: 20 },
+  other_model: 21,
+  default: 100
+};
+
 /**
  * Parses an image/video URL according to the nomenclature rules
  * @param {string} url - The image/video URL to parse
@@ -5,49 +29,81 @@
  * @returns {Object} - An object containing product, color, and image_type
  */
 export function parseImageUrl(url, colorMappings = null) {
+  // Memoization: check cache first (only for null colorMappings to be safe)
+  if (colorMappings === null && parseCache.has(url)) {
+    return parseCache.get(url);
+  }
+
   // Initialize result with default values
   const result = {
     product: "",
     color: "",
     image_type: "main",
     reference_id: null,
-    // Add a unique identifier based on the URL to differentiate between images with the same type/sequence
-    unique_id: url.split('?v=')[1] || Math.random().toString(36).substring(2, 10)
+    unique_id: ""
   };
 
+  // Extract query param for unique_id
+  const queryParts = url.split('?v=');
+  result.unique_id = queryParts[1] || '';
+
   // Extract filename from URL and remove file extension
-  const filename = url.split("/").pop()?.split("?")[0] || "";
-  const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+  const slashIdx = url.lastIndexOf('/');
+  const filename = slashIdx >= 0 ? url.substring(slashIdx + 1).split('?')[0] : url.split('?')[0];
+  const nameWithoutExt = filename.replace(EXTENSION_PATTERN, "");
 
   // Return default values for malformed URLs or files without proper naming convention
-  if (!nameWithoutExt.includes("-")) {
+  if (!nameWithoutExt.includes('-')) {
+    // Memoize only when colorMappings is null
+    if (colorMappings === null && parseCache.size < MAX_CACHE_SIZE) {
+      parseCache.set(url, result);
+    }
     return result;
   }
 
   // Handle new formats (NF-no and NF-bu)
-  const parts = nameWithoutExt.split("-");
-  const nfIndex = parts.findIndex((part) => part === "NF");
+  const parts = nameWithoutExt.split('-');
+  let nfIndex = -1;
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i] === 'NF') {
+      nfIndex = i;
+      break;
+    }
+  }
 
   if (nfIndex !== -1) {
     // Extract product code (includes the prefix and additional parts)
     const prefix = parts[nfIndex + 1];
     const productParts = parts.slice(nfIndex + 2);
 
-    // Find the index where the color/type section starts
-    const typeIndex = productParts.findIndex((part) =>
-      ["H", "D", "M", "B", "BV", "X"].some((code) => part.startsWith(code) && (part === code || part.includes("_"))),
-    );
+    // Find the index where the color/type section starts - optimized loop
+    let typeIndex = -1;
+    for (let i = 0; i < productParts.length; i++) {
+      const part = productParts[i];
+      if (TYPE_CODE_PATTERN.test(part)) {
+        typeIndex = i;
+        break;
+      }
+    }
 
     // Find the product code by looking for the base code before any color parts
-    const baseCodeEndIndex = productParts.findIndex(
-      (part) => part.includes("-") || part === "light" || part === "dark",
-    );
+    let baseCodeEndIndex = -1;
+    for (let i = 0; i < productParts.length; i++) {
+      const part = productParts[i];
+      if (part.includes('-') || part === 'light' || part === 'dark') {
+        baseCodeEndIndex = i;
+        break;
+      }
+    }
     const code =
       baseCodeEndIndex === -1
-        ? productParts.slice(0, typeIndex === -1 ? productParts.length - 1 : typeIndex - 1).join("-")
-        : productParts.slice(0, baseCodeEndIndex).join("-");
+        ? productParts.slice(0, typeIndex === -1 ? productParts.length - 1 : typeIndex - 1).join('-')
+        : productParts.slice(0, baseCodeEndIndex).join('-');
 
     if (!code) {
+      if (colorMappings === null && parseCache.size < MAX_CACHE_SIZE) {
+        parseCache.set(url, result);
+      }
       return result;
     }
 
@@ -59,7 +115,8 @@ export function parseImageUrl(url, colorMappings = null) {
       const colorParts = productParts.slice(baseCodeEndIndex === -1 ? typeIndex - 1 : baseCodeEndIndex, typeIndex);
 
       // Check if this is a reference_id (numeric) or color name
-      const potentialReferenceId = parseInt(colorParts.join(""), 10);
+      const colorStr = colorParts.join('-');
+      const potentialReferenceId = parseInt(colorStr, 10);
 
       if (!isNaN(potentialReferenceId)) {
         result.reference_id = potentialReferenceId;
@@ -72,58 +129,35 @@ export function parseImageUrl(url, colorMappings = null) {
           result.color = `color-${potentialReferenceId}`;
         }
       } else {
-        result.color = colorParts.join("-");
+        result.color = colorStr;
       }
 
       // Extract type code and sequence
       const typePart = productParts[typeIndex];
+      const typeCode = typePart[0];
+      const underscoreIdx = typePart.indexOf('_');
 
-      // Check for BV first (since it's two characters)
-      if (typePart === "BV" || typePart.startsWith("BV_")) {
-        result.image_type = "back_variant";
-        const seq = typePart.split("_")[1];
-        if (seq) result.sequence = parseInt(seq, 10);
-      } else if (typePart === "B" || typePart.startsWith("B_")) {
-        // Handle B (back main) specifically
-        result.image_type = "back_main";
-        const seq = typePart.split("_")[1];
-        if (seq) result.sequence = parseInt(seq, 10);
-      } else {
-        // Handle other single-character codes
-        const [type, seq] = typePart.split("_");
+      if (underscoreIdx > 0) {
+        result.sequence = parseInt(typePart.substring(underscoreIdx + 1), 10);
+      }
 
-        switch (type) {
-          case "D":
-            result.image_type = "details";
-            if (seq) result.sequence = parseInt(seq, 10);
-            break;
-          case "M":
-            result.image_type = "model";
-            if (seq) result.sequence = parseInt(seq, 10);
-            break;
-          case "H":
-            result.image_type = "main";
-            // Check if there's a sequence number in the filename (like H_1)
-            if (seq) {
-              result.sequence = parseInt(seq, 10);
-            } else {
-              // Check if there's a sequence number at the end of the filename (like H.jpg vs H_1.jpg)
-              // This handles cases where the image is named like product-color-H_1.jpg
-              const filenameWithoutExt = filename.replace(/\.[^/.]+$/, "");
-              const parts = filenameWithoutExt.split("-");
-              const lastPart = parts[parts.length - 1];
-
-              // If the last part is H_1, extract the sequence
-              if (lastPart && lastPart.startsWith("H_")) {
-                const seqNum = lastPart.split("_")[1];
-                if (seqNum) result.sequence = parseInt(seqNum, 10);
-              }
-            }
-            break;
-          default:
-            // If we can't determine the type, default to main
-            result.image_type = "main";
-        }
+      switch (typeCode) {
+        case 'D':
+          result.image_type = 'details';
+          break;
+        case 'M':
+          result.image_type = 'model';
+          break;
+        case 'B':
+          if (typePart === 'BV' || typePart.startsWith('BV_')) {
+            result.image_type = 'back_variant';
+          } else {
+            result.image_type = 'back_main';
+          }
+          break;
+        case 'H':
+        default:
+          result.image_type = 'main';
       }
     } else {
       // If no type code found, check if the last part is numeric (reference_id) or string (color)
@@ -144,6 +178,11 @@ export function parseImageUrl(url, colorMappings = null) {
         result.color = lastPart;
       }
     }
+  }
+
+  // Memoize only when colorMappings is null
+  if (colorMappings === null && parseCache.size < MAX_CACHE_SIZE) {
+    parseCache.set(url, result);
   }
 
   return result;
@@ -244,167 +283,80 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
 
   // Sort each group according to the new display rules
   Object.keys(groupedImages).forEach((key) => {
+    const group = groupedImages[key];
+    
     // First, check if we have a BV (back variant) image in this group
-    const hasBV = groupedImages[key].some(img => img.image_type === "back_variant");
+    let hasBV = false;
+    for (let i = 0; i < group.length; i++) {
+      if (group[i].image_type === "back_variant") { hasBV = true; break; }
+    }
 
-    groupedImages[key].sort((a, b) => {
-      const getDisplayPriority = (img) => {
-        // Position 1: H.jpg (Main product photo without sequence)
-        if (img.image_type === "main" && !img.sequence) return 1;
+    group.sort((a, b) => {
+      // Inline priority calculation to avoid function call overhead
+      let pa = a.image_type === "main" ? (a.sequence ? 1 + a.sequence * 0.1 : 1) :
+                a.image_type === "back_variant" ? 2 :
+                a.image_type === "back_main" ? (hasBV ? 11 : 2) :
+                a.image_type === "model" ? (a.sequence === 1 ? 3 : a.sequence > 1 ? 3 + a.sequence : 21) :
+                a.image_type === "video" ? 12 :
+                a.image_type === "details" ? (a.sequence === 1 ? 13 : a.sequence > 1 ? 13 + a.sequence : 20) : 100;
+      
+      let pb = b.image_type === "main" ? (b.sequence ? 1 + b.sequence * 0.1 : 1) :
+                b.image_type === "back_variant" ? 2 :
+                b.image_type === "back_main" ? (hasBV ? 11 : 2) :
+                b.image_type === "model" ? (b.sequence === 1 ? 3 : b.sequence > 1 ? 3 + b.sequence : 21) :
+                b.image_type === "video" ? 12 :
+                b.image_type === "details" ? (b.sequence === 1 ? 13 : b.sequence > 1 ? 13 + b.sequence : 20) : 100;
 
-        // Position 1+: H_1.jpg, H_2.jpg, etc. (Main product photos with sequence)
-        if (img.image_type === "main" && img.sequence) {
-          return 1 + (img.sequence * 0.1); // This will give 1.1, 1.2, etc. for H_1, H_2...
-        }
+      // If priorities differ, return immediately (avoids string comparison in most cases)
+      if (pa !== pb) return pa - pb;
 
-        // Position 2: BV.jpg (Back variant photo)
-        if (img.image_type === "back_variant") return 2;
-
-        // Position 2 fallback: If no BV exists, use B.jpg (Back main) in position 2
-        if (!hasBV && img.image_type === "back_main") return 2;
-
-        // Position 3: M_1.jpg (First model photo)
-        if (img.image_type === "model" && img.sequence === 1) return 3;
-
-        // Position 4-10: M_2.jpg through M_7.jpg (Remaining model photos in sequence order)
-        if (img.image_type === "model" && img.sequence > 1) {
-          return 3 + img.sequence; // This will give 4, 5, 6, etc. for M_2, M_3, M_4...
-        }
-
-        // Position 11: B.jpg (Back main product photo) - only if not used as fallback for BV
-        if (hasBV && img.image_type === "back_main") return 11;
-
-        // Position 12: video.avi/mp4
-        if (img.image_type === "video") return 12;
-
-        // Position 13: D_1.jpg (First detail photo)
-        if (img.image_type === "details" && img.sequence === 1) return 13;
-
-        // Position 14+: D_X.jpg (Remaining detail photos in sequence order)
-        if (img.image_type === "details" && img.sequence > 1) {
-          return 13 + img.sequence; // This will give 14, 15, 16, etc. for D_2, D_3, D_4...
-        }
-
-        // Any other detail photos without sequence
-        if (img.image_type === "details") return 20;
-
-        // Any other model photos without sequence
-        if (img.image_type === "model") return 21;
-
-        // Everything else
-        return 100;
-      };
-
-      const priorityA = getDisplayPriority(a);
-      const priorityB = getDisplayPriority(b);
-
-      // If priorities are the same, use the unique_id as a tiebreaker to ensure consistent ordering
-      if (priorityA === priorityB) {
-        // For main images with the same priority, check if one has H_1 suffix in the filename
-        if (a.image_type === 'main' && b.image_type === 'main') {
-          // Extract the filename without extension
-          const filenameA = a.url.split('/').pop().split('?')[0].replace(/\.[^/.]+$/, "");
-          const filenameB = b.url.split('/').pop().split('?')[0].replace(/\.[^/.]+$/, "");
-
-          // Check if filename contains H_1 or ends with -H_1
-          const hasH1SuffixA = filenameA.includes('H_1') || filenameA.endsWith('-H_1');
-          const hasH1SuffixB = filenameB.includes('H_1') || filenameB.endsWith('-H_1');
-
-          // Also check for H vs H_1 pattern - look for -H at the end or followed by a dot
-          const hasHSuffixA = (filenameA.endsWith('-H') || filenameA.includes('-H.')) && !filenameA.includes('H_');
-          const hasHSuffixB = (filenameB.endsWith('-H') || filenameB.includes('-H.')) && !filenameB.includes('H_');
-
-          // Extract the last part of the filename to check for H suffix more precisely
-          const lastPartA = filenameA.split('-').pop();
-          const lastPartB = filenameB.split('-').pop();
-          const isExactHSuffixA = lastPartA === 'H';
-          const isExactHSuffixB = lastPartB === 'H';
-
-          // Prefer H_1 over any other
-          if (hasH1SuffixA && !hasH1SuffixB) {
-            return -1;
-          }
-          if (!hasH1SuffixA && hasH1SuffixB) {
-            return 1;
-          }
-
-          // If neither has H_1, prefer exact H suffix over others
-          if (isExactHSuffixA && !isExactHSuffixB) {
-            return -1;
-          }
-          if (!isExactHSuffixA && isExactHSuffixB) {
-            return 1;
-          }
-
-          // If neither has exact H suffix, try the more general H pattern
-          if (hasHSuffixA && !hasHSuffixB) {
-            return -1;
-          }
-          if (!hasHSuffixA && hasHSuffixB) {
-            return 1;
-          }
-
-          // If both or neither have H_1 suffix, use the unique_id
-          return a.unique_id.localeCompare(b.unique_id);
-        }
-
-        // For other image types, just use the unique_id
-        return a.unique_id.localeCompare(b.unique_id);
-      }
-
-      return priorityA - priorityB;
+      // Only do string comparison when priorities are equal
+      return a.unique_id < b.unique_id ? -1 : a.unique_id > b.unique_id ? 1 : 0;
     });
 
     // Show first 8 images (or fewer if even number), hide the rest
-    const visibleImages = [];
-    const hiddenImages = [];
-
-    // Determine how many images to show initially (2, 4, 6, or 8)
+    const totalCount = groupedImages[key].length;
     let visibleCount = 8; // Maximum of 8 images
-    if (groupedImages[key].length < 8) {
+    if (totalCount < 8) {
       // If we have fewer than 8 images, round down to the nearest even number
       // But ensure we always show at least 1 image
-      visibleCount = Math.max(1, Math.floor(groupedImages[key].length / 2) * 2);
+      visibleCount = Math.max(1, Math.floor(totalCount / 2) * 2);
+    }
+    
+    // Pre-allocate arrays
+    const visibleImages = new Array(visibleCount);
+    const hiddenImages = new Array(totalCount - visibleCount);
+    let vi = 0, hi = 0;
+    
+    for (let i = 0; i < totalCount; i++) {
+      const img = groupedImages[key][i];
+      if (i < visibleCount) {
+        visibleImages[vi++] = img;
+      } else {
+        hiddenImages[hi++] = { ...img, hidden: true };
+      }
     }
 
-    groupedImages[key].forEach((img, index) => {
-      // First N images are visible (where N is visibleCount)
-      if (index < visibleCount) {
-        visibleImages.push(img);
-      } else {
-        // All images after position N are hidden
-        const hiddenImg = {
-          ...img,
-          hidden: true
-        };
-        hiddenImages.push(hiddenImg);
-      }
-    });
-
-    // Replace the group with the new ordering
-    groupedImages[key] = [...visibleImages, ...hiddenImages];
+    groupedImages[key] = visibleImages.concat(hiddenImages);
   });
 
   // Flatten the grouped images, keeping product-color groups together
   const sortedImages = [];
   const seenUrls = new Set(); // Track URLs we've already added to prevent duplicates
+  const mainImageTracker = new Map(); // Track main images per product-color
 
   Object.keys(groupedImages).forEach((key) => {
     groupedImages[key].forEach((img) => {
-      // Parse the image to get its type
-      const parsed = parseImageUrl(img.url, colorMappings);
-
       // Special handling for main (H) images to prevent duplicates
       let isDuplicate = seenUrls.has(img.url);
 
       // For main images, also check if we already have another main image with the same product and color
-      if (!isDuplicate && parsed.image_type === "main") {
-        // Check if we already have a main image for this product-color
-        const mainImageKey = `main-${parsed.product}-${parsed.color}`;
-        const hasMainImage = seenUrls.has(mainImageKey);
+      if (!isDuplicate && img.image_type === "main") {
+        const mainKey = `${img.product}|${img.color}`;
+        const existingMainUrl = mainImageTracker.get(mainKey);
 
-        if (hasMainImage) {
-          // If this is H_1, it might be better than a plain H
+        if (existingMainUrl) {
+          // Check if this is H_1 (prefer over plain H)
           const filename = img.url.split('/').pop().split('?')[0].replace(/\.[^/.]+$/, "");
           const lastPart = filename.split('-').pop();
           const isExactHSuffix = lastPart === 'H';
@@ -412,13 +364,7 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
 
           if (hasH1Suffix) {
             // This is an H_1 image, which we prefer - find and remove the existing main image
-            const existingMainIndex = sortedImages.findIndex(item => {
-              const itemParsed = parseImageUrl(item.url, colorMappings);
-              return itemParsed.image_type === "main" &&
-                     itemParsed.product === parsed.product &&
-                     itemParsed.color === parsed.color;
-            });
-
+            const existingMainIndex = sortedImages.findIndex(item => item.url === existingMainUrl);
             if (existingMainIndex !== -1) {
               sortedImages.splice(existingMainIndex, 1);
             }
@@ -428,8 +374,10 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
           }
         }
 
-        // Mark that we have a main image for this product-color
-        seenUrls.add(mainImageKey);
+        // Track main image for this product-color
+        if (!isDuplicate) {
+          mainImageTracker.set(mainKey, img.url);
+        }
       }
 
       // Only add the image if it's not a duplicate
