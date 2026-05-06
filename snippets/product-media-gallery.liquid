@@ -1407,71 +1407,36 @@
       }
 
       // Set up event listeners
+      //
+      // Subscribe to the theme's variant pub/sub. This is the canonical Dawn
+      // pattern (see assets/pubsub.js + assets/product-info.js) and survives
+      // <variant-selects> DOM swaps performed by HTMLUpdateUtility.viewTransition.
+      // Direct radio listeners would die after the first swap; the URL-poll
+      // fallback breaks when data-update-url="false". Pub/sub avoids both.
       function setupEventListeners() {
-        // Listen for radio button changes (use data-option-type for language-agnostic detection)
-        document.querySelectorAll('[data-option-type="color"] input[type="radio"]')
-          .forEach(radio => {
-            radio.addEventListener('change', e => {
-              const newColor = e.target.value;
-              handleColorChange(newColor);
-            });
-          });
+        // `subscribe` and `PUB_SUB_EVENTS` are script-scope globals from
+        // assets/pubsub.js + assets/constants.js — accessible by name but
+        // not as window properties (top-level `const` doesn't attach to window).
+        if (typeof subscribe !== 'function' || typeof PUB_SUB_EVENTS === 'undefined') return;
 
-        // Listen for variant select changes
-        document.querySelectorAll('[data-option-type="color"] select')
-          .forEach(select => {
-            select.addEventListener('change', e => {
-              const newColor = e.target.value;
-              handleColorChange(newColor);
-            });
-          });
+        // Avoid duplicate subscriptions on theme-editor section reloads.
+        if (window.__nfGalleryVariantUnsub) {
+          window.__nfGalleryVariantUnsub();
+        }
 
-        // Listen for Shopify's variant change event
-        document.addEventListener('variant:changed', function(event) {
-          if (event.detail.variant) {
-            // Extract color from variant using pre-computed index
-            const colorPosition = colorOptionIndex;
+        window.__nfGalleryVariantUnsub = subscribe(PUB_SUB_EVENTS.variantChange, ({ data }) => {
+          const variant = data && data.variant;
+          if (!variant) return;
 
-            let newColor = '';
-            if (colorPosition >= 0 && event.detail.variant.options) {
-              newColor = event.detail.variant.options[colorPosition];
-            } else if (event.detail.variant.title) {
-              newColor = event.detail.variant.title.split('/')[0].trim();
-            }
-
-            if (newColor) {
-              handleColorChange(newColor);
-            }
+          let newColor = '';
+          if (colorOptionIndex >= 0 && variant.options) {
+            newColor = variant.options[colorOptionIndex];
+          } else if (variant.title) {
+            newColor = variant.title.split('/')[0].trim();
           }
+
+          if (newColor) handleColorChange(newColor);
         });
-
-        // Listen for URL changes for variant updates
-        let currentUrl = window.location.href;
-        setInterval(() => {
-          if (currentUrl !== window.location.href) {
-            currentUrl = window.location.href;
-            const variantId = new URLSearchParams(window.location.search).get('variant');
-
-            if (variantId) {
-              const variants = {{ product.variants | json }};
-              const variant = variants.find(v => v.id.toString() === variantId);
-
-              if (variant) {
-                // Extract color from variant using pre-computed index
-                const colorPosition = colorOptionIndex;
-
-                let color = colorPosition >= 0 && variant.options ? variant.options[colorPosition] : '';
-                if (!color && variant.title) {
-                  color = variant.title.split('/')[0].trim();
-                }
-
-                if (color) {
-                  handleColorChange(color);
-                }
-              }
-            }
-          }
-        }, 300);
       }
 
       // Start processing media and set up listeners
@@ -1492,30 +1457,6 @@
         }
       });
 
-      // Directly hook into Shopify's variant change mechanism
-      const originalOnVariantChange = window.onVariantChange;
-      window.onVariantChange = function(variant) {
-        if (variant) {
-          // Extract color from variant using pre-computed index
-          const colorPosition = colorOptionIndex;
-
-          let newColor = '';
-          if (colorPosition >= 0 && variant.options) {
-            newColor = variant.options[colorPosition];
-          } else if (variant.title) {
-            newColor = variant.title.split('/')[0].trim();
-          }
-
-          if (newColor) {
-            handleColorChange(newColor);
-          }
-        }
-
-        // Call the original handler if it exists
-        if (typeof originalOnVariantChange === 'function') {
-          originalOnVariantChange(variant);
-        }
-      };
     }
 
     // Function to open the lightbox with filtered and sorted images
