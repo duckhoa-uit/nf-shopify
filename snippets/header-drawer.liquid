@@ -22,14 +22,36 @@
           <nav class="menu-drawer__navigation p-0">
             <ul class="menu-drawer__menu has-submenu list-menu flex flex-col gap-7" role="list">
               {%- for link in section.settings.menu.links -%}
+                {%- liquid
+                  assign link_has_current_descendant = false
+                  if link.current
+                    assign link_has_current_descendant = true
+                  else
+                    for childlink in link.links
+                      if childlink.current
+                        assign link_has_current_descendant = true
+                        break
+                      endif
+                      for grandchildlink in childlink.links
+                        if grandchildlink.current
+                          assign link_has_current_descendant = true
+                          break
+                        endif
+                      endfor
+                      if link_has_current_descendant
+                        break
+                      endif
+                    endfor
+                  endif
+                -%}
                 <li>
                   {%- if link.links != blank -%}
                     <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
                       <summary
                         id="HeaderDrawer-{{ link.handle }}"
-                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset p-0 text-lg font-semibold leading-5"
+                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset p-0 text-lg leading-5 {% if link_has_current_descendant %}font-bold{% else %}font-medium{% endif %}"
                       >
-                        <a href="{{ link.url }}">
+                        <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>
                           {{ link.title | escape }}
                         </a>
                         <span class="svg-wrapper">
@@ -52,7 +74,7 @@
                                   <a
                                     id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
                                     href="{{ childlink.url }}"
-                                    class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %} p-0"
+                                    class="menu-drawer__menu-item link link--text list-menu__item focus-inset p-0{% if childlink.current %} menu-drawer__menu-item--active font-bold{% endif %}"
                                     {% if childlink.current %}
                                       aria-current="page"
                                     {% endif %}
@@ -90,7 +112,7 @@
                                           <a
                                             id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
                                             href="{{ grandchildlink.url }}"
-                                            class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %} p-0 text-lg font-medium leading-6 mt-2 text-[#3D3D3D]"
+                                            class="menu-drawer__menu-item link link--text list-menu__item focus-inset p-0 text-lg leading-6 mt-2 text-[#3D3D3D] {% if grandchildlink.current %}menu-drawer__menu-item--active font-bold{% else %}font-medium{% endif %}"
                                             {% if grandchildlink.current %}
                                               aria-current="page"
                                             {% endif %}
@@ -112,7 +134,7 @@
                     <a
                       id="HeaderDrawer-{{ link.handle }}"
                       href="{{ link.url }}"
-                      class="menu-drawer__menu-item list-menu__item link link--text focus-inset p-0 text-lg font-semibold leading-5"
+                      class="menu-drawer__menu-item list-menu__item link link--text focus-inset p-0 text-lg leading-5 {% if link.current %}font-bold{% else %}font-medium{% endif %}"
                       {% if link.current %}
                         aria-current="page"
                       {% endif %}
