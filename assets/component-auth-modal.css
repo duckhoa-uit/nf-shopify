@@ -1,0 +1,318 @@
+/* ==========================================================================
+   <auth-modal>
+   Native <dialog>-based login/register/recover modal.
+   Uses theme color tokens, layered shadows, and @starting-style for entrance.
+   ========================================================================== */
+
+.auth-modal {
+  /* Reset native <dialog> chrome */
+  border: 0;
+  padding: 0;
+  margin: auto;
+
+  width: 100%;
+  max-width: 28rem;
+  max-height: calc(100dvh - 2rem);
+  overflow: visible;
+
+  background: rgb(var(--color-base-background));
+  color: rgb(var(--color-base-foreground));
+  border-radius: var(--radius-3, 0.1875rem);
+
+  /* visual-layered-shadows + visual-no-pure-black-shadow */
+  box-shadow:
+    0 1px 1px rgba(var(--color-base-foreground), 0.04),
+    0 4px 8px rgba(var(--color-base-foreground), 0.06),
+    0 16px 32px rgba(var(--color-base-foreground), 0.10);
+}
+
+/* Backdrop — native-backdrop-styling */
+.auth-modal::backdrop {
+  background: rgba(15, 15, 15, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+/* Entrance / exit (display + overlay must be transitioned via allow-discrete) */
+.auth-modal,
+.auth-modal::backdrop {
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out,
+    overlay 200ms allow-discrete,
+    display 200ms allow-discrete;
+}
+
+.auth-modal {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+}
+
+.auth-modal[open] {
+  opacity: 1;
+  transform: none;
+}
+
+.auth-modal::backdrop {
+  opacity: 0;
+}
+
+.auth-modal[open]::backdrop {
+  opacity: 1;
+}
+
+/* @starting-style: required so the [open] state animates *in* on open. */
+@starting-style {
+  .auth-modal[open] {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  .auth-modal[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-modal,
+  .auth-modal::backdrop {
+    transition: none;
+  }
+
+  .auth-modal {
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Inner layout
+   -------------------------------------------------------------------------- */
+
+.auth-modal__inner {
+  padding: 2rem;
+  outline: none;
+}
+
+.auth-modal__inner:focus-visible {
+  outline: none;
+}
+
+.auth-modal__heading {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgb(var(--color-base-foreground));
+}
+
+/* Close button — Fitts: 40×40 hit area with pseudo-element expansion */
+.auth-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-3, 0.1875rem);
+  color: rgba(var(--color-base-foreground), 0.7);
+  cursor: pointer;
+  transition: background-color 150ms ease-out, color 150ms ease-out;
+}
+
+.auth-modal__close:hover {
+  background: rgba(var(--color-base-foreground), 0.06);
+  color: rgb(var(--color-base-foreground));
+}
+
+.auth-modal__close .svg-wrapper {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   Tablist
+   -------------------------------------------------------------------------- */
+
+.auth-modal__tablist {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(var(--color-base-foreground), 0.12);
+}
+
+.auth-modal__tab {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 0.875rem 0.25rem;
+  margin-bottom: -1px;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgb(var(--color-base-foreground));
+  cursor: pointer;
+  transition: border-color 150ms ease-out;
+}
+
+.auth-modal__tab[aria-selected='true'] {
+  border-bottom-color: rgb(var(--color-base-foreground));
+}
+
+.auth-modal__tab:focus-visible {
+  outline: 2px solid rgb(var(--color-base-foreground));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Panels & forms
+   -------------------------------------------------------------------------- */
+
+.auth-modal__panel[hidden] {
+  display: none;
+}
+
+.auth-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.auth-modal__form .field {
+  margin: 0;
+}
+
+.auth-modal__submit {
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.auth-modal__lede {
+  margin: 0 0 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: rgba(var(--color-base-foreground), 0.8);
+}
+
+.auth-modal__forgot {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(var(--color-base-foreground), 0.7);
+}
+
+.auth-modal__forgot--center {
+  text-align: center;
+}
+
+.auth-modal__link {
+  color: rgb(var(--color-base-foreground));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.auth-modal__link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.auth-modal__newsletter {
+  margin: 0.25rem 0 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Messages (errors / success)
+   -------------------------------------------------------------------------- */
+
+.auth-modal__messages:empty {
+  display: none;
+}
+
+.auth-modal__error,
+.auth-modal__success {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-3, 0.1875rem);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.auth-modal__error {
+  background: rgba(236, 0, 9, 0.08);
+  color: #ec0009;
+}
+
+.auth-modal__success {
+  background: rgba(0, 148, 95, 0.08);
+  color: #00945f;
+}
+
+/* --------------------------------------------------------------------------
+   Password requirements (progressive disclosure)
+   -------------------------------------------------------------------------- */
+
+.password-requirements {
+  display: none;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: rgba(var(--color-base-foreground), 0.7);
+}
+
+.password-requirements[data-touched] {
+  display: block;
+}
+
+.password-requirements__title {
+  margin: 0 0 0.25rem;
+}
+
+.password-requirements__list {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.password-requirements__item.is-valid {
+  color: #00945f;
+}
+
+.password-requirements__item.is-invalid {
+  color: #ec0009;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile sheet
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 749px) {
+  .auth-modal {
+    max-width: 100%;
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .auth-modal__inner {
+    padding: 1.5rem;
+    padding-top: max(1.5rem, env(safe-area-inset-top));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .auth-modal__close {
+    top: max(0.75rem, env(safe-area-inset-top));
+    right: 0.75rem;
+  }
+}

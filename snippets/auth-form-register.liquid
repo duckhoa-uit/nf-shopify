@@ -1,0 +1,129 @@
+{% comment %}
+  Registration form. Rendered inside auth-modal as a tabpanel and as the standalone /account/register template.
+
+  Accepts:
+    none
+
+  Usage:
+    {% render 'auth-form-register' %}
+{% endcomment %}
+
+<div id="register-messages" class="auth-modal__messages" aria-live="polite">
+  {% if form.errors %}
+    <div class="auth-modal__error">
+      {{ form.errors | default_errors }}
+    </div>
+  {% endif %}
+</div>
+
+{% form 'create_customer', return_to: routes.account_register_url, id: 'customer_register_form', class: 'auth-modal__form' %}
+  <div class="field">
+    <input
+      type="text"
+      name="customer[first_name]"
+      id="first_name"
+      required
+      placeholder=" "
+      autocomplete="given-name"
+      {% if form.errors contains 'first_name' %}
+        aria-invalid="true"
+      {% endif %}
+      value="{{ form.first_name }}"
+    >
+    <label for="first_name">{{ 'customer.register.first_name' | t }}</label>
+  </div>
+
+  <div class="field">
+    <input
+      type="text"
+      name="customer[last_name]"
+      id="last_name"
+      required
+      placeholder=" "
+      autocomplete="family-name"
+      {% if form.errors contains 'last_name' %}
+        aria-invalid="true"
+      {% endif %}
+      value="{{ form.last_name }}"
+    >
+    <label for="last_name">{{ 'customer.register.last_name' | t }}</label>
+  </div>
+
+  <div class="field">
+    <input
+      type="email"
+      name="customer[email]"
+      id="email"
+      required
+      placeholder=" "
+      autocomplete="email"
+      {% if form.errors contains 'email' %}
+        aria-invalid="true"
+      {% endif %}
+      value="{{ form.email }}"
+    >
+    <label for="email">{{ 'customer.login_page.email' | t }}</label>
+  </div>
+
+  <div class="field">
+    <input
+      type="password"
+      name="customer[password]"
+      id="password"
+      required
+      minlength="8"
+      placeholder=" "
+      autocomplete="new-password"
+      aria-describedby="password-requirements"
+      {% if form.errors contains 'password' %}
+        aria-invalid="true"
+      {% endif %}
+    >
+    <label for="password">{{ 'customer.login_page.password' | t }}</label>
+  </div>
+
+  {%- comment -%}
+    Progressive disclosure: hidden until the password input has been focused at least once.
+    The auth-modal Web Component reveals it via the [data-touched] attribute on the form.
+  {%- endcomment -%}
+  <div id="password-requirements" class="password-requirements" data-password-requirements>
+    <p class="password-requirements__title">
+      {{ 'customer.register.password_requirements' | t }}
+    </p>
+    <ul class="password-requirements__list">
+      <li class="password-requirements__item" data-rule="length">
+        {{- 'customer.register.password_requirement_length' | t -}}
+      </li>
+      <li class="password-requirements__item" data-rule="lowercase">
+        {{- 'customer.register.password_requirement_lowercase' | t -}}
+      </li>
+      <li class="password-requirements__item" data-rule="uppercase">
+        {{- 'customer.register.password_requirement_uppercase' | t -}}
+      </li>
+      <li class="password-requirements__item" data-rule="number">
+        {{- 'customer.register.password_requirement_number' | t -}}
+      </li>
+      <li class="password-requirements__item" data-rule="special">
+        {{- 'customer.register.password_requirement_special' | t -}}
+      </li>
+    </ul>
+  </div>
+
+  <div class="auth-modal__newsletter">
+    {%
+      render 'checkbox-field',
+      id: 'newsletter',
+      name: 'customer[accepts_marketing]',
+      value: '1',
+      checked: form.accepts_marketing,
+      label: 'customer.register.accepts_marketing' | t,
+      class: 'flex items-start',
+      input_class: 'flex size-[1.125rem] items-center justify-center mr-2 cursor-pointer p-2 relative',
+      label_class: 'mt-0 text-foreground text-sm leading-5 text-left flex-1'
+    %}
+  </div>
+
+  <button type="submit" class="button auth-modal__submit">
+    {{ 'customer.register.submit' | t }}
+  </button>
+{% endform %}

@@ -343,6 +343,9 @@
       {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
     {%- endif -%}
     {{ 'component-cart-sync.css' | asset_url | stylesheet_tag }}
+    {%- if customer == nil -%}
+      {{ 'component-auth-modal.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
 
     {%- unless settings.type_body_font.system? -%}
       {% comment %}theme-check-disable AssetPreload{% endcomment %}
@@ -533,7 +536,9 @@
     <script>window.initialCartData = {{ cart | json }};</script>
     <script src="{{ 'cart-sync.js' | asset_url }}" defer="defer"></script>
 
-    <script src="{{ 'auth-modal.js' | asset_url }}" defer></script>
+    {%- if customer == nil -%}
+      <script src="{{ 'auth-modal.js' | asset_url }}" defer></script>
+    {%- endif -%}
     <script src="{{ 'product-utils.module.js' | asset_url }}" type="module"></script>
 
     {% comment %} International Phone Input - Load only when needed {% endcomment %}

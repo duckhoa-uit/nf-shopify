@@ -184,6 +184,11 @@
           class="header__icon px-3 header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
           rel="nofollow"
           id="user-menu-trigger"
+          {%- if customer == nil %}
+            data-auth-required="login"
+            aria-haspopup="dialog"
+            aria-controls="AuthModal"
+          {%- endif -%}
         >
           {%- if section.settings.enable_customer_avatar -%}
             <account-icon>
