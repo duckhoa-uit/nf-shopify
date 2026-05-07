@@ -185,9 +185,11 @@
                   {{ 'customer.log_out' | t | default: 'Log out' }}
                 </a>
               {% else %}
-                <button
+                <a
+                  href="{{ routes.account_register_url }}"
                   data-auth-trigger="register"
-                  class="button h-[3.125rem] leading-7"
+                  rel="nofollow"
+                  class="button h-[3.125rem] leading-7 flex items-center justify-center"
                 >
                   <span class="button-text">{{ 'customer.register.title' | t | default: 'Register' }}</span>
                   <span class="button-spinner" style="display: none;">
@@ -196,10 +198,12 @@
                       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   </span>
-                </button>
-                <button
+                </a>
+                <a
+                  href="{{ routes.account_login_url }}"
                   data-auth-trigger="login"
-                  class="button h-[3.125rem] bg-background text-foreground leading-7"
+                  rel="nofollow"
+                  class="button h-[3.125rem] bg-background text-foreground leading-7 flex items-center justify-center"
                 >
                   <span class="button-text">{{ 'customer.login_page.sign_in' | t | default: 'Login' }}</span>
                   <span class="button-spinner" style="display: none;">
@@ -208,7 +212,7 @@
                       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 0 1 4 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   </span>
-                </button>
+                </a>
               {% endif %}
             </div>
             {% comment %}

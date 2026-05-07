@@ -182,8 +182,14 @@ class AuthModal extends HTMLElement {
   }
 
   #wirePasswordValidation() {
-    const requirementsEl = this.querySelector('[data-password-requirements]');
-    const passwordEl = this.querySelector('input[type="password"][name="customer[password]"]');
+    // Live password-rule feedback applies ONLY to the register form.
+    // The login form's password input must keep its native validity so that
+    // legacy passwords (which may not satisfy the new register rules) still
+    // submit successfully.
+    const requirementsEl = this.panels.register?.querySelector('[data-password-requirements]');
+    const passwordEl = this.panels.register?.querySelector(
+      'input[type="password"][name="customer[password]"]'
+    );
     if (!requirementsEl || !passwordEl) return;
 
     const items = Object.fromEntries(
