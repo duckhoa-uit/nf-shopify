@@ -111,7 +111,7 @@
             assign variant_option_value = variant.option3
         endcase
         
-        if variant_option_value == value_name and variant.available and variant.inventory_management != blank
+        if variant_option_value == value_name and variant.available and variant.inventory_management != blank and variant.price > 0
           assign has_truly_available_variant = true
           break
         endif
@@ -282,6 +282,28 @@
             assign option_disabled = false
           endif
 
+          # Disable option values whose only matching variants have price = 0
+          # (treat zero-priced variants as unavailable everywhere).
+          assign value_name_check = value.name | default: value
+          assign has_priced_variant = false
+          for variant in product.variants
+            case option.position
+              when 1
+                assign variant_option_value = variant.option1
+              when 2
+                assign variant_option_value = variant.option2
+              when 3
+                assign variant_option_value = variant.option3
+            endcase
+            if variant_option_value == value_name_check and variant.price > 0
+              assign has_priced_variant = true
+              break
+            endif
+          endfor
+          if has_priced_variant == false
+            assign option_disabled = true
+          endif
+
           # Create input ID and names
           assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0
           assign input_name = option.name | append: '-' | append: option.position
@@ -332,6 +354,28 @@
       assign option_disabled = true
       if value.available
         assign option_disabled = false
+      endif
+
+      # Disable option values whose only matching variants have price = 0
+      # (treat zero-priced variants as unavailable everywhere).
+      assign value_name_check = value.name | default: value
+      assign has_priced_variant = false
+      for variant in product.variants
+        case option.position
+          when 1
+            assign variant_option_value = variant.option1
+          when 2
+            assign variant_option_value = variant.option2
+          when 3
+            assign variant_option_value = variant.option3
+        endcase
+        if variant_option_value == value_name_check and variant.price > 0
+          assign has_priced_variant = true
+          break
+        endif
+      endfor
+      if has_priced_variant == false
+        assign option_disabled = true
       endif
 
       # Create input ID and names
