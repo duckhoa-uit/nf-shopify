@@ -131,27 +131,27 @@
 
           <hr class="menu-drawer__divider">
 
-          <div class="menu-drawer__utility-links my-5 px-6">
-            <div class="flex flex-col w-full gap-y-3">
+          <div class="menu-drawer__utility-links">
+            <div class="menu-drawer__auth">
               {% if customer %}
                 <a
                   href="{{ routes.account_url }}"
-                  class="button h-[var(--control-height-md)] leading-7 flex items-center justify-center"
+                  class="menu-drawer__auth-btn menu-drawer__auth-btn--primary"
                 >
-                  <span class="svg-wrapper size-5 mr-2">{{ 'icon-account.svg' | inline_asset_content }}</span>
+                  <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
                   {{ 'customer.account.title' | t | default: 'Customer Zone' }}
                 </a>
                 <a
                   href="{{ routes.account_logout_url }}"
-                  class="button h-[var(--control-height-md)] bg-background text-foreground leading-7 flex items-center justify-center"
+                  class="menu-drawer__auth-btn menu-drawer__auth-btn--secondary"
                 >
-                  <span class="svg-wrapper size-5 mr-2">{{ 'icon-logout.svg' | inline_asset_content }}</span>
+                  <span class="svg-wrapper">{{ 'icon-logout.svg' | inline_asset_content }}</span>
                   {{ 'customer.log_out' | t | default: 'Log out' }}
                 </a>
               {% else %}
                 <button
                   data-auth-trigger="register"
-                  class="button h-[var(--control-height-md)] leading-7"
+                  class="menu-drawer__auth-btn menu-drawer__auth-btn--primary"
                 >
                   <span class="button-text">{{ 'customer.register.title' | t | default: 'Register' }}</span>
                   <span class="button-spinner" style="display: none;">
@@ -163,7 +163,7 @@
                 </button>
                 <button
                   data-auth-trigger="login"
-                  class="button h-[var(--control-height-md)] bg-background text-foreground leading-7"
+                  class="menu-drawer__auth-btn menu-drawer__auth-btn--secondary"
                 >
                   <span class="button-text">{{ 'customer.login_page.sign_in' | t | default: 'Login' }}</span>
                   <span class="button-spinner" style="display: none;">
