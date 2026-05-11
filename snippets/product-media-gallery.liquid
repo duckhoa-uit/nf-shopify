@@ -1736,39 +1736,8 @@
               const container = document.querySelector('.fancybox__container');
               if (!container) return;
 
-              // Position prev/next buttons relative to the image content,
-              // not the wider .fancybox__nav box. Fancybox sizes __nav to
-              // the carousel slot which can be much wider than letterboxed
-              // images, leaving the chevrons too far out. We snap them to
-              // <gap> px outside the actual image (.fancybox__content).
-              //
-              // Button size, color, chevron, and visibility breakpoint are
-              // still handled in CSS via Fancybox's --f-button-* variables.
-              // We only set position here, never `display` (Fancybox needs
-              // display:flex on .f-button to center the chevron SVG).
-              const positionNavButtons = () => {
-                const content = container.querySelector('.fancybox__content');
-                const prevButton = container.querySelector('.f-button.is-prev');
-                const nextButton = container.querySelector('.f-button.is-next');
-
-                if (!content || !prevButton || !nextButton) return;
-                if (window.innerWidth <= 990) return; // CSS hides them here
-
-                const contentRect = content.getBoundingClientRect();
-                const gap = 60; // matches --f-button-prev-pos / --f-button-next-pos
-
-                prevButton.style.left = `${contentRect.left - gap}px`;
-                prevButton.style.right = 'auto';
-                nextButton.style.right = `${window.innerWidth - contentRect.right - gap}px`;
-                nextButton.style.left = 'auto';
-              };
-
-              setTimeout(positionNavButtons, 100);
-              window.addEventListener('resize', positionNavButtons);
-              fancybox.on('change', positionNavButtons);
-              fancybox.on('destroy', () => {
-                window.removeEventListener('resize', positionNavButtons);
-              });
+              // Prev/next chevron buttons use Fancybox v5 defaults — no
+              // custom styling or positioning.
 
               // Create toolbar container
               const toolbar = document.createElement('div');

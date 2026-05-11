@@ -87,63 +87,7 @@
   background-position: center;
 }
 
-/* Fancybox v5 prev/next chevron buttons
- * Fancybox v5 sets its own --f-button-* defaults on .fancybox__nav (50px,
- * transparent bg) inside fancybox.css. Because that CDN stylesheet loads
- * AFTER this file, we use a higher-specificity selector
- * (.fancybox__container .fancybox__nav) to ensure our overrides win
- * regardless of load order.
- */
-.fancybox__container .fancybox__nav {
-  --f-button-width: 56px;
-  --f-button-height: 56px;
-  --f-button-border-radius: 50%;
-  --f-button-color: #0f0f0f;
-  --f-button-hover-color: #0f0f0f;
-  --f-button-bg: #ffffff;
-  --f-button-hover-bg: #ffffff;
-  --f-button-active-bg: #ffffff;
-  --f-button-svg-width: 18px;
-  --f-button-svg-height: 18px;
-  --f-button-svg-stroke-width: 2;
-  --f-button-svg-filter: none;
-  --f-button-prev-pos: -60px;
-  --f-button-next-pos: -60px;
-}
-
-@media screen and (max-width: 990px) and (min-width: 768px) {
-  .fancybox__container .fancybox__nav {
-    --f-button-prev-pos: -40px;
-    --f-button-next-pos: -40px;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .fancybox__container .fancybox__nav {
-    --f-button-prev-pos: -20px;
-    --f-button-next-pos: -20px;
-  }
-}
-
-/* Subtle elevation + smoother hover feedback than Fancybox's default */
-.f-button.is-prev,
-.f-button.is-next {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.2s ease;
-}
-
-.f-button.is-prev:hover,
-.f-button.is-next:hover {
-  opacity: 0.9;
-}
-
-/* Hide navigation buttons on tablet and mobile */
-@media screen and (max-width: 990px) {
-  .f-button.is-prev,
-  .f-button.is-next {
-    display: none;
-  }
-}
+/* Fancybox v5 prev/next chevron buttons use library defaults — no overrides. */
 
 /* Custom toolbar for Fancybox */
 .custom-fancybox-toolbar {
