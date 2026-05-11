@@ -328,11 +328,14 @@ details[open].menu-opening > .menu-drawer__submenu {
 .menu-drawer__tile-label {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.5;
   color: var(--color-foreground);
+  text-align: center;
+  width: 100%;
 }
 
 .menu-drawer__tile-label .svg-wrapper {
@@ -345,6 +348,52 @@ details[open].menu-opening > .menu-drawer__submenu {
   border-top: 1px solid var(--color-gray-400);
   margin: 0 1.5rem;
   width: auto;
+}
+
+.menu-drawer__list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-drawer__list-item + .menu-drawer__list-item {
+  border-top: 1px solid var(--color-gray-300);
+}
+
+.menu-drawer__list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--color-foreground);
+  text-decoration: none;
+  cursor: pointer;
+  list-style: none;
+  min-height: var(--touch-target-min);
+}
+
+.menu-drawer__list-row::-webkit-details-marker,
+.menu-drawer__list-row::marker {
+  display: none;
+  content: '';
+}
+
+.menu-drawer__list-label {
+  flex: 1;
+}
+
+.menu-drawer__list-chevron {
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.625rem;
+  color: var(--color-foreground);
 }
 
 .menu-drawer__cta-all {

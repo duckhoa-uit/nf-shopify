@@ -75,19 +75,19 @@
             {%- if list_links.size > 0 -%}
               <hr class="menu-drawer__divider">
 
-              <ul class="menu-drawer__menu has-submenu list-menu flex flex-col gap-7" role="list">
+              <ul class="menu-drawer__list list-menu" role="list">
                 {%- for link in list_links -%}
-                  <li>
+                  <li class="menu-drawer__list-item">
                     {%- if link.links != blank -%}
                       <details id="Details-menu-drawer-menu-item-{{ forloop.index | plus: hero_links.size }}">
                         <summary
                           id="HeaderDrawer-{{ link.handle }}"
-                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset p-0 text-lg leading-5 font-bold"
+                          class="menu-drawer__list-row link link--text focus-inset"
                         >
-                          <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>
-                            {{ link.title | escape }}
-                          </a>
-                          <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                          <span class="menu-drawer__list-label">{{ link.title | escape }}</span>
+                          <span class="svg-wrapper menu-drawer__list-chevron">
+                            {{- 'icon-arrow.svg' | inline_asset_content -}}
+                          </span>
                         </summary>
                         {% render 'menu-drawer-panel', link: link %}
                       </details>
@@ -95,10 +95,13 @@
                       <a
                         id="HeaderDrawer-{{ link.handle }}"
                         href="{{ link.url }}"
-                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset p-0 text-lg leading-5 font-bold"
+                        class="menu-drawer__list-row link link--text focus-inset"
                         {% if link.current %}aria-current="page"{% endif %}
                       >
-                        {{ link.title | escape }}
+                        <span class="menu-drawer__list-label">{{ link.title | escape }}</span>
+                        <span class="svg-wrapper menu-drawer__list-chevron">
+                          {{- 'icon-arrow.svg' | inline_asset_content -}}
+                        </span>
                       </a>
                     {%- endif -%}
                   </li>
