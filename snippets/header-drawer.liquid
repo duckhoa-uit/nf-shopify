@@ -73,8 +73,6 @@
             {%- endif -%}
 
             {%- if list_links.size > 0 -%}
-              <hr class="menu-drawer__divider">
-
               <ul class="menu-drawer__list list-menu" role="list">
                 {%- for link in list_links -%}
                   <li class="menu-drawer__list-item">
@@ -109,7 +107,7 @@
               </ul>
             {%- endif -%}
 
-            <div class="my-[2.1875rem] w-full flex flex-col *:text-gray-600 *:my-0.5 *:leading-6 *:text-sm *:font-bold px-6">
+            <div class="menu-drawer__extras">
               {% if announcement_section.settings.blog_link != blank %}
                 <a href="{{ announcement_section.settings.blog_link }}">
                   {{- 'general.navigation.blog' | t | default: 'Blog' -}}
@@ -128,8 +126,6 @@
               {% endif %}
             </div>
           </nav>
-
-          <hr class="menu-drawer__divider">
 
           <div class="menu-drawer__utility-links">
             <div class="menu-drawer__auth">
