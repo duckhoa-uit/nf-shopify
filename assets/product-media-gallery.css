@@ -87,7 +87,44 @@
   background-position: center;
 }
 
-/* Fancybox v5 prev/next chevron buttons use library defaults — no overrides. */
+/* Fancybox v5 prev/next chevron buttons — visual restyle only.
+ * Library handles positioning, flex centering, LTR/RTL, and hide-on-mobile.
+ * We only override colors/size/shadow via Fancybox's --f-button-* vars,
+ * scoped with higher specificity so we win the cascade against fancybox.css.
+ */
+.fancybox__container .fancybox__nav {
+  --f-button-width: 56px;
+  --f-button-height: 56px;
+  --f-button-border-radius: 50%;
+  --f-button-color: #0f0f0f;
+  --f-button-hover-color: #0f0f0f;
+  --f-button-bg: #ffffff;
+  --f-button-hover-bg: #ffffff;
+  --f-button-active-bg: #ffffff;
+  --f-button-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --f-button-svg-width: 18px;
+  --f-button-svg-height: 18px;
+  --f-button-svg-stroke-width: 2;
+  --f-button-svg-filter: none;
+}
+
+.fancybox__container .fancybox__nav .f-button.is-prev,
+.fancybox__container .fancybox__nav .f-button.is-next {
+  transition: opacity 0.2s ease;
+}
+
+.fancybox__container .fancybox__nav .f-button.is-prev:hover,
+.fancybox__container .fancybox__nav .f-button.is-next:hover {
+  opacity: 0.9;
+}
+
+/* Hide on tablet and mobile (matches gallery behavior) */
+@media screen and (max-width: 990px) {
+  .fancybox__container .fancybox__nav .f-button.is-prev,
+  .fancybox__container .fancybox__nav .f-button.is-next {
+    display: none;
+  }
+}
 
 /* Custom toolbar for Fancybox */
 .custom-fancybox-toolbar {
