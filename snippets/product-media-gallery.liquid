@@ -1736,66 +1736,14 @@
               const container = document.querySelector('.fancybox__container');
               if (!container) return;
 
-              // Position navigation buttons relative to content
-              const positionNavButtons = () => {
-                // Get the content element and navigation buttons
-                const content = document.querySelector('.fancybox__content');
-                const prevButton = document.querySelector('.f-button.is-prev');
-                const nextButton = document.querySelector('.f-button.is-next');
-
-                if (content && prevButton && nextButton) {
-                  // Get content width
-                  const contentWidth = content.offsetWidth;
-                  const contentRect = content.getBoundingClientRect();
-
-                  // Calculate button positions based on screen size
-                  let gap;
-                  if (window.innerWidth <= 767) {
-                    // Mobile: 20px gap
-                    gap = 20;
-                  } else if (window.innerWidth <= 990) {
-                    // Tablet: 40px gap
-                    gap = 40;
-                  } else {
-                    // Desktop: 60px gap
-                    gap = 60;
-                  }
-
-                  // Set button positions directly
-                  prevButton.style.position = 'absolute';
-                  nextButton.style.position = 'absolute';
-                  prevButton.style.top = '50%';
-                  nextButton.style.top = '50%';
-                  prevButton.style.transform = 'translateY(-50%)';
-                  nextButton.style.transform = 'translateY(-50%)';
-
-                  // Position buttons relative to content
-                  prevButton.style.left = `${contentRect.left - gap}px`;
-                  nextButton.style.right = `${window.innerWidth - contentRect.right - gap}px`;
-
-                  // Hide buttons on mobile/tablet
-                  if (window.innerWidth <= 990) {
-                    prevButton.style.display = 'none';
-                    nextButton.style.display = 'none';
-                  } else {
-                    prevButton.style.display = 'block';
-                    nextButton.style.display = 'block';
-                  }
-                }
-              };
-
-              // Position buttons initially and on resize
-              // Wait for Fancybox to fully initialize
-              setTimeout(positionNavButtons, 100);
-              window.addEventListener('resize', positionNavButtons);
-
-              // Also position buttons when Fancybox changes slides
-              fancybox.on('change', positionNavButtons);
-
-              // Clean up event listener on close
-              fancybox.on('destroy', () => {
-                window.removeEventListener('resize', positionNavButtons);
-              });
+              // Prev/next nav button styling (size, color, position, hide
+              // breakpoint) is handled entirely in CSS via Fancybox v5's
+              // own --f-button-* variables scoped to .fancybox__container
+              // .fancybox__nav. The previous setTimeout-based JS overrode
+              // Fancybox's flex layout with `display: block` (breaking
+              // chevron centering) and fought Fancybox's LTR/RTL auto
+              // positioning. Both issues are now avoided by letting
+              // Fancybox + our CSS do the work.
 
               // Create toolbar container
               const toolbar = document.createElement('div');
