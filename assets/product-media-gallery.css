@@ -88,12 +88,12 @@
 }
 
 /* Fancybox v5 prev/next chevron buttons
- * Styled via Fancybox's own CSS variables so the built-in chevron SVG is
- * preserved (centering, accessibility, RTL all handled by the library).
- * Scope the variables to .fancybox__container so they only affect the
- * lightbox, not any other consumer of these variable names.
+ * Fancybox v5 sets its own defaults on .fancybox__nav (50px, transparent
+ * background, etc.) which override anything placed on .fancybox__container
+ * because .fancybox__nav is a closer ancestor to the buttons. So we scope
+ * our overrides to .fancybox__nav specifically.
  */
-.fancybox__container {
+.fancybox__nav {
   --f-button-width: 56px;
   --f-button-height: 56px;
   --f-button-border-radius: 50%;
@@ -102,8 +102,8 @@
   --f-button-bg: #ffffff;
   --f-button-hover-bg: #ffffff;
   --f-button-active-bg: #ffffff;
-  --f-button-svg-width: 16px;
-  --f-button-svg-height: 16px;
+  --f-button-svg-width: 18px;
+  --f-button-svg-height: 18px;
   --f-button-svg-stroke-width: 2;
   --f-button-svg-filter: none;
   --f-button-prev-pos: -60px;
@@ -111,14 +111,14 @@
 }
 
 @media screen and (max-width: 990px) and (min-width: 768px) {
-  .fancybox__container {
+  .fancybox__nav {
     --f-button-prev-pos: -40px;
     --f-button-next-pos: -40px;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .fancybox__container {
+  .fancybox__nav {
     --f-button-prev-pos: -20px;
     --f-button-next-pos: -20px;
   }
