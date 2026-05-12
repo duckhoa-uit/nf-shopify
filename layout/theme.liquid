@@ -407,8 +407,6 @@
       <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
     </ul>
 
-    {% render 'auth-modal' %}
-
     <script>
       window.shopUrl = '{{ request.origin }}';
       window.routes = {
@@ -542,7 +540,6 @@
     <script>window.initialCartData = {{ cart | json }};</script>
     <script src="{{ 'cart-sync.js' | asset_url }}" defer="defer"></script>
 
-    <script src="{{ 'auth-modal.js' | asset_url }}" defer></script>
     <script src="{{ 'product-utils.module.js' | asset_url }}" type="module"></script>
 
     {% comment %} International Phone Input - Load only when needed {% endcomment %}

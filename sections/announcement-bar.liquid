@@ -161,12 +161,12 @@
           {% endif %}
           {% if section.settings.show_register and customer == null %}
           <div>
-            <a href="{{ routes.account_register_url }}" data-auth-trigger="register">{{ 'customer.register.title' | t }}</a>
+            <a href="{{ routes.account_register_url }}">{{ 'customer.register.title' | t }}</a>
           </div>
           {% endif %}
           {% if section.settings.show_login and customer == null %}
           <div>
-            <a href="{{ routes.account_login_url }}" data-auth-trigger="login">{{ 'customer.login_page.sign_in' | t }}</a>
+            <a href="{{ routes.account_login_url }}">{{ 'customer.login_page.sign_in' | t }}</a>
           </div>
           {% endif %}
           {% if customer != null %}
