@@ -54,7 +54,7 @@
                         {% render 'menu-link-image', link: link %}
                         <span class="menu-drawer__tile-label">
                           {{ link.title | escape }}
-                          <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                          <span class="svg-wrapper">{{- 'icon-chevron-right.svg' | inline_asset_content -}}</span>
                         </span>
                       </summary>
                       {% render 'menu-drawer-panel', link: link %}
@@ -64,7 +64,7 @@
                       {% render 'menu-link-image', link: link %}
                       <span class="menu-drawer__tile-label">
                         {{ link.title | escape }}
-                        <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                        <span class="svg-wrapper">{{- 'icon-chevron-right.svg' | inline_asset_content -}}</span>
                       </span>
                     </a>
                   {%- endif -%}
@@ -84,7 +84,7 @@
                         >
                           <span class="menu-drawer__list-label">{{ link.title | escape }}</span>
                           <span class="svg-wrapper menu-drawer__list-chevron">
-                            {{- 'icon-arrow.svg' | inline_asset_content -}}
+                            {{- 'icon-chevron-right.svg' | inline_asset_content -}}
                           </span>
                         </summary>
                         {% render 'menu-drawer-panel', link: link %}
@@ -98,7 +98,7 @@
                       >
                         <span class="menu-drawer__list-label">{{ link.title | escape }}</span>
                         <span class="svg-wrapper menu-drawer__list-chevron">
-                          {{- 'icon-arrow.svg' | inline_asset_content -}}
+                          {{- 'icon-chevron-right.svg' | inline_asset_content -}}
                         </span>
                       </a>
                     {%- endif -%}
