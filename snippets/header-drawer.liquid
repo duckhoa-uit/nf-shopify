@@ -128,37 +128,39 @@
           </nav>
 
           <div class="menu-drawer__utility-links">
-            <div class="menu-drawer__auth">
-              {% if customer %}
-                <a
-                  href="{{ routes.account_url }}"
-                  class="menu-drawer__auth-btn menu-drawer__auth-btn--primary"
-                >
-                  <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
-                  {{ 'customer.account.title' | t | default: 'Customer Zone' }}
-                </a>
-                <a
-                  href="{{ routes.account_logout_url }}"
-                  class="menu-drawer__auth-btn menu-drawer__auth-btn--secondary"
-                >
-                  <span class="svg-wrapper">{{ 'icon-logout.svg' | inline_asset_content }}</span>
-                  {{ 'customer.log_out' | t | default: 'Log out' }}
-                </a>
-              {% else %}
-                <a
-                  href="{{ routes.account_register_url }}"
-                  class="menu-drawer__auth-btn menu-drawer__auth-btn--primary"
-                >
-                  {{ 'customer.register.title' | t | default: 'Register' }}
-                </a>
-                <a
-                  href="{{ routes.account_login_url }}"
-                  class="menu-drawer__auth-btn menu-drawer__auth-btn--secondary"
-                >
-                  {{ 'customer.login_page.sign_in' | t | default: 'Login' }}
-                </a>
-              {% endif %}
-            </div>
+            {%- if shop.customer_accounts_enabled -%}
+              <div class="menu-drawer__auth">
+                {% if customer %}
+                  <a
+                    href="{{ routes.account_url }}"
+                    class="menu-drawer__auth-btn menu-drawer__auth-btn--primary"
+                  >
+                    <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+                    {{ 'customer.account.title' | t | default: 'Customer Zone' }}
+                  </a>
+                  <a
+                    href="{{ routes.account_logout_url }}"
+                    class="menu-drawer__auth-btn menu-drawer__auth-btn--secondary"
+                  >
+                    <span class="svg-wrapper">{{ 'icon-logout.svg' | inline_asset_content }}</span>
+                    {{ 'customer.log_out' | t | default: 'Log out' }}
+                  </a>
+                {% else %}
+                  <a
+                    href="{{ routes.account_register_url }}"
+                    class="menu-drawer__auth-btn menu-drawer__auth-btn--primary"
+                  >
+                    {{ 'customer.register.title' | t | default: 'Register' }}
+                  </a>
+                  <a
+                    href="{{ routes.account_login_url }}"
+                    class="menu-drawer__auth-btn menu-drawer__auth-btn--secondary"
+                  >
+                    {{ 'customer.login_page.sign_in' | t | default: 'Login' }}
+                  </a>
+                {% endif %}
+              </div>
+            {%- endif -%}
 
             {%- if localization.available_countries or localization.available_languages -%}
               <div class="menu-drawer__localization menu-drawer__localization--mobile">

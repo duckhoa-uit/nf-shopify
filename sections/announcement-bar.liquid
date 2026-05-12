@@ -158,21 +158,23 @@
             </a>
           </div>
           {% endif %}
-          {% if section.settings.show_register and customer == null %}
-          <div>
-            <a href="{{ routes.account_register_url }}">{{ 'customer.register.title' | t }}</a>
-          </div>
-          {% endif %}
-          {% if section.settings.show_login and customer == null %}
-          <div>
-            <a href="{{ routes.account_login_url }}">{{ 'customer.login_page.sign_in' | t }}</a>
-          </div>
-          {% endif %}
-          {% if customer != null %}
-          <div>
-            <a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a>
-          </div>
-          {% endif %}
+          {%- if shop.customer_accounts_enabled -%}
+            {% if section.settings.show_register and customer == null %}
+            <div>
+              <a href="{{ routes.account_register_url }}">{{ 'customer.register.title' | t }}</a>
+            </div>
+            {% endif %}
+            {% if section.settings.show_login and customer == null %}
+            <div>
+              <a href="{{ routes.account_login_url }}">{{ 'customer.login_page.sign_in' | t }}</a>
+            </div>
+            {% endif %}
+            {% if customer != null %}
+            <div>
+              <a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a>
+            </div>
+            {% endif %}
+          {%- endif -%}
           {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
             <div class="language-selector-wrapper">
               <localization-form>
