@@ -14,6 +14,22 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  # Region-specific content switches by ACTIVE LANGUAGE, not by market.
+  # Edit values in locale files (e.g. locales/sl.json) or via
+  # Shopify admin > Content > Languages > Edit translations.
+  # Falls back to global theme settings if a locale key is missing.
+  assign partnership_email = 'templates.contact.partnership.contact_email' | t
+  if partnership_email contains 'translation missing' or partnership_email == blank
+    assign partnership_email = settings.contact_email
+  endif
+
+  assign partnership_phone = 'templates.contact.partnership.contact_phone' | t
+  if partnership_phone contains 'translation missing' or partnership_phone == blank
+    assign partnership_phone = settings.contact_phone
+  endif
+-%}
+
 <div
   class="contact-partnership-wrapper"
   {% if section.settings.background_image %}
@@ -63,23 +79,11 @@
 
             <div class="contact-partnership__info">
               <p class="contact-partnership__email">
-                <a href="mailto:{% if section.settings.contact_email != blank %}{{ section.settings.contact_email }}{% else %}{{ settings.contact_email }}{% endif %}">
-                  {%- if section.settings.contact_email != blank -%}
-                    {{ section.settings.contact_email | escape }}
-                  {%- else -%}
-                    {{ settings.contact_email | escape }}
-                  {%- endif -%}
-                </a>
+                <a href="mailto:{{ partnership_email | escape }}">{{ partnership_email | escape }}</a>
               </p>
 
               <p class="contact-partnership__phone">
-                <a href="tel:{% if section.settings.contact_phone != blank %}{{ section.settings.contact_phone }}{% else %}{{ settings.contact_phone }}{% endif %}">
-                  {%- if section.settings.contact_phone != blank -%}
-                    {{ section.settings.contact_phone | escape }}
-                  {%- else -%}
-                    {{ settings.contact_phone | escape }}
-                  {%- endif -%}
-                </a>
+                <a href="tel:{{ partnership_phone | remove: ' ' | escape }}">{{ partnership_phone | escape }}</a>
               </p>
             </div>
           </div>
@@ -127,16 +131,8 @@
       "label": "Contact Person Image"
     },
     {
-      "type": "text",
-      "id": "contact_email",
-      "label": "Contact Email",
-      "default": "partners@northfinder.sk"
-    },
-    {
-      "type": "text",
-      "id": "contact_phone",
-      "label": "Contact Phone",
-      "default": "+421 944 111 222"
+      "type": "paragraph",
+      "content": "Contact email & phone are managed per language via Content > Languages > Edit translations (keys: templates.contact.partnership.contact_email / contact_phone)."
     },
     {
       "type": "color_scheme",

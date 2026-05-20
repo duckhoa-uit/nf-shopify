@@ -14,6 +14,32 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  # Region-specific content switches by ACTIVE LANGUAGE, not by market.
+  # Edit values in locale files (e.g. locales/sl.json) or via
+  # Shopify admin > Content > Languages > Edit translations.
+  # Falls back to global theme settings if a locale key is missing.
+  assign contact_address = 'templates.contact.info.address' | t
+  if contact_address contains 'translation missing' or contact_address == blank
+    assign contact_address = settings.contact_address
+  endif
+
+  assign contact_phone = 'templates.contact.info.phone' | t
+  if contact_phone contains 'translation missing' or contact_phone == blank
+    assign contact_phone = settings.contact_phone
+  endif
+
+  assign contact_hours = 'templates.contact.info.hours' | t
+  if contact_hours contains 'translation missing' or contact_hours == blank
+    assign contact_hours = settings.contact_hours
+  endif
+
+  assign contact_email = 'templates.contact.info.email' | t
+  if contact_email contains 'translation missing' or contact_email == blank
+    assign contact_email = settings.contact_email
+  endif
+-%}
+
 <div class="color-{{ section.settings.color_scheme }} gradient bg-gray-100">
   <div class="page-width section-{{ section.id }}-padding">
     <h2 class="font-extrabold font-archivo-expanded text-base lg:text-2xl leading-7 text-[#0F0F0F] uppercase mb-3 lg:mb-6{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
@@ -29,13 +55,7 @@
             </svg>
           </div>
           <div class="contact-info__content">
-            <p class="contact-info__text">
-              {%- if section.settings.address != blank -%}
-                {{ section.settings.address | escape }}
-              {%- else -%}
-                {{ settings.contact_address | escape }}
-              {%- endif -%}
-            </p>
+            <p class="contact-info__text">{{ contact_address | escape }}</p>
           </div>
         </div>
 
@@ -54,19 +74,9 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {%- if section.settings.phone != blank -%}
-                {{ section.settings.phone | escape }}
-              {%- else -%}
-                {{ settings.contact_phone | escape }}
-              {%- endif -%}
+              <a href="tel:{{ contact_phone | remove: ' ' | escape }}">{{ contact_phone | escape }}</a>
             </p>
-            <p class="contact-info__hours">
-              {%- if section.settings.hours != blank -%}
-                {{ section.settings.hours | escape }}
-              {%- else -%}
-                {{ settings.contact_hours | escape }}
-              {%- endif -%}
-            </p>
+            <p class="contact-info__hours">{{ contact_hours | escape }}</p>
           </div>
         </div>
 
@@ -86,11 +96,7 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {%- if section.settings.email != blank -%}
-                {{ section.settings.email | escape }}
-              {%- else -%}
-                {{ settings.contact_email | escape }}
-              {%- endif -%}
+              <a href="mailto:{{ contact_email | escape }}">{{ contact_email | escape }}</a>
             </p>
           </div>
         </div>
