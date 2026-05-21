@@ -1,0 +1,104 @@
+{% comment %}
+  Determines if a product option is a size option.
+
+  Locale-independent — relies on Shopify "Linked Metafields" feature
+  (option values linked to `custom.size` metaobjects) plus value patterns
+  rather than translated option names.
+
+  Accepts:
+  - option: {Object} Product option object (required)
+  - product: {Object} Product object (optional, recommended)
+      Used to cross-reference option values against the `custom.size`
+      metaobject list for robust detection.
+
+  Returns (via echo):
+  - 'true' if the option is a size option
+  - 'false' otherwise
+
+  Detection priority:
+  1. `product.metafields.custom.size` exists AND any option value matches
+     one of its metaobject `value` entries → size  (locale-proof, primary)
+  2. ≥2 option values are numeric (e.g. shoe sizes 36..47, waist sizes) → size
+  3. ≥2 option values match standard letter sizes (XXS..6XL) → size
+
+  Note: We deliberately do NOT match by option.name because Shopify
+  translates option names per storefront locale (e.g. "Size" → "Velikost",
+  "Größe", "Taille", "Mărime"). Using locale-independent signals only.
+
+  Usage:
+  {%- capture is_size -%}
+    {%- render 'is-size-option', option: option, product: product -%}
+  {%- endcapture -%}
+  {%- if is_size == 'true' -%}
+    ...size-specific logic...
+  {%- endif -%}
+{% endcomment %}
+
+{%- liquid
+  assign is_size = false
+
+  # Priority 1: Cross-reference with linked metafield (custom.size metaobjects)
+  assign size_metaobjects = product.metafields.custom.size.value
+  if size_metaobjects != blank and size_metaobjects.size > 0
+    for value in option.values
+      capture value_str
+        echo value
+      endcapture
+      assign value_norm = value_str | strip
+      for size_meta in size_metaobjects
+        assign meta_value = size_meta.value | strip
+        if value_norm == meta_value
+          assign is_size = true
+          break
+        endif
+      endfor
+      if is_size
+        break
+      endif
+    endfor
+  endif
+
+  # Priority 2: Numeric values (shoe sizes, waist sizes, etc.)
+  # Treat as size when ≥2 values are pure numeric (e.g. "40", "41.5", "42,5")
+  if is_size == false
+    assign numeric_match_count = 0
+    for value in option.values
+      capture value_str
+        echo value
+      endcapture
+      assign value_norm = value_str | strip | replace: ',', '.'
+      # Pure numeric check: stripping digits and one optional dot leaves nothing
+      assign digits_only = value_norm | replace: '.', '' | replace: '0', '' | replace: '1', '' | replace: '2', '' | replace: '3', '' | replace: '4', '' | replace: '5', '' | replace: '6', '' | replace: '7', '' | replace: '8', '' | replace: '9', ''
+      if digits_only == '' and value_norm != ''
+        assign numeric_match_count = numeric_match_count | plus: 1
+      endif
+    endfor
+    if numeric_match_count >= 2
+      assign is_size = true
+    endif
+  endif
+
+  # Priority 3: Standard letter sizes (apparel)
+  if is_size == false
+    assign letter_sizes = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
+    assign letter_match_count = 0
+    for value in option.values
+      capture value_str
+        echo value
+      endcapture
+      assign value_upcase = value_str | upcase | strip
+      for letter_size in letter_sizes
+        if value_upcase == letter_size
+          assign letter_match_count = letter_match_count | plus: 1
+          break
+        endif
+      endfor
+    endfor
+    if letter_match_count >= 2
+      assign is_size = true
+    endif
+  endif
+
+  echo is_size
+-%}
+

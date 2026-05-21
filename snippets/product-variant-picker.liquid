@@ -20,64 +20,108 @@
       # Set up form ID for inputs
       assign product_form_id = 'product-form-' | append: section.id
 
-      # Option sorting based on content detection, not position
-      # Color options have swatches, Size options match standard size patterns
+      # Identify Color and Size options using centralized, locale-independent
+      # detection (is-color-option / is-size-option). Size takes priority over
+      # color when both somehow match (defensive — same option shouldn't be both).
       assign sorted_options = ''
       assign color_option = null
       assign size_option = null
 
-      # Standard size patterns for detection
-      assign standard_sizes_pattern = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
-
-      # First, identify Color and Size options by their characteristics
       for option in product.options_with_values
-        assign is_color_option = false
-        assign is_size_option = false
-
-        # Check if this option has swatches - indicates it's a color option
-        assign swatch_count = option.values | map: 'swatch' | compact | size
-        if swatch_count > 0
-          assign is_color_option = true
-        endif
-
-        # Check if option name indicates it's a size option (multi-language support)
-        assign option_name_lower = option.name | downcase
-        assign size_keywords = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,размер,veľkosť,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ','
-        for size_keyword in size_keywords
-          if option_name_lower contains size_keyword
-            assign is_size_option = true
-            break
-          endif
-        endfor
-
-        # Check if option values match standard size patterns
-        assign size_match_count = 0
-        for value in option.values
-          capture value_str
-            echo value
-          endcapture
-          assign value_upcase = value_str | upcase | strip
-          for standard_size in standard_sizes_pattern
-            if value_upcase == standard_size
-              assign size_match_count = size_match_count | plus: 1
+        # --- Inline size detection (locale-independent) ---
+        # Priority 1: linked metafield (custom.size) cross-ref
+        # Priority 2: ≥2 numeric values
+        # Priority 3: ≥2 standard letter sizes
+        assign is_size_opt = false
+        if product.metafields.custom.size.value != blank
+          for v in option.values
+            capture v_str
+              echo v
+            endcapture
+            assign v_norm = v_str | strip
+            for sm in product.metafields.custom.size.value
+              assign sm_norm = sm.value | strip
+              if v_norm == sm_norm
+                assign is_size_opt = true
+                break
+              endif
+            endfor
+            if is_size_opt
               break
             endif
           endfor
-        endfor
-
-        if size_match_count >= 2
-          assign is_size_option = true
+        endif
+        if is_size_opt == false
+          assign numeric_count = 0
+          for v in option.values
+            capture v_str
+              echo v
+            endcapture
+            assign v_norm = v_str | strip | replace: ',', '.'
+            assign digits = v_norm | replace: '.', '' | replace: '0', '' | replace: '1', '' | replace: '2', '' | replace: '3', '' | replace: '4', '' | replace: '5', '' | replace: '6', '' | replace: '7', '' | replace: '8', '' | replace: '9', ''
+            if digits == '' and v_norm != ''
+              assign numeric_count = numeric_count | plus: 1
+            endif
+          endfor
+          if numeric_count >= 2
+            assign is_size_opt = true
+          endif
+        endif
+        if is_size_opt == false
+          assign letter_sizes = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
+          assign letter_count = 0
+          for v in option.values
+            capture v_str
+              echo v
+            endcapture
+            assign v_up = v_str | upcase | strip
+            for ls in letter_sizes
+              if v_up == ls
+                assign letter_count = letter_count | plus: 1
+                break
+              endif
+            endfor
+          endfor
+          if letter_count >= 2
+            assign is_size_opt = true
+          endif
         endif
 
-        # Fallback: if position 1 and not detected as size, treat as color
-        if option.position == 1 and is_size_option == false
-          assign is_color_option = true
+        # --- Inline color detection (locale-independent) ---
+        # Priority 1: any option value has a `swatch` attribute set
+        # Priority 2: linked metafield (custom.color) cross-ref
+        # Priority 3: first option position fallback (when not size)
+        assign is_color_opt = false
+        assign swatch_for_color = option.values | map: 'swatch' | compact | size
+        if swatch_for_color > 0
+          assign is_color_opt = true
+        endif
+        if is_color_opt == false and product.metafields.custom.color.value != blank
+          for v in option.values
+            capture v_str
+              echo v
+            endcapture
+            assign v_norm = v_str | strip | downcase
+            for cm in product.metafields.custom.color.value
+              assign cm_norm = cm.value | strip | downcase
+              if v_norm == cm_norm
+                assign is_color_opt = true
+                break
+              endif
+            endfor
+            if is_color_opt
+              break
+            endif
+          endfor
+        endif
+        if is_color_opt == false and option.position == 1 and is_size_opt == false
+          assign is_color_opt = true
         endif
 
-        # Store the identified options (size takes priority if both detected)
-        if is_size_option
+        # Size takes priority if both somehow match
+        if is_size_opt
           assign size_option = option
-        elsif is_color_option
+        elsif is_color_opt
           assign color_option = option
         endif
       endfor
@@ -111,6 +155,7 @@
 
     {%- for option_name in sorted_options -%}
       {%- assign option = product.options_with_values | where: 'name', option_name | first -%}
+
       {%- liquid
         assign swatch_count = option.values | map: 'swatch' | compact | size
         assign picker_type = block.settings.picker_type
@@ -124,72 +169,97 @@
         endif
       -%}
       {%- liquid
-        # Determine option type based on swatches and standard patterns
+        # Locale-independent option type detection (inline; avoids render-scope issues).
+        # Size takes priority over color when both somehow match.
         assign is_size_option = false
-        assign is_color_option = false
-
-        # Check if this option has swatches - indicates it's a color option
-        assign swatch_count_check = option.values | map: 'swatch' | compact | size
-
-        if swatch_count_check > 0
-          assign is_color_option = true
-        endif
-
-        # Check if option name indicates it's a size option (multi-language support)
-        assign option_name_lower = option.name | downcase
-        assign size_keywords = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,размер,veľkosť,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ','
-        for size_keyword in size_keywords
-          if option_name_lower contains size_keyword
-            assign is_size_option = true
-            assign is_color_option = false
-            break
-          endif
-        endfor
-
-        # Check if option values match standard size patterns
-        assign standard_sizes_pattern = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
-        assign size_match_count = 0
-
-        for value in option.values
-          capture value_str
-            echo value
-          endcapture
-          assign value_upcase = value_str | upcase | strip
-          for standard_size in standard_sizes_pattern
-            if value_upcase == standard_size
-              assign size_match_count = size_match_count | plus: 1
+        if product.metafields.custom.size.value != blank
+          for v in option.values
+            capture v_str
+              echo v
+            endcapture
+            assign v_norm = v_str | strip
+            for sm in product.metafields.custom.size.value
+              assign sm_norm = sm.value | strip
+              if v_norm == sm_norm
+                assign is_size_option = true
+                break
+              endif
+            endfor
+            if is_size_option
               break
             endif
           endfor
-        endfor
-
-        # If at least 2 values match standard sizes, treat as size option
-        if size_match_count >= 2
-          assign is_size_option = true
+        endif
+        if is_size_option == false
+          assign numeric_count = 0
+          for v in option.values
+            capture v_str
+              echo v
+            endcapture
+            assign v_norm = v_str | strip | replace: ',', '.'
+            assign digits = v_norm | replace: '.', '' | replace: '0', '' | replace: '1', '' | replace: '2', '' | replace: '3', '' | replace: '4', '' | replace: '5', '' | replace: '6', '' | replace: '7', '' | replace: '8', '' | replace: '9', ''
+            if digits == '' and v_norm != ''
+              assign numeric_count = numeric_count | plus: 1
+            endif
+          endfor
+          if numeric_count >= 2
+            assign is_size_option = true
+          endif
+        endif
+        if is_size_option == false
+          assign letter_sizes = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
+          assign letter_count = 0
+          for v in option.values
+            capture v_str
+              echo v
+            endcapture
+            assign v_up = v_str | upcase | strip
+            for ls in letter_sizes
+              if v_up == ls
+                assign letter_count = letter_count | plus: 1
+                break
+              endif
+            endfor
+          endfor
+          if letter_count >= 2
+            assign is_size_option = true
+          endif
         endif
 
-        # Note: We removed the metafield check that was incorrectly overriding color detection
-        # Size options are detected by matching standard size patterns (XXS, XS, S, M, L, etc.)
-        # The presence of size_fit metafields doesn't determine if an option is a size option
-
-        # Fallback: if position 1 and not detected as size, treat as color
-        if option.position == 1 and is_size_option == false
+        assign is_color_option = false
+        assign swatch_for_color = option.values | map: 'swatch' | compact | size
+        if swatch_for_color > 0
           assign is_color_option = true
+        endif
+        if is_color_option == false and product.metafields.custom.color.value != blank
+          for v in option.values
+            capture v_str
+              echo v
+            endcapture
+            assign v_norm = v_str | strip | downcase
+            for cm in product.metafields.custom.color.value
+              assign cm_norm = cm.value | strip | downcase
+              if v_norm == cm_norm
+                assign is_color_option = true
+                break
+              endif
+            endfor
+            if is_color_option
+              break
+            endif
+          endfor
+        endif
+        if is_color_option == false and option.position == 1 and is_size_option == false
+          assign is_color_option = true
+        endif
+
+        # Size takes priority over color
+        if is_size_option
+          assign is_color_option = false
         endif
       -%}
 
       {%- if is_size_option -%}
-        {%- comment -%} Check if this is a single-size product {%- endcomment -%}
-        {%- assign is_single_size_product = false -%}
-        {%- assign single_size_value = null -%}
-        {%- assign single_size_input_id = null -%}
-
-        {%- if option.values.size == 1 -%}
-          {%- assign is_single_size_product = true -%}
-          {%- assign single_size_value = option.values.first -%}
-          {%- assign single_size_input_id = section.id | append: '-' | append: option.position | append: '-single-size' -%}
-        {%- endif -%}
-
         {%- comment -%} Check product kind to hide size-fit-button for scarfs {%- endcomment -%}
         {%- assign is_scarfs = false -%}
         {%- if product.metafields.features.kind.value -%}
@@ -202,52 +272,37 @@
           {%- endfor -%}
         {%- endif -%}
 
-        {%- if is_single_size_product -%}
-          {%- comment -%} Single size product: render hidden input instead of fieldset {%- endcomment -%}
-          <input
-            type="hidden"
-            id="{{ single_size_input_id }}"
-            name="options[{{ option.name | escape }}]"
-            value="{{ single_size_value | escape }}"
-            form="{{ product_form_id }}"
-            data-single-size-input
-            data-option-type="size"
-            data-option-position="{{ option.position }}"
-            data-size-value="{{ single_size_value | escape }}"
-            checked
-          >
-          {%- comment -%} Optional: Add a visually hidden label for accessibility {%- endcomment -%}
-          <span class="visually-hidden" aria-live="polite">
-            {{ option.name }}: {{ single_size_value }}
-          </span>
-        {%- else -%}
-          {%- comment -%} Multiple sizes: render normal fieldset {%- endcomment -%}
-          <fieldset class="js product-form__input product-form__input--pill product-form__input--pill-size" data-option-type="size" data-option-position="{{ option.position }}">
-            <div class="flex items-center justify-between mb-2">
-              <legend class="form__label m-0">{{ option.name }}</legend>
-              {%- unless is_scarfs -%}
-                <button
-                  type="button"
-                  class="size-fit-button flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                  data-size-fit-modal
-                >
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                  </svg>
-                  {{ 'products.product.size_guide_fit_recommender' | t }}
-                </button>
-              {%- endunless -%}
-            </div>
-            <div class="grid grid-cols-5 gap-5">
-              {% render 'product-variant-options',
-                product: product,
-                option: option,
-                block: block,
-                picker_type: picker_type
-              %}
-            </div>
-          </fieldset>
-        {%- endif -%}
+        {%- comment -%}
+          Render the standard fieldset for ALL size products (including single-size).
+          A single-size variant still gets its pill so buyers can see which size is available.
+          The radio input fully replaces the legacy `data-single-size-input` hidden input;
+          variant-selects.js reads selected option values from `fieldset input:checked`.
+        {%- endcomment -%}
+        <fieldset class="js product-form__input product-form__input--pill product-form__input--pill-size" data-option-type="size" data-option-position="{{ option.position }}">
+          <div class="flex items-center justify-between mb-2">
+            <legend class="form__label m-0">{{ option.name }}</legend>
+            {%- unless is_scarfs -%}
+              <button
+                type="button"
+                class="size-fit-button flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                data-size-fit-modal
+              >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+                {{ 'products.product.size_guide_fit_recommender' | t }}
+              </button>
+            {%- endunless -%}
+          </div>
+          <div class="grid grid-cols-5 gap-5">
+            {% render 'product-variant-options',
+              product: product,
+              option: option,
+              block: block,
+              picker_type: picker_type
+            %}
+          </div>
+        </fieldset>
       {%- elsif is_color_option -%}
         <fieldset class="js product-form__input product-form__input--swatch product-form__input--pill-color" data-option-type="color" data-option-position="{{ option.position }}">
           <legend class="form__label">
