@@ -6,10 +6,6 @@
 {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
 {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
 
-{%- if localization.available_languages.size > 1 -%}
-  <script src="{{ 'footer-language-selector.js' | asset_url }}" defer="defer"></script>
-{%- endif -%}
-
 {%- style -%}
   .footer {
     margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
@@ -74,77 +70,65 @@
     padding-top: 0.5rem;
   }
 
-  /* Footer Language Switcher Styles */
-  .footer-language-selector {
-    position: relative;
-  }
-
-  .footer-language-disclosure {
-    position: relative;
-  }
-
-  .footer-language-button {
-    background: transparent;
-    border: none;
+  /* Footer localization: compact trigger sized for footer column.
+     Shared dropdown styles live in component-localization-form.css */
+  .footer__localization {
+    align-items: flex-start;
+    gap: 1.5rem;
     padding: 0;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    font-size: 14px;
-    font-weight: 600;
+    /* Stacking context so its dropdown panel paints above
+       sibling .footer__content-bottom (which has its own stacking
+       context from scroll-trigger animate--slide-in transforms) */
+    position: relative;
+    z-index: 40;
+  }
+
+  /* Pin the animated bottom row below the localization stack
+     so its transform/opacity doesn't visually cover the dropdown */
+  .footer__content-bottom {
+    position: relative;
+    z-index: 1;
+  }
+  .footer__content-bottom-wrapper {
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer__localization h2 {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    text-decoration: underline;
-    color: inherit;
+    color: #0f0f0f;
   }
 
-  .footer-language-button:hover {
-    text-decoration: underline;
-  }
-
-  .footer-language-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    z-index: 50;
-    min-width: 180px;
-    margin-top: 5px;
-  }
-
-  .footer-language-list {
-    list-style: none;
+  .footer__localization .localization-form {
     padding: 0;
     margin: 0;
   }
 
-  .footer-language-item {
-    padding: 0;
+  .footer__localization .disclosure .localization-form__select {
+    padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+    min-height: 0;
+    height: auto;
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    background-color: #fff;
+    transition: border-color 150ms cubic-bezier(0.2, 0, 0, 1);
   }
 
-  .footer-language-link {
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    text-decoration: none;
-    color: #333;
-    transition: background-color 0.2s;
+  .footer__localization .disclosure .localization-form__select:hover {
+    border-color: rgba(0, 0, 0, 0.25);
   }
 
-  .footer-language-link:hover {
-    background-color: #f5f5f5;
+  .footer__localization .disclosure .localization-form__select .icon-caret {
+    right: 0.75rem;
   }
 
-  .footer-language-link[aria-current="true"] {
-    background-color: #f0f0f0;
-  }
-
-  .footer-language-disclosure .language-name {
-    margin-left: 8px;
-    font-size: 14px;
-  }
 {%- endstyle -%}
 
 <footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding border-0">
@@ -347,49 +331,40 @@
               </div>
             {%- endfor -%}
 
-            {%- comment -%} Keep original language display UI with added functionality {%- endcomment -%}
-            {%- if localization.available_languages.size > 1 -%}
+            {%- if section.settings.enable_country_selector
+                   and localization.available_countries.size > 1
+                   or section.settings.enable_language_selector
+                   and localization.available_languages.size > 1
+            -%}
               <div
-                class="footer-block {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                class="footer-block footer__localization{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                 data-cascade
                 style="--animation-order: {{ section.blocks.size }};"
               >
-                <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
-                  {{ 'footer.shopping_from' | t | default: 'Shopping from' }}
-                </h2>
-                <div class="block">
-                  <div class="footer-language-selector">
-                    <div class="flex items-center gap-2">
-                      {%- liquid
-                        if localization.language.iso_code == 'de'
-                          assign flag_image = 'flag-de.png'
-                          assign flag_alt = 'Deutsch (Deutsch)'
-                        else
-                          assign flag_image = 'flag-' | append: localization.language.iso_code | downcase | append: '.png'
-                          assign flag_alt = localization.language.endonym_name
-                        endif
-                      -%}
-                      <img
-                        src="{{ flag_image | asset_url }}"
-                        width="32"
-                        height="20"
-                        class="w-4 h-[11px]"
-                        alt="{{ flag_alt }}"
-                      >
-                      <span class="mr-2 border-r border-[#ccc] pr-2 text-gray-850 text-sm leading-[1.125rem]">
-                        {{- localization.language.endonym_name -}}
-                      </span>
-                      {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
-                        <div>
-                          <h2 class="visually-hidden" id="FooterLanguageLabel">
-                            {{ 'localization.language_label' | t }}
-                          </h2>
-                          {%- render 'footer-language-selector', localPosition: 'FooterLanguage' -%}
-                        </div>
-                      {%- endform -%}
-                    </div>
-                  </div>
-                </div>
+                {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+                  <localization-form>
+                    {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+                      <div>
+                        <h2 class="caption-large" id="FooterCountryLabel">
+                          {{ 'localization.country_label' | t }}
+                        </h2>
+                        {%- render 'country-localization', localPosition: 'FooterCountry' -%}
+                      </div>
+                    {%- endform -%}
+                  </localization-form>
+                {%- endif -%}
+                {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+                  <localization-form>
+                    {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
+                      <div>
+                        <h2 class="caption-large" id="FooterLanguageLabel">
+                          {{ 'localization.language_label' | t }}
+                        </h2>
+                        {%- render 'language-localization', localPosition: 'FooterLanguage' -%}
+                      </div>
+                    {%- endform -%}
+                  </localization-form>
+                {%- endif -%}
               </div>
             {%- endif -%}
           </div>

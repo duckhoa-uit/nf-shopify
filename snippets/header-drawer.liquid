@@ -419,11 +419,13 @@
     transform: rotate(180deg);
   }
 
-  /* Drop the popup *down* from the trigger (default Dawn pops up, which collides
-     with Login button above). Constrain width to avoid horizontal overflow. */
+  /* Open the popup UPWARD from the trigger so it never gets clipped by
+     the bottom of the drawer (the localization selectors live at the very
+     end of the drawer). Constrain width to avoid horizontal overflow. */
   .menu-drawer__localization--mobile localization-form .disclosure__list-wrapper {
-    bottom: auto;
-    top: calc(100% + 0.5rem);
+    position: absolute;
+    top: auto;
+    bottom: calc(100% + 0.5rem);
     left: 0;
     right: 0;
     width: 100%;
@@ -432,13 +434,28 @@
     transform: translateY(0);
     border-radius: 8px;
     border: 1px solid rgba(var(--color-base-foreground), 0.1);
+    background-color: rgb(var(--color-base-background));
     box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.04),
-      0 4px 12px rgba(0, 0, 0, 0.06),
-      0 16px 32px rgba(0, 0, 0, 0.08);
+      0 -1px 2px rgba(0, 0, 0, 0.04),
+      0 -4px 12px rgba(0, 0, 0, 0.06),
+      0 -16px 32px rgba(0, 0, 0, 0.08);
     z-index: 5;
-    transform-origin: top center;
+    transform-origin: bottom center;
     animation: menuDrawerLocOpen 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* Force any anchor-positioning logic from component-localization-form.css
+     to also open upward (and stay scoped to the trigger) */
+  @supports (anchor-name: --x) {
+    .menu-drawer__localization--mobile localization-form .disclosure__list-wrapper {
+      position: absolute;
+      inset: auto;
+      bottom: calc(100% + 0.5rem);
+      top: auto;
+      left: 0;
+      right: 0;
+      width: 100%;
+    }
   }
 
   .menu-drawer__localization--mobile localization-form .disclosure__list {
@@ -455,12 +472,35 @@
     display: flex;
     align-items: center;
     padding: 10px 14px;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(var(--color-base-foreground), 0.75);
+    border-radius: 0;
+    text-decoration: none;
+  }
+
+  .menu-drawer__localization--mobile .disclosure__item .disclosure__link:hover {
+    background-color: rgba(var(--color-base-foreground), 0.04);
+    color: rgb(var(--color-base-foreground));
+  }
+
+  /* Active language/country matches the bold/underline treatment used
+     for the current menu item elsewhere in the drawer */
+  .menu-drawer__localization--mobile .disclosure__item .disclosure__link[aria-current='true'] {
+    font-weight: 700;
+    color: rgb(var(--color-base-foreground));
+  }
+
+  /* The trigger button reflects the active state in the same way */
+  .menu-drawer__localization--mobile .localization-form__select {
+    font-weight: 600;
+    color: rgb(var(--color-base-foreground));
   }
 
   @keyframes menuDrawerLocOpen {
     from {
       opacity: 0;
-      transform: translateY(-4px) scale(0.98);
+      transform: translateY(4px) scale(0.98);
     }
 
     to {

@@ -16,30 +16,66 @@
 {% endif %}
 
 <style>
-  .announcement-bar-section .localization-form {
+  /* Top-bar localization: compact trigger button only.
+     Shared dropdown styles live in component-localization-form.css */
+  .announcement-bar-section .header-localization {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .announcement-bar-section .header-localization .localization-form {
     padding: 0;
     margin: 0;
   }
 
-  .announcement-bar-section .localization-form__select {
-    padding: 0;
+  .announcement-bar-section .header-localization .disclosure {
+    position: relative;
+    z-index: 20;
+  }
+
+  /* Trigger button — compact, right-aligned dropdown, 40px hit area */
+  .announcement-bar-section .header-localization .disclosure .localization-form__select {
+    position: relative;
+    padding: 0.25rem 1.25rem 0.25rem 0;
+    height: auto;
     min-height: 0;
     font-size: 0.8125rem;
-    line-height: 0.875rem;
+    line-height: 1.1;
     color: inherit;
+    background: transparent;
+    transition-property: color, opacity;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
-
-  .announcement-bar-section .disclosure {
-    position: relative;
+  .announcement-bar-section .header-localization .disclosure .localization-form__select::before {
+    content: '';
+    position: absolute;
+    inset: -1rem -0.25rem;
   }
-
-  .announcement-bar-section .disclosure__list-wrapper {
+  .announcement-bar-section .header-localization .disclosure .localization-form__select:hover {
+    color: #111;
+    text-decoration: none;
+  }
+  .announcement-bar-section .header-localization .disclosure .localization-form__select:active {
+    scale: 0.96;
+  }
+  .announcement-bar-section .header-localization .disclosure .localization-form__select .icon-caret {
     right: 0;
-    left: auto;
+    height: 0.5rem;
   }
+  .announcement-bar-section
+    .header-localization
+    .disclosure
+    .localization-form__select[aria-expanded='true']
+    .icon-caret {
+    transform: rotate(180deg);
+  }
+
 </style>
 
-<div class="bg-[#F5F5F5] text-[0.8125rem] leading-[0.875rem] text-secondary-foreground hidden lg:block">
+<div class="bg-[#F5F5F5] text-[0.8125rem] leading-[0.875rem] text-secondary-foreground hidden lg:block relative z-30">
   <div class="page-width">
     <nav class="w-full flex flex-row justify-between h-[1.875rem] items-center">
       <div class="italic flex items-center">
@@ -120,32 +156,42 @@
             <a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a>
           </div>
           {% endif %}
-          {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
-            <div class="announcement-bar__localization">
-              <localization-form>
-                {%- form 'localization', id: 'AnnouncementBarCountryForm', class: 'localization-form' -%}
-                  <div>
-                    <h2 class="visually-hidden" id="AnnouncementBarCountryLabel">
-                      {{ 'localization.country_label' | t }}
-                    </h2>
-                    {%- render 'country-localization', localPosition: 'AnnouncementBarCountry' -%}
-                  </div>
-                {%- endform -%}
-              </localization-form>
-            </div>
-          {%- endif -%}
-          {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-            <div class="announcement-bar__localization">
-              <localization-form>
-                {%- form 'localization', id: 'AnnouncementBarLanguageForm', class: 'localization-form' -%}
-                  <div>
-                    <h2 class="visually-hidden" id="AnnouncementBarLanguageLabel">
-                      {{ 'localization.language_label' | t }}
-                    </h2>
-                    {%- render 'language-localization', localPosition: 'AnnouncementBarLanguage' -%}
-                  </div>
-                {%- endform -%}
-              </localization-form>
+          {%- liquid
+            assign show_ab_country = false
+            assign show_ab_language = false
+            if section.settings.enable_country_selector and localization.available_countries.size > 1
+              assign show_ab_country = true
+            endif
+            if section.settings.enable_language_selector and localization.available_languages.size > 1
+              assign show_ab_language = true
+            endif
+          -%}
+          {%- if show_ab_country or show_ab_language -%}
+            <div class="header-localization">
+              {%- if show_ab_country -%}
+                <localization-form data-prevent-hide>
+                  {%- form 'localization', id: 'AnnouncementBarCountryForm', class: 'localization-form' -%}
+                    <div>
+                      <h2 class="visually-hidden" id="AnnouncementBarCountryLabel">
+                        {{ 'localization.country_label' | t }}
+                      </h2>
+                      {%- render 'country-localization', localPosition: 'AnnouncementBarCountry' -%}
+                    </div>
+                  {%- endform -%}
+                </localization-form>
+              {%- endif -%}
+              {%- if show_ab_language -%}
+                <localization-form data-prevent-hide>
+                  {%- form 'localization', id: 'AnnouncementBarLanguageForm', class: 'localization-form' -%}
+                    <div>
+                      <h2 class="visually-hidden" id="AnnouncementBarLanguageLabel">
+                        {{ 'localization.language_label' | t }}
+                      </h2>
+                      {%- render 'language-localization', localPosition: 'AnnouncementBarLanguage' -%}
+                    </div>
+                  {%- endform -%}
+                </localization-form>
+              {%- endif -%}
             </div>
           {%- endif -%}
         </div>

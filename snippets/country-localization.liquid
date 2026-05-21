@@ -23,6 +23,7 @@
   if currencies.size > 1
     assign show_currencies = true
   endif
+
 %}
 
 <div class="disclosure">
@@ -34,7 +35,9 @@
     aria-describedby="{{ localPosition }}Label"
   >
     <span>
-      {{- localization.country.name }} |
+      <span class="localization-flag" aria-hidden="true"
+        >{%- render 'country-flag', iso: localization.country.iso_code -%}</span
+      >{{ localization.country.name }} |
       {{ localization.country.currency.iso_code }}
       {{ localization.country.currency.symbol -}}
     </span>
@@ -111,6 +114,9 @@
                 >
                   {{- 'icon-checkmark.svg' | inline_asset_content -}}
                 </span>
+                <span class="localization-flag" aria-hidden="true"
+                  >{%- render 'country-flag', iso: country.iso_code -%}</span
+                >
                 <span class="country">{{- country.name }}</span>
                 <span class="localization-form__currency motion-reduce{% unless show_currencies %} hidden{% endunless %}">
                   {{ country.currency.iso_code }}
@@ -140,6 +146,9 @@
               >
                 {{- 'icon-checkmark.svg' | inline_asset_content -}}
               </span>
+              <span class="localization-flag" aria-hidden="true"
+                >{%- render 'country-flag', iso: country.iso_code -%}</span
+              >
               <span class="country">{{- country.name }}</span>
               <span class="localization-form__currency motion-reduce{% unless show_currencies %} hidden{% endunless %}">
                 {{ country.currency.iso_code }}

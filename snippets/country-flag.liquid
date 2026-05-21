@@ -1,0 +1,35 @@
+{%- comment -%}
+  Renders a Unicode emoji flag for any ISO 3166-1 alpha-2 country code by
+  composing two Regional Indicator Symbols (U+1F1E6..U+1F1FF). Unlike
+  PNG flag assets, this covers every country/region with zero asset
+  overhead and never breaks the row layout when a flag is missing.
+
+  Accepts:
+    - iso: country ISO code (e.g., 'DE', 'SI', 'GB'). Case-insensitive.
+{%- endcomment -%}
+{%- liquid
+  assign iso = iso | upcase
+  if iso.size == 2
+    assign alphabet = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z' | split: ','
+    assign flags = '🇦,🇧,🇨,🇩,🇪,🇫,🇬,🇭,🇮,🇯,🇰,🇱,🇲,🇳,🇴,🇵,🇶,🇷,🇸,🇹,🇺,🇻,🇼,🇽,🇾,🇿' | split: ','
+    assign c1 = iso | slice: 0, 1
+    assign c2 = iso | slice: 1, 1
+    assign i1 = -1
+    assign i2 = -1
+    for letter in alphabet
+      if letter == c1
+        assign i1 = forloop.index0
+      endif
+      if letter == c2
+        assign i2 = forloop.index0
+      endif
+    endfor
+    if i1 >= 0
+      if i2 >= 0
+        assign f1 = flags[i1]
+        assign f2 = flags[i2]
+        echo f1 | append: f2
+      endif
+    endif
+  endif
+-%}
