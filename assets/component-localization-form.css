@@ -466,12 +466,60 @@
    ============================================================ */
 
 /* Trigger acts as the anchor (Chrome 125+, Safari 17.5+, Edge 125+).
-   Each <localization-form> gets a unique scoped anchor via --nf-loc-anchor. */
-localization-form {
-  anchor-scope: --nf-loc-anchor;
+   Each <localization-form> gets a UNIQUE anchor name so adjacent
+   country/language pickers (announcement bar, footer) don't share
+   the same anchor — `anchor-scope` only ships in Chrome 131+/Safari 18+
+   and would otherwise leave duplicate names colliding on older builds.
+   We inline `position-anchor` per form (rather than via a custom
+   property) because some browsers don't substitute var() into
+   position-anchor reliably, leaving the panel unanchored. */
+
+/* Announcement bar — country */
+#AnnouncementBarCountryForm .disclosure__button { anchor-name: --nf-loc-ab-country; }
+@supports (anchor-name: --x) {
+  #AnnouncementBarCountryForm .disclosure__list-wrapper {
+    position-anchor: --nf-loc-ab-country;
+  }
 }
-localization-form .disclosure__button {
-  anchor-name: --nf-loc-anchor;
+
+/* Announcement bar — language */
+#AnnouncementBarLanguageForm .disclosure__button { anchor-name: --nf-loc-ab-language; }
+@supports (anchor-name: --x) {
+  #AnnouncementBarLanguageForm .disclosure__list-wrapper {
+    position-anchor: --nf-loc-ab-language;
+  }
+}
+
+/* Header drawer (mobile) — country */
+#HeaderCountryMobileForm .disclosure__button { anchor-name: --nf-loc-drawer-country; }
+@supports (anchor-name: --x) {
+  #HeaderCountryMobileForm .disclosure__list-wrapper {
+    position-anchor: --nf-loc-drawer-country;
+  }
+}
+
+/* Header drawer (mobile) — language */
+#HeaderLanguageMobileForm .disclosure__button { anchor-name: --nf-loc-drawer-language; }
+@supports (anchor-name: --x) {
+  #HeaderLanguageMobileForm .disclosure__list-wrapper {
+    position-anchor: --nf-loc-drawer-language;
+  }
+}
+
+/* Footer — country */
+#FooterCountryForm .disclosure__button { anchor-name: --nf-loc-footer-country; }
+@supports (anchor-name: --x) {
+  #FooterCountryForm .disclosure__list-wrapper {
+    position-anchor: --nf-loc-footer-country;
+  }
+}
+
+/* Footer — language */
+#FooterLanguageForm .disclosure__button { anchor-name: --nf-loc-footer-language; }
+@supports (anchor-name: --x) {
+  #FooterLanguageForm .disclosure__list-wrapper {
+    position-anchor: --nf-loc-footer-language;
+  }
 }
 
 /* Panel: drop downward, modern radius, layered shadow, no border.
@@ -500,13 +548,15 @@ localization-form .disclosure__list-wrapper {
 }
 
 /* Anchor-positioning upgrade: anchor to the trigger, prefer below+end,
-   fall back to flipped/inset variants when the default would overflow */
+   fall back to flipped/inset variants when the default would overflow.
+   The per-form `position-anchor` was declared above (one rule per
+   form id) — here we just supply the shared positioning + try-fallback
+   chain that every anchored wrapper uses. */
 @supports (anchor-name: --x) {
   localization-form .disclosure__list-wrapper {
     /* Take over from Dawn's absolute/transform positioning */
     position: fixed;
     inset: auto;
-    position-anchor: --nf-loc-anchor;
     /* Default: drop below the trigger, align its right edge */
     top: anchor(bottom);
     right: anchor(right);
@@ -519,8 +569,11 @@ localization-form .disclosure__list-wrapper {
       flip-block,
       flip-inline,
       flip-block flip-inline;
-    /* Hide the panel entirely if no fallback fits (rare) */
-    position-visibility: anchors-visible;
+    /* Note: do NOT set `position-visibility: anchors-visible` here.
+       If anchoring silently fails (e.g. stale browser, transformed
+       ancestor stacking-context), the engine would hide the wrapper
+       outright. We'd rather render the in-flow fallback
+       (`top: calc(100% + 0.5rem)` / `bottom: …` for footer/drawer). */
   }
 }
 

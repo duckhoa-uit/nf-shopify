@@ -73,6 +73,24 @@
     transform: rotate(180deg);
   }
 
+  /* Opt the announcement bar out of CSS Anchor Positioning entirely.
+     Anchor positioning has surprising failure modes when the trigger
+     sits near the viewport edge. Plain absolute positioning relative
+     to `.disclosure` is reliable. ID selectors + !important to beat
+     the generic @supports rule in component-localization-form.css. */
+  #AnnouncementBarCountryForm .disclosure__list-wrapper,
+  #AnnouncementBarLanguageForm .disclosure__list-wrapper {
+    position: absolute !important;
+    inset: auto !important;
+    top: calc(100% + 0.5rem) !important;
+    right: 0 !important;
+    left: auto !important;
+    bottom: auto !important;
+    margin: 0 !important;
+    position-anchor: none !important;
+    position-try-fallbacks: none !important;
+  }
+
 </style>
 
 <div class="bg-[#F5F5F5] text-[0.8125rem] leading-[0.875rem] text-secondary-foreground hidden lg:block relative z-30">

@@ -445,7 +445,11 @@
   }
 
   /* Force any anchor-positioning logic from component-localization-form.css
-     to also open upward (and stay scoped to the trigger) */
+     to also open upward (and stay scoped to the trigger). Fully opt out of
+     position-anchor + position-try here — the drawer panel anchors itself
+     to the trigger via plain absolute positioning, so we don't want the
+     engine attempting an anchored layout that could collapse the panel
+     when the trigger's anchor name fails to resolve. */
   @supports (anchor-name: --x) {
     .menu-drawer__localization--mobile localization-form .disclosure__list-wrapper {
       position: absolute;
@@ -455,6 +459,8 @@
       left: 0;
       right: 0;
       width: 100%;
+      position-anchor: none;
+      position-try-fallbacks: none;
     }
   }
 
