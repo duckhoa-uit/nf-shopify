@@ -1249,8 +1249,8 @@ class VariantSelects extends HTMLElement {
         // Add to all sizes for this color
         map[color].allSizes.add(size);
 
-        // Add to available sizes only if variant is available and has a real price (> 0)
-        if (variant.available && variant.price > 0) {
+        // Add to available sizes only if variant is available
+        if (variant.available) {
           map[color].availableSizes.add(size);
         }
       }

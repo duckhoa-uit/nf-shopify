@@ -11,84 +11,31 @@
   endif
 -%}
 
-{%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-  {{ 'component-localization-form.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'custom-language-selector.js' | asset_url }}" defer="defer"></script>
-{%- endif -%}
-
 {% if social_icons %}
   {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
 {% endif %}
 
 <style>
-  /* Custom styles for announcement bar localization */
   .announcement-bar-section .localization-form {
     padding: 0;
     margin: 0;
   }
 
-  /* Custom language selector styles */
-  .language-selector-wrapper {
+  .announcement-bar-section .localization-form__select {
+    padding: 0;
+    min-height: 0;
+    font-size: 0.8125rem;
+    line-height: 0.875rem;
+    color: inherit;
+  }
+
+  .announcement-bar-section .disclosure {
     position: relative;
   }
 
-  .custom-language-button {
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-
-  .language-flag {
-    display: block;
-    border: 1px solid #e0e0e0;
-  }
-
-  .custom-language-dropdown {
-    position: absolute;
-    top: 100%;
+  .announcement-bar-section .disclosure__list-wrapper {
     right: 0;
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    z-index: 50;
-    min-width: 180px;
-    margin-top: 5px;
-  }
-
-  .custom-language-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .custom-language-item {
-    padding: 0;
-  }
-
-  .custom-language-link {
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    text-decoration: none;
-    color: #333;
-    transition: background-color 0.2s;
-  }
-
-  .custom-language-link:hover {
-    background-color: #f5f5f5;
-  }
-
-  .custom-language-link[aria-current="true"] {
-    background-color: #f0f0f0;
-  }
-
-  .language-name {
-    margin-left: 8px;
-    font-size: 14px;
+    left: auto;
   }
 </style>
 
@@ -158,32 +105,44 @@
             </a>
           </div>
           {% endif %}
-          {%- if shop.customer_accounts_enabled -%}
-            {% if section.settings.show_register and customer == null %}
-            <div>
-              <a href="{{ routes.account_register_url }}">{{ 'customer.register.title' | t }}</a>
+          {% if section.settings.show_register and customer == null %}
+          <div>
+            <a href="{{ routes.account_register_url }}" data-auth-trigger="register">{{ 'customer.register.title' | t }}</a>
+          </div>
+          {% endif %}
+          {% if section.settings.show_login and customer == null %}
+          <div>
+            <a href="{{ routes.account_login_url }}" data-auth-trigger="login">{{ 'customer.login_page.sign_in' | t }}</a>
+          </div>
+          {% endif %}
+          {% if customer != null %}
+          <div>
+            <a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a>
+          </div>
+          {% endif %}
+          {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+            <div class="announcement-bar__localization">
+              <localization-form>
+                {%- form 'localization', id: 'AnnouncementBarCountryForm', class: 'localization-form' -%}
+                  <div>
+                    <h2 class="visually-hidden" id="AnnouncementBarCountryLabel">
+                      {{ 'localization.country_label' | t }}
+                    </h2>
+                    {%- render 'country-localization', localPosition: 'AnnouncementBarCountry' -%}
+                  </div>
+                {%- endform -%}
+              </localization-form>
             </div>
-            {% endif %}
-            {% if section.settings.show_login and customer == null %}
-            <div>
-              <a href="{{ routes.account_login_url }}">{{ 'customer.login_page.sign_in' | t }}</a>
-            </div>
-            {% endif %}
-            {% if customer != null %}
-            <div>
-              <a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a>
-            </div>
-            {% endif %}
           {%- endif -%}
           {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-            <div class="language-selector-wrapper">
+            <div class="announcement-bar__localization">
               <localization-form>
                 {%- form 'localization', id: 'AnnouncementBarLanguageForm', class: 'localization-form' -%}
                   <div>
                     <h2 class="visually-hidden" id="AnnouncementBarLanguageLabel">
                       {{ 'localization.language_label' | t }}
                     </h2>
-                    {%- render 'custom-language-selector', localPosition: 'AnnouncementBarLanguage' -%}
+                    {%- render 'language-localization', localPosition: 'AnnouncementBarLanguage' -%}
                   </div>
                 {%- endform -%}
               </localization-form>
@@ -258,6 +217,12 @@
       "type": "url",
       "id": "category3_link",
       "label": "Category 3 Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "label": "Enable Country Selector",
+      "default": false
     },
     {
       "type": "checkbox",

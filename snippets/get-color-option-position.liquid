@@ -22,59 +22,13 @@
 
 {%- liquid
   assign color_position = 1
-
+  
   for option in product.options_with_values
-    # Inline color detection (locale-independent; render-scope safe).
-    assign gcop_is_color = false
-    assign gcop_swatch_count = option.values | map: 'swatch' | compact | size
-    if gcop_swatch_count > 0
-      assign gcop_is_color = true
-    endif
-    if gcop_is_color == false and product.metafields.custom.color.value != blank
-      for v in option.values
-        capture v_str
-          echo v
-        endcapture
-        assign v_norm = v_str | strip | downcase
-        for cm in product.metafields.custom.color.value
-          assign cm_norm = cm.value | strip | downcase
-          if v_norm == cm_norm
-            assign gcop_is_color = true
-            break
-          endif
-        endfor
-        if gcop_is_color
-          break
-        endif
-      endfor
-    endif
-    if gcop_is_color == false and option.position == 1
-      # Don't fall back to color if this is clearly a size option
-      assign gcop_is_size = false
-      if product.metafields.custom.size.value != blank
-        for v in option.values
-          capture v_str
-            echo v
-          endcapture
-          assign v_norm = v_str | strip
-          for sm in product.metafields.custom.size.value
-            assign sm_norm = sm.value | strip
-            if v_norm == sm_norm
-              assign gcop_is_size = true
-              break
-            endif
-          endfor
-          if gcop_is_size
-            break
-          endif
-        endfor
-      endif
-      if gcop_is_size == false
-        assign gcop_is_color = true
-      endif
-    endif
-
-    if gcop_is_color
+    capture is_color
+      render 'is-color-option', option: option
+    endcapture
+    
+    if is_color == 'true'
       assign color_position = option.position
       break
     endif

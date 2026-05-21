@@ -20,93 +20,54 @@
   assign product_form_id = 'product-form-' | append: section.id
   assign sorted_indices = ''
 
-  # Locale-independent option type detection (inline; render-scope safe).
-  # Size takes priority over color when both somehow match.
-  assign is_size_option = false
-  if product.metafields.custom.size.value != blank
-    for v in option.values
-      capture v_str
-        echo v
-      endcapture
-      assign v_norm = v_str | strip
-      for sm in product.metafields.custom.size.value
-        assign sm_norm = sm.value | strip
-        if v_norm == sm_norm
-          assign is_size_option = true
-          break
-        endif
-      endfor
-      if is_size_option
-        break
-      endif
-    endfor
-  endif
-  if is_size_option == false
-    assign numeric_count = 0
-    for v in option.values
-      capture v_str
-        echo v
-      endcapture
-      assign v_norm = v_str | strip | replace: ',', '.'
-      assign digits = v_norm | replace: '.', '' | replace: '0', '' | replace: '1', '' | replace: '2', '' | replace: '3', '' | replace: '4', '' | replace: '5', '' | replace: '6', '' | replace: '7', '' | replace: '8', '' | replace: '9', ''
-      if digits == '' and v_norm != ''
-        assign numeric_count = numeric_count | plus: 1
-      endif
-    endfor
-    if numeric_count >= 2
-      assign is_size_option = true
-    endif
-  endif
-  if is_size_option == false
-    assign letter_sizes = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
-    assign letter_count = 0
-    for v in option.values
-      capture v_str
-        echo v
-      endcapture
-      assign v_up = v_str | upcase | strip
-      for ls in letter_sizes
-        if v_up == ls
-          assign letter_count = letter_count | plus: 1
-          break
-        endif
-      endfor
-    endfor
-    if letter_count >= 2
-      assign is_size_option = true
-    endif
-  endif
-
+  # Option detection based on swatches and standard size patterns
   assign is_color_option = false
-  assign swatch_for_color = option.values | map: 'swatch' | compact | size
-  if swatch_for_color > 0
-    assign is_color_option = true
-  endif
-  if is_color_option == false and product.metafields.custom.color.value != blank
-    for v in option.values
-      capture v_str
-        echo v
-      endcapture
-      assign v_norm = v_str | strip | downcase
-      for cm in product.metafields.custom.color.value
-        assign cm_norm = cm.value | strip | downcase
-        if v_norm == cm_norm
-          assign is_color_option = true
-          break
-        endif
-      endfor
-      if is_color_option
-        break
-      endif
-    endfor
-  endif
-  if is_color_option == false and option.position == 1 and is_size_option == false
+  assign is_size_option = false
+
+  # Check if this option has swatches - indicates it's a color option
+  assign swatch_count = option.values | map: 'swatch' | compact | size
+
+  if swatch_count > 0
     assign is_color_option = true
   endif
 
-  # Size takes priority over color
-  if is_size_option
-    assign is_color_option = false
+  # Check if option name indicates it's a size option (multi-language support)
+  assign option_name_lower = option.name | downcase
+  assign size_keywords = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,размер,veľkosť,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ','
+  for size_keyword in size_keywords
+    if option_name_lower contains size_keyword
+      assign is_size_option = true
+      break
+    endif
+  endfor
+
+  # Check if option values match standard size patterns
+  # Standard sizes to detect: XXS, XS, S, M, L, XL, XXL, 2XL, 3XL, 4XL, 5XL, 6XL
+  assign standard_sizes_pattern = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
+  assign size_match_count = 0
+
+  for value in option.values
+    # Get string representation of value (works with both object and string)
+    capture value_str
+      echo value
+    endcapture
+    assign value_upcase = value_str | upcase | strip
+    for standard_size in standard_sizes_pattern
+      if value_upcase == standard_size
+        assign size_match_count = size_match_count | plus: 1
+        break
+      endif
+    endfor
+  endfor
+
+  # If at least 2 values match standard sizes, treat as size option
+  if size_match_count >= 2
+    assign is_size_option = true
+  endif
+
+  # Fallback: if position 1 and not detected as size, treat as color
+  if option.position == 1 and is_size_option == false
+    assign is_color_option = true
   endif
 
   # NEW: Stock-based filtering for color options
@@ -150,7 +111,7 @@
             assign variant_option_value = variant.option3
         endcase
         
-        if variant_option_value == value_name and variant.available and variant.inventory_management != blank and variant.price > 0
+        if variant_option_value == value_name and variant.available and variant.inventory_management != blank
           assign has_truly_available_variant = true
           break
         endif
@@ -321,28 +282,6 @@
             assign option_disabled = false
           endif
 
-          # Disable option values whose only matching variants have price = 0
-          # (treat zero-priced variants as unavailable everywhere).
-          assign value_name_check = value.name | default: value
-          assign has_priced_variant = false
-          for variant in product.variants
-            case option.position
-              when 1
-                assign variant_option_value = variant.option1
-              when 2
-                assign variant_option_value = variant.option2
-              when 3
-                assign variant_option_value = variant.option3
-            endcase
-            if variant_option_value == value_name_check and variant.price > 0
-              assign has_priced_variant = true
-              break
-            endif
-          endfor
-          if has_priced_variant == false
-            assign option_disabled = true
-          endif
-
           # Create input ID and names
           assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0
           assign input_name = option.name | append: '-' | append: option.position
@@ -393,28 +332,6 @@
       assign option_disabled = true
       if value.available
         assign option_disabled = false
-      endif
-
-      # Disable option values whose only matching variants have price = 0
-      # (treat zero-priced variants as unavailable everywhere).
-      assign value_name_check = value.name | default: value
-      assign has_priced_variant = false
-      for variant in product.variants
-        case option.position
-          when 1
-            assign variant_option_value = variant.option1
-          when 2
-            assign variant_option_value = variant.option2
-          when 3
-            assign variant_option_value = variant.option3
-        endcase
-        if variant_option_value == value_name_check and variant.price > 0
-          assign has_priced_variant = true
-          break
-        endif
-      endfor
-      if has_priced_variant == false
-        assign option_disabled = true
       endif
 
       # Create input ID and names

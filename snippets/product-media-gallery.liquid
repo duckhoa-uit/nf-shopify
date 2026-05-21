@@ -377,60 +377,10 @@
   assign color_option_index = -1
   assign temp_index = 0
   for option in product.options_with_values
-    # Inline color detection (locale-independent; render-scope safe):
-    # Priority 1: any value has a swatch attribute
-    # Priority 2: linked metafield (custom.color) cross-ref
-    # Priority 3: first option fallback (only when not size)
-    assign mg_is_color = false
-    assign mg_swatch_count = option.values | map: 'swatch' | compact | size
-    if mg_swatch_count > 0
-      assign mg_is_color = true
-    endif
-    if mg_is_color == false and product.metafields.custom.color.value != blank
-      for v in option.values
-        capture v_str
-          echo v
-        endcapture
-        assign v_norm = v_str | strip | downcase
-        for cm in product.metafields.custom.color.value
-          assign cm_norm = cm.value | strip | downcase
-          if v_norm == cm_norm
-            assign mg_is_color = true
-            break
-          endif
-        endfor
-        if mg_is_color
-          break
-        endif
-      endfor
-    endif
-    if mg_is_color == false and option.position == 1
-      # Check whether this option is a size first — if so, don't fall back to color
-      assign mg_is_size = false
-      if product.metafields.custom.size.value != blank
-        for v in option.values
-          capture v_str
-            echo v
-          endcapture
-          assign v_norm = v_str | strip
-          for sm in product.metafields.custom.size.value
-            assign sm_norm = sm.value | strip
-            if v_norm == sm_norm
-              assign mg_is_size = true
-              break
-            endif
-          endfor
-          if mg_is_size
-            break
-          endif
-        endfor
-      endif
-      if mg_is_size == false
-        assign mg_is_color = true
-      endif
-    endif
-
-    if mg_is_color
+    capture is_color
+      render 'is-color-option', option: option
+    endcapture
+    if is_color == 'true'
       assign color_option_name = option.name
       assign color_option_index = temp_index
       break
@@ -1457,36 +1407,71 @@
       }
 
       // Set up event listeners
-      //
-      // Subscribe to the theme's variant pub/sub. This is the canonical Dawn
-      // pattern (see assets/pubsub.js + assets/product-info.js) and survives
-      // <variant-selects> DOM swaps performed by HTMLUpdateUtility.viewTransition.
-      // Direct radio listeners would die after the first swap; the URL-poll
-      // fallback breaks when data-update-url="false". Pub/sub avoids both.
       function setupEventListeners() {
-        // `subscribe` and `PUB_SUB_EVENTS` are script-scope globals from
-        // assets/pubsub.js + assets/constants.js — accessible by name but
-        // not as window properties (top-level `const` doesn't attach to window).
-        if (typeof subscribe !== 'function' || typeof PUB_SUB_EVENTS === 'undefined') return;
+        // Listen for radio button changes (use data-option-type for language-agnostic detection)
+        document.querySelectorAll('[data-option-type="color"] input[type="radio"]')
+          .forEach(radio => {
+            radio.addEventListener('change', e => {
+              const newColor = e.target.value;
+              handleColorChange(newColor);
+            });
+          });
 
-        // Avoid duplicate subscriptions on theme-editor section reloads.
-        if (window.__nfGalleryVariantUnsub) {
-          window.__nfGalleryVariantUnsub();
-        }
+        // Listen for variant select changes
+        document.querySelectorAll('[data-option-type="color"] select')
+          .forEach(select => {
+            select.addEventListener('change', e => {
+              const newColor = e.target.value;
+              handleColorChange(newColor);
+            });
+          });
 
-        window.__nfGalleryVariantUnsub = subscribe(PUB_SUB_EVENTS.variantChange, ({ data }) => {
-          const variant = data && data.variant;
-          if (!variant) return;
+        // Listen for Shopify's variant change event
+        document.addEventListener('variant:changed', function(event) {
+          if (event.detail.variant) {
+            // Extract color from variant using pre-computed index
+            const colorPosition = colorOptionIndex;
 
-          let newColor = '';
-          if (colorOptionIndex >= 0 && variant.options) {
-            newColor = variant.options[colorOptionIndex];
-          } else if (variant.title) {
-            newColor = variant.title.split('/')[0].trim();
+            let newColor = '';
+            if (colorPosition >= 0 && event.detail.variant.options) {
+              newColor = event.detail.variant.options[colorPosition];
+            } else if (event.detail.variant.title) {
+              newColor = event.detail.variant.title.split('/')[0].trim();
+            }
+
+            if (newColor) {
+              handleColorChange(newColor);
+            }
           }
-
-          if (newColor) handleColorChange(newColor);
         });
+
+        // Listen for URL changes for variant updates
+        let currentUrl = window.location.href;
+        setInterval(() => {
+          if (currentUrl !== window.location.href) {
+            currentUrl = window.location.href;
+            const variantId = new URLSearchParams(window.location.search).get('variant');
+
+            if (variantId) {
+              const variants = {{ product.variants | json }};
+              const variant = variants.find(v => v.id.toString() === variantId);
+
+              if (variant) {
+                // Extract color from variant using pre-computed index
+                const colorPosition = colorOptionIndex;
+
+                let color = colorPosition >= 0 && variant.options ? variant.options[colorPosition] : '';
+                if (!color && variant.title) {
+                  color = variant.title.split('/')[0].trim();
+                }
+
+                if (color) {
+                  handleColorChange(color);
+                }
+              }
+            }
+          }
+        }, 300);
       }
 
       // Start processing media and set up listeners
@@ -1507,6 +1492,30 @@
         }
       });
 
+      // Directly hook into Shopify's variant change mechanism
+      const originalOnVariantChange = window.onVariantChange;
+      window.onVariantChange = function(variant) {
+        if (variant) {
+          // Extract color from variant using pre-computed index
+          const colorPosition = colorOptionIndex;
+
+          let newColor = '';
+          if (colorPosition >= 0 && variant.options) {
+            newColor = variant.options[colorPosition];
+          } else if (variant.title) {
+            newColor = variant.title.split('/')[0].trim();
+          }
+
+          if (newColor) {
+            handleColorChange(newColor);
+          }
+        }
+
+        // Call the original handler if it exists
+        if (typeof originalOnVariantChange === 'function') {
+          originalOnVariantChange(variant);
+        }
+      };
     }
 
     // Function to open the lightbox with filtered and sorted images
@@ -1786,8 +1795,66 @@
               const container = document.querySelector('.fancybox__container');
               if (!container) return;
 
-              // Prev/next chevron buttons use Fancybox v5 defaults — no
-              // custom styling or positioning.
+              // Position navigation buttons relative to content
+              const positionNavButtons = () => {
+                // Get the content element and navigation buttons
+                const content = document.querySelector('.fancybox__content');
+                const prevButton = document.querySelector('.f-button.is-prev');
+                const nextButton = document.querySelector('.f-button.is-next');
+
+                if (content && prevButton && nextButton) {
+                  // Get content width
+                  const contentWidth = content.offsetWidth;
+                  const contentRect = content.getBoundingClientRect();
+
+                  // Calculate button positions based on screen size
+                  let gap;
+                  if (window.innerWidth <= 767) {
+                    // Mobile: 20px gap
+                    gap = 20;
+                  } else if (window.innerWidth <= 990) {
+                    // Tablet: 40px gap
+                    gap = 40;
+                  } else {
+                    // Desktop: 60px gap
+                    gap = 60;
+                  }
+
+                  // Set button positions directly
+                  prevButton.style.position = 'absolute';
+                  nextButton.style.position = 'absolute';
+                  prevButton.style.top = '50%';
+                  nextButton.style.top = '50%';
+                  prevButton.style.transform = 'translateY(-50%)';
+                  nextButton.style.transform = 'translateY(-50%)';
+
+                  // Position buttons relative to content
+                  prevButton.style.left = `${contentRect.left - gap}px`;
+                  nextButton.style.right = `${window.innerWidth - contentRect.right - gap}px`;
+
+                  // Hide buttons on mobile/tablet
+                  if (window.innerWidth <= 990) {
+                    prevButton.style.display = 'none';
+                    nextButton.style.display = 'none';
+                  } else {
+                    prevButton.style.display = 'block';
+                    nextButton.style.display = 'block';
+                  }
+                }
+              };
+
+              // Position buttons initially and on resize
+              // Wait for Fancybox to fully initialize
+              setTimeout(positionNavButtons, 100);
+              window.addEventListener('resize', positionNavButtons);
+
+              // Also position buttons when Fancybox changes slides
+              fancybox.on('change', positionNavButtons);
+
+              // Clean up event listener on close
+              fancybox.on('destroy', () => {
+                window.removeEventListener('resize', positionNavButtons);
+              });
 
               // Create toolbar container
               const toolbar = document.createElement('div');

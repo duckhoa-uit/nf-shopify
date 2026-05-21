@@ -128,8 +128,6 @@
     --ratio-percent: 56.25%;
     --radius-3: 0.1875rem;
     --font-archivo-expanded: "Archivo SemiExpanded", sans-serif;
-    --touch-target-min: 2.75rem;
-    --control-height-md: 3rem;
   }
 }
 @layer base {
@@ -289,6 +287,9 @@
   }
   .pointer-events-none {
     pointer-events: none !important;
+  }
+  .collapse {
+    visibility: collapse !important;
   }
   .visible {
     visibility: visible !important;
@@ -717,9 +718,6 @@
   .h-\[120px\] {
     height: 120px !important;
   }
-  .h-\[var\(--control-height-md\)\] {
-    height: var(--control-height-md) !important;
-  }
   .h-auto {
     height: auto !important;
   }
@@ -982,6 +980,9 @@
   }
   .gap-y-3 {
     row-gap: calc(var(--spacing) * 3) !important;
+  }
+  .gap-y-5 {
+    row-gap: calc(var(--spacing) * 5) !important;
   }
   .gap-y-8 {
     row-gap: calc(var(--spacing) * 8) !important;
@@ -1288,6 +1289,9 @@
   }
   .p-8 {
     padding: calc(var(--spacing) * 8) !important;
+  }
+  .p-10 {
+    padding: calc(var(--spacing) * 10) !important;
   }
   .px-0 {
     padding-inline: calc(var(--spacing) * 0) !important;
@@ -1827,10 +1831,10 @@
       rotate: 90deg !important;
     }
   }
-  .\*\:text-sm {
+  .\*\:text-base {
     :is(& > *) {
-      font-size: var(--text-sm) !important;
-      line-height: var(--tw-leading, var(--text-sm--line-height)) !important;
+      font-size: var(--text-base) !important;
+      line-height: var(--tw-leading, var(--text-base--line-height)) !important;
     }
   }
   .\*\:text-\[0\.9375rem\] {
@@ -1838,16 +1842,10 @@
       font-size: 0.9375rem !important;
     }
   }
-  .\*\:leading-6 {
+  .\*\:leading-7 {
     :is(& > *) {
-      --tw-leading: calc(var(--spacing) * 6) !important;
-      line-height: calc(var(--spacing) * 6) !important;
-    }
-  }
-  .\*\:font-bold {
-    :is(& > *) {
-      --tw-font-weight: var(--font-weight-bold) !important;
-      font-weight: var(--font-weight-bold) !important;
+      --tw-leading: calc(var(--spacing) * 7) !important;
+      line-height: calc(var(--spacing) * 7) !important;
     }
   }
   .\*\:text-\[\#0F0F0F\] {
@@ -1855,9 +1853,9 @@
       color: #0F0F0F !important;
     }
   }
-  .\*\:text-gray-600 {
+  .\*\:text-\[\#999\] {
     :is(& > *) {
-      color: #999999 !important;
+      color: #999 !important;
     }
   }
   .group-hover\:text-accent {

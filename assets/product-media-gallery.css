@@ -4,7 +4,7 @@
  * Styles for the product media gallery component including:
  * - Loading states for media elements
  * - Gallery toggle button
- * - Fancybox v5 customization (close, toolbar) — prev/next chevrons use library defaults
+ * - Fancybox v5 customization (close, prev/next buttons, toolbar)
  * - Video container styling
  * - Thumbnail customization
  *
@@ -87,43 +87,104 @@
   background-position: center;
 }
 
-/* Fancybox v5 prev/next chevron buttons — visual restyle only.
- * Library handles positioning, flex centering, LTR/RTL, and hide-on-mobile.
- * We only override colors/size/shadow via Fancybox's --f-button-* vars,
- * scoped with higher specificity so we win the cascade against fancybox.css.
- */
-.fancybox__container .fancybox__nav {
-  --f-button-width: 56px;
-  --f-button-height: 56px;
-  --f-button-border-radius: 50%;
-  --f-button-color: #0f0f0f;
-  --f-button-hover-color: #0f0f0f;
-  --f-button-bg: #ffffff;
-  --f-button-hover-bg: #ffffff;
-  --f-button-active-bg: #ffffff;
-  --f-button-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  --f-button-svg-width: 18px;
-  --f-button-svg-height: 18px;
-  --f-button-svg-stroke-width: 2;
-  --f-button-svg-filter: none;
+/* Custom navigation buttons for Fancybox v5 */
+.f-button.is-prev svg,
+.f-button.is-next svg {
+  display: none;
 }
 
-.fancybox__container .fancybox__nav .f-button.is-prev,
-.fancybox__container .fancybox__nav .f-button.is-next {
+.f-button.is-prev,
+.f-button.is-next {
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background-color: white;
+  opacity: 1;
   transition: opacity 0.2s ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
 }
 
-.fancybox__container .fancybox__nav .f-button.is-prev:hover,
-.fancybox__container .fancybox__nav .f-button.is-next:hover {
+/* Position buttons relative to fancybox__content with higher specificity */
+.is-horizontal .f-carousel__nav .f-button.is-prev,
+.is-horizontal .fancybox__nav .f-button.is-prev,
+.f-button.is-prev {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: var(--f-button-prev-pos) !important; /* Use !important to override default styles */
+}
+
+.is-horizontal .f-carousel__nav .f-button.is-next,
+.is-horizontal .fancybox__nav .f-button.is-next,
+.f-button.is-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: var(--f-button-next-pos) !important; /* Use !important to override default styles */
+}
+
+/* Set default values for the CSS variables */
+:root {
+  --f-button-prev-pos: -60px; /* 60px gap on desktop */
+  --f-button-next-pos: -60px; /* 60px gap on desktop */
+}
+
+/* Responsive gaps for tablet and mobile */
+@media screen and (max-width: 990px) and (min-width: 768px) {
+  :root {
+    --f-button-prev-pos: -40px; /* 40px gap on tablet */
+    --f-button-next-pos: -40px; /* 40px gap on tablet */
+  }
+}
+
+@media screen and (max-width: 767px) {
+  :root {
+    --f-button-prev-pos: -20px; /* 20px gap on mobile */
+    --f-button-next-pos: -20px; /* 20px gap on mobile */
+  }
+}
+
+/* Hide navigation buttons on tablet and mobile */
+@media screen and (max-width: 990px) {
+  .f-button.is-prev,
+  .f-button.is-next {
+    display: none;
+  }
+}
+
+.f-button.is-prev:hover,
+.f-button.is-next:hover {
   opacity: 0.9;
 }
 
-/* Hide on tablet and mobile (matches gallery behavior) */
-@media screen and (max-width: 990px) {
-  .fancybox__container .fancybox__nav .f-button.is-prev,
-  .fancybox__container .fancybox__nav .f-button.is-next {
-    display: none;
-  }
+.f-button.is-prev::before,
+.f-button.is-next::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 24px;
+  stroke: #0f0f0f;
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+
+.f-button.is-next::before {
+  transform: translate(-50%, -50%);
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='24' viewBox='0 0 16 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 24L10 12L2 0' stroke='%230F0F0F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.f-button.is-prev::before {
+  transform: translate(-50%, -50%);
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='24' viewBox='0 0 16 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14 24L6 12L14 0' stroke='%230F0F0F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* Custom toolbar for Fancybox */

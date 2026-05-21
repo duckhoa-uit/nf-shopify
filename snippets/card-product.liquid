@@ -263,7 +263,7 @@
           # These variants show available=true but have no actual stock
           assign truly_available_variants = ''
           for variant in card_product.variants
-            if variant.available and variant.inventory_management != blank and variant.price > 0
+            if variant.available and variant.inventory_management != blank
               case color_option_position
                 when 2
                   assign variant_color = variant.option2
@@ -566,30 +566,7 @@
 
         <div class="flex gap-3 items-center mt-0.5">
           {%- liquid
-            # Prefer the first available variant with a real (non-zero) price.
-            # Some products have placeholder variants priced at 0 even though they
-            # are flagged available — those should not drive the displayed price.
-            assign display_variant = null
-            for v in card_product.variants
-              if v.available and v.price > 0
-                assign display_variant = v
-                break
-              endif
-            endfor
-
-            # Fallbacks: any variant with a non-zero price, then Shopify's default.
-            if display_variant == null
-              for v in card_product.variants
-                if v.price > 0
-                  assign display_variant = v
-                  break
-                endif
-              endfor
-            endif
-            if display_variant == null
-              assign display_variant = card_product.selected_or_first_available_variant
-            endif
-
+            assign display_variant = card_product.selected_or_first_available_variant
             assign display_price = display_variant.price | default: card_product.price
             assign display_compare_at_price = display_variant.compare_at_price | default: card_product.compare_at_price
           -%}

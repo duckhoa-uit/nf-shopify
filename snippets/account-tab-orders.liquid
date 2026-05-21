@@ -181,21 +181,21 @@
                       </h4>
 
                       <div class="product-meta">
-                        {% comment %} Detect size and color positions using locale-independent centralized snippets {% endcomment %}
+                        {% comment %} Detect size and color positions using language-agnostic detection {% endcomment %}
                         {% assign display_size_pos = 0 %}
                         {% assign display_color_pos = order_color_pos %}
                         {% for option in line_item.product.options_with_values %}
-                          {% capture is_opt_color %}{% render 'is-color-option', option: option, product: line_item.product %}{% endcapture %}
-                          {% assign is_opt_color = is_opt_color | strip %}
-                          {% if is_opt_color == 'true' %}
-                            {% assign display_color_pos = option.position %}
-                          {% else %}
-                            {% capture is_opt_size %}{% render 'is-size-option', option: option, product: line_item.product %}{% endcapture %}
-                            {% assign is_opt_size = is_opt_size | strip %}
-                            {% if is_opt_size == 'true' %}
-                              {% assign display_size_pos = option.position %}
-                            {% endif %}
-                          {% endif %}
+                          {% capture is_opt_color %}{% render 'is-color-option', option: option %}{% endcapture %}
+                          {% unless is_opt_color == 'true' %}
+                            {% assign opt_name_lower = option.name | downcase %}
+                            {% assign size_kw = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,velikost,размер,veľkosť,méret,mărime,suurus,dydis,izmērs,μέγεθος,beden,ขนาด,kích cỡ,ukuran,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ',' %}
+                            {% for kw in size_kw %}
+                              {% if opt_name_lower contains kw %}
+                                {% assign display_size_pos = option.position %}
+                                {% break %}
+                              {% endif %}
+                            {% endfor %}
+                          {% endunless %}
                         {% endfor %}
 
                         {% comment %} Get translated option values directly from variant object {% endcomment %}

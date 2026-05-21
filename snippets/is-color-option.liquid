@@ -1,30 +1,21 @@
 {% comment %}
-  Determines if a product option is a color option.
-
-  Locale-independent — relies on Shopify "Linked Metafields" feature
-  (option values linked to `custom.color` metaobjects) plus swatch presence
-  rather than translated option names.
+  Determines if a product option is a color option
 
   Accepts:
-  - option: {Object} Product option object (required)
-  - product: {Object} Product object (optional, recommended)
-      Used to cross-reference option values against the `custom.color`
-      metaobject list for robust detection.
-
-  Returns (via echo):
+  - option: {Object} Product option object with values (required)
+  
+  Returns (via capture):
   - 'true' if the option is a color option
   - 'false' otherwise
 
-  Detection priority:
-  1. Any option value has a `swatch` → color
-  2. `product.metafields.custom.color` exists AND any option value name
-     matches one of its metaobject `name` entries → color
-  3. Fallback: position 1 AND not detected as size → color
-     (size detection is delegated to `is-size-option`)
+  Detection logic (in priority order):
+  1. Has swatches → color option
+  2. Matches standard size patterns (≥2 values) → NOT color (size option)
+  3. Position 1 fallback → treat as color if not size
 
   Usage:
   {%- capture is_color -%}
-    {%- render 'is-color-option', option: option, product: product -%}
+    {%- render 'is-color-option', option: option -%}
   {%- endcapture -%}
   {%- if is_color == 'true' -%}
     ...color-specific logic...
@@ -33,40 +24,52 @@
 
 {%- liquid
   assign is_color = false
+  assign is_size = false
 
-  # Priority 1: Swatches present → color option
+  # Priority 1: Check if this option has swatches - indicates it's a color option
   assign swatch_count = option.values | map: 'swatch' | compact | size
   if swatch_count > 0
     assign is_color = true
   endif
 
-  # Priority 2: Cross-reference with linked metafield (custom.color metaobjects)
-  if is_color == false and product.metafields.custom.color.value != blank
-    assign color_metaobjects = product.metafields.custom.color.value
+  # Priority 2: Check if option name indicates it's a size option (multi-language support)
+  assign option_name_lower = option.name | downcase
+  assign size_keywords = 'size,größe,taille,talla,taglia,størrelse,storlek,veličina,размер,veľkosť,尺寸,rozmiar,tamanho,koko,maat,サイズ,사이즈' | split: ','
+  for size_keyword in size_keywords
+    if option_name_lower contains size_keyword
+      assign is_size = true
+      assign is_color = false
+      break
+    endif
+  endfor
+
+  # Priority 3: Check if option values match standard size patterns
+  unless is_size
+    assign standard_sizes = 'XXS,XS,S,M,L,XL,XXL,2XL,3XL,4XL,5XL,6XL' | split: ','
+    assign size_match_count = 0
+
     for value in option.values
-      assign value_lower = value | downcase | strip
-      for color_meta in color_metaobjects
-        assign color_name = color_meta.name | downcase | strip
-        if value_lower == color_name
-          assign is_color = true
+      capture value_str
+        echo value
+      endcapture
+      assign value_upcase = value_str | upcase | strip
+      
+      for standard_size in standard_sizes
+        if value_upcase == standard_size
+          assign size_match_count = size_match_count | plus: 1
           break
         endif
       endfor
-      if is_color
-        break
-      endif
     endfor
-  endif
 
-  # Priority 3: Fallback — first option is color when not detected as size
-  if is_color == false and option.position == 1
-    capture is_size
-      render 'is-size-option', option: option, product: product
-    endcapture
-    assign is_size = is_size | strip
-    if is_size != 'true'
-      assign is_color = true
+    if size_match_count >= 2
+      assign is_size = true
     endif
+  endunless
+
+  # Priority 4: Fallback - position 1 and not detected as size → treat as color
+  if is_color == false and is_size == false and option.position == 1
+    assign is_color = true
   endif
 
   echo is_color
