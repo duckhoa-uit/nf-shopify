@@ -377,60 +377,10 @@
   assign color_option_index = -1
   assign temp_index = 0
   for option in product.options_with_values
-    # Inline color detection (locale-independent; render-scope safe):
-    # Priority 1: any value has a swatch attribute
-    # Priority 2: linked metafield (custom.color) cross-ref
-    # Priority 3: first option fallback (only when not size)
-    assign mg_is_color = false
-    assign mg_swatch_count = option.values | map: 'swatch' | compact | size
-    if mg_swatch_count > 0
-      assign mg_is_color = true
-    endif
-    if mg_is_color == false and product.metafields.custom.color.value != blank
-      for v in option.values
-        capture v_str
-          echo v
-        endcapture
-        assign v_norm = v_str | strip | downcase
-        for cm in product.metafields.custom.color.value
-          assign cm_norm = cm.value | strip | downcase
-          if v_norm == cm_norm
-            assign mg_is_color = true
-            break
-          endif
-        endfor
-        if mg_is_color
-          break
-        endif
-      endfor
-    endif
-    if mg_is_color == false and option.position == 1
-      # Check whether this option is a size first — if so, don't fall back to color
-      assign mg_is_size = false
-      if product.metafields.custom.size.value != blank
-        for v in option.values
-          capture v_str
-            echo v
-          endcapture
-          assign v_norm = v_str | strip
-          for sm in product.metafields.custom.size.value
-            assign sm_norm = sm.value | strip
-            if v_norm == sm_norm
-              assign mg_is_size = true
-              break
-            endif
-          endfor
-          if mg_is_size
-            break
-          endif
-        endfor
-      endif
-      if mg_is_size == false
-        assign mg_is_color = true
-      endif
-    endif
-
-    if mg_is_color
+    capture is_color
+      render 'is-color-option', option: option
+    endcapture
+    if is_color == 'true'
       assign color_option_name = option.name
       assign color_option_index = temp_index
       break
@@ -803,7 +753,10 @@
       if (mediaObject && mediaObject.media_type === 'video') {
         // Create a container for the video
         const videoContainer = document.createElement('div');
-        videoContainer.className = 'video-container relative w-full h-full';
+        videoContainer.className = 'video-container relative w-full h-full cursor-pointer';
+        videoContainer.setAttribute('role', 'button');
+        videoContainer.setAttribute('tabindex', '0');
+        videoContainer.setAttribute('aria-label', mediaObject.alt || 'Play product video');
 
         // Create the video element
         const video = document.createElement('video');
@@ -855,9 +808,28 @@
         videoContainer.appendChild(img);
         imageContainer.appendChild(videoContainer);
 
-        // Add click handler to prevent lightbox from opening when clicking on video
-        videoContainer.addEventListener('click', function(e) {
-          e.stopPropagation(); // Prevent event from bubbling up to container
+        // Stash sources/poster on the container so the lightbox can read them
+        // without needing access to the original mediaObject closure.
+        const videoSources = (mediaObject.sources || []).map(source => ({
+          url: source.url,
+          mime_type: source.mime_type,
+        }));
+        videoContainer.dataset.videoSources = JSON.stringify(videoSources);
+        if (mediaObject.preview_image && mediaObject.preview_image.src) {
+          videoContainer.dataset.videoPoster = mediaObject.preview_image.src;
+        }
+
+        // Open the 9:16 video lightbox when the cropped 1:1 preview is clicked.
+        const openVideoLightboxHandler = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openProductVideoLightbox(videoSources, videoContainer.dataset.videoPoster);
+        };
+        videoContainer.addEventListener('click', openVideoLightboxHandler);
+        videoContainer.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            openVideoLightboxHandler(e);
+          }
         });
       } else {
         // Check if this is a placeholder
@@ -1185,6 +1157,33 @@
               if (clonedVideo) {
                 clonedVideo.setAttribute('autoplay', '');
                 clonedVideo.autoplay = true;
+              }
+
+              // cloneNode does not copy event listeners, so wire the video
+              // lightbox click handler on the cloned container using sources
+              // we stashed on the dataset.
+              const clonedVideoContainer = mobileMediaItem.querySelector('.video-container');
+              if (clonedVideoContainer) {
+                const clonedSourcesAttr = clonedVideoContainer.dataset.videoSources;
+                const clonedPoster = clonedVideoContainer.dataset.videoPoster || '';
+                let clonedSources = [];
+                try {
+                  clonedSources = clonedSourcesAttr ? JSON.parse(clonedSourcesAttr) : [];
+                } catch (err) {
+                  clonedSources = [];
+                }
+
+                const clonedHandler = (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  openProductVideoLightbox(clonedSources, clonedPoster);
+                };
+                clonedVideoContainer.addEventListener('click', clonedHandler);
+                clonedVideoContainer.addEventListener('keydown', function(e) {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    clonedHandler(e);
+                  }
+                });
               }
 
               sliderWrapper.appendChild(mobileMediaItem);
@@ -2026,6 +2025,85 @@
         });
       } catch (error) {
         // Error opening lightbox
+      }
+    }
+
+    // Open Fancybox showing the product video in its native 9:16 portrait
+    // aspect ratio. The gallery preview is cropped 1:1 via object-fit, but the
+    // lightbox should always render the source video uncropped.
+    function openProductVideoLightbox(sources, poster) {
+      if (!window.Fancybox || !sources || sources.length === 0) {
+        return;
+      }
+
+      try {
+        if (typeof Fancybox.close === 'function') {
+          Fancybox.close();
+        }
+
+        const sourceTags = sources
+          .filter(source => source && source.url)
+          .map(source => `<source src="${source.url}"${source.mime_type ? ` type="${source.mime_type}"` : ''}>`)
+          .join('');
+
+        const posterAttr = poster ? ` poster="${poster}"` : '';
+
+        const html = `
+          <div class="product-video-lightbox">
+            <button
+              type="button"
+              class="product-video-lightbox__close"
+              aria-label="Close"
+              data-fancybox-close
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path>
+              </svg>
+            </button>
+            <video
+              class="product-video-lightbox__player"
+              controls
+              autoplay
+              playsinline
+              webkit-playsinline
+              preload="metadata"
+              controlslist="nodownload nofullscreen noremoteplayback noplaybackrate"
+              disablepictureinpicture
+              disableremoteplayback
+              x-webkit-airplay="deny"
+              ${posterAttr}
+            >
+              ${sourceTags}
+            </video>
+          </div>
+        `;
+
+        Fancybox.show(
+          [
+            {
+              src: html,
+              type: 'html',
+            },
+          ],
+          {
+            dragToClose: false,
+            closeButton: false,
+            Toolbar: false,
+            Thumbs: false,
+            Carousel: false,
+            Caption: false,
+            on: {
+              ready: () => {
+                const closeBtn = document.querySelector('.fancybox__container .product-video-lightbox__close');
+                if (closeBtn) {
+                  closeBtn.addEventListener('click', () => Fancybox.close());
+                }
+              },
+            },
+          }
+        );
+      } catch (error) {
+        // Error opening video lightbox
       }
     }
 

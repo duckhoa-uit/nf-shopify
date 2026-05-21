@@ -245,6 +245,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .video-container video {
@@ -256,6 +257,54 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+/* 9:16 portrait video lightbox shown via Fancybox */
+.product-video-lightbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(90vw, calc(90vh * 9 / 16));
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+  background: #000;
+}
+
+.product-video-lightbox__player {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+  display: block;
+}
+
+.product-video-lightbox__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+}
+
+.product-video-lightbox__close:hover {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.product-video-lightbox__close svg {
+  width: 20px;
+  height: 20px;
+  fill: #ffffff;
 }
 
 /* Hide all video controls completely */
