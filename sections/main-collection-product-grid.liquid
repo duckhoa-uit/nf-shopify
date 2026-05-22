@@ -1115,7 +1115,14 @@
         }
 
         const pageToLoad = currentPage + pagesLoaded;
-        const fetchUrl = new URL(baseUrl, window.location.origin);
+        // Use the current localized pathname so the locale prefix (e.g. /sl/) is preserved.
+        // paginate.next.url may resolve to the canonical (non-localized) path, which would cause
+        // appended product cards to render in the default locale (EN) instead of SL/DE/etc.
+        const fetchUrl = new URL(window.location.pathname, window.location.origin);
+        // Carry over any query params from paginate.next.url (e.g. page, filters embedded in URL)
+        new URL(baseUrl, window.location.origin).searchParams.forEach((value, key) => {
+          fetchUrl.searchParams.set(key, value);
+        });
         fetchUrl.searchParams.set('page', pageToLoad.toString());
         // Don't set products_per_page in the fetch URL to get default 24 per page
         fetchUrl.searchParams.delete('products_per_page');
@@ -1201,7 +1208,11 @@
 
         // Check if there are more pages available by trying to fetch next page
         const lastPageToCheck = currentPage + pagesLoaded;
-        const checkUrl = new URL(baseUrl, window.location.origin);
+        // Use the current localized pathname (see comment in loadNextBatch above).
+        const checkUrl = new URL(window.location.pathname, window.location.origin);
+        new URL(baseUrl, window.location.origin).searchParams.forEach((value, key) => {
+          checkUrl.searchParams.set(key, value);
+        });
         checkUrl.searchParams.set('page', lastPageToCheck.toString());
         checkUrl.searchParams.delete('products_per_page');
 
@@ -1225,14 +1236,20 @@
 
             // Check if next page has products or if there's a next page button
             if ((nextPageButton?.dataset.url) || (nextPageProducts && nextPageProducts.length > 0)) {
-              // Update current button with new URL, preserving products_per_page
-              if (nextPageButton?.dataset.url) {
-                const nextUrl = new URL(nextPageButton.dataset.url, window.location.origin);
-                if (currentProductsPerPage) {
-                  nextUrl.searchParams.set('products_per_page', currentProductsPerPage);
-                }
-                viewMoreButton.dataset.url = nextUrl.pathname + nextUrl.search;
+              // The page we just verified (checkUrl, page = currentPage + pagesLoaded) is the
+              // page that should be loaded on the NEXT Load More click. Previously this code
+              // read nextPageButton.dataset.url, which is the probe page's OWN next-page URL
+              // (i.e. checkUrl + 1) — causing every odd page after page 2 to be silently
+              // skipped and ~half of the collection's products to never render.
+              const nextUrl = new URL(checkUrl.toString());
+              if (currentProductsPerPage) {
+                nextUrl.searchParams.set('products_per_page', currentProductsPerPage);
+              } else {
+                nextUrl.searchParams.delete('products_per_page');
               }
+              // Preserve the current localized pathname (e.g. /sl/...) instead of using
+              // the non-localized pathname returned by paginate.next.url.
+              viewMoreButton.dataset.url = window.location.pathname + nextUrl.search;
 
               viewMoreButton.textContent = {{ 'products.facets.view_more' | t | json }};
               viewMoreButton.disabled = false;
