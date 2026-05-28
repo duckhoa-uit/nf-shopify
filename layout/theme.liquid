@@ -64,6 +64,9 @@
 
     {{ content_for_header }}
 
+    {%- comment -%} Market data layer — accurate country/language/market for analytics & ads. Must run after content_for_header so window.Shopify exists. {%- endcomment -%}
+    {%- render 'nf-market-data-layer' -%}
+
     {%- liquid
       assign body_font_500 = settings.type_body_font | font_modify: 'weight', '500'
       assign body_font_600 = settings.type_body_font | font_modify: 'weight', '600'

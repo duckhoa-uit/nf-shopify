@@ -1,38 +1,51 @@
 {%- comment -%}
-  Renders hreflang tags for SEO and language targeting
-  
-  This snippet generates proper hreflang tags for all available languages
-  with the correct URL structure where German is the default language
+  Hreflang tags for SEO and language targeting.
+
+  Notes
+    - Shopify emits some hreflang automatically via content_for_header
+      when Markets is configured. This snippet complements that by
+      emitting one alternate per available language for the current
+      market, plus an x-default pointing at the primary language.
+    - Do NOT hardcode a "default language" here. The default is whichever
+      language Shopify reports as primary for the current market, which
+      we read from `shop.locale` / `localization.available_languages`.
+    - We use `request.origin` which already reflects the current market's
+      domain (ccTLD/subdomain/subfolder). Cross-market ccTLD hreflang
+      (e.g. linking northfinder.com → northfinder.bg) is handled by
+      Shopify's automatic emission, not this snippet.
 {%- endcomment -%}
 
 {%- if localization.available_languages.size > 1 -%}
+  {%- liquid
+    # Strip the current locale prefix from request.path if present.
+    # routes.root_url is either "/" (primary locale) or "/<locale>/" or
+    # "/<locale>".  We normalize to a path without it.
+    assign locale_root = routes.root_url
+    assign locale_root_trimmed = locale_root | remove_first: '/' | replace: '/', ''
+    assign clean_path = request.path
+    if locale_root_trimmed != ''
+      assign locale_prefix = '/' | append: locale_root_trimmed
+      assign clean_path = clean_path | remove_first: locale_prefix
+    endif
+    if clean_path == ''
+      assign clean_path = '/'
+    endif
+  -%}
+
   {%- for language in localization.available_languages -%}
     {%- liquid
-      assign language_url = request.origin
-      
-      # For German (default language), use root domain without language prefix
-      if language.iso_code == 'de'
-        assign language_url = request.origin | append: request.path
+      assign lang_code = language.iso_code
+      if language.primary
+        assign language_url = request.origin | append: clean_path
       else
-        # For other languages, add language prefix
-        assign language_url = request.origin | append: '/' | append: language.iso_code | append: request.path
+        assign language_url = request.origin | append: '/' | append: lang_code | append: clean_path
       endif
-      
-      # Remove double slashes if any
-      assign language_url = language_url | replace: '//', '/'
-      assign language_url = language_url | replace: 'https:/', 'https://'
-      assign language_url = language_url | replace: 'http:/', 'http://'
+      # Collapse any accidental double slash in the path portion only
+      assign language_url = language_url | replace: '//', '/' | replace: 'https:/', 'https://' | replace: 'http:/', 'http://'
     -%}
-    
-    <link rel="alternate" hreflang="{{ language.iso_code }}" href="{{ language_url }}">
+    <link rel="alternate" hreflang="{{ lang_code }}" href="{{ language_url }}">
   {%- endfor -%}
-  
-  {%- comment -%} Add x-default hreflang pointing to German version {%- endcomment -%}
-  {%- liquid
-    assign default_url = request.origin | append: request.path
-    assign default_url = default_url | replace: '//', '/'
-    assign default_url = default_url | replace: 'https:/', 'https://'
-    assign default_url = default_url | replace: 'http:/', 'http://'
-  -%}
-  <link rel="alternate" hreflang="x-default" href="{{ default_url }}">
+
+  {%- comment -%} x-default points at the primary language URL of the current market {%- endcomment -%}
+  <link rel="alternate" hreflang="x-default" href="{{ request.origin }}{{ clean_path }}">
 {%- endif -%}

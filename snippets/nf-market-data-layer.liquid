@@ -1,0 +1,57 @@
+{%- comment -%}
+  Northfinder Market Data Layer
+  ------------------------------------------------------------
+  Source of truth for market/country/language context across:
+    - GTM / GA4 dataLayer (event: 'market_context')
+    - Shopify Web Pixel sandbox (event: 'nf:market_context')
+    - Any 3rd-party tag that needs accurate market attribution
+
+  IMPORTANT
+    Shopify Markets URL prefixes (e.g. /en, /de-at) do NOT always
+    reflect the market the buyer is actually browsing in — a buyer
+    can land in a market context that does not match the URL.
+    The values below come from `localization.*` which is the real
+    market context Shopify uses for pricing, currency, and routing.
+
+  Render this snippet from layout/theme.liquid as early as possible
+  (right after content_for_header) so that pixels and third-party
+  tags can read window.nfMarket / dataLayer market_context.
+{%- endcomment -%}
+
+<script>
+  (function () {
+    var nfMarket = {
+      country: {{ localization.country.iso_code | json }},
+      language: {{ localization.language.iso_code | json }},
+      marketHandle: {{ localization.market.handle | json }},
+      marketId: {{ localization.market.id | json }},
+      currency: {{ cart.currency.iso_code | json }}
+    };
+
+    // Expose globally for theme JS and 3rd-party scripts
+    window.nfMarket = nfMarket;
+
+    // Push into GTM/GA4 dataLayer (web-side)
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'market_context',
+      market_country: nfMarket.country,
+      market_language: nfMarket.language,
+      market_handle: nfMarket.marketHandle,
+      market_id: nfMarket.marketId,
+      market_currency: nfMarket.currency
+    });
+
+    // Bridge into Shopify Web Pixel sandbox so Custom Pixels can
+    // read the same market context (Custom Pixels do not see
+    // window.nfMarket directly because they run in a sandbox).
+    // See https://shopify.dev/docs/api/web-pixels-api/emitting-data
+    if (
+      window.Shopify &&
+      window.Shopify.analytics &&
+      typeof window.Shopify.analytics.publish === 'function'
+    ) {
+      window.Shopify.analytics.publish('nf:market_context', nfMarket);
+    }
+  })();
+</script>
