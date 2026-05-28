@@ -8,8 +8,13 @@
     <meta name="theme-color" content="{{ settings.colors_accent_1 | default: '#000000' }}">
     <link rel="canonical" href="{{ canonical_url }}">
 
-    {%- comment -%} Hreflang tags for language targeting {%- endcomment -%}
-    {%- render 'hreflang-tags' -%}
+    {%- comment -%}
+      Hreflang tags are emitted automatically by Shopify Markets through
+      content_for_header above. Do NOT add a custom snippet here — it
+      caused duplicate hreflang values on ccTLDs (northfinder.bg) which
+      Google penalizes.
+      Ref: https://shopify.dev/docs/storefronts/themes/markets/multiple-currencies-languages
+    {%- endcomment -%}
 
     {%- comment -%} Accessibility improvements {%- endcomment -%}
     <meta name="color-scheme" content="light">
