@@ -382,7 +382,8 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
-  {% include 'pagefly-app-header' %}</head>
+  {% include 'pagefly-app-header' %}{% render 'google_consent_mode_script' %}
+</head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %} template-{{ template.name | handle }}{% if request.page_type == 'page' and request.path contains '/pages/wishlist' %} page-wishlist{% endif %}">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
