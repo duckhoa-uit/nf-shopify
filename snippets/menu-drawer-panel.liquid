@@ -1,0 +1,106 @@
+{% doc %}
+  Renders one slide-in panel for a menu drawer (level 2 or 3).
+
+  Panel contents:
+    - Title bar: back arrow (handled by MenuDrawer JS via the button click)
+      + centered category title.
+    - Grid of 128px tiles for the link's children.
+      * If the child has its own children, the tile is a <details>/<summary>
+        and embeds a nested panel (one more level deep).
+      * Otherwise it's a direct <a> tile.
+    - Footer "All <title>" CTA pointing to the parent link's URL.
+
+  Shopify navigation supports up to 3 levels, so this snippet only renders
+  one additional level of nesting (not recursive).
+
+  @param {object} link - Liquid link object with non-empty `links` array.
+
+  @example
+    {% render 'menu-drawer-panel', link: link %}
+{% enddoc %}
+
+<div
+  id="link-{{ link.handle | escape }}"
+  class="menu-drawer__submenu has-submenu gradient motion-reduce"
+  tabindex="-1"
+>
+  <div class="menu-drawer__inner-submenu">
+    <div class="menu-drawer__title-bar">
+      <button
+        class="menu-drawer__close-button link link--text focus-inset"
+        aria-expanded="true"
+        aria-label="{{ 'mobile_menu.back' | t }}"
+      >
+        <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+      </button>
+      <h2 class="menu-drawer__title">{{ link.title | escape }}</h2>
+    </div>
+
+    <div class="menu-drawer__grid">
+      {%- for childlink in link.links -%}
+        {%- if childlink.links == blank -%}
+          <a
+            id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+            href="{{ childlink.url }}"
+            class="menu-drawer__tile{% if childlink.current %} menu-drawer__tile--active{% endif %}"
+            {% if childlink.current %}aria-current="page"{% endif %}
+          >
+            {% render 'menu-link-image', link: childlink %}
+            <span class="menu-drawer__tile-label">{{ childlink.title | escape }}</span>
+          </a>
+        {%- else -%}
+          <details id="Details-menu-drawer-{{ link.handle }}-{{ childlink.handle }}">
+            <summary
+              id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+              class="menu-drawer__tile"
+            >
+              {% render 'menu-link-image', link: childlink %}
+              <span class="menu-drawer__tile-label">{{ childlink.title | escape }}</span>
+            </summary>
+
+            <div
+              id="link-{{ link.handle | escape }}-{{ childlink.handle | escape }}"
+              class="menu-drawer__submenu has-submenu gradient motion-reduce"
+              tabindex="-1"
+            >
+              <div class="menu-drawer__inner-submenu">
+                <div class="menu-drawer__title-bar">
+                  <button
+                    class="menu-drawer__close-button link link--text focus-inset"
+                    aria-expanded="true"
+                    aria-label="{{ 'mobile_menu.back' | t }}"
+                  >
+                    <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                  </button>
+                  <h2 class="menu-drawer__title">{{ childlink.title | escape }}</h2>
+                </div>
+
+                <div class="menu-drawer__grid">
+                  {%- for grandchild in childlink.links -%}
+                    <a
+                      id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchild.handle }}"
+                      href="{{ grandchild.url }}"
+                      class="menu-drawer__tile{% if grandchild.current %} menu-drawer__tile--active{% endif %}"
+                      {% if grandchild.current %}aria-current="page"{% endif %}
+                    >
+                      {% render 'menu-link-image', link: grandchild %}
+                      <span class="menu-drawer__tile-label">{{ grandchild.title | escape }}</span>
+                    </a>
+                  {%- endfor -%}
+                </div>
+
+                <a href="{{ childlink.url }}" class="menu-drawer__cta-all">
+                  {{ 'mobile_menu.all_in' | t: title: childlink.title }}
+                </a>
+              </div>
+            </div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <a href="{{ link.url }}" class="menu-drawer__cta-all">
+      {{ 'mobile_menu.all_in' | t: title: link.title }}
+    </a>
+  </div>
+</div>
