@@ -157,7 +157,10 @@ details[open].menu-opening > .menu-drawer__submenu {
   bottom: 0;
   left: 0;
   background-color: rgb(var(--color-base-background));
-  z-index: 1;
+  /* Must outrank .menu-drawer__utility-links (positioned, z:auto) so that
+     Register/Login and the localization selectors don't bleed through the
+     L2/L3 slide-in panel. */
+  z-index: 2;
   transform: translateX(100%);
   visibility: hidden;
 }
@@ -260,7 +263,10 @@ details[open].menu-opening > .menu-drawer__submenu {
 
 .menu-drawer__title-bar {
   display: grid;
-  grid-template-columns: var(--touch-target-min) 1fr var(--touch-target-min);
+  /* 2 columns: back button + title area. Title is visually centered
+     within the drawer by giving it a matching right padding (see
+     .menu-drawer__title) rather than reserving an empty third column. */
+  grid-template-columns: var(--touch-target-min) 1fr;
   align-items: center;
   padding: 0 1.5rem;
   margin-top: 1.5rem;
@@ -285,6 +291,9 @@ details[open].menu-opening > .menu-drawer__submenu {
 .menu-drawer__title {
   grid-column: 2;
   margin: 0;
+  /* Visually re-center the title across the whole drawer by reserving
+     the same width on the right as the back button takes on the left. */
+  padding-right: var(--touch-target-min);
   font-weight: 700;
   font-size: 1.125rem;
   line-height: 1.5;
