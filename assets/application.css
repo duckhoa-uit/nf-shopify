@@ -128,6 +128,8 @@
     --ratio-percent: 56.25%;
     --radius-3: 0.1875rem;
     --font-archivo-expanded: "Archivo SemiExpanded", sans-serif;
+    --touch-target-min: 2.75rem;
+    --control-height-md: 3rem;
   }
 }
 @layer base {
@@ -291,6 +293,9 @@
   .collapse {
     visibility: collapse !important;
   }
+  .invisible {
+    visibility: hidden !important;
+  }
   .visible {
     visibility: visible !important;
   }
@@ -344,6 +349,9 @@
   .top-8 {
     top: calc(var(--spacing) * 8) !important;
   }
+  .top-50 {
+    top: calc(var(--spacing) * 50) !important;
+  }
   .-right-2 {
     right: calc(var(--spacing) * -2) !important;
   }
@@ -385,6 +393,9 @@
   }
   .z-10 {
     z-index: 10 !important;
+  }
+  .z-30 {
+    z-index: 30 !important;
   }
   .z-50 {
     z-index: 50 !important;
@@ -440,8 +451,14 @@
   .m-0 {
     margin: calc(var(--spacing) * 0) !important;
   }
+  .m-1 {
+    margin: calc(var(--spacing) * 1) !important;
+  }
   .-mx-4 {
     margin-inline: calc(var(--spacing) * -4) !important;
+  }
+  .-mx-px {
+    margin-inline: -1px !important;
   }
   .mx-auto {
     margin-inline: auto !important;
@@ -460,6 +477,9 @@
   }
   .my-5 {
     margin-block: calc(var(--spacing) * 5) !important;
+  }
+  .my-\[-0\.2rem\] {
+    margin-block: -0.2rem !important;
   }
   .my-\[2\.1875rem\] {
     margin-block: 2.1875rem !important;
@@ -712,11 +732,11 @@
   .h-\[3\.125rem\] {
     height: 3.125rem !important;
   }
-  .h-\[11px\] {
-    height: 11px !important;
-  }
   .h-\[120px\] {
     height: 120px !important;
+  }
+  .h-\[var\(--control-height-md\)\] {
+    height: var(--control-height-md) !important;
   }
   .h-auto {
     height: auto !important;
@@ -805,6 +825,9 @@
   .max-w-full {
     max-width: 100% !important;
   }
+  .min-w-\(--thread-content-width\) {
+    min-width: var(--thread-content-width) !important;
+  }
   .min-w-12 {
     min-width: calc(var(--spacing) * 12) !important;
   }
@@ -821,6 +844,9 @@
     flex-shrink: 1 !important;
   }
   .flex-grow {
+    flex-grow: 1 !important;
+  }
+  .grow {
     flex-grow: 1 !important;
   }
   .border-collapse {
@@ -887,6 +913,9 @@
   }
   .flex-col {
     flex-direction: column !important;
+  }
+  .flex-col-reverse {
+    flex-direction: column-reverse !important;
   }
   .flex-row {
     flex-direction: row !important;
@@ -1320,6 +1349,9 @@
   .px-9 {
     padding-inline: calc(var(--spacing) * 9) !important;
   }
+  .px-px {
+    padding-inline: 1px !important;
+  }
   .py-0 {
     padding-block: calc(var(--spacing) * 0) !important;
   }
@@ -1347,6 +1379,9 @@
   .py-16 {
     padding-block: calc(var(--spacing) * 16) !important;
   }
+  .py-\[0\.2rem\] {
+    padding-block: 0.2rem !important;
+  }
   .py-\[10px\] {
     padding-block: 10px !important;
   }
@@ -1364,9 +1399,6 @@
   }
   .pt-\[10rem\] {
     padding-top: 10rem !important;
-  }
-  .pr-2 {
-    padding-right: calc(var(--spacing) * 2) !important;
   }
   .pr-5 {
     padding-right: calc(var(--spacing) * 5) !important;
@@ -1788,6 +1820,10 @@
     --tw-ease: var(--ease-in-out) !important;
     transition-timing-function: var(--ease-in-out) !important;
   }
+  .ease-out {
+    --tw-ease: var(--ease-out) !important;
+    transition-timing-function: var(--ease-out) !important;
+  }
   .outline-none {
     --tw-outline-style: none !important;
     outline-style: none !important;
@@ -1837,15 +1873,33 @@
       line-height: var(--tw-leading, var(--text-base--line-height)) !important;
     }
   }
+  .\*\:text-sm {
+    :is(& > *) {
+      font-size: var(--text-sm) !important;
+      line-height: var(--tw-leading, var(--text-sm--line-height)) !important;
+    }
+  }
   .\*\:text-\[0\.9375rem\] {
     :is(& > *) {
       font-size: 0.9375rem !important;
+    }
+  }
+  .\*\:leading-6 {
+    :is(& > *) {
+      --tw-leading: calc(var(--spacing) * 6) !important;
+      line-height: calc(var(--spacing) * 6) !important;
     }
   }
   .\*\:leading-7 {
     :is(& > *) {
       --tw-leading: calc(var(--spacing) * 7) !important;
       line-height: calc(var(--spacing) * 7) !important;
+    }
+  }
+  .\*\:font-bold {
+    :is(& > *) {
+      --tw-font-weight: var(--font-weight-bold) !important;
+      font-weight: var(--font-weight-bold) !important;
     }
   }
   .\*\:text-\[\#0F0F0F\] {
@@ -1856,6 +1910,11 @@
   .\*\:text-\[\#999\] {
     :is(& > *) {
       color: #999 !important;
+    }
+  }
+  .\*\:text-gray-600 {
+    :is(& > *) {
+      color: #999999 !important;
     }
   }
   .group-hover\:text-accent {
