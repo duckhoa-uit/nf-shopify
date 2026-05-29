@@ -103,6 +103,16 @@ details[open].menu-opening > .menu-drawer__submenu {
   padding-bottom: 2.5rem;
 }
 
+/* Reset and pad the root <ul class="list-menu"> inside the drawer only.
+   The global .list-menu class is shared with desktop mega menu, header
+   localization disclosures, and footer — so we scope here to avoid
+   regressing those layouts. */
+.menu-drawer .list-menu {
+  list-style: none;
+  padding: 0 1.5rem;
+  margin: 1.25rem 0;
+}
+
 .js .menu-drawer__menu li {
   margin-bottom: 0.2rem;
 }
