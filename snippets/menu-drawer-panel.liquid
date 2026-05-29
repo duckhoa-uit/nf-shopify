@@ -38,6 +38,12 @@
 
     <div class="menu-drawer__grid">
       {%- for childlink in link.links -%}
+        {%- comment -%}
+          Skip the merchant-authored "All <category>" tile (its URL matches
+          the parent link's URL). On mobile we render that as the underlined
+          CTA at the bottom of the panel instead, to avoid duplication.
+        {%- endcomment -%}
+        {%- if childlink.url == link.url -%}{%- continue -%}{%- endif -%}
         {%- if childlink.links == blank -%}
           <a
             id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
@@ -77,6 +83,11 @@
 
                 <div class="menu-drawer__grid">
                   {%- for grandchild in childlink.links -%}
+                    {%- comment -%}
+                      Same as L2: skip the "All <subcategory>" tile so only
+                      the bottom CTA links to the parent collection.
+                    {%- endcomment -%}
+                    {%- if grandchild.url == childlink.url -%}{%- continue -%}{%- endif -%}
                     <a
                       id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchild.handle }}"
                       href="{{ grandchild.url }}"

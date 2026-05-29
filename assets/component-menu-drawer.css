@@ -97,6 +97,9 @@ details[open].menu-opening > .menu-drawer__submenu {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  /* Breathing room below the "All …" CTA so it never sits flush against
+     the bottom edge of the viewport and stays comfortably tappable. */
+  padding-bottom: 2.5rem;
 }
 
 .js .menu-drawer__menu li {
@@ -351,7 +354,8 @@ details[open].menu-opening > .menu-drawer__submenu {
   display: block;
   text-align: center;
   padding: 0.5rem;
-  margin: 0 1.5rem;
+  /* Separate the CTA from the last row of tiles above it. */
+  margin: 2rem 1.5rem 0;
   font-weight: 700;
   font-size: 1.25rem;
   line-height: 1.5;
