@@ -71,16 +71,6 @@
                   {%- endif -%}
                 </a>
               </p>
-
-              <p class="contact-partnership__phone">
-                <a href="tel:{% if section.settings.contact_phone != blank %}{{ section.settings.contact_phone }}{% else %}{{ settings.contact_phone }}{% endif %}">
-                  {%- if section.settings.contact_phone != blank -%}
-                    {{ section.settings.contact_phone | escape }}
-                  {%- else -%}
-                    {{ settings.contact_phone | escape }}
-                  {%- endif -%}
-                </a>
-              </p>
             </div>
           </div>
         </div>
