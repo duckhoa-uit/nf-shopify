@@ -106,6 +106,10 @@ if (!customElements.get('localization-form')) {
       }
 
       onItemClick(event) {
+        if (event.currentTarget.dataset.externalMarket === 'true') {
+          this.hidePanel();
+          return;
+        }
         event.preventDefault();
         const form = this.querySelector('form');
         this.elements.input.value = event.currentTarget.dataset.value;
