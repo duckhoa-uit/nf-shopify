@@ -331,11 +331,17 @@
               </div>
             {%- endfor -%}
 
-            {%- if section.settings.enable_country_selector
-                   and localization.available_countries.size > 1
-                   or section.settings.enable_language_selector
-                   and localization.available_languages.size > 1
+            {%- liquid
+              assign show_country = false
+              if section.settings.enable_country_selector and localization.available_countries.size > 1
+                assign show_country = true
+              endif
+              assign show_language = false
+              if section.settings.enable_language_selector and localization.available_languages.size > 1
+                assign show_language = true
+              endif
             -%}
+            {%- if show_country or show_language -%}
               <div
                 class="footer-block footer__localization{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                 data-cascade
