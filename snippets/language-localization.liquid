@@ -12,6 +12,7 @@
     assign on_external_market = true
   endif
   assign override_url = settings.cross_market_home_url | strip
+  assign override_default_iso = settings.cross_market_home_default_iso | strip | downcase
 -%}
 
 <div class="disclosure">
@@ -37,10 +38,19 @@
           if is_override
             assign override_base = override_url | split: '?' | first | split: '#' | first
             assign last_char = override_base | slice: -1
-            if last_char == '/'
-              assign override_target = override_base | append: language.iso_code | append: '/'
+            assign lang_iso_lower = language.iso_code | downcase
+            if override_default_iso != blank and lang_iso_lower == override_default_iso
+              if last_char == '/'
+                assign override_target = override_base
+              else
+                assign override_target = override_base | append: '/'
+              endif
             else
-              assign override_target = override_base | append: '/' | append: language.iso_code | append: '/'
+              if last_char == '/'
+                assign override_target = override_base | append: language.iso_code | append: '/'
+              else
+                assign override_target = override_base | append: '/' | append: language.iso_code | append: '/'
+              endif
             endif
           endif
         -%}
