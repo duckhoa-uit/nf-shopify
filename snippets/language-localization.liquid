@@ -5,6 +5,14 @@
     - localPosition: pass in the position in which the form is coming up to create specific IDs
 {%- endcomment -%}
 
+{%- liquid
+  assign on_external_market = false
+  if settings.cross_market_host_match != blank and request.host contains settings.cross_market_host_match
+    assign on_external_market = true
+  endif
+  assign override_url = settings.cross_market_home_url
+-%}
+
 <div class="disclosure">
   <button
     type="button"
@@ -19,16 +27,28 @@
   <div class="disclosure__list-wrapper language-selector" hidden>
     <ul id="{{ localPosition }}List" role="list" class="disclosure__list list-unstyled">
       {%- for language in localization.available_languages -%}
-        <li class="disclosure__item" tabindex="-1">
+        {%- liquid
+          assign is_override = false
+          if on_external_market and override_url != blank and language.iso_code != localization.language.iso_code
+            assign is_override = true
+          endif
+        -%}
+        <li class="disclosure__item{% if is_override %} disclosure__item--external{% endif %}" tabindex="-1">
           <a
             class="link link--text disclosure__link caption-large focus-inset"
-            href="#"
+            {% if is_override -%}
+              href="{{ override_url }}"
+              rel="alternate"
+              data-external-market="true"
+            {%- else -%}
+              href="#"
+              data-value="{{ language.iso_code }}"
+            {%- endif %}
             hreflang="{{ language.iso_code }}"
             lang="{{ language.iso_code }}"
             {% if language.iso_code == localization.language.iso_code %}
               aria-current="true"
             {% endif %}
-            data-value="{{ language.iso_code }}"
           >
             <span
               {% if language.iso_code != localization.language.iso_code %}
@@ -42,32 +62,22 @@
         </li>
       {%- endfor -%}
       {%- liquid
-        assign on_external_market = false
-        if settings.cross_market_host_match != blank and request.host contains settings.cross_market_host_match
-          assign on_external_market = true
-        endif
-        if on_external_market
-          assign extra_url = settings.cross_market_home_url
-          assign extra_label = settings.cross_market_home_label
-          assign extra_iso = settings.cross_market_home_iso
-        else
-          assign extra_url = settings.cross_market_language_url
-          assign extra_label = settings.cross_market_language_label
-          assign extra_iso = settings.cross_market_language_iso
-        endif
-        assign show_extra = false
-        if extra_url != blank and extra_label != blank
-          assign show_extra = true
+        assign append_url = settings.cross_market_language_url
+        assign append_label = settings.cross_market_language_label
+        assign append_iso = settings.cross_market_language_iso
+        assign show_append = false
+        if append_url != blank and append_label != blank and on_external_market == false
+          assign show_append = true
         endif
       -%}
-      {%- if show_extra -%}
+      {%- if show_append -%}
         <li class="disclosure__item disclosure__item--external" tabindex="-1">
           <a
             class="link link--text disclosure__link caption-large focus-inset"
-            href="{{ extra_url }}"
-            {% if extra_iso != blank %}
-              hreflang="{{ extra_iso }}"
-              lang="{{ extra_iso }}"
+            href="{{ append_url }}"
+            {% if append_iso != blank %}
+              hreflang="{{ append_iso }}"
+              lang="{{ append_iso }}"
             {% endif %}
             rel="alternate"
             data-external-market="true"
@@ -75,7 +85,7 @@
             <span class="visibility-hidden">
               {{- 'icon-checkmark.svg' | inline_asset_content -}}
             </span>
-            <span>{{ extra_label | capitalize }}</span>
+            <span>{{ append_label | capitalize }}</span>
           </a>
         </li>
       {%- endif -%}
