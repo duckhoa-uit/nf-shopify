@@ -547,7 +547,7 @@ html,body{margin:0;padding:0}
  var locale=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
  var isBG=(locale==='bg');
  var isDefault=(locale==='en');
- document.querySelectorAll('a[href*="shop.northfinder.com"]').forEach(function(a){
+ document.querySelectorAll('a[href*="shop.northfinder.com"]:not([data-external-market])').forEach(function(a){
  var h=a.getAttribute('href');
  if(!h)return;
  if(isBG){
