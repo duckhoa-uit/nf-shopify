@@ -1552,5 +1552,38 @@
         "default": false
       }
     ]
+  },
+  {
+    "name": "Cross-market language link",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Adds an extra entry to the language selector that links to a separate Shopify Markets instance (different domain). Use when a language lives on its own market/domain (e.g., Bulgarian on northfinder.bg) and should still be discoverable from the language picker."
+      },
+      {
+        "type": "url",
+        "id": "cross_market_language_url",
+        "label": "External market URL"
+      },
+      {
+        "type": "text",
+        "id": "cross_market_language_label",
+        "label": "Display label",
+        "info": "Endonym shown in the language list (e.g. Български)."
+      },
+      {
+        "type": "text",
+        "id": "cross_market_language_iso",
+        "label": "Language ISO code",
+        "info": "Two-letter code used for hreflang/lang attributes (e.g. bg)."
+      },
+      {
+        "type": "text",
+        "id": "cross_market_host_match",
+        "label": "External market host",
+        "info": "Hostname of the external market (e.g. northfinder.bg). Used to hide the link when the visitor is already on that market.",
+        "default": "northfinder.bg"
+      }
+    ]
   }
 ]
