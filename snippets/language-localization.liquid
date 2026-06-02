@@ -42,26 +42,32 @@
         </li>
       {%- endfor -%}
       {%- liquid
-        assign cross_market_url = settings.cross_market_language_url
-        assign cross_market_label = settings.cross_market_language_label
-        assign cross_market_iso = settings.cross_market_language_iso
-        assign cross_market_host = settings.cross_market_host_match
-        assign show_cross_market = false
-        if cross_market_url != blank and cross_market_label != blank
-          assign show_cross_market = true
-          if cross_market_host != blank and request.host contains cross_market_host
-            assign show_cross_market = false
-          endif
+        assign on_external_market = false
+        if settings.cross_market_host_match != blank and request.host contains settings.cross_market_host_match
+          assign on_external_market = true
+        endif
+        if on_external_market
+          assign extra_url = settings.cross_market_home_url
+          assign extra_label = settings.cross_market_home_label
+          assign extra_iso = settings.cross_market_home_iso
+        else
+          assign extra_url = settings.cross_market_language_url
+          assign extra_label = settings.cross_market_language_label
+          assign extra_iso = settings.cross_market_language_iso
+        endif
+        assign show_extra = false
+        if extra_url != blank and extra_label != blank
+          assign show_extra = true
         endif
       -%}
-      {%- if show_cross_market -%}
+      {%- if show_extra -%}
         <li class="disclosure__item disclosure__item--external" tabindex="-1">
           <a
             class="link link--text disclosure__link caption-large focus-inset"
-            href="{{ cross_market_url }}"
-            {% if cross_market_iso != blank %}
-              hreflang="{{ cross_market_iso }}"
-              lang="{{ cross_market_iso }}"
+            href="{{ extra_url }}"
+            {% if extra_iso != blank %}
+              hreflang="{{ extra_iso }}"
+              lang="{{ extra_iso }}"
             {% endif %}
             rel="alternate"
             data-external-market="true"
@@ -69,7 +75,7 @@
             <span class="visibility-hidden">
               {{- 'icon-checkmark.svg' | inline_asset_content -}}
             </span>
-            <span>{{ cross_market_label | capitalize }}</span>
+            <span>{{ extra_label | capitalize }}</span>
           </a>
         </li>
       {%- endif -%}
