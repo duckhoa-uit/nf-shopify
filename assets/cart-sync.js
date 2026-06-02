@@ -305,29 +305,44 @@ class CartSyncManager {
   async #refreshMainCartSection() {
     try {
       const mainCart = document.getElementById('main-cart-items');
-      const sectionId = mainCart?.dataset?.id;
-      if (!mainCart || !sectionId) {
-        console.warn('[cart-sync] cannot refresh section, missing main-cart-items');
+      // Locate the <cart-items> wrapper that lives in main-cart-items.liquid
+      const liveCartItems = document.querySelector('cart-items');
+      const sectionId = mainCart?.dataset?.id || liveCartItems?.closest('[id^="shopify-section-"]')?.id?.replace(/^shopify-section-/, '');
+      if (!sectionId) {
+        console.warn('[cart-sync] cannot refresh section, missing section id');
         return false;
       }
       const url = `${routes.cart_url}?section_id=${sectionId}`;
       const html = await fetch(url, { headers: { Accept: 'text/html' } }).then(r => r.text());
       const newDoc = new DOMParser().parseFromString(html, 'text/html');
-      // Prefer the inner contents region (cart populated state).
-      // Fall back to replacing the whole section (cart empty state has no .js-contents).
+
+      // Preferred: replace the inner .js-contents region when cart is populated
+      // (matches the target Dawn uses in cart.js getSectionsToRender).
       const newContents = newDoc.querySelector('#main-cart-items .js-contents');
-      const liveContents = mainCart.querySelector('.js-contents');
+      const liveContents = mainCart?.querySelector('.js-contents');
       if (newContents && liveContents) {
         liveContents.innerHTML = newContents.innerHTML;
         console.log('[cart-sync] refreshed main-cart-items section (contents)');
         return true;
       }
+
+      // Fallback 1: replace the <cart-items> custom element (covers empty cart
+      // state whose markup does not contain #main-cart-items).
+      const newCartItems = newDoc.querySelector('cart-items');
+      if (newCartItems && liveCartItems) {
+        liveCartItems.outerHTML = newCartItems.outerHTML;
+        console.log('[cart-sync] refreshed main-cart-items section (cart-items)');
+        return true;
+      }
+
+      // Fallback 2: replace #main-cart-items if present (legacy structure).
       const newMainCart = newDoc.querySelector('#main-cart-items');
-      if (newMainCart) {
+      if (newMainCart && mainCart) {
         mainCart.innerHTML = newMainCart.innerHTML;
         console.log('[cart-sync] refreshed main-cart-items section (full)');
         return true;
       }
+
       console.warn('[cart-sync] section response missing main-cart-items');
       return false;
     } catch (error) {
