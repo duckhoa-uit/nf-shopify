@@ -353,11 +353,15 @@ class CartSyncManager {
 
   #showCartOutOfSyncToast() {
     try {
+      const message =
+        window.theme?.strings?.cart_outdated ||
+        window.theme?.strings?.cart_updated_review ||
+        'Your cart has changed. Please review and try again.';
       const notification = document.createElement('div');
       notification.className = 'cart-sync-notification';
       notification.innerHTML = `
         <div class="cart-sync-notification__content">
-          <span>${window.theme?.strings?.cart_outdated || 'Your cart has changed. Please review and try again.'}</span>
+          <span>${message}</span>
         </div>
       `;
       document.body.appendChild(notification);
