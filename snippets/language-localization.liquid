@@ -6,11 +6,12 @@
 {%- endcomment -%}
 
 {%- liquid
+  assign cross_market_host_match = settings.cross_market_host_match | strip
   assign on_external_market = false
-  if settings.cross_market_host_match != blank and request.host contains settings.cross_market_host_match
+  if cross_market_host_match != blank and request.host contains cross_market_host_match
     assign on_external_market = true
   endif
-  assign override_url = settings.cross_market_home_url
+  assign override_url = settings.cross_market_home_url | strip
 -%}
 
 <div class="disclosure">
@@ -32,12 +33,22 @@
           if on_external_market and override_url != blank and language.iso_code != localization.language.iso_code
             assign is_override = true
           endif
+          assign override_target = override_url
+          if is_override
+            assign override_base = override_url | split: '?' | first | split: '#' | first
+            assign last_char = override_base | slice: -1
+            if last_char == '/'
+              assign override_target = override_base | append: language.iso_code | append: '/'
+            else
+              assign override_target = override_base | append: '/' | append: language.iso_code | append: '/'
+            endif
+          endif
         -%}
         <li class="disclosure__item{% if is_override %} disclosure__item--external{% endif %}" tabindex="-1">
           <a
             class="link link--text disclosure__link caption-large focus-inset"
             {% if is_override -%}
-              href="{{ override_url }}"
+              href="{{ override_target }}"
               rel="alternate"
               data-external-market="true"
             {%- else -%}
@@ -62,9 +73,9 @@
         </li>
       {%- endfor -%}
       {%- liquid
-        assign append_url = settings.cross_market_language_url
-        assign append_label = settings.cross_market_language_label
-        assign append_iso = settings.cross_market_language_iso
+        assign append_url = settings.cross_market_language_url | strip
+        assign append_label = settings.cross_market_language_label | strip
+        assign append_iso = settings.cross_market_language_iso | strip
         assign show_append = false
         if append_url != blank and append_label != blank and on_external_market == false
           assign show_append = true
