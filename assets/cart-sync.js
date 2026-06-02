@@ -644,7 +644,7 @@ class CartSyncManager {
         <div class="cart-sync-modal__actions">
           <button class="button button--secondary" data-action="cancel">${window.theme?.strings?.cancel_checkout || 'Cancel Checkout'}</button>
         </div>
-      `, { ariaLabel: 'Stock validation' });
+      `, { ariaLabel: window.theme?.strings?.stock_unavailable || 'Stock Unavailable' });
 
       const closeModal = () => {
         resolve(false);
@@ -709,7 +709,7 @@ class CartSyncManager {
           <button class="button button--secondary" data-action="cancel">${window.theme?.strings?.cancel_checkout || 'Cancel Checkout'}</button>
           <button class="button button--primary" data-action="proceed">${window.theme?.strings?.continue_anyway || 'Continue Anyway'}</button>
         </div>
-      `, { ariaLabel: 'Stock validation warning' });
+      `, { ariaLabel: window.theme?.strings?.stock_validation_warning || 'Stock Validation Warning' });
 
       const closeModal = (result) => {
         resolve(result);
@@ -735,7 +735,7 @@ class CartSyncManager {
           <button class="button button--secondary" data-action="cancel">${window.theme?.strings?.review_cart || 'Review Cart'}</button>
           <button class="button button--primary" data-action="proceed">${window.theme?.strings?.continue_to_checkout || 'Continue to Checkout'}</button>
         </div>
-      `, { ariaLabel: 'Cart updated notification' });
+      `, { ariaLabel: window.theme?.strings?.cart_updated || 'Cart Updated' });
 
       const closeModal = (result) => {
         resolve(result);
