@@ -436,16 +436,13 @@
                   </svg>
                   <div class="date-delivery text-sm text-gray-950">
                     {%- if product.available -%}
-                      {{ 'products.product.delivery_info.in_stock' | t }}
+                      {%- if block.settings.delivery_days_range != blank -%}
+                        {{ 'products.product.delivery_info.in_stock_html' | t: days: block.settings.delivery_days_range }}
+                      {%- else -%}
+                        {{ 'products.product.delivery_info.in_stock' | t }}
+                      {%- endif -%}
                     {%- else -%}
                       {{ 'products.product.delivery_info.out_of_stock' | t }}
-                    {%- endif -%}
-                    {%- if product.available and block.settings.delivery_days_range != blank -%}
-                      - {{ 'products.product.delivery_info.delivery_time_prefix' | t }}
-                      <b>
-                        {{- block.settings.delivery_days_range }}
-                        {{ 'products.product.delivery_info.business_days' | t -}}
-                      </b>
                     {%- endif -%}
                   </div>
                 </div>
