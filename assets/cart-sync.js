@@ -283,6 +283,72 @@ class CartSyncManager {
   /**
    * Validate cart before checkout (public API)
    */
+  /**
+   * Read item keys currently rendered in the cart form's update inputs.
+   * Returns [] if no cart form is on the page (e.g., user came from a non-cart page).
+   */
+  #readDomCartKeys() {
+    const cartForm = document.getElementById('cart');
+    if (!cartForm) return null;
+    const keys = [];
+    for (const el of cartForm.querySelectorAll('[name^="updates["]')) {
+      const match = el.name.match(/^updates\[(.+)\]$/);
+      if (match && match[1]) keys.push(match[1]);
+    }
+    return keys;
+  }
+
+  /**
+   * Pattern C: Re-render the main cart items section using Section Rendering API
+   * so the form picks up fresh `updates[key]` inputs that match server cart.
+   */
+  async #refreshMainCartSection() {
+    try {
+      const mainCart = document.getElementById('main-cart-items');
+      const sectionId = mainCart?.dataset?.id;
+      if (!mainCart || !sectionId) {
+        console.warn('[cart-sync] cannot refresh section, missing main-cart-items');
+        return false;
+      }
+      const url = `${routes.cart_url}?section_id=${sectionId}`;
+      const html = await fetch(url, { headers: { Accept: 'text/html' } }).then(r => r.text());
+      const newDoc = new DOMParser().parseFromString(html, 'text/html');
+      // Replace the .js-contents region (same target as Dawn's cart.js getSectionsToRender)
+      const newContents = newDoc.querySelector('#main-cart-items .js-contents');
+      const liveContents = mainCart.querySelector('.js-contents');
+      if (newContents && liveContents) {
+        liveContents.innerHTML = newContents.innerHTML;
+        console.log('[cart-sync] refreshed main-cart-items section');
+        return true;
+      }
+      console.warn('[cart-sync] section response missing .js-contents');
+      return false;
+    } catch (error) {
+      console.warn('[cart-sync] refresh section failed', error);
+      return false;
+    }
+  }
+
+  #showCartOutOfSyncToast() {
+    try {
+      const notification = document.createElement('div');
+      notification.className = 'cart-sync-notification';
+      notification.innerHTML = `
+        <div class="cart-sync-notification__content">
+          <span>${window.theme?.strings?.cart_outdated || 'Your cart has changed. Please review and try again.'}</span>
+        </div>
+      `;
+      document.body.appendChild(notification);
+      requestAnimationFrame(() => notification.classList.add('cart-sync-notification--visible'));
+      setTimeout(() => {
+        notification.classList.remove('cart-sync-notification--visible');
+        setTimeout(() => notification.remove(), 300);
+      }, 4000);
+    } catch (_) {
+      // Non-critical
+    }
+  }
+
   async validateBeforeCheckout() {
     if (this.#isValidatingCheckout) return true;
 
@@ -307,6 +373,32 @@ class CartSyncManager {
           title: i.title
         }))
       });
+
+      // Pattern B: detect stale DOM cart vs server cart.
+      // Causes include: bfcache restore, multi-domain Markets cookie reset,
+      // GA cross-domain navigation, or another tab modifying the cart.
+      const domKeys = this.#readDomCartKeys();
+      if (Array.isArray(domKeys)) {
+        const serverKeys = new Set(serverCart.items.map(i => i.key));
+        const staleKeys = domKeys.filter(k => !serverKeys.has(k));
+        const missingFromDom = [...serverKeys].filter(k => !domKeys.includes(k));
+        if (staleKeys.length > 0 || missingFromDom.length > 0 || domKeys.length === 0 && serverCart.item_count === 0) {
+          // Real mismatch only if there is a non-empty difference
+          if (staleKeys.length > 0 || missingFromDom.length > 0) {
+            console.warn('[cart-sync] DOM cart out of sync with server', {
+              domKeys,
+              serverKeys: [...serverKeys],
+              staleKeys,
+              missingFromDom
+            });
+            // Pattern C: re-render the section to pick up correct keys
+            const refreshed = await this.#refreshMainCartSection();
+            this.#showCartOutOfSyncToast();
+            // Abort checkout: user must click again with fresh form
+            return false;
+          }
+        }
+      }
 
       try {
         const stockValidation = await this.#validateStock(serverCart);
