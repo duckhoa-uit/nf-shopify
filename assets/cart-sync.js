@@ -313,15 +313,22 @@ class CartSyncManager {
       const url = `${routes.cart_url}?section_id=${sectionId}`;
       const html = await fetch(url, { headers: { Accept: 'text/html' } }).then(r => r.text());
       const newDoc = new DOMParser().parseFromString(html, 'text/html');
-      // Replace the .js-contents region (same target as Dawn's cart.js getSectionsToRender)
+      // Prefer the inner contents region (cart populated state).
+      // Fall back to replacing the whole section (cart empty state has no .js-contents).
       const newContents = newDoc.querySelector('#main-cart-items .js-contents');
       const liveContents = mainCart.querySelector('.js-contents');
       if (newContents && liveContents) {
         liveContents.innerHTML = newContents.innerHTML;
-        console.log('[cart-sync] refreshed main-cart-items section');
+        console.log('[cart-sync] refreshed main-cart-items section (contents)');
         return true;
       }
-      console.warn('[cart-sync] section response missing .js-contents');
+      const newMainCart = newDoc.querySelector('#main-cart-items');
+      if (newMainCart) {
+        mainCart.innerHTML = newMainCart.innerHTML;
+        console.log('[cart-sync] refreshed main-cart-items section (full)');
+        return true;
+      }
+      console.warn('[cart-sync] section response missing main-cart-items');
       return false;
     } catch (error) {
       console.warn('[cart-sync] refresh section failed', error);
