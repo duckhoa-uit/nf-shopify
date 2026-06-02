@@ -179,6 +179,16 @@ class CartSyncManager {
       id: item.variant_id.toString()
     }));
 
+    console.log('[cart-sync] validateStock request', {
+      variants,
+      cartItems: cartData.items.map(i => ({
+        key: i.key,
+        variant_id: i.variant_id,
+        sku: i.sku,
+        quantity: i.quantity
+      }))
+    });
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -190,6 +200,8 @@ class CartSyncManager {
         signal: controller.signal
       });
 
+      console.log('[cart-sync] validateStock response status', response.status);
+
       clearTimeout(timeoutId);
 
       if (!response.ok) {
@@ -197,6 +209,7 @@ class CartSyncManager {
       }
 
       const result = await response.json();
+      console.log('[cart-sync] validateStock body', result);
       const stockIssues = [];
 
       if (result.data && Array.isArray(result.data)) {
@@ -213,9 +226,15 @@ class CartSyncManager {
         }
       }
 
+      console.log('[cart-sync] validateStock result', {
+        success: stockIssues.length === 0,
+        stockIssues
+      });
+
       return { success: stockIssues.length === 0, stockIssues };
     } catch (error) {
       clearTimeout(timeoutId);
+      console.warn('[cart-sync] validateStock error', error);
       if (error.name === 'AbortError') {
         throw new Error('Stock validation timed out');
       }
@@ -268,6 +287,7 @@ class CartSyncManager {
     if (this.#isValidatingCheckout) return true;
 
     this.#isValidatingCheckout = true;
+    console.log('[cart-sync] validateBeforeCheckout start');
 
     try {
       this.#showCheckoutLoading();
@@ -276,6 +296,17 @@ class CartSyncManager {
       if (!response.ok) throw new Error('Failed to fetch cart for validation');
 
       const serverCart = await response.json();
+      console.log('[cart-sync] serverCart snapshot', {
+        token: serverCart.token,
+        item_count: serverCart.item_count,
+        items: serverCart.items.map(i => ({
+          key: i.key,
+          variant_id: i.variant_id,
+          sku: i.sku,
+          quantity: i.quantity,
+          title: i.title
+        }))
+      });
 
       try {
         const stockValidation = await this.#validateStock(serverCart);
@@ -311,8 +342,10 @@ class CartSyncManager {
         await this.#updateCartUI(serverCart);
       }
 
+      console.log('[cart-sync] validateBeforeCheckout success');
       return true;
     } catch (error) {
+      console.warn('[cart-sync] validateBeforeCheckout failed (proceeding anyway)', error);
       return true;
     } finally {
       this.#hideCheckoutLoading();

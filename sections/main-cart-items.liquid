@@ -772,11 +772,19 @@
       // Only prevent default if it's a quantity change
       // Allow checkout button to work normally
       if (event.submitter && event.submitter.name === 'checkout') {
+        console.log('[cart-checkout] submit intercepted', {
+          formAction: cartForm.action,
+          formId: cartForm.id,
+          submitter: event.submitter && event.submitter.name,
+          originalEntries: [...new FormData(cartForm).entries()]
+        });
+
         // Validate cart before checkout if cart sync is available
         if (window.cartSyncManager) {
           event.preventDefault();
 
           const isValid = await window.cartSyncManager.validateBeforeCheckout();
+          console.log('[cart-checkout] validateBeforeCheckout returned', isValid);
           if (isValid) {
             // Proceed with checkout by creating a new form to avoid event listeners
             event.submitter.disabled = true;
@@ -789,12 +797,14 @@
 
             // Copy all form data
             const formData = new FormData(cartForm);
+            const copiedEntries = [];
             for (let [key, value] of formData.entries()) {
               const input = document.createElement('input');
               input.type = 'hidden';
               input.name = key;
               input.value = value;
               newForm.appendChild(input);
+              copiedEntries.push([key, value]);
             }
 
             // Add checkout parameter
@@ -803,6 +813,12 @@
             checkoutInput.name = 'checkout';
             checkoutInput.value = 'checkout';
             newForm.appendChild(checkoutInput);
+
+            console.log('[cart-checkout] submitting new form', {
+              action: newForm.action,
+              entries: copiedEntries,
+              extra: { checkout: 'checkout' }
+            });
 
             document.body.appendChild(newForm);
             newForm.submit();
