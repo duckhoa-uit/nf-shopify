@@ -436,11 +436,7 @@
                   </svg>
                   <div class="date-delivery text-sm text-gray-950">
                     {%- if product.available -%}
-                      {%- if block.settings.delivery_days_range != blank -%}
-                        {{ 'products.product.delivery_info.in_stock_html' | t: days: block.settings.delivery_days_range }}
-                      {%- else -%}
-                        {{ 'products.product.delivery_info.in_stock' | t }}
-                      {%- endif -%}
+                      {{ 'products.product.delivery_info.in_stock' | t }}
                     {%- else -%}
                       {{ 'products.product.delivery_info.out_of_stock' | t }}
                     {%- endif -%}
@@ -1036,15 +1032,7 @@
       "type": "delivery_info",
       "name": "t:sections.main-product.blocks.delivery_info.name",
       "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "delivery_days_range",
-          "default": "2-3",
-          "label": "t:sections.main-product.blocks.delivery_info.settings.delivery_days_range.label",
-          "info": "t:sections.main-product.blocks.delivery_info.settings.delivery_days_range.info"
-        }
-      ]
+      "settings": []
     },
     {
       "type": "buy_buttons",
