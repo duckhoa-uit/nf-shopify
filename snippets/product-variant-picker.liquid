@@ -273,36 +273,61 @@
         {%- endif -%}
 
         {%- comment -%}
-          Render the standard fieldset for ALL size products (including single-size).
-          A single-size variant still gets its pill so buyers can see which size is available.
-          The radio input fully replaces the legacy `data-single-size-input` hidden input;
-          variant-selects.js reads selected option values from `fieldset input:checked`.
+          Single-size products (e.g. OSO-UNI / one-size only): don't render the size
+          selector — buyers shouldn't have to "choose" a size. Render a hidden input
+          carrying the option value so the form & variant-selects still submit it.
+          variant-selects.js reads selected option values from `input[data-single-size-input]`.
         {%- endcomment -%}
-        <fieldset class="js product-form__input product-form__input--pill product-form__input--pill-size" data-option-type="size" data-option-position="{{ option.position }}">
-          <div class="flex items-center justify-between mb-2">
-            <legend class="form__label m-0">{{ option.name }}</legend>
-            {%- unless is_scarfs -%}
-              <button
-                type="button"
-                class="size-fit-button flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                data-size-fit-modal
-              >
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                </svg>
-                {{ 'products.product.size_guide_fit_recommender' | t }}
-              </button>
-            {%- endunless -%}
-          </div>
-          <div class="grid grid-cols-5 gap-5">
-            {% render 'product-variant-options',
-              product: product,
-              option: option,
-              block: block,
-              picker_type: picker_type
-            %}
-          </div>
-        </fieldset>
+        {%- assign is_single_size_product = false -%}
+        {%- if option.values.size == 1 -%}
+          {%- assign is_single_size_product = true -%}
+        {%- endif -%}
+
+        {%- if is_single_size_product -%}
+          {%- assign single_size_value = option.values.first -%}
+          {%- assign single_size_input_id = section.id | append: '-' | append: option.position | append: '-single-size' -%}
+          <input
+            type="hidden"
+            id="{{ single_size_input_id }}"
+            name="options[{{ option.name | escape }}]"
+            value="{{ single_size_value | escape }}"
+            form="{{ product_form_id }}"
+            data-single-size-input
+            data-option-type="size"
+            data-option-position="{{ option.position }}"
+            data-option-value-id="{{ single_size_value.id }}"
+            data-size-value="{{ single_size_value | escape }}"
+          >
+          <span class="visually-hidden" aria-live="polite">
+            {{ option.name }}: {{ single_size_value }}
+          </span>
+        {%- else -%}
+          <fieldset class="js product-form__input product-form__input--pill product-form__input--pill-size" data-option-type="size" data-option-position="{{ option.position }}">
+            <div class="flex items-center justify-between mb-2">
+              <legend class="form__label m-0">{{ option.name }}</legend>
+              {%- unless is_scarfs -%}
+                <button
+                  type="button"
+                  class="size-fit-button flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                  data-size-fit-modal
+                >
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                  </svg>
+                  {{ 'products.product.size_guide_fit_recommender' | t }}
+                </button>
+              {%- endunless -%}
+            </div>
+            <div class="grid grid-cols-5 gap-5">
+              {% render 'product-variant-options',
+                product: product,
+                option: option,
+                block: block,
+                picker_type: picker_type
+              %}
+            </div>
+          </fieldset>
+        {%- endif -%}
       {%- elsif is_color_option -%}
         <fieldset class="js product-form__input product-form__input--swatch product-form__input--pill-color" data-option-type="color" data-option-position="{{ option.position }}">
           <legend class="form__label">
