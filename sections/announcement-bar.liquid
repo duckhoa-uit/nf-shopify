@@ -1,10 +1,10 @@
 {%- liquid
   assign show_ab_country = false
   assign show_ab_language = false
-  if section.settings.enable_country_selector and localization.available_countries.size > 1
+  if settings.show_country_selector and localization.available_countries.size > 1
     assign show_ab_country = true
   endif
-  if section.settings.enable_language_selector and localization.available_languages.size > 1
+  if settings.show_language_selector and localization.available_languages.size > 1
     assign show_ab_language = true
   endif
 -%}
@@ -138,6 +138,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  @media screen and (min-width: 990px) {
+    .announcement-bar-section .announcement-bar__message {
+      text-align: left;
+    }
   }
   .announcement-bar-section .announcement-bar__link {
     color: inherit;
@@ -423,18 +428,6 @@
       "type": "url",
       "id": "contact_link",
       "label": "Contact Link"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_country_selector",
-      "label": "Enable Country Selector",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_language_selector",
-      "label": "Enable Language Selector",
-      "default": true
     },
     {
       "type": "checkbox",

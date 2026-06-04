@@ -3,6 +3,15 @@
   position: initial;
 }
 
+/* When the drawer is open, lift the header and the announcement bar
+   above any third-party floating elements (e.g. chat widgets sitting
+   at z-index ~100000). The bump is scoped to the open state so resting
+   page stacking is unaffected. */
+body:has(.section-header.menu-open) .section-header,
+body:has(.section-header.menu-open) .announcement-bar-section {
+  z-index: 100001 !important;
+}
+
 .js menu-drawer > details > summary::before,
 .js menu-drawer > details[open]:not(.menu-opening) > summary::before {
   content: "";
