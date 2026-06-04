@@ -93,10 +93,10 @@
 
 </style>
 
-<div class="bg-[#F5F5F5] text-[0.8125rem] leading-[0.875rem] text-secondary-foreground hidden lg:block relative z-30">
+<div class="bg-[#F5F5F5] text-[0.8125rem] leading-[0.875rem] text-secondary-foreground relative z-30">
   <div class="page-width">
-    <nav class="w-full flex flex-row justify-between h-[1.875rem] items-center">
-      <div class="italic flex items-center">
+    <nav class="w-full flex flex-row justify-center lg:justify-between h-[1.875rem] items-center">
+      <div class="italic flex items-center text-center lg:text-left truncate">
         <div class="">
           <ul class="">
             <li>
@@ -113,7 +113,7 @@
           </ul>
         </div>
       </div>
-      <div class="nav_right flex justify-end items-center">
+      <div class="nav_right hidden lg:flex justify-end items-center">
         <div class="flex gap-6 justify-between items-center [&_a]:text-secondary-foreground [&_a]:cursor-pointer">
           {% comment %}
             {% if section.settings.category1_link != blank %}
