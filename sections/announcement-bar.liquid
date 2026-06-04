@@ -159,11 +159,6 @@
             </a>
           </div>
           {% endif %}
-          {% if section.settings.show_register and customer == null %}
-          <div>
-            <a href="{{ routes.account_register_url }}">{{ 'customer.register.title' | t }}</a>
-          </div>
-          {% endif %}
           {% if section.settings.show_login and customer == null %}
           <div>
             <a href="{{ routes.account_login_url }}">{{ 'customer.login_page.sign_in' | t }}</a>
@@ -295,12 +290,6 @@
       "default": true
     },
 
-    {
-      "type": "checkbox",
-      "id": "show_register",
-      "label": "Show Register Link",
-      "default": true
-    },
     {
       "type": "checkbox",
       "id": "show_login",
