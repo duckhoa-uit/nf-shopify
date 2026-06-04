@@ -54,7 +54,7 @@
                         {% render 'menu-link-image', link: link %}
                         <span class="menu-drawer__tile-label">
                           {{ link.title | escape }}
-                          <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                          <span class="svg-wrapper">{{- 'chevron-right.svg' | inline_asset_content -}}</span>
                         </span>
                       </summary>
                       {% render 'menu-drawer-panel', link: link %}
@@ -64,7 +64,7 @@
                       {% render 'menu-link-image', link: link %}
                       <span class="menu-drawer__tile-label">
                         {{ link.title | escape }}
-                        <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                        <span class="svg-wrapper">{{- 'chevron-right.svg' | inline_asset_content -}}</span>
                       </span>
                     </a>
                   {%- endif -%}
@@ -87,7 +87,7 @@
                           <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>
                             {{ link.title | escape }}
                           </a>
-                          <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                          <span class="svg-wrapper">{{- 'chevron-right.svg' | inline_asset_content -}}</span>
                         </summary>
                         {% render 'menu-drawer-panel', link: link %}
                       </details>
@@ -106,22 +106,22 @@
               </ul>
             {%- endif -%}
 
-            <div class="my-[2.1875rem] w-full flex flex-col *:text-gray-600 *:my-0.5 *:leading-6 *:text-sm *:font-bold px-6">
+            <div class="my-[2.1875rem] w-full flex flex-col *:text-gray-600 *:my-0.5 *:leading-6 *:text-md *:font-bold px-6">
               {% if announcement_section.settings.blog_link != blank %}
-                <a href="{{ announcement_section.settings.blog_link }}">
+                <a class="text-base" href="{{ announcement_section.settings.blog_link }}">
                   {{- 'general.navigation.blog' | t | default: 'Blog' -}}
                 </a>
               {% else %}
-                <a href="{{ blog.url | default: '/blogs/news' }}">
+                <a class="text-base" href="{{ blog.url | default: '/blogs/news' }}">
                   {{- 'general.navigation.blog' | t | default: 'Blog' -}}
                 </a>
               {% endif %}
               {% if announcement_section.settings.faq_link != blank %}
-                <a href="{{ announcement_section.settings.faq_link }}">
+                <a class="text-base" href="{{ announcement_section.settings.faq_link }}">
                   {{- 'general.navigation.faq' | t | default: 'FAQ' -}}
                 </a>
               {% else %}
-                <a href="/pages/faq">{{ 'general.navigation.faq' | t | default: 'FAQ' }}</a>
+                <a class="text-base" href="/pages/faq">{{ 'general.navigation.faq' | t | default: 'FAQ' }}</a>
               {% endif %}
             </div>
           </nav>
@@ -133,14 +133,14 @@
               {% if customer %}
                 <a
                   href="{{ routes.account_url }}"
-                  class="button h-[var(--control-height-md)] leading-7 flex items-center justify-center"
+                  class="w-full button h-[var(--control-height-md)] leading-7 flex items-center justify-center"
                 >
                   <span class="svg-wrapper size-5 mr-2">{{ 'icon-account.svg' | inline_asset_content }}</span>
                   {{ 'customer.account.title' | t | default: 'Customer Zone' }}
                 </a>
                 <a
                   href="{{ routes.account_logout_url }}"
-                  class="button h-[var(--control-height-md)] bg-background text-foreground leading-7 flex items-center justify-center"
+                  class="w-full button h-[var(--control-height-md)] bg-background text-foreground leading-7 flex items-center justify-center"
                 >
                   <span class="svg-wrapper size-5 mr-2">{{ 'icon-logout.svg' | inline_asset_content }}</span>
                   {{ 'customer.log_out' | t | default: 'Log out' }}
@@ -148,16 +148,26 @@
               {% else %}
                 <a
                   href="{{ routes.account_login_url }}"
-                  class="button h-[var(--control-height-md)] leading-7 flex items-center justify-center"
+                  class="w-full button h-[var(--control-height-md)] leading-7 flex items-center justify-center"
                 >
                   {{ 'customer.login_page.sign_in' | t | default: 'Login' }}
                 </a>
               {% endif %}
             </div>
 
-            {%- if localization.available_countries or localization.available_languages -%}
+            {%- liquid
+              assign show_drawer_country = false
+              assign show_drawer_language = false
+              if section.settings.enable_country_selector_drawer and localization.available_countries.size > 1
+                assign show_drawer_country = true
+              endif
+              if section.settings.enable_language_selector_drawer and localization.available_languages.size > 1
+                assign show_drawer_language = true
+              endif
+            -%}
+            {%- if show_drawer_country or show_drawer_language -%}
               <div class="menu-drawer__localization header-localization menu-drawer__localization--mobile">
-                {%- if localization.available_countries and localization.available_countries.size > 1 -%}
+                {%- if show_drawer_country -%}
                   <localization-form>
                     {%- form 'localization', id: 'HeaderCountryMobileForm', class: 'localization-form' -%}
                       <div>
@@ -168,9 +178,9 @@
                       </div>
                     {%- endform -%}
                   </localization-form>
-                {% endif %}
+                {%- endif -%}
 
-                {%- if localization.available_languages and localization.available_languages.size > 1 -%}
+                {%- if show_drawer_language -%}
                   <localization-form>
                     {%- form 'localization', id: 'HeaderLanguageMobileForm', class: 'localization-form' -%}
                       <div>
