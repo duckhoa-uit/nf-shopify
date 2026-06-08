@@ -245,3 +245,46 @@ h2,
     display: none !important;
   }
 }
+
+/* Header icon sizing/visibility - Critical to prevent FOUC of inline SVGs (close, hamburger, search) before base.css loads */
+.header__icon .icon,
+.header__icon .svg-wrapper > svg {
+  height: 1.25rem;
+  width: 1.25rem;
+  fill: none;
+  vertical-align: middle;
+}
+
+.header__icon .svg-wrapper {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header__icon:not(.header__icon--summary),
+.header__icon span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hide the close icon while the details/disclosure is collapsed */
+details:not([open]) > .header__icon--menu .icon-close,
+details[open] > .header__icon--menu .icon-hamburger {
+  visibility: hidden;
+  opacity: 0;
+}
+
+details .header__icon-close {
+  display: none;
+}
+
+details[open] .header__icon-close {
+  display: inline-block;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
