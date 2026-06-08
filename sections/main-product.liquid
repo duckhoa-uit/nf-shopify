@@ -627,9 +627,15 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
           {% if product.metafields.features.size > 0 %}
-            {% comment %} Pre-filter features to display - Using pagination hack to overcome 50-item limit {% endcomment %}
+            {% comment %}
+              Pre-filter features to display, then sort by metaobject position (high → low).
+              Only metaobjects with `display_on_product_page == true` are included.
+              Entries are encoded as `<inverted_position>|<key>` where inverted_position
+              is `9999999 - position`. A plain ascending sort then produces position desc.
+              Features without a position default to 0 and sort to the bottom.
+            {% endcomment %}
             {% paginate shop.metaobjects.product_feature.values by 250 %}
-              {% assign displayable_features = '' %}
+              {% assign sortable_entries = '' %}
               {% for metafield in product.metafields.features %}
                 {% assign key = metafield | first %}
                 {% assign arr_values = metafield | last %}
@@ -642,10 +648,14 @@
                       {% assign handle_matches = true %}
                     {% endif %}
                     {% if handle_matches and feature.display_on_product_page.value == true %}
-                      {% if displayable_features == '' %}
-                        {% assign displayable_features = key %}
+                      {% assign pos_value = feature.position.value | default: 0 %}
+                      {% comment %} Invert position so ascending sort produces high→low order {% endcomment %}
+                      {% assign pos_inverted = 9999999 | minus: pos_value %}
+                      {% assign entry = pos_inverted | append: '|' | append: key %}
+                      {% if sortable_entries == '' %}
+                        {% assign sortable_entries = entry %}
                       {% else %}
-                        {% assign displayable_features = displayable_features | append: ',' | append: key %}
+                        {% assign sortable_entries = sortable_entries | append: ',' | append: entry %}
                       {% endif %}
                       {% break %}
                     {% endif %}
@@ -654,17 +664,18 @@
               {% endfor %}
             {% endpaginate %}
 
-            {% if displayable_features != '' %}
-              {% assign displayable_keys = displayable_features | split: ',' %}
+            {% if sortable_entries != '' %}
+              {% assign sorted_entries = sortable_entries | split: ',' | sort %}
               <div id="parameters-section" class="product-info flex flex-col">
                 <h3 class="text-lg font-bold leading-7 mb-4">{{ 'sections.main_product.parameters' | t }}</h3>
                 <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
                   {% comment %} Apply pagination to display block to overcome 50-item limit {% endcomment %}
                   {% paginate shop.metaobjects.product_feature.values by 250 %}
-                    {% for metafield in product.metafields.features %}
-                      {% assign key = metafield | first %}
-                      {% if displayable_keys contains key %}
-                        {% assign arr_values = metafield | last %}
+                    {% for entry in sorted_entries %}
+                      {% assign entry_parts = entry | split: '|' %}
+                      {% assign key = entry_parts | last %}
+                      {% assign arr_values = product.metafields.features[key] %}
+                      {% if arr_values.value != blank %}
                         <li class="leading-6">
                           {%- liquid
                             assign feature_obj = null
