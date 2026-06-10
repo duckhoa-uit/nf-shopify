@@ -134,26 +134,35 @@ Each command spins up an unpublished dev theme on that store. Useful for verifyi
 ### Deploying to production
 
 ```bash
-# Push the current branch as a draft theme (does not replace live)
-shopify theme push -e international --unpublished
-shopify theme push -e czech         --unpublished
-shopify theme push -e romania       --unpublished
+# Push code to a single store (live theme, settings_data.json preserved)
+pnpm push:international
+pnpm push:czech
+pnpm push:romania
+pnpm push:perfumes
 
-# After QA on the unpublished theme, swap live in the Shopify admin
-# (Online Store → Themes → Actions → Publish).
+# Or all four in sequence
+pnpm push:all
 ```
 
-Use `--allow-live` only when you intentionally overwrite the live theme.
+`shopify.theme.toml` declares `ignore = ["config/settings_data.json"]` for every environment so `theme push` never overwrites merchant-managed settings or per-store app embed block UUIDs. Code (sections, snippets, locales, schema, market overlays) ships; `config/settings_data.json` stays untouched on each store.
 
-### Store-specific config changes
-
-Store-specific settings (theme editor color schemes, app embeds, market overlays) usually arrive via `shopify theme pull -e <env>` and land on `store/international` like any other change. Commit them with a scoped message:
+For a draft preview without replacing the live theme:
 
 ```bash
-shopify theme pull -e czech --only config/settings_data.json
-git add config/settings_data.json
-git commit -m "config(czech): sync settings_data from live"
+shopify theme push -e <env> --unpublished --theme "QA <date>"
 ```
+
+### Backing up live settings_data.json
+
+Each store's live `config/settings_data.json` is NOT auto-committed to the repo (since it's `ignore`d). Snapshot manually before major releases or weekly:
+
+```bash
+pnpm settings:backup:all
+git add config/backups/
+git commit -m "snapshot(settings): all stores $(date +%Y-%m-%d)"
+```
+
+Snapshots land in `config/backups/settings_data.<env>.json` and are read-only relative to deploy. See `config/backups/README.md` for restore procedure.
 
 ## Store Information
 

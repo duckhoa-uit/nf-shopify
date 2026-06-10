@@ -24,11 +24,21 @@ pnpm format           # Format code with Prettier
 
 ### Per-store commands
 ```bash
-pnpm dev              # international (sportfinder-international.myshopify.com)
-pnpm dev:czech        # CZ (northfinder-cz.myshopify.com)
-pnpm dev:romania      # RO (northfinder-ro.myshopify.com)
-pnpm dev:perfumes     # Perfumes (northfinder-parfums.myshopify.com)
+pnpm dev              # dev: international
+pnpm dev:czech        # dev: CZ
+pnpm dev:romania      # dev: RO
+pnpm dev:perfumes     # dev: Perfumes
+
+pnpm push:international   # push code to int (settings_data.json ignored)
+pnpm push:czech           # push code to CZ
+pnpm push:romania         # push code to RO
+pnpm push:perfumes        # push code to perfumes
+pnpm push:all             # push to all 4 in sequence
+
+pnpm settings:backup:all  # snapshot live settings_data.json from all 4 stores
 ```
+
+**Note:** `config/settings_data.json` is `ignore`d in `shopify.theme.toml` for every env, so `theme push` never overwrites merchant-managed app embed UUIDs / brand settings. Each store manages its own `settings_data.json` via Theme Editor. Repo holds snapshots in `config/backups/settings_data.<env>.json` (refresh manually).
 
 ### Manual Commands
 ```bash

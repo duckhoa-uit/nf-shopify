@@ -33,6 +33,16 @@
     "dev": "pnpm start & pnpm watch",
     "dev:czech": "pnpm start:czech & pnpm watch",
     "dev:romania": "pnpm start:romania & pnpm watch",
-    "dev:perfumes": "pnpm start:perfumes & pnpm watch"
+    "dev:perfumes": "pnpm start:perfumes & pnpm watch",
+    "push:international": "shopify theme push -e international --allow-live",
+    "push:czech": "shopify theme push -e czech --allow-live",
+    "push:romania": "shopify theme push -e romania --allow-live",
+    "push:perfumes": "shopify theme push -e perfumes --allow-live",
+    "push:all": "pnpm push:international && pnpm push:czech && pnpm push:romania && pnpm push:perfumes",
+    "settings:backup:international": "shopify theme pull -e international --live --only config/settings_data.json --path .tmp/settings-international && cp .tmp/settings-international/config/settings_data.json config/backups/settings_data.international.json",
+    "settings:backup:czech": "shopify theme pull -e czech --live --only config/settings_data.json --path .tmp/settings-czech && cp .tmp/settings-czech/config/settings_data.json config/backups/settings_data.czech.json",
+    "settings:backup:romania": "shopify theme pull -e romania --live --only config/settings_data.json --path .tmp/settings-romania && cp .tmp/settings-romania/config/settings_data.json config/backups/settings_data.romania.json",
+    "settings:backup:perfumes": "shopify theme pull -e perfumes --live --only config/settings_data.json --path .tmp/settings-perfumes && cp .tmp/settings-perfumes/config/settings_data.json config/backups/settings_data.perfumes.json",
+    "settings:backup:all": "pnpm settings:backup:international && pnpm settings:backup:czech && pnpm settings:backup:romania && pnpm settings:backup:perfumes"
   }
 }
