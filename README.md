@@ -17,70 +17,44 @@ A sophisticated e-commerce theme built on Shopify Dawn with extensive customizat
 
 ## Multi-Store Git Flow
 
-This repository uses an **Environment Branch Strategy** to manage multiple production stores while maintaining a shared codebase.
+A single branch (`store/international`) ships the theme to every EU store (International, CZ, RO, Perfumes). Per-store differences are handled at runtime by Shopify Markets context overlays — not by separate branches.
 
 ### Branch Structure
 
 ```
-main (integration branch) ────────────────────────────► Shared codebase - no direct store connection
-│                                                       ✅ Safe to merge features here
-│
-├── develop ──────────────────────────────────────────► Development Store (sportfinder-international.myshopify.com)
-│   ├── feature/new-product-card                        🟡 Testing & staging
-│   ├── feature/checkout-improvements
-│   └── hotfix/critical-bug-fix
-│
-├── store/sportfinder-de ─────────────────────────────► Germany Production (northfinder-1.myshopify.com)
-│                                                       🔴 Live store
-├── store/international ──────────────────────────────► International (sportfinder-international.myshopify.com)
-│                                                       🟢 Future multi-market
-├── store/poland ─────────────────────────────────────► Poland Production (poland-northfinder-2.myshopify.com)
-│                                                       🔴 Live store
-└── store/perfumes ───────────────────────────────────► Perfumes Production (northfinder-parfums.myshopify.com)
-                                                        🔴 Live store
+main                          → Integration branch, no direct store connection
+store/international           → Active deployment branch for ALL EU stores
+url-migration                 → Workstream branch for Cloudflare Worker + KV redirect tooling
+feature/<x>                   → Short-lived, merges into store/international
 ```
 
-### Store-Branch Mapping
+### Store ↔ Environment Mapping
 
-| Store | Branch | Shopify Store | CLI Environment | Status |
-|-------|--------|---------------|-----------------|--------|
-| **Germany** | `store/sportfinder-de` | northfinder-1.myshopify.com | `germany` | 🔴 Production |
-| **Development** | `develop` | sportfinder-international.myshopify.com | `development` | 🟡 Staging |
-| **International** | `store/international` | sportfinder-international.myshopify.com | `development` | 🟢 Future |
-| **Poland** | `store/poland` | poland-northfinder-2.myshopify.com | `poland` | 🔴 Production |
-| **Perfumes** | `store/perfumes` | northfinder-parfums.myshopify.com | `perfumes` | 🔴 Production |
-| **Integration** | `main` | *(no direct connection)* | - | ✅ Safe |
+| Store | Shopify Store | CLI Environment | Primary Locale |
+|---|---|---|---|
+| International | sportfinder-international.myshopify.com | `international` | en + bg/de/hr/sl |
+| Czech Republic | northfinder-cz.myshopify.com | `czech` | cs |
+| Romania | northfinder-ro.myshopify.com | `romania` | ro |
+| Perfumes | northfinder-parfums.myshopify.com | `perfumes` | en + multi |
 
-### Key Principles
+### Per-store overrides
 
-1. **`main` = Integration Branch**: Shared codebase, no direct store connection - safe for merging
-2. **`develop` = Safe Testing**: All feature development happens here, connected to development store
-3. **`store/*` = Production**: Each store has its own branch with store-specific configs
-4. **Shared UI, Isolated Configs**: All UI/features developed in `develop`, store-specific configs stay in `store/*` branches
-5. **Never Merge Configs Up**: Store configurations never merge back to `main` or `develop`
-6. **Always Merge Features Down**: Changes in `main` propagate to all `store/*` branches
+Differences between stores live in market-context files inside the theme, not in git branches:
 
-### Quick Decision Tree
+- `config/markets.json` — registry of market handles
+- `config/settings_data.context.<market>.json` — per-market theme settings (contact info, brand)
+- `templates/<x>.context.<market>.json` — per-market template overlay
+- `sections/<x>.context.<market>.json` — per-market section overlay
+- `locales/<lang>.json` — per-language translations
 
-**What are you working on?**
+When a store loads the theme, Shopify auto-applies the overlay matching that store's primary market handle.
 
-- **New UI/Feature** (sections, snippets, assets, etc.)
-  - Create `feature/*` branch from `develop`
-  - Test on development store
-  - Merge to `develop` via PR
-  - Merge `develop` to `main`
-  - Then merge `main` to all `store/*` branches
+### Key principles
 
-- **Store-Specific Config** (apps, theme settings)
-  - Checkout `store/*` branch directly (e.g., `store/sportfinder-de` for Germany)
-  - Commit changes to that store branch only
-  - Do NOT merge back to `main` or `develop`
-
-- **Emergency Fix**
-  - Create `hotfix/*` from affected `store/*` branch
-  - Merge to store branch first (deploy immediately)
-  - Then merge to `main` and `develop`
-  - Then merge to other store branches
+1. **One branch, many stores** — `store/international` is the source of truth for theme code.
+2. **Data, not branches** — store-specific contact info, language picker links, FAQ copy live in context JSON.
+3. **`main` is integration only** — never connected to a live store directly.
+4. **Workstreams stay isolated** — `url-migration` (Cloudflare KV redirects) never merges into store branches.
 
 ## Development Setup
 
@@ -110,153 +84,89 @@ pnpm install
 The repository is configured for multiple stores in `shopify.theme.toml`:
 
 ```toml
-[environments.development]
-store = "sportfinder-international.myshopify.com"  # ✅ Safe development/staging
+[environments.international]
+store = "sportfinder-international.myshopify.com"
 
-[environments.germany]
-store = "northfinder-1.myshopify.com"              # ⚠️ Germany Production
+[environments.czech]
+store = "northfinder-cz.myshopify.com"
 
-[environments.poland]
-store = "poland-northfinder-2.myshopify.com"
+[environments.romania]
+store = "northfinder-ro.myshopify.com"
 
 [environments.perfumes]
 store = "northfinder-parfums.myshopify.com"
 ```
 
-> ⚠️ **Warning**: The `germany` environment connects to the live production store. Always use `development` for testing.
+All environments connect to live stores. Use `shopify theme dev -e <env>` to work against an unpublished development theme automatically created by the CLI — your changes never touch the published theme until you explicitly `shopify theme push`.
 
 ## Development Workflow
 
-### For Shared UI/Feature Development (Recommended)
+### Feature development
 
 ```bash
-# 1. Start from develop branch
-git checkout develop
-git pull origin develop
+# 1. Start from store/international
+git checkout store/international
+git pull origin store/international
 
 # 2. Create feature branch
-git checkout -b feature/new-product-card
+git checkout -b feature/<name>
 
-# 3. Start development server (ALWAYS use development environment for safety)
-pnpm dev  # Runs both Shopify dev + Tailwind watch on development store
+# 3. Start dev server against the international store (safe — uses unpublished dev theme)
+pnpm dev
 
-# Or manually target the development store:
-shopify theme dev -e development  # ✅ Safe - sportfinder-international.myshopify.com
-
-# ⚠️ AVOID these during development:
-# shopify theme dev -e germany     # ❌ Connects to live Germany store!
-
-# 4. Make your changes to sections, snippets, assets, etc.
-# ... develop your feature ...
-
-# 5. Test your changes
+# 4. Make changes, run tests
 pnpm test
 
-# 6. Commit and push
-git add .
-git commit -m "feat: add new product card design"
-git push origin feature/new-product-card
-
-# 7. Create PR to develop
-# After approval and merge to develop, changes are ready for production deployment
+# 5. Commit + PR back into store/international
+git push origin feature/<name>
 ```
 
-### Deploying to Production (Germany)
+### Test on a specific store
 
 ```bash
-# 1. Ensure develop is stable and tested
-git checkout develop
-git pull origin develop
-
-# 2. Merge to main (integration branch)
-git checkout main
-git pull origin main
-git merge develop
-git push origin main
-
-# 3. Merge to Germany store branch
-git checkout store/sportfinder-de
-git pull origin store/sportfinder-de
-git merge main
-git push origin store/sportfinder-de
-
-# 4. Deploy to Germany store
-shopify theme push -e germany --allow-live
+pnpm dev:czech      # northfinder-cz.myshopify.com
+pnpm dev:romania    # northfinder-ro.myshopify.com
+pnpm dev:perfumes   # northfinder-parfums.myshopify.com
 ```
 
-### For Store-Specific Configuration Changes
+Each command spins up an unpublished dev theme on that store. Useful for verifying market overlays (footer, language picker, FAQ) that only render with real `localization.market.handle`.
+
+### Deploying to production
 
 ```bash
-# 1. Checkout the specific store branch
-git checkout store/sportfinder-de  # For Germany-specific config
+# Push the current branch as a draft theme (does not replace live)
+shopify theme push -e international --unpublished
+shopify theme push -e czech         --unpublished
+shopify theme push -e romania       --unpublished
 
-# 2. Make configuration changes
-# - Update config/settings_data.json (app embeds, theme settings)
-# - Update templates/*.json if needed
+# After QA on the unpublished theme, swap live in the Shopify admin
+# (Online Store → Themes → Actions → Publish).
+```
 
-# 3. Test with Shopify CLI
-shopify theme dev -e germany
+Use `--allow-live` only when you intentionally overwrite the live theme.
 
-# 4. Commit directly to store branch
+### Store-specific config changes
+
+Store-specific settings (theme editor color schemes, app embeds, market overlays) usually arrive via `shopify theme pull -e <env>` and land on `store/international` like any other change. Commit them with a scoped message:
+
+```bash
+shopify theme pull -e czech --only config/settings_data.json
 git add config/settings_data.json
-git commit -m "config(germany): add reviews app embed"
-git push origin store/sportfinder-de
-
-# 5. Deploy to store
-shopify theme push -e germany --allow-live
-
-# ⚠️ DO NOT merge store configs back to main or develop
-```
-
-### For Emergency Hotfixes
-
-```bash
-# 1. Create hotfix from affected store branch
-git checkout store/sportfinder-de
-git checkout -b hotfix/fix-checkout-bug
-
-# 2. Fix the bug
-# ... make your fix ...
-
-# 3. Test on development store first (if possible)
-shopify theme dev -e development
-
-# 4. Commit and merge to store branch (urgent)
-git commit -m "fix: resolve checkout button not working"
-git checkout store/sportfinder-de
-git merge hotfix/fix-checkout-bug
-git push origin store/sportfinder-de
-
-# 5. Deploy immediately
-shopify theme push -e germany --allow-live
-
-# 6. Propagate to main and develop
-git checkout main
-git merge hotfix/fix-checkout-bug
-git push origin main
-
-git checkout develop
-git merge hotfix/fix-checkout-bug
-git push origin develop
-
-# 7. Merge to other store branches as needed
-git checkout store/poland
-git merge main
-git push origin store/poland
+git commit -m "config(czech): sync settings_data from live"
 ```
 
 ## Store Information
 
 ### Active Stores
 
-| Store | Branch | Shopify Store | CLI Environment | Primary Language | Status |
-|-------|--------|---------------|-----------------|------------------|--------|
-| Germany | `store/sportfinder-de` | northfinder-1.myshopify.com | `germany` | German (de) | 🔴 Live |
-| Development | `develop` | sportfinder-international.myshopify.com | `development` | Multiple | 🟡 Testing |
-| Poland | `store/poland` | poland-northfinder-2.myshopify.com | `poland` | Polish (pl) | 🔴 Live |
-| Perfumes | `store/perfumes` | northfinder-parfums.myshopify.com | `perfumes` | Multiple | 🔴 Live |
-| International | `store/international` | sportfinder-international.myshopify.com | `development` | Multiple | 🟢 Future |
-| Integration | `main` | *(no direct connection)* | - | - | ✅ Safe |
+| Store | Shopify Store | CLI Environment | Primary Locale | Market handle |
+|---|---|---|---|---|
+| International | sportfinder-international.myshopify.com | `international` | en (+ bg, de, hr, sl) | (default) |
+| Czech Republic | northfinder-cz.myshopify.com | `czech` | cs | `czech` |
+| Romania | northfinder-ro.myshopify.com | `romania` | ro | `romania` |
+| Perfumes | northfinder-parfums.myshopify.com | `perfumes` | en (+ multi) | (default) |
+
+All stores deploy from the `store/international` branch.
 
 ## Testing
 
@@ -275,23 +185,17 @@ pnpm format
 
 ### Manual Testing Checklist
 
-Before merging to `develop`:
-- [ ] Test locally with `shopify theme dev -e development`
-- [ ] Test on development store (sportfinder-international.myshopify.com)
-- [ ] Verify no breaking changes
-- [ ] Run automated tests
+Before merging to `store/international`:
+- [ ] Test locally with `pnpm dev` (international store)
+- [ ] If change affects market overlays: test with `pnpm dev:czech` and `pnpm dev:romania`
+- [ ] Run `pnpm test:ci`
+- [ ] Verify no console errors on home, PDP, cart, checkout
 
-Before merging to `main`:
-- [ ] All changes tested on development store
-- [ ] Run automated tests
-- [ ] Verify no breaking changes
-
-Before merging to `store/*` branches (Production):
-- [ ] Changes merged to `main` first
-- [ ] Test on unpublished theme if needed
-- [ ] Verify store-specific configs intact
-- [ ] Check app functionality
-- [ ] Verify no visual regressions
+Before publishing to a live store:
+- [ ] `shopify theme push -e <env> --unpublished` first
+- [ ] Smoke test the unpublished theme on the target store
+- [ ] Verify market-specific footer / language picker / FAQ render correctly
+- [ ] Then publish via Shopify admin
 
 ## Documentation
 
@@ -315,27 +219,32 @@ Before merging to `store/*` branches (Production):
 ## Development Commands
 
 ```bash
-pnpm dev              # Start development server (connects to sportfinder-international.myshopify.com)
-pnpm start            # Start Shopify dev server only
-pnpm watch            # Start Tailwind CSS watcher only
-pnpm test             # Run tests
-pnpm test:ci          # Run tests in CI mode
-pnpm format           # Format code with Prettier
+pnpm dev               # International dev server + Tailwind watcher
+pnpm dev:czech         # CZ dev server + Tailwind watcher
+pnpm dev:romania       # RO dev server + Tailwind watcher
+pnpm dev:perfumes      # Perfumes dev server + Tailwind watcher
+
+pnpm start             # International dev server only
+pnpm start:czech       # CZ dev server only
+pnpm start:romania     # RO dev server only
+pnpm start:perfumes    # Perfumes dev server only
+
+pnpm watch             # Tailwind CSS watcher only
+pnpm test              # Vitest (watch)
+pnpm test:ci           # Vitest (run once)
+pnpm format            # Prettier
 ```
 
 ### Manual Shopify CLI Commands
 
 ```bash
-# Development (safe)
-shopify theme dev -e development    # ✅ sportfinder-international.myshopify.com
+shopify theme dev  -e international            # sportfinder-international
+shopify theme dev  -e czech                    # northfinder-cz
+shopify theme dev  -e romania                  # northfinder-ro
+shopify theme dev  -e perfumes                 # northfinder-parfums
 
-# Production (careful!)
-shopify theme dev -e germany        # ⚠️ northfinder-1.myshopify.com (Germany Live)
-shopify theme push -e germany       # ⚠️ Deploys to Germany production
-
-# Other stores
-shopify theme dev -e poland         # Poland store
-shopify theme dev -e perfumes       # Perfumes store
+shopify theme push -e <env> --unpublished      # Push as draft (safe)
+shopify theme push -e <env> --allow-live       # ⚠️ Overwrite live theme
 ```
 
 ## Important Files
@@ -348,19 +257,13 @@ shopify theme dev -e perfumes       # Perfumes store
 - `/locales/*` - Translation files (25+ languages)
 - `config/settings_schema.json` - Theme customization schema
 
-### Store-Specific Files (never merge back to develop)
-- `config/settings_data.json` - **CRITICAL**: App embeds and theme settings
-- Some `/templates/*.json` - Templates with store-specific sections
-- `shopify.theme.toml` - Store connection config (shared across all branches)
+### Per-store overlays (auto-applied by Shopify at runtime)
+- `config/settings_data.context.<market>.json`
+- `templates/<x>.context.<market>.json`
+- `sections/<x>.context.<market>.json`
+- `config/markets.json` — market registry
 
-### Conflict Prevention
-
-The repository uses `.gitattributes` to prevent config conflicts:
-
-```gitattributes
-# Always keep store branch version when merging
-config/settings_data.json merge=ours
-```
+Overlays apply when the loading store's primary market handle matches the file suffix (e.g. `*.context.czech.json` applies on northfinder-cz).
 
 ## Contributing
 
@@ -376,10 +279,11 @@ style: update button hover states
 docs: update README with new workflow
 ```
 
-**Store-specific changes:**
+**Store-specific config sync:**
 ```
-config(germany): add reviews app embed
-config(poland): update theme colors
+config(international): sync settings_data from live
+config(czech): add cross-market language slot 2
+config(romania): update contact email
 config(perfumes): enable new payment method
 ```
 
@@ -394,39 +298,17 @@ config(perfumes): enable new payment method
 
 ### Common Issues
 
-**Issue: Merge conflict in config/settings_data.json**
+**Issue: live store edited theme settings, local out of sync**
 ```bash
-# Always keep the store branch version
-git checkout --ours config/settings_data.json
+shopify theme pull -e <env> --only config/settings_data.json
 git add config/settings_data.json
-git commit
+git commit -m "config(<env>): sync settings_data from live"
 ```
 
-**Issue: Store branch missing latest main changes**
-```bash
-git checkout store/sportfinder-de
-git pull origin store/sportfinder-de
-git merge main
-# Resolve conflicts (keep store's config/settings_data.json)
-git push origin store/sportfinder-de
-```
-
-**Issue: Can't deploy to Germany store**
-```bash
-# Pull latest config from live store first
-git checkout store/sportfinder-de
-shopify theme pull -e germany --only config/settings_data.json
-git add config/settings_data.json
-git commit -m "config(germany): sync with live store"
-git push origin store/sportfinder-de
-```
-
-**Issue: Development store out of sync**
-```bash
-# Push latest develop to development store
-git checkout develop
-shopify theme push -e development
-```
+**Issue: market overlay (footer/picker) doesn't render**
+- Confirm the market handle exists in the store's admin (Settings → Markets) and matches the file suffix exactly (`czech`, `romania`, `slovenia`, ...).
+- Confirm the locale you're testing is published on that store.
+- Real `request.host` is required to test cross-market language picker — use `shopify theme push -e <env> --unpublished` and preview the live URL with `?preview_theme_id=`.
 
 ## Support
 

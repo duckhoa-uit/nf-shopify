@@ -22,10 +22,18 @@ pnpm test:ci          # Run tests in CI mode
 pnpm format           # Format code with Prettier
 ```
 
+### Per-store commands
+```bash
+pnpm dev              # international (sportfinder-international.myshopify.com)
+pnpm dev:czech        # CZ (northfinder-cz.myshopify.com)
+pnpm dev:romania      # RO (northfinder-ro.myshopify.com)
+pnpm dev:perfumes     # Perfumes (northfinder-parfums.myshopify.com)
+```
+
 ### Manual Commands
 ```bash
 npx @tailwindcss/cli -i ./assets/tailwind.css -o ./assets/application.css --watch
-shopify theme dev -e development
+shopify theme dev -e international
 ```
 
 ## Architecture
@@ -108,8 +116,8 @@ Complex product measurement and recommendation engine located in:
 ## Development Notes
 
 ### Local Development
-- Use `pnpm dev` for full development experience
-- Shopify CLI connects to northfinder-1.myshopify.com development store
+- Use `pnpm dev` for full development experience (sportfinder-international.myshopify.com)
+- Per-store dev: `pnpm dev:czech` (CZ), `pnpm dev:romania` (RO), `pnpm dev:perfumes`
 - Tailwind watcher rebuilds CSS on file changes
 
 ### Code Patterns

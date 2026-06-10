@@ -25,14 +25,14 @@
   "scripts": {
     "test": "vitest",
     "test:ci": "vitest run",
-    "start": "shopify theme dev -e development",
-    "start:germany": "shopify theme dev -e germany",
-    "start:poland": "shopify theme dev -e poland",
+    "start": "shopify theme dev -e international",
+    "start:czech": "shopify theme dev -e czech",
+    "start:romania": "shopify theme dev -e romania",
     "start:perfumes": "shopify theme dev -e perfumes",
     "watch": "npx @tailwindcss/cli -i ./assets/tailwind.css -o ./assets/application.css --watch",
     "dev": "pnpm start & pnpm watch",
-    "dev:germany": "pnpm start:germany & pnpm watch",
-    "dev:poland": "pnpm start:poland & pnpm watch",
+    "dev:czech": "pnpm start:czech & pnpm watch",
+    "dev:romania": "pnpm start:romania & pnpm watch",
     "dev:perfumes": "pnpm start:perfumes & pnpm watch"
   }
 }
