@@ -1,18 +1,51 @@
 {%- comment -%}
-  Renders the language picker for the localization form
+  Renders the language picker for the localization form.
+
+  Supports up to 4 cross-market slots (settings.cross_market_*, cross_market_2_*, …).
+  Each slot defines an external market on a separate domain. Behavior:
+    - When request.host matches a slot's host_match, the picker is rendered in
+      "external" mode for that slot: in-store language switches redirect to the
+      slot's home_url instead of changing locale on the external host.
+    - When on the home shop, every slot whose external URL + label are set
+      appends an extra <li> linking to that external market.
 
   Accepts:
-    - localPosition: pass in the position in which the form is coming up to create specific IDs
+    - localPosition: pass in the position in which the form is coming up to
+      create specific IDs.
 {%- endcomment -%}
 
 {%- liquid
-  assign cross_market_host_match = settings.cross_market_host_match | strip
   assign on_external_market = false
-  if cross_market_host_match != blank and request.host contains cross_market_host_match
-    assign on_external_market = true
-  endif
-  assign override_url = settings.cross_market_home_url | strip
-  assign override_default_iso = settings.cross_market_home_default_iso | strip | downcase
+  assign active_override_url = ''
+  assign active_override_default_iso = ''
+
+  for slot_index in (1..4)
+    case slot_index
+      when 1
+        assign slot_host = settings.cross_market_host_match
+        assign slot_home_url = settings.cross_market_home_url
+        assign slot_home_default_iso = settings.cross_market_home_default_iso
+      when 2
+        assign slot_host = settings.cross_market_2_host_match
+        assign slot_home_url = settings.cross_market_2_home_url
+        assign slot_home_default_iso = settings.cross_market_2_home_default_iso
+      when 3
+        assign slot_host = settings.cross_market_3_host_match
+        assign slot_home_url = settings.cross_market_3_home_url
+        assign slot_home_default_iso = settings.cross_market_3_home_default_iso
+      when 4
+        assign slot_host = settings.cross_market_4_host_match
+        assign slot_home_url = settings.cross_market_4_home_url
+        assign slot_home_default_iso = settings.cross_market_4_home_default_iso
+    endcase
+
+    assign slot_host = slot_host | strip
+    if slot_host != blank and request.host contains slot_host
+      assign on_external_market = true
+      assign active_override_url = slot_home_url | strip
+      assign active_override_default_iso = slot_home_default_iso | strip | downcase
+    endif
+  endfor
 -%}
 
 <div class="disclosure">
@@ -31,15 +64,15 @@
       {%- for language in localization.available_languages -%}
         {%- liquid
           assign is_override = false
-          if on_external_market and override_url != blank and language.iso_code != localization.language.iso_code
+          if on_external_market and active_override_url != blank and language.iso_code != localization.language.iso_code
             assign is_override = true
           endif
-          assign override_target = override_url
+          assign override_target = active_override_url
           if is_override
-            assign override_base = override_url | split: '?' | first | split: '#' | first
+            assign override_base = active_override_url | split: '?' | first | split: '#' | first
             assign last_char = override_base | slice: -1
             assign lang_iso_lower = language.iso_code | downcase
-            if override_default_iso != blank and lang_iso_lower == override_default_iso
+            if active_override_default_iso != blank and lang_iso_lower == active_override_default_iso
               if last_char == '/'
                 assign override_target = override_base
               else
@@ -82,33 +115,51 @@
           </a>
         </li>
       {%- endfor -%}
-      {%- liquid
-        assign append_url = settings.cross_market_language_url | strip
-        assign append_label = settings.cross_market_language_label | strip
-        assign append_iso = settings.cross_market_language_iso | strip
-        assign show_append = false
-        if append_url != blank and append_label != blank and on_external_market == false
-          assign show_append = true
-        endif
-      -%}
-      {%- if show_append -%}
-        <li class="disclosure__item disclosure__item--external" tabindex="-1">
-          <a
-            class="link link--text disclosure__link caption-large focus-inset"
-            href="{{ append_url }}"
-            {% if append_iso != blank %}
-              hreflang="{{ append_iso }}"
-              lang="{{ append_iso }}"
-            {% endif %}
-            rel="alternate"
-            data-external-market="true"
-          >
-            <span class="visibility-hidden">
-              {{- 'icon-checkmark.svg' | inline_asset_content -}}
-            </span>
-            <span>{{ append_label | capitalize }}</span>
-          </a>
-        </li>
+      {%- if on_external_market == false -%}
+        {%- for slot_index in (1..4) -%}
+          {%- liquid
+            case slot_index
+              when 1
+                assign append_url = settings.cross_market_language_url
+                assign append_label = settings.cross_market_language_label
+                assign append_iso = settings.cross_market_language_iso
+              when 2
+                assign append_url = settings.cross_market_2_language_url
+                assign append_label = settings.cross_market_2_language_label
+                assign append_iso = settings.cross_market_2_language_iso
+              when 3
+                assign append_url = settings.cross_market_3_language_url
+                assign append_label = settings.cross_market_3_language_label
+                assign append_iso = settings.cross_market_3_language_iso
+              when 4
+                assign append_url = settings.cross_market_4_language_url
+                assign append_label = settings.cross_market_4_language_label
+                assign append_iso = settings.cross_market_4_language_iso
+            endcase
+            assign append_url = append_url | strip
+            assign append_label = append_label | strip
+            assign append_iso = append_iso | strip
+          -%}
+          {%- if append_url != blank and append_label != blank -%}
+            <li class="disclosure__item disclosure__item--external" tabindex="-1">
+              <a
+                class="link link--text disclosure__link caption-large focus-inset"
+                href="{{ append_url }}"
+                {% if append_iso != blank %}
+                  hreflang="{{ append_iso }}"
+                  lang="{{ append_iso }}"
+                {% endif %}
+                rel="alternate"
+                data-external-market="true"
+              >
+                <span class="visibility-hidden">
+                  {{- 'icon-checkmark.svg' | inline_asset_content -}}
+                </span>
+                <span>{{ append_label | capitalize }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
       {%- endif -%}
     </ul>
   </div>
