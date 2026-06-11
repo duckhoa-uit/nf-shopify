@@ -203,6 +203,49 @@ describe("parseImageUrl", () => {
       unique_id: expect.any(String)
     });
   });
+
+  // Shopify appends a UUID v4 suffix when the same filename is uploaded again.
+  // The parser must ignore that suffix and still recover the type code +
+  // reference_id, otherwise the gallery falls back to its 2-image safety net.
+  test("strips Shopify UUID suffix on main image with reference_id", () => {
+    const result = parseImageUrl(
+      "to-2011or-women-s-barefoot-hiking-low-cut-shoes-vibram-danda-NF-TO-2011OR-696-H_af20023b-df1e-4f99-ab45-f20191769853.jpg?v=1779428694",
+    );
+    expect(result).toEqual({
+      product: "NF-TO-2011OR",
+      color: "color-696",
+      image_type: "main",
+      reference_id: 696,
+      unique_id: "1779428694",
+    });
+  });
+
+  test("strips Shopify UUID suffix on details image with sequence", () => {
+    const result = parseImageUrl(
+      "to-2011or-women-s-barefoot-hiking-low-cut-shoes-vibram-danda-NF-TO-2011OR-696-D_2_769c7f2c-ffd6-429d-8db2-26d28162145e.jpg",
+    );
+    expect(result).toEqual({
+      product: "NF-TO-2011OR",
+      color: "color-696",
+      image_type: "details",
+      sequence: 2,
+      reference_id: 696,
+      unique_id: expect.any(String),
+    });
+  });
+
+  test("strips Shopify UUID suffix on back_variant image", () => {
+    const result = parseImageUrl(
+      "to-2011or-women-s-barefoot-hiking-low-cut-shoes-vibram-danda-NF-TO-2011OR-696-BV_74c1ed04-6bfa-4486-a12a-b4edbc1e6a81.jpg",
+    );
+    expect(result).toEqual({
+      product: "NF-TO-2011OR",
+      color: "color-696",
+      image_type: "back_variant",
+      reference_id: 696,
+      unique_id: expect.any(String),
+    });
+  });
 });
 
 describe("sortImagesByDisplayRules", () => {

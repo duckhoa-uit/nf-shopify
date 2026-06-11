@@ -5,6 +5,10 @@ const URL_SPLIT_QUERY = /\?v=/;
 const PATH_SPLIT_SLASH = /\//;
 const EXTENSION_PATTERN = /\.[^/.]+$/;
 const HYPHEN_PATTERN = /-/;
+// Shopify appends a UUID v4 suffix (`_<8>-<4>-<4>-<4>-<12>` hex) to filenames
+// when the same name is uploaded more than once. Strip it before parsing so
+// the type code (`H`, `D_2`, `BV`, ...) is the final token of the filename.
+const SHOPIFY_UUID_SUFFIX_PATTERN = /_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Memoization cache for parseImageUrl
 const parseCache = new Map();
@@ -50,7 +54,9 @@ export function parseImageUrl(url, colorMappings = null) {
   // Extract filename from URL and remove file extension
   const slashIdx = url.lastIndexOf('/');
   const filename = slashIdx >= 0 ? url.substring(slashIdx + 1).split('?')[0] : url.split('?')[0];
-  const nameWithoutExt = filename.replace(EXTENSION_PATTERN, "");
+  const nameWithoutExt = filename
+    .replace(EXTENSION_PATTERN, "")
+    .replace(SHOPIFY_UUID_SUFFIX_PATTERN, "");
 
   // Return default values for malformed URLs or files without proper naming convention
   if (!nameWithoutExt.includes('-')) {
