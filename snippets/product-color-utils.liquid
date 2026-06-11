@@ -256,6 +256,30 @@
             {% assign image_url = best_model_media.preview_image | image_url: width: width, height: height, crop: crop %}
           {% endif %}
         {% endunless %}
+
+        {% comment %}
+          When the product has no model (-M) image for this color reference_id
+          (common for shoes), fall back to the typed-priority loop (H -> BV -> B -> D)
+          on the SAME reference_id instead of dropping into Step 5, which would
+          otherwise return the first media item containing the ref_id in admin
+          drag-drop order (e.g. a sole or close-up shot).
+        {% endcomment %}
+        {% if image_url == '' %}
+          {% assign fallback_types = 'H,BV,B,D' | split: ',' %}
+          {% for type in fallback_types %}
+            {% if image_url == '' %}
+              {% for media in product.media %}
+                {% assign media_src = media.src | default: '' %}
+                {% assign parsed_url = media_src | split: '/' | last %}
+                {% assign type_code = '-' | append: type %}
+                {% if parsed_url contains reference_id and parsed_url contains type_code %}
+                  {% assign image_url = media.preview_image | image_url: width: width, height: height, crop: crop %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       {% else %}
         {% comment %} Look for specific image type or use priority order {% endcomment %}
         {% assign image_types = image_type | default: 'H,B,BV,D' | split: ',' %}
