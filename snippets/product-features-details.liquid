@@ -1,0 +1,329 @@
+{% comment %}
+  Renders the "Features & details" block — three sub-groups of product
+  feature metafields that are merged into a single section rather than
+  rendered as individual rows in the Parameters table.
+
+  Per customer feedback (Tab 2):
+  - Construction details: hood, collar, sleeve, shoulders, inside, ventilation
+  - Storage: pockets + zipper (merged "{count} pockets ({zipper})"), hydration
+  - Adjustability: waist, knee, bottom-legs, back, hips
+
+  Sub-groups are ordered by feedback (Construction → Storage → Adjustability).
+  Within each sub-group, fields are sorted by the metaobject `position` field
+  ascending (matching the backend PIM convention).
+
+  Empty fields are skipped. Sub-groups with no data are hidden entirely.
+
+  Icons: a placeholder slot is wired up for each bullet so SVG icons can be
+  added later; the slot is hidden via the `.with-icon` class which is empty
+  for now.
+
+  Accepts:
+  - product: {Object} Product Liquid object
+
+  Usage:
+  {% render 'product-features-details', product: product %}
+{% endcomment %}
+
+{%- liquid
+  comment
+  Comma-separated lists of metafield keys (Liquid lacks array literals)
+  endcomment
+  assign construction_keys = 'hood,collar,sleeve,shoulders,inside,ventilation' | split: ','
+  assign storage_keys = 'pockets,zipper,hydration' | split: ','
+  assign adjustability_keys = 'waist,knee,bottom_legs,back,hips' | split: ','
+-%}
+
+{%- comment -%}
+  Helper: collect non-empty fields for a sub-group, sorted by position asc.
+  Each entry encoded as `<padded_position>|<key>` so a string sort matches numeric.
+{%- endcomment -%}
+{%- capture _features_details_open -%}
+  {%- paginate shop.metaobjects.product_feature.values by 250 -%}
+
+    {%- comment -%} ============ CONSTRUCTION ============ {%- endcomment -%}
+    {%- assign construction_entries = '' -%}
+    {%- for k in construction_keys -%}
+      {%- assign mf = product.metafields.features[k] -%}
+      {%- if mf.value != blank -%}
+        {%- assign feature_obj = null -%}
+        {%- assign k_dash = k | replace: '_', '-' -%}
+        {%- for feature in shop.metaobjects.product_feature.values -%}
+          {%- if feature.system.handle == k or feature.system.handle == k_dash -%}
+            {%- assign feature_obj = feature -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign pos_value = feature_obj.position.value | default: 9999 -%}
+        {%- assign pos_padded = pos_value | plus: 10000 -%}
+        {%- assign entry = pos_padded | append: '|' | append: k -%}
+        {%- if construction_entries == '' -%}
+          {%- assign construction_entries = entry -%}
+        {%- else -%}
+          {%- assign construction_entries = construction_entries | append: ',' | append: entry -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- comment -%} ============ STORAGE ============ {%- endcomment -%}
+    {%- comment -%}
+      Storage is special: pockets + zipper are merged into one line.
+      We treat the merged pair as a single "virtual" entry positioned at the
+      pockets position (or zipper position if pockets is missing). Hydration
+      is added separately.
+    {%- endcomment -%}
+    {%- assign storage_entries = '' -%}
+
+    {%- assign pockets_mf = product.metafields.features.pockets -%}
+    {%- assign zipper_mf = product.metafields.features.zipper -%}
+    {%- assign has_pockets = false -%}
+    {%- assign has_zipper = false -%}
+    {%- if pockets_mf.value != blank -%}{%- assign has_pockets = true -%}{%- endif -%}
+    {%- if zipper_mf.value != blank -%}{%- assign has_zipper = true -%}{%- endif -%}
+
+    {%- if has_pockets or has_zipper -%}
+      {%- assign pair_pos_value = 9999 -%}
+      {%- for feature in shop.metaobjects.product_feature.values -%}
+        {%- if feature.system.handle == 'pockets' or feature.system.handle == 'zipper' -%}
+          {%- if feature.position.value != blank -%}
+            {%- if feature.system.handle == 'pockets' -%}
+              {%- assign pair_pos_value = feature.position.value -%}
+            {%- elsif has_pockets == false -%}
+              {%- assign pair_pos_value = feature.position.value -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign pair_padded = pair_pos_value | plus: 10000 -%}
+      {%- assign storage_entries = pair_padded | append: '|__pockets_zipper__' -%}
+    {%- endif -%}
+
+    {%- assign hydration_mf = product.metafields.features.hydration -%}
+    {%- if hydration_mf.value != blank -%}
+      {%- assign hyd_pos = 9999 -%}
+      {%- for feature in shop.metaobjects.product_feature.values -%}
+        {%- if feature.system.handle == 'hydration' -%}
+          {%- assign hyd_pos = feature.position.value | default: 9999 -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign hyd_padded = hyd_pos | plus: 10000 -%}
+      {%- assign hyd_entry = hyd_padded | append: '|hydration' -%}
+      {%- if storage_entries == '' -%}
+        {%- assign storage_entries = hyd_entry -%}
+      {%- else -%}
+        {%- assign storage_entries = storage_entries | append: ',' | append: hyd_entry -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- comment -%} ============ ADJUSTABILITY ============ {%- endcomment -%}
+    {%- assign adjustability_entries = '' -%}
+    {%- for k in adjustability_keys -%}
+      {%- assign mf = product.metafields.features[k] -%}
+      {%- if mf.value != blank -%}
+        {%- assign feature_obj = null -%}
+        {%- assign k_dash = k | replace: '_', '-' -%}
+        {%- for feature in shop.metaobjects.product_feature.values -%}
+          {%- if feature.system.handle == k or feature.system.handle == k_dash -%}
+            {%- assign feature_obj = feature -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign pos_value = feature_obj.position.value | default: 9999 -%}
+        {%- assign pos_padded = pos_value | plus: 10000 -%}
+        {%- assign entry = pos_padded | append: '|' | append: k -%}
+        {%- if adjustability_entries == '' -%}
+          {%- assign adjustability_entries = entry -%}
+        {%- else -%}
+          {%- assign adjustability_entries = adjustability_entries | append: ',' | append: entry -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endpaginate -%}
+{%- endcapture -%}
+
+{%- comment -%}
+  Only render the outer block if at least one sub-group has data.
+{%- endcomment -%}
+{%- assign has_any = false -%}
+{%- if construction_entries != '' or storage_entries != '' or adjustability_entries != '' -%}
+  {%- assign has_any = true -%}
+{%- endif -%}
+
+{%- if has_any -%}
+  <div id="features-details-section" class="product-info flex flex-col mt-8">
+    <h3 class="text-lg font-bold leading-7 mb-4">
+      {{- 'sections.main_product.features_details.title' | t -}}
+    </h3>
+
+    {%- comment -%}
+      Pagination hack: `shop.metaobjects.product_feature.values` is capped at 50
+      by default. Wrap the render loop so the feature lookups can resolve all 75+
+      entries (matching the strategy used by the Parameters table above).
+    {%- endcomment -%}
+    {%- paginate shop.metaobjects.product_feature.values by 250 -%}
+
+    {%- if construction_entries != '' -%}
+      {%- assign construction_sorted = construction_entries | split: ',' | sort -%}
+      <div class="features-details-group mb-6">
+        <h4 class="text-sm font-semibold leading-6 uppercase tracking-wide text-[#0F0F0F] mb-2">
+          {{- 'sections.main_product.features_details.construction' | t -}}
+        </h4>
+        <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
+          {%- for entry in construction_sorted -%}
+            {%- assign entry_parts = entry | split: '|' -%}
+            {%- assign key = entry_parts | last -%}
+            {%- assign arr_values = product.metafields.features[key] -%}
+            {%- assign feature_obj = null -%}
+            {%- assign key_dash = key | replace: '_', '-' -%}
+            {%- for feature in shop.metaobjects.product_feature.values -%}
+              {%- if feature.system.handle == key or feature.system.handle == key_dash -%}
+                {%- assign feature_obj = feature -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- assign translated_label = feature_obj.name.value -%}
+            {%- assign items_array = arr_values.value | map: 'name' -%}
+            {%- assign translated_items = '' -%}
+            {%- for item in items_array -%}
+              {%- if forloop.first -%}
+                {%- assign translated_items = item | metafield_text -%}
+              {%- else -%}
+                {%- assign translated_items = translated_items | append: ', ' | append: item | metafield_text -%}
+              {%- endif -%}
+            {%- endfor -%}
+            <li class="leading-6">
+              {%- comment -%} Icon slot: hidden for now, ready for future SVG. {%- endcomment -%}
+              <span class="features-details-icon with-icon hidden" aria-hidden="true"></span>
+              <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
+                {{- translated_label -}}
+                :</strong
+              >
+              <span class="text-[#3D3D3D] text-sm">{{ translated_items }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    {%- if storage_entries != '' -%}
+      {%- assign storage_sorted = storage_entries | split: ',' | sort -%}
+      <div class="features-details-group mb-6">
+        <h4 class="text-sm font-semibold leading-6 uppercase tracking-wide text-[#0F0F0F] mb-2">
+          {{- 'sections.main_product.features_details.storage' | t -}}
+        </h4>
+        <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
+          {%- for entry in storage_sorted -%}
+            {%- assign entry_parts = entry | split: '|' -%}
+            {%- assign key = entry_parts | last -%}
+
+            {%- if key == '__pockets_zipper__' -%}
+              {%- assign pockets_count = product.metafields.features.pockets.value | size -%}
+              {%- assign pockets_text = '' -%}
+              {%- if pockets_count > 0 -%}
+                {%- assign pockets_text = 'sections.main_product.features_details.pockets_with_count' | t: count: pockets_count -%}
+              {%- endif -%}
+              {%- assign zipper_items = product.metafields.features.zipper.value | map: 'name' -%}
+              {%- assign zipper_text = '' -%}
+              {%- for item in zipper_items -%}
+                {%- if forloop.first -%}
+                  {%- assign zipper_text = item | metafield_text -%}
+                {%- else -%}
+                  {%- assign zipper_text = zipper_text | append: ', ' | append: item | metafield_text -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- assign merged = '' -%}
+              {%- if pockets_text != '' and zipper_text != '' -%}
+                {%- assign merged = 'sections.main_product.features_details.pockets_with_zipper' | t: pockets: pockets_text, zipper: zipper_text -%}
+              {%- elsif pockets_text != '' -%}
+                {%- assign merged = pockets_text -%}
+              {%- elsif zipper_text != '' -%}
+                {%- assign merged = zipper_text -%}
+              {%- endif -%}
+
+              {%- if merged != '' -%}
+                <li class="leading-6">
+                  <span class="features-details-icon with-icon hidden" aria-hidden="true"></span>
+                  <span class="text-[#3D3D3D] text-sm">{{ merged }}</span>
+                </li>
+              {%- endif -%}
+            {%- else -%}
+              {%- assign arr_values = product.metafields.features[key] -%}
+              {%- assign feature_obj = null -%}
+              {%- assign key_dash = key | replace: '_', '-' -%}
+              {%- for feature in shop.metaobjects.product_feature.values -%}
+                {%- if feature.system.handle == key or feature.system.handle == key_dash -%}
+                  {%- assign feature_obj = feature -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- assign translated_label = feature_obj.name.value -%}
+              {%- assign items_array = arr_values.value | map: 'name' -%}
+              {%- assign translated_items = '' -%}
+              {%- for item in items_array -%}
+                {%- if forloop.first -%}
+                  {%- assign translated_items = item | metafield_text -%}
+                {%- else -%}
+                  {%- assign translated_items = translated_items | append: ', ' | append: item | metafield_text -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <li class="leading-6">
+                <span class="features-details-icon with-icon hidden" aria-hidden="true"></span>
+                <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
+                  {{- translated_label -}}
+                  :</strong
+                >
+                <span class="text-[#3D3D3D] text-sm">{{ translated_items }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    {%- if adjustability_entries != '' -%}
+      {%- assign adjustability_sorted = adjustability_entries | split: ',' | sort -%}
+      <div class="features-details-group">
+        <h4 class="text-sm font-semibold leading-6 uppercase tracking-wide text-[#0F0F0F] mb-2">
+          {{- 'sections.main_product.features_details.adjustability' | t -}}
+        </h4>
+        <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
+          {%- for entry in adjustability_sorted -%}
+            {%- assign entry_parts = entry | split: '|' -%}
+            {%- assign key = entry_parts | last -%}
+            {%- assign arr_values = product.metafields.features[key] -%}
+            {%- assign feature_obj = null -%}
+            {%- assign key_dash = key | replace: '_', '-' -%}
+            {%- for feature in shop.metaobjects.product_feature.values -%}
+              {%- if feature.system.handle == key or feature.system.handle == key_dash -%}
+                {%- assign feature_obj = feature -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- assign translated_label = feature_obj.name.value -%}
+            {%- assign items_array = arr_values.value | map: 'name' -%}
+            {%- assign translated_items = '' -%}
+            {%- for item in items_array -%}
+              {%- if forloop.first -%}
+                {%- assign translated_items = item | metafield_text -%}
+              {%- else -%}
+                {%- assign translated_items = translated_items | append: ', ' | append: item | metafield_text -%}
+              {%- endif -%}
+            {%- endfor -%}
+            <li class="leading-6">
+              <span class="features-details-icon with-icon hidden" aria-hidden="true"></span>
+              <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
+                {{- translated_label -}}
+                :</strong
+              >
+              <span class="text-[#3D3D3D] text-sm">{{ translated_items }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    {%- endpaginate -%}
+  </div>
+{%- endif -%}

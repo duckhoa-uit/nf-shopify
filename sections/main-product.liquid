@@ -638,10 +638,22 @@
             {% endcomment %}
             {% paginate shop.metaobjects.product_feature.values by 250 %}
               {% assign sortable_entries = '' %}
+              {%- comment -%}
+                Skip features rendered in the dedicated "Features & details" block
+                (Construction / Storage / Adjustability) — see product-features-details snippet.
+              {%- endcomment -%}
+              {%- assign features_details_keys = 'hood,collar,sleeve,shoulders,inside,ventilation,pockets,zipper,hydration,waist,knee,bottom_legs,back,hips' | split: ',' -%}
               {% for metafield in product.metafields.features %}
                 {% assign key = metafield | first %}
                 {% assign arr_values = metafield | last %}
-                {% if arr_values.value != blank and key != 'nf_flow_series' %}
+                {%- assign is_features_details_key = false -%}
+                {%- for fd_key in features_details_keys -%}
+                  {%- if key == fd_key -%}
+                    {%- assign is_features_details_key = true -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {% if arr_values.value != blank and key != 'nf_flow_series' and is_features_details_key == false %}
                   {% comment %} Find matching metaobject by handle - Support both underscore and dash naming {% endcomment %}
                   {% for feature in shop.metaobjects.product_feature.values %}
                     {% assign key_dash = key | replace: '_', '-' %}
@@ -775,6 +787,8 @@
               </div>
             {% endif %}
           {% endif %}
+
+          {% render 'product-features-details', product: product %}
 
           <div id="main-elements-section" class="product-info flex flex-col">
             {% if product.metafields.custom.main_elements.value != blank %}
