@@ -1,0 +1,26 @@
+{% comment %}
+  Renders NF Flow™ Series brand badge(s) above the Parameters section.
+  Data source: product.metafields.features.nf_flow_series — a list of
+  `product_feature_preset` metaobjects (e.g., "PATH Flow™ Series", "PeakFlow Series").
+
+  Renders nothing when the metafield is blank.
+
+  Accepts:
+  - product: {Object} Product Liquid object
+
+  Usage:
+  {% render 'nf-flow-series-badge', product: product %}
+{% endcomment %}
+
+{%- if product.metafields.features.nf_flow_series.value != blank -%}
+  <div class="nf-series-badge-group flex flex-wrap gap-2 mb-4">
+    {%- for series in product.metafields.features.nf_flow_series.value -%}
+      {%- assign series_name = series.name | metafield_text -%}
+      {%- if series_name != blank -%}
+        <div class="nf-series-badge inline-flex items-center px-3 py-1.5 border border-[#0F0F0F] text-[#0F0F0F] text-[13px] font-semibold leading-4 uppercase tracking-wide rounded-sm">
+          {{- series_name -}}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
