@@ -628,11 +628,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
           {% if product.metafields.features.size > 0 %}
             {% comment %}
-              Pre-filter features to display, then sort by metaobject position (high → low).
+              Pre-filter features to display, then sort by metaobject `position` ascending
+              (lower position = shown first, matching the backend PIM convention).
               Only metaobjects with `display_on_product_page == true` are included.
-              Entries are encoded as `<inverted_position>|<key>` where inverted_position
-              is `9999999 - position`. A plain ascending sort then produces position desc.
-              Features without a position default to 0 and sort to the bottom.
+              Features without a position fall back to a large sentinel so they sort to
+              the bottom rather than the top.
             {% endcomment %}
             {% paginate shop.metaobjects.product_feature.values by 250 %}
               {% assign sortable_entries = '' %}
@@ -648,10 +648,11 @@
                       {% assign handle_matches = true %}
                     {% endif %}
                     {% if handle_matches and feature.display_on_product_page.value == true %}
-                      {% assign pos_value = feature.position.value | default: 0 %}
-                      {% comment %} Invert position so ascending sort produces high→low order {% endcomment %}
-                      {% assign pos_inverted = 9999999 | minus: pos_value %}
-                      {% assign entry = pos_inverted | append: '|' | append: key %}
+                      {% comment %} Default null/missing position to 9999 so it sorts to the bottom {% endcomment %}
+                      {% assign pos_value = feature.position.value | default: 9999 %}
+                      {% comment %} Pad to fixed width so lexical sort matches numeric sort {% endcomment %}
+                      {% assign pos_padded = pos_value | plus: 10000 %}
+                      {% assign entry = pos_padded | append: '|' | append: key %}
                       {% if sortable_entries == '' %}
                         {% assign sortable_entries = entry %}
                       {% else %}
