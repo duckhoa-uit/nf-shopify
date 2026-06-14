@@ -1,0 +1,49 @@
+{% comment %}
+  Renders a 3-dot visual scale for tech feature ratings (waterproofness,
+  windproofness, warmth). Maps the metaobject's system handle to a
+  3-level scale (low / medium / high).
+
+  Accepts:
+  - feature_values: {Array} product.metafields.features.<key>.value
+                    (list of metaobject references — first item is used)
+
+  Usage:
+  {% render 'feature-dot-scale', feature_values: product.metafields.features.waterproofness.value %}
+{% endcomment %}
+
+{%- assign level = 0 -%}
+{%- assign handle = '' -%}
+
+{%- if feature_values != blank -%}
+  {%- for ref in feature_values -%}
+    {%- assign handle = ref.system.handle -%}
+    {%- break -%}
+  {%- endfor -%}
+
+  {%- comment -%} Order matters: longer phrases first to avoid early matches {%- endcomment -%}
+  {%- if handle contains 'extremely' and handle contains 'high' -%}
+    {%- assign level = 3 -%}
+  {%- elsif handle contains 'medium' and handle contains 'high' -%}
+    {%- assign level = 2 -%}
+  {%- elsif handle contains 'very' and handle contains 'low' -%}
+    {%- assign level = 1 -%}
+  {%- elsif handle contains 'high' -%}
+    {%- assign level = 3 -%}
+  {%- elsif handle contains 'medium' -%}
+    {%- assign level = 2 -%}
+  {%- elsif handle contains 'low' -%}
+    {%- assign level = 1 -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if level > 0 -%}
+  <span class="feature-dot-scale inline-flex items-center gap-1 ml-1 align-middle" aria-label="{{ level }} of 3">
+    {%- for i in (1..3) -%}
+      {%- if i <= level -%}
+        <span class="inline-block size-2 rounded-full bg-[#0F0F0F]" aria-hidden="true"></span>
+      {%- else -%}
+        <span class="inline-block size-2 rounded-full border border-[#0F0F0F]" aria-hidden="true"></span>
+      {%- endif -%}
+    {%- endfor -%}
+  </span>
+{%- endif -%}

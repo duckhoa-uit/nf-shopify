@@ -705,22 +705,34 @@
                             :</strong
                           >
 
-                          {% assign items_array = arr_values.value | map: 'name' %}
-                          {% assign translated_items = '' %}
-                          {% for item in items_array %}
-                            {% if forloop.first %}
-                              {% assign translated_items = item | metafield_text %}
-                            {% else %}
-                              {% assign translated_items = translated_items
-                                | append: ', '
-                                | append: item
-                                | metafield_text
-                              %}
-                            {% endif %}
-                          {% endfor %}
-                          <span class="text-[#3D3D3D] text-sm">
-                            {{ translated_items }}
-                          </span>
+                          {%- comment -%}
+                            Render value as a 3-dot scale (low/medium/high) for
+                            tech rating fields, otherwise render the text value.
+                          {%- endcomment -%}
+                          {% assign is_dot_scale = false %}
+                          {% if key == 'waterproofness' or key == 'windproofness' or key == 'warmth' %}
+                            {% assign is_dot_scale = true %}
+                          {% endif %}
+                          {% if is_dot_scale %}
+                            {% render 'feature-dot-scale', feature_values: arr_values.value %}
+                          {% else %}
+                            {% assign items_array = arr_values.value | map: 'name' %}
+                            {% assign translated_items = '' %}
+                            {% for item in items_array %}
+                              {% if forloop.first %}
+                                {% assign translated_items = item | metafield_text %}
+                              {% else %}
+                                {% assign translated_items = translated_items
+                                  | append: ', '
+                                  | append: item
+                                  | metafield_text
+                                %}
+                              {% endif %}
+                            {% endfor %}
+                            <span class="text-[#3D3D3D] text-sm">
+                              {{ translated_items }}
+                            </span>
+                          {% endif %}
 
                           {%- comment -%}
                             Pair vapor_permeability inline with water_column when both
