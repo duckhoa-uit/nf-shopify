@@ -40,9 +40,9 @@
   <span class="feature-dot-scale inline-flex items-center gap-1 ml-1 align-middle" aria-label="{{ level }} of 3">
     {%- for i in (1..3) -%}
       {%- if i <= level -%}
-        <span class="inline-block size-2 rounded-full bg-[#0F0F0F]" aria-hidden="true"></span>
+        <span class="inline-block size-2 rounded-full" style="background-color:#0F0F0F" aria-hidden="true"></span>
       {%- else -%}
-        <span class="inline-block size-2 rounded-full border border-[#0F0F0F]" aria-hidden="true"></span>
+        <span class="inline-block size-2 rounded-full" style="border:1px solid #0F0F0F" aria-hidden="true"></span>
       {%- endif -%}
     {%- endfor -%}
   </span>
