@@ -679,7 +679,15 @@
                       {% assign entry_parts = entry | split: '|' %}
                       {% assign key = entry_parts | last %}
                       {% assign arr_values = product.metafields.features[key] %}
-                      {% if arr_values.value != blank %}
+                      {% comment %}
+                        Skip vapor_permeability when it is paired with water_column on the
+                        same row (rendered together below for the water_column entry).
+                      {% endcomment %}
+                      {% assign is_paired_vapor = false %}
+                      {% if key == 'vapor_permeability_g_m2_24hr' and product.metafields.features.water_column_wp_mm.value != blank %}
+                        {% assign is_paired_vapor = true %}
+                      {% endif %}
+                      {% if arr_values.value != blank and is_paired_vapor == false %}
                         <li class="leading-6">
                           {%- liquid
                             assign feature_obj = null
@@ -713,6 +721,40 @@
                           <span class="text-[#3D3D3D] text-sm">
                             {{ translated_items }}
                           </span>
+
+                          {%- comment -%}
+                            Pair vapor_permeability inline with water_column when both
+                            are present, per customer feedback (Tab 1, #7 + #8).
+                          {%- endcomment -%}
+                          {% if key == 'water_column_wp_mm' and product.metafields.features.vapor_permeability_g_m2_24hr.value != blank %}
+                            {%- liquid
+                              assign vapor_obj = null
+                              for feature in shop.metaobjects.product_feature.values
+                                if feature.system.handle == 'vapor-permeability-g-m2-24hr' or feature.system.handle == 'vapor_permeability_g_m2_24hr'
+                                  assign vapor_obj = feature
+                                  break
+                                endif
+                              endfor
+                              assign vapor_label = vapor_obj.name.value
+                            -%}
+                            <span class="mx-2 text-[#3D3D3D] text-sm">·</span>
+                            <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
+                              {{- vapor_label -}}
+                              :</strong
+                            >
+                            {% assign vapor_items = product.metafields.features.vapor_permeability_g_m2_24hr.value | map: 'name' %}
+                            {% assign vapor_text = '' %}
+                            {% for item in vapor_items %}
+                              {% if forloop.first %}
+                                {% assign vapor_text = item | metafield_text %}
+                              {% else %}
+                                {% assign vapor_text = vapor_text | append: ', ' | append: item | metafield_text %}
+                              {% endif %}
+                            {% endfor %}
+                            <span class="text-[#3D3D3D] text-sm">
+                              {{ vapor_text }}
+                            </span>
+                          {% endif %}
                         </li>
                       {% endif %}
                     {% endfor %}
