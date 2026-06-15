@@ -2,13 +2,14 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-05-27 08:24:15
+ At 2026-06-15 09:39:42
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
  {% if ecom_root_url != '/'%}
  {% assign ecom_root_url = routes.root_url | append: '/' %}
  {% endif %}
+ {% assign translation = metaobjects['app--6509291--ecom_translation']['app--6509291--ecom-translation-qswkam2j'].data.value %}
  <link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript>
 {%capture section_id %}ecom-homepage-new-home{% endcapture%}{% if section and section_id == section.id and headless == true %}
 {{ content_for_header }}
@@ -554,7 +555,7 @@ html,body{margin:0;padding:0}
  var locale=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
  var isBG=(locale==='bg');
  var isDefault=(locale==='en');
- document.querySelectorAll('a[href*="shop.northfinder.com"]:not([data-external-market])').forEach(function(a){
+ document.querySelectorAll('a[href*="shop.northfinder.com"]').forEach(function(a){
  var h=a.getAttribute('href');
  if(!h)return;
  if(isBG){
@@ -788,7 +789,6 @@ html,body{margin:0;padding:0}
  "content": "[EDIT WITH EComposer APP \u2192](https:\/\/admin.shopify.com\/store\/sportfinder-international\/apps\/ecomposer?open_builder=1&page=home&id=6a15a7f92e74bd8c270e48c9&utm_source=theme-customize)",
  "info": "(*You must install the app to start editing this section [Learn more](https:\/\/help.ecomposer.io\/docs\/getting-started\/installation\/))"
  }
- ],
- "locales": {}
+ ]
 }
 {% endschema %}
