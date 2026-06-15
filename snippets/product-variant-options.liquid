@@ -188,8 +188,11 @@
         assign position = 999
 
         # Find matching metafield position
+        # Locale-safe: metaobject `name` is translatable (SL black -> "črna"),
+        # so we also match the non-translatable system.handle root.
         for metafield_color in metafield_colors
-          if value_downcase == metafield_color.name
+          assign mc_handle_root = metafield_color.system.handle | split: '-' | first | downcase
+          if value_downcase == metafield_color.name or value_downcase == mc_handle_root
             assign position = metafield_color.position
             break
           endif

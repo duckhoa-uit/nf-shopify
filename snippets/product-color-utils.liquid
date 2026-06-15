@@ -26,7 +26,12 @@
 
   {% if product.metafields.custom.color.value != blank %}
     {% for color_item in product.metafields.custom.color.value %}
-      {% if color_item.name == color_value_normalized %}
+      {%- comment -%}
+        Locale-safe match: metaobject `name` field is translatable (e.g. SL: black -> "črna"),
+        so we also compare against the non-translatable `system.handle` (without its trailing -N suffix).
+      {%- endcomment -%}
+      {%- assign handle_root = color_item.system.handle | split: '-' | first | downcase -%}
+      {% if color_item.name == color_value_normalized or handle_root == color_value_normalized %}
         {% assign reference_id = color_item.reference_id %}
         {% break %}
       {% endif %}
@@ -186,7 +191,12 @@
     {% comment %} Step 2: Try to find reference ID from metafields {% endcomment %}
     {% if product.metafields.custom.color.value != blank %}
       {% for color_item in product.metafields.custom.color.value %}
-        {% if color_item.name == color_value_normalized %}
+        {%- comment -%}
+          Locale-safe match: metaobject `name` field is translatable, fall back to
+          system.handle (root part before trailing -N) which is never translated.
+        {%- endcomment -%}
+        {%- assign handle_root = color_item.system.handle | split: '-' | first | downcase -%}
+        {% if color_item.name == color_value_normalized or handle_root == color_value_normalized %}
           {% assign reference_id = color_item.reference_id %}
           {% break %}
         {% endif %}
