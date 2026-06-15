@@ -2,1374 +2,781 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-04-29 11:18:44
+ At 2026-06-15 09:50:25
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
  {% if ecom_root_url != '/'%}
  {% assign ecom_root_url = routes.root_url | append: '/' %}
  {% endif %}
- <link rel="stylesheet" media="print" onload="this.media='all'" id="ecom-vendors-slider_css" href="https://cdn.ecomposer.app/vendors/css/ecom-swiper@11.css" /><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" onload="this.media='all'" id="ecom-vendors-slider_css" href="https://cdn.ecomposer.app/vendors/css/ecom-swiper@11.css" /><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript><script type="text/javascript" asyc="async" id="ecom-vendors-slider_js" src="https://cdn.ecomposer.app/vendors/js/ecom-swiper@11.0.5.js" ></script>
+ <link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript>
 {%- assign headless = true -%}{%- render "ecom_theme_helper" -%}{%capture section_id %}ecom-preview-home-home{% endcapture%}{% if section and section_id == section.id and headless == true %}
 {{ content_for_header }}
-{% render 'ecom_header', ECOM_THEME: true %}{% endif %}<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/>
+{% render 'ecom_header', ECOM_THEME: true %}{% endif %}
 {{'ecom-preview-template-home.css' | asset_url | stylesheet_tag }}
 <script src="{{'ecom-preview-template-home.js' | asset_url }}" defer="defer"></script>
 <script type="text/javascript" class="ecom-page-info">
  window.EComposer = window.EComposer || {};
  window.EComposer.TEMPLATE_ID="preview-template-home";
- window.EComposer.PAGE = {"title":"Untitled","type":"home","slug":"ecom-preview-home","plan_id":4,"template_id":"preview-template-home"};
+ window.EComposer.PAGE = {"title":"Homepage","type":"home","slug":"ecom-preview-home","plan_id":4,"template_id":"preview-template-home"};
  </script>
-<div class="ecom-builder" id="ecom-preview-home"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ecom-section ecom-row ecom-core ecom-brh5qhklybo" data-id="ecom-brh5qhklybo" section_id="ecom-brh5qhklybo" style="position: relative; z-index: inherit;"><div class="ecom-grid-layout core__row--columns" data-section-id="ecom-brh5qhklybo"><div class="ecom-block ecom-core core__block ecom-ingrid-full-height elmspace ecom-ym8gwsl2vtb ecom-grid-item"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" deep="1" ingrid="true" section_id="ecom-brh5qhklybo"><!DOCTYPE html>
+<div class="ecom-builder" id="ecom-preview-home"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-frh477kbyyp"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-nux1z3cvbn"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-frh477kbyyp" deep="2"><!DOCTYPE html>
 <html lang="sk">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
- <title>Northfinder – Mobile</title>
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
- <link rel="preload" as="video" href="https://northfinder.com/en/img/cms/herovideomobile.mp4">
- <style>
- #nfhp,
- #nfhp *,
- #nfhp *::before,
- #nfhp *::after {
- box-sizing: border-box;
- margin: 0;
- padding: 0;
- border: none;
- outline: none;
- font-family: 'Montserrat', sans-serif;
- -webkit-font-smoothing: antialiased;
- }
- #nfhp {
- background: #0f0f0f;
- color: #ffffff;
- width: 100vw;
- position: relative;
- left: 50%;
- transform: translateX(-50%);
- overflow-x: hidden;
- }
- #nfhp img { display: block; max-width: 100%; }
- #nfhp a,
- #nfhp a:visited,
- #nfhp a:hover,
- #nfhp a:active { text-decoration: none !important; }
- /* ════════════════════════════════════════
- SEKCIA 7 — HERO / VIDEO
- ════════════════════════════════════════ */
- #nfhp ._nfhp_s7 {
- position: relative;
- width: 100%;
- min-height: 100svh;
- display: flex;
- flex-direction: column;
- justify-content: flex-end;
- overflow: hidden;
- background: #0f0f0f;
- }
- /* Poster — zobrazí sa kým sa video nenačíta */
- #nfhp ._nfhp_s7-poster {
- position: absolute;
- inset: 0;
- width: 100%;
- height: 100%;
- object-fit: cover;
- object-position: center center;
- z-index: 0;
- transition: opacity 0.6s ease;
- }
- #nfhp ._nfhp_s7-poster.is-hidden {
- opacity: 0;
- pointer-events: none;
- }
- /* Mobile video — portrait (9:16) */
- #nfhp ._nfhp_s7-video-wrap {
- position: absolute;
- inset: 0;
- z-index: 0;
- overflow: hidden;
- }
- /* Vimeo desktop video — skryté na mobile */
- #nfhp ._nfhp_s7-vimeo-wrap {
- display: none;
- position: absolute;
- inset: 0;
- z-index: 0;
- overflow: hidden;
- }
- #nfhp ._nfhp_s7-vimeo-wrap iframe {
- position: absolute;
- top: 50%;
- left: 50%;
- /* Pokrytie landscape obrazovky */
- width: 100vw;
- height: 56.25vw; /* 16:9 */
- min-height: 100%;
- min-width: 177.78vh; /* 16:9 */
- transform: translate(-50%, -50%);
- pointer-events: none;
- border: none;
- }
- #nfhp ._nfhp_s7-video {
- position: absolute;
- top: 50%;
- left: 50%;
- width: calc(100svh * 9 / 16);
- height: 100svh;
- min-width: 100%;
- min-height: calc(100vw * 16 / 9);
- transform: translate(-50%, -50%);
- object-fit: cover;
- pointer-events: none;
- }
- /* Skryť natívne video controls a play button overlay */
- #nfhp ._nfhp_s7-video::-webkit-media-controls { display: none !important; }
- #nfhp ._nfhp_s7-video::-webkit-media-controls-panel { display: none !important; }
- #nfhp ._nfhp_s7-video::-webkit-media-controls-play-button { display: none !important; }
- #nfhp ._nfhp_s7-video::-webkit-media-controls-start-playback-button { display: none !important; }
- #nfhp ._nfhp_s7-video::-webkit-media-controls-overlay-play-button { display: none !important; }
- /* Tmavý gradient overlay */
- #nfhp ._nfhp_s7-overlay {
- position: absolute;
- inset: 0;
- background: linear-gradient(
- to top,
- rgba(0, 0, 0, 0.88) 0%,
- rgba(0, 0, 0, 0.45) 50%,
- rgba(0, 0, 0, 0.15) 100%
- );
- z-index: 1;
- }
- /* Obsah */
- #nfhp ._nfhp_s7-content {
- position: relative;
- z-index: 2;
- padding: 40px 24px 50px;
- display: flex;
- flex-direction: column;
- gap: 28px;
- }
- /* Nadpis */
- #nfhp ._nfhp_s7-title {
- font-size: 56px !important;
- font-weight: 900 !important;
- line-height: 1.0 !important;
- letter-spacing: -1px;
- }
- #nfhp ._nfhp_s7-title-white { color: #ffffff; }
- #nfhp ._nfhp_s7-title-red { color: #e3340d; }
- /* Popis */
- #nfhp ._nfhp_s7-desc {
- font-size: 15px;
- font-weight: 400;
- color: rgba(255, 255, 255, 0.80);
- line-height: 1.65;
- }
- #nfhp ._nfhp_s7-desc strong {
- font-weight: 700;
- color: #ffffff;
- }
- /* Štatistiky */
- #nfhp ._nfhp_s7-stats {
- display: grid;
- grid-template-columns: repeat(3, 1fr);
- gap: 4px;
- }
- #nfhp ._nfhp_s7-stat {
- display: flex;
- flex-direction: column;
- gap: 6px;
- }
- #nfhp ._nfhp_s7-stat + ._nfhp_s7-stat {
- border-left: 1px solid rgba(255,255,255,0.15);
- padding-left: 16px;
- }
- #nfhp ._nfhp_s7-stat-num {
- font-size: 20px !important;
- font-weight: 900 !important;
- color: #ffffff;
- line-height: 1;
- letter-spacing: -0.5px;
- white-space: nowrap;
- }
- #nfhp ._nfhp_s7-stat-label {
- font-size: 11px;
- font-weight: 500;
- color: rgba(255,255,255,0.60);
- line-height: 1.35;
- }
- /* Tlačidlo */
- #nfhp ._nfhp_s7-btn {
- display: block;
- width: 100%;
- padding: 18px 24px;
- background: rgba(255, 255, 255, 0.06);
- backdrop-filter: blur(16px);
- -webkit-backdrop-filter: blur(16px);
- border: 1px solid rgba(255, 255, 255, 0.40);
- border-radius: 14px;
- font-size: 15px !important;
- font-weight: 700 !important;
- color: #ffffff !important;
- text-align: center;
- letter-spacing: 0.12em;
- text-transform: uppercase;
- text-decoration: none !important;
- transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
- box-shadow:
- 0 0 18px rgba(255, 255, 255, 0.08),
- inset 0 1px 0 rgba(255, 255, 255, 0.12);
- }
- #nfhp ._nfhp_s7-btn:active {
- background: rgba(255, 255, 255, 0.12);
- }
- /* ════════════════════
- TABLET — 600px+
- ════════════════════ */
- @media (min-width: 600px) {
- /* Zameniť videá */
- #nfhp ._nfhp_s7-video-wrap { display: none; }
- #nfhp ._nfhp_s7-vimeo-wrap { display: block; }
- #nfhp ._nfhp_s7-content {
- padding: 60px 48px 64px;
- max-width: 680px;
- gap: 32px;
- }
- #nfhp ._nfhp_s7-title {
- font-size: 76px !important;
- letter-spacing: -2px;
- }
- #nfhp ._nfhp_s7-desc {
- font-size: 17px;
- }
- #nfhp ._nfhp_s7-stat-num {
- font-size: 24px !important;
- }
- #nfhp ._nfhp_s7-stat-label {
- font-size: 12px;
- }
- #nfhp ._nfhp_s7-btn {
- width: auto;
- display: inline-block;
- padding: 18px 48px;
- }
- }
- /* ════════════════════
- DESKTOP — 1024px+
- ════════════════════ */
- @media (min-width: 1024px) {
- #nfhp ._nfhp_s7-content {
- padding: 80px 80px 80px;
- max-width: 760px;
- gap: 40px;
- /* Obsah dole vľavo */
- justify-content: flex-end;
- }
- #nfhp ._nfhp_s7-title {
- font-size: 104px !important;
- letter-spacing: -3px;
- }
- #nfhp ._nfhp_s7-desc {
- font-size: 18px;
- max-width: 520px;
- }
- #nfhp ._nfhp_s7-stats {
- gap: 0;
- }
- #nfhp ._nfhp_s7-stat-num {
- font-size: 28px !important;
- }
- #nfhp ._nfhp_s7-stat-label {
- font-size: 13px;
- }
- #nfhp ._nfhp_s7-stat + ._nfhp_s7-stat {
- padding-left: 24px;
- }
- #nfhp ._nfhp_s7-btn {
- padding: 20px 56px;
- font-size: 14px !important;
- transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
- }
- #nfhp ._nfhp_s7-btn:hover {
- background: transparent;
- border-color: rgba(255, 255, 255, 0.85);
- box-shadow:
- 0 0 28px rgba(200, 190, 255, 0.30),
- 0 0 8px rgba(255, 255, 255, 0.18),
- inset 0 0 18px rgba(200, 190, 255, 0.08),
- inset 0 1px 0 rgba(255, 255, 255, 0.18);
- }
- }
- </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+#nfhp,#nfhp *,#nfhp *::before,#nfhp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfhp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;overflow-y:visible}
+#nfhp img{display:block;max-width:100%}
+#nfhp a,#nfhp a:visited,#nfhp a:hover,#nfhp a:active{text-decoration:none!important;color:inherit}
+#nfhp{background:#0a0a0a;color:#fff}
+</style>
 </head>
 <body>
-<div id="nfhp">
- 
- <section class="_nfhp_s7">
- 
- <img class="_nfhp_s7-poster"
- id="nfhp-poster"
- src="https://northfinder.com/sk/modules/jscomposer/uploads/image-4.png"
- alt=""
- fetchpriority="high">
- 
- <div class="_nfhp_s7-video-wrap">
- <video id="nfhp-video"
- class="_nfhp_s7-video"
- autoplay muted loop playsinline
- webkit-playsinline
- x5-playsinline
- preload="metadata">
- <source src="https://northfinder.com/en/img/cms/herovideomobile.mp4" type="video/mp4">
- </video>
+<div id="nfhp" style="background:#0a0a0a;color:#fff">
+<style>
+#nfhp ._s1{position:relative;min-height:720px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;margin-top:-60px}
+#nfhp ._s1-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top}
+#nfhp ._s1-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.40) 55%,rgba(0,0,0,.10) 100%)}
+#nfhp ._s1-c{position:relative;z-index:2;padding:0 24px 56px;display:flex;flex-direction:column;gap:28px}
+#nfhp ._s1-h1{font-size:60px;font-weight:700;line-height:.95;letter-spacing:-.025em;color:#fff}
+#nfhp ._s1-red{color:#e3340d}
+#nfhp ._s1-body{font-size:15px;color:rgba(255,255,255,.78);line-height:1.6}
+#nfhp ._s1-stats{display:grid;grid-template-columns:repeat(3,1fr);padding-top:18px;gap:16px 8px;justify-items:start}
+#nfhp ._s1-stat{display:flex;flex-direction:column;gap:6px;text-align:left}
+#nfhp ._s1-sv{font-size:18px;font-weight:700;line-height:1.1;letter-spacing:-.02em}
+#nfhp ._s1-sl{font-size:10px;font-weight:500;color:rgba(255,255,255,.7);line-height:1.3;white-space:normal}
+#nfhp ._s1-ctas{display:flex;flex-direction:column;gap:10px}
+#nfhp ._s1-btn-r{display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:16px 24px;background:#e3340d;color:#fff !important;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;transition:transform .25s ease}
+#nfhp ._s1-btn-r:hover{transform:translateX(6px)}
+#nfhp ._s1-btn-g{display:inline-flex;align-items:center;gap:10px;padding:14px 0;color:#fff !important;font-size:13px;font-weight:500;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.4);align-self:flex-start}
+@media(min-width:768px){
+ #nfhp ._s1{min-height:100vh;margin-top:-40px}
+ #nfhp ._s1-c{padding:0 64px 72px;max-width:880px;gap:32px}
+ #nfhp ._s1-h1{font-size:112px;letter-spacing:-.04em}
+ #nfhp ._s1-body{font-size:17px;max-width:480px}
+ #nfhp ._s1-stats{padding-top:24px;grid-template-columns:repeat(3,auto);gap:48px;justify-items:start}
+ #nfhp ._s1-sv{font-size:30px}
+ #nfhp ._s1-sl{font-size:12px}
+ #nfhp ._s1-ctas{flex-direction:row;align-items:center}
+ #nfhp ._s1-btn-r{padding:18px 36px}
+ #nfhp ._s1-btn-g{padding:18px 28px}
+ #nfhp ._s1-stat:last-child{grid-column:auto}
+}
+</style><section class="_s1">
+ <video id="_s1-vid" class="_s1-bg" autoplay muted loop playsinline webkit-playsinline></video>
+<script>
+(function(){
+ var PC='https://cdn.shopify.com/videos/c/o/v/1a6a974b8c8c46c18dcde9815a7779b1.mp4';
+ var MOB='https://cdn.shopify.com/videos/c/o/v/bacdb0fdc31b4246bb8b0898bdf9feb2.mp4';
+ var v=document.getElementById('_s1-vid');
+ if(!v)return;
+ v.setAttribute('playsinline','');
+ v.setAttribute('muted','');
+ v.muted=true;
+ v.src=window.innerWidth>=768?PC:MOB;
+ function tryPlay(){v.muted=true;v.play().catch(function(){});}
+ v.addEventListener('canplay',tryPlay,{once:true});
+ v.load();
+ tryPlay();
+ // Fallback: play on any user gesture
+ function gesture(){tryPlay();document.removeEventListener('click',gesture);document.removeEventListener('touchstart',gesture);}
+ document.addEventListener('click',gesture);
+ document.addEventListener('touchstart',gesture,{passive:true});
+ // IntersectionObserver fallback
+ if('IntersectionObserver' in window){
+ new IntersectionObserver(function(e){if(e[0].isIntersecting)tryPlay();},{threshold:0.1}).observe(v);
+ }
+})();
+</script>
+ <div class="_s1-ov"></div>
+ <div class="_s1-c">
+ <h1 class="_s1-h1">Your Path.<br><span class="_s1-red">Your Flow.</span></h1>
+ <p class="_s1-body">Premium outdoor brand born in the Carpathians. Tested in real conditions, not in a laboratory.</p>
+ <div class="_s1-stats">
+ <div class="_s1-stat"><span class="_s1-sv">300 000+</span><span class="_s1-sl">Community members</span></div>
+ <div class="_s1-stat"><span class="_s1-sv">30+</span><span class="_s1-sl">Years on the market</span></div>
+ <div class="_s1-stat"><span class="_s1-sv">99%</span><span class="_s1-sl">Product satisfaction</span></div>
  </div>
- 
- <div class="_nfhp_s7-vimeo-wrap">
- <iframe
- src="https://player.vimeo.com/video/1185497240?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1"
- allow="autoplay; fullscreen"
- allowfullscreen>
- </iframe>
- </div>
- <div class="_nfhp_s7-overlay"></div>
- <div class="_nfhp_s7-content">
- 
- <div class="_nfhp_s7-title">
- <span class="_nfhp_s7-title-white">Your Path.<br></span>
- <span class="_nfhp_s7-title-red">Your Flow.</span>
- </div>
- 
- <p class="_nfhp_s7-desc">
- Prémiová <strong>outdoorová značka</strong> zrodená v
- Karpatoch. Testovaná v reálnych podmienkach.
- </p>
- 
- <div class="_nfhp_s7-stats">
- <div class="_nfhp_s7-stat">
- <span class="_nfhp_s7-stat-num">300 000+</span>
- <span class="_nfhp_s7-stat-label">Členov komunity</span>
- </div>
- <div class="_nfhp_s7-stat">
- <span class="_nfhp_s7-stat-num">30+</span>
- <span class="_nfhp_s7-stat-label">Rokov na trhu</span>
- </div>
- <div class="_nfhp_s7-stat">
- <span class="_nfhp_s7-stat-num">99%</span>
- <span class="_nfhp_s7-stat-label">Spokojnosť produktov</span>
+ <div class="_s1-ctas">
+ <a href="https://shop.northfinder.com/collections/all-clothing" class="_s1-btn-r">Explore collection →</a>
  </div>
  </div>
- 
- <a href="#" class="_nfhp_s7-btn">Preskúmať</a>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-kmigf41uka"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-wq88nesgvel"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-kmigf41uka" deep="2"><!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfhp,#nfhp *,#nfhp *::before,#nfhp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfhp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfhp img{display:block;max-width:100%}
+#nfhp a,#nfhp a:visited,#nfhp a:hover,#nfhp a:active{text-decoration:none!important;color:inherit}
+#nfhp{background:#0f0f0f;color:#fff}
+</style>
+</head>
+<body>
+<div id="nfhp" style="background:#0f0f0f;color:#fff">
+<style>
+html,body{margin:0;padding:0}
+#nfhp ._s2{background:#0f0f0f}
+#nfhp ._s2-hdr{padding:40px 24px 24px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:8px}
+#nfhp ._s2-ey{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#888;display:block;}
+#nfhp ._s2-ey-line{width:0;height:1px;background:transparent;display:inline-block;flex-shrink:0}
+#nfhp ._s2-htitle{font-size:32px;font-weight:700;color:#fff;line-height:1.05;letter-spacing:-.02em;text-align:left}
+#nfhp ._s2-sub{font-size:12px;color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase;text-align:left;white-space:nowrap}
+#nfhp ._s2-cards{display:flex;flex-direction:column;gap:24px;padding:0 24px 24px}
+#nfhp ._s2-card{position:relative;flex:1;min-height:560px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;border-radius:4px}
+#nfhp ._s2-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%}
+#nfhp ._s2-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.35) 50%,rgba(0,0,0,0) 80%)}
+#nfhp ._s2-top{position:absolute;top:20px;left:20px;right:20px;display:flex;justify-content:space-between;align-items:center;z-index:2;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+#nfhp ._s2-num{color:rgba(255,255,255,.85)}
+#nfhp ._s2-tag{color:#e3340d}
+#nfhp ._s2-cnt{position:relative;z-index:2;padding:0 20px 24px;display:flex;flex-direction:column;gap:14px;color:#fff !important}
+#nfhp ._s2-rule{display:none}
+#nfhp ._s2-ctitle{font-size:36px;font-weight:700;line-height:1;letter-spacing:-.02em;color:#fff !important}
+#nfhp ._s2-body{font-size:13px;line-height:1.6;color:rgba(255,255,255,.78) !important;max-width:380px}
+#nfhp ._s2-cta{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff !important;margin-top:4px;transition:transform .25s ease}
+#nfhp ._s2-card:hover ._s2-cta{transform:translateX(6px)}
+@media(min-width:768px){
+ #nfhp ._s2-hdr{padding:56px 64px 32px;flex-direction:row;align-items:baseline;justify-content:space-between;text-align:left}
+ #nfhp ._s2-htitle{font-size:48px;text-align:left}
+ #nfhp ._s2-cards{flex-direction:row;padding:0 64px 64px}
+ #nfhp ._s2-card{min-height:800px}
+ #nfhp ._s2-top{top:28px;left:32px;right:32px}
+ #nfhp ._s2-cnt{padding:0 32px 36px;gap:18px}
+ #nfhp ._s2-ctitle{font-size:56px}
+ #nfhp ._s2-body{font-size:14px;min-height:90px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfhp ._s2-htitle{font-size:40px}}
+</style>
+<div class="_s2">
+ <div class="_s2-hdr">
+ <div>
+ <div class="_s2-ey"><span class="_s2-ey-line"></span>Two worlds</div>
+ <h2 class="_s2-htitle">Choose your rhythm.</h2>
  </div>
- </section>
+ <span class="_s2-sub">2 lines / 1 brand</span>
+ </div>
+ <div class="_s2-cards">
+ <a href="https://shop.northfinder.com/collections/peak-flow-series" class="_s2-card">
+ <img class="_s2-img" src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/NFtatryseptember2131.jpg?v=1778743293" alt="Peak Flow">
+ <div class="_s2-grad"></div>
+ <div class="_s2-top"><span class="_s2-num">01</span><span class="_s2-tag">Performance</span></div>
+ <div class="_s2-cnt">
+ <div class="_s2-rule"></div>
+ <h3 class="_s2-ctitle">Peak Flow</h3>
+ <p class="_s2-body">For professionals pushing their limits. Peak performance, premium materials, built for demanding conditions.</p>
+ <span class="_s2-cta">Discover Peak Flow →</span>
+ </div>
+ </a>
+ <a href="https://shop.northfinder.com/collections/path-flow-series" class="_s2-card">
+ <img class="_s2-img" src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/UntitledCapture0820.jpg?v=1778743923" alt="Path Flow" style="object-position:center 20%">
+ <div class="_s2-grad"></div>
+ <div class="_s2-top"><span class="_s2-num">02</span><span class="_s2-tag">Lifestyle</span></div>
+ <div class="_s2-cnt">
+ <div class="_s2-rule"></div>
+ <h3 class="_s2-ctitle">Path Flow</h3>
+ <p class="_s2-body">For those who want to live actively, freely and with joy. Versatile range focused on durability and practicality.</p>
+ <span class="_s2-cta">Discover Path Flow →</span>
+ </div>
+ </a>
+ </div>
+</div>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-do85wo1thl"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-ir49mqlhm4j"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-do85wo1thl" deep="2"><!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfhp,#nfhp *,#nfhp *::before,#nfhp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfhp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfhp img{display:block;max-width:100%}
+#nfhp a,#nfhp a:visited,#nfhp a:hover,#nfhp a:active{text-decoration:none!important;color:inherit}
+#nfhp{background:#0f0f0f;color:#fff}
+</style>
+</head>
+<body>
+<div id="nfhp" style="background:#0f0f0f;color:#fff">
+<style>
+html,body{margin:0;padding:0}
+#nfhp ._s3{background:#0f0f0f;padding:48px 24px}
+#nfhp ._s3-hdr{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;align-items:flex-start;text-align:left}
+#nfhp ._s3-ey{display:block;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#888}
+#nfhp ._s3-h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#fff}
+#nfhp ._s3-grid{display:grid;grid-template-columns:1fr;gap:12px}
+#nfhp ._s3-card{position:relative;display:block;aspect-ratio:16/11;border-radius:10px;overflow:hidden;background:#0f0f0f;transform:translateZ(0);-webkit-transform:translateZ(0);isolation:isolate;border:none !important;outline:none !important;box-shadow:none !important}
+#nfhp ._s3-cimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform .4s ease}
+#nfhp ._s3-card:hover ._s3-cimg{transform:scale(1.1)}
+#nfhp ._s3-cgrad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65) 0%,rgba(0,0,0,.05) 60%,transparent 100%)}
+#nfhp ._s3-cmeta{position:absolute;left:20px;right:20px;bottom:18px;color:#fff}
+#nfhp ._s3-ctitle{font-size:20px;font-weight:700;letter-spacing:-.02em}
+@media(min-width:768px){
+ #nfhp ._s3{padding:56px 64px}
+ #nfhp ._s3-hdr{flex-direction:column;align-items:flex-start;text-align:left;margin-bottom:32px;gap:8px}
+ #nfhp ._s3-hdr-top{display:flex;justify-content:space-between;align-items:center;width:100%}
+ #nfhp ._s3-ey{}
+ #nfhp ._s3-h2-desktop{display:block;font-size:56px;font-weight:700;line-height:1.05;letter-spacing:-.02em;color:#fff}
+ #nfhp ._s3-h2-mobile{display:none}
+ #nfhp ._s3-link{color:rgba(255,255,255,.5);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+ #nfhp ._s3-grid{grid-template-columns:repeat(4,1fr);gap:16px}
+ #nfhp ._s3-sub{display:contents}
+ #nfhp ._s3-card{aspect-ratio:3/4 !important;border-radius:16px}
+ #nfhp ._s3-ctitle{font-size:32px !important;letter-spacing:-.02em}
+}
+@media(min-width:768px) and (max-width:1023px){
+ #nfhp ._s3-grid{grid-template-columns:repeat(2,1fr)}
+ #nfhp ._s3-card{aspect-ratio:16/11 !important}
+ #nfhp ._s3-ctitle{font-size:22px !important}
+ #nfhp ._s3-h2-desktop{font-size:40px}
+}
+ #nfhp ._s3-ctitle{font-size:28px !important}
+}
+</style>
+<section class="_s3">
+ <div class="_s3-hdr">
+ <div class="_s3-hdr-top">
+ <span class="_s3-ey">Categories</span>
+ <a href="https://shop.northfinder.com/collections/mens-clothing?sort_by=manual&filter.v.price.gte=0&filter.v.price.lte=500&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813347533132&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813345501516&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813347598668&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813348680012&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813304115532&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813348745548&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813303984460&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813333901644&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813334262092&filter.p.m.features.activities=gid%3A%2F%2Fshopify%2FMetaobject%2F1813334196556" class="_s3-link">All categories →</a>
+ </div>
+ <h2 class="_s3-h2-desktop">Your terrain,<br>your collection</h2>
+ <h2 class="_s3-h2-mobile" style="font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#fff">Tailored collections</h2>
+ </div>
+ <div class="_s3-grid" id="s3main">
+ <a href="https://shop.northfinder.com/collections/activity-hiking" class="_s3-card">
+ <img class="_s3-cimg" src="https://northfinder.com/sk/modules/jscomposer/uploads/Product-Image-2.jpg" alt="Hiking">
+ <div class="_s3-cgrad"></div>
+ <div class="_s3-cmeta">
+ <div class="_s3-ctitle" data-t="s3_cat2">Hiking</div>
+ </div>
+ </a>
+ <div class="_s3-sub">
+ <a href="https://shop.northfinder.com/collections/activity-free-time" class="_s3-card">
+ <img class="_s3-cimg" src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/all-photos-capture_jpg.jpg?v=1779795359" alt="Free time">
+ <div class="_s3-cgrad"></div>
+ <div class="_s3-cmeta">
+ <div class="_s3-ctitle" data-t="s3_cat4">Free time</div>
+ </div>
+ </a>
+ <a href="https://shop.northfinder.com/collections/activity-skiing" class="_s3-card">
+ <img class="_s3-cimg" src="https://northfinder.com/sk/modules/jscomposer/uploads/Product-Image-1.jpg" alt="Skiing">
+ <div class="_s3-cgrad"></div>
+ <div class="_s3-cmeta">
+ <div class="_s3-ctitle" data-t="s3_cat3">Skiing</div>
+ </div>
+ </a>
+ <a href="https://shop.northfinder.com/collections/activity-ski-touring" class="_s3-card">
+ <img class="_s3-cimg" src="https://northfinder.com/sk/modules/jscomposer/uploads/Product-Image.jpg" alt="Ski touring">
+ <div class="_s3-cgrad"></div>
+ <div class="_s3-cmeta">
+ <div class="_s3-ctitle" data-t="s3_cat1">Ski touring</div>
+ </div>
+ </a>
+ </div>
+ </div>
+</section>
+<style>
+html,body{margin:0;padding:0}
+@media(min-width:768px) and (max-width:1023px){
+ #nfhp ._s3-grid{grid-template-columns:repeat(2,1fr)}
+ #nfhp ._s3-card{aspect-ratio:16/11 !important}
+ #nfhp ._s3-ctitle{font-size:22px !important}
+ #nfhp ._s3-h2-desktop{font-size:40px}
+}
+@media(max-width:767px){
+ #nfhp ._s3-sub{display:contents}
+ #nfhp ._s3-link{display:none}
+ #nfhp ._s3-hdr-top{justify-content:flex-start}
+ #nfhp ._s3-h2-desktop{display:none}
+ #nfhp ._s3-h2-mobile{display:block}
+ #nfhp ._s3-hdr{align-items:flex-start}
+}
+</style>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-32mpitggdh2"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-9zbe92z2z9k"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-32mpitggdh2" deep="2"><!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfhp,#nfhp *,#nfhp *::before,#nfhp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfhp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfhp img{display:block;max-width:100%}
+#nfhp a,#nfhp a:visited,#nfhp a:hover,#nfhp a:active{text-decoration:none!important;color:inherit}
+#nfhp{background:#ffffff;color:#0f0f0f}
+</style>
+</head>
+<body>
+<div id="nfhp" style="background:#ffffff;color:#0f0f0f">
+<style>
+html,body{margin:0;padding:0}
+#nfhp ._s5{padding:56px 24px}
+#nfhp ._s5-inner{display:flex;flex-direction:column;gap:8px}
+#nfhp ._s5-text{display:flex;flex-direction:column;gap:8px;align-items:flex-start;text-align:left}
+#nfhp ._s5-ey{display:block;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#888}
+#nfhp ._s5-h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#0f0f0f}
+#nfhp ._s5-red{color:#e3340d}
+#nfhp ._s5-body{font-size:14px;color:rgba(15,15,15,.55);line-height:1.6;max-width:420px;margin-top:12px}
+#nfhp ._s5-icons{list-style:none;width:100%;max-width:420px;margin-top:12px}
+#nfhp ._s5-icon-item{display:flex;align-items:center;gap:14px;padding:12px 0}
+#nfhp ._s5-icon-img{width:28px;height:28px;object-fit:contain;flex-shrink:0}
+#nfhp ._s5-icon-label{font-size:13px;font-weight:500;color:#0f0f0f;text-align:left}
+/* Mobile: map in flow, stats below with slight overlap */
+#nfhp ._s5-map-wrap{position:relative}
+#nfhp ._s5-map{width:100%;display:block;height:auto}
+#nfhp ._s5-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:-24px;position:relative;z-index:2}
+#nfhp ._s5-stat{background:#2a2a2a;color:#fff;padding:12px 8px;border-radius:10px;text-align:center;border:1px solid rgba(255,255,255,.10)}
+#nfhp ._s5-sval{font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1}
+#nfhp ._s5-slabel{font-size:9px;opacity:.75;margin-top:4px;letter-spacing:.04em;text-transform:uppercase}
+/* Tablet */
+@media(min-width:600px) and (max-width:1023px){
+ #nfhp ._s5{padding:72px 0 72px 64px}
+ #nfhp ._s5-inner{display:grid;grid-template-columns:1fr 1.4fr;gap:32px;align-items:center}
+ #nfhp ._s5-text{align-items:flex-start;text-align:left}
+ #nfhp ._s5-h2{font-size:40px}
+ #nfhp ._s5-map-wrap{overflow:visible}
+ #nfhp ._s5-map{width:340%;margin-left:-10%}
+ #nfhp ._s5-stats{grid-template-columns:1fr 1fr;gap:8px;margin-top:-28px;overflow:visible;padding-right:64px}
+ #nfhp ._s5-stat{padding:12px 8px;min-width:0}
+ #nfhp ._s5-stat-full{grid-column:1 / -1}
+ #nfhp ._s5-sval{font-size:22px}
+}
+/* Desktop */
+@media(min-width:1024px){
+ #nfhp ._s5{padding:96px 64px}
+ #nfhp ._s5-inner{display:grid;grid-template-columns:1fr 1.3fr;gap:48px;align-items:center}
+ #nfhp ._s5-text{align-items:flex-start;text-align:left}
+ #nfhp ._s5-h2{font-size:56px}
+ #nfhp ._s5-body{font-size:16px}
+ #nfhp ._s5-map{width:120%;margin-left:-10%}
+ #nfhp ._s5-stats{gap:12px;margin-top:-36px}
+ #nfhp ._s5-stat{padding:16px 12px}
+ #nfhp ._s5-sval{font-size:28px}
+ #nfhp ._s5-slabel{font-size:9px}
+}
+</style>
+<section class="_s5">
+ <div class="_s5-inner">
+ <div class="_s5-text">
+ <span class="_s5-ey">About us</span>
+ <h2 class="_s5-h2">Our home?<br><span class="_s5-red">The Carpathians.</span></h2>
+ <p class="_s5-body">Slovak outdoor brand with 30+ years of testing in real mountains.</p>
+ <ul class="_s5-icons">
+ <li class="_s5-icon-item">
+ <img class="_s5-icon-img" src="https://northfinder.com/sk/modules/jscomposer/uploads/nflogomale.png" alt="">
+ <span class="_s5-icon-label">Carpathians, nature and freedom of movement</span>
+ </li>
+ <li class="_s5-icon-item" id="_s5-brand-item">
+ <img class="_s5-icon-img" id="_s5-brand-flag" src="https://flagcdn.com/sk.svg" alt="">
+ <span class="_s5-icon-label" id="_s5-brand-label">Slovak brand</span>
+ </li>
+ <li class="_s5-icon-item">
+ <img class="_s5-icon-img" src="https://northfinder.com/sk/modules/jscomposer/uploads/horkasluzba.png" alt="">
+ <span class="_s5-icon-label">Tested in real terrain</span>
+ </li>
+ </ul>
+ </div>
+ <div class="_s5-map-wrap">
+ <img class="_s5-map" src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/Gemini_Generated_Image_qp26gqp26gqp26gq.png?v=1779369003" alt="Mapa Slovenska">
+ <div class="_s5-stats">
+ <div class="_s5-stat"><div class="_s5-sval">4</div><div class="_s5-slabel">Seasons</div></div>
+ <div class="_s5-stat"><div class="_s5-sval">2+</div><div class="_s5-slabel">Testing seasons</div></div>
+ <div class="_s5-stat _s5-stat-full"><div class="_s5-sval">30%</div><div class="_s5-slabel">Recycled content</div></div>
+ </div>
+ </div>
+ </div>
+</section>
 </div>
 <script>
- (function () {
- var video = document.getElementById('nfhp-video');
- var poster = document.getElementById('nfhp-poster');
- function hidePoster() {
- poster.classList.add('is-hidden');
+(function(){
+ var locale=(window.Shopify&&Shopify.locale)?Shopify.locale:(document.documentElement.lang||'en');
+ var isSK=locale==='sk'||locale.startsWith('sk-');
+ if(!isSK){
+ var flag=document.getElementById('_s5-brand-flag');
+ var label=document.getElementById('_s5-brand-label');
+ if(flag)flag.src='https://flagcdn.com/eu.svg';
+ if(label)label.textContent='European brand';
  }
- function forcePlay() {
- video.muted = true;
- var p = video.play();
- if (p !== undefined) {
- p.catch(function () {});
- }
- }
- // Skry poster hneď ako video začne hrať
- video.addEventListener('playing', hidePoster, { once: true });
- // Spusti hneď
- forcePlay();
- // iOS niekedy potrebuje canplay event
- video.addEventListener('canplay', forcePlay, { once: true });
- // Fallback pri prvom dotyku (iOS strict mode)
- document.addEventListener('touchstart', function () {
- forcePlay();
- }, { once: true, passive: true });
- // Fallback — skry poster po 3s
- setTimeout(hidePoster, 3000);
- })();
+})();
 </script>
 </body>
-</html>
-</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-7ntrc5c1h3o"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-3lvv067ssbu"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-7ntrc5c1h3o" deep="2"><!DOCTYPE html>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-18vlm8j0awg"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-0mx6rav8iea"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-18vlm8j0awg" deep="2"><!DOCTYPE html>
 <html lang="sk">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
- <title>Northfinder – Sekcia 1+2</title>
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
- <style>
- #nfhp,
- #nfhp *,
- #nfhp *::before,
- #nfhp *::after {
- box-sizing: border-box;
- margin: 0;
- padding: 0;
- font-family: 'Montserrat', sans-serif;
- -webkit-font-smoothing: antialiased;
- }
- #nfhp {
- background: #0f0f0f;
- color: #ffffff;
- width: 100vw;
- position: relative;
- left: 50%;
- transform: translateX(-50%);
- overflow-x: hidden;
- }
- #nfhp img { display: block; max-width: 100%; }
- #nfhp a,
- #nfhp a:visited,
- #nfhp a:hover,
- #nfhp a:active { text-decoration: none !important; color: inherit; }
- /* ════════════════════════════════════════
- WRAPPER — mobile: stĺpec, tablet+: rad
- ════════════════════════════════════════ */
- #nfhp ._nfhp_s12-wrap {
- display: flex;
- flex-direction: column;
- gap: 2px; /* jemná medzera medzi kartami */
- }
- /* ════════════════════════════════════════
- KARTA — spoločné štýly
- ════════════════════════════════════════ */
- #nfhp ._nfhp_s2-card {
- position: relative;
- flex: 1;
- min-height: 580px;
- background: #141414;
- display: flex;
- flex-direction: column;
- justify-content: flex-end;
- overflow: hidden;
- }
- #nfhp ._nfhp_s2-bg {
- position: absolute;
- inset: 0;
- width: 100%;
- height: 100%;
- object-fit: cover;
- object-position: center top;
- }
- #nfhp ._nfhp_s2-overlay {
- position: absolute;
- inset: 0;
- background: linear-gradient(
- to top,
- rgba(0, 0, 0, 0.92) 0%,
- rgba(0, 0, 0, 0.55) 45%,
- rgba(0, 0, 0, 0.00) 75%
- );
- z-index: 1;
- }
- #nfhp ._nfhp_s2-content {
- position: relative;
- z-index: 2;
- padding: 220px 24px 36px;
- text-align: center;
- }
- #nfhp ._nfhp_s2-title {
- font-size: 42px !important;
- font-weight: 900 !important;
- letter-spacing: -0.5px !important;
- line-height: 1.05 !important;
- color: #ffffff !important;
- margin-bottom: 16px;
- }
- #nfhp ._nfhp_s2-desc {
- font-size: 15px;
- font-weight: 400;
- line-height: 1.65;
- color: rgba(255, 255, 255, 0.85);
- margin-bottom: 28px;
- }
- #nfhp ._nfhp_s2-desc strong {
- font-weight: 700;
- color: #ffffff;
- }
- #nfhp ._nfhp_s2-btn {
- position: relative;
- display: block;
- width: 100%;
- padding: 18px 24px;
- background: rgba(255, 255, 255, 0.06);
- backdrop-filter: blur(16px);
- -webkit-backdrop-filter: blur(16px);
- border: 1px solid rgba(255, 255, 255, 0.40);
- border-radius: 14px;
- font-size: 16px !important;
- font-weight: 700 !important;
- color: #ffffff !important;
- text-align: center;
- letter-spacing: 0.12em;
- text-transform: uppercase;
- transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
- text-decoration: none !important;
- box-shadow:
- 0 0 18px rgba(255, 255, 255, 0.08),
- inset 0 1px 0 rgba(255, 255, 255, 0.12);
- }
- #nfhp ._nfhp_s2-btn:active {
- background: rgba(255, 255, 255, 0.12);
- }
- /* ════════════════════
- TABLET — 600px+
- ════════════════════ */
- @media (min-width: 600px) {
- #nfhp ._nfhp_s12-wrap {
- flex-direction: row;
- gap: 3px;
- }
- #nfhp ._nfhp_s2-card {
- min-height: 75vh;
- }
- #nfhp ._nfhp_s2-content {
- padding: 0 48px 44px;
- text-align: left;
- }
- #nfhp ._nfhp_s2-title {
- font-size: 44px !important;
- }
- #nfhp ._nfhp_s2-desc {
- font-size: 14px;
- margin-bottom: 28px;
- }
- #nfhp ._nfhp_s2-btn {
- display: inline-block;
- width: auto;
- padding: 16px 36px;
- font-size: 14px !important;
- }
- }
- /* ════════════════════
- DESKTOP — 1024px+
- ════════════════════ */
- @media (min-width: 1024px) {
- #nfhp ._nfhp_s12-wrap {
- gap: 4px;
- }
- #nfhp ._nfhp_s2-card {
- min-height: 90vh;
- }
- #nfhp ._nfhp_s2-content {
- padding: 0 80px 72px;
- }
- #nfhp ._nfhp_s2-title {
- font-size: 60px !important;
- letter-spacing: -1.5px !important;
- margin-bottom: 20px;
- }
- #nfhp ._nfhp_s2-desc {
- font-size: 15px;
- max-width: 380px;
- margin-bottom: 36px;
- }
- #nfhp ._nfhp_s2-btn {
- padding: 18px 44px;
- font-size: 14px !important;
- transition: background 0.25s ease;
- }
- #nfhp ._nfhp_s2-btn:hover {
- background: transparent;
- border-color: rgba(255, 255, 255, 0.85);
- box-shadow:
- 0 0 28px rgba(200, 190, 255, 0.30),
- 0 0 8px rgba(255, 255, 255, 0.18),
- inset 0 0 18px rgba(200, 190, 255, 0.08),
- inset 0 1px 0 rgba(255, 255, 255, 0.18);
- }
- }
- </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfhp,#nfhp *,#nfhp *::before,#nfhp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfhp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfhp img{display:block;max-width:100%}
+#nfhp a,#nfhp a:visited,#nfhp a:hover,#nfhp a:active{text-decoration:none!important;color:inherit}
+#nfhp{background:#0f0f0f;color:#fff}
+</style>
 </head>
 <body>
-<div id="nfhp">
- <div class="_nfhp_s12-wrap">
- 
- <section class="_nfhp_s2-card">
- <img class="_nfhp_s2-bg"
- src="https://northfinder.com/sk//modules/asdata_lookbook/views/img/look-book-__2025-11-21-09-16-46.jpg"
- alt="Peak Flow – model">
- <div class="_nfhp_s2-overlay"></div>
- <div class="_nfhp_s2-content">
- <div class="_nfhp_s2-title">Peak Flow</div>
- <p class="_nfhp_s2-desc">
- Pre profesionálov, ktorí hľadajú svoje limity. Najvyšší <strong>výkon</strong>,
- najlepšie <strong>materiály</strong>, určené pre <strong>náročné podmienky</strong>.
- </p>
- <a href="#" class="_nfhp_s2-btn">Objaviť Peak Flow</a>
+<div id="nfhp" style="background:#0f0f0f;color:#fff">
+<style>
+html,body{margin:0;padding:0}
+#nfhp ._s6{background:#161616;padding:56px 24px}
+#nfhp ._s6-hdr{display:flex;flex-direction:column;gap:8px;margin-bottom:36px;align-items:flex-start;text-align:left}
+#nfhp ._s6-ey{display:block;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#888}
+#nfhp ._s6-h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#fff}
+#nfhp ._s6-red{color:#e3340d}
+#nfhp ._s6-body{font-size:14px;color:rgba(255,255,255,.86);line-height:1.6}
+/* Mobile: horizontal scroll */
+#nfhp ._s6-cards{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;margin-inline:-24px;padding:0 24px 6px;scrollbar-width:none}
+#nfhp ._s6-cards::-webkit-scrollbar{display:none}
+#nfhp ._s6-card{flex:0 0 62%;scroll-snap-align:start;padding:20px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;display:flex;flex-direction:column;gap:14px}
+#nfhp ._s6-icon{width:40px;height:40px;border-radius:10px;background:#e3340d;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#nfhp ._s6-clabel{font-size:14px;font-weight:600;color:#fff;margin-bottom:6px;line-height:1.25}
+#nfhp ._s6-cdesc{font-size:13px;color:rgba(255,255,255,.6);line-height:1.55}
+@media(min-width:768px){
+ #nfhp ._s6{padding:96px 64px}
+ #nfhp ._s6-hdr{align-items:flex-start;text-align:left;margin-inline:0;margin-bottom:36px}
+ #nfhp ._s6-h2{font-size:56px}
+ #nfhp ._s6-body{font-size:16px}
+ #nfhp ._s6-cards{display:grid;grid-template-columns:repeat(3,1fr);overflow-x:visible;scroll-snap-type:none;margin-inline:0;padding:0;gap:16px}
+ #nfhp ._s6-card{flex:unset;padding:28px 24px}
+ #nfhp ._s6-clabel{font-size:16px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfhp ._s6-h2{font-size:40px}}
+</style>
+<section class="_s6">
+ <div class="_s6-hdr">
+ <span class="_s6-ey">Premium quality</span>
+ <h2 class="_s6-h2">What makes Northfinder<br><span class="_s6-red">premium?</span></h2>
+ <p class="_s6-body">Premium is not a price. It is quality, functionality and responsibility — from design to end of life.</p>
  </div>
- </section>
- 
- <section class="_nfhp_s2-card">
- <img class="_nfhp_s2-bg"
- src="https://northfinder.com/sk//modules/asdata_lookbook/views/img/look-book-__2025-11-21-09-20-32.jpg"
- alt="Path Flow – model">
- <div class="_nfhp_s2-overlay"></div>
- <div class="_nfhp_s2-content">
- <div class="_nfhp_s2-title">Path Flow</div>
- <p class="_nfhp_s2-desc">
- Pre tých, ktorí chcú žiť <strong>aktívne</strong>, slobodne a s
- radosťou. Univerzálna rada s dôrazom na
- <strong>odolnosť</strong> a <strong>praktickosť</strong>.
- </p>
- <a href="#" class="_nfhp_s2-btn">Objaviť Path Flow</a>
- </div>
- </section>
- </div>
+ <div class="_s6-cards"><div class="_s6-card"><div class="_s6-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div><div><h3 class="_s6-clabel">Top-tier materials</h3><p class="_s6-cdesc">Primaloft®, Gore-Tex® and proprietary laminated fabrics.</p></div></div><div class="_s6-card"><div class="_s6-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div><h3 class="_s6-clabel">Terrain testing</h3><p class="_s6-cdesc">Every cut goes through at least two seasons in the Carpathians.</p></div></div><div class="_s6-card"><div class="_s6-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/></svg></div><div><h3 class="_s6-clabel">Sustainability</h3><p class="_s6-cdesc">Recycled fibres, repairable stitching, bluesign® partners.</p></div></div><div class="_s6-card"><div class="_s6-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></svg></div><div><h3 class="_s6-clabel">Hybrid constructions</h3><p class="_s6-cdesc">Layering based on real movements, not marketing.</p></div></div><div class="_s6-card"><div class="_s6-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div><h3 class="_s6-clabel">Design with emotion</h3><p class="_s6-cdesc">Cuts that have character even after the fifth season.</p></div></div><div class="_s6-card"><div class="_s6-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></div><div><h3 class="_s6-clabel">Carpathian authenticity</h3><p class="_s6-cdesc">Slovakia as home, mountains as laboratory.</p></div></div></div>
+</section>
 </div>
 </body>
-</html>
-</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div> </section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-yo5s8pirq7"><div class="ecom-inner"><div class="ecom-block ecom-core core__block elmspace ecom-0k3j2mkhfqn7"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-yo5s8pirq7" deep="2"><!DOCTYPE html>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-z1jetq6xl1"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-1yyswk9nuw2"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-z1jetq6xl1" deep="2"><!DOCTYPE html>
 <html lang="sk">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
- <title>Northfinder – Mobile</title>
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
- <style>
- #nfhp,
- #nfhp *,
- #nfhp *::before,
- #nfhp *::after {
- box-sizing: border-box;
- margin: 0;
- padding: 0;
- font-family: 'Montserrat', sans-serif;
- -webkit-font-smoothing: antialiased;
- }
- #nfhp {
- background: #ffffff;
- color: #000000;
- width: 100vw;
- position: relative;
- left: 50%;
- transform: translateX(-50%);
- overflow-x: hidden;
- }
- #nfhp img { display: block; max-width: 100%; }
- #nfhp a,
- #nfhp a:visited,
- #nfhp a:hover,
- #nfhp a:active { text-decoration: none !important; }
- /* ════════════════════════════════════════
- SEKCIA 3 — KOLEKCIE NA MIERU
- ════════════════════════════════════════ */
- #nfhp ._nfhp_s3 {
- background: #ffffff;
- padding-top: 40px;
- padding-bottom: 40px;
- }
- #nfhp ._nfhp_s3-title {
- font-size: 32px;
- font-weight: 900;
- color: #000000;
- text-transform: uppercase;
- letter-spacing: 0.02em;
- padding-inline: 24px;
- margin-bottom: 30px;
- text-align: center;
- }
- /* Horizontálne scrollovateľný rad kariet */
- #nfhp ._nfhp_s3-scroll {
- display: flex;
- gap: 25px;
- overflow-x: auto;
- scroll-snap-type: x mandatory;
- -webkit-overflow-scrolling: touch;
- padding-left: 24px;
- padding-right: 20px;
- padding-bottom: 15px;
- scroll-padding-left: 24px;
- /* Skryť scrollbar */
- scrollbar-width: none;
- }
- #nfhp ._nfhp_s3-scroll::-webkit-scrollbar {
- display: none;
- }
- #nfhp ._nfhp_s3-spacer {
- flex-shrink: 0;
- width: 20px;
- }
- /* Karta kolekcie */
- #nfhp ._nfhp_s3-card {
- position: relative;
- flex: 0 0 calc(100vw - 60px);
- max-width: 320px;
- height: 220px;
- border-radius: 14px;
- overflow: hidden;
- scroll-snap-align: start;
- cursor: pointer;
- background: #1a1a1a;
- text-decoration: none !important;
- }
- #nfhp ._nfhp_s3-card-img {
- position: absolute;
- inset: 0;
- width: 100%;
- height: 100%;
- object-fit: cover;
- object-position: center;
- transition: transform 0.4s ease;
- }
- #nfhp ._nfhp_s3-card:active ._nfhp_s3-card-img {
- transform: scale(1.04);
- }
- /* Gradient overlay */
- #nfhp ._nfhp_s3-card-overlay {
- position: absolute;
- inset: 0;
- background: linear-gradient(
- to top,
- rgba(0, 0, 0, 0.72) 0%,
- rgba(0, 0, 0, 0.15) 55%,
- rgba(0, 0, 0, 0.00) 100%
- );
- }
- /* NF logo — pravý horný roh */
- #nfhp ._nfhp_s3-nflogo {
- position: absolute;
- top: 12px;
- right: 12px;
- width: 32px;
- height: 32px;
- background: rgba(255, 255, 255, 0.22);
- backdrop-filter: blur(6px);
- -webkit-backdrop-filter: blur(6px);
- border-radius: 50%;
- display: flex;
- align-items: center;
- justify-content: center;
- }
- #nfhp ._nfhp_s3-nflogo svg {
- width: 18px;
- height: 18px;
- }
- /* Nadpis karty */
- #nfhp ._nfhp_s3-card-title {
- position: absolute;
- bottom: 24px;
- left: 0;
- right: 0;
- text-align: center;
- font-size: 14px;
- font-weight: 900;
- color: #ffffff;
- text-transform: uppercase;
- letter-spacing: 0.06em;
- line-height: 1.25;
- padding-inline: 12px;
- }
- /* Scroll indikátor (bodky) */
- #nfhp ._nfhp_s3-dots {
- display: flex;
- justify-content: center;
- gap: 6px;
- margin-top: 14px;
- padding-inline: 20px;
- }
- #nfhp ._nfhp_s3-dot {
- height: 3px;
- border-radius: 2px;
- background: #d0d0d0;
- transition: all 0.25s ease;
- }
- #nfhp ._nfhp_s3-dot._nfhp_s3-dot-active {
- background: #000000;
- width: 20px !important;
- }
- /* ════════════════════
- TABLET — 600px+
- ════════════════════ */
- @media (min-width: 600px) {
- #nfhp ._nfhp_s3 {
- padding: 60px 0;
- }
- #nfhp ._nfhp_s3-title {
- font-size: 40px;
- }
- /* Na tablete karta zaberá ~45vw — vidieť 2 karty + peek 3. */
- #nfhp ._nfhp_s3-card {
- flex: 0 0 calc(50vw - 28px);
- max-width: 380px;
- height: 260px;
- }
- }
- /* ════════════════════
- DESKTOP — 1024px+
- ════════════════════ */
- @media (min-width: 1024px) {
- #nfhp ._nfhp_s3 {
- padding: 80px 0;
- max-width: 1280px;
- margin-inline: auto;
- }
- #nfhp ._nfhp_s3-title {
- font-size: 48px;
- padding-inline: 80px;
- margin-bottom: 40px;
- }
- /* Grid — 3 karty vedľa seba, žiadny scroll */
- #nfhp ._nfhp_s3-scroll {
- display: grid;
- grid-template-columns: repeat(3, 1fr);
- overflow-x: visible;
- padding-left: 40px;
- padding-right: 40px;
- scroll-snap-type: none;
- gap: 20px;
- }
- #nfhp ._nfhp_s3-card {
- flex: unset;
- width: 100%;
- max-width: none;
- height: 320px;
- }
- /* Skryť scroll indikátor na desktope */
- #nfhp ._nfhp_s3-dots {
- display: none;
- }
- /* Hover efekty na kartách */
- #nfhp ._nfhp_s3-card {
- transition: transform 0.35s ease, box-shadow 0.35s ease;
- }
- #nfhp ._nfhp_s3-card:hover {
- transform: translateY(-6px);
- box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22);
- }
- #nfhp ._nfhp_s3-card:hover ._nfhp_s3-card-img {
- transform: scale(1.06);
- }
- #nfhp ._nfhp_s3-card:hover ._nfhp_s3-card-overlay {
- background: linear-gradient(
- to top,
- rgba(0, 0, 0, 0.80) 0%,
- rgba(0, 0, 0, 0.25) 55%,
- rgba(0, 0, 0, 0.05) 100%
- );
- }
- #nfhp ._nfhp_s3-card:hover ._nfhp_s3-card-title {
- letter-spacing: 0.10em;
- transition: letter-spacing 0.35s ease;
- }
- }
- </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfhp,#nfhp *,#nfhp *::before,#nfhp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfhp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfhp img{display:block;max-width:100%}
+#nfhp a,#nfhp a:visited,#nfhp a:hover,#nfhp a:active{text-decoration:none!important;color:inherit}
+/* ── S7 Mobile base ── */
+#nfhp ._s7{padding:0 24px 56px;margin-top:24px}
+#nfhp ._s7-inner{display:flex;flex-direction:column;gap:40px}
+#nfhp ._s7-left{display:flex;flex-direction:column;gap:8px}
+#nfhp ._s7-ey{display:block;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#888}
+#nfhp ._s7-h2{font-size:32px;font-weight:800;line-height:.95;letter-spacing:-.03em;color:#0f0f0f}
+#nfhp ._s7-red{color:#e3340d}
+#nfhp ._s7-right{display:flex;flex-direction:column;gap:32px}
+#nfhp ._s7-body{font-size:15px;line-height:1.65;color:rgba(15,15,15,.6);max-width:480px;margin-top:12px}
+#nfhp ._s7-links{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:16px}
+#nfhp ._s7-link{display:flex;flex-direction:column;gap:6px;padding:20px 16px 20px 0}
+#nfhp ._s7-link+._s7-link{padding-left:16px}
+#nfhp ._s7-link-label{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(15,15,15,.4)}
+#nfhp ._s7-link-title{font-size:14px;font-weight:700;color:#0f0f0f;line-height:1.3}
+#nfhp ._s7-link{transition:transform .25s ease}
+#nfhp ._s7-link:hover{transform:translateX(6px)}
+#nfhp ._s7-btn{margin-top:8px;display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:18px 36px;background:#e3340d;color:#fff !important;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;width:100%}
+#nfhp ._s7-btn{transition:transform .25s ease,background .2s ease}
+#nfhp ._s7-btn:hover{background:#c42c0a;transform:translateX(6px)}
+@media(min-width:768px){
+ #nfhp ._s7{padding:96px 64px}
+ #nfhp ._s7-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+ #nfhp ._s7-h2{font-size:60px}
+ #nfhp ._s7-body{font-size:16px}
+ #nfhp ._s7-link{padding:24px 24px 24px 0}
+ #nfhp ._s7-link+._s7-link{padding-left:24px}
+ #nfhp ._s7-link-title{font-size:15px}
+ #nfhp ._s7-btn{width:auto;padding:20px 40px;font-size:13px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfhp ._s7-h2{font-size:40px}#nfhp ._s7{padding-top:0;padding-left:48px;padding-right:48px;margin-top:24px}#nfhp ._s7-inner{grid-template-columns:1fr 1.6fr;gap:48px}#nfhp ._s7-btn{width:100%;font-size:13px}}
+</style>
 </head>
 <body>
-<div id="nfhp">
- 
- <section class="_nfhp_s3">
- <h2 class="_nfhp_s3-title">Kolekcie na mieru</h2>
- <div class="_nfhp_s3-scroll" id="nfhp_s3_scroll">
- 
- <a href="https://northfinder.com/sk/1619-clothing/aktivity-lyzovanie" class="_nfhp_s3-card">
- <img class="_nfhp_s3-card-img"
- src="https://northfinder.com/sk/modules/jscomposer/uploads/Product-Image.jpg"
- alt="Lyžovanie">
- <div class="_nfhp_s3-card-overlay"></div>
- <span class="_nfhp_s3-card-title">Lyžovanie</span>
+<div id="nfhp" style="background:#ffffff;color:#0f0f0f">
+<section class="_s7">
+ <div class="_s7-inner">
+ <div class="_s7-left">
+ <span class="_s7-ey">Start now</span>
+ <h2 class="_s7-h2">Move your <span class="_s7-red">way.</span></h2>
+ </div>
+ <div class="_s7-right">
+ <p class="_s7-body">Discover premium Carpathian outdoor clothing for every season and terrain. Choose your collection.</p>
+ <div class="_s7-links">
+ <a class="_s7-link" href="https://shop.northfinder.com/collections/peak-flow-series">
+ <span class="_s7-link-label">Peak Flow™</span>
+ <span class="_s7-link-title">For demanding conditions →</span>
  </a>
- 
- <a href="https://northfinder.com/sk/1619-clothing/aktivity-turistika" class="_nfhp_s3-card">
- <img class="_nfhp_s3-card-img"
- src="https://northfinder.com/sk/modules/jscomposer/uploads/Product-Image-2.jpg"
- alt="Turistika">
- <div class="_nfhp_s3-card-overlay"></div>
- <span class="_nfhp_s3-card-title">Turistika</span>
- </a>
- 
- <a href="https://northfinder.com/sk/1619-clothing/aktivity-skialpinizmus" class="_nfhp_s3-card">
- <img class="_nfhp_s3-card-img"
- src="https://northfinder.com/sk/modules/jscomposer/uploads/Product-Image-1.jpg"
- alt="Skialpinizmus">
- <div class="_nfhp_s3-card-overlay"></div>
- <span class="_nfhp_s3-card-title">Skialpinizmus</span>
+ <a class="_s7-link" href="https://shop.northfinder.com/collections/path-flow-series">
+ <span class="_s7-link-label">Path Flow™</span>
+ <span class="_s7-link-title">For everyday movement →</span>
  </a>
  </div>
- 
- <div class="_nfhp_s3-dots" id="nfhp_s3_dots">
- <div class="_nfhp_s3-dot _nfhp_s3-dot-active" style="width:20px;"></div>
- <div class="_nfhp_s3-dot" style="width:8px;"></div>
- <div class="_nfhp_s3-dot" style="width:8px;"></div>
+ <a class="_s7-btn" href="https://shop.northfinder.com/collections/all-clothing">Explore collection →</a>
  </div>
- </section>
+ </div>
+</section>
 </div>
 <script>
- (function () {
- var scroll = document.getElementById('nfhp_s3_scroll');
- var dots = document.getElementById('nfhp_s3_dots').children;
- if (!scroll) return;
- scroll.addEventListener('scroll', function () {
- var cards = scroll.querySelectorAll('._nfhp_s3-card');
- var cardWidth = cards[0].offsetWidth + 25; // šírka + gap
- var idx = Math.round(scroll.scrollLeft / cardWidth);
- for (var i = 0; i < dots.length; i++) {
- dots[i].classList.remove('_nfhp_s3-dot-active');
- dots[i].style.width = '8px';
- }
- if (dots[idx]) {
- dots[idx].classList.add('_nfhp_s3-dot-active');
- dots[idx].style.width = '20px';
+(function(){
+ function nfFixLinks(){
+ var locale=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
+ var isBG=(locale==='bg');
+ var isDefault=(locale==='en');
+ document.querySelectorAll('a[href*="shop.northfinder.com"]').forEach(function(a){
+ var h=a.getAttribute('href');
+ if(!h)return;
+ if(isBG){
+ a.href=h.replace('https://shop.northfinder.com','https://northfinder.bg/en');
+ } else if(!isDefault){
+ a.href=h.replace('https://shop.northfinder.com/','https://shop.northfinder.com/'+locale+'/');
  }
  });
- })();
+ }
+ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',nfFixLinks);}
+ else{nfFixLinks();}
+})();
+</script>
+<script>
+(function(){
+ var locale=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
+ if(locale==='de-at'||locale==='at')locale='de';
+ var T={
+ sk:{
+ 
+ s1_body:'Prémiová outdoorová značka zrodená v Karpatoch. Testovaná v reálnych podmienkach, nie v laboratóriu.',
+ s1_st1:'Členov komunity',s1_st2:'Rokov na trhu',s1_st3:'Spokojnosť s produktom',
+ s1_btn:'Preskúmať kolekciu →',
+ s2_ey:'Dva svety',s2_h2:'Vyber si svoj rytmus.',s2_sub:'2 línie / 1 značka',
+ s2_t1:'Výkon',s2_t2:'Životný štýl',
+ s2_b1:'Pre profesionálov, ktorí prekračujú hranice. Špičkový výkon, prémiové materiály, navrhnuté pre náročné podmienky.',
+ s2_b2:'Pre tých, ktorí chcú žiť aktívne, slobodne a s radosťou. Všestranná kolekcia zameraná na odolnosť a praktickosť.',
+ s2_cta1:'Objaviť Peak Flow →',s2_cta2:'Objaviť Path Flow →',
+ s3_ey:'Kategórie',s3_link:'Všetky kategórie →',
+ s3_h2a:'Tvoj terén,',s3_h2b:'tvoja kolekcia',s3_h2m:'Šité kolekcie',
+ s3_badge:'Odporúčané',s3_c1:'Skialpinizmus',s3_c2:'Turistika',s3_c3:'Lyžovanie',s3_c4:'Voľný čas',
+ s5_ey:'O nás',s5_h2a:'Náš domov?',s5_h2b:'Karpaty.',
+ s5_body:'Slovenská outdoorová značka s 30+ rokmi testovania v skutočných horách.',
+ s5_f1:'Karpaty, príroda a sloboda pohybu',s5_f2sk:'Slovenská značka',s5_f2eu:'Európska značka',s5_f3:'Testované v reálnom teréne',
+ s5_sl1:'Sezóny',s5_sl2:'Testovacích sezón',s5_sl3:'Recyklovaný obsah',
+ s6_ey:'Prémiová kvalita',s6_h2a:'Čo robí Northfinder',s6_h2b:'prémiovým?',
+ s6_body:'Prémium nie je cena. Je to kvalita, funkcionalita a zodpovednosť — od dizajnu až po koniec životnosti.',
+ s6_c1t:'Špičkové materiály',s6_c1d:'Primaloft®, Gore-Tex® a proprietárne laminované tkaniny.',
+ s6_c2t:'Testovanie v teréne',s6_c2d:'Každý strih prejde aspoň dvoma sezónami v Karpatoch.',
+ s6_c3t:'Udržateľnosť',s6_c3d:'Recyklované vlákna, opraviteľné šitie, bluesign® partneri.',
+ s6_c4t:'Hybridné konštrukcie',s6_c4d:'Vrstvenie založené na reálnych pohyboch, nie na marketingu.',
+ s6_c5t:'Dizajn s emóciou',s6_c5d:'Strihy, ktoré majú charakter aj po piatej sezóne.',
+ s6_c6t:'Karpatská autentickosť',s6_c6d:'Slovensko ako domov, hory ako laboratórium.',
+ s7_ey:'Začni teraz',s7_h2a:'Pohybuj sa',s7_h2b:'po svojom.',
+ s7_body:'Objavte prémiové karpatské outdoorové oblečenie pre každú sezónu a terén. Vyberte si kolekciu.',
+ s7_lt1:'Pre náročné podmienky →',s7_lt2:'Pre každodenný pohyb →',s7_btn:'Preskúmať kolekciu →'
+ },
+ de:{
+ 
+ s1_body:'Premium-Outdoor-Marke aus den Karpaten. Getestet unter realen Bedingungen, nicht im Labor.',
+ s1_st1:'Community-Mitglieder',s1_st2:'Jahre auf dem Markt',s1_st3:'Produktzufriedenheit',
+ s1_btn:'Kollektion entdecken →',
+ s2_ey:'Zwei Welten',s2_h2:'Wähle deinen Rhythmus.',s2_sub:'2 Linien / 1 Marke',
+ s2_t1:'Performance',s2_t2:'Lifestyle',
+ s2_b1:'Für Profis, die ihre Grenzen überwinden. Spitzenleistung, Premium-Materialien, gebaut für anspruchsvolle Bedingungen.',
+ s2_b2:'Für alle, die aktiv, frei und mit Freude leben wollen. Vielseitiges Sortiment für Langlebigkeit und Praktikabilität.',
+ s2_cta1:'Peak Flow entdecken →',s2_cta2:'Path Flow entdecken →',
+ s3_ey:'Kategorien',s3_link:'Alle Kategorien →',
+ s3_h2a:'Dein Gelände,',s3_h2b:'deine Kollektion',s3_h2m:'Maßgeschneiderte Kollektionen',
+ s3_badge:'Empfohlen',s3_c1:'Skitouren',s3_c2:'Wandern',s3_c3:'Skifahren',s3_c4:'Freizeit',
+ s5_ey:'Über uns',s5_h2a:'Unser Zuhause?',s5_h2b:'Die Karpaten.',
+ s5_body:'Slowakische Outdoor-Marke mit 30+ Jahren Testen in echten Bergen.',
+ s5_f1:'Karpaten, Natur und Freiheit der Bewegung',s5_f2sk:'Slowakische Marke',s5_f2eu:'Europäische Marke',s5_f3:'Im echten Gelände getestet',
+ s5_sl1:'Jahreszeiten',s5_sl2:'Testsaisons',s5_sl3:'Recycelter Anteil',
+ s6_ey:'Premium-Qualität',s6_h2a:'Was macht Northfinder',s6_h2b:'premium?',
+ s6_body:'Premium ist kein Preis. Es ist Qualität, Funktionalität und Verantwortung — vom Design bis zum Ende des Lebenszyklus.',
+ s6_c1t:'Erstklassige Materialien',s6_c1d:'Primaloft®, Gore-Tex® und proprietäre laminierte Stoffe.',
+ s6_c2t:'Geländetests',s6_c2d:'Jeder Schnitt durchläuft mindestens zwei Saisons in den Karpaten.',
+ s6_c3t:'Nachhaltigkeit',s6_c3d:'Recycelte Fasern, reparierbare Nähte, bluesign® Partner.',
+ s6_c4t:'Hybridkonstruktionen',s6_c4d:'Schichtung basierend auf realen Bewegungen, nicht auf Marketing.',
+ s6_c5t:'Design mit Emotion',s6_c5d:'Schnitte mit Charakter auch nach der fünften Saison.',
+ s6_c6t:'Karpatische Authentizität',s6_c6d:'Die Slowakei als Heimat, Berge als Labor.',
+ s7_ey:'Jetzt starten',s7_h2a:'Bewege dich',s7_h2b:'auf deine Weise.',
+ s7_body:'Entdecke premium karpatische Outdoor-Bekleidung für jede Saison und jedes Gelände. Wähle deine Kollektion.',
+ s7_lt1:'Für anspruchsvolle Bedingungen →',s7_lt2:'Für alltägliche Bewegung →',s7_btn:'Kollektion entdecken →'
+ },
+ hr:{
+ 
+ s1_body:'Premium outdoor brend rođen u Karpatima. Testiran u stvarnim uvjetima, ne u laboratoriju.',
+ s1_st1:'Članovi zajednice',s1_st2:'Godina na tržištu',s1_st3:'Zadovoljstvo proizvodom',
+ s1_btn:'Istraži kolekciju →',
+ s2_ey:'Dva svijeta',s2_h2:'Odaberi svoj ritam.',s2_sub:'2 linije / 1 brend',
+ s2_t1:'Performance',s2_t2:'Lifestyle',
+ s2_b1:'Za profesionalce koji guraju granice. Vrhunske performanse, premium materijali, napravljeno za zahtjevne uvjete.',
+ s2_b2:'Za one koji žele živjeti aktivno, slobodno i s radošću. Svestrani asortiman fokusiran na trajnost i praktičnost.',
+ s2_cta1:'Otkrij Peak Flow →',s2_cta2:'Otkrij Path Flow →',
+ s3_ey:'Kategorije',s3_link:'Sve kategorije →',
+ s3_h2a:'Tvoj teren,',s3_h2b:'tvoja kolekcija',s3_h2m:'Prilagođene kolekcije',
+ s3_badge:'Istaknuto',s3_c1:'Ski touring',s3_c2:'Planinarenje',s3_c3:'Skijanje',s3_c4:'Slobodno vrijeme',
+ s5_ey:'O nama',s5_h2a:'Naš dom?',s5_h2b:'Karpati.',
+ s5_body:'Slovački outdoor brend s 30+ godina testiranja u pravim planinama.',
+ s5_f1:'Karpati, priroda i sloboda kretanja',s5_f2sk:'Slovačka marka',s5_f2eu:'Europska marka',s5_f3:'Testirano u stvarnom terenu',
+ s5_sl1:'Godišnja doba',s5_sl2:'Sezone testiranja',s5_sl3:'Reciklirani sadržaj',
+ s6_ey:'Premium kvaliteta',s6_h2a:'Što čini Northfinder',s6_h2b:'premium?',
+ s6_body:'Premium nije cijena. To je kvaliteta, funkcionalnost i odgovornost — od dizajna do kraja životnog vijeka.',
+ s6_c1t:'Vrhunski materijali',s6_c1d:'Primaloft®, Gore-Tex® i vlastite laminirane tkanine.',
+ s6_c2t:'Terenska testiranja',s6_c2d:'Svaki kroj prolazi kroz najmanje dvije sezone u Karpatima.',
+ s6_c3t:'Održivost',s6_c3d:'Reciklirana vlakna, popravljivi šavovi, bluesign® partneri.',
+ s6_c4t:'Hibridne konstrukcije',s6_c4d:'Slojevitost temeljena na stvarnim pokretima, ne na marketingu.',
+ s6_c5t:'Dizajn s emocijom',s6_c5d:'Krojevi koji imaju karakter i nakon pete sezone.',
+ s6_c6t:'Karpatska autentičnost',s6_c6d:'Slovačka kao dom, planine kao laboratorij.',
+ s7_ey:'Počni sada',s7_h2a:'Kreci se',s7_h2b:'na svoj način.',
+ s7_body:'Otkrijte premium karpatsku outdoor odjeću za svaku sezonu i teren. Odaberite svoju kolekciju.',
+ s7_lt1:'Za zahtjevne uvjete →',s7_lt2:'Za svakodnevno kretanje →',s7_btn:'Istraži kolekciju →'
+ },
+ sl:{
+ 
+ s1_body:'Premium outdoor znamka rojena v Karpatih. Testirana v resničnih razmerah, ne v laboratoriju.',
+ s1_st1:'Člani skupnosti',s1_st2:'Let na trgu',s1_st3:'Zadovoljstvo s produktom',
+ s1_btn:'Razišči kolekcijo →',
+ s2_ey:'Dva svetova',s2_h2:'Izberi svoj ritem.',s2_sub:'2 linije / 1 znamka',
+ s2_t1:'Performance',s2_t2:'Lifestyle',
+ s2_b1:'Za profesionalce, ki presegajo meje. Vrhunska zmogljivost, premium materiali, zasnovano za zahtevne razmere.',
+ s2_b2:'Za tiste, ki želijo živeti aktivno, svobodno in z veseljem. Vsestranska kolekcija za vzdržljivost in praktičnost.',
+ s2_cta1:'Odkrijte Peak Flow →',s2_cta2:'Odkrijte Path Flow →',
+ s3_ey:'Kategorije',s3_link:'Vse kategorije →',
+ s3_h2a:'Tvoj teren,',s3_h2b:'tvoja kolekcija',s3_h2m:'Prilagojene kolekcije',
+ s3_badge:'Izpostavljeno',s3_c1:'Smučarski turizem',s3_c2:'Pohodništvo',s3_c3:'Smučanje',s3_c4:'Prosti čas',
+ s5_ey:'O nas',s5_h2a:'Naš dom?',s5_h2b:'Karpati.',
+ s5_body:'Slovaška outdoor znamka z 30+ leti testiranja v resničnih gorah.',
+ s5_f1:'Karpati, narava in svoboda gibanja',s5_f2sk:'Slovaška znamka',s5_f2eu:'Evropska znamka',s5_f3:'Testirano v resničnem terenu',
+ s5_sl1:'Letni časi',s5_sl2:'Testnih sezon',s5_sl3:'Reciklirana vsebina',
+ s6_ey:'Premium kakovost',s6_h2a:'Kaj dela Northfinder',s6_h2b:'premium?',
+ s6_body:'Premium ni cena. Je kakovost, funkcionalnost in odgovornost — od zasnove do konca življenjske dobe.',
+ s6_c1t:'Vrhunski materiali',s6_c1d:'Primaloft®, Gore-Tex® in lastne laminirane tkanine.',
+ s6_c2t:'Testiranje na terenu',s6_c2d:'Vsak kroj gre skozi vsaj dve sezoni v Karpatih.',
+ s6_c3t:'Trajnostnost',s6_c3d:'Reciklirana vlakna, popravljivi šivi, bluesign® partnerji.',
+ s6_c4t:'Hibridne konstrukcije',s6_c4d:'Plastenje na podlagi resničnih gibov, ne trženja.',
+ s6_c5t:'Dizajn s čustvi',s6_c5d:'Kroji z značajem tudi po peti sezoni.',
+ s6_c6t:'Karpatska avtentičnost',s6_c6d:'Slovaška kot dom, gore kot laboratorij.',
+ s7_ey:'Začni zdaj',s7_h2a:'Premakni se',s7_h2b:'na svoj način.',
+ s7_body:'Odkrijte premium karpatsko outdoor oblačilo za vsako sezono in teren. Izberite svojo kolekcijo.',
+ s7_lt1:'Za zahtevne razmere →',s7_lt2:'Za vsakodnevno gibanje →',s7_btn:'Razišči kolekcijo →'
+ },
+ bg:{
+ 
+ s1_body:'Премиум outdoor марка, родена в Карпатите. Тествана в реални условия, не в лаборатория.',
+ s1_st1:'Членове на общността',s1_st2:'Години на пазара',s1_st3:'Удовлетвореност от продукта',
+ s1_btn:'Разгледай колекцията →',
+ s2_ey:'Два свята',s2_h2:'Избери своя ритъм.',s2_sub:'2 линии / 1 марка',
+ s2_t1:'Performance',s2_t2:'Lifestyle',
+ s2_b1:'За професионалисти, които надхвърлят границите. Върхови постижения, премиум материали, за взискателни условия.',
+ s2_b2:'За тези, които искат да живеят активно, свободно и с радост. Универсална гама за издръжливост и практичност.',
+ s2_cta1:'Открий Peak Flow →',s2_cta2:'Открий Path Flow →',
+ s3_ey:'Категории',s3_link:'Всички категории →',
+ s3_h2a:'Твоят терен,',s3_h2b:'твоята колекция',s3_h2m:'Персонализирани колекции',
+ s3_badge:'Препоръчано',s3_c1:'Ски туринг',s3_c2:'Туризъм',s3_c3:'Ски',s3_c4:'Свободно време',
+ s5_ey:'За нас',s5_h2a:'Нашият дом?',s5_h2b:'Карпатите.',
+ s5_body:'Словашка outdoor марка с 30+ години тестване в истински планини.',
+ s5_f1:'Карпатите, природата и свободата на движение',s5_f2sk:'Словашка марка',s5_f2eu:'Европейска марка',s5_f3:'Тествано в реален терен',
+ s5_sl1:'Сезони',s5_sl2:'Тестови сезона',s5_sl3:'Рециклирано съдържание',
+ s6_ey:'Премиум качество',s6_h2a:'Какво прави Northfinder',s6_h2b:'премиум?',
+ s6_body:'Премиумът не е цена. Това е качество, функционалност и отговорност — от дизайна до края на живота.',
+ s6_c1t:'Първокласни материали',s6_c1d:'Primaloft®, Gore-Tex® и собствени ламинирани тъкани.',
+ s6_c2t:'Теренно тестване',s6_c2d:'Всеки кройки минава поне два сезона в Карпатите.',
+ s6_c3t:'Устойчивост',s6_c3d:'Рециклирани влакна, поправими шевове, bluesign® партньори.',
+ s6_c4t:'Хибридни конструкции',s6_c4d:'Многопластовост на базата на реални движения, не маркетинг.',
+ s6_c5t:'Дизайн с емоция',s6_c5d:'Кройки с характер дори след петия сезон.',
+ s6_c6t:'Карпатска автентичност',s6_c6d:'Словакия като дом, планините като лаборатория.',
+ s7_ey:'Започни сега',s7_h2a:'Движи се',s7_h2b:'по своему.',
+ s7_body:'Открийте премиум карпатско outdoor облекло за всеки сезон и терен. Изберете своята колекция.',
+ s7_lt1:'За взискателни условия →',s7_lt2:'За ежедневно движение →',s7_btn:'Разгледай колекцията →'
+ }
+ };
+ var t=T[locale];
+ if(!t)return;
+ var isSK=locale==='sk';
+ function txt(s,v){var e=document.querySelector(s);if(e)e.textContent=v;}
+ function ihtml(s,v){var e=document.querySelector(s);if(e)e.innerHTML=v;}
+ function txts(s,a){var es=document.querySelectorAll(s);a.forEach(function(v,i){if(es[i])es[i].textContent=v;});}
+ function ey(s,v){var e=document.querySelector(s);if(!e)return;for(var i=e.childNodes.length-1;i>=0;i--){if(e.childNodes[i].nodeType===3){e.childNodes[i].nodeValue=v;return;}}}
+ // S1
+ // eyebrow removed from hero
+ // h1 not translated (brand tagline)
+ txt('._s1-body',t.s1_body);
+ txts('._s1-sl',[t.s1_st1,t.s1_st2,t.s1_st3]);
+ txt('._s1-btn-r',t.s1_btn);
+ // S2
+ ey('._s2-ey',t.s2_ey);
+ txt('._s2-htitle',t.s2_h2);
+ txt('._s2-sub',t.s2_sub);
+ txts('._s2-tag',[t.s2_t1,t.s2_t2]);
+ txts('._s2-body',[t.s2_b1,t.s2_b2]);
+ txts('._s2-cta',[t.s2_cta1,t.s2_cta2]);
+ // S3
+ txt('._s3-ey',t.s3_ey);
+ txt('._s3-link',t.s3_link);
+ ihtml('._s3-h2-desktop',t.s3_h2a+'<br>'+t.s3_h2b);
+ txt('._s3-h2-mobile',t.s3_h2m);
+ txt('._s3-badge',t.s3_badge);
+ txts('._s3-ctitle',[t.s3_c1,t.s3_c2,t.s3_c3,t.s3_c4]);
+ // S5
+ txt('._s5-ey',t.s5_ey);
+ ihtml('._s5-h2',t.s5_h2a+'<br><span class="_s5-red">'+t.s5_h2b+'</span>');
+ txt('._s5-body',t.s5_body);
+ var il=document.querySelectorAll('._s5-icon-label');
+ if(il[0])il[0].textContent=t.s5_f1;
+ var bl=document.getElementById('_s5-brand-label');
+ if(bl)bl.textContent=isSK?t.s5_f2sk:t.s5_f2eu;
+ if(il[2])il[2].textContent=t.s5_f3;
+ txts('._s5-slabel',[t.s5_sl1,t.s5_sl2,t.s5_sl3]);
+ // S6
+ txt('._s6-ey',t.s6_ey);
+ ihtml('._s6-h2',t.s6_h2a+'<br><span class="_s6-red">'+t.s6_h2b+'</span>');
+ txt('._s6-body',t.s6_body);
+ var cl=document.querySelectorAll('._s6-clabel'),cd=document.querySelectorAll('._s6-cdesc');
+ [t.s6_c1t,t.s6_c2t,t.s6_c3t,t.s6_c4t,t.s6_c5t,t.s6_c6t].forEach(function(v,i){if(cl[i])cl[i].textContent=v;});
+ [t.s6_c1d,t.s6_c2d,t.s6_c3d,t.s6_c4d,t.s6_c5d,t.s6_c6d].forEach(function(v,i){if(cd[i])cd[i].textContent=v;});
+ // S7
+ txt('._s7-ey',t.s7_ey);
+ ihtml('._s7-h2',t.s7_h2a+' <span class="_s7-red">'+t.s7_h2b+'</span>');
+ txt('._s7-body',t.s7_body);
+ txts('._s7-link-title',[t.s7_lt1,t.s7_lt2]);
+ txt('._s7-btn',t.s7_btn);
+})();
 </script>
 </body>
-</html>
-</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div> </section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-pehi8dq0qzd"><div class="ecom-inner"><div class="ecom-block ecom-core core__block elmspace ecom-92hazwhzi16 hide-on-mobile"><div class="ecom__element ecom-lookbook__product ecom__element-lookbook ecom-flex ecom-items-start ecom-pr" data-trigger="hover" section_id="ecom-pehi8dq0qzd" style="display: flex; flex-wrap: wrap;"><div class="ecom-image element__image-lookbook ecom-flex ecom-column" style="position: relative; flex: 0 0 0%;"><picture class="element__image-lookbook--img ecom-image-default"><img class="" loading="lazy" fetchpriority="low" src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/look-book-__2025-11-21-09-39-32.jpg?v=1777296342" alt="look-book-__2025-11-21-09-39-32" style=""></picture><div class="goto-element"><div class="element__image-lookbook--text ecom-pa ecom-flex ecom-fl_center ecom-al_center element__image-lookbook--btn-nolabel" data-handle="womens-elastic-ski-touring-pants-blizzard®-zdiarska-2" data-limit="20" data-stopdrag="" style="left: 47%; top: 65%;"><div class="element__image-lookbook--btn ecom-flex ecom-fl_center ecom-al_center goto-element-item ecom-box-active" data-index="0" style="cursor: default;"><div class="element__image-lookbook--btn-icon ecom-flex ecom-fl_center ecom-al_center"><svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="4.5" cy="4.5" r="4.5"></circle></svg></div></div></div><div class="element__image-lookbook--text ecom-pa ecom-flex ecom-fl_center ecom-al_center element__image-lookbook--btn-nolabel" data-handle="womens-insulating-ski-touring-skirt-primaloft®-podkova-1" data-limit="20" data-stopdrag="" style="left: 53%; top: 48%;"><div class="element__image-lookbook--btn ecom-flex ecom-fl_center ecom-al_center goto-element-item" data-index="1" style="cursor: default;"><div class="element__image-lookbook--btn-icon ecom-flex ecom-fl_center ecom-al_center"><svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="4.5" cy="4.5" r="4.5"></circle></svg></div></div></div><div class="element__image-lookbook--text ecom-pa ecom-flex ecom-fl_center ecom-al_center element__image-lookbook--btn-nolabel" data-handle="womens-quick-drying-sweatshirt-zliechova-2" data-limit="20" data-stopdrag="" style="left: 53%; top: 32%;"><div class="element__image-lookbook--btn ecom-flex ecom-fl_center ecom-al_center goto-element-item" data-index="2" style="cursor: default;"><div class="element__image-lookbook--btn-icon ecom-flex ecom-fl_center ecom-al_center"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" width="16" height="16"><g><g><path d="M256,0C115.39,0,0,115.39,0,256s115.39,256,256,256s256-115.39,256-256S396.61,0,256,0z" fill="currentColor"></path></g></g></svg></div></div></div></div></div><div class="ecom-product-wrap ecom__element-slider ecom-flex ecom-column" style="flex: 0 0 0%;"><div class="ecom-product-slider ecom-lookbook-container ecom-swiper" data-option-swiper="{&quot;direction&quot;:&quot;horizontal&quot;,&quot;freeMode&quot;:false,&quot;loopAddBlankSlides&quot;:false,&quot;breakpoints&quot;:{&quot;0&quot;:{},&quot;768&quot;:{},&quot;1025&quot;:{}},&quot;autoplay&quot;:{&quot;enabled&quot;:false,&quot;delay&quot;:0,&quot;pauseOnMouseEnter&quot;:false,&quot;disableOnInteraction&quot;:false,&quot;reverseDirection&quot;:false},&quot;grabCursor&quot;:true,&quot;slideActiveClass&quot;:&quot;ecom-box-active&quot;,&quot;centeredSlides&quot;:false,&quot;watchOverflow&quot;:true,&quot;autoHeight&quot;:true,&quot;cubeEffect&quot;:{&quot;slideShadows&quot;:true,&quot;shadowOffset&quot;:20},&quot;creativeEffect&quot;:{},&quot;fadeEffect&quot;:{&quot;crossFade&quot;:true},&quot;pagination&quot;:{&quot;el&quot;:&quot;.ecom-swiper-pagination&quot;,&quot;type&quot;:&quot;bullets&quot;,&quot;clickable&quot;:true},&quot;navigation&quot;:{&quot;nextEl&quot;:&quot;.ecom-swiper-button-next&quot;,&quot;prevEl&quot;:&quot;.ecom-swiper-button-prev&quot;}}" style="max-width: 100%;"><div class="ecom-swiper-wrapper">
- {%- assign tmp_product = product -%}
- {% assign productsDefault = collections.all.products %}
- 
- {% capture product_handles %} womens-elastic-ski-touring-pants-blizzard®-zdiarska-2,womens-insulating-ski-touring-skirt-primaloft®-podkova-1,womens-quick-drying-sweatshirt-zliechova-2 {% endcapture%}
- {% assign products = product_handles | strip | split: ',' %}
- {% for p in products %}
- {% assign product = all_products[p]%}
- <div class="ecom-product-item ecom-swiper-slide" data-product_handles="{{ product_handles }}" >
- <div class="ecom-pr ecom-w__full ecom-lookbook__product-media">
- <div class="ecom-lookbook__product-media-wrap">
- <img srcset="
- {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
- {%- if product.featured_media.width >= 720 -%}{{ product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
- {%- if product.featured_media.width >= 940 -%}{{ product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
- {%- if product.featured_media.width >= 1066 -%}{{ product.featured_media | image_url: width: 1066 }} 1066w{%- endif -%}"
- src="{{ product.featured_media | image_url: width: 533 }}"
- sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
- alt="{{ product.featured_media.alt | escape }}"
- loading='lazy'
- class="ecom-lookbook__product-media-image ecom-w__full"
- width="{{ product.featured_media.width }}"
- height="{{ product.featured_media.height }}"
- />
- </div>
- 
- 
- {%- if product.has_only_default_variant -%}
- {%- if product.compare_at_price_min > product.price_min -%}
- <div class="ecom-lookbook__product-price--bage-sale">
- {%- assign sale = product.compare_at_price_min | minus: product.price_min | times: 100.0 | divided_by: product.compare_at_price_min | round -%}
- <span>
- -{{sale}}%
- </span>
- </div>
- {%- endif -%}
- {%- else -%}
- {%- if product.compare_at_price_min > product.price_min -%}
- <div class="ecom-lookbook__product-price--bage-sale">
- {%- assign sale = product.compare_at_price_min | minus: product.price_min | times: 100.0 | divided_by: product.compare_at_price_min | round -%}
- <span>
- -{{sale}}%
- </span>
- </div>
- {%- endif -%}
- {%- endif -%}
- 
- 
- 
- {%- assign quickview_app = shop.metafields.ecomposer.app_quickview.value -%}
- <div class="ecom-lookbook__product--quickview-wrapper" data-quickview-app="{{quickview_app}}">
- {%- if quickview_app -%}
- {% case quickview_app %}
- {% when 'intergrated' %}
- <a href="{{ product.url }}" title="{{ product.title }}" class="ecom-product-quickview" data-handle="{{product.handle}}" data-id="{{product.id}}">
- <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
- <span class="ecom-product-quickview--text">
- Quickview
- </span>
- </a>
- {% endcase %}
- {% endif %}
- </div>
- 
- 
- </div>
- <div style="display: flex; flex-wrap: wrap;">
- 
- 
- <h3 class="ecom-lookbook__product-title-tag">
- <a
- href="{{- product.url -}}"
- title="{{product.title | escape }}"
- target="_blank"
- class="ecom-lookbook__product-item-information-title ecom-title-one-row"
- >
- {{ product.title }}
- </a>
- </h3>
- 
- 
- 
- <div class="ecom-lookbook__product-price-wrapper">
- {%- if product.has_only_default_variant == false -%}
- 
- {% endif %}
- <span class="ecom-lookbook__product-price{% if product.compare_at_price_min > product.price_min %} ecom-lookbook__product-price--sale{% endif %}">
- {{ product.price_min| money }}
- </span>
- <span class="ecom-lookbook__product-price--regular ecom-lookbook__product--compare-at-price" {%- if product.compare_at_price == nil or product.compare_at_price <= product.price -%} style="display:none" {% endif %}>
- {{ product.compare_at_price_min | money }}
- </span>
- </div>
- 
- 
- {% capture badge_tags %}hot{% endcapture%}
- {% liquid
- assign badge_tags = badge_tags | strip | split: ','
- %}
- 
- <div class="ecom-lookbook__product-badges">
- {%- if product.available == false -%}
- 
- <span class="ecom-lookbook__product-badge--sold-out" aria-hidden="true">
- Sold out
- </span>
- 
- {%- elsif product.compare_at_price_min > product.price_min and product.available -%}
- 
- <span class="ecom-lookbook__product-badge--sale" aria-hidden="true">
- Sale
- </span>
- 
- {%- endif -%}
- {% if badge_tags %}
- <span class="ecom-lookbook__product-badge--custom">
- {% for badge in badge_tags %}
- {% if product.tags contains badge %}
- <span class="ecom-lookbook__product-badge--custom-item ecom-lookbook__product-badge--{{ badge | handleize}}" aria-hidden="true">
- {{ badge }}
- </span>
- {% endif %}
- {% endfor %}
- </span>
- {% endif %}
- </div>
- 
- 
- </div>
- </div>
- {% endfor %}
- 
- {%- assign product = tmp_product -%}
- </div></div><div class="ecom-swiper-navigation-position" style="display: none;"><button class="ecom-swiper-button ecom-swiper-button-prev" style="position: unset;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor"><path d="M 19.03125 4.28125 L 8.03125 15.28125 L 7.34375 16 L 8.03125 16.71875 L 19.03125 27.71875 L 20.46875 26.28125 L 10.1875 16 L 20.46875 5.71875 Z"></path></svg></button><button class="ecom-swiper-button ecom-swiper-button-next" style="position: unset;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor"><path d="M 12.96875 4.28125 L 11.53125 5.71875 L 21.8125 16 L 11.53125 26.28125 L 12.96875 27.71875 L 23.96875 16.71875 L 24.65625 16 L 23.96875 15.28125 Z"></path></svg></button></div><div class="ecom-swiper-pagination-position ecom-swiper-pagination" style="display: none;"></div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div> </section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-wx7bc55j2cr"><div class="ecom-inner"><div class="ecom-block ecom-core core__block elmspace ecom-nqswa2qjmdn"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-wx7bc55j2cr" deep="2"><!DOCTYPE html>
-<html lang="sk">
-<head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
- <title>Northfinder – Mobile</title>
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
- <style>
- #nfhp,
- #nfhp *,
- #nfhp *::before,
- #nfhp *::after {
- box-sizing: border-box;
- margin: 0;
- padding: 0;
- font-family: 'Montserrat', sans-serif;
- -webkit-font-smoothing: antialiased;
- }
- #nfhp {
- background: #ffffff;
- color: #000000;
- width: 100vw;
- position: relative;
- left: 50%;
- transform: translateX(-50%);
- overflow-x: hidden;
- }
- #nfhp img { display: block; max-width: 100%; }
- #nfhp a,
- #nfhp a:visited,
- #nfhp a:hover,
- #nfhp a:active { text-decoration: none !important; }
- /* ════════════════════════════════════════
- SEKCIA 4 — NÁŠ DOMOV? KARPATY.
- ════════════════════════════════════════ */
- #nfhp ._nfhp_s4 {
- background: #ffffff;
- padding-top: 40px;
- padding-bottom: 40px;
- overflow: hidden;
- }
- #nfhp ._nfhp_s4-title {
- font-size: 48px;
- font-weight: 900;
- color: #000000;
- text-transform: uppercase;
- line-height: 1.08;
- letter-spacing: -0.3px;
- padding-inline: 24px;
- margin-bottom: 24px;
- text-align: center;
- }
- /* Ikony rad */
- #nfhp ._nfhp_s4-icons {
- display: flex;
- justify-content: space-between;
- padding-inline: 24px;
- gap: 8px;
- margin-bottom: 24px;
- }
- #nfhp ._nfhp_s4-icon-item {
- display: flex;
- flex-direction: column;
- align-items: center;
- gap: 10px;
- flex: 1;
- text-align: center;
- }
- /* Červený box pre ikony */
- #nfhp ._nfhp_s4-icon-box {
- width: 52px;
- height: 52px;
- border-radius: 12px;
- background: #e3340d;
- display: flex;
- align-items: center;
- justify-content: center;
- flex-shrink: 0;
- }
- #nfhp ._nfhp_s4-icon-box svg {
- width: 26px;
- height: 26px;
- }
- /* Vlajka — bez červeného boxu, len obrázok */
- #nfhp ._nfhp_s4-flag-wrap {
- width: 52px;
- height: 52px;
- display: flex;
- align-items: center;
- justify-content: center;
- flex-shrink: 0;
- }
- #nfhp ._nfhp_s4-flag-wrap img {
- width: 52px;
- height: 35px;
- object-fit: cover;
- border-radius: 6px;
- box-shadow: 0 1px 4px rgba(0,0,0,0.2);
- }
- #nfhp ._nfhp_s4-icon-label {
- font-size: 11px;
- font-weight: 500;
- color: #333333;
- line-height: 1.4;
- }
- /* Mapa */
- #nfhp ._nfhp_s4-map-wrap {
- position: relative;
- width: 100%;
- margin-top: 20px;
- }
- #nfhp ._nfhp_s4-map-img {
- width: 100%;
- height: auto;
- display: block;
- }
- /* Glass štatistiky */
- #nfhp ._nfhp_s4-stats {
- position: absolute;
- bottom: 14%;
- left: 0;
- right: 0;
- display: flex;
- gap: 8px;
- padding-inline: 24px;
- }
- #nfhp ._nfhp_s4-stat {
- flex: 1;
- display: flex;
- flex-direction: column;
- align-items: center;
- justify-content: center;
- gap: 4px;
- padding: 14px 6px;
- border-radius: 12px;
- background: rgba(80, 80, 80, 0.32);
- backdrop-filter: blur(18px) saturate(160%);
- -webkit-backdrop-filter: blur(18px) saturate(160%);
- border: 1px solid rgba(255, 255, 255, 0.18);
- box-shadow:
- inset 0 1px 0 rgba(255,255,255,0.20),
- 0 4px 16px rgba(0,0,0,0.18);
- }
- #nfhp ._nfhp_s4-stat-num {
- font-size: 32px;
- font-weight: 900;
- color: #ffffff;
- line-height: 1;
- letter-spacing: -1px;
- }
- #nfhp ._nfhp_s4-stat-label {
- font-size: 9px;
- font-weight: 700;
- color: rgba(255,255,255,0.80);
- text-transform: uppercase;
- letter-spacing: 0.06em;
- text-align: center;
- line-height: 1.3;
- }
- /* TABLET */
- @media (min-width: 600px) {
- #nfhp ._nfhp_s4 {
- padding: 60px 0 60px;
- }
- #nfhp ._nfhp_s4-title {
- font-size: 40px;
- padding-inline: 48px;
- }
- #nfhp ._nfhp_s4-icons {
- padding-inline: 48px;
- gap: 24px;
- }
- #nfhp ._nfhp_s4-icon-label {
- font-size: 12px;
- }
- #nfhp ._nfhp_s4-stats {
- padding-inline: 48px;
- gap: 12px;
- }
- #nfhp ._nfhp_s4-stat-num {
- font-size: 36px;
- }
- }
- /* DESKTOP */
- @media (min-width: 1024px) {
- #nfhp ._nfhp_s4 {
- padding: 80px 80px;
- max-width: 1280px;
- margin-inline: auto;
- /* 2-stĺpcový layout: obsah vľavo, mapa vpravo */
- display: grid;
- grid-template-columns: 1fr 1fr;
- grid-template-rows: auto auto;
- align-items: center;
- gap: 0 60px;
- }
- #nfhp ._nfhp_s4-title {
- font-size: 52px;
- padding-inline: 0;
- margin-bottom: 32px;
- text-align: left;
- grid-column: 1;
- grid-row: 1;
- }
- #nfhp ._nfhp_s4-icons {
- padding-inline: 0;
- gap: 32px;
- margin-bottom: 0;
- grid-column: 1;
- grid-row: 2;
- justify-content: flex-start;
- }
- #nfhp ._nfhp_s4-icon-item {
- align-items: flex-start;
- text-align: left;
- }
- #nfhp ._nfhp_s4-icon-box {
- width: 64px;
- height: 64px;
- }
- #nfhp ._nfhp_s4-flag-wrap {
- width: 64px;
- height: 64px;
- }
- #nfhp ._nfhp_s4-icon-label {
- font-size: 13px;
- }
- /* Mapa zaberá pravý stĺpec cez oba riadky */
- #nfhp ._nfhp_s4-map-wrap {
- grid-column: 2;
- grid-row: 1 / 3;
- margin-top: 0;
- border-radius: 20px;
- overflow: hidden;
- }
- #nfhp ._nfhp_s4-map-img {
- border-radius: 20px;
- }
- #nfhp ._nfhp_s4-stats {
- padding-inline: 16px;
- gap: 12px;
- bottom: 10%;
- }
- #nfhp ._nfhp_s4-stat-num {
- font-size: 36px;
- }
- #nfhp ._nfhp_s4-stat-label {
- font-size: 10px;
- }
- }
- </style>
-</head>
-<body>
-<div id="nfhp">
- 
- <section class="_nfhp_s4">
- <h2 class="_nfhp_s4-title">Náš domov?<br>Karpaty.</h2>
- <div class="_nfhp_s4-icons">
- 
- <div class="_nfhp_s4-icon-item">
- <div class="_nfhp_s4-flag-wrap">
- <img src="https://northfinder.com/sk/modules/jscomposer/uploads/nflogomale.png" alt="Northfinder logo">
- </div>
- <span class="_nfhp_s4-icon-label">Karpaty, príroda a sloboda pohybu</span>
- </div>
- 
- <div class="_nfhp_s4-icon-item">
- <div class="_nfhp_s4-flag-wrap">
- <img src="https://flagcdn.com/sk.svg" alt="Slovenská vlajka">
- </div>
- <span class="_nfhp_s4-icon-label">Slovenská značka</span>
- </div>
- 
- <div class="_nfhp_s4-icon-item">
- <div class="_nfhp_s4-flag-wrap">
- <img src="https://northfinder.com/sk/modules/jscomposer/uploads/horkasluzba.png" alt="Testované v teréne">
- </div>
- <span class="_nfhp_s4-icon-label">Testované v reálnom teréne.</span>
- </div>
- </div>
- 
- <div class="_nfhp_s4-map-wrap">
- <img class="_nfhp_s4-map-img"
- src="https://northfinder.com/sk/modules/jscomposer/uploads/sk_map.png"
- alt="Mapa Slovenska">
- <div class="_nfhp_s4-stats">
- <div class="_nfhp_s4-stat">
- <span class="_nfhp_s4-stat-num">4</span>
- <span class="_nfhp_s4-stat-label">Ročné<br>obdobia</span>
- </div>
- <div class="_nfhp_s4-stat">
- <span class="_nfhp_s4-stat-num">2+</span>
- <span class="_nfhp_s4-stat-label">Sezóny<br>testovania</span>
- </div>
- <div class="_nfhp_s4-stat">
- <span class="_nfhp_s4-stat-num">30%</span>
- <span class="_nfhp_s4-stat-label">Recyk.<br>obsah</span>
- </div>
- </div>
- </div>
- </section>
-</div>
-</body>
-</html>
-</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div> </section> 
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
 </div></div>
 {% schema %}
 {
- "name": "Untitled",
+ "name": "Homepage",
  "settings": [
  {
  "type": "header",
@@ -1382,6 +789,8 @@
  "info": "(*You must install the app to start editing this section [Learn more](https:\/\/help.ecomposer.io\/docs\/getting-started\/installation\/))"
  }
  ],
- "locales": {}
+ "locales": {
+ "en": {}
+ }
 }
 {% endschema %}
