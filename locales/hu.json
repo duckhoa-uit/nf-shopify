@@ -17,7 +17,8 @@
       "login_form_error": "Téves jelszót írtál be.",
       "login_form_submit": "Belépés",
       "admin_link_html": "Te vagy a webáruház tulajdonosa? <a href=\"/admin\" class=\"link underlined-link\">Itt tudsz bejelentkezni</a>",
-      "powered_by_shopify_html": "A bolt szolgáltatója a {{ shopify }}"
+      "powered_by_shopify_html": "A bolt szolgáltatója a {{ shopify }}",
+      "signup_form_email_label": "E-mail"
     },
     "social": {
       "alt_text": {
@@ -46,7 +47,9 @@
     },
     "search": {
       "search": "Keresés",
-      "reset": "Keresőszó törlése"
+      "reset": "Keresőszó törlése",
+      "submit": "Elküldés",
+      "placeholder": "Keresés"
     },
     "cart": {
       "view": "Kosár megtekintése ({{ count }})",
@@ -64,6 +67,20 @@
       "next_slide": "Következő dia",
       "previous_slide": "Előző dia",
       "name": "Csúszka"
+    },
+    "accessibility": {
+      "skip_to_content": "Ugrás a tartalomra"
+    },
+    "navigation": {
+      "contact": "Kapcsolat"
+    },
+    "breadcrumbs": {
+      "products": "Termékek",
+      "back": "Vissza",
+      "collections": "Kollekciók"
+    },
+    "404": {
+      "link": "Vásárlás folytatása"
     }
   },
   "newsletter": {
@@ -106,7 +123,15 @@
       "back_to_blog": "Vissza a blogba",
       "share": "Cikk megosztása",
       "success": "Elküldtük a hozzászólásodat. Köszönjük!",
-      "success_moderated": "Elküldtük a hozzászólásodat. Blogunkat moderáljuk, ezért egy kis idő múlva tesszük csak közzé a hozzászólást."
+      "success_moderated": "Elküldtük a hozzászólásodat. Blogunkat moderáljuk, ezért egy kis idő múlva tesszük csak közzé a hozzászólást.",
+      "view_all": "Összes megtekintése"
+    },
+    "main_blog": {
+      "view_more": "Tovább"
+    },
+    "comments": {
+      "email": "E-mail",
+      "name": "Név"
     }
   },
   "onboarding": {
@@ -215,6 +240,9 @@
       },
       "about_perfumes": {
         "title": "Mik azok a mosóparfümök?"
+      },
+      "delivery_info": {
+        "out_of_stock": "Elfogyott"
       }
     },
     "modal": {
@@ -249,7 +277,13 @@
       "filter_selected_accessibility": "{{ type }} ({{ count }} szűrő kiválasztva)",
       "show_more": "Több részlet",
       "show_less": "Kevesebb részlet",
-      "filter_and_operator_subtitle": "Az összesnek megfelelő"
+      "filter_and_operator_subtitle": "Az összesnek megfelelő",
+      "sort_by": {
+        "price_ascending": "Legalacsonyabb ár"
+      }
+    },
+    "general": {
+      "view_more": "Tovább"
     }
   },
   "templates": {
@@ -298,7 +332,8 @@
         "send": "Küldés",
         "post_success": "Köszönjük, hogy írtál nekünk. A lehető legrövidebb időn belül válaszolni fogunk.",
         "error_heading": "Kérjük, helyesbítsd a következőket:",
-        "title": "Kapcsolattartói űrlap"
+        "title": "Kapcsolattartói űrlap",
+        "write_to_us": "Írjon nekünk"
       }
     }
   },
@@ -341,19 +376,42 @@
       "duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html": "Tartalmazza a vámokat. Az adókat, a kedvezményeket és a <a href=\"{{ link }}\">szállítási költséget</a> a megrendeléskor számítjuk ki.",
       "duties_included_taxes_at_checkout_shipping_at_checkout_without_policy": "Tartalmazza a vámokat. Az adókat, a kedvezményeket és a szállítási költséget a megrendeléskor számítjuk ki",
       "taxes_at_checkout_shipping_at_checkout_with_policy_html": "Az adókat, a kedvezményeket és a <a href=\"{{ link }}\">szállítási költséget</a> a megrendeléskor számítjuk ki.",
-      "taxes_at_checkout_shipping_at_checkout_without_policy": "Az adókat, a kedvezményeket és a szállítási költséget a megrendeléskor számítjuk ki"
+      "taxes_at_checkout_shipping_at_checkout_without_policy": "Az adókat, a kedvezményeket és a szállítási költséget a megrendeléskor számítjuk ki",
+      "remove": "Eltávolítás",
+      "cancel_checkout": "Fizetés megszakítása",
+      "cart_updated": "Kosár frissítve",
+      "cart_updated_other_tab": "A kosár egy másik lapról frissült",
+      "cart_updated_review": "A kosara egy másik lapról frissült. Kérjük, ellenőrizze a változásokat, mielőtt továbblép a fizetéshez.",
+      "continue_anyway": "Mégis folytatom",
+      "continue_to_checkout": "Tovább a fizetéshez",
+      "failed_adjust_quantity": "A mennyiség módosítása sikertelen. Próbálja újra.",
+      "failed_remove_item": "A tétel eltávolítása sikertelen. Próbálja újra.",
+      "item_added": "A termék a kosárba került",
+      "review_cart": "Kosár áttekintése",
+      "savings": "Megtakarítás",
+      "stock_validation_continue": "Rendelése a készlettől függhet. Folytatja?",
+      "stock_validation_error": "Nem tudtuk ellenőrizni a készlet elérhetőségét",
+      "stock_validation_warning": "Készletellenőrzési figyelmeztetés",
+      "stock_unavailable": "Készlet nem elérhető",
+      "stock_issues_message": "A kosarában lévő egyes termékek nem érhetők el a kért mennyiségben:",
+      "summary": "Összegzés",
+      "validating_stock": "Készlet ellenőrzése...",
+      "view_cart": "Kosár megtekintése"
     },
     "footer": {
-      "payment": "Fizetési módok"
+      "payment": "Fizetési módok",
+      "contact_us": "Vegye fel velünk a kapcsolatot"
     },
     "featured_blog": {
       "view_all": "Az összes megtekintése",
       "onboarding_title": "Blogbejegyzés",
-      "onboarding_content": "Itt foglalhatod össze a vásárlóidnak, miről szól a blogbejegyzésed"
+      "onboarding_content": "Itt foglalhatod össze a vásárlóidnak, miről szól a blogbejegyzésed",
+      "heading": "Northfinder blog"
     },
     "featured_collection": {
       "view_all": "Az összes megtekintése",
-      "view_all_label": "Az ebben a kollekcióban szereplő összes termék megtekintése: {{ collection_name }}"
+      "view_all_label": "Az ebben a kollekcióban szereplő összes termék megtekintése: {{ collection_name }}",
+      "title": "Kollekciók"
     },
     "collection_list": {
       "view_all": "Az összes megtekintése"
@@ -409,6 +467,152 @@
       "min_error": "A termék minimális mennyisége {{ min }}",
       "max_error": "A termék maximális mennyisége {{ max }}",
       "step_error": "A termék mennyisége csak {{ step }} darabos lépésekben növelhető"
+    },
+    "ecom-69fca16d9321c331d20eea71-context": {
+      "view_more_text_08wjs9u73fgd_html": "Tovább",
+      "product_soldout_08wjs9u73fgd_html": "Elfogyott",
+      "sold_out_text_08wjs9u73fgd_html": "Elfogyott",
+      "product_unavailable_08wjs9u73fgd_html": "Nem elérhető",
+      "buttoncontent_t2depqtncq9_html": "Kollekció megtekintése",
+      "headingtext_1wg5amtkxd3_html": "Tavasz-nyár kollekció",
+      "textcontent_h7kbcq9hcjl_html": "Szerezze be 2023 legtrendibb dizájnját",
+      "buttoncontent_z0dbt4ahy_html": "Vásároljon most",
+      "buttoncontent_ei28mair6g_html": "Vásároljon most",
+      "headingtext_88ydej3n3ro_html": "A legjobb árat keresi",
+      "textcontent_5ooutbhc4c_html": "Új érkezések",
+      "masonry_button_title_0_6qp9q24twgh_html": "Férfi",
+      "masonry_button_title_1_6qp9q24twgh_html": "Nő",
+      "badge_tags_08wjs9u73fgd_html": "Hot,Legkelendőbb,Trendi termék",
+      "product_option_swatch_08wjs9u73fgd_html": "Szín",
+      "add_to_cart_08wjs9u73fgd_html": "Kosárba ",
+      "added_cart_text_08wjs9u73fgd_html": "Kosárhoz adva",
+      "added_cart_message_08wjs9u73fgd_html": "Kosárhoz adva",
+      "pre_order_08wjs9u73fgd_html": "Előrendelés",
+      "quick_shop_text_08wjs9u73fgd_html": "Gyors vásárlás",
+      "no_product_item_08wjs9u73fgd_html": "Még nincsenek termékek!",
+      "textcontent_idmfm4a9cw_html": "Kabátok, nadrágok, rövidnadrágok és lábbelik. Vásárolja meg a tavaszi felszerelést, mielőtt a kedvezmények eltűnnek a hegyekben.",
+      "buttoncontent_xlb9nwuhzv_html": "Kollekció megtekintése",
+      "name0_rn38sv8po39_html": "Ontrej",
+      "title0_rn38sv8po39_html": "Vásárolt termék: <span> GERON </span>",
+      "name1_rn38sv8po39_html": "Marian",
+      "title1_rn38sv8po39_html": "Vásárolt termék: <span>Pertex® DRACI</span>",
+      "text2_rn38sv8po39_html": "Nagyon elégedett vagyok az áruházzal. Maximális ügyfélbarát kiszolgálás és gyors szállítás. Csak ajánlani tudom.",
+      "name2_rn38sv8po39_html": "Ludmila",
+      "title2_rn38sv8po39_html": "Vásárolt termék: <span> NORTHKIT </span>"
+    },
+    "contact_form": {
+      "heading": "Kapcsolat"
+    },
+    "parfum_care_guide": {
+      "settings": {
+        "description": {
+          "label": "Leírás"
+        }
+      },
+      "no_questions": "Ehhez a kategóriához nincsenek kérdések."
+    },
+    "parfum_instructions": {
+      "settings": {
+        "description": {
+          "label": "Leírás"
+        }
+      }
+    },
+    "parfum_recommendations": {
+      "settings": {
+        "description": {
+          "label": "Leírás"
+        }
+      }
+    },
+    "activities": {
+      "name": "Tevékenységek",
+      "title": "Tevékenységek"
+    },
+    "blog_posts_slider": {
+      "add_posts": "Blogbejegyzések hozzáadása a testreszabás gombra kattintva"
+    },
+    "main-cart-items": {
+      "name": "Kosár tételei"
+    },
+    "discover-northfinder": {
+      "name": "Fedezze fel a Northfindert",
+      "title": "Fedezze fel a northfinderen"
+    },
+    "faq": {
+      "contact_button": "Írjon nekünk",
+      "contact_button_aria": "Lépjen velünk kapcsolatba, ha kérdése van",
+      "contact_heading": "Nem talált választ?",
+      "contact_subtext": "Szívesen segítünk",
+      "no_questions": "Ehhez a kategóriához nincsenek kérdések.",
+      "view_all_questions": "összes kérdés megtekintése"
+    },
+    "main_product": {
+      "customer_reviews": "Vásárlói vélemények",
+      "description_and_parameters": "Leírás és paraméterek",
+      "detailed_product_description": "Részletes termékleírás",
+      "features_details": {
+        "title": "Jellemzők és részletek",
+        "adjustability": "Állíthatóság",
+        "construction": "Szerkezeti részletek",
+        "pockets_with_count": {
+          "one": "{{ count }} zseb",
+          "other": "{{ count }} zseb"
+        },
+        "pockets_with_zipper": "{{ pockets }} ({{ zipper }})",
+        "storage": "Tárolás"
+      },
+      "inspiration": "Inspiráció",
+      "less_images": "KEVESEBB KÉP",
+      "main_elements": "Fő elemek",
+      "more_images": "TÖBB KÉP",
+      "parameters": "Paraméterek",
+      "you_will_like_it": "Tetszeni fog"
+    },
+    "main-blog": {
+      "name": "Fő blog",
+      "settings": {
+        "enable_filtering": {
+          "label": "Kategóriaszűrés engedélyezése"
+        },
+        "enable_load_more": {
+          "label": "További betöltése gomb engedélyezése"
+        },
+        "enable_search": {
+          "label": "Kereső engedélyezése"
+        },
+        "header": {
+          "content": "Blogbejegyzés beállításai"
+        },
+        "image_height": {
+          "info": "Állítsa be a kiemelt kép képarányát. Ez a beállítás nem érvényes az 'Igazítás a képhez' opcióval.",
+          "label": "Kiemelt kép magassága",
+          "options__1": {
+            "label": "Igazítás a képhez"
+          },
+          "options__2": {
+            "label": "Kicsi"
+          },
+          "options__3": {
+            "label": "Közepes"
+          },
+          "options__4": {
+            "label": "Nagy"
+          }
+        },
+        "paragraph": {
+          "content": "A blogbejegyzések elrendezésének módosításához szerkessze a blog sablont."
+        },
+        "posts_per_page": {
+          "label": "Bejegyzés oldalanként"
+        },
+        "show_author": {
+          "label": "Szerző megjelenítése"
+        },
+        "show_date": {
+          "label": "Dátum megjelenítése"
+        }
+      }
     }
   },
   "localization": {
@@ -425,7 +629,13 @@
       "title": "Fiók",
       "details": "Fiókadatok",
       "view_addresses": "Címek megtekintése",
-      "return": "Vissza a fiókadatokhoz"
+      "return": "Vissza a fiókadatokhoz",
+      "email": "E-mail",
+      "save": "Mentés",
+      "addresses": "Címek",
+      "settings": "Beállítások",
+      "orders": "Rendelések",
+      "menu": "Menü"
     },
     "account_fallback": "Fiók",
     "activate_account": {
@@ -457,7 +667,10 @@
       "cancel": "Mégse",
       "edit": "Szerkesztés",
       "delete": "Törlés",
-      "delete_confirm": "Biztos, hogy törlöd a címet?"
+      "delete_confirm": "Biztos, hogy törlöd a címet?",
+      "email": "E-mail",
+      "name": "Név",
+      "tax_id": "Adószám"
     },
     "log_in": "Bejelentkezés",
     "log_out": "Kijelentkezés",
@@ -482,12 +695,26 @@
       "payment_status": "Fizetési állapot",
       "fulfillment_status": "Teljesítési állapot",
       "total": "Végösszeg",
-      "none": "Még nem rendeltél semmit."
+      "none": "Még nem rendeltél semmit.",
+      "quantity": "Mennyiség",
+      "price_details": "Ár",
+      "status": "Állapot",
+      "discount": "Kedvezmény",
+      "shipping": "Szállítás",
+      "shipping_discount": "Szállítási kedvezmény",
+      "original_price": "Eredeti ár",
+      "delivered": "Kézbesítve",
+      "refunded": "Visszatérítve",
+      "detail": "Részletek",
+      "color": "Szín"
     },
     "recover_password": {
       "title": "Új jelszó létrehozása",
       "subtext": "Küldünk egy e-mailt, amellyel új jelszót készíthetsz magadnak.",
-      "success": "E-mailben elküldtük a jelszó módosításához szükséges hivatkozást."
+      "success": "E-mailben elküldtük a jelszó módosításához szükséges hivatkozást.",
+      "submit": "Elküldés",
+      "email": "E-mail",
+      "cancel": "Mégse"
     },
     "register": {
       "title": "Fiók létrehozása",
@@ -495,7 +722,10 @@
       "last_name": "Vezetéknév",
       "email": "E-mail-cím",
       "password": "Jelszó",
-      "submit": "Létrehozás"
+      "submit": "Létrehozás",
+      "privacy_policy": "Adatvédelmi szabályzat",
+      "terms_of_service": "Általános Szerződési Feltételek",
+      "and": "és"
     },
     "reset_password": {
       "title": "Új fiókjelszó létrehozása",
@@ -529,6 +759,11 @@
       "subtotal": "Részösszeg",
       "total_duties": "Vámok",
       "total_refunded": "Visszatérítve"
+    },
+    "login": {
+      "guest_continue": "Folytatás",
+      "submit": "Elküldés",
+      "email": "E-mail"
     }
   },
   "gift_cards": {
@@ -654,7 +889,47 @@
   "footer": {
     "contact": {
       "phone": "+421 233 418 364",
-      "email": "eshop@northfinder.sk"
+      "email": "eshop@northfinder.sk",
+      "contact_us": "Vegye fel velünk a kapcsolatot"
+    },
+    "change": "Módosítás",
+    "contact_us": "Vegye fel velünk a kapcsolatot"
+  },
+  "cart": {
+    "general": {
+      "edit": "Szerkesztés",
+      "remove": "Eltávolítás",
+      "subtotal": "Részösszeg",
+      "cancel": "Mégse",
+      "continue_shopping": "Vásárlás folytatása",
+      "title": "Kosár",
+      "update": "Frissítés",
+      "checkout": "Fizetés"
+    },
+    "label": {
+      "quantity": "Mennyiség",
+      "price": "Ár",
+      "total": "Összesen",
+      "product": "Termék"
+    },
+    "coupon": {
+      "apply": "Alkalmaz"
+    },
+    "summary": {
+      "shipping": "Szállítás",
+      "title": "Összegzés"
     }
+  },
+  "size_guide": {
+    "parfum-features": {
+      "settings": {
+        "description": {
+          "label": "Leírás"
+        }
+      }
+    }
+  },
+  "mobile_menu": {
+    "back": "Vissza"
   }
 }
