@@ -9,6 +9,11 @@
  */
 {
   "general": {
+    "404": {
+      "link": "Continuați cumpărăturile",
+      "subtext": "Pagina solicitată nu există.",
+      "title": "404 Pagină negăsită"
+    },
     "password_page": {
       "login_form_heading": "Accesați magazinul folosind parola:",
       "login_password_button": "Accesați folosind parola",
@@ -17,7 +22,11 @@
       "login_form_error": "Parolă incorectă!",
       "login_form_submit": "Accesați",
       "admin_link_html": "Sunteți proprietarul magazinului? <a href=\"/admin\" class=\"link underlined-link\">Conectați-vă aici</a>",
-      "powered_by_shopify_html": "Acest magazin va fi pe platforma {{ shopify }}"
+      "powered_by_shopify_html": "Acest magazin va fi pe platforma {{ shopify }}",
+      "opening_soon": "Se deschide în curând",
+      "password_link": "Intră folosind parola",
+      "signup_form_email_label": "E-mail",
+      "signup_form_success": "Vă vom trimite un e-mail chiar înainte de deschidere!"
     },
     "social": {
       "alt_text": {
@@ -35,18 +44,31 @@
         "youtube": "YouTube",
         "vimeo": "Vimeo",
         "tiktok": "TikTok"
-      }
+      },
+      "share_on_facebook": "Distribuie",
+      "share_on_pinterest": "Pinuiește",
+      "share_on_twitter": "Tweetuiește"
     },
     "continue_shopping": "Continuați cumpărăturile",
     "pagination": {
       "label": "Paginare",
       "page": "Pagina {{ number }}",
       "next": "Pagina următoare",
-      "previous": "Pagina precedentă"
+      "previous": "Pagina precedentă",
+      "current_page": "Pagina {{ current }} din {{ total }}"
     },
     "search": {
       "search": "Căutați",
-      "reset": "Golește termenul de căutare"
+      "reset": "Golește termenul de căutare",
+      "close": "Închide căutarea",
+      "no_results_html": "Căutarea dvs. pentru „{{ terms }}\" nu a returnat niciun rezultat.",
+      "placeholder": "Caută",
+      "results_with_count": {
+        "one": "{{ count }} rezultat pentru „{{ terms }}\"",
+        "other": "{{ count }} rezultate pentru „{{ terms }}\""
+      },
+      "submit": "Trimite",
+      "title": "Căutați pe site-ul nostru"
     },
     "cart": {
       "view": "Vezi coșul ({{ count }})",
@@ -57,19 +79,59 @@
       "copy_to_clipboard": "Copiați linkul",
       "share_url": "Link",
       "success_message": "Linkul a fost copiat în clipboard",
-      "close": "Închide partajarea"
+      "close": "Închide partajarea",
+      "button": "Distribuie"
     },
     "slider": {
       "of": "din",
       "next_slide": "Glisare la dreapta",
       "previous_slide": "Glisare la stânga",
       "name": "Glisor"
+    },
+    "accessibility": {
+      "close_modal": "Închideți (esc)",
+      "skip_to_content": "Sari la conținut"
+    },
+    "breadcrumbs": {
+      "back": "Înapoi",
+      "collections": "Colecții",
+      "home": "Acasă",
+      "products": "Produse"
+    },
+    "discover_northfinder": {
+      "for_men": "Pentru bărbați",
+      "for_women": "Pentru femei"
+    },
+    "filters": {
+      "show_less": "Afișează mai puțin",
+      "show_more": "Afișează mai mult"
+    },
+    "meta": {
+      "page": "Pagina {{ page }}",
+      "tags": "Etichetat „{{ tags }}\""
+    },
+    "navigation": {
+      "contact": "Contact",
+      "faq": "Întrebări frecvente"
+    },
+    "newsletter_form": {
+      "confirmation": "Vă mulțumim pentru abonare",
+      "email_placeholder": "Adresă de e-mail",
+      "newsletter_email": "Alăturați-vă listei noastre de e-mail",
+      "submit": "Abonează-te"
+    },
+    "text_truncation": {
+      "read_less": "Citește mai puțin",
+      "read_more": "Citește mai mult"
     }
   },
   "newsletter": {
     "label": "E-mail",
     "success": "Vă mulțumim că v-ați abonat",
-    "button_label": "Abonați-vă"
+    "button_label": "Abonați-vă",
+    "discount_label": "Cupon de reducere pentru abonați",
+    "placeholder": "Introduceți e-mailul dvs.",
+    "policy_agreement": "Prin trimiterea e-mailului dvs., sunteți de acord cu prelucrarea datelor cu caracter personal."
   },
   "accessibility": {
     "skip_to_text": "Salt la conținut",
@@ -103,16 +165,45 @@
       "share": "Distribuiți acest articol",
       "success": "Comentariul a fost postat cu succes! Vă mulțumim!",
       "success_moderated": "Comentariul a fost postat cu succes. Îl vom publica peste puțin timp, deoarece blogul nostru este moderat.",
-      "comments": {
+      "comments": "Comentarii",
+      "all_topics": "Toate subiectele",
+      "by_author": "de {{ author }}",
+      "posted_in": "Postat în",
+      "read_more": "Citește mai mult",
+      "related_articles": "Articole similare",
+      "view_all": "Vezi toate"
+    },
+    "comments": {
+      "comments_with_count": {
         "one": "{{ count }} comentariu",
-        "other": "{{ count }} comentarii",
-        "few": "{{ count }} comentarii"
-      }
+        "other": "{{ count }} comentarii"
+      },
+      "email": "E-mail",
+      "message": "Mesaj",
+      "moderated": "Rețineți: comentariile trebuie aprobate înainte de publicare",
+      "name": "Nume",
+      "post": "Postează comentariul",
+      "success": "Comentariul a fost postat cu succes! Vă mulțumim!",
+      "success_moderated": "Comentariul a fost postat cu succes. Îl vom publica în curând, deoarece blogul nostru este moderat.",
+      "title": "Lasă un comentariu"
+    },
+    "main_blog": {
+      "all_articles": "Toate articolele",
+      "categories": {
+        "adventure": "Aventură",
+        "gear": "Echipament",
+        "skialp": "Skialp",
+        "tips": "Sfaturi"
+      },
+      "no_results": "Nu au fost găsite articole care să corespundă criteriilor de căutare.",
+      "search_placeholder": "Caută articole",
+      "view_more": "Vezi mai mult"
     }
   },
   "onboarding": {
     "product_title": "Exemplu de titlu de produs",
-    "collection_title": "Numele colecției"
+    "collection_title": "Numele colecției",
+    "product_tag": "Etichetă exemplu"
   },
   "products": {
     "product": {
@@ -163,7 +254,9 @@
         "load_image": "Încarcă imaginea {{ index }} în vizualizarea galeriei",
         "load_model": "Încarcă modelul 3D {{ index }} în vizualizarea galeriei",
         "load_video": "Redă videoclipul {{ index }} în vizualizarea galeriei",
-        "image_available": "Imaginea {{ index }} este disponibilă acum în vizualizarea galeriei"
+        "image_available": "Imaginea {{ index }} este disponibilă acum în vizualizarea galeriei",
+        "open_featured_media": "Deschide conținutul media principal în vizualizarea galeriei",
+        "view_in_space": "Vizualizați în spațiul dvs."
       },
       "view_full_details": "Vedeți detaliile complete",
       "delivery_info": {
@@ -220,7 +313,19 @@
       },
       "about_perfumes": {
         "title": "Ce sunt parfumurile de rufe?"
-      }
+      },
+      "add_to_wishlist": "Adaugă la favorite",
+      "load_video": "Încarcă videoclipul în vizualizarea galeriei",
+      "new": "Nou",
+      "original_recommended_price": "- prețul recomandat inițial",
+      "price_includes_vat": "Prețul include TVA.",
+      "product_codes_label": "Coduri produs:",
+      "regular_price": "Preț obișnuit",
+      "related_products": "S-ar putea să vă placă",
+      "sale_badge": "REDUCERE",
+      "size_guide_fit_recommender": "Ghid de mărimi și recomandare de mărime",
+      "size_label": "Mărime",
+      "wishlist": "Favorite"
     },
     "modal": {
       "label": "Galerie media"
@@ -243,11 +348,7 @@
         "other": "{{ count }} selectate",
         "few": "{{ count }} selectate"
       },
-      "product_count": {
-        "one": "{{ product_count }} din {{ count }} produs",
-        "other": "{{ product_count }} din {{ count }} produse",
-        "few": "{{ product_count }} din {{ count }} produse"
-      },
+      "product_count": "Vizualizate {{ viewed }} din {{ total }} produse",
       "product_count_simple": {
         "one": "{{ count }} produs",
         "other": "{{ count }} produse",
@@ -257,7 +358,25 @@
       "filter_selected_accessibility": "{{ type }} ({{ count }} filtre selectate)",
       "show_more": "Afișează mai mult",
       "show_less": "Afișează mai puțin",
-      "filter_and_operator_subtitle": "Potrivește-le pe toate"
+      "filter_and_operator_subtitle": "Potrivește-le pe toate",
+      "hide_filters": "Ascunde filtrele",
+      "loading": "SE ÎNCARCĂ...",
+      "product_count_status": "Vizualizate {{ viewed_count }} din {{ total_count }} produse",
+      "products_per_page": "Afișează:",
+      "remove_filter": "Elimină filtrul {{ value }}",
+      "show_only_discounted": "Afișează doar produsele reduse",
+      "show_products": "AFIȘEAZĂ PRODUSELE",
+      "sort_by": {
+        "created_descending": "Produse noi",
+        "manual": "Favorite",
+        "price_ascending": "Cel mai mic preț",
+        "price_descending": "Cel mai mare preț"
+      },
+      "view_more": "VIZUALIZEAZĂ MAI MULTE"
+    },
+    "general": {
+      "view_all": "Toate produsele",
+      "view_more": "Vezi mai mult"
     }
   },
   "templates": {
@@ -297,7 +416,10 @@
         "few": "{{ count }} produse"
       },
       "suggestions": "Sugestii",
-      "pages": "Pagini"
+      "pages": "Pagini",
+      "articles": "Articole",
+      "categories": "Categorii",
+      "no_results_suggestion": "Verificați ortografia sau încercați alte cuvinte."
     },
     "cart": {
       "cart": "Coș"
@@ -311,7 +433,18 @@
         "send": "Trimiteți",
         "post_success": "Vă mulțumim că ne-ați contactat. Vom lua legătura cu dvs. cât mai curând posibil.",
         "error_heading": "Vă rugăm să ajustați următoarele:",
-        "title": "Formular de contact"
+        "title": "Formular de contact",
+        "write_to_us": "Scrieți-ne"
+      },
+      "info": {
+        "address": "Rastislavova 109, 951 41 Lužianky, Slovakia",
+        "hours": "Luni - Vineri 8:00 – 16:00",
+        "subtitle": "Suntem bucuroși să vă sfătuim"
+      },
+      "partnership": {
+        "contact_name": "Persoană de contact",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "heading": "Doriți să vindeți Northfinder?"
       }
     }
   },
@@ -368,10 +501,18 @@
       "review_cart": "Verifică coșul",
       "continue_to_checkout": "Continuă la plată",
       "stock_unavailable": "Stoc indisponibil",
-      "stock_issues_message": "Unele articole din coșul dvs. nu sunt disponibile în cantitățile solicitate:"
+      "stock_issues_message": "Unele articole din coșul dvs. nu sunt disponibile în cantitățile solicitate:",
+      "failed_adjust_quantity": "Cantitatea nu a putut fi ajustată. Vă rugăm să încercați din nou.",
+      "failed_remove_item": "Articolul nu a putut fi eliminat. Vă rugăm să încercați din nou.",
+      "item_added": "Articol adăugat în coș",
+      "remove": "Elimină",
+      "savings": "Economisiți",
+      "summary": "Rezumat",
+      "view_cart": "Vezi coșul"
     },
     "footer": {
-      "payment": "Metode de plată"
+      "payment": "Metode de plată",
+      "contact_us": "Contactați-ne"
     },
     "featured_blog": {
       "view_all": "Afișați tot",
@@ -380,7 +521,8 @@
     },
     "featured_collection": {
       "view_all": "Afișați tot",
-      "view_all_label": "Afișați toate produsele din colecția {{ collection_name }}"
+      "view_all_label": "Afișați toate produsele din colecția {{ collection_name }}",
+      "title": "Colecții"
     },
     "collection_list": {
       "view_all": "Afișați tot"
@@ -440,12 +582,309 @@
       "step_error": "Poți introduce acest articol numai în incrementuri de {{ step }}"
     },
     "faq": {
-      "view_all_questions": "view all questions",
-      "no_questions": "No questions available for this category.",
-      "contact_heading": "Didn't find an answer?",
-      "contact_subtext": "We'll be happy to help",
-      "contact_button": "Write to us",
-      "contact_button_aria": "Contact us for help with your questions"
+      "view_all_questions": "vezi toate întrebările",
+      "no_questions": "Nu există întrebări disponibile pentru această categorie.",
+      "contact_heading": "Nu ați găsit un răspuns?",
+      "contact_subtext": "Vom fi bucuroși să vă ajutăm",
+      "contact_button": "Scrieți-ne",
+      "contact_button_aria": "Contactați-ne pentru ajutor cu întrebările dvs."
+    },
+    "activities": {
+      "name": "Activități",
+      "title": "Activități"
+    },
+    "blog_posts_slider": {
+      "add_posts": "Adăugați articole de blog făcând clic pe butonul de personalizare"
+    },
+    "contact_form": {
+      "heading": "Contact"
+    },
+    "discover-northfinder": {
+      "name": "Descoperă Northfinder",
+      "title": "Descoperă pe northfinder"
+    },
+    "main-blog": {
+      "name": "Blog principal",
+      "settings": {
+        "enable_filtering": {
+          "label": "Activează filtrarea pe categorii"
+        },
+        "enable_load_more": {
+          "label": "Activează butonul Încarcă mai mult"
+        },
+        "enable_search": {
+          "label": "Activează caseta de căutare"
+        },
+        "header": {
+          "content": "Setări articol de blog"
+        },
+        "image_height": {
+          "info": "Setați raportul de aspect al imaginii principale. Această setare nu se aplică atunci când utilizați opțiunea „Adaptare la imagine\".",
+          "label": "Înălțimea imaginii principale",
+          "options__1": {
+            "label": "Adaptare la imagine"
+          },
+          "options__2": {
+            "label": "Mică"
+          },
+          "options__3": {
+            "label": "Medie"
+          },
+          "options__4": {
+            "label": "Mare"
+          }
+        },
+        "paragraph": {
+          "content": "Pentru a modifica aspectul articolelor de blog, editați șablonul de blog."
+        },
+        "posts_per_page": {
+          "label": "Articole pe pagină"
+        },
+        "show_author": {
+          "label": "Afișează autorul"
+        },
+        "show_date": {
+          "label": "Afișează data"
+        },
+        "show_image": {
+          "label": "Afișează imaginea principală"
+        }
+      }
+    },
+    "main-cart-items": {
+      "name": "Articolele coșului"
+    },
+    "main_product": {
+      "customer_reviews": "Recenzii clienți",
+      "description_and_parameters": "Descriere și parametri",
+      "detailed_product_description": "Descriere detaliată a produsului",
+      "features_details": {
+        "adjustability": "Ajustabilitate",
+        "construction": "Detalii de construcție",
+        "pockets_with_count": {
+          "one": "{{ count }} buzunar",
+          "other": "{{ count }} buzunare"
+        },
+        "storage": "Depozitare",
+        "title": "Caracteristici și detalii"
+      },
+      "inspiration": "Inspirație",
+      "less_images": "MAI PUȚINE IMAGINI",
+      "main_elements": "Elemente principale",
+      "more_images": "MAI MULTE IMAGINI",
+      "parameters": "Parametri",
+      "you_will_like_it": "O să vă placă"
+    },
+    "parfum_benefits": {
+      "certified_materials": "Materiale\ncertificate outdoor",
+      "free_returns": "Retur gratuit\nîn 14 zile",
+      "member_benefits": "Beneficii pentru\nmembrii înregistrați",
+      "name": "Beneficii parfumuri",
+      "presets": {
+        "name": "Beneficii parfumuri"
+      },
+      "settings": {
+        "heading": {
+          "label": "Titlu"
+        }
+      },
+      "tested_athletes": "Testat de atleți\nși salvamontiști"
+    },
+    "parfum_care_guide": {
+      "badge": "Întrebări frecvente",
+      "blocks": {
+        "faq_category": {
+          "name": "Categorie FAQ",
+          "settings": {
+            "category_id": {
+              "info": "Identificator unic pentru această categorie (folosiți litere mici, fără spații)",
+              "label": "ID categorie"
+            },
+            "category_name": {
+              "label": "Nume categorie"
+            }
+          }
+        },
+        "faq_item": {
+          "name": "Element FAQ",
+          "settings": {
+            "answer": {
+              "label": "Răspuns"
+            },
+            "category": {
+              "info": "Trebuie să corespundă unui ID de categorie din blocurile Categorie FAQ",
+              "label": "ID categorie"
+            },
+            "question": {
+              "label": "Întrebare"
+            }
+          }
+        }
+      },
+      "heading": "Aveți întrebări? Avem răspunsuri.",
+      "name": "Ghid de îngrijire parfumuri",
+      "no_questions": "Nu există întrebări disponibile pentru această categorie.",
+      "presets": {
+        "name": "Ghid de îngrijire parfumuri"
+      },
+      "settings": {
+        "default_category": {
+          "info": "ID-ul categoriei care ar trebui să fie activă implicit",
+          "label": "ID categorie activă implicit"
+        },
+        "description": {
+          "label": "Descriere"
+        },
+        "heading": {
+          "label": "Titlu"
+        }
+      }
+    },
+    "parfum_features": {
+      "cards": {
+        "activity_support": {
+          "alt": "Dezvoltat pentru a vă susține activitatea",
+          "text": "Dezvoltat pentru a vă susține activitatea"
+        },
+        "nature_fragrances": {
+          "alt": "Parfume de lungă durată inspirate din natură",
+          "text": "Parfume de lungă durată inspirate din natură"
+        },
+        "no_residue": {
+          "alt": "Fără depuneri sau reziduuri pe textile",
+          "text": "Fără depuneri sau reziduuri pe textile"
+        },
+        "vegan": {
+          "alt": "Vegane",
+          "text": "Vegane"
+        }
+      }
+    },
+    "parfum_instructions": {
+      "badge": "Instrucțiuni",
+      "heading": "Cum să folosiți parfumul de rufe",
+      "important_title": "IMPORTANT:",
+      "name": "Instrucțiuni parfumuri",
+      "presets": {
+        "name": "Instrucțiuni parfumuri"
+      },
+      "settings": {
+        "description": {
+          "label": "Descriere"
+        },
+        "heading": {
+          "label": "Titlu"
+        }
+      },
+      "steps": {
+        "step_1": "Agitați bine sticla înainte de utilizare.",
+        "step_2": "Turnați 5 ml (1 doză) în compartimentul pentru balsam al mașinii de spălat, pentru fiecare 4 kg de rufe.",
+        "step_3": "Nu turnați direct în tambur sau în uscător.",
+        "step_4": "Porniți ciclul normal de spălare.",
+        "step_5": "Dacă produsul se varsă pe orice suprafață, ștergeți imediat cu o cârpă umedă sau clătiți cu apă."
+      },
+      "warnings": {
+        "children": "Nu lăsați la îndemâna copiilor. NU spălați hainele copiilor cu parfumul de rufe, deoarece pielea lor este prea sensibilă pentru uleiurile puternice folosite în parfum.",
+        "contact": "Evitați contactul direct cu pielea sau ochii.",
+        "disposal": "Eliminați recipientul conform reglementărilor locale.",
+        "irritation": "În caz de iritație a pielii sau erupție, spălați cu mult săpun și apă. Cereți sfatul medicului dacă simptomele persistă.",
+        "washing_machine": "Numai pentru utilizare la mașina de spălat."
+      }
+    },
+    "parfum_recommendations": {
+      "avoid": {
+        "item_1": "Aplicare directă pe haine",
+        "item_2": "Contact cu ochii și pielea (clătiți în caz de contact)",
+        "item_3": "Utilizare pe mătase delicată sau lână netratată",
+        "title": "Evitați"
+      },
+      "badge": "Întrebări frecvente",
+      "do": {
+        "item_1": "Folosiți cu țesături sintetice, bumbac sau tehnice",
+        "item_2": "Păstrați la temperatura camerei",
+        "item_3": "Testați mai întâi pe pielea sensibilă",
+        "title": "Recomandări:"
+      },
+      "dont": {
+        "item_1": "Nu aplicați direct pe haine",
+        "item_2": "Evitați contactul cu ochii și mucoasele",
+        "item_3": "Nu lăsați la îndemâna copiilor",
+        "title": "Nu:"
+      },
+      "heading": "Recomandări și avertismente",
+      "name": "Recomandări parfumuri",
+      "presets": {
+        "name": "Recomandări parfumuri"
+      },
+      "recommended": {
+        "item_1": "Îmbrăcăminte sport și echipament outdoor",
+        "item_2": "Îmbrăcăminte casual și rufe de zi cu zi",
+        "item_3": "Pentru cei care caută un parfum de lungă durată fără reziduuri de balsam",
+        "title": "Recomandat pentru:"
+      },
+      "settings": {
+        "description": {
+          "label": "Descriere"
+        },
+        "heading": {
+          "label": "Titlu"
+        }
+      }
+    },
+    "parfum_scents": {
+      "best_for": "Cel mai potrivit pentru",
+      "cards": {
+        "active_fresh": {
+          "best_for": "Antrenamente de mare intensitate și îmbrăcăminte activă",
+          "fragrance": "Citrice proaspete cu mentă energizantă și eucalipt",
+          "name": "Active Fresh"
+        },
+        "adventure_mist": {
+          "best_for": "Echipament de camping și echipament outdoor",
+          "fragrance": "Ierburi sălbatice cu mușchi pământiu și adiere de pădure",
+          "name": "Adventure Mist"
+        },
+        "classic_fresh": {
+          "best_for": "Îmbrăcăminte de zi cu zi și ținute casual",
+          "fragrance": "Bumbac curat cu levănțică delicată și vanilie",
+          "name": "Classic Fresh"
+        },
+        "outdoor_flow": {
+          "best_for": "Aventuri în aer liber și echipament tehnic",
+          "fragrance": "Pin de munte cu aer alpin proaspăt și cedru",
+          "name": "Outdoor Flow"
+        },
+        "pure_essence": {
+          "best_for": "Țesături delicate și lenjerie intimă",
+          "fragrance": "Flori delicate cu mosc ușor și lenjerie curată",
+          "name": "Pure Essence"
+        }
+      },
+      "explore_scent": "Explorați parfumul",
+      "fragrance_profile": "Profil de parfum",
+      "name": "Parfumuri"
+    },
+    "recent_products": {
+      "heading": "Vizualizate recent"
+    },
+    "unique-selling-point": {
+      "materials": {
+        "alt": "Materiale certificate",
+        "text": "Folosim materiale outdoor certificate"
+      },
+      "members": {
+        "alt": "Membri",
+        "text": "Beneficii suplimentare pentru membrii înregistrați"
+      },
+      "name": "Puncte unice de vânzare",
+      "returns": {
+        "alt": "Returnări",
+        "text": "Returnări și schimburi fără complicații"
+      },
+      "tested": {
+        "alt": "Testat",
+        "text": "Testat de atleți și salvamontiști"
+      }
     }
   },
   "localization": {
@@ -462,7 +901,33 @@
       "title": "Cont",
       "details": "Detalii cont",
       "view_addresses": "Afișați adresele",
-      "return": "Înapoi la detaliile contului"
+      "return": "Înapoi la detaliile contului",
+      "account_settings": "Setări cont",
+      "addresses": "Adrese",
+      "available_bonus": "Bonus disponibil",
+      "back_to_shopping": "Înapoi la cumpărături",
+      "basic_info": "Informații de bază",
+      "birthdate": "Data nașterii",
+      "bonus_detail_1": "Puteți utiliza bonusul la următoarea achiziție.",
+      "bonus_detail_2": "Bonusul poate fi aplicat până la 25% din valoarea totală a achiziției.",
+      "bonus_detail_3": "Vă recomandăm să utilizați bonusul în termen de 150 de zile de la primire.",
+      "bonus_details": "Cum să utilizați bonusul dvs.",
+      "customer_zone": "ZONA CLIENTULUI",
+      "delete_account": "Șterge contul",
+      "delete_confirm": "Sigur doriți să vă ștergeți contul? Această acțiune nu poate fi anulată.",
+      "delete_success": "Cererea de ștergere a contului a fost trimisă.",
+      "email": "E-mail",
+      "first_name": "Prenume",
+      "info_update_success": "Informațiile de bază au fost actualizate cu succes!",
+      "last_name": "Nume de familie",
+      "loyalty_bonus": "Bonus de fidelitate",
+      "orders": "Comenzi",
+      "phone": "Număr de telefon",
+      "save": "Salvează",
+      "settings": "Setări",
+      "settings_description": "Puteți șterge contul dvs. și toate datele asociate. Această acțiune nu poate fi anulată.",
+      "wishlist": "Lista de produse favorite",
+      "wishlist_empty": "Nu aveți încă produse în lista de favorite."
     },
     "account_fallback": "Cont",
     "log_in": "Conectați-vă",
@@ -496,7 +961,22 @@
       "cancel": "Anulați",
       "edit": "Editați",
       "delete": "Ștergeți",
-      "delete_confirm": "Sigur ștergeți această adresă?"
+      "delete_confirm": "Sigur ștergeți această adresă?",
+      "add_success": "Adresa a fost adăugată cu succes",
+      "address_min_length": "Adresa trebuie să conțină cel puțin 5 caractere",
+      "billing_address": "Adresă de facturare",
+      "city_min_length": "Numele orașului trebuie să conțină cel puțin 2 caractere",
+      "company_id": "Cod unic de înregistrare (CUI)",
+      "delivery_address": "Adresă de livrare",
+      "email": "E-mail",
+      "error": "A apărut o eroare la procesarea cererii dvs. Vă rugăm să încercați din nou.",
+      "first_name_min_length": "Prenumele trebuie să conțină cel puțin 2 caractere",
+      "last_name_min_length": "Numele de familie trebuie să conțină cel puțin 2 caractere",
+      "name": "Nume",
+      "phone_min_length": "Introduceți un număr de telefon valid",
+      "tax_id": "Cod fiscal (CIF)",
+      "update_success": "Adresa a fost actualizată cu succes",
+      "zip_min_length": "Codul poștal trebuie să conțină 3-10 caractere"
     },
     "login_page": {
       "cancel": "Anulați",
@@ -509,7 +989,13 @@
       "title": "Conectați-vă",
       "sign_in": "Conectați-vă",
       "submit": "Trimiteți",
-      "alternate_provider_separator": "sau"
+      "alternate_provider_separator": "sau",
+      "facebook_login": "Conectați-vă prin Facebook",
+      "forgot_password_message": "Dacă ați pierdut parola, continuați la pagina",
+      "google_login": "Conectați-vă prin Google",
+      "migration_notice_body": "Dacă ați avut un cont pe site-ul nostru anterior, contul și punctele de fidelitate au fost transferate. Vă rugăm să vă resetați parola pentru a accesa contul.",
+      "migration_notice_cta": "Resetați parola",
+      "migration_notice_title": "Ne-am modernizat magazinul!"
     },
     "orders": {
       "title": "Istoric comenzi",
@@ -519,12 +1005,43 @@
       "payment_status": "Starea plății",
       "fulfillment_status": "Starea comenzii",
       "total": "Total",
-      "none": "Încă nu ați plasat comenzi."
+      "none": "Încă nu ați plasat comenzi.",
+      "billing_address": "Adresă de facturare",
+      "cancelled": "Anulată",
+      "color": "Culoare",
+      "delivered": "Livrată",
+      "detail": "Detalii",
+      "discount": "Reducere",
+      "download_invoice": "Descarcă factura",
+      "final_price": "Preț final",
+      "including_vat": "Inclusiv TVA",
+      "no_billing_address": "Nicio adresă de facturare disponibilă",
+      "no_shipping_address": "Nicio adresă de livrare disponibilă",
+      "original_price": "Preț original",
+      "partially_refunded": "Rambursată parțial",
+      "pending_payment": "Plată în așteptare",
+      "price_details": "Preț",
+      "processing": "În procesare",
+      "product_discount": "Reducere produs",
+      "purchase_price": "Preț de achiziție",
+      "quantity": "Cantitate",
+      "refunded": "Rambursată",
+      "reorder": "Comandă din nou",
+      "reorder_error": "Comanda nu a putut fi reînregistrată. Vă rugăm să încercați din nou.",
+      "shipped": "Expediată",
+      "shipping": "Livrare",
+      "shipping_address": "Adresă de livrare",
+      "shipping_discount": "Reducere livrare",
+      "size": "Mărime",
+      "tax": "TVA"
     },
     "recover_password": {
       "title": "Resetați parola",
       "subtext": "Vă vom trimite un e-mail ca să vă resetați parola",
-      "success": "V-am trimis un e-mail cu un link pentru a vă actualiza parola."
+      "success": "V-am trimis un e-mail cu un link pentru a vă actualiza parola.",
+      "cancel": "Anulează",
+      "email": "E-mail",
+      "submit": "Trimite"
     },
     "register": {
       "title": "Creați un cont",
@@ -532,7 +1049,21 @@
       "last_name": "Nume de familie",
       "email": "E-mail",
       "password": "Parolă",
-      "submit": "Creați"
+      "submit": "Creați",
+      "accepts_marketing": "În viitor, aș dori să primesc prin e-mail informații despre tendințele actuale, oferte și reduceri NORTHFINDER. Abonamentul poate fi anulat gratuit în orice moment.",
+      "and": "și",
+      "apply": "aplică.",
+      "password_requirement_length": "Cel puțin 8 caractere",
+      "password_requirement_lowercase": "Cel puțin o literă mică",
+      "password_requirement_number": "Cel puțin un număr",
+      "password_requirement_special": "Cel puțin un caracter special",
+      "password_requirement_uppercase": "Cel puțin o literă mare",
+      "password_requirements": "Parola trebuie să îndeplinească următoarele cerințe:",
+      "phone": "Număr de telefon",
+      "privacy_policy": "Politica de confidențialitate",
+      "privacy_policy_message": "Ca în orice magazin online, veți primi de la noi toate actualizările importante prin e-mail (confirmarea comenzii, confirmarea livrării, informații despre retur, recomandări). Citiți",
+      "recaptcha_message": "Acest site este protejat de reCAPTCHA și de Google",
+      "terms_of_service": "Termeni și condiții"
     },
     "reset_password": {
       "title": "Resetați parola contului",
@@ -566,6 +1097,26 @@
       "subtotal": "Subtotal",
       "total_duties": "Taxe vamale",
       "total_refunded": "Rambursată"
+    },
+    "form_errors": {
+      "email_invalid": "Introduceți o adresă de e-mail validă",
+      "email_required": "E-mailul este obligatoriu",
+      "error": "A apărut o eroare la procesarea cererii dvs. Vă rugăm să încercați din nou.",
+      "first_name": "Prenumele este obligatoriu",
+      "last_name": "Numele de familie este obligatoriu",
+      "password_requirements": "Parola trebuie să îndeplinească toate cerințele"
+    },
+    "login": {
+      "alternate_provider_separator": "sau",
+      "email": "E-mail",
+      "forgot_password": "Ați uitat parola?",
+      "guest_continue": "Continuă",
+      "guest_title": "Continuați ca oaspete",
+      "password": "Parolă",
+      "please_login": "Vă rugăm să vă autentificați în cont",
+      "sign_in": "Conectați-vă",
+      "submit": "Trimite",
+      "title": "Autentificare"
     }
   },
   "gift_cards": {
@@ -580,7 +1131,12 @@
       "expired": "Expirat",
       "copy_code_success": "Codul a fost copiat cu succes",
       "how_to_use_gift_card": "Folosește codul cardului cadou online sau codul QR în magazin",
-      "expiration_date": "Expiră pe {{ expires_on }}"
+      "expiration_date": "Expiră pe {{ expires_on }}",
+      "active": "Expiră pe {{ expiry }}",
+      "disabled": "Dezactivat",
+      "print": "Tipărește acest card cadou",
+      "redeem_html": "Folosiți acest cod la finalizarea comenzii pentru a valorifica cardul cadou de {{ value }}",
+      "remaining_html": "{{ balance }} rămas"
     }
   },
   "recipient": {
@@ -603,46 +1159,46 @@
   "pagefly": {
     "products": {
       "product": {
-        "regular_price": "Regular price",
-        "sold_out": "Sold out",
-        "unavailable": "Unavailable",
-        "on_sale": "Sale",
-        "quantity": "Quantity",
-        "add_to_cart": "Add to cart",
-        "back_to_collection": "Back to {{ title }}",
-        "view_details": "View details"
+        "regular_price": "Preț obișnuit",
+        "sold_out": "Stoc epuizat",
+        "unavailable": "Indisponibil",
+        "on_sale": "Reducere",
+        "quantity": "Cantitate",
+        "add_to_cart": "Adaugă în coș",
+        "back_to_collection": "Înapoi la {{ title }}",
+        "view_details": "Vezi detalii"
       }
     },
     "article": {
-      "tags": "Tags:",
-      "all_topics": "All topics",
-      "by_author": "by {{ author }}",
-      "posted_in": "Posted in",
-      "read_more": "Read more",
-      "back_to_blog": "Back to {{ title }}"
+      "tags": "Etichete:",
+      "all_topics": "Toate subiectele",
+      "by_author": "de {{ author }}",
+      "posted_in": "Postat în",
+      "read_more": "Citește mai mult",
+      "back_to_blog": "Înapoi la {{ title }}"
     },
     "comments": {
-      "title": "Leave a comment",
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "post": "Post comment",
-      "moderated": "Please note, comments must be approved before they are published",
-      "success_moderated": "Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.",
-      "success": "Your comment was posted successfully! Thank you!",
+      "title": "Lasă un comentariu",
+      "name": "Nume",
+      "email": "E-mail",
+      "message": "Mesaj",
+      "post": "Postează comentariul",
+      "moderated": "Rețineți: comentariile trebuie aprobate înainte de publicare",
+      "success_moderated": "Comentariul a fost postat cu succes. Îl vom publica în curând, deoarece blogul nostru este moderat.",
+      "success": "Comentariul a fost postat cu succes! Vă mulțumim!",
       "comments_with_count": {
-        "one": "{{ count }} comment",
-        "other": "{{ count }} comments"
+        "one": "{{ count }} comentariu",
+        "other": "{{ count }} comentarii"
       }
     },
     "password_page": {
-      "login_form_message": "Enter store using password:",
-      "login_form_password_label": "Password",
-      "login_form_password_placeholder": "Your password",
-      "login_form_submit": "Enter",
-      "signup_form_email_label": "Email",
-      "signup_form_success": "We will send you an email right before we open!",
-      "password_link": "Enter using password"
+      "login_form_message": "Accesați magazinul folosind parola:",
+      "login_form_password_label": "Parolă",
+      "login_form_password_placeholder": "Parola dvs.",
+      "login_form_submit": "Intră",
+      "signup_form_email_label": "E-mail",
+      "signup_form_success": "Vă vom trimite un e-mail chiar înainte de deschidere!",
+      "password_link": "Intră folosind parola"
     }
   },
   "pages": {
@@ -694,7 +1250,277 @@
   "footer": {
     "contact": {
       "phone": "+421 233 418 364",
-      "email": "eshop@northfinder.com"
+      "email": "eshop@northfinder.com",
+      "contact_us": "Contactați-ne"
+    },
+    "change": "Schimbă",
+    "contact_us": "Contactați-ne",
+    "copyright": "© Copyright Northfinder {{ year }} / Toate drepturile rezervate",
+    "language": "English (English)",
+    "shopping_from": "Cumpărați din"
+  },
+  "cart": {
+    "benefits": {
+      "loyalty": "Bonus de fidelitate",
+      "loyalty_text_1": "Înregistrați-vă și câștigați un bonus de fidelitate la fiecare achiziție.",
+      "loyalty_text_2": "Bonusul va fi creditat în contul dvs. în a 15-a zi de la livrare.",
+      "loyalty_text_3": "Puteți să îl deduceți din următoarea achiziție, până la 25% din valoarea acesteia.",
+      "loyalty_text_4": "Vă recomandăm să utilizați bonusul în următoarele 150 de zile.",
+      "title": "Beneficii pentru clienții înregistrați"
+    },
+    "coupon": {
+      "apply": "Aplică",
+      "placeholder": "Cod",
+      "title": "Cupon de reducere / Card cadou"
+    },
+    "general": {
+      "cancel": "Anulează",
+      "checkout": "Finalizează comanda",
+      "continue_shopping": "Continuați cumpărăturile",
+      "cookies_required": "Activați cookie-urile pentru a utiliza coșul de cumpărături",
+      "edit": "Editează",
+      "empty": "Coșul dvs. este momentan gol.",
+      "note": "Adaugă o notă comenzii tale",
+      "remove": "Elimină",
+      "savings": "Economisiți",
+      "shipping_at_checkout": "Taxele de expediere și impozitele se calculează la finalizarea comenzii",
+      "subtotal": "Subtotal",
+      "title": "Coșul dvs.",
+      "update": "Actualizează"
+    },
+    "label": {
+      "price": "Preț",
+      "product": "Produs",
+      "quantity": "Cantitate",
+      "total": "Total"
+    },
+    "save_for_later": "Salvează pentru mai târziu",
+    "summary": {
+      "calculated_at_checkout": "Calculat la finalizarea comenzii",
+      "shipping": "Livrare",
+      "subtotal": "Subtotal inclusiv TVA",
+      "subtotal_excluding_tax": "Subtotal fără TVA",
+      "tax": "TVA",
+      "title": "Rezumat",
+      "total": "Total estimat"
     }
+  },
+  "collections": {
+    "general": {
+      "all": "Toate"
+    }
+  },
+  "date_formats": {
+    "month_day_year": "%B %d, %Y"
+  },
+  "mobile_menu": {
+    "all_in": "Tot în {{ title }}",
+    "back": "Înapoi"
+  },
+  "phone_validation": {
+    "invalid": "Număr de telefon invalid",
+    "invalid_country_code": "Cod de țară invalid",
+    "local_only": "Introduceți în format internațional",
+    "required": "Introduceți un număr de telefon",
+    "too_long": "Numărul de telefon este prea lung",
+    "too_short": "Numărul de telefon este prea scurt"
+  },
+  "size_guide": {
+    "descriptions": {
+      "hiking_shoes": "*Bocancii de drumeție se dimensionează conform piciorului uman"
+    },
+    "gender": {
+      "mens": "Bărbați",
+      "womens": "Femei"
+    },
+    "headings": {
+      "footwear_measurement_guide": "Cum se măsoară mărimea produsului?",
+      "measurement_guide": "Cum să vă măsurați corpul?",
+      "men_clothing": "Ghid de mărimi - bărbați",
+      "men_footwear": "Mărimi bocanci drumeție - bărbați",
+      "women_clothing": "Ghid de mărimi - femei",
+      "women_footwear": "Mărimi bocanci drumeție - femei"
+    },
+    "instructions": {
+      "body_measurements": "<ol><li>PIEPT</li><li>TALIE</li><li>ȘOLD</li><li>ÎNĂLȚIME</li><li>LUNGIME INTERIOARĂ</li></ol>",
+      "foot_measurements": "<ol><li>LUNGIME PICIOR</li></ol>"
+    },
+    "measurements": {
+      "chest": "PIEPT",
+      "foot_length": "LUNGIME PICIOR",
+      "height": "ÎNĂLȚIME",
+      "hip": "ȘOLD",
+      "inseam_length": "LUNGIME INTERIOARĂ",
+      "waist": "TALIE"
+    },
+    "parfum-features": {
+      "blocks": {
+        "feature": {
+          "name": "Caracteristică",
+          "settings": {
+            "icon": {
+              "info": "Introduceți numele fișierului SVG al iconiței (fără extensia .svg)",
+              "label": "Nume iconiță"
+            },
+            "title": {
+              "default": "Titlu caracteristică",
+              "label": "Titlu"
+            }
+          }
+        }
+      },
+      "name": "Caracteristici parfumuri",
+      "presets": {
+        "name": "Caracteristici parfumuri"
+      },
+      "settings": {
+        "description": {
+          "default": "<p>Parfumurile de rufe NORTHFINDER sunt amplificatoare de parfum concentrate, dezvoltate pentru performanță și uzura de zi cu zi.</p><p>Spre deosebire de balsamuri, acestea păstrează respirabilitatea și proprietățile țesăturilor, oferind în același timp prospețime de lungă durată.</p>",
+          "label": "Descriere"
+        },
+        "heading": {
+          "default": "Ce sunt parfumurile de rufe?",
+          "label": "Titlu"
+        }
+      }
+    },
+    "product_measurements": {
+      "back_rise_end_waist": "Lungimea șezutului spate - de la capătul taliei",
+      "back_rise_top_waist": "Lungimea șezutului spate - de la vârful taliei",
+      "bottom_girth_half": "1/2 circumferință la tiv",
+      "bottom_girth_relaxed": "1/2 circumferință la tiv - relaxată",
+      "bottom_girth_stretched_half": "1/2 circumferință la tiv - întinsă",
+      "bottom_legs_half": "1/2 circumferință craci",
+      "center_back_length": "Lungime spate centru",
+      "chest_girth_half": "1/2 circumferință piept",
+      "front_rise_end_waist": "Lungime șezut față de la capătul taliei",
+      "front_rise_top_waist": "Lungime șezut față - de la vârful taliei",
+      "hip_girth": "Circumferință șold",
+      "inside_length": "Lungime interioară",
+      "outside_length_end_waist": "Lungime exterioară de la capătul taliei",
+      "outside_length_top_waist": "Lungime exterioară de la vârful taliei",
+      "shoulder_point_to_point": "Umăr de la punct la punct",
+      "shoulder_sleeve_length": "Lungime umăr și mânecă",
+      "sleeve_length": "Lungime mânecă",
+      "thigh_half_crotch": "1/2 coapsă - la crotch",
+      "waist_girth": "Circumferință talie",
+      "waist_girth_half": "1/2 circumferință talie",
+      "waist_girth_relaxed": "Circumferință talie - relaxată",
+      "waist_girth_stretched": "Circumferință talie - întinsă"
+    },
+    "size_fit": {
+      "button_text": "Ghid de mărimi și recomandare de mărime",
+      "measurement_guide": {
+        "chest": {
+          "description": "Măsurați în jurul celei mai late părți a pieptului, menținând centimetrul orizontal",
+          "title": "PIEPT"
+        },
+        "height": {
+          "description": "Măsurați din vârful capului până la podea fără pantofi",
+          "title": "ÎNĂLȚIME"
+        },
+        "hip": {
+          "description": "Măsurați în jurul celei mai late părți a șoldurilor, la aproximativ 20 cm sub talie",
+          "title": "ȘOLD"
+        },
+        "inseam": {
+          "description": "Măsurați de la crotch până la gleznă",
+          "title": "LUNGIME INTERIOARĂ"
+        },
+        "title": "Cum să vă măsurați corpul?",
+        "waist": {
+          "description": "Măsurați în jurul liniei naturale a taliei, cea mai îngustă parte a trunchiului",
+          "title": "TALIE"
+        }
+      },
+      "modal": {
+        "title": "Ghid de mărimi - {{ gender }}"
+      },
+      "no_product_measurements": "Nu există dimensiuni disponibile pentru acest articol.",
+      "product_guide": {
+        "back_part": "Partea din spate a jachetei",
+        "bottom_girth_half": "1/2 CIRCUMFERINȚĂ LA TIV",
+        "bottom_girth_relaxed": "1/2 CIRCUMFERINȚĂ LA TIV - RELAXATĂ",
+        "bottom_girth_stretched": "1/2 CIRCUMFERINȚĂ LA TIV - ÎNTINSĂ",
+        "center_back_length": "LUNGIME SPATE CENTRU",
+        "chest_girth_half": "1/2 CIRCUMFERINȚĂ PIEPT",
+        "description": "Aceste dimensiuni sunt luate direct de pe articol și pot fi folosite pentru a le compara cu hainele dvs. existente.",
+        "front_body_length": "LUNGIME FAȚĂ DE LA HSP",
+        "front_part": "Partea din față a jachetei",
+        "hip_girth": "CIRCUMFERINȚĂ ȘOLD",
+        "inside_length": "LUNGIME INTERIOARĂ",
+        "outside_length": "LUNGIME EXTERIOARĂ",
+        "shoulder_point_to_point": "UMĂR DE LA PUNCT LA PUNCT",
+        "shoulder_sleeve_length": "LUNGIME UMĂR ȘI MÂNECĂ",
+        "sleeve_length": "LUNGIME MÂNECĂ",
+        "title": "Cum se măsoară produsul?",
+        "waist_girth": "CIRCUMFERINȚĂ TALIE"
+      },
+      "product_measurements": {
+        "bottom_girth_half": "1/2 CIRCUMFERINȚĂ LA TIV (CM)",
+        "center_back_length": "LUNGIME SPATE CENTRU (CM)",
+        "chest_girth_half": "1/2 CIRCUMFERINȚĂ PIEPT (CM)",
+        "description": "Dimensiuni aproximative măsurate pe produse",
+        "hip_girth": "CIRCUMFERINȚĂ ȘOLD (CM)",
+        "inside_length": "LUNGIME INTERIOARĂ (CM)",
+        "shoulder_point_to_point": "UMĂR DE LA PUNCT LA PUNCT (CM)",
+        "shoulder_sleeve_length": "LUNGIME UMĂR ȘI MÂNECĂ (CM)",
+        "sleeve_length": "LUNGIME MÂNECĂ (CM)",
+        "usage_note": "(folosiți pentru a compara cu hainele din garderobă)",
+        "waist_girth": "CIRCUMFERINȚĂ TALIE (CM)"
+      },
+      "recommender": {
+        "alternative_sizes": "Mărimi alternative de luat în considerare:",
+        "calculating": "Calculăm mărimea dvs. perfectă...",
+        "chest": "Piept",
+        "description": "Introduceți dimensiunile dvs. pentru a obține o recomandare personalizată de mărime",
+        "error_title": "Mărimea nu poate fi calculată",
+        "fit_preference": "Cum preferați să vi se potrivească hainele?",
+        "get_recommendation": "Obțineți recomandarea de mărime",
+        "height": "Înălțime",
+        "loose_fit": "Croială lejeră",
+        "loose_fit_desc": "Croială relaxată, spațioasă",
+        "measurements_required": "Dimensiunile pieptului și taliei sunt obligatorii",
+        "recommendation_explanation": "Pe baza dimensiunilor dvs. și a preferinței pentru PLACEHOLDER_FIT, mărimea PLACEHOLDER_SIZE ar trebui să ofere cea mai bună potrivire.",
+        "recommendation_title": "Mărimea dvs. recomandată",
+        "regular_fit": "Croială normală",
+        "regular_fit_desc": "Croială confortabilă standard",
+        "tight_fit": "Croială strâmtă",
+        "tight_fit_desc": "Ajustată, mulată pe corp",
+        "title": "Găsiți-vă mărimea perfectă",
+        "waist": "Talie",
+        "weight": "Greutate"
+      },
+      "table_headers": {
+        "chest": "PIEPT",
+        "height": "ÎNĂLȚIME",
+        "hip": "ȘOLD",
+        "inseam_length": "LUNGIME INTERIOARĂ",
+        "size": "Mărime",
+        "waist": "TALIE"
+      },
+      "tabs": {
+        "body_measurements": "Dimensiuni corporale",
+        "product_measurements": "Dimensiuni produs",
+        "size_recommender": "Recomandare mărime"
+      },
+      "unit_converter": {
+        "inches": "INCH",
+        "label": "Unitate:"
+      }
+    },
+    "table_headers": {
+      "chest": "PIEPT",
+      "foot_length": "Lungime picior (cm)",
+      "height": "ÎNĂLȚIME",
+      "hip": "ȘOLD",
+      "inseam_length": "LUNGIME INTERIOARĂ",
+      "measurement": "Dimensiune",
+      "size": "Mărime",
+      "waist": "TALIE"
+    }
+  },
+  "video": {
+    "no_support": "Browserul dvs. nu acceptă eticheta video."
   }
 }

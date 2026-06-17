@@ -9,6 +9,11 @@
  */
 {
   "general": {
+    "404": {
+      "link": "Pokračovat v nákupu",
+      "subtext": "Požadovaná stránka neexistuje.",
+      "title": "404 Stránka nenalezena"
+    },
     "password_page": {
       "login_form_heading": "Zadejte heslo, abyste mohli vstoupit do obchodu:",
       "login_password_button": "Vstoupit pomocí hesla",
@@ -17,7 +22,11 @@
       "login_form_error": "Heslo není správné!",
       "login_form_submit": "Zadat",
       "admin_link_html": "Jste majitelem obchodu? <a href=\"/admin\" class=\"link underlined-link\">Přihlaste se zde</a>",
-      "powered_by_shopify_html": "Obchod bude využívat platformu {{ shopify }}"
+      "powered_by_shopify_html": "Obchod bude využívat platformu {{ shopify }}",
+      "opening_soon": "Brzy otevřeme",
+      "password_link": "Vstup pomocí hesla",
+      "signup_form_email_label": "E-mail",
+      "signup_form_success": "Pošleme vám e-mail těsně před otevřením!"
     },
     "social": {
       "alt_text": {
@@ -35,18 +44,31 @@
         "youtube": "YouTube",
         "vimeo": "Vimeo",
         "tiktok": "TikTok"
-      }
+      },
+      "share_on_facebook": "Sdílet",
+      "share_on_pinterest": "Připnout",
+      "share_on_twitter": "Tweetnout"
     },
     "continue_shopping": "Pokračovat v nákupu",
     "pagination": {
       "label": "Stránkování",
       "page": "Strana {{ number }}",
       "next": "Další stránka",
-      "previous": "Předchozí stránka"
+      "previous": "Předchozí stránka",
+      "current_page": "Strana {{ current }} z {{ total }}"
     },
     "search": {
       "search": "Hledání",
-      "reset": "Vymazat hledaný termín"
+      "reset": "Vymazat hledaný termín",
+      "close": "Zavřít vyhledávání",
+      "no_results_html": "Vaše vyhledávání „{{ terms }}\" nepřineslo žádné výsledky.",
+      "placeholder": "Hledat",
+      "results_with_count": {
+        "one": "{{ count }} výsledek pro „{{ terms }}\"",
+        "other": "{{ count }} výsledků pro „{{ terms }}\""
+      },
+      "submit": "Odeslat",
+      "title": "Prohledat náš web"
     },
     "cart": {
       "view": "Zobrazit košík ({{ count }})",
@@ -57,25 +79,65 @@
       "copy_to_clipboard": "Kopírovat odkaz",
       "share_url": "Odkaz",
       "success_message": "Odkaz byl zkopírován do schránky",
-      "close": "Zavřít okno pro sdílení"
+      "close": "Zavřít okno pro sdílení",
+      "button": "Sdílet"
     },
     "slider": {
       "of": "z",
       "next_slide": "Snímek vpravo",
       "previous_slide": "Snímek vlevo",
       "name": "Posuvník"
+    },
+    "accessibility": {
+      "close_modal": "Zavřít (esc)",
+      "skip_to_content": "Přejít na obsah"
+    },
+    "breadcrumbs": {
+      "back": "Zpět",
+      "collections": "Kolekce",
+      "home": "Domů",
+      "products": "Produkty"
+    },
+    "discover_northfinder": {
+      "for_men": "Pro muže",
+      "for_women": "Pro ženy"
+    },
+    "filters": {
+      "show_less": "Zobrazit méně",
+      "show_more": "Zobrazit více"
+    },
+    "meta": {
+      "page": "Strana {{ page }}",
+      "tags": "Otagováno \"{{ tags }}\""
+    },
+    "navigation": {
+      "contact": "Kontakt",
+      "faq": "FAQ"
+    },
+    "newsletter_form": {
+      "confirmation": "Děkujeme za přihlášení k odběru",
+      "email_placeholder": "E-mailová adresa",
+      "newsletter_email": "Připojte se k našemu newsletteru",
+      "submit": "Odebírat"
+    },
+    "text_truncation": {
+      "read_less": "Číst méně",
+      "read_more": "Číst více"
     }
   },
   "newsletter": {
     "label": "E-mail",
     "success": "Děkujeme za přihlášení k odběru",
-    "button_label": "Přihlásit k odběru"
+    "button_label": "Přihlásit k odběru",
+    "discount_label": "Slevový kupón pro odběratele",
+    "placeholder": "Zadejte svůj e-mail",
+    "policy_agreement": "Odesláním e-mailu souhlasíte se zpracováním osobních údajů."
   },
   "accessibility": {
     "skip_to_text": "Přejít k obsahu",
     "close": "Zavřít",
     "unit_price_separator": "za",
-    "vendor": "Vendor:",
+    "vendor": "Prodejce:",
     "error": "Chyba",
     "refresh_page": "Po volbě výběru se obnoví celá stránka.",
     "loading": "Načítání...",
@@ -103,17 +165,45 @@
       "share": "Nasdílet tento článek",
       "success": "Váš komentář byl úspěšně publikován! Děkujeme!",
       "success_moderated": "Váš komentář byl úspěšně publikován. Zveřejníme jej až za chvíli, protože náš blog je moderován.",
-      "comments": {
+      "comments": "Komentáře",
+      "all_topics": "Všechna témata",
+      "by_author": "od {{ author }}",
+      "posted_in": "Zveřejněno v",
+      "read_more": "Číst dále",
+      "related_articles": "Související články",
+      "view_all": "Zobrazit vše"
+    },
+    "comments": {
+      "comments_with_count": {
         "one": "{{ count }} komentář",
-        "other": "Počet komentářů: {{ count }}",
-        "few": "Počet komentářů: {{ count }}",
-        "many": "Počet komentářů: {{ count }}"
-      }
+        "other": "{{ count }} komentářů"
+      },
+      "email": "E-mail",
+      "message": "Zpráva",
+      "moderated": "Upozorňujeme, že komentáře musí být před zveřejněním schváleny",
+      "name": "Jméno",
+      "post": "Odeslat komentář",
+      "success": "Váš komentář byl úspěšně odeslán! Děkujeme!",
+      "success_moderated": "Váš komentář byl úspěšně odeslán. Zveřejníme jej za chvíli, protože náš blog je moderován.",
+      "title": "Napsat komentář"
+    },
+    "main_blog": {
+      "all_articles": "Všechny články",
+      "categories": {
+        "adventure": "Dobrodružství",
+        "gear": "Výbava",
+        "skialp": "Skialp",
+        "tips": "Tipy"
+      },
+      "no_results": "Podle zadaných kritérií nebyly nalezeny žádné články.",
+      "search_placeholder": "Hledat články",
+      "view_more": "Zobrazit více"
     }
   },
   "onboarding": {
     "product_title": "Vzorový název produktu",
-    "collection_title": "Název vaší kolekce"
+    "collection_title": "Název vaší kolekce",
+    "product_tag": "Ukázkový štítek"
   },
   "products": {
     "product": {
@@ -163,7 +253,9 @@
         "load_image": "Načíst obrázek {{ index }} do zobrazení galerie",
         "load_model": "Načíst 3D model {{ index }} do zobrazení galerie",
         "load_video": "Přehrát video {{ index }} v zobrazení galerie",
-        "image_available": "Obrázek {{ index }} je nyní k dispozici v zobrazení galerie"
+        "image_available": "Obrázek {{ index }} je nyní k dispozici v zobrazení galerie",
+        "open_featured_media": "Otevřít vybrané médium v zobrazení galerie",
+        "view_in_space": "Zobrazit ve vašem prostoru"
       },
       "view_full_details": "Zobrazit veškeré podrobnosti",
       "shipping_policy_html": "<a href=\"{{ link }}\">Poštovné</a> se vypočítá na pokladně.",
@@ -217,7 +309,23 @@
       },
       "about_perfumes": {
         "title": "Co jsou parfumy na praní?"
-      }
+      },
+      "add_to_wishlist": "Přidat do oblíbených",
+      "delivery_info": {
+        "in_stock_html": "Skladem - Obvyklá doba dodání: <b>3-5 pracovních dnů</b>",
+        "out_of_stock": "Není skladem"
+      },
+      "load_video": "Načíst video v zobrazení galerie",
+      "new": "Nové",
+      "original_recommended_price": "- původní doporučená cena",
+      "price_includes_vat": "Cena včetně DPH.",
+      "product_codes_label": "Kódy produktu:",
+      "regular_price": "Běžná cena",
+      "related_products": "Mohlo by se vám líbit",
+      "sale_badge": "SLEVA",
+      "size_guide_fit_recommender": "Tabulka velikostí a doporučení velikosti",
+      "size_label": "Velikost",
+      "wishlist": "Oblíbené"
     },
     "modal": {
       "label": "Galerie multimédií"
@@ -241,12 +349,7 @@
         "few": "Vybráno: {{ count }}",
         "many": "Vybráno: {{ count }}"
       },
-      "product_count": {
-        "one": "{{ product_count }} z {{ count }} produktu",
-        "other": "{{ product_count }} z {{ count }} produktů",
-        "few": "{{ product_count }} z {{ count }} produktů",
-        "many": "{{ product_count }} z {{ count }} produktů"
-      },
+      "product_count": "Zobrazeno {{ viewed }} z {{ total }} produktů",
       "product_count_simple": {
         "one": "Počet produktů: {{ count }}",
         "other": "Počet produktů: {{ count }}",
@@ -257,7 +360,25 @@
       "filter_selected_accessibility": "{{ type }} (počet vybraných filtrů: {{ count }})",
       "show_more": "Zobrazit více",
       "show_less": "Zobrazit méně",
-      "filter_and_operator_subtitle": "Shoda se všemi kritérii"
+      "filter_and_operator_subtitle": "Shoda se všemi kritérii",
+      "hide_filters": "Skrýt filtry",
+      "loading": "NAČÍTÁNÍ...",
+      "product_count_status": "Zobrazeno {{ viewed_count }} z {{ total_count }} produktů",
+      "products_per_page": "Zobrazit:",
+      "remove_filter": "Odebrat filtr {{ value }}",
+      "show_only_discounted": "Zobrazit pouze zlevněné produkty",
+      "show_products": "ZOBRAZIT PRODUKTY",
+      "sort_by": {
+        "created_descending": "Nové produkty",
+        "manual": "Oblíbené",
+        "price_ascending": "Nejnižší cena",
+        "price_descending": "Nejvyšší cena"
+      },
+      "view_more": "ZOBRAZIT VÍCE"
+    },
+    "general": {
+      "view_all": "Všechny produkty",
+      "view_more": "Zobrazit více"
     }
   },
   "templates": {
@@ -302,7 +423,10 @@
         "other": "Počet návrhů: {{ count }}",
         "few": "Počet návrhů: {{ count }}",
         "many": "Počet návrhů: {{ count }}"
-      }
+      },
+      "articles": "Články",
+      "categories": "Kategorie",
+      "no_results_suggestion": "Zkuste zkontrolovat pravopis nebo použijte jiná slova."
     },
     "cart": {
       "cart": "Košík"
@@ -316,7 +440,18 @@
         "send": "Odeslat",
         "post_success": "Děkujeme, že jste nás kontaktovali. Ozveme se vám co možná nejdříve.",
         "error_heading": "Upravte prosím následující informace:",
-        "title": "Kontaktní formulář"
+        "title": "Kontaktní formulář",
+        "write_to_us": "Napište nám"
+      },
+      "info": {
+        "address": "Rastislavova 109, 951 41 Lužianky, Slovakia",
+        "hours": "Pondělí - Pátek 8:00 – 16:00",
+        "subtitle": "Rádi vám poradíme"
+      },
+      "partnership": {
+        "contact_name": "Kontaktní osoba",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "heading": "Chcete prodávat Northfinder?"
       }
     }
   },
@@ -361,10 +496,31 @@
       "duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html": "Včetně cla. Daně, slevy a <a href=\"{{ link }}\">poštovné</a> se vypočítají na pokladně.",
       "duties_included_taxes_at_checkout_shipping_at_checkout_without_policy": "Včetně cla. Daně, slevy a poštovné se vypočítají na pokladně.",
       "taxes_at_checkout_shipping_at_checkout_with_policy_html": "Daně, slevy a <a href=\"{{ link }}\">poštovné</a> se vypočítají na pokladně.",
-      "taxes_at_checkout_shipping_at_checkout_without_policy": "Daně, slevy a poštovné se vypočítají na pokladně."
+      "taxes_at_checkout_shipping_at_checkout_without_policy": "Daně, slevy a poštovné se vypočítají na pokladně.",
+      "cancel_checkout": "Zrušit pokladnu",
+      "cart_updated": "Košík aktualizován",
+      "cart_updated_other_tab": "Košík byl aktualizován v jiné záložce",
+      "cart_updated_review": "Váš košík byl aktualizován v jiné záložce. Před pokračováním k pokladně zkontrolujte prosím změny.",
+      "continue_anyway": "Přesto pokračovat",
+      "continue_to_checkout": "Pokračovat k pokladně",
+      "failed_adjust_quantity": "Nepodařilo se upravit množství. Zkuste to prosím znovu.",
+      "failed_remove_item": "Nepodařilo se odebrat položku. Zkuste to prosím znovu.",
+      "item_added": "Položka byla přidána do košíku",
+      "remove": "Odebrat",
+      "review_cart": "Zkontrolovat košík",
+      "savings": "Ušetříte",
+      "stock_issues_message": "Některé položky ve vašem košíku nejsou v požadovaném množství k dispozici:",
+      "stock_unavailable": "Není skladem",
+      "stock_validation_continue": "Vaše objednávka může být ovlivněna dostupností zboží. Chcete pokračovat?",
+      "stock_validation_error": "Nepodařilo se ověřit dostupnost zboží",
+      "stock_validation_warning": "Upozornění na dostupnost zboží",
+      "summary": "Souhrn",
+      "validating_stock": "Ověřování skladových zásob...",
+      "view_cart": "Zobrazit košík"
     },
     "footer": {
-      "payment": "Platební metody"
+      "payment": "Platební metody",
+      "contact_us": "Kontaktujte nás"
     },
     "featured_blog": {
       "view_all": "Zobrazit vše",
@@ -373,7 +529,8 @@
     },
     "featured_collection": {
       "view_all": "Zobrazit vše",
-      "view_all_label": "Zobrazit všechny produkty v kolekci {{ collection_name }}"
+      "view_all_label": "Zobrazit všechny produkty v kolekci {{ collection_name }}",
+      "title": "Kolekce"
     },
     "collection_list": {
       "view_all": "Zobrazit vše"
@@ -433,6 +590,311 @@
       "min_error": "Tato položka vyžaduje minimum: {{ min }}",
       "max_error": "Tato položka vyžaduje maximum: {{ max }}",
       "step_error": "Tuto položku můžete přidat jen v přírůstcích hodnoty: {{ step }}"
+    },
+    "activities": {
+      "name": "Aktivity",
+      "title": "Aktivity"
+    },
+    "blog_posts_slider": {
+      "add_posts": "Přidejte příspěvky kliknutím na tlačítko přizpůsobit"
+    },
+    "contact_form": {
+      "heading": "Kontakt"
+    },
+    "discover-northfinder": {
+      "name": "Objevte Northfinder",
+      "title": "Objevte na northfinder"
+    },
+    "faq": {
+      "contact_button": "Napište nám",
+      "contact_button_aria": "Kontaktujte nás pro pomoc s vašimi dotazy",
+      "contact_heading": "Nenašli jste odpověď?",
+      "contact_subtext": "Rádi vám pomůžeme",
+      "no_questions": "Pro tuto kategorii nejsou k dispozici žádné dotazy.",
+      "view_all_questions": "zobrazit všechny dotazy"
+    },
+    "main-blog": {
+      "name": "Hlavní blog",
+      "settings": {
+        "enable_filtering": {
+          "label": "Povolit filtrování kategorií"
+        },
+        "enable_load_more": {
+          "label": "Povolit tlačítko Načíst další"
+        },
+        "enable_search": {
+          "label": "Povolit vyhledávací pole"
+        },
+        "header": {
+          "content": "Nastavení příspěvků blogu"
+        },
+        "image_height": {
+          "info": "Nastavte poměr stran vybraného obrázku. Toto nastavení se nepoužije, pokud je zvolena možnost „Přizpůsobit obrázku\".",
+          "label": "Výška vybraného obrázku",
+          "options__1": {
+            "label": "Přizpůsobit obrázku"
+          },
+          "options__2": {
+            "label": "Malé"
+          },
+          "options__3": {
+            "label": "Střední"
+          },
+          "options__4": {
+            "label": "Velké"
+          }
+        },
+        "paragraph": {
+          "content": "Chcete-li změnit rozvržení příspěvků blogu, upravte šablonu blogu."
+        },
+        "posts_per_page": {
+          "label": "Počet příspěvků na stránku"
+        },
+        "show_author": {
+          "label": "Zobrazit autora"
+        },
+        "show_date": {
+          "label": "Zobrazit datum"
+        },
+        "show_image": {
+          "label": "Zobrazit vybraný obrázek"
+        }
+      }
+    },
+    "main-cart-items": {
+      "name": "Položky košíku"
+    },
+    "main_product": {
+      "customer_reviews": "Recenze zákazníků",
+      "description_and_parameters": "Popis a parametry",
+      "detailed_product_description": "Podrobný popis produktu",
+      "features_details": {
+        "adjustability": "Nastavitelnost",
+        "construction": "Detaily konstrukce",
+        "pockets_with_count": {
+          "one": "{{ count }} kapsa",
+          "other": "{{ count }} kapes"
+        },
+        "storage": "Úložný prostor",
+        "title": "Vlastnosti a detaily"
+      },
+      "inspiration": "Inspirace",
+      "less_images": "MÉNĚ OBRÁZKŮ",
+      "main_elements": "Hlavní prvky",
+      "more_images": "VÍCE OBRÁZKŮ",
+      "parameters": "Parametry",
+      "you_will_like_it": "Bude se vám líbit"
+    },
+    "parfum_benefits": {
+      "certified_materials": "Certifikované\nvenkovní materiály",
+      "free_returns": "Bezplatné vrácení\ndo 14 dnů",
+      "member_benefits": "Výhody pro\n registrované členy",
+      "name": "Výhody parfémů",
+      "presets": {
+        "name": "Výhody parfémů"
+      },
+      "settings": {
+        "heading": {
+          "label": "Nadpis"
+        }
+      },
+      "tested_athletes": "Testováno atlety\na horskými záchranáři"
+    },
+    "parfum_care_guide": {
+      "badge": "FAQ",
+      "blocks": {
+        "faq_category": {
+          "name": "Kategorie FAQ",
+          "settings": {
+            "category_id": {
+              "info": "Jedinečný identifikátor této kategorie (použijte malá písmena, bez mezer)",
+              "label": "ID kategorie"
+            },
+            "category_name": {
+              "label": "Název kategorie"
+            }
+          }
+        },
+        "faq_item": {
+          "name": "Položka FAQ",
+          "settings": {
+            "answer": {
+              "label": "Odpověď"
+            },
+            "category": {
+              "info": "Musí odpovídat ID kategorie z bloků Kategorie FAQ",
+              "label": "ID kategorie"
+            },
+            "question": {
+              "label": "Otázka"
+            }
+          }
+        }
+      },
+      "heading": "Otázky? Máme odpovědi.",
+      "name": "Průvodce péčí o parfémy",
+      "no_questions": "Pro tuto kategorii nejsou k dispozici žádné dotazy.",
+      "presets": {
+        "name": "Průvodce péčí o parfémy"
+      },
+      "settings": {
+        "default_category": {
+          "info": "ID kategorie, která by měla být ve výchozím stavu aktivní",
+          "label": "Výchozí ID aktivní kategorie"
+        },
+        "description": {
+          "label": "Popis"
+        },
+        "heading": {
+          "label": "Nadpis"
+        }
+      }
+    },
+    "parfum_features": {
+      "cards": {
+        "activity_support": {
+          "alt": "Vyvinuto na podporu vaší aktivity",
+          "text": "Vyvinuto na podporu vaší aktivivity"
+        },
+        "nature_fragrances": {
+          "alt": "Dlouhotrvající vůně inspirované přírodou",
+          "text": "Dlouhotrvající vůně inspirované přírodou"
+        },
+        "no_residue": {
+          "alt": "Bez usazenin a zbytků na textiliích",
+          "text": "Bez usazenin a zbytků na textiliích"
+        },
+        "vegan": {
+          "alt": "Veganské",
+          "text": "Veganské"
+        }
+      }
+    },
+    "parfum_instructions": {
+      "badge": "Instrukce",
+      "heading": "Jak používat prací parfémy",
+      "important_title": "DŮLEŽITÉ:",
+      "name": "Instrukce k parfémům",
+      "presets": {
+        "name": "Instrukce k parfémům"
+      },
+      "settings": {
+        "description": {
+          "label": "Popis"
+        },
+        "heading": {
+          "label": "Nadpis"
+        }
+      },
+      "steps": {
+        "step_1": "Před použitím lahvičku dobře protřepejte.",
+        "step_2": "Nalijte 5 ml (1 dávku) do přihrádky na aviváž vaší pračky na každé 4 kg prádla.",
+        "step_3": "Nelijte přímo do bubnu ani do sušičky.",
+        "step_4": "Spusťte běžný prací cyklus.",
+        "step_5": "Pokud se produkt rozlije na jakýkoli povrch, okamžitě jej otřete vlhkým hadříkem nebo opláchněte vodou."
+      },
+      "warnings": {
+        "children": "Uchovávejte mimo dosah dětí. NEperte dětské oblečení s pracím parfémem, protože jejich pokožka je příliš citlivá na silné oleje obsažené v parfému.",
+        "contact": "Zabraňte přímému kontaktu s pokožkou nebo očima.",
+        "disposal": "Obal zlikvidujte v souladu s místními předpisy.",
+        "irritation": "V případě podráždění pokožky nebo vyrážky omyjte velkým množstvím mýdla a vody. Pokud příznaky přetrvávají, vyhledejte lékařskou pomoc.",
+        "washing_machine": "Pouze pro použití v pračce."
+      }
+    },
+    "parfum_recommendations": {
+      "avoid": {
+        "item_1": "Přímá aplikace na oblečení",
+        "item_2": "Kontakt s očima a pokožkou (při kontaktu opláchněte)",
+        "item_3": "Použití na jemné hedvábí nebo neošetřenou vlnu",
+        "title": "Vyhněte se"
+      },
+      "badge": "FAQ",
+      "do": {
+        "item_1": "Používejte se syntetickými, bavlněnými nebo technickými tkaninami",
+        "item_2": "Skladujte při pokojové teplotě",
+        "item_3": "U citlivé pokožky nejprve otestujte",
+        "title": "Doporučení:"
+      },
+      "dont": {
+        "item_1": "Neaplikujte přímo na oblečení",
+        "item_2": "Zabraňte kontaktu s očima a sliznicemi",
+        "item_3": "Uchovávejte mimo dosah dětí",
+        "title": "Nedělejte:"
+      },
+      "heading": "Doporučení a upozornění",
+      "name": "Doporučení k parfémům",
+      "presets": {
+        "name": "Doporučení k parfémům"
+      },
+      "recommended": {
+        "item_1": "Sportovní oblečení a outdoorové vybavení",
+        "item_2": "Běžné oblečení a každodenní praní",
+        "item_3": "Pro ty, kteří hledají dlouhotrvající vůni bez zbytků aviváže",
+        "title": "Doporučeno pro:"
+      },
+      "settings": {
+        "description": {
+          "label": "Popis"
+        },
+        "heading": {
+          "label": "Nadpis"
+        }
+      }
+    },
+    "parfum_scents": {
+      "best_for": "Nejlepší pro",
+      "cards": {
+        "active_fresh": {
+          "best_for": "Vysoce intenzivní trénink a aktivní oblečení",
+          "fragrance": "Svěží citrusy s energizující mátou a eukalyptem",
+          "name": "Active Fresh"
+        },
+        "adventure_mist": {
+          "best_for": "Kempingové vybavení a outdoorové vybavení",
+          "fragrance": "Divoké bylinky se zemitým mechem a lesním vánkem",
+          "name": "Adventure Mist"
+        },
+        "classic_fresh": {
+          "best_for": "Každodenní oblečení a běžné nošení",
+          "fragrance": "Čistá bavlna s jemnou levandulí a vanilkou",
+          "name": "Classic Fresh"
+        },
+        "outdoor_flow": {
+          "best_for": "Outdoorová dobrodružství a technické vybavení",
+          "fragrance": "Horská borovice s čistým alpským vzduchem a cedrem",
+          "name": "Outdoor Flow"
+        },
+        "pure_essence": {
+          "best_for": "Jemné tkaniny a spodní prádlo",
+          "fragrance": "Jemné květinové tóny s měkkým pižmem a čistým prádlem",
+          "name": "Pure Essence"
+        }
+      },
+      "explore_scent": "Prozkoumat vůni",
+      "fragrance_profile": "Profil vůně",
+      "name": "Vůně parfémů"
+    },
+    "recent_products": {
+      "heading": "Nedávno prohlížené"
+    },
+    "unique-selling-point": {
+      "materials": {
+        "alt": "Certifikované materiály",
+        "text": "Používáme certifikované outdoorové materiály"
+      },
+      "members": {
+        "alt": "Členové",
+        "text": "Další výhody pro registrované členy"
+      },
+      "name": "Unikátní prodejní body",
+      "returns": {
+        "alt": "Vrácení",
+        "text": "Bezproblémové vrácení a výměna"
+      },
+      "tested": {
+        "alt": "Testováno",
+        "text": "Testováno atlety a horskými záchranáři"
+      }
     }
   },
   "localization": {
@@ -449,7 +911,33 @@
       "title": "Účet",
       "details": "Podrobnosti účtu",
       "view_addresses": "Zobrazit adresy",
-      "return": "Vrátit se k podrobnostem účtu"
+      "return": "Vrátit se k podrobnostem účtu",
+      "account_settings": "Nastavení účtu",
+      "addresses": "Adresy",
+      "available_bonus": "Dostupný bonus",
+      "back_to_shopping": "Zpět k nákupu",
+      "basic_info": "Základní informace",
+      "birthdate": "Datum narození",
+      "bonus_detail_1": "Bonus můžete využít při vašem příštím nákupu.",
+      "bonus_detail_2": "Bonus lze uplatnit až do výše 25 % z celkové hodnoty nákupu.",
+      "bonus_detail_3": "Doporučujeme bonus využít do 150 dnů od jeho připsání.",
+      "bonus_details": "Jak využít váš bonus",
+      "customer_zone": "ZÓNA ZÁKAZNÍKA",
+      "delete_account": "Smazat účet",
+      "delete_confirm": "Opravdu chcete smazat svůj účet? Tuto akci nelze vrátit zpět.",
+      "delete_success": "Žádost o smazání účtu byla odeslána.",
+      "email": "E-mail",
+      "first_name": "Jméno",
+      "info_update_success": "Základní informace byly úspěšně aktualizovány!",
+      "last_name": "Příjmení",
+      "loyalty_bonus": "Věrnostní bonus",
+      "orders": "Objednávky",
+      "phone": "Telefonní číslo",
+      "save": "Uložit",
+      "settings": "Nastavení",
+      "settings_description": "Můžete smazat svůj účet a všechna přidružená data. Tuto akci nelze vrátit zpět.",
+      "wishlist": "Seznam oblíbených produktů",
+      "wishlist_empty": "Ve vašem seznamu oblíbených zatím nejsou žádné produkty."
     },
     "account_fallback": "Účet",
     "log_in": "Přihlásit se",
@@ -483,7 +971,22 @@
       "cancel": "Zrušit",
       "edit": "Upravit",
       "delete": "Odstranit",
-      "delete_confirm": "Opravdu chcete tuto adresu odstranit?"
+      "delete_confirm": "Opravdu chcete tuto adresu odstranit?",
+      "add_success": "Adresa byla úspěšně přidána",
+      "address_min_length": "Adresa musí obsahovat alespoň 5 znaků",
+      "billing_address": "Fakturační adresa",
+      "city_min_length": "Název města musí obsahovat alespoň 2 znaky",
+      "company_id": "IČO",
+      "delivery_address": "Dodací adresa",
+      "email": "E-mail",
+      "error": "Při zpracování vaší žádosti došlo k chybě. Zkuste to prosím znovu.",
+      "first_name_min_length": "Jméno musí obsahovat alespoň 2 znaky",
+      "last_name_min_length": "Příjmení musí obsahovat alespoň 2 znaky",
+      "name": "Jméno",
+      "phone_min_length": "Zadejte prosím platné telefonní číslo",
+      "tax_id": "DIČ",
+      "update_success": "Adresa byla úspěšně aktualizována",
+      "zip_min_length": "PSČ musí obsahovat 3-10 znaků"
     },
     "login_page": {
       "cancel": "Zrušit",
@@ -496,7 +999,13 @@
       "title": "Přihlášení",
       "sign_in": "Přihlásit se",
       "submit": "Odeslat",
-      "alternate_provider_separator": "nebo"
+      "alternate_provider_separator": "nebo",
+      "facebook_login": "Přihlásit se přes Facebook",
+      "forgot_password_message": "Pokud jste zapomněli heslo, pokračujte na stránku",
+      "google_login": "Přihlásit se přes Google",
+      "migration_notice_body": "Pokud jste měli účet na našem předchozím webu, váš účet a věrnostní body byly přeneseny. Pro přístup k účtu si prosím obnovte heslo.",
+      "migration_notice_cta": "Obnovit heslo",
+      "migration_notice_title": "Náš obchod jsme vylepšili!"
     },
     "orders": {
       "title": "Historie objednávek",
@@ -506,12 +1015,43 @@
       "payment_status": "Stav platby",
       "fulfillment_status": "Stav plnění",
       "total": "Celkem",
-      "none": "Zatím jste nezadali žádné objednávky."
+      "none": "Zatím jste nezadali žádné objednávky.",
+      "billing_address": "Fakturační adresa",
+      "cancelled": "Zrušeno",
+      "color": "Barva",
+      "delivered": "Doručeno",
+      "detail": "Podrobnosti",
+      "discount": "Sleva",
+      "download_invoice": "Stáhnout fakturu",
+      "final_price": "Konečná cena",
+      "including_vat": "Včetně DPH",
+      "no_billing_address": "Fakturační adresa není k dispozici",
+      "no_shipping_address": "Dodací adresa není k dispozici",
+      "original_price": "Původní cena",
+      "partially_refunded": "Částečně vráceno",
+      "pending_payment": "Čeká na platbu",
+      "price_details": "Cena",
+      "processing": "Zpracovává se",
+      "product_discount": "Sleva na produkt",
+      "purchase_price": "Kupní cena",
+      "quantity": "Množství",
+      "refunded": "Vráceno",
+      "reorder": "Objednat znovu",
+      "reorder_error": "Opakovaná objednávka selhala. Zkuste to prosím znovu.",
+      "shipped": "Odesláno",
+      "shipping": "Doprava",
+      "shipping_address": "Dodací adresa",
+      "shipping_discount": "Sleva na dopravu",
+      "size": "Velikost",
+      "tax": "Daň"
     },
     "recover_password": {
       "title": "Resetujte si heslo",
       "subtext": "Pošleme vám e-mail, abyste si mohli resetovat heslo",
-      "success": "Poslali jsme vám e-mail s odkazem na aktualizaci hesla."
+      "success": "Poslali jsme vám e-mail s odkazem na aktualizaci hesla.",
+      "cancel": "Zrušit",
+      "email": "E-mail",
+      "submit": "Odeslat"
     },
     "register": {
       "title": "Vytvořit účet",
@@ -519,7 +1059,21 @@
       "last_name": "Příjmení",
       "email": "E-mail",
       "password": "Heslo",
-      "submit": "Vytvořit"
+      "submit": "Vytvořit",
+      "accepts_marketing": "Ráda/rád bych v budoucnu dostávala/dostával e-mailem informace o aktuálních trendech, nabídkách a slevách NORTHFINDER. Odběr lze kdykoli bezplatně zrušit.",
+      "and": "a",
+      "apply": "aplikovat.",
+      "password_requirement_length": "Alespoň 8 znaků",
+      "password_requirement_lowercase": "Alespoň jedno malé písmeno",
+      "password_requirement_number": "Alespoň jedno číslo",
+      "password_requirement_special": "Alespoň jeden speciální znak",
+      "password_requirement_uppercase": "Alespoň jedno velké písmeno",
+      "password_requirements": "Heslo musí splňovat následující požadavky:",
+      "phone": "Telefonní číslo",
+      "privacy_policy": "Zásady ochrany osobních údajů",
+      "privacy_policy_message": "Stejně jako v každém internetovém obchodě od nás budete e-mailem dostávat všechna důležitá upozornění (potvrzení objednávky, potvrzení doručení, informace o vrácení, doporučení). Přečtěte si prosím",
+      "recaptcha_message": "Tato stránka je chráněna službou reCAPTCHA a Google",
+      "terms_of_service": "Obchodní podmínky"
     },
     "reset_password": {
       "title": "Resetujte heslo účtu",
@@ -553,6 +1107,26 @@
       "subtotal": "Mezisoučet",
       "total_duties": "Cla",
       "total_refunded": "Vrácená částka"
+    },
+    "form_errors": {
+      "email_invalid": "Zadejte prosím platnou e-mailovou adresu",
+      "email_required": "E-mail je povinný",
+      "error": "Při zpracování vaší žádosti došlo k chybě. Zkuste to prosím znovu.",
+      "first_name": "Jméno je povinné",
+      "last_name": "Příjmení je povinné",
+      "password_requirements": "Heslo musí splňovat všechny požadavky"
+    },
+    "login": {
+      "alternate_provider_separator": "nebo",
+      "email": "E-mail",
+      "forgot_password": "Zapomněli jste heslo?",
+      "guest_continue": "Pokračovat",
+      "guest_title": "Pokračovat jako host",
+      "password": "Heslo",
+      "please_login": "Přihlaste se prosím ke svému účtu",
+      "sign_in": "Přihlásit se",
+      "submit": "Odeslat",
+      "title": "Přihlášení"
     }
   },
   "gift_cards": {
@@ -567,7 +1141,12 @@
       "expired": "Platnost vypršela",
       "copy_code_success": "Kód byl úspěšně zkopírován",
       "how_to_use_gift_card": "Použijte kód dárkové karty online nebo QR kód na prodejně",
-      "expiration_date": "Platnost skončí {{ expires_on }}"
+      "expiration_date": "Platnost skončí {{ expires_on }}",
+      "active": "Platí do {{ expiry }}",
+      "disabled": "Zakázáno",
+      "print": "Vytisknout tuto dárkovou kartu",
+      "redeem_html": "Tento kód použijte při pokladně k uplatnění vaší dárkové karty v hodnotě {{ value }}",
+      "remaining_html": "Zbývá {{ balance }}"
     }
   },
   "recipient": {
@@ -590,46 +1169,46 @@
   "pagefly": {
     "products": {
       "product": {
-        "regular_price": "Regular price",
-        "sold_out": "Sold out",
-        "unavailable": "Unavailable",
-        "on_sale": "Sale",
-        "quantity": "Quantity",
-        "add_to_cart": "Add to cart",
-        "back_to_collection": "Back to {{ title }}",
-        "view_details": "View details"
+        "regular_price": "Běžná cena",
+        "sold_out": "Vyprodáno",
+        "unavailable": "Není k dispozici",
+        "on_sale": "Sleva",
+        "quantity": "Množství",
+        "add_to_cart": "Přidat do košíku",
+        "back_to_collection": "Zpět na {{ title }}",
+        "view_details": "Zobrazit podrobnosti"
       }
     },
     "article": {
-      "tags": "Tags:",
-      "all_topics": "All topics",
-      "by_author": "by {{ author }}",
-      "posted_in": "Posted in",
-      "read_more": "Read more",
-      "back_to_blog": "Back to {{ title }}"
+      "tags": "Štítky:",
+      "all_topics": "Všechna témata",
+      "by_author": "od {{ author }}",
+      "posted_in": "Zveřejněno v",
+      "read_more": "Číst dále",
+      "back_to_blog": "Zpět na {{ title }}"
     },
     "comments": {
-      "title": "Leave a comment",
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "post": "Post comment",
-      "moderated": "Please note, comments must be approved before they are published",
-      "success_moderated": "Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.",
-      "success": "Your comment was posted successfully! Thank you!",
+      "title": "Napsat komentář",
+      "name": "Jméno",
+      "email": "E-mail",
+      "message": "Zpráva",
+      "post": "Odeslat komentář",
+      "moderated": "Upozorňujeme, že komentáře musí být před zveřejněním schváleny",
+      "success_moderated": "Váš komentář byl úspěšně odeslán. Zveřejníme jej za chvíli, protože náš blog je moderován.",
+      "success": "Váš komentář byl úspěšně odeslán! Děkujeme!",
       "comments_with_count": {
-        "one": "{{ count }} comment",
-        "other": "{{ count }} comments"
+        "one": "{{ count }} komentář",
+        "other": "{{ count }} komentářů"
       }
     },
     "password_page": {
-      "login_form_message": "Enter store using password:",
-      "login_form_password_label": "Password",
-      "login_form_password_placeholder": "Your password",
-      "login_form_submit": "Enter",
-      "signup_form_email_label": "Email",
-      "signup_form_success": "We will send you an email right before we open!",
-      "password_link": "Enter using password"
+      "login_form_message": "Pro vstup do obchodu zadejte heslo:",
+      "login_form_password_label": "Heslo",
+      "login_form_password_placeholder": "Vaše heslo",
+      "login_form_submit": "Vstoupit",
+      "signup_form_email_label": "E-mail",
+      "signup_form_success": "Pošleme vám e-mail těsně před otevřením!",
+      "password_link": "Vstup pomocí hesla"
     }
   },
   "snippets": {
@@ -678,7 +1257,277 @@
   "footer": {
     "contact": {
       "phone": "+421 233 418 364",
-      "email": "eshop@northfinder.com"
+      "email": "eshop@northfinder.com",
+      "contact_us": "Kontaktujte nás"
+    },
+    "change": "Změnit",
+    "contact_us": "Kontaktujte nás",
+    "copyright": "© Copyright Northfinder {{ year }} / Všechna práva vyhrazena",
+    "language": "English (English)",
+    "shopping_from": "Nakupujete z"
+  },
+  "cart": {
+    "benefits": {
+      "loyalty": "Věrnostní bonus",
+      "loyalty_text_1": "Zaregistrujte se a získejte věrnostní bonus za každý nákup.",
+      "loyalty_text_2": "Bonus bude připsán na váš účet 15. den po dodání.",
+      "loyalty_text_3": "Můžete jej odečíst z vašeho příštího nákupu, až do výše 25 % jeho hodnoty.",
+      "loyalty_text_4": "Doporučujeme bonus využít do 150 dnů.",
+      "title": "Výhody pro registrované zákazníky"
+    },
+    "coupon": {
+      "apply": "Použít",
+      "placeholder": "Kód",
+      "title": "Slevový kupón / Dárková karta"
+    },
+    "general": {
+      "cancel": "Zrušit",
+      "checkout": "K pokladně",
+      "continue_shopping": "Pokračovat v nákupu",
+      "cookies_required": "Pro použití nákupního košíku povolte cookies",
+      "edit": "Upravit",
+      "empty": "Váš košík je momentálně prázdný.",
+      "note": "Přidat poznámku k objednávce",
+      "remove": "Odebrat",
+      "savings": "Ušetříte",
+      "shipping_at_checkout": "Doprava a daně se vypočítávají při pokladně",
+      "subtotal": "Mezisoučet",
+      "title": "Váš košík",
+      "update": "Aktualizovat"
+    },
+    "label": {
+      "price": "Cena",
+      "product": "Produkt",
+      "quantity": "Množství",
+      "total": "Celkem"
+    },
+    "save_for_later": "Uložit na později",
+    "summary": {
+      "calculated_at_checkout": "Vypočítáno při pokladně",
+      "shipping": "Doprava",
+      "subtotal": "Mezisoučet včetně daně",
+      "subtotal_excluding_tax": "Mezisoučet bez daně",
+      "tax": "Daň",
+      "title": "Souhrn",
+      "total": "Odhadovaná cena celkem"
     }
+  },
+  "collections": {
+    "general": {
+      "all": "Vše"
+    }
+  },
+  "date_formats": {
+    "month_day_year": "%B %d, %Y"
+  },
+  "mobile_menu": {
+    "all_in": "Vše v {{ title }}",
+    "back": "Zpět"
+  },
+  "phone_validation": {
+    "invalid": "Neplatné telefonní číslo",
+    "invalid_country_code": "Neplatný kód země",
+    "local_only": "Zadejte prosím číslo v mezinárodním formátu",
+    "required": "Zadejte prosím telefonní číslo",
+    "too_long": "Telefonní číslo je příliš dlouhé",
+    "too_short": "Telefonní číslo je příliš krátké"
+  },
+  "size_guide": {
+    "descriptions": {
+      "hiking_shoes": "*Turistické boty se velikostně řídí podle lidské nohy"
+    },
+    "gender": {
+      "mens": "Pánské",
+      "womens": "Dámské"
+    },
+    "headings": {
+      "footwear_measurement_guide": "Jak změřit velikost produktu?",
+      "measurement_guide": "Jak změřit své tělo?",
+      "men_clothing": "Tabulka velikostí - pánské",
+      "men_footwear": "Velikosti turistických bot - pánské",
+      "women_clothing": "Tabulka velikostí - dámské",
+      "women_footwear": "Velikosti turistických bot - dámské"
+    },
+    "instructions": {
+      "body_measurements": "<ol><li>HRUDNÍK</li><li>PÁS</li><li>KYČLE</li><li>VÝŠKA</li><li>DÉLKA VNITŘNÍHO ŠVU</li></ol>",
+      "foot_measurements": "<ol><li>DÉLKA CHODIDLA</li></ol>"
+    },
+    "measurements": {
+      "chest": "HRUDNÍK",
+      "foot_length": "DÉLKA CHODIDLA",
+      "height": "VÝŠKA",
+      "hip": "KYČLE",
+      "inseam_length": "DÉLKA VNITŘNÍHO ŠVU",
+      "waist": "PÁS"
+    },
+    "parfum-features": {
+      "blocks": {
+        "feature": {
+          "name": "Vlastnost",
+          "settings": {
+            "icon": {
+              "info": "Zadejte název souboru SVG ikony (bez přípony .svg)",
+              "label": "Název ikony"
+            },
+            "title": {
+              "default": "Název vlastnosti",
+              "label": "Nadpis"
+            }
+          }
+        }
+      },
+      "name": "Vlastnosti parfémů",
+      "presets": {
+        "name": "Vlastnosti parfémů"
+      },
+      "settings": {
+        "description": {
+          "default": "<p>Prací parfémy NORTHFINDER jsou koncentrované vonné boostery vyvinuté pro výkon a každodenní nošení.</p><p>Na rozdíl od aviváží zachovávají prodyšnost a vlastnosti tkanin a zároveň poskytují dlouhotrvající svěžest.</p>",
+          "label": "Popis"
+        },
+        "heading": {
+          "default": "Co jsou prací parfémy?",
+          "label": "Nadpis"
+        }
+      }
+    },
+    "product_measurements": {
+      "back_rise_end_waist": "Délka zadního sedu - od konce pasu",
+      "back_rise_top_waist": "Délka zadního sedu - od vrcholu pasu",
+      "bottom_girth_half": "1/2 obvodu spodního okraje",
+      "bottom_girth_relaxed": "1/2 obvodu spodního okraje - v klidu",
+      "bottom_girth_stretched_half": "1/2 obvodu spodního okraje - nataženo",
+      "bottom_legs_half": "1/2 obvodu nohavic",
+      "center_back_length": "Délka středové zadní části",
+      "chest_girth_half": "1/2 obvodu hrudníku",
+      "front_rise_end_waist": "Délka předního sedu od konce pasu",
+      "front_rise_top_waist": "Délka předního sedu - od vrcholu pasu",
+      "hip_girth": "Obvod kyčlí",
+      "inside_length": "Vnitřní délka",
+      "outside_length_end_waist": "Vnější délka od konce pasu",
+      "outside_length_top_waist": "Vnější délka od vrcholu pasu",
+      "shoulder_point_to_point": "Rameno od bodu k bodu",
+      "shoulder_sleeve_length": "Délka ramene a rukávu",
+      "sleeve_length": "Délka rukávu",
+      "thigh_half_crotch": "1/2 stehna - u rozkroku",
+      "waist_girth": "Obvod pasu",
+      "waist_girth_half": "1/2 obvodu pasu",
+      "waist_girth_relaxed": "Obvod pasu - v klidu",
+      "waist_girth_stretched": "Obvod pasu - nataženo"
+    },
+    "size_fit": {
+      "button_text": "Tabulka velikostí a doporučení velikosti",
+      "measurement_guide": {
+        "chest": {
+          "description": "Změřte nejširší část hrudníku, pásku držte vodorovně",
+          "title": "HRUDNÍK"
+        },
+        "height": {
+          "description": "Změřte od temene hlavy k podlaze bez bot",
+          "title": "VÝŠKA"
+        },
+        "hip": {
+          "description": "Změřte nejširší část kyčlí, asi 20 cm pod pasem",
+          "title": "KYČLE"
+        },
+        "inseam": {
+          "description": "Změřte od rozkroku ke kotníku",
+          "title": "DÉLKA VNITŘNÍHO ŠVU"
+        },
+        "title": "Jak změřit své tělo?",
+        "waist": {
+          "description": "Změřte kolem přirozené linie pasu, nejužší části trupu",
+          "title": "PÁS"
+        }
+      },
+      "modal": {
+        "title": "Tabulka velikostí - {{ gender }}"
+      },
+      "no_product_measurements": "Pro tento produkt nejsou k dispozici žádné rozměry.",
+      "product_guide": {
+        "back_part": "Zadní část bundy",
+        "bottom_girth_half": "1/2 OBVODU SPODNÍHO OKRAJE",
+        "bottom_girth_relaxed": "1/2 OBVODU SPODNÍHO OKRAJE - V KLIDU",
+        "bottom_girth_stretched": "1/2 OBVODU SPODNÍHO OKRAJE - NATAŽENO",
+        "center_back_length": "DÉLKA STŘEDOVÉ ZADNÍ ČÁSTI",
+        "chest_girth_half": "1/2 OBVODU HRUDNÍKU",
+        "description": "Tyto rozměry jsou měřeny přímo na oblečení a lze je použít pro porovnání s vaším stávajícím oblečením.",
+        "front_body_length": "DÉLKA PŘEDNÍ ČÁSTI TĚLA OD HSP",
+        "front_part": "Přední část bundy",
+        "hip_girth": "OBVOD KYČLÍ",
+        "inside_length": "VNITŘNÍ DÉLKA",
+        "outside_length": "VNĚJŠÍ DÉLKA",
+        "shoulder_point_to_point": "RAMENO OD BODU K BODU",
+        "shoulder_sleeve_length": "DÉLKA RAMENE A RUKÁVU",
+        "sleeve_length": "DÉLKA RUKÁVU",
+        "title": "Jak změřit produkt?",
+        "waist_girth": "OBVOD PASU"
+      },
+      "product_measurements": {
+        "bottom_girth_half": "1/2 OBVODU SPODNÍHO OKRAJE (CM)",
+        "center_back_length": "DÉLKA STŘEDOVÉ ZADNÍ ČÁSTI (CM)",
+        "chest_girth_half": "1/2 OBVODU HRUDNÍKU (CM)",
+        "description": "Přibližné rozměry měřené na produktech",
+        "hip_girth": "OBVOD KYČLÍ (CM)",
+        "inside_length": "VNITŘNÍ DÉLKA (CM)",
+        "shoulder_point_to_point": "RAMENO OD BODU K BODU (CM)",
+        "shoulder_sleeve_length": "DÉLKA RAMENE A RUKÁVU (CM)",
+        "sleeve_length": "DÉLKA RUKÁVU (CM)",
+        "usage_note": "(použijte pro porovnání s oblečením ve vašem šatníku)",
+        "waist_girth": "OBVOD PASU (CM)"
+      },
+      "recommender": {
+        "alternative_sizes": "Alternativní velikosti ke zvážení:",
+        "calculating": "Vypočítáváme vaši ideální velikost...",
+        "chest": "Hrudník",
+        "description": "Zadejte své míry pro získání personalizovaného doporučení velikosti",
+        "error_title": "Velikost nelze vypočítat",
+        "fit_preference": "Jak preferujete, aby vám oblečení sedělo?",
+        "get_recommendation": "Získat doporučení velikosti",
+        "height": "Výška",
+        "loose_fit": "Volný střih",
+        "loose_fit_desc": "Uvolněný, prostorný střih",
+        "measurements_required": "Míry hrudníku a pasu jsou povinné",
+        "recommendation_explanation": "Na základě vašich měr a preference PLACEHOLDER_FIT by měla velikost PLACEHOLDER_SIZE poskytovat nejlepší střih.",
+        "recommendation_title": "Vaše doporučená velikost",
+        "regular_fit": "Běžný střih",
+        "regular_fit_desc": "Standardní pohodlný střih",
+        "tight_fit": "Těsný střih",
+        "tight_fit_desc": "Přiléhavý, tvarovaný",
+        "title": "Najděte svou ideální velikost",
+        "waist": "Pás",
+        "weight": "Hmotnost"
+      },
+      "table_headers": {
+        "chest": "HRUDNÍK",
+        "height": "VÝŠKA",
+        "hip": "KYČLE",
+        "inseam_length": "DÉLKA VNITŘNÍHO ŠVU",
+        "size": "Velikost",
+        "waist": "PÁS"
+      },
+      "tabs": {
+        "body_measurements": "Tělesné míry",
+        "product_measurements": "Rozměry produktu",
+        "size_recommender": "Doporučení velikosti"
+      },
+      "unit_converter": {
+        "inches": "PALCE",
+        "label": "Jednotka:"
+      }
+    },
+    "table_headers": {
+      "chest": "HRUDNÍK",
+      "foot_length": "Délka chodidla (cm)",
+      "height": "VÝŠKA",
+      "hip": "KYČLE",
+      "inseam_length": "DÉLKA VNITŘNÍHO ŠVU",
+      "measurement": "Míra",
+      "size": "Velikost",
+      "waist": "PÁS"
+    }
+  },
+  "video": {
+    "no_support": "Váš prohlížeč nepodporuje video tag."
   }
 }

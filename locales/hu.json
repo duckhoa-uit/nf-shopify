@@ -9,6 +9,11 @@
  */
 {
   "general": {
+    "404": {
+      "link": "Vásárlás folytatása",
+      "subtext": "A keresett oldal nem létezik.",
+      "title": "404 - Az oldal nem található"
+    },
     "password_page": {
       "login_form_heading": "Belépés a webáruházba jelszóval:",
       "login_password_button": "Belépés jelszóval",
@@ -17,7 +22,11 @@
       "login_form_error": "Téves jelszót írtál be.",
       "login_form_submit": "Belépés",
       "admin_link_html": "Te vagy a webáruház tulajdonosa? <a href=\"/admin\" class=\"link underlined-link\">Itt tudsz bejelentkezni</a>",
-      "powered_by_shopify_html": "A bolt szolgáltatója a {{ shopify }}"
+      "powered_by_shopify_html": "A bolt szolgáltatója a {{ shopify }}",
+      "opening_soon": "Hamarosan nyitunk",
+      "password_link": "Belépés jelszóval",
+      "signup_form_email_label": "E-mail",
+      "signup_form_success": "E-mailt küldünk Önnek közvetlenül a nyitás előtt!"
     },
     "social": {
       "alt_text": {
@@ -35,18 +44,31 @@
         "youtube": "YouTube",
         "vimeo": "Vimeo",
         "tiktok": "TikTok"
-      }
+      },
+      "share_on_facebook": "Megosztás",
+      "share_on_pinterest": "Tűzd ki",
+      "share_on_twitter": "Tweetelés"
     },
     "continue_shopping": "Vásárlás folytatása",
     "pagination": {
       "label": "Tördelés",
       "page": "{{ number }}. oldal",
       "next": "Következő oldal",
-      "previous": "Előző oldal"
+      "previous": "Előző oldal",
+      "current_page": "{{ current }} / {{ total }} oldal"
     },
     "search": {
       "search": "Keresés",
-      "reset": "Keresőszó törlése"
+      "reset": "Keresőszó törlése",
+      "close": "Keresés bezárása",
+      "no_results_html": "A(z) \"{{ terms }}\" kifejezésre nincs találat.",
+      "placeholder": "Keresés",
+      "results_with_count": {
+        "one": "{{ count }} találat erre: \"{{ terms }}\"",
+        "other": "{{ count }} találat erre: \"{{ terms }}\""
+      },
+      "submit": "Keresés",
+      "title": "Keresés az oldalon"
     },
     "cart": {
       "view": "Kosár megtekintése ({{ count }})",
@@ -57,19 +79,59 @@
       "copy_to_clipboard": "Hivatkozás másolása",
       "share_url": "Hivatkozás",
       "success_message": "A vágólapra másoltuk a hivatkozást.",
-      "close": "Megosztás befejezése"
+      "close": "Megosztás befejezése",
+      "button": "Megosztás"
     },
     "slider": {
       "of": "/",
       "next_slide": "Következő dia",
       "previous_slide": "Előző dia",
       "name": "Csúszka"
+    },
+    "accessibility": {
+      "close_modal": "Bezárás (esc)",
+      "skip_to_content": "Ugrás a tartalomra"
+    },
+    "breadcrumbs": {
+      "back": "Vissza",
+      "collections": "Kategóriák",
+      "home": "Főoldal",
+      "products": "Termékek"
+    },
+    "discover_northfinder": {
+      "for_men": "Férfiaknak",
+      "for_women": "Nőknek"
+    },
+    "filters": {
+      "show_less": "Kevesebb",
+      "show_more": "Több"
+    },
+    "meta": {
+      "page": "{{ page }}. oldal",
+      "tags": "Cimke: \"{{ tags }}\""
+    },
+    "navigation": {
+      "contact": "Kapcsolat",
+      "faq": "GYIK"
+    },
+    "newsletter_form": {
+      "confirmation": "Köszönjük a feliratkozást",
+      "email_placeholder": "E-mail cím",
+      "newsletter_email": "Csatlakozzon a hírlevélhez",
+      "submit": "Feliratkozás"
+    },
+    "text_truncation": {
+      "read_less": "Kevesebb",
+      "read_more": "Tovább"
     }
   },
   "newsletter": {
     "label": "E-mail-cím",
     "success": "Köszönjük a feliratkozást",
-    "button_label": "Feliratkozás"
+    "button_label": "Feliratkozás",
+    "discount_label": "Kedvezménykupon feliratkozóknak",
+    "placeholder": "Írja be e-mail címét",
+    "policy_agreement": "Az e-mail cím beküldésével hozzájárul az adatkezeléshez."
   },
   "accessibility": {
     "skip_to_text": "Ugrás a tartalomhoz",
@@ -93,10 +155,7 @@
     "article": {
       "blog": "Blog",
       "read_more_title": "Továbbiak: {{ title }}",
-      "comments": {
-        "one": "{{ count }} hozzászólás",
-        "other": "{{ count }} hozzászólás"
-      },
+      "comments": "Hozzászólások",
       "moderated": "Felhívjuk a figyelmedet, hogy a hozzászólásokat jóvá kell hagyni a közzétételük előtt.",
       "comment_form_title": "Hozzászólás írása",
       "name": "Név",
@@ -106,12 +165,45 @@
       "back_to_blog": "Vissza a blogba",
       "share": "Cikk megosztása",
       "success": "Elküldtük a hozzászólásodat. Köszönjük!",
-      "success_moderated": "Elküldtük a hozzászólásodat. Blogunkat moderáljuk, ezért egy kis idő múlva tesszük csak közzé a hozzászólást."
+      "success_moderated": "Elküldtük a hozzászólásodat. Blogunkat moderáljuk, ezért egy kis idő múlva tesszük csak közzé a hozzászólást.",
+      "all_topics": "Összes téma",
+      "by_author": "szerző: {{ author }}",
+      "posted_in": "Kategória:",
+      "read_more": "Tovább",
+      "related_articles": "Kapcsolódó cikkek",
+      "view_all": "Összes megtekintése"
+    },
+    "comments": {
+      "comments_with_count": {
+        "one": "{{ count }} hozzászólás",
+        "other": "{{ count }} hozzászólás"
+      },
+      "email": "E-mail",
+      "message": "Üzenet",
+      "moderated": "Felhívjuk figyelmét, hogy a hozzászólásokat közzététel előtt jóvá kell hagyni",
+      "name": "Név",
+      "post": "Hozzászólás küldése",
+      "success": "A hozzászólása sikeresen közzétéve. Köszönjük!",
+      "success_moderated": "A hozzászólása sikeresen elküldve. Hamarosan közzétesszük, mivel a blog moderált.",
+      "title": "Szólj hozzá"
+    },
+    "main_blog": {
+      "all_articles": "Összes cikk",
+      "categories": {
+        "adventure": "Kaland",
+        "gear": "Felszerelés",
+        "skialp": "Sítúra",
+        "tips": "Tippek"
+      },
+      "no_results": "Nincs a keresésnek megfelelő cikk.",
+      "search_placeholder": "Cikkek keresése",
+      "view_more": "Továbbiak megtekintése"
     }
   },
   "onboarding": {
     "product_title": "Példa terméknévre",
-    "collection_title": "Kollekció neve"
+    "collection_title": "Kollekció neve",
+    "product_tag": "Minta címke"
   },
   "products": {
     "product": {
@@ -162,7 +254,9 @@
         "load_image": "{{ index }}. kép betöltése galérianézetben",
         "load_model": "{{ index }}. térhatású modell betöltése galérianézetben",
         "load_video": "{{ index }}. videó lejátszása galérianézetben",
-        "image_available": "{{ index }}. kép betöltve galérianézetben"
+        "image_available": "{{ index }}. kép betöltve galérianézetben",
+        "open_featured_media": "Kiemelt média megnyitása galérianézetben",
+        "view_in_space": "Megtekintés a saját terében"
       },
       "view_full_details": "Minden részlet megtekintése",
       "shipping_policy_html": "A <a href=\"{{ link }}\">szállítási költséget</a> a megrendeléskor számítjuk ki.",
@@ -215,7 +309,23 @@
       },
       "about_perfumes": {
         "title": "Mik azok a mosóparfümök?"
-      }
+      },
+      "add_to_wishlist": "Hozzáadás a kedvencekhez",
+      "delivery_info": {
+        "in_stock_html": "Raktáron - Átlagos szállítási idő: <b>3-5 munkanap</b>",
+        "out_of_stock": "Nincs raktáron"
+      },
+      "load_video": "Videó betöltése a galérianézetben",
+      "new": "Új",
+      "original_recommended_price": "- eredeti ajánlott ár",
+      "price_includes_vat": "Az ár tartalmazza az áfát.",
+      "product_codes_label": "Termékkód:",
+      "regular_price": "Alapár",
+      "related_products": "Ezt is szeretheti",
+      "sale_badge": "AKCIÓ",
+      "size_guide_fit_recommender": "Mérettábla és méretajánló",
+      "size_label": "Méret",
+      "wishlist": "Kedvencek"
     },
     "modal": {
       "label": "Médiatár"
@@ -233,10 +343,7 @@
         "other": "{{ count }} elem kijelölve"
       },
       "max_price": "A legmagasabb ár {{ price }}",
-      "product_count": {
-        "one": "{{ count }}/{{ product_count }} termék",
-        "other": "{{ count }}/{{ product_count }} termék"
-      },
+      "product_count": "Megtekintve: {{ viewed }} a(z) {{ total }} termékből",
       "product_count_simple": {
         "one": "{{ count }} termék",
         "other": "{{ count }} termék"
@@ -249,7 +356,25 @@
       "filter_selected_accessibility": "{{ type }} ({{ count }} szűrő kiválasztva)",
       "show_more": "Több részlet",
       "show_less": "Kevesebb részlet",
-      "filter_and_operator_subtitle": "Az összesnek megfelelő"
+      "filter_and_operator_subtitle": "Az összesnek megfelelő",
+      "hide_filters": "Szűrők elrejtése",
+      "loading": "BETÖLTÉS...",
+      "product_count_status": "Megtekintve: {{ viewed_count }} a(z) {{ total_count }} termékből",
+      "products_per_page": "Megjelenítés:",
+      "remove_filter": "Szűrő eltávolítása: {{ value }}",
+      "show_only_discounted": "Csak akciós termékek mutatása",
+      "show_products": "TERMÉKEK MUTATÁSA",
+      "sort_by": {
+        "created_descending": "Új termékek",
+        "manual": "Kedvencek",
+        "price_ascending": "Legalacsonyabb ár",
+        "price_descending": "Legmagasabb ár"
+      },
+      "view_more": "TOVÁBBIAK"
+    },
+    "general": {
+      "view_all": "Összes termék",
+      "view_more": "Továbbiak"
     }
   },
   "templates": {
@@ -284,7 +409,10 @@
         "other": "{{ count }} termék"
       },
       "suggestions": "Javaslatok",
-      "pages": "Oldal"
+      "pages": "Oldal",
+      "articles": "Cikkek",
+      "categories": "Kategóriák",
+      "no_results_suggestion": "Próbálja meg ellenőrizni a helyesírást vagy használjon más szavakat."
     },
     "cart": {
       "cart": "Kosár"
@@ -298,7 +426,19 @@
         "send": "Küldés",
         "post_success": "Köszönjük, hogy írtál nekünk. A lehető legrövidebb időn belül válaszolni fogunk.",
         "error_heading": "Kérjük, helyesbítsd a következőket:",
-        "title": "Kapcsolattartói űrlap"
+        "title": "Kapcsolattartói űrlap",
+        "write_to_us": "Írjon nekünk"
+      },
+      "info": {
+        "address": "Rastislavova 109, 951 41 Lužianky, Szlovákia",
+        "email": "eshop@northfinder.com",
+        "hours": "Hétfő - Péntek 8:00 – 16:00",
+        "subtitle": "Szívesen segítünk"
+      },
+      "partnership": {
+        "contact_name": "Kapcsolattartó",
+        "description": "Olyan márkákkal és partnerekkel működünk együtt, akik osztják a természet és a minőségi outdoor felszerelés iránti szenvedélyünket. Ha érdekli a partnerség, vegye fel velünk a kapcsolatot, és közösen feltárjuk az együttműködés lehetőségeit.",
+        "heading": "Szeretne Northfinder terméket árusítani?"
       }
     }
   },
@@ -341,10 +481,31 @@
       "duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html": "Tartalmazza a vámokat. Az adókat, a kedvezményeket és a <a href=\"{{ link }}\">szállítási költséget</a> a megrendeléskor számítjuk ki.",
       "duties_included_taxes_at_checkout_shipping_at_checkout_without_policy": "Tartalmazza a vámokat. Az adókat, a kedvezményeket és a szállítási költséget a megrendeléskor számítjuk ki",
       "taxes_at_checkout_shipping_at_checkout_with_policy_html": "Az adókat, a kedvezményeket és a <a href=\"{{ link }}\">szállítási költséget</a> a megrendeléskor számítjuk ki.",
-      "taxes_at_checkout_shipping_at_checkout_without_policy": "Az adókat, a kedvezményeket és a szállítási költséget a megrendeléskor számítjuk ki"
+      "taxes_at_checkout_shipping_at_checkout_without_policy": "Az adókat, a kedvezményeket és a szállítási költséget a megrendeléskor számítjuk ki",
+      "cancel_checkout": "Pénztár megszakítása",
+      "cart_updated": "Kosár frissítve",
+      "cart_updated_other_tab": "A kosár egy másik lapon frissítve lett",
+      "cart_updated_review": "A kosara egy másik lapról frissült. Kérjük, ellenőrizze a módosításokat, mielőtt a pénztárhoz lép.",
+      "continue_anyway": "Folytatás mindenképp",
+      "continue_to_checkout": "Tovább a pénztárhoz",
+      "failed_adjust_quantity": "Nem sikerült módosítani a mennyiséget. Próbálja újra.",
+      "failed_remove_item": "Nem sikerült eltávolítani a tételt. Próbálja újra.",
+      "item_added": "A termék hozzáadva a kosárhoz",
+      "remove": "Eltávolítás",
+      "review_cart": "Kosár áttekintése",
+      "savings": "Megtakarítása",
+      "stock_issues_message": "A kosárban lévő néhány tétel nem érhető el a kért mennyiségben:",
+      "stock_unavailable": "Készlet nem elérhető",
+      "stock_validation_continue": "A rendelése a készlettől függ. Szeretné folytatni?",
+      "stock_validation_error": "Nem tudtuk ellenőrizni a készlet elérhetőségét",
+      "stock_validation_warning": "Készletellenőrzési figyelmeztetés",
+      "summary": "Összegzés",
+      "validating_stock": "Készlet ellenőrzése...",
+      "view_cart": "Kosár megtekintése"
     },
     "footer": {
-      "payment": "Fizetési módok"
+      "payment": "Fizetési módok",
+      "contact_us": "Kapcsolat"
     },
     "featured_blog": {
       "view_all": "Az összes megtekintése",
@@ -353,7 +514,8 @@
     },
     "featured_collection": {
       "view_all": "Az összes megtekintése",
-      "view_all_label": "Az ebben a kollekcióban szereplő összes termék megtekintése: {{ collection_name }}"
+      "view_all_label": "Az ebben a kollekcióban szereplő összes termék megtekintése: {{ collection_name }}",
+      "title": "Kollekciók"
     },
     "collection_list": {
       "view_all": "Az összes megtekintése"
@@ -409,6 +571,311 @@
       "min_error": "A termék minimális mennyisége {{ min }}",
       "max_error": "A termék maximális mennyisége {{ max }}",
       "step_error": "A termék mennyisége csak {{ step }} darabos lépésekben növelhető"
+    },
+    "activities": {
+      "name": "Aktivitások",
+      "title": "Aktivitások"
+    },
+    "blog_posts_slider": {
+      "add_posts": "Adjon hozzá blogbejegyzéseket a testreszabás gombra kattintva"
+    },
+    "contact_form": {
+      "heading": "Kapcsolat"
+    },
+    "discover-northfinder": {
+      "name": "Fedezze fel a Northfindert",
+      "title": "Fedezze fel a Northfindert"
+    },
+    "faq": {
+      "contact_button": "Írjon nekünk",
+      "contact_button_aria": "Vegye fel velünk a kapcsolatot kérdéseivel",
+      "contact_heading": "Nem találta meg a választ?",
+      "contact_subtext": "Szívesen segítünk",
+      "no_questions": "Ehhez a kategóriához nem áll rendelkezésre kérdés.",
+      "view_all_questions": "összes kérdés megtekintése"
+    },
+    "main-blog": {
+      "name": "Főblog",
+      "settings": {
+        "enable_filtering": {
+          "label": "Kategória szerinti szűrés engedélyezése"
+        },
+        "enable_load_more": {
+          "label": "\"Továbbiak\" gomb engedélyezése"
+        },
+        "enable_search": {
+          "label": "Keresőmező engedélyezése"
+        },
+        "header": {
+          "content": "Blogbejegyzés beállítások"
+        },
+        "image_height": {
+          "info": "Állítsa be a kiemelt kép képarányát. Ez a beállítás nem érvényes a 'Képhez igazítva' opció használatakor.",
+          "label": "Kiemelt kép magassága",
+          "options__1": {
+            "label": "Képhez igazítva"
+          },
+          "options__2": {
+            "label": "Kicsi"
+          },
+          "options__3": {
+            "label": "Közepes"
+          },
+          "options__4": {
+            "label": "Nagy"
+          }
+        },
+        "paragraph": {
+          "content": "A blogbejegyzések elrendezésének módosításához szerkessze a blogsablont."
+        },
+        "posts_per_page": {
+          "label": "Bejegyzések oldalanként"
+        },
+        "show_author": {
+          "label": "Szerző megjelenítése"
+        },
+        "show_date": {
+          "label": "Dátum megjelenítése"
+        },
+        "show_image": {
+          "label": "Kiemelt kép megjelenítése"
+        }
+      }
+    },
+    "main-cart-items": {
+      "name": "Kosár tételei"
+    },
+    "main_product": {
+      "customer_reviews": "Vásárlói vélemények",
+      "description_and_parameters": "Leírás és paraméterek",
+      "detailed_product_description": "Részletes termékleírás",
+      "features_details": {
+        "adjustability": "Állíthatóság",
+        "construction": "Konstrukciós részletek",
+        "pockets_with_count": {
+          "one": "{{ count }} zseb",
+          "other": "{{ count }} zseb"
+        },
+        "storage": "Tárolás",
+        "title": "Jellemzők és részletek"
+      },
+      "inspiration": "Inspiráció",
+      "less_images": "KEVESEBB KÉP",
+      "main_elements": "Fő elemek",
+      "more_images": "TOVÁBBI KÉPEK",
+      "parameters": "Paraméterek",
+      "you_will_like_it": "Ez is tetszeni fog"
+    },
+    "parfum_benefits": {
+      "certified_materials": "Tanúsított\noutdoor anyagok",
+      "free_returns": "Ingyenes visszaküldés\n14 napon belül",
+      "member_benefits": "Előnyök\nregisztrált tagoknak",
+      "name": "Parfüm előnyök",
+      "presets": {
+        "name": "Parfüm előnyök"
+      },
+      "settings": {
+        "heading": {
+          "label": "Címsor"
+        }
+      },
+      "tested_athletes": "Sportolók és hegyimentők\náltal tesztelve"
+    },
+    "parfum_care_guide": {
+      "badge": "GYIK",
+      "blocks": {
+        "faq_category": {
+          "name": "GYIK kategória",
+          "settings": {
+            "category_id": {
+              "info": "A kategória egyedi azonosítója (használjon kisbetűket, szóköz nélkül)",
+              "label": "Kategória azonosítója"
+            },
+            "category_name": {
+              "label": "Kategória neve"
+            }
+          }
+        },
+        "faq_item": {
+          "name": "GYIK tétel",
+          "settings": {
+            "answer": {
+              "label": "Válasz"
+            },
+            "category": {
+              "info": "Egyeznie kell egy kategória azonosítójával a GYIK kategória blokkjaiból",
+              "label": "Kategória azonosítója"
+            },
+            "question": {
+              "label": "Kérdés"
+            }
+          }
+        }
+      },
+      "heading": "Kérdései vannak? Vannak válaszaink.",
+      "name": "Parfüm útmutató",
+      "no_questions": "Ehhez a kategóriához nem áll rendelkezésre kérdés.",
+      "presets": {
+        "name": "Parfüm útmutató"
+      },
+      "settings": {
+        "default_category": {
+          "info": "Alapértelmezetten aktív kategória azonosítója",
+          "label": "Alapértelmezett aktív kategória azonosítója"
+        },
+        "description": {
+          "label": "Leírás"
+        },
+        "heading": {
+          "label": "Címsor"
+        }
+      }
+    },
+    "parfum_features": {
+      "cards": {
+        "activity_support": {
+          "alt": "Aktivitásának támogatására kifejlesztve",
+          "text": "Aktivitásának támogatására kifejlesztve"
+        },
+        "nature_fragrances": {
+          "alt": "Természetből ihletett, hosszan tartó illatok",
+          "text": "Természetből ihletett, hosszan tartó illatok"
+        },
+        "no_residue": {
+          "alt": "Nem rakódik le és nem hagy maradékot a textileken",
+          "text": "Nem rakódik le és nem hagy maradékot a textileken"
+        },
+        "vegan": {
+          "alt": "Vegán",
+          "text": "Vegán"
+        }
+      }
+    },
+    "parfum_instructions": {
+      "badge": "Útmutató",
+      "heading": "Hogyan használja a mosóparfümöt",
+      "important_title": "FONTOS:",
+      "name": "Parfüm útmutató",
+      "presets": {
+        "name": "Parfüm útmutató"
+      },
+      "settings": {
+        "description": {
+          "label": "Leírás"
+        },
+        "heading": {
+          "label": "Címsor"
+        }
+      },
+      "steps": {
+        "step_1": "Használat előtt jól rázza fel a flakont.",
+        "step_2": "Öntsön 5 ml-t (1 adagot) a mosógép öblítőrekeszébe minden 4 kg ruhához.",
+        "step_3": "Ne öntse közvetlenül a dobba vagy a szárítógépbe.",
+        "step_4": "Indítsa el a mosási programot a megszokott módon.",
+        "step_5": "Ha a termék bármely felületre kicsöppen, azonnal törölje le nedves ruhával vagy öblítse le vízzel."
+      },
+      "warnings": {
+        "children": "Tartsa távol gyermekektől. NE mossa gyermekruhákat mosóparfümmel, mert bőrük túl érzékeny a parfümben használt erős olajokhoz.",
+        "contact": "Kerülje a bőrrel és a szemmel való közvetlen érintkezést.",
+        "disposal": "A flakont a helyi előírásoknak megfelelően ártalmatlanítsa.",
+        "irritation": "Bőrirritáció vagy kiütés esetén mossa le bő szappannal és vízzel. Ha a tünetek tartósan fennállnak, forduljon orvoshoz.",
+        "washing_machine": "Kizárólag mosógépben használja."
+      }
+    },
+    "parfum_recommendations": {
+      "avoid": {
+        "item_1": "Közvetlenül a ruhára történő alkalmazás",
+        "item_2": "Szem- és bőrkontaktus (érintkezés esetén öblítse le)",
+        "item_3": "Érzékeny selyem vagy nem kezelt gyapjú esetén",
+        "title": "Kerülje"
+      },
+      "badge": "GYIK",
+      "do": {
+        "item_1": "Szintetikus, pamut vagy technikai anyagokkal használja",
+        "item_2": "Szobahőmérsékleten tárolja",
+        "item_3": "Érzékeny bőr esetén előbb tesztelje",
+        "title": "Tegye:"
+      },
+      "dont": {
+        "item_1": "Ne alkalmazza közvetlenül a ruhán",
+        "item_2": "Kerülje a szemmel és nyálkahártyával való érintkezést",
+        "item_3": "Tartsa távol gyermekektől",
+        "title": "Ne tegye:"
+      },
+      "heading": "Javaslatok és figyelmeztetések",
+      "name": "Parfüm ajánlások",
+      "presets": {
+        "name": "Parfüm ajánlások"
+      },
+      "recommended": {
+        "item_1": "Sportruházat és outdoor felszerelés",
+        "item_2": "Hétköznapi viselet és napi mosás",
+        "item_3": "Akik tartós illatot szeretnének öblítőmaradék nélkül",
+        "title": "Ajánlott a következőhöz:"
+      },
+      "settings": {
+        "description": {
+          "label": "Leírás"
+        },
+        "heading": {
+          "label": "Címsor"
+        }
+      }
+    },
+    "parfum_scents": {
+      "best_for": "Ideális",
+      "cards": {
+        "active_fresh": {
+          "best_for": "Nagy intenzitású edzéshez és aktív viselethez",
+          "fragrance": "Friss citrus energizáló mentával és eukaliptusszal",
+          "name": "Aktív Frissesség"
+        },
+        "adventure_mist": {
+          "best_for": "Kempingfelszereléshez és outdoor eszközökhöz",
+          "fragrance": "Vad gyógynövények földes mohával és erdei szellővel",
+          "name": "Kalandos Köd"
+        },
+        "classic_fresh": {
+          "best_for": "Hétköznapi és szabadidős ruházathoz",
+          "fragrance": "Tiszta pamut finom levendulával és vaníliával",
+          "name": "Klasszikus Frissesség"
+        },
+        "outdoor_flow": {
+          "best_for": "Outdoor kalandokhoz és technikai felszereléshez",
+          "fragrance": "Hegyi fenyő friss alpesi levegővel és cédrussal",
+          "name": "Outdoor Áramlat"
+        },
+        "pure_essence": {
+          "best_for": "Finom anyagokhoz és fehérneműhöz",
+          "fragrance": "Finom virágok lágy pézsmával és tiszta vászonnal",
+          "name": "Tiszta Esszencia"
+        }
+      },
+      "explore_scent": "Fedezze fel az illatot",
+      "fragrance_profile": "Illatprofil",
+      "name": "Parfüm illatok"
+    },
+    "recent_products": {
+      "heading": "Legutóbb megtekintve"
+    },
+    "unique-selling-point": {
+      "materials": {
+        "alt": "Tanúsított anyagok",
+        "text": "Tanúsított outdoor anyagokat használunk"
+      },
+      "members": {
+        "alt": "Tagok",
+        "text": "Extra előnyök regisztrált tagoknak"
+      },
+      "name": "Egyedi értékajánlatok",
+      "returns": {
+        "alt": "Visszaküldés",
+        "text": "Egyszerű visszaküldés és csere"
+      },
+      "tested": {
+        "alt": "Tesztelve",
+        "text": "Sportolók és hegyimentők által tesztelve"
+      }
     }
   },
   "localization": {
@@ -425,7 +892,33 @@
       "title": "Fiók",
       "details": "Fiókadatok",
       "view_addresses": "Címek megtekintése",
-      "return": "Vissza a fiókadatokhoz"
+      "return": "Vissza a fiókadatokhoz",
+      "account_settings": "Fiókbeállítások",
+      "addresses": "Címek",
+      "available_bonus": "Felhasználható bónusz",
+      "back_to_shopping": "Vissza a vásárláshoz",
+      "basic_info": "Alapadatok",
+      "birthdate": "Születési dátum",
+      "bonus_detail_1": "A bónuszt a következő vásárlásnál használhatja fel.",
+      "bonus_detail_2": "A bónusz a teljes vásárlási érték legfeljebb 25%-áig használható.",
+      "bonus_detail_3": "Javasoljuk, hogy a bónuszt a kézhezvételtől számított 150 napon belül használja fel.",
+      "bonus_details": "Hogyan használja a bónuszt",
+      "customer_zone": "VÁSÁRLÓI FIÓK",
+      "delete_account": "Fiók törlése",
+      "delete_confirm": "Biztosan törölni szeretné a fiókját? Ez a művelet nem visszavonható.",
+      "delete_success": "A fióktörlési kérés elküldve.",
+      "email": "E-mail",
+      "first_name": "Keresztnév",
+      "info_update_success": "Az alapadatok sikeresen frissítve!",
+      "last_name": "Vezetéknév",
+      "loyalty_bonus": "Hűségbónusz",
+      "orders": "Rendelések",
+      "phone": "Telefonszám",
+      "save": "Mentés",
+      "settings": "Beállítások",
+      "settings_description": "Törölheti a fiókját és minden hozzá tartozó adatot. Ez a művelet nem visszavonható.",
+      "wishlist": "Kedvenc termékek",
+      "wishlist_empty": "Még nincsenek termékek a kedvencek listáján."
     },
     "account_fallback": "Fiók",
     "activate_account": {
@@ -457,7 +950,22 @@
       "cancel": "Mégse",
       "edit": "Szerkesztés",
       "delete": "Törlés",
-      "delete_confirm": "Biztos, hogy törlöd a címet?"
+      "delete_confirm": "Biztos, hogy törlöd a címet?",
+      "add_success": "Cím sikeresen hozzáadva",
+      "address_min_length": "A címnek legalább 5 karakter hosszúnak kell lennie",
+      "billing_address": "Számlázási cím",
+      "city_min_length": "A városnévnek legalább 2 karaktert kell tartalmaznia",
+      "company_id": "Cégjegyzékszám",
+      "delivery_address": "Szállítási cím",
+      "email": "E-mail",
+      "error": "Hiba történt a kérés feldolgozása közben. Próbálja újra.",
+      "first_name_min_length": "A keresztnévnek legalább 2 karaktert kell tartalmaznia",
+      "last_name_min_length": "A vezetéknévnek legalább 2 karaktert kell tartalmaznia",
+      "name": "Név",
+      "phone_min_length": "Adjon meg érvényes telefonszámot",
+      "tax_id": "Adószám",
+      "update_success": "A cím sikeresen frissítve",
+      "zip_min_length": "Az irányítószámnak 3-10 karakter hosszúnak kell lennie"
     },
     "log_in": "Bejelentkezés",
     "log_out": "Kijelentkezés",
@@ -472,7 +980,13 @@
       "title": "Felhasználónév",
       "sign_in": "Bejelentkezés",
       "submit": "Küldés",
-      "alternate_provider_separator": "vagy"
+      "alternate_provider_separator": "vagy",
+      "facebook_login": "Bejelentkezés Facebookkal",
+      "forgot_password_message": "Ha elfelejtette jelszavát, lépjen az oldalra",
+      "google_login": "Bejelentkezés Google-fiókkal",
+      "migration_notice_body": "Ha rendelkezett fiókkal a korábbi weboldalunkon, fiókja és hűségpontjai átkerültek. A fiókja eléréséhez állítsa vissza a jelszavát.",
+      "migration_notice_cta": "Jelszó visszaállítása",
+      "migration_notice_title": "Megújítottuk a boltunkat!"
     },
     "orders": {
       "title": "Korábbi rendelések",
@@ -482,12 +996,43 @@
       "payment_status": "Fizetési állapot",
       "fulfillment_status": "Teljesítési állapot",
       "total": "Végösszeg",
-      "none": "Még nem rendeltél semmit."
+      "none": "Még nem rendeltél semmit.",
+      "billing_address": "Számlázási cím",
+      "cancelled": "Visszavonva",
+      "color": "Szín",
+      "delivered": "Kézbesítve",
+      "detail": "Részletek",
+      "discount": "Kedvezmény",
+      "download_invoice": "Számla letöltése",
+      "final_price": "Végső ár",
+      "including_vat": "Áfával együtt",
+      "no_billing_address": "Nincs elérhető számlázási cím",
+      "no_shipping_address": "Nincs elérhető szállítási cím",
+      "original_price": "Eredeti ár",
+      "partially_refunded": "Részben visszatérítve",
+      "pending_payment": "Fizetésre vár",
+      "price_details": "Ár",
+      "processing": "Feldolgozás alatt",
+      "product_discount": "Termékkedvezmény",
+      "purchase_price": "Vételár",
+      "quantity": "Mennyiség",
+      "refunded": "Visszatérítve",
+      "reorder": "Újrarendelés",
+      "reorder_error": "Nem sikerült újrarendelni a tételeket. Próbálja újra.",
+      "shipped": "Kiszállítva",
+      "shipping": "Szállítás",
+      "shipping_address": "Szállítási cím",
+      "shipping_discount": "Szállítási kedvezmény",
+      "size": "Méret",
+      "tax": "Adó"
     },
     "recover_password": {
       "title": "Új jelszó létrehozása",
       "subtext": "Küldünk egy e-mailt, amellyel új jelszót készíthetsz magadnak.",
-      "success": "E-mailben elküldtük a jelszó módosításához szükséges hivatkozást."
+      "success": "E-mailben elküldtük a jelszó módosításához szükséges hivatkozást.",
+      "cancel": "Mégse",
+      "email": "E-mail",
+      "submit": "Beküldés"
     },
     "register": {
       "title": "Fiók létrehozása",
@@ -495,7 +1040,21 @@
       "last_name": "Vezetéknév",
       "email": "E-mail-cím",
       "password": "Jelszó",
-      "submit": "Létrehozás"
+      "submit": "Létrehozás",
+      "accepts_marketing": "A jövőben szeretnék e-mailben tájékoztatást kapni az aktuális trendekről, ajánlatokról és NORTHFINDER kedvezményekről. A feliratkozás bármikor ingyenesen lemondható.",
+      "and": "és",
+      "apply": "vonatkoznak.",
+      "password_requirement_length": "Legalább 8 karakter",
+      "password_requirement_lowercase": "Legalább egy kisbetű",
+      "password_requirement_number": "Legalább egy szám",
+      "password_requirement_special": "Legalább egy speciális karakter",
+      "password_requirement_uppercase": "Legalább egy nagybetű",
+      "password_requirements": "A jelszónak meg kell felelnie az alábbi követelményeknek:",
+      "phone": "Telefonszám",
+      "privacy_policy": "Adatvédelmi szabályzat",
+      "privacy_policy_message": "Mint minden online áruháznál, e-mailben elküldjük az összes fontos értesítést (rendelés visszaigazolása, kiszállítás visszaigazolása, visszaküldési információk, ajánlások). Mindenképpen olvassa el a",
+      "recaptcha_message": "Ezt az oldalt a reCAPTCHA védi, és a Google",
+      "terms_of_service": "Általános szerződési feltételek"
     },
     "reset_password": {
       "title": "Új fiókjelszó létrehozása",
@@ -529,6 +1088,26 @@
       "subtotal": "Részösszeg",
       "total_duties": "Vámok",
       "total_refunded": "Visszatérítve"
+    },
+    "form_errors": {
+      "email_invalid": "Adjon meg érvényes e-mail címet",
+      "email_required": "Az e-mail cím megadása kötelező",
+      "error": "Hiba történt a kérés feldolgozása közben. Próbálja újra.",
+      "first_name": "A keresztnév megadása kötelező",
+      "last_name": "A vezetéknév megadása kötelező",
+      "password_requirements": "A jelszónak meg kell felelnie minden követelménynek"
+    },
+    "login": {
+      "alternate_provider_separator": "vagy",
+      "email": "E-mail",
+      "forgot_password": "Elfelejtette jelszavát?",
+      "guest_continue": "Folytatás",
+      "guest_title": "Folytatás vendégként",
+      "password": "Jelszó",
+      "please_login": "Kérjük, jelentkezzen be a fiókjába",
+      "sign_in": "Bejelentkezés",
+      "submit": "Beküldés",
+      "title": "Bejelentkezés"
     }
   },
   "gift_cards": {
@@ -543,7 +1122,12 @@
       "expired": "Lejárt",
       "copy_code_success": "Sikeres volt a kód másolása",
       "how_to_use_gift_card": "Az ajándékkártya kódja online, a QR-kód pedig az üzletben használható fel",
-      "expiration_date": "Lejárat dátuma: {{ expires_on }}"
+      "expiration_date": "Lejárat dátuma: {{ expires_on }}",
+      "active": "Lejár ekkor: {{ expiry }}",
+      "disabled": "Letiltva",
+      "print": "Ajándékkártya nyomtatása",
+      "redeem_html": "Használja ezt a kódot a pénztárnál a(z) {{ value }} értékű ajándékkártya beváltásához",
+      "remaining_html": "{{ balance }} fennmaradó egyenleg"
     }
   },
   "recipient": {
@@ -566,46 +1150,46 @@
   "pagefly": {
     "products": {
       "product": {
-        "regular_price": "Regular price",
-        "sold_out": "Sold out",
-        "unavailable": "Unavailable",
-        "on_sale": "Sale",
-        "quantity": "Quantity",
-        "add_to_cart": "Add to cart",
-        "back_to_collection": "Back to {{ title }}",
-        "view_details": "View details"
+        "regular_price": "Alapár",
+        "sold_out": "Elfogyott",
+        "unavailable": "Nem elérhető",
+        "on_sale": "Akció",
+        "quantity": "Mennyiség",
+        "add_to_cart": "Kosárba",
+        "back_to_collection": "Vissza ide: {{ title }}",
+        "view_details": "Részletek"
       }
     },
     "article": {
-      "tags": "Tags:",
-      "all_topics": "All topics",
-      "by_author": "by {{ author }}",
-      "posted_in": "Posted in",
-      "read_more": "Read more",
-      "back_to_blog": "Back to {{ title }}"
+      "tags": "Címkék:",
+      "all_topics": "Összes téma",
+      "by_author": "szerző: {{ author }}",
+      "posted_in": "Kategória:",
+      "read_more": "Tovább",
+      "back_to_blog": "Vissza ide: {{ title }}"
     },
     "comments": {
-      "title": "Leave a comment",
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "post": "Post comment",
-      "moderated": "Please note, comments must be approved before they are published",
-      "success_moderated": "Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.",
-      "success": "Your comment was posted successfully! Thank you!",
+      "title": "Szólj hozzá",
+      "name": "Név",
+      "email": "E-mail",
+      "message": "Üzenet",
+      "post": "Hozzászólás küldése",
+      "moderated": "Felhívjuk figyelmét, hogy a hozzászólásokat közzététel előtt jóvá kell hagyni",
+      "success_moderated": "A hozzászólása sikeresen elküldve. Hamarosan közzétesszük, mivel a blog moderált.",
+      "success": "A hozzászólása sikeresen közzétéve. Köszönjük!",
       "comments_with_count": {
-        "one": "{{ count }} comment",
-        "other": "{{ count }} comments"
+        "one": "{{ count }} hozzászólás",
+        "other": "{{ count }} hozzászólás"
       }
     },
     "password_page": {
-      "login_form_message": "Enter store using password:",
-      "login_form_password_label": "Password",
-      "login_form_password_placeholder": "Your password",
-      "login_form_submit": "Enter",
-      "signup_form_email_label": "Email",
-      "signup_form_success": "We will send you an email right before we open!",
-      "password_link": "Enter using password"
+      "login_form_message": "Lépjen be az üzletbe jelszóval:",
+      "login_form_password_label": "Jelszó",
+      "login_form_password_placeholder": "Az ön jelszava",
+      "login_form_submit": "Belépés",
+      "signup_form_email_label": "E-mail",
+      "signup_form_success": "E-mailt küldünk önnek közvetlenül a nyitás előtt!",
+      "password_link": "Belépés jelszóval"
     }
   },
   "snippets": {
@@ -654,7 +1238,280 @@
   "footer": {
     "contact": {
       "phone": "+421 233 418 364",
-      "email": "eshop@northfinder.sk"
+      "email": "eshop@northfinder.sk",
+      "contact_us": "Kapcsolat"
+    },
+    "change": "Módosítás",
+    "contact_us": "Kapcsolat",
+    "copyright": "© Copyright Northfinder {{ year }} / Minden jog fenntartva",
+    "language": "Magyar (Hungarian)",
+    "shopping_from": "Vásárlás innen"
+  },
+  "cart": {
+    "benefits": {
+      "loyalty": "Hűségbónusz",
+      "loyalty_text_1": "Regisztráljon és minden vásárlás után hűségbónuszt kap.",
+      "loyalty_text_2": "A bónuszt a kiszállítást követő 15. napon írjuk jóvá a számláján.",
+      "loyalty_text_3": "A következő vásárlásból levonhatja, annak értékének legfeljebb 25%-áig.",
+      "loyalty_text_4": "Javasoljuk, hogy a bónuszt a következő 150 napon belül használja fel.",
+      "title": "Előnyök regisztrált vásárlóknak"
+    },
+    "coupon": {
+      "apply": "Beváltás",
+      "placeholder": "Kód",
+      "title": "Kedvezménykupon / Ajándékkártya"
+    },
+    "general": {
+      "cancel": "Mégse",
+      "checkout": "Pénztár",
+      "continue_shopping": "Vásárlás folytatása",
+      "cookies_required": "Engedélyezze a sütiket a kosár használatához",
+      "edit": "Szerkesztés",
+      "empty": "A kosara jelenleg üres.",
+      "note": "Megjegyzés hozzáadása a rendeléshez",
+      "remove": "Eltávolítás",
+      "savings": "Megtakarítása",
+      "shipping_at_checkout": "A szállítási költséget és az adókat a pénztárnál számítjuk ki",
+      "subtotal": "Részösszeg",
+      "title": "Az ön kosara",
+      "update": "Frissítés"
+    },
+    "label": {
+      "price": "Ár",
+      "product": "Termék",
+      "quantity": "Mennyiség",
+      "total": "Összesen"
+    },
+    "save_for_later": "Mentés későbbre",
+    "summary": {
+      "calculated_at_checkout": "A pénztárnál számítva",
+      "shipping": "Szállítás",
+      "subtotal": "Részösszeg adóval",
+      "subtotal_excluding_tax": "Részösszeg adó nélkül",
+      "tax": "Adó",
+      "title": "Összegzés",
+      "total": "Becsült végösszeg"
     }
+  },
+  "collections": {
+    "general": {
+      "all": "Összes"
+    }
+  },
+  "date_formats": {
+    "month_day_year": "%Y. %B %d."
+  },
+  "mobile_menu": {
+    "all_in": "Összes ebben: {{ title }}",
+    "back": "Vissza"
+  },
+  "phone_validation": {
+    "invalid": "Érvénytelen telefonszám",
+    "invalid_country_code": "Érvénytelen országkód",
+    "local_only": "Adjon meg nemzetközi formátumot",
+    "required": "Adjon meg egy telefonszámot",
+    "too_long": "A telefonszám túl hosszú",
+    "too_short": "A telefonszám túl rövid"
+  },
+  "size_guide": {
+    "descriptions": {
+      "hiking_shoes": "*A túracipőket az emberi láb mérete szerint méretezzük"
+    },
+    "gender": {
+      "mens": "Férfi",
+      "womens": "Női"
+    },
+    "headings": {
+      "footwear_measurement_guide": "Hogyan mérje a termék méretét?",
+      "measurement_guide": "Hogyan mérje meg a testét?",
+      "men_clothing": "Mérettábla - Férfi",
+      "men_footwear": "Túracipő méretek - Férfi",
+      "women_clothing": "Mérettábla - Női",
+      "women_footwear": "Túracipő méretek - Női"
+    },
+    "instructions": {
+      "body_measurements": "<ol><li>MELLBŐSÉG</li><li>DEREKBŐSÉG</li><li>CSÍPŐBŐSÉG</li><li>MAGASSÁG</li><li>BELSŐ LÁBHOSSZ</li></ol>",
+      "foot_measurements": "<ol><li>LÁBHOSSZ</li></ol>"
+    },
+    "measurements": {
+      "chest": "MELLBŐSÉG",
+      "foot_length": "LÁBHOSSZ",
+      "height": "MAGASSÁG",
+      "hip": "CSÍPŐBŐSÉG",
+      "inseam_length": "BELSŐ LÁBHOSSZ",
+      "waist": "DEREKBŐSÉG"
+    },
+    "parfum-features": {
+      "blocks": {
+        "feature": {
+          "name": "Jellemző",
+          "settings": {
+            "icon": {
+              "info": "Adja meg az SVG ikon fájlnevét (.svg kiterjesztés nélkül)",
+              "label": "Ikon neve"
+            },
+            "title": {
+              "default": "Jellemző címe",
+              "label": "Cím"
+            }
+          }
+        }
+      },
+      "name": "Parfüm jellemzők",
+      "presets": {
+        "name": "Parfüm jellemzők"
+      },
+      "settings": {
+        "description": {
+          "default": "<p>A NORTHFINDER mosóparfümök koncentrált illatfokozók, melyeket teljesítményhez és mindennapi viselethez fejlesztettek.</p><p>Az öblítőktől eltérően megőrzik a légáteresztő képességet és az anyagok tulajdonságait, miközben hosszan tartó frissességet biztosítanak.</p>",
+          "label": "Leírás"
+        },
+        "heading": {
+          "default": "Mik azok a mosóparfümök?",
+          "label": "Címsor"
+        }
+      }
+    },
+    "product_measurements": {
+      "back_rise_end_waist": "Hátsó emelési hossz - az alsó deréktól",
+      "back_rise_top_waist": "Hátsó emelési hossz - a felső deréktól",
+      "bottom_girth_half": "1/2 alsó bőség",
+      "bottom_girth_relaxed": "1/2 alsó bőség - lazítva",
+      "bottom_girth_stretched_half": "1/2 alsó bőség - kifeszítve",
+      "bottom_legs_half": "1/2 alsó lábrész",
+      "center_back_length": "Középső hátrész hossza",
+      "chest_girth_half": "1/2 mellbőség",
+      "front_rise_end_waist": "Elülső emelési hossz az alsó deréktól",
+      "front_rise_top_waist": "Elülső emelési hossz - a felső deréktól",
+      "hip_girth": "Csípőbőség",
+      "inside_length": "Belső hossz",
+      "outside_length_end_waist": "Külső hossz az alsó deréktól",
+      "outside_length_top_waist": "Külső hossz a felső deréktól",
+      "shoulder_point_to_point": "Váll, ponttól pontig",
+      "shoulder_sleeve_length": "Váll- és ujjhossz",
+      "sleeve_length": "Ujjhossz",
+      "thigh_half_crotch": "1/2 comb - lépésnél",
+      "waist_girth": "Derékbőség",
+      "waist_girth_half": "1/2 derékbőség",
+      "waist_girth_relaxed": "Derékbőség - lazítva",
+      "waist_girth_stretched": "Derékbőség - kifeszítve"
+    },
+    "size_fit": {
+      "button_text": "Mérettábla és méretajánló",
+      "measurement_guide": {
+        "chest": {
+          "description": "Mérjen a mellkasa legszélesebb részén, vízszintesen tartva a mérőszalagot",
+          "title": "MELLBŐSÉG"
+        },
+        "height": {
+          "description": "Mérjen a feje tetejétől a padlóig, cipő nélkül",
+          "title": "MAGASSÁG"
+        },
+        "hip": {
+          "description": "Mérjen a csípője legszélesebb részén, körülbelül 20 cm-rel a derék alatt",
+          "title": "CSÍPŐBŐSÉG"
+        },
+        "inseam": {
+          "description": "Mérjen a lépéstől a bokacsontjáig",
+          "title": "BELSŐ LÁBHOSSZ"
+        },
+        "title": "Hogyan mérje meg a testét?",
+        "waist": {
+          "description": "Mérjen a természetes derékvonalánál, a felsőtest legkeskenyebb részén",
+          "title": "DEREKBŐSÉG"
+        }
+      },
+      "modal": {
+        "title": "Mérettábla - {{ gender }}"
+      },
+      "no_product_measurements": "Ehhez a tételhez nincs elérhető termékméret.",
+      "product_guide": {
+        "back_part": "A kabát hátoldala",
+        "bottom_girth_half": "1/2 ALSÓ BŐSÉG",
+        "bottom_girth_relaxed": "1/2 ALSÓ BŐSÉG - LAZÍTVA",
+        "bottom_girth_stretched": "1/2 ALSÓ BŐSÉG - KIFESZÍTVE",
+        "center_back_length": "KÖZÉPSŐ HÁTRÉSZ HOSSZA",
+        "chest_girth_half": "1/2 MELLBŐSÉG",
+        "description": "Ezek a méretek közvetlenül a ruhán vannak mérve, és a meglévő ruhákkal való összehasonlításhoz használhatók.",
+        "front_body_length": "ELÜLSŐ TESTHOSSZ HSP-TŐL",
+        "front_part": "A kabát eleje",
+        "hip_girth": "CSÍPŐBŐSÉG",
+        "inside_length": "BELSŐ HOSSZ",
+        "outside_length": "KÜLSŐ HOSSZ",
+        "shoulder_point_to_point": "VÁLL, PONTTÓL PONTIG",
+        "shoulder_sleeve_length": "VÁLL- ÉS UJJHOSSZ",
+        "sleeve_length": "UJJHOSSZ",
+        "title": "Hogyan mérje a terméket?",
+        "waist_girth": "DERÉKBŐSÉG"
+      },
+      "product_measurements": {
+        "bottom_girth_half": "1/2 ALSÓ BŐSÉG (CM)",
+        "center_back_length": "KÖZÉPSŐ HÁTRÉSZ HOSSZA (CM)",
+        "chest_girth_half": "1/2 MELLBŐSÉG (CM)",
+        "description": "A termékeken mért közelítő méretek",
+        "hip_girth": "CSÍPŐBŐSÉG (CM)",
+        "inside_length": "BELSŐ HOSSZ (CM)",
+        "shoulder_point_to_point": "VÁLL, PONTTÓL PONTIG (CM)",
+        "shoulder_sleeve_length": "VÁLL- ÉS UJJHOSSZ (CM)",
+        "sleeve_length": "UJJHOSSZ (CM)",
+        "usage_note": "(használja a szekrényében lévő ruhákkal való összehasonlításhoz)",
+        "waist_girth": "DERÉKBŐSÉG (CM)"
+      },
+      "recommender": {
+        "alternative_sizes": "Megfontolandó alternatív méretek:",
+        "calculating": "Az ideális méret kiszámítása...",
+        "chest": "Mellbőség",
+        "description": "Adja meg méreteit a személyre szabott méretajánlathoz",
+        "error_title": "A méret nem számítható",
+        "fit_preference": "Milyen szabást szeret a ruháin?",
+        "get_recommendation": "Méretajánlás kérése",
+        "height": "Magasság",
+        "loose_fit": "Bő szabás",
+        "loose_fit_desc": "Laza, kényelmes szabás",
+        "measurements_required": "A mellbőség és derékbőség megadása kötelező",
+        "recommendation_explanation": "A méretei és a PLACEHOLDER_FIT preferencia alapján a PLACEHOLDER_SIZE méret biztosítja a legjobb szabást.",
+        "recommendation_title": "Az ön ajánlott mérete",
+        "regular_fit": "Normál szabás",
+        "regular_fit_desc": "Standard kényelmes szabás",
+        "tight_fit": "Szűk szabás",
+        "tight_fit_desc": "Testhezálló, vonalas szabás",
+        "title": "Találja meg az ideális méretét",
+        "waist": "Derékbőség",
+        "weight": "Súly"
+      },
+      "table_headers": {
+        "chest": "MELLBŐSÉG",
+        "height": "MAGASSÁG",
+        "hip": "CSÍPŐBŐSÉG",
+        "inseam_length": "BELSŐ LÁBHOSSZ",
+        "size": "Méret",
+        "waist": "DEREKBŐSÉG"
+      },
+      "tabs": {
+        "body_measurements": "Testméretek",
+        "product_measurements": "Termékméretek",
+        "size_recommender": "Méretajánló"
+      },
+      "unit_converter": {
+        "inches": "HÜVELYK",
+        "label": "Mértékegység:"
+      }
+    },
+    "table_headers": {
+      "chest": "MELLBŐSÉG",
+      "foot_length": "Lábhossz (cm)",
+      "height": "MAGASSÁG",
+      "hip": "CSÍPŐBŐSÉG",
+      "inseam_length": "BELSŐ LÁBHOSSZ",
+      "measurement": "Méret",
+      "size": "Méret",
+      "waist": "DEREKBŐSÉG"
+    }
+  },
+  "video": {
+    "no_support": "A böngészője nem támogatja a videocímkét."
+  },
+  "pages": {
+    "contact": "/pages/contact"
   }
 }
