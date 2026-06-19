@@ -451,6 +451,12 @@
       window.theme.strings.continue_to_checkout = {{ 'sections.cart.continue_to_checkout' | t | default: 'Continue to Checkout' | json }};
       window.theme.strings.stock_unavailable = {{ 'sections.cart.stock_unavailable' | t | default: 'Stock Unavailable' | json }};
       window.theme.strings.stock_issues_message = {{ 'sections.cart.stock_issues_message' | t | default: 'Some items in your cart are not available in the requested quantities:' | json }};
+      window.theme.strings.stock_requested_available = {{ 'sections.cart.stock_requested_available' | t: requested: '[requested]', available: '[available]' | default: 'Requested: [requested], Available: [available]' | json }};
+      window.theme.strings.stock_adjust_to = {{ 'sections.cart.stock_adjust_to' | t: quantity: '[quantity]' | default: 'Adjust to [quantity]' | json }};
+      window.theme.strings.stock_removing = {{ 'sections.cart.stock_removing' | t | default: 'Removing...' | json }};
+      window.theme.strings.stock_adjusting = {{ 'sections.cart.stock_adjusting' | t | default: 'Adjusting...' | json }};
+      window.theme.strings.stock_remove = {{ 'sections.cart.remove' | t | default: 'Remove' | json }};
+      window.theme.strings.stock_validation_timeout = {{ 'sections.cart.stock_validation_timeout' | t | default: 'Stock validation timed out' | json }};
 
       // Account mobile menu strings
       window.theme.strings.menu = {{ 'customer.account.menu' | t | default: 'Menu' | json }};

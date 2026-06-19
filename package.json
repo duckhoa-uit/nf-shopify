@@ -25,6 +25,12 @@
   "scripts": {
     "test": "vitest",
     "test:ci": "vitest run",
+    "i18n:coverage": "node scripts/i18n/coverage.mjs",
+    "i18n:apply": "node scripts/i18n/apply.mjs",
+    "i18n:resource-coverage": "node scripts/i18n/resource-coverage.mjs",
+    "i18n:resource-apply": "node scripts/i18n/resource-apply.mjs",
+    "i18n:translate-prepare": "node scripts/i18n/translate-prepare.mjs",
+    "i18n:translate-apply": "node scripts/i18n/translate-apply.mjs",
     "start": "shopify theme dev -e international",
     "start:czech": "shopify theme dev -e czech",
     "start:romania": "shopify theme dev -e romania",

@@ -236,7 +236,7 @@ class CartSyncManager {
       clearTimeout(timeoutId);
       console.warn('[cart-sync] validateStock error', error);
       if (error.name === 'AbortError') {
-        throw new Error('Stock validation timed out');
+        throw new Error(window.theme?.strings?.stock_validation_timeout || 'Stock validation timed out');
       }
       throw error;
     }
@@ -621,15 +621,15 @@ class CartSyncManager {
             <div class="cart-sync-modal__stock-info">
               <p class="cart-sync-modal__stock-title">${title}${variant}</p>
               <p class="cart-sync-modal__stock-variant">SKU: ${cartItem.sku || 'N/A'}</p>
-              <p class="cart-sync-modal__stock-status"><span class="cart-sync-modal__stock-status--warning">Requested: ${requestedQuantity}, Available: ${availableStock}</span></p>
+              <p class="cart-sync-modal__stock-status"><span class="cart-sync-modal__stock-status--warning">${(window.theme?.strings?.stock_requested_available || 'Requested: [requested], Available: [available]').replace('[requested]', requestedQuantity).replace('[available]', availableStock)}</span></p>
             </div>
             <div class="cart-sync-modal__stock-actions">
               <button class="button button--small button--secondary" data-action="remove" data-item-key="${cartItem.key}">
-                Remove
+                ${window.theme?.strings?.stock_remove || 'Remove'}
               </button>
               ${availableStock > 0 ? `
                 <button class="button button--small button--primary" data-action="adjust" data-item-key="${cartItem.key}" data-quantity="${availableStock}">
-                  Adjust to ${availableStock}
+                  ${(window.theme?.strings?.stock_adjust_to || 'Adjust to [quantity]').replace('[quantity]', availableStock)}
                 </button>
               ` : ''}
             </div>
@@ -660,7 +660,7 @@ class CartSyncManager {
           closeModal();
         } else if (action === 'remove' && itemKey) {
           e.target.disabled = true;
-          e.target.textContent = 'Removing...';
+          e.target.textContent = window.theme?.strings?.stock_removing || 'Removing...';
 
           try {
             await this.removeCartItem(itemKey);
@@ -672,12 +672,12 @@ class CartSyncManager {
             }
           } catch (error) {
             e.target.disabled = false;
-            e.target.textContent = 'Remove';
+            e.target.textContent = window.theme?.strings?.stock_remove || 'Remove';
             alert(window.theme?.strings?.failed_remove_item || 'Failed to remove item. Please try again.');
           }
         } else if (action === 'adjust' && itemKey && quantity) {
           e.target.disabled = true;
-          e.target.textContent = 'Adjusting...';
+          e.target.textContent = window.theme?.strings?.stock_adjusting || 'Adjusting...';
 
           try {
             await this.updateCartItemQuantity(itemKey, parseInt(quantity));
@@ -689,7 +689,7 @@ class CartSyncManager {
             }
           } catch (error) {
             e.target.disabled = false;
-            e.target.textContent = `Adjust to ${quantity}`;
+            e.target.textContent = (window.theme?.strings?.stock_adjust_to || 'Adjust to [quantity]').replace('[quantity]', quantity);
             alert(window.theme?.strings?.failed_adjust_quantity || 'Failed to adjust quantity. Please try again.');
           }
         }
