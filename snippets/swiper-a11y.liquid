@@ -1,0 +1,17 @@
+{%- comment -%}
+  Renders the localized `a11y` config object for Swiper.
+  Usage inside a `new Swiper(...)` options object:
+    a11y: {%- render 'swiper-a11y' -%},
+
+  Reuses the existing `general.slider.*` translations that are present in
+  every locale shipped with this theme so it works on intl / cz / ro stores
+  without adding new keys to 33 locale files.
+{%- endcomment -%}
+{
+  enabled: true,
+  prevSlideMessage: {{ 'general.slider.previous_slide' | t | json }},
+  nextSlideMessage: {{ 'general.slider.next_slide' | t | json }},
+  firstSlideMessage: {{ 'general.slider.first_slide' | t | json }},
+  lastSlideMessage: {{ 'general.slider.last_slide' | t | json }},
+  paginationBulletMessage: {{ 'general.slider.go_to_slide' | t | json }}
+}

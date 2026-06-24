@@ -251,31 +251,23 @@ class PredictiveSearch extends SearchForm {
     }
 
     function formatMoney(amount) {
-      // Simple money formatter that mimics Shopify's money filter
-      // This doesn't rely on Shopify.formatMoney which might not be available
-
-      // Default to EUR formatting
-      let currencySymbol = '€';
-      let decimalSeparator = ',';
-      let thousandsSeparator = '.';
-
-      // Format the number with 2 decimal places
+      // Format using the storefront's active currency and locale so CZ/RO/etc.
+      // see their own currency (Kč, lei, …) instead of a hardcoded €.
       const price = parseFloat(amount);
-      if (isNaN(price)) return '€0,00';
+      if (isNaN(price)) return '';
 
-      // Convert to string with 2 decimal places
-      let priceString = price.toFixed(2);
+      const currency = (window.Shopify && window.Shopify.currency && window.Shopify.currency.active) || 'EUR';
+      const locale = (window.Shopify && window.Shopify.locale) || document.documentElement.lang || 'en';
 
-      // Replace decimal point with our decimal separator
-      priceString = priceString.replace('.', decimalSeparator);
-
-      // Add thousands separators
-      const parts = priceString.split(decimalSeparator);
-      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparator);
-      priceString = parts.join(decimalSeparator);
-
-      // Return formatted price with currency symbol
-      return currencySymbol + priceString;
+      try {
+        return new Intl.NumberFormat(locale, {
+          style: 'currency',
+          currency: currency,
+        }).format(price);
+      } catch (e) {
+        // Fallback: number with currency code suffix
+        return price.toFixed(2) + ' ' + currency;
+      }
     }
 
     function formatDate(dateString) {

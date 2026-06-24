@@ -521,7 +521,7 @@
                   data-variant-image="placeholder"
                   data-variant-image-srcset=""
                 {%- endif -%}
-                aria-label="Select {{ color_variant.title | escape }} variant"
+                aria-label="{{ 'products.product.select_variant_aria' | t: variant: color_variant.title }}"
               >
                 {%- if variant_image -%}
                   <img
