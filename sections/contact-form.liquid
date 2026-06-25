@@ -30,11 +30,7 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {%- if section.settings.address != blank -%}
-                {{ section.settings.address | escape }}
-              {%- else -%}
-                {{ settings.contact_address | escape }}
-              {%- endif -%}
+              {{ 'templates.contact.info.address' | t }}
             </p>
           </div>
         </div>
@@ -54,18 +50,10 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {%- if section.settings.phone != blank -%}
-                {{ section.settings.phone | escape }}
-              {%- else -%}
-                {{ settings.contact_phone | escape }}
-              {%- endif -%}
+              {{ 'templates.contact.info.phone' | t }}
             </p>
             <p class="contact-info__hours">
-              {%- if section.settings.hours != blank -%}
-                {{ section.settings.hours | escape }}
-              {%- else -%}
-                {{ settings.contact_hours | escape }}
-              {%- endif -%}
+              {{ 'templates.contact.info.hours' | t }}
             </p>
           </div>
         </div>
@@ -86,21 +74,13 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {%- if section.settings.email != blank -%}
-                {{ section.settings.email | escape }}
-              {%- else -%}
-                {{ settings.contact_email | escape }}
-              {%- endif -%}
+              {{ 'templates.contact.info.email' | t }}
             </p>
           </div>
         </div>
       </div>
       <div class="contact__form-container">
-        {%- if section.settings.heading != blank -%}
-          <h2 class="contact__form-heading">{{ section.settings.heading }}</h2>
-        {%- else -%}
-          <h2 class="contact__form-heading">{{ 'templates.contact.form.write_to_us' | t }}</h2>
-        {%- endif -%}
+        <h2 class="contact__form-heading">{{ 'templates.contact.form.write_to_us' | t }}</h2>
         <p class="text-sm leading-5 md:text-lg text-black md:leading-7">{{ 'templates.contact.info.subtitle' | t }}</p>
         {%- liquid
           assign contact_form_class = 'isolate'
@@ -236,12 +216,6 @@
     "groups": ["header", "footer"]
   },
   "settings": [
-    {
-      "type": "inline_richtext",
-      "id": "heading",
-      "default": "t:sections.contact-form.settings.title.default",
-      "label": "t:sections.contact-form.settings.title.label"
-    },
     {
       "type": "select",
       "id": "heading_size",
