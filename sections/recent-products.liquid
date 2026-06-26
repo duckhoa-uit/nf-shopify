@@ -290,7 +290,7 @@
       isAvailable: {{ product.available | json }},
       savings: {% if product.compare_at_price > product.price and product.available %}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round | json }}{% else %}'0'{% endif %},
       tags: {{ product.tags | json }},
-      promotions: {% if product.metafields.features.promotion.value %}{{ product.metafields.features.promotion.value | json }}{% else %}[]{% endif %},
+      promotions: {% if product.metafields.custom_features.promotion.value %}{{ product.metafields.custom_features.promotion.value | json }}{% else %}[]{% endif %},
       productId: {{ product.id | json }},
       isPlaceholder: finalModelImage.isPlaceholder || false,
     };

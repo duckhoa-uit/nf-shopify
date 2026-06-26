@@ -80,8 +80,8 @@
               {% render 'discount-badge', product: product, badge_class: 'product-discount-badge' %}
 
               <!-- Product tags from metafields -->
-              {%- if product.metafields.features.extra.value -%}
-                {%- for extra_tag in product.metafields.features.extra.value -%}
+              {%- if product.metafields.custom_features.extra.value -%}
+                {%- for extra_tag in product.metafields.custom_features.extra.value -%}
                   <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
                     {{- extra_tag.name -}}
                   </span>
@@ -89,8 +89,8 @@
               {%- endif -%}
 
               <!-- Promotion metafield -->
-              {%- if product.metafields.features.promotion.value -%}
-                {%- for promotion in product.metafields.features.promotion.value -%}
+              {%- if product.metafields.custom_features.promotion.value -%}
+                {%- for promotion in product.metafields.custom_features.promotion.value -%}
                   <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
                     {{- promotion.name -}}
                   </span>
@@ -633,11 +633,11 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
-          {% if product.metafields.features.size > 0 %}
+          {% if product.metafields.custom_features.size > 0 %}
             {% comment %} Pre-filter features to display - Using pagination hack to overcome 50-item limit {% endcomment %}
             {% paginate shop.metaobjects.product_feature.values by 250 %}
               {% assign displayable_features = '' %}
-              {% for metafield in product.metafields.features %}
+              {% for metafield in product.metafields.custom_features %}
                 {% assign key = metafield | first %}
                 {% assign arr_values = metafield | last %}
                 {% if arr_values.value != blank %}
@@ -668,7 +668,7 @@
                 <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
                   {% comment %} Apply pagination to display block to overcome 50-item limit {% endcomment %}
                   {% paginate shop.metaobjects.product_feature.values by 250 %}
-                    {% for metafield in product.metafields.features %}
+                    {% for metafield in product.metafields.custom_features %}
                       {% assign key = metafield | first %}
                       {% if displayable_keys contains key %}
                         {% assign arr_values = metafield | last %}

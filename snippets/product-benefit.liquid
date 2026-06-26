@@ -16,8 +16,8 @@
 
 {% comment %} Use system.handle for language-independent comparison {% endcomment %}
 {% assign breathability_name = '' %}
-{% if product.metafields.features.breathability.value %}
-  {% for breathability_obj in product.metafields.features.breathability.value %}
+{% if product.metafields.custom_features.breathability.value %}
+  {% for breathability_obj in product.metafields.custom_features.breathability.value %}
     {% assign breathability_name = breathability_obj.system.handle %}
     {% break %}
   {% endfor %}
@@ -44,8 +44,8 @@
 
 {% comment %} Use system.handle for language-independent comparison {% endcomment %}
 {% assign elasticity_name = '' %}
-{% if product.metafields.features.elasticity.value %}
-  {% for elasticity_obj in product.metafields.features.elasticity.value %}
+{% if product.metafields.custom_features.elasticity.value %}
+  {% for elasticity_obj in product.metafields.custom_features.elasticity.value %}
     {% assign elasticity_name = elasticity_obj.system.handle %}
     {% break %}
   {% endfor %}
@@ -72,8 +72,8 @@
 
 {% comment %} Use system.handle for language-independent comparison {% endcomment %}
 {% assign windproofness_name = '' %}
-{% if product.metafields.features.windproofness.value %}
-  {% for windproofness_obj in product.metafields.features.windproofness.value %}
+{% if product.metafields.custom_features.windproofness.value %}
+  {% for windproofness_obj in product.metafields.custom_features.windproofness.value %}
     {% assign windproofness_name = windproofness_obj.system.handle %}
     {% break %}
   {% endfor %}
@@ -100,8 +100,8 @@
 
 {% comment %} Use system.handle for language-independent comparison {% endcomment %}
 {% assign warmth_name = '' %}
-{% if product.metafields.features.warmth.value %}
-  {% for warmth_obj in product.metafields.features.warmth.value %}
+{% if product.metafields.custom_features.warmth.value %}
+  {% for warmth_obj in product.metafields.custom_features.warmth.value %}
     {% assign warmth_name = warmth_obj.system.handle %}
     {% break %}
   {% endfor %}

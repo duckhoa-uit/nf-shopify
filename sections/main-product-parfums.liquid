@@ -81,8 +81,8 @@
               {% render 'discount-badge', product: product, badge_class: 'product-discount-badge' %}
 
               <!-- Product tags from metafields -->
-              {%- if product.metafields.features.extra.value -%}
-                {%- for extra_tag in product.metafields.features.extra.value -%}
+              {%- if product.metafields.custom_features.extra.value -%}
+                {%- for extra_tag in product.metafields.custom_features.extra.value -%}
                   <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
                     {{- extra_tag.name -}}
                   </span>
@@ -90,8 +90,8 @@
               {%- endif -%}
 
               <!-- Promotion metafield -->
-              {%- if product.metafields.features.promotion.value -%}
-                {%- for promotion in product.metafields.features.promotion.value -%}
+              {%- if product.metafields.custom_features.promotion.value -%}
+                {%- for promotion in product.metafields.custom_features.promotion.value -%}
                   <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
                     {{- promotion.name -}}
                   </span>

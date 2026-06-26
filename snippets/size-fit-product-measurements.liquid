@@ -210,8 +210,8 @@
   %}
   {% assign product_kind_handle = blank %}
 
-  {% if product.metafields.features.kind.value %}
-    {% for kind_item in product.metafields.features.kind.value %}
+  {% if product.metafields.custom_features.kind.value %}
+    {% for kind_item in product.metafields.custom_features.kind.value %}
       {% assign kind_system_handle = kind_item.system.handle %}
       {% if supported_categories contains kind_system_handle %}
         {% assign product_kind_handle = kind_system_handle %}

@@ -160,8 +160,8 @@
 
         {%- comment -%} Check product kind to hide size-fit-button for scarfs {%- endcomment -%}
         {%- assign is_scarfs = false -%}
-        {%- if product.metafields.features.kind.value -%}
-          {%- for kind_item in product.metafields.features.kind.value -%}
+        {%- if product.metafields.custom_features.kind.value -%}
+          {%- for kind_item in product.metafields.custom_features.kind.value -%}
             {%- assign kind_system_handle = kind_item.system.handle -%}
             {%- if kind_system_handle == 'scarfs' -%}
               {%- assign is_scarfs = true -%}
