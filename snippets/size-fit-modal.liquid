@@ -23,7 +23,7 @@
     <div class="modal-header flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
       {% comment %} Determine gender based on product metafield features.gender or default to Men's {% endcomment %}
       {% assign gender = 'size_guide.gender.mens' | t %}
-      {% assign gender_metafield = product.metafields.features.gender.value %}
+      {% assign gender_metafield = product.metafields.custom_features.gender.value %}
       {% if gender_metafield %}
         {% for gender_obj in gender_metafield %}
           {% comment %} Use system.handle for language-independent comparison {% endcomment %}

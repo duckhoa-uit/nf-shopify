@@ -80,8 +80,8 @@
               {% render 'discount-badge', product: product, badge_class: 'product-discount-badge' %}
 
               <!-- Product tags from metafields -->
-              {%- if product.metafields.features.extra.value -%}
-                {%- for extra_tag in product.metafields.features.extra.value -%}
+              {%- if product.metafields.custom_features.extra.value -%}
+                {%- for extra_tag in product.metafields.custom_features.extra.value -%}
                   <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
                     {{- extra_tag.name -}}
                   </span>
@@ -89,8 +89,8 @@
               {%- endif -%}
 
               <!-- Promotion metafield -->
-              {%- if product.metafields.features.promotion.value -%}
-                {%- for promotion in product.metafields.features.promotion.value -%}
+              {%- if product.metafields.custom_features.promotion.value -%}
+                {%- for promotion in product.metafields.custom_features.promotion.value -%}
                   <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
                     {{- promotion.name -}}
                   </span>
@@ -626,7 +626,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
-          {% if product.metafields.features.size > 0 %}
+          {% if product.metafields.custom_features.size > 0 %}
             {% comment %}
               Pre-filter features to display, then sort by metaobject `position` ascending
               (lower position = shown first, matching the backend PIM convention).
@@ -643,7 +643,7 @@
                 (Construction / Storage / Adjustability) — see product-features-details snippet.
               {%- endcomment -%}
               {%- assign features_details_keys = 'hood,collar,sleeve,shoulders,inside,ventilation,pockets,zipper,hydration,waist,knee,bottom_legs,back,hips' | split: ',' -%}
-              {% for metafield in product.metafields.features %}
+              {% for metafield in product.metafields.custom_features %}
                 {% assign key = metafield | first %}
                 {% assign arr_values = metafield | last %}
                 {%- assign is_features_details_key = false -%}
@@ -690,13 +690,13 @@
                     {% for entry in sorted_entries %}
                       {% assign entry_parts = entry | split: '|' %}
                       {% assign key = entry_parts | last %}
-                      {% assign arr_values = product.metafields.features[key] %}
+                      {% assign arr_values = product.metafields.custom_features[key] %}
                       {% comment %}
                         Skip vapor_permeability when it is paired with water_column on the
                         same row (rendered together below for the water_column entry).
                       {% endcomment %}
                       {% assign is_paired_vapor = false %}
-                      {% if key == 'vapor_permeability_g_m2_24hr' and product.metafields.features.water_column_wp_mm.value != blank %}
+                      {% if key == 'vapor_permeability_g_m2_24hr' and product.metafields.custom_features.water_column_wp_mm.value != blank %}
                         {% assign is_paired_vapor = true %}
                       {% endif %}
                       {% if arr_values.value != blank and is_paired_vapor == false %}
@@ -750,7 +750,7 @@
                             Pair vapor_permeability inline with water_column when both
                             are present, per customer feedback (Tab 1, #7 + #8).
                           {%- endcomment -%}
-                          {% if key == 'water_column_wp_mm' and product.metafields.features.vapor_permeability_g_m2_24hr.value != blank %}
+                          {% if key == 'water_column_wp_mm' and product.metafields.custom_features.vapor_permeability_g_m2_24hr.value != blank %}
                             {%- liquid
                               assign vapor_obj = null
                               for feature in shop.metaobjects.product_feature.values
@@ -766,7 +766,7 @@
                               {{- vapor_label -}}
                               :</strong
                             >
-                            {% assign vapor_items = product.metafields.features.vapor_permeability_g_m2_24hr.value | map: 'name' %}
+                            {% assign vapor_items = product.metafields.custom_features.vapor_permeability_g_m2_24hr.value | map: 'name' %}
                             {% assign vapor_text = '' %}
                             {% for item in vapor_items %}
                               {% if forloop.first %}

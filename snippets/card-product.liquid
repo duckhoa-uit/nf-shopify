@@ -26,8 +26,8 @@
         {% render 'discount-badge', product: card_product %}
 
         <!-- Product tags from metafields (max 3) -->
-        {%- if card_product.metafields.features.extra.value -%}
-          {%- for extra_tag in card_product.metafields.features.extra.value -%}
+        {%- if card_product.metafields.custom_features.extra.value -%}
+          {%- for extra_tag in card_product.metafields.custom_features.extra.value -%}
             {%- if tag_count < 3 -%}
               <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">
                 {{- extra_tag.name -}}
@@ -38,8 +38,8 @@
         {%- endif -%}
 
         <!-- Promotion metafield -->
-        {%- if card_product.metafields.features.promotion.value -%}
-          {%- for promotion in card_product.metafields.features.promotion.value -%}
+        {%- if card_product.metafields.custom_features.promotion.value -%}
+          {%- for promotion in card_product.metafields.custom_features.promotion.value -%}
             {%- if tag_count < 3 -%}
               <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">
                 {{- promotion.name -}}

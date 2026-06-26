@@ -44,7 +44,7 @@
     {%- comment -%} ============ CONSTRUCTION ============ {%- endcomment -%}
     {%- assign construction_entries = '' -%}
     {%- for k in construction_keys -%}
-      {%- assign mf = product.metafields.features[k] -%}
+      {%- assign mf = product.metafields.custom_features[k] -%}
       {%- if mf.value != blank -%}
         {%- assign feature_obj = null -%}
         {%- assign k_dash = k | replace: '_', '-' -%}
@@ -74,8 +74,8 @@
     {%- endcomment -%}
     {%- assign storage_entries = '' -%}
 
-    {%- assign pockets_mf = product.metafields.features.pockets -%}
-    {%- assign zipper_mf = product.metafields.features.zipper -%}
+    {%- assign pockets_mf = product.metafields.custom_features.pockets -%}
+    {%- assign zipper_mf = product.metafields.custom_features.zipper -%}
     {%- assign has_pockets = false -%}
     {%- assign has_zipper = false -%}
     {%- if pockets_mf.value != blank -%}{%- assign has_pockets = true -%}{%- endif -%}
@@ -98,7 +98,7 @@
       {%- assign storage_entries = pair_padded | append: '|__pockets_zipper__' -%}
     {%- endif -%}
 
-    {%- assign hydration_mf = product.metafields.features.hydration -%}
+    {%- assign hydration_mf = product.metafields.custom_features.hydration -%}
     {%- if hydration_mf.value != blank -%}
       {%- assign hyd_pos = 9999 -%}
       {%- for feature in shop.metaobjects.product_feature.values -%}
@@ -119,7 +119,7 @@
     {%- comment -%} ============ ADJUSTABILITY ============ {%- endcomment -%}
     {%- assign adjustability_entries = '' -%}
     {%- for k in adjustability_keys -%}
-      {%- assign mf = product.metafields.features[k] -%}
+      {%- assign mf = product.metafields.custom_features[k] -%}
       {%- if mf.value != blank -%}
         {%- assign feature_obj = null -%}
         {%- assign k_dash = k | replace: '_', '-' -%}
@@ -173,7 +173,7 @@
           {%- for entry in construction_sorted -%}
             {%- assign entry_parts = entry | split: '|' -%}
             {%- assign key = entry_parts | last -%}
-            {%- assign arr_values = product.metafields.features[key] -%}
+            {%- assign arr_values = product.metafields.custom_features[key] -%}
             {%- assign feature_obj = null -%}
             {%- assign key_dash = key | replace: '_', '-' -%}
             {%- for feature in shop.metaobjects.product_feature.values -%}
@@ -218,12 +218,12 @@
             {%- assign key = entry_parts | last -%}
 
             {%- if key == '__pockets_zipper__' -%}
-              {%- assign pockets_count = product.metafields.features.pockets.value | size -%}
+              {%- assign pockets_count = product.metafields.custom_features.pockets.value | size -%}
               {%- assign pockets_text = '' -%}
               {%- if pockets_count > 0 -%}
                 {%- assign pockets_text = 'sections.main_product.features_details.pockets_with_count' | t: count: pockets_count -%}
               {%- endif -%}
-              {%- assign zipper_items = product.metafields.features.zipper.value | map: 'name' -%}
+              {%- assign zipper_items = product.metafields.custom_features.zipper.value | map: 'name' -%}
               {%- assign zipper_text = '' -%}
               {%- for item in zipper_items -%}
                 {%- if forloop.first -%}
@@ -249,7 +249,7 @@
                 </li>
               {%- endif -%}
             {%- else -%}
-              {%- assign arr_values = product.metafields.features[key] -%}
+              {%- assign arr_values = product.metafields.custom_features[key] -%}
               {%- assign feature_obj = null -%}
               {%- assign key_dash = key | replace: '_', '-' -%}
               {%- for feature in shop.metaobjects.product_feature.values -%}
@@ -292,7 +292,7 @@
           {%- for entry in adjustability_sorted -%}
             {%- assign entry_parts = entry | split: '|' -%}
             {%- assign key = entry_parts | last -%}
-            {%- assign arr_values = product.metafields.features[key] -%}
+            {%- assign arr_values = product.metafields.custom_features[key] -%}
             {%- assign feature_obj = null -%}
             {%- assign key_dash = key | replace: '_', '-' -%}
             {%- for feature in shop.metaobjects.product_feature.values -%}
