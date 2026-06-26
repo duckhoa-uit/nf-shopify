@@ -167,9 +167,11 @@
         endif
       -%}
 
-      <a href="{{ routes.cart_url }}" class="header__icon link px-3 focus-inset ">
-        <span class="svg-wrapper [&_svg]:size-[1.625rem]">{{ 'icon-currency.svg' | inline_asset_content }}</span>
-      </a>
+      {%- if customer -%}
+        <a href="{{ routes.cart_url }}" class="header__icon link px-3 focus-inset ">
+          <span class="svg-wrapper [&_svg]:size-[1.625rem]">{{ 'icon-currency.svg' | inline_asset_content }}</span>
+        </a>
+      {%- endif -%}
 
       {%- for block in section.blocks -%}
         {%- case block.type -%}
