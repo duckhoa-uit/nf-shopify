@@ -122,7 +122,7 @@
     "bodyMeasurements": {
       "type": "object",
       "title": "Body Measurements Metafield (size_fit.body_measurements)",
-      "description": "Standard body measurements for size guide. Gender is obtained from product.metafields.features.gender",
+      "description": "Standard body measurements for size guide. Gender is obtained from product.metafields.custom_features.gender",
       "patternProperties": {
         "^(XXS|XS|S|M|L|XL|XXL|3XL|4XL)$": {
           "$ref": "#/definitions/sizeInfo"
@@ -135,7 +135,7 @@
     "productMeasurements": {
       "type": "object",
       "title": "Product Measurements Metafield (size_fit.measurements)",
-      "description": "Product-specific measurements for garments. Product category is obtained from product.metafields.features.kind",
+      "description": "Product-specific measurements for garments. Product category is obtained from product.metafields.custom_features.kind",
       "patternProperties": {
         "^(XXS|XS|S|M|L|XL|XXL|3XL|4XL)$": {
           "$ref": "#/definitions/sizeChart"

@@ -17,8 +17,8 @@
 {% assign gender_values = '' %}
 
 {% comment %} Check features.kind for shoes using system.handle for language-independent comparison {% endcomment %}
-{% if product.metafields.features.kind.value %}
-  {% for kind_item in product.metafields.features.kind.value %}
+{% if product.metafields.custom_features.kind.value %}
+  {% for kind_item in product.metafields.custom_features.kind.value %}
     {% assign kind_system_handle = kind_item.system.handle %}
     {% assign kind_values = kind_values | append: kind_system_handle | append: ',' %}
     {% if kind_system_handle == 'shoes' %}
@@ -28,8 +28,8 @@
 {% endif %}
 
 {% comment %} Check features.gender for men using system.handle for language-independent comparison {% endcomment %}
-{% if product.metafields.features.gender.value %}
-  {% for gender_item in product.metafields.features.gender.value %}
+{% if product.metafields.custom_features.gender.value %}
+  {% for gender_item in product.metafields.custom_features.gender.value %}
     {% assign gender_system_handle = gender_item.system.handle %}
     {% assign gender_values = gender_values | append: gender_system_handle | append: ',' %}
     {% if gender_system_handle == 'men' or gender_system_handle == 'man' %}

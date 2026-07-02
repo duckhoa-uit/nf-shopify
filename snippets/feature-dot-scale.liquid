@@ -4,11 +4,11 @@
   3-level scale (low / medium / high).
 
   Accepts:
-  - feature_values: {Array} product.metafields.features.<key>.value
+  - feature_values: {Array} product.metafields.custom_features.<key>.value
                     (list of metaobject references — first item is used)
 
   Usage:
-  {% render 'feature-dot-scale', feature_values: product.metafields.features.waterproofness.value %}
+  {% render 'feature-dot-scale', feature_values: product.metafields.custom_features.waterproofness.value %}
 {% endcomment %}
 
 {%- assign level = 0 -%}
