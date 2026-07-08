@@ -1,10 +1,11 @@
 {% liquid
-      assign bonLoyaltyPageInfo = shop.metafields.bonLoyaltyPageInfo.bonLoyaltyPageInfo
-      assign bonShopInfo = shop.metafields.bonShopInfo.bonShopInfo
+      assign bon_loyalty_page_info = shop.metafields.bonLoyaltyPageInfo.bonLoyaltyPageInfo
+      assign bon_shop_info = shop.metafields.bonShopInfo.bonShopInfo
   %}
-  <script> var bonLoyaltyPageInfo = {{ bonLoyaltyPageInfo | json }}; </script>
-  <script> var bonShopInfo = {{ bonShopInfo | json }}; </script>
-  <div class='shopify-section'>
+  {{ 'bon-loyalty-page.css' | asset_url | stylesheet_tag }}
+  <script> var bonLoyaltyPageInfo = {{ bon_loyalty_page_info | json }}; </script>
+  <script> var bonShopInfo = {{ bon_shop_info | json }}; </script>
+  <div class='shopify-section bon-loyalty-page'>
       {{ page.content }}
-      <script id='script-bon-loyalty-page' src='https://d31wum4217462x.cloudfront.net/loyalty_page/js/app.js'></script>
+      <script id='script-bon-loyalty-page' src='https://d31wum4217462x.cloudfront.net/loyalty_page/js/app.js' defer></script>
   </div>
