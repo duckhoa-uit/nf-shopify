@@ -1,0 +1,98 @@
+.bon-loyalty-page {
+  --bon-loyalty-surface: #1a1a1a;
+  --bon-loyalty-surface-active: #242424;
+  --bon-loyalty-text: #ffffff;
+  --bon-loyalty-muted: rgba(255, 255, 255, 0.72);
+  --bon-loyalty-border: rgba(255, 255, 255, 0.14);
+  --bon-loyalty-border-hover: rgba(225, 37, 27, 0.72);
+  --bon-loyalty-accent: #e1251b;
+  --bon-loyalty-success: #59c982;
+}
+
+/* BON injects app styles after the page loads, so these contrast overrides need priority. */
+.bon-loyalty-page #bon-onclick-dropdown-mybalance,
+.bon-loyalty-page #bon-onclick-dropdown-myreward {
+  background: var(--bon-loyalty-surface) !important;
+  border: 1px solid var(--bon-loyalty-border) !important;
+  box-shadow: none !important;
+  color: var(--bon-loyalty-text) !important;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.bon-loyalty-page #bon-onclick-dropdown-mybalance:hover,
+.bon-loyalty-page #bon-onclick-dropdown-myreward:hover,
+.bon-loyalty-page #bon-onclick-dropdown-mybalance:focus-visible,
+.bon-loyalty-page #bon-onclick-dropdown-myreward:focus-visible {
+  background: var(--bon-loyalty-surface-active) !important;
+  border-color: var(--bon-loyalty-border-hover) !important;
+  box-shadow: 0 0 0 1px rgba(225, 37, 27, 0.18) !important;
+  transform: translateY(-1px);
+}
+
+.bon-loyalty-page #bon-onclick-dropdown-mybalance[aria-expanded='true'],
+.bon-loyalty-page #bon-onclick-dropdown-mybalance.bon-active,
+.bon-loyalty-page #bon-onclick-dropdown-mybalance.active {
+  background: var(--bon-loyalty-surface-active) !important;
+  border-color: var(--bon-loyalty-accent) !important;
+}
+
+.bon-loyalty-page #bon-onclick-dropdown-mybalance *,
+.bon-loyalty-page #bon-onclick-dropdown-myreward * {
+  color: inherit !important;
+}
+
+.bon-loyalty-page #bon-onclick-dropdown-mybalance svg,
+.bon-loyalty-page #bon-onclick-dropdown-myreward svg {
+  color: var(--bon-loyalty-accent) !important;
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+.bon-loyalty-page #bon-onclick-dropdown-mybalance .title,
+.bon-loyalty-page #bon-onclick-dropdown-myreward .title,
+.bon-loyalty-page #bon-onclick-dropdown-mybalance .bon-body-other-primary-color,
+.bon-loyalty-page #bon-onclick-dropdown-myreward .bon-body-other-primary-color {
+  color: var(--bon-loyalty-text) !important;
+}
+
+.bon-loyalty-page #bon-onclick-dropdown-mybalance .balance_count,
+.bon-loyalty-page #bon-onclick-dropdown-myreward .balance_count,
+.bon-loyalty-page #bon-onclick-dropdown-mybalance .bon-body-other-secondary-color,
+.bon-loyalty-page #bon-onclick-dropdown-myreward .bon-body-other-secondary-color {
+  color: var(--bon-loyalty-muted) !important;
+}
+
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom {
+  background: var(--bon-loyalty-surface) !important;
+  border: 1px solid var(--bon-loyalty-border) !important;
+  border-collapse: separate;
+  color: var(--bon-loyalty-text) !important;
+}
+
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom thead,
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom tbody,
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom tfoot,
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom tr,
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom th,
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom td {
+  border-color: var(--bon-loyalty-border) !important;
+}
+
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom thead th {
+  background: var(--bon-loyalty-surface) !important;
+  border-bottom: 1px solid var(--bon-loyalty-border) !important;
+  color: var(--bon-loyalty-text) !important;
+}
+
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom tbody td {
+  border-bottom: 1px solid var(--bon-loyalty-border) !important;
+  color: var(--bon-loyalty-text) !important;
+}
+
+.bon-loyalty-page [id='profile-balance-table'] .bon-table-custom tbody td:last-child {
+  color: var(--bon-loyalty-success) !important;
+}
