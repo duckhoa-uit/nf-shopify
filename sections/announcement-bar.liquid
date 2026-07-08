@@ -323,7 +323,7 @@
           {% endif %}
           {% if section.settings.show_login and customer == null %}
           <div>
-            <a href="{{ routes.account_login_url }}">{{ 'customer.login_page.sign_in' | t }}</a>
+            <a href="{{ routes.storefront_login_url }}">{{ 'customer.login_page.sign_in' | t }}</a>
           </div>
           {% endif %}
           {% if customer != null %}
