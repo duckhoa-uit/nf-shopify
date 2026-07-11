@@ -2,25 +2,25 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-07-11 11:31:45
+ At 2026-07-11 12:02:02
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
  {% if ecom_root_url != '/'%}
  {% assign ecom_root_url = routes.root_url | append: '/' %}
  {% endif %}
- {% assign translation = metaobjects['app--6509291--ecom_translation']['app--6509291--ecom-translation-un7ccacg'].data.value %}
+ {% assign translation = metaobjects['app--6509291--ecom_translation']['app--6509291--ecom-translation-usyfr6xs'].data.value %}
  <link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript>
 {%capture section_id %}ecom-69eb1f8f5ae781310c01bc86-page{% endcapture%}{% if section and section_id == section.id and headless == true %}
 {{ content_for_header }}
 {% render 'ecom_header', ECOM_THEME: true %}{% endif %}
-{{'ecom-6a5229a17c2474d3fc067bf2.css' | asset_url | stylesheet_tag }}
+{{'ecom-6a5230b9de43b12a8502176b.css' | asset_url | stylesheet_tag }}
 <script type="text/javascript" class="ecom-page-info">
  window.EComposer = window.EComposer || {};
- window.EComposer.TEMPLATE_ID="6a5229a17c2474d3fc067bf2";
- window.EComposer.PAGE = {"title":"Peak Flow","type":"page","slug":"ecom-69eb1f8f5ae781310c01bc86","plan_id":4,"template_id":"6a5229a17c2474d3fc067bf2"};
+ window.EComposer.TEMPLATE_ID="6a5230b9de43b12a8502176b";
+ window.EComposer.PAGE = {"title":"test","type":"page","slug":"ecom-69eb1f8f5ae781310c01bc861","plan_id":4,"template_id":"6a5230b9de43b12a8502176b"};
  </script>
-<div class="ecom-builder" id="ecom-69eb1f8f5ae781310c01bc86"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-gxje1rimlg"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-7fqmqg0vdh"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-gxje1rimlg" deep="2">
+<div class="ecom-builder" id="ecom-69eb1f8f5ae781310c01bc86"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-cap8ii5hrqs"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-3mfeh95301e"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-cap8ii5hrqs" deep="2">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -55,13 +55,7 @@
 #pkfp .pk-btn-o:hover{border-color:rgba(15,15,15,.6)}
 /* ══ S1 · HERO ══════════════════════════════════════════════════════ */
 #pkfp ._pk1{position:relative;height:100vh;min-height:720px;overflow:hidden;background:#0f0f0f}
-#pkfp ._pk1-vid{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center center!important}
-#pkfp ._pk1-vid-pc{display:none!important}
-#pkfp ._pk1-vid-mobile{display:block!important}
-@media(min-width:768px){
- #pkfp ._pk1-vid-pc{display:block!important}
- #pkfp ._pk1-vid-mobile{display:none!important}
-}
+#pkfp ._pk1-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
 #pkfp ._pk1-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 0%,rgba(0,0,0,.4) 48%,rgba(0,0,0,.45) 100%)}
 #pkfp ._pk1-c{position:relative;z-index:2;height:100%;padding:0 64px 72px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start}
 #pkfp ._pk1-in{max-width:880px;display:flex;flex-direction:column;gap:32px}
@@ -249,11 +243,8 @@
 </style>
 <div id="pkfp">
 <section class="_pk1">
- <video class="_pk1-vid _pk1-vid-pc" autoplay muted loop playsinline webkit-playsinline preload="auto">
+ <video class="_pk1-bg" autoplay muted loop playsinline webkit-playsinline>
  <source src="https://cdn.shopify.com/videos/c/o/v/e95c31afeb01432f8a5cf23b17a67d42.mp4" type="video/mp4">
- </video>
- <video class="_pk1-vid _pk1-vid-mobile" autoplay muted loop playsinline webkit-playsinline preload="auto">
- <source src="https://cdn.shopify.com/videos/c/o/v/5b5357d924e7494fbf45a8ae8a87689f.mp4" type="video/mp4">
  </video>
  <div class="_pk1-ov"></div>
  <div class="_pk1-c">
@@ -531,31 +522,12 @@
  },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
  els.forEach(function(e){io.observe(e);});
 })();
-// ── Hero video — vynútené auto-spustenie (iOS/Android fallback) ──────
-(function(){
- var vids=document.querySelectorAll('#pkfp ._pk1-vid');
- if(!vids.length)return;
- function play(){
- vids.forEach(function(v){
- // len viditeľné video (druhé je display:none podľa breakpointu)
- if(v.offsetParent===null)return;
- v.muted=true;v.defaultMuted=true;v.setAttribute('muted','');
- var p=v.play&&v.play();
- if(p&&p.catch)p.catch(function(){});
- });
- }
- play();
- window.addEventListener('load',play);
- ['touchstart','click','scroll'].forEach(function(ev){
- document.addEventListener(ev,play,{once:true,passive:true});
- });
-})();
 </script>
 </div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
 </div></div>
 {% schema %}
 {
- "name": "Peak Flow",
+ "name": "test",
  "settings": [
  {
  "type": "header",
@@ -564,7 +536,7 @@
  },
  {
  "type": "header",
- "content": "[EDIT WITH EComposer APP \u2192](https:\/\/admin.shopify.com\/store\/sportfinder-international\/apps\/ecomposer?open_builder=1&page=page&id=6a5229a17c2474d3fc067bf2&utm_source=theme-customize)",
+ "content": "[EDIT WITH EComposer APP \u2192](https:\/\/admin.shopify.com\/store\/sportfinder-international\/apps\/ecomposer?open_builder=1&page=page&id=6a5230b9de43b12a8502176b&utm_source=theme-customize)",
  "info": "(*You must install the app to start editing this section [Learn more](https:\/\/help.ecomposer.io\/docs\/getting-started\/installation\/))"
  }
  ]
