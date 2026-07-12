@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-07-11 12:02:24
+ At 2026-07-12 12:47:39
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -18,9 +18,9 @@
 <script type="text/javascript" class="ecom-page-info">
  window.EComposer = window.EComposer || {};
  window.EComposer.TEMPLATE_ID="preview-template-page";
- window.EComposer.PAGE = {"title":"test","type":"page","slug":"ecom-preview-page","plan_id":4,"template_id":"preview-template-page"};
+ window.EComposer.PAGE = {"title":"PeakFLow","type":"page","slug":"ecom-preview-page","plan_id":4,"template_id":"preview-template-page"};
  </script>
-<div class="ecom-builder" id="ecom-preview-page"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-cap8ii5hrqs"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-3mfeh95301e"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-cap8ii5hrqs" deep="2">
+<div class="ecom-builder" id="ecom-preview-page"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-k9p9h97oc7j"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-axkgupatvxg"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-k9p9h97oc7j" deep="2">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -243,9 +243,29 @@
 </style>
 <div id="pkfp">
 <section class="_pk1">
- <video class="_pk1-bg" autoplay muted loop playsinline webkit-playsinline>
- <source src="https://cdn.shopify.com/videos/c/o/v/e95c31afeb01432f8a5cf23b17a67d42.mp4" type="video/mp4">
- </video>
+ <video id="_pk1-vid" class="_pk1-bg" autoplay muted loop playsinline webkit-playsinline></video>
+<script>
+(function(){
+ var PC='https://cdn.shopify.com/videos/c/o/v/e95c31afeb01432f8a5cf23b17a67d42.mp4';
+ var MOB='https://cdn.shopify.com/videos/c/o/v/5b5357d924e7494fbf45a8ae8a87689f.mp4';
+ var v=document.getElementById('_pk1-vid');
+ if(!v)return;
+ v.setAttribute('playsinline','');
+ v.setAttribute('muted','');
+ v.muted=true;
+ v.src=window.innerWidth>=768?PC:MOB;
+ function tryPlay(){v.muted=true;v.play().catch(function(){});}
+ v.addEventListener('canplay',tryPlay,{once:true});
+ v.load();
+ tryPlay();
+ function gesture(){tryPlay();document.removeEventListener('click',gesture);document.removeEventListener('touchstart',gesture);}
+ document.addEventListener('click',gesture);
+ document.addEventListener('touchstart',gesture,{passive:true});
+ if('IntersectionObserver' in window){
+ new IntersectionObserver(function(e){if(e[0].isIntersecting)tryPlay();},{threshold:0.1}).observe(v);
+ }
+})();
+</script>
  <div class="_pk1-ov"></div>
  <div class="_pk1-c">
  <div class="_pk1-in pk-r">
@@ -527,7 +547,7 @@
 </div></div>
 {% schema %}
 {
- "name": "test",
+ "name": "PeakFLow",
  "settings": [
  {
  "type": "header",
