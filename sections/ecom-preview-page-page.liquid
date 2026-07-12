@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-07-12 12:47:39
+ At 2026-07-12 13:47:10
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -18,9 +18,9 @@
 <script type="text/javascript" class="ecom-page-info">
  window.EComposer = window.EComposer || {};
  window.EComposer.TEMPLATE_ID="preview-template-page";
- window.EComposer.PAGE = {"title":"PeakFLow","type":"page","slug":"ecom-preview-page","plan_id":4,"template_id":"preview-template-page"};
+ window.EComposer.PAGE = {"title":"test1","type":"page","slug":"ecom-preview-page","plan_id":4,"template_id":"preview-template-page"};
  </script>
-<div class="ecom-builder" id="ecom-preview-page"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-k9p9h97oc7j"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-axkgupatvxg"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-k9p9h97oc7j" deep="2">
+<div class="ecom-builder" id="ecom-preview-page"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-zq1zdrrpkz"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-ie84b5trgcm"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-zq1zdrrpkz" deep="2">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -202,24 +202,30 @@
  #pkfp ._pk1-h1{font-size:clamp(54px,15vw,78px)}
  #pkfp ._pk1-body{font-size:15px}
  #pkfp ._pk1-ctas{flex-direction:column;align-items:stretch;gap:10px;margin-top:28px}
- /* S2 */
+ /* S2 — 5 princípov: horizontálny scroll kompaktných kariet */
  #pkfp ._pk2{padding:64px 0}
- #pkfp ._pk2-grid{grid-template-columns:1fr;gap:28px}
+ #pkfp ._pk2-grid{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;margin-inline:-22px;padding:0 22px 8px;scrollbar-width:none}
+ #pkfp ._pk2-grid::-webkit-scrollbar{display:none}
+ #pkfp ._pk2-cell{flex:0 0 74%;scroll-snap-align:start;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:10px;padding:24px 22px}
  /* S3 */
  #pkfp ._pk3-grid{grid-template-columns:1fr}
  #pkfp ._pk3-img-wrap{height:400px}
  #pkfp ._pk3-text{padding:52px 22px}
  #pkfp ._pk3-stats{gap:28px}
- /* S4 */
+ /* S4 — Materiály: horizontálny scroll (button pod nimi ostáva normálne) */
  #pkfp ._pk4{padding:64px 0}
- #pkfp ._pk4-grid{grid-template-columns:1fr}
+ #pkfp ._pk4-grid{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;margin-inline:-22px;padding:0 22px 8px;scrollbar-width:none}
+ #pkfp ._pk4-grid::-webkit-scrollbar{display:none}
+ #pkfp ._pk4-card{flex:0 0 80%;scroll-snap-align:start}
  /* S6 */
  #pkfp ._pk6{padding:64px 0}
  #pkfp ._pk6-grid{grid-template-columns:1fr;gap:12px}
  #pkfp ._pk6-card{aspect-ratio:4/3.6}
- /* S7 */
+ /* S7 — Systém vrstiev: horizontálny scroll (diagram pod nimi ostáva) */
  #pkfp ._pk7{padding:64px 0}
- #pkfp ._pk7-grid{grid-template-columns:1fr}
+ #pkfp ._pk7-grid{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;margin-inline:-22px;padding:0 22px 8px;scrollbar-width:none}
+ #pkfp ._pk7-grid::-webkit-scrollbar{display:none}
+ #pkfp ._pk7-card{flex:0 0 80%;scroll-snap-align:start}
  #pkfp ._pk7-diagram{flex-wrap:wrap;gap:6px 10px;justify-content:flex-start;margin-top:28px}
  #pkfp ._pk7-line{display:none}
  /* S9 */
@@ -270,10 +276,10 @@
  <div class="_pk1-c">
  <div class="_pk1-in pk-r">
  <h1 class="_pk1-h1">Peak<br><span style="color:var(--pk-red)">Flow.</span></h1>
- <p class="_pk1-body">Naša najvýkonnejšia rada. Membrány, izolácie a strihy pre tých, ktorí idú za hranicu — testované v reálnych horách Karpát.</p>
+ <p class="_pk1-body">Our highest-performance line. Membranes, insulations and cuts for those who go beyond the limit — tested in the real mountains of the Carpathians.</p>
  <div class="_pk1-ctas">
- <a href="#pk-produkty" class="pk-btn-r">Preskúmať kolekciu →</a>
- <a href="#pk-technologie" class="pk-btn-g">Technológie</a>
+ <a href="#pk-produkty" class="pk-btn-r">Explore collection →</a>
+ <a href="#pk-technologie" class="pk-btn-g">Technologies</a>
  </div>
  </div>
  </div>
@@ -281,15 +287,15 @@
 <section class="_pk2" id="pk-filozofia">
  <div class="pk-wrap">
  <div class="_pk2-intro pk-r">
- <span class="pk-ey">Filozofia</span>
- <h2 class="_pk2-h2">Päť princípov, na ktorých <span style="color:var(--pk-red)">staviame</span> každý kus.</h2>
+ <span class="pk-ey">Philosophy</span>
+ <h2 class="_pk2-h2">Five principles we <span style="color:var(--pk-red)">build</span> every piece on.</h2>
  </div>
  <div class="_pk2-grid">
- <div class="_pk2-cell pk-r" style="--d:0ms"><span class="_pk2-num">01</span><h3 class="_pk2-title">Nekompromisný výkon</h3><p class="_pk2-desc">Žiadne ústupky. Každý kus obstojí tam, kde bežná výbava končí — vo vetre, mraze a výške.</p></div>
- <div class="_pk2-cell pk-r" style="--d:80ms"><span class="_pk2-num">02</span><h3 class="_pk2-title">Inovácia</h3><p class="_pk2-desc">Membrány, izolácie a strihy, ktoré vznikajú v spolupráci s pretekármi a vyvíjajú sa každú sezónu.</p></div>
- <div class="_pk2-cell pk-r" style="--d:160ms"><span class="_pk2-num">03</span><h3 class="_pk2-title">Ľahká konštrukcia</h3><p class="_pk2-desc">Maximálna ochrana pri minimálnej hmotnosti. Každý gram má svoj dôvod alebo ide preč.</p></div>
- <div class="_pk2-cell pk-r" style="--d:240ms"><span class="_pk2-num">04</span><h3 class="_pk2-title">Technická precíznosť</h3><p class="_pk2-desc">Ergonomické strihy, presné prešitia a detaily premyslené do posledného zipsu.</p></div>
- <div class="_pk2-cell pk-r" style="--d:320ms"><span class="_pk2-num">05</span><h3 class="_pk2-title">Pre extrémne podmienky</h3><p class="_pk2-desc">Vyvinuté a testované v reálnom horskom teréne — nie v laboratóriu, ale na hrebeni.</p></div>
+ <div class="_pk2-cell pk-r" style="--d:0ms"><span class="_pk2-num">01</span><h3 class="_pk2-title">Uncompromising performance</h3><p class="_pk2-desc">No concessions. Every piece holds where ordinary gear ends — in wind, frost and altitude.</p></div>
+ <div class="_pk2-cell pk-r" style="--d:80ms"><span class="_pk2-num">02</span><h3 class="_pk2-title">Innovation</h3><p class="_pk2-desc">Membranes, insulations and cuts developed together with racers and refined every season.</p></div>
+ <div class="_pk2-cell pk-r" style="--d:160ms"><span class="_pk2-num">03</span><h3 class="_pk2-title">Lightweight build</h3><p class="_pk2-desc">Maximum protection at minimum weight. Every gram has a reason or it goes.</p></div>
+ <div class="_pk2-cell pk-r" style="--d:240ms"><span class="_pk2-num">04</span><h3 class="_pk2-title">Technical precision</h3><p class="_pk2-desc">Ergonomic cuts, precise stitching and details thought through to the last zipper.</p></div>
+ <div class="_pk2-cell pk-r" style="--d:320ms"><span class="_pk2-num">05</span><h3 class="_pk2-title">For extreme conditions</h3><p class="_pk2-desc">Developed and tested in real mountain terrain — not in a lab, but on the ridge.</p></div>
  </div>
  </div>
 </section>
@@ -313,28 +319,28 @@
 <section class="_pk4" id="pk-technologie">
  <div class="pk-wrap">
  <div class="_pk4-hdr pk-r">
- <span class="pk-ey">Prémiové technológie</span>
- <h2 class="_pk4-h2">Materiály, ktorým môžeš veriť</h2>
+ <span class="pk-ey">Premium technologies</span>
+ <h2 class="_pk4-h2">Materials you can trust</h2>
  </div>
  <div class="_pk4-grid">
  <div class="_pk4-card pk-r" style="--d:0ms">
- <div class="_pk4-card-top"><span class="_pk4-tag">Technické materiály</span></div>
+ <div class="_pk4-card-top"><span class="_pk4-tag">Technical fabrics</span></div>
  <h3 class="_pk4-name">Pertex®</h3>
- <p class="_pk4-desc">Ľahké technické materiály s technológiou Diamond Fuse™, ktorá vďaka diamantovej štruktúre vlákien zvyšuje odolnosť pri zachovaní nízkej hmotnosti. Poskytujú spoľahlivú ochranu pred nepriaznivým počasím a vysoký komfort pri pohybe.</p>
+ <p class="_pk4-desc">Lightweight technical fabrics with Diamond Fuse™ technology, whose diamond fibre structure boosts durability while keeping low weight. They deliver reliable protection from harsh weather and high comfort in motion.</p>
  </div>
  <div class="_pk4-card pk-r" style="--d:70ms">
- <div class="_pk4-card-top"><span class="_pk4-tag">Membrána</span></div>
+ <div class="_pk4-card-top"><span class="_pk4-tag">Membrane</span></div>
  <h3 class="_pk4-name">Toray® Dermizax™</h3>
- <p class="_pk4-desc">Hydrofilná neporézna membrána odvádzajúca vlhkosť na molekulárnej úrovni, ktorá poskytuje vysokú vodoodolnosť, priedušnosť a pružnosť. Je základom našich prémiových lyžiarskych búnd a nohavíc do náročných podmienok.</p>
+ <p class="_pk4-desc">A hydrophilic non-porous membrane that wicks moisture at the molecular level, delivering high waterproofness, breathability and stretch. It is the foundation of our premium ski jackets and pants for demanding conditions.</p>
  </div>
  <div class="_pk4-card pk-r" style="--d:140ms">
- <div class="_pk4-card-top"><span class="_pk4-tag">Izolácia</span></div>
+ <div class="_pk4-card-top"><span class="_pk4-tag">Insulation</span></div>
  <h3 class="_pk4-name">PrimaLoft®</h3>
- <p class="_pk4-desc">Patentovaná syntetická izolácia z ultra jemných mikrovlákien, ktorá napodobňuje vlastnosti páperia. Poskytuje vysoký tepelný komfort aj vo vlhkom prostredí a využíva recyklované materiály ako udržateľnejšiu alternatívu.</p>
+ <p class="_pk4-desc">Patented synthetic insulation from ultra-fine microfibres that mimics the properties of down. It delivers high thermal comfort even in wet conditions and uses recycled materials as a more sustainable alternative.</p>
  </div>
  </div>
  <div class="_pk4-more pk-r">
- <a href="#" class="pk-btn-g">Preskúmať všetky technológie <span style="color:var(--pk-red)">→</span></a>
+ <a href="#" class="pk-btn-g">Explore all technologies <span style="color:var(--pk-red)">→</span></a>
  </div>
  </div>
 </section>
@@ -342,40 +348,40 @@
  <div class="pk-wrap">
  <div class="_pk6-hdr pk-r">
  <div style="display:flex;flex-direction:column;gap:18px">
- <span class="pk-ey">Kolekcie</span>
- <h2 class="_pk6-h2">Tri svety výkonu</h2>
+ <span class="pk-ey">Collections</span>
+ <h2 class="_pk6-h2">Three worlds of performance</h2>
  </div>
- <span class="_pk6-season">Sezóna 25/26</span>
+ <span class="_pk6-season">Season 25/26</span>
  </div>
  <div class="_pk6-grid">
  <a href="https://shop.northfinder.com/collections/activity-ski-touring" class="_pk6-card pk-r" style="--d:0ms">
  <img class="_pk6-card-img" src="https://northfinder.com/download/images/peak/man-navy.png" alt="Ski Touring">
  <div class="_pk6-grad"></div>
  <div class="_pk6-meta">
- <span class="_pk6-sk">Skialpinizmus</span>
+ <span class="_pk6-sk">Ski touring</span>
  <h3 class="_pk6-name">Ski Touring</h3>
- <p class="_pk6-desc">Ľahké vrstvenie pre výstup aj zjazd. Maximálna priedušnosť, minimálna hmotnosť.</p>
- <span class="_pk6-cta">32 kúskov →</span>
+ <p class="_pk6-desc">Lightweight layering for ascent and descent. Maximum breathability, minimum weight.</p>
+ <span class="_pk6-cta">32 pieces →</span>
  </div>
  </a>
  <a href="https://shop.northfinder.com/collections/activity-hiking" class="_pk6-card pk-r" style="--d:90ms">
  <img class="_pk6-card-img" src="https://northfinder.com/download/images/peak/woman-pink.png" alt="High Performance Hiking">
  <div class="_pk6-grad"></div>
  <div class="_pk6-meta">
- <span class="_pk6-sk">Vysokohorská turistika</span>
+ <span class="_pk6-sk">High-mountain hiking</span>
  <h3 class="_pk6-name">High Performance Hiking</h3>
- <p class="_pk6-desc">Odolné shelly a strečové vrstvy pre dlhé dni nad hranicou lesa.</p>
- <span class="_pk6-cta">41 kúskov →</span>
+ <p class="_pk6-desc">Durable shells and stretch layers for long days above the treeline.</p>
+ <span class="_pk6-cta">41 pieces →</span>
  </div>
  </a>
  <a href="https://shop.northfinder.com/collections/peak-flow-series" class="_pk6-card pk-r" style="--d:180ms">
  <img class="_pk6-card-img" src="https://northfinder.com/download/images/peak/man-blue.png" alt="Luxury Skiwear">
  <div class="_pk6-grad"></div>
  <div class="_pk6-meta">
- <span class="_pk6-sk">Luxusné lyžiarske</span>
+ <span class="_pk6-sk">Luxury skiwear</span>
  <h3 class="_pk6-name">Luxury Skiwear</h3>
- <p class="_pk6-desc">Prémiové materiály a strihy pre tých, čo nerobia kompromisy ani na zjazdovke.</p>
- <span class="_pk6-cta">28 kúskov →</span>
+ <p class="_pk6-desc">Premium materials and cuts for those who make no compromises, even on the slope.</p>
+ <span class="_pk6-cta">28 pieces →</span>
  </div>
  </a>
  </div>
@@ -384,125 +390,125 @@
 <section class="_pk7" id="pk-vrstvenie">
  <div class="pk-wrap-sm">
  <div class="_pk7-hdr pk-r">
- <span class="pk-ey" style="color:#888;--pk-red:#888">Vrstvenie</span>
- <h2 class="_pk7-h2">Systém troch vrstiev</h2>
- <p class="_pk7-lead">Žiadny jednotlivý kus nezvládne všetko. Peak Flow je navrhnutý ako systém — vrstvy, ktoré spolu pracujú a prispôsobíš ich počasiu aj záťaži.</p>
+ <span class="pk-ey" style="color:#888;--pk-red:#888">Layering</span>
+ <h2 class="_pk7-h2">The three-layer system</h2>
+ <p class="_pk7-lead">No single piece can do it all. Peak Flow is designed as a system — layers that work together and adapt to weather and workload.</p>
  </div>
  <div class="_pk7-grid">
  <a href="#" class="_pk7-card pk-r" style="--d:0ms">
  <div class="_pk7-strip" style="background:#e5e0d4"></div>
  <div class="_pk7-inner">
- <div class="_pk7-top"><span class="_pk7-n">01</span><span class="_pk7-role">Odvod vlhkosti</span></div>
- <h3 class="_pk7-title">Základná vrstva</h3>
- <p class="_pk7-desc">Termoprádlo, ktoré drží pokožku suchú a teplú. Základ každého systému.</p>
- <span class="_pk7-cta">Nakúpiť základnú vrstvu <span>→</span></span>
+ <div class="_pk7-top"><span class="_pk7-n">01</span><span class="_pk7-role">Moisture wicking</span></div>
+ <h3 class="_pk7-title">Base layer</h3>
+ <p class="_pk7-desc">Baselayer that keeps skin dry and warm. The foundation of every system.</p>
+ <span class="_pk7-cta">Shop the base layer <span>→</span></span>
  </div>
  </a>
  <a href="#" class="_pk7-card pk-r" style="--d:90ms">
  <div class="_pk7-strip" style="background:#c8c2b4"></div>
  <div class="_pk7-inner">
- <div class="_pk7-top"><span class="_pk7-n">02</span><span class="_pk7-role">Tepelná izolácia</span></div>
- <h3 class="_pk7-title">Stredná vrstva</h3>
- <p class="_pk7-desc">Polartec® alebo páperie — zachytáva teplo a reguluje teplotu počas pohybu.</p>
- <span class="_pk7-cta">Nakúpiť strednú vrstvu <span>→</span></span>
+ <div class="_pk7-top"><span class="_pk7-n">02</span><span class="_pk7-role">Thermal insulation</span></div>
+ <h3 class="_pk7-title">Mid layer</h3>
+ <p class="_pk7-desc">Polartec® or down — traps heat and regulates temperature during movement.</p>
+ <span class="_pk7-cta">Shop the mid layer <span>→</span></span>
  </div>
  </a>
  <a href="#" class="_pk7-card pk-r" style="--d:180ms">
  <div class="_pk7-strip" style="background:var(--pk-red)"></div>
  <div class="_pk7-inner">
- <div class="_pk7-top"><span class="_pk7-n">03</span><span class="_pk7-role">Ochrana pred živlami</span></div>
- <h3 class="_pk7-title">Vrchná vrstva</h3>
- <p class="_pk7-desc">Dermizax® shell, ktorý zastaví vietor, dážď a sneh. Posledná línia obrany.</p>
- <span class="_pk7-cta">Nakúpiť vrchnú vrstvu <span>→</span></span>
+ <div class="_pk7-top"><span class="_pk7-n">03</span><span class="_pk7-role">Protection from the elements</span></div>
+ <h3 class="_pk7-title">Outer layer</h3>
+ <p class="_pk7-desc">A Dermizax® shell that stops wind, rain and snow. The last line of defence.</p>
+ <span class="_pk7-cta">Shop the outer layer <span>→</span></span>
  </div>
  </a>
  </div>
  <div class="_pk7-diagram pk-r">
- <span>Pokožka</span>
+ <span>Skin</span>
  <span class="_pk7-line"></span>
- <span>Vrstva 01</span>
+ <span>Layer 01</span>
  <span class="_pk7-arr">→</span>
- <span>Vrstva 02</span>
+ <span>Layer 02</span>
  <span class="_pk7-arr">→</span>
- <span>Vrstva 03</span>
+ <span>Layer 03</span>
  <span class="_pk7-line"></span>
- <span>Živly</span>
+ <span>Elements</span>
  </div>
  </div>
 </section>
 <section class="_pk9" id="pk-produkty">
  <div class="pk-wrap">
  <div class="_pk9-hdr pk-r">
- <span class="pk-ey">Produkty</span>
- <h2 class="_pk9-h2">Vrchol kolekcie</h2>
+ <span class="pk-ey">Products</span>
+ <h2 class="_pk9-h2">Peak of the collection</h2>
  </div>
  <div class="_pk9-grid">
  <a href="#" class="_pk9-item pk-r" style="--d:0ms">
  <div class="_pk9-img-wrap"><img src="https://b2b.northfinder.com/214704-original_default/bu-5501pro-panska-hardshellova-bunda-pertex-shield-3l-draci.webp" alt="Hardshell DRACI"></div>
  <div style="display:flex;flex-direction:column;gap:12px">
- <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Pánska technická bunda</span><span class="_pk9-name">Hardshell DRACI</span></div><span class="_pk9-price">249 €</span></div>
+ <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Men's technical jacket</span><span class="_pk9-name">Hardshell DRACI</span></div><span class="_pk9-price">249 €</span></div>
  <div class="_pk9-tags"><span class="_pk9-tag">Pertex® Shield</span><span class="_pk9-tag">3L</span><span class="_pk9-tag">Hardshell</span></div>
  </div>
  </a>
  <a href="#" class="_pk9-item pk-r" style="--d:70ms">
  <div class="_pk9-img-wrap"><img src="https://b2b.northfinder.com/189894-original_default/bu-6501pro-damska-hardshellova-bunda-pertex-shield-3l-dracia.webp" alt="Hardshell DRACIA"></div>
  <div style="display:flex;flex-direction:column;gap:12px">
- <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Dámska technická bunda</span><span class="_pk9-name">Hardshell DRACIA</span></div><span class="_pk9-price">229 €</span></div>
+ <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Women's technical jacket</span><span class="_pk9-name">Hardshell DRACIA</span></div><span class="_pk9-price">229 €</span></div>
  <div class="_pk9-tags"><span class="_pk9-tag">Pertex® Shield</span><span class="_pk9-tag">3L</span><span class="_pk9-tag">Hardshell</span></div>
  </div>
  </a>
  <a href="#" class="_pk9-item pk-r" style="--d:140ms">
  <div class="_pk9-img-wrap"><img src="https://b2b.northfinder.com/175964-original_default/no-5502pro-men-s-active-hybrid-softshell-pants-3l.webp" alt="Softshell nohavice GANEK"></div>
  <div style="display:flex;flex-direction:column;gap:12px">
- <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Pánske hybridné nohavice</span><span class="_pk9-name">Softshell nohavice GANEK</span></div><span class="_pk9-price">89 €</span></div>
- <div class="_pk9-tags"><span class="_pk9-tag">Hybridný softshell</span><span class="_pk9-tag">3L</span><span class="_pk9-tag">Celorozopínacie</span></div>
+ <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Men's hybrid pants</span><span class="_pk9-name">Softshell nohavice GANEK</span></div><span class="_pk9-price">89 €</span></div>
+ <div class="_pk9-tags"><span class="_pk9-tag">Hybrid softshell</span><span class="_pk9-tag">3L</span><span class="_pk9-tag">Full-zip</span></div>
  </div>
  </a>
  <a href="#" class="_pk9-item pk-r" style="--d:0ms">
  <div class="_pk9-img-wrap"><img src="https://b2b.northfinder.com/189003-original_default/damske-softshellove-nohavice-hybridne-celorozopinacie-belasa.webp" alt="Softshell nohavice BELASA"></div>
  <div style="display:flex;flex-direction:column;gap:12px">
- <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Dámske hybridné nohavice</span><span class="_pk9-name">Softshell nohavice BELASA</span></div><span class="_pk9-price">99 €</span></div>
- <div class="_pk9-tags"><span class="_pk9-tag">Hybridný softshell</span><span class="_pk9-tag">Strečové</span><span class="_pk9-tag">Celorozopínacie</span></div>
+ <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Women's hybrid pants</span><span class="_pk9-name">Softshell nohavice BELASA</span></div><span class="_pk9-price">99 €</span></div>
+ <div class="_pk9-tags"><span class="_pk9-tag">Hybrid softshell</span><span class="_pk9-tag">Stretch</span><span class="_pk9-tag">Full-zip</span></div>
  </div>
  </a>
  <a href="#" class="_pk9-item pk-r" style="--d:70ms">
  <div class="_pk9-img-wrap"><img src="https://b2b.northfinder.com/199361-original_default/mi-36511skp-panska-ski-turingova-mikina-z-techno-strecu-pre-aktivny-sport-sulov.webp" alt="Skialp mikina SULOV 1"></div>
  <div style="display:flex;flex-direction:column;gap:12px">
- <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Pánska skialp mikina</span><span class="_pk9-name">Skialp mikina SULOV 1</span></div><span class="_pk9-price">79 €</span></div>
- <div class="_pk9-tags"><span class="_pk9-tag">Dri-release®</span><span class="_pk9-tag">Techno streč</span><span class="_pk9-tag">Rýchloschnúca</span></div>
+ <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Men's ski-touring hoodie</span><span class="_pk9-name">Skialp mikina SULOV 1</span></div><span class="_pk9-price">79 €</span></div>
+ <div class="_pk9-tags"><span class="_pk9-tag">Dri-release®</span><span class="_pk9-tag">Techno stretch</span><span class="_pk9-tag">Quick-dry</span></div>
  </div>
  </a>
  <a href="#" class="_pk9-item pk-r" style="--d:140ms">
  <div class="_pk9-img-wrap"><img src="https://b2b.northfinder.com/199325-original_default/mi-46252skp-damska-ski-turingova-celorozopinacia-mikina-pre-aktivny-sport-zliechova2.webp" alt="Skialp mikina ZLIECHOVA 2"></div>
  <div style="display:flex;flex-direction:column;gap:12px">
- <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Dámska skialp mikina</span><span class="_pk9-name">Skialp mikina ZLIECHOVA 2</span></div><span class="_pk9-price">79 €</span></div>
- <div class="_pk9-tags"><span class="_pk9-tag">Dri-release®</span><span class="_pk9-tag">Skialp</span><span class="_pk9-tag">Rýchloschnúca</span></div>
+ <div class="_pk9-info"><div style="display:flex;flex-direction:column;gap:4px"><span class="_pk9-cat">Women's ski-touring hoodie</span><span class="_pk9-name">Skialp mikina ZLIECHOVA 2</span></div><span class="_pk9-price">79 €</span></div>
+ <div class="_pk9-tags"><span class="_pk9-tag">Dri-release®</span><span class="_pk9-tag">Ski touring</span><span class="_pk9-tag">Quick-dry</span></div>
  </div>
  </a>
  </div>
  <div class="_pk9-more pk-r">
- <a href="https://shop.northfinder.com/collections/peak-flow-series" class="pk-btn-g">Celá kolekcia Peak Flow™ <span style="color:var(--pk-red)">→</span></a>
+ <a href="https://shop.northfinder.com/collections/peak-flow-series" class="pk-btn-g">Full Peak Flow™ collection <span style="color:var(--pk-red)">→</span></a>
  </div>
  </div>
 </section>
 <section class="_pk10">
  <div class="pk-wrap-sm">
  <div class="_pk10-hdr pk-r">
- <span class="pk-ey">Prečo Peak Flow</span>
- <h2 class="_pk10-h2">Rozdiel, ktorý cítiš</h2>
+ <span class="pk-ey">Why Peak Flow</span>
+ <h2 class="_pk10-h2">The difference you feel</h2>
  </div>
  <div class="_pk10-table pk-r">
  <div class="_pk10-head">
  <span class="_pk10-hcol">Parameter</span>
  <span class="_pk10-hcol-peak"><span>▲</span> Peak Flow™</span>
- <span class="_pk10-hcol">Bežné oblečenie</span>
+ <span class="_pk10-hcol">Ordinary clothing</span>
  </div>
- <div class="_pk10-row"><span class="_pk10-cell">Vodný stĺpec</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> 20 000 mm</span><span class="_pk10-cell-std">5 000–10 000 mm</span></div>
- <div class="_pk10-row"><span class="_pk10-cell">Priedušnosť</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> 20 000 g/m²</span><span class="_pk10-cell-std">8 000 g/m²</span></div>
- <div class="_pk10-row"><span class="_pk10-cell">Švy</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> 100 % páskované</span><span class="_pk10-cell-std">Čiastočne / žiadne</span></div>
- <div class="_pk10-row"><span class="_pk10-cell">Testovanie</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> Reálny horský terén</span><span class="_pk10-cell-std">Laboratórne</span></div>
- <div class="_pk10-row"><span class="_pk10-cell">Strih</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> Ergonomický, artikulovaný</span><span class="_pk10-cell-std">Rovný</span></div>
- <div class="_pk10-row"><span class="_pk10-cell">Záruka výkonu</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> Pre extrémne podmienky</span><span class="_pk10-cell-std">Bežné použitie</span></div>
+ <div class="_pk10-row"><span class="_pk10-cell">Water column</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> 20 000 mm</span><span class="_pk10-cell-std">5 000–10 000 mm</span></div>
+ <div class="_pk10-row"><span class="_pk10-cell">Breathability</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> 20 000 g/m²</span><span class="_pk10-cell-std">8 000 g/m²</span></div>
+ <div class="_pk10-row"><span class="_pk10-cell">Seams</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> 100% taped</span><span class="_pk10-cell-std">Partial / none</span></div>
+ <div class="_pk10-row"><span class="_pk10-cell">Testing</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> Real mountain terrain</span><span class="_pk10-cell-std">Laboratory</span></div>
+ <div class="_pk10-row"><span class="_pk10-cell">Cut</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> Ergonomic, articulated</span><span class="_pk10-cell-std">Straight</span></div>
+ <div class="_pk10-row"><span class="_pk10-cell">Performance guarantee</span><span class="_pk10-cell-peak"><span class="_pk10-check">✓</span> For extreme conditions</span><span class="_pk10-cell-std">Everyday use</span></div>
  </div>
  </div>
 </section>
@@ -510,12 +516,12 @@
  <div class="_pk11-inner">
  <div class="_pk11-left pk-r">
  <span class="pk-ey">Peak Flow™</span>
- <h2 class="_pk11-h2">Vrchol čaká. <span style="color:var(--pk-red)">Buď pripravený.</span></h2>
+ <h2 class="_pk11-h2">The summit awaits. <span style="color:var(--pk-red)">Be ready.</span></h2>
  </div>
  <div class="_pk11-right pk-r" style="transition-delay:.08s">
- <p class="_pk11-body">Peak Flow nie je len kolekcia. Je to záväzok výkonu — postavený pre moment, keď na výbave naozaj záleží.</p>
+ <p class="_pk11-body">Peak Flow is not just a collection. It's a commitment to performance — built for the moment when your gear really matters.</p>
  <div class="_pk11-ctas">
- <a href="https://shop.northfinder.com/collections/peak-flow-series" class="pk-btn-r">Preskúmať kolekciu →</a>
+ <a href="https://shop.northfinder.com/collections/peak-flow-series" class="pk-btn-r">Explore collection →</a>
  <a href="https://shop.northfinder.com/collections/path-flow-series" class="pk-btn-g">Objaviť Path Flow™</a>
  </div>
  </div>
@@ -543,11 +549,85 @@
  els.forEach(function(e){io.observe(e);});
 })();
 </script>
+<script>
+(function(){
+ var loc=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
+ if(loc==='de-at'||loc==='at')loc='de';
+ var T={"sk": {"p1_body": "Naša najvýkonnejšia rada. Membrány, izolácie a strihy pre tých, ktorí idú za hranicu — testované v reálnych horách Karpát.", "p2_ey": "Filozofia", "p2_t1": "Nekompromisný výkon", "p2_t2": "Inovácia", "p2_t3": "Ľahká konštrukcia", "p2_t4": "Technická precíznosť", "p2_t5": "Pre extrémne podmienky", "p2_d1": "Žiadne ústupky. Každý kus obstojí tam, kde bežná výbava končí — vo vetre, mraze a výške.", "p2_d2": "Membrány, izolácie a strihy, ktoré vznikajú v spolupráci s pretekármi a vyvíjajú sa každú sezónu.", "p2_d3": "Maximálna ochrana pri minimálnej hmotnosti. Každý gram má svoj dôvod alebo ide preč.", "p2_d4": "Ergonomické strihy, presné prešitia a detaily premyslené do posledného zipsu.", "p2_d5": "Vyvinuté a testované v reálnom horskom teréne — nie v laboratóriu, ale na hrebeni.", "p4_ey": "Prémiové technológie", "p4_tg1": "Technické materiály", "p4_tg2": "Membrána", "p4_tg3": "Izolácia", "p4_d1": "Ľahké technické materiály s technológiou Diamond Fuse™, ktorá vďaka diamantovej štruktúre vlákien zvyšuje odolnosť pri zachovaní nízkej hmotnosti. Poskytujú spoľahlivú ochranu pred nepriaznivým počasím a vysoký komfort pri pohybe.", "p4_d2": "Hydrofilná neporézna membrána odvádzajúca vlhkosť na molekulárnej úrovni, ktorá poskytuje vysokú vodoodolnosť, priedušnosť a pružnosť. Je základom našich prémiových lyžiarskych búnd a nohavíc do náročných podmienok.", "p4_d3": "Patentovaná syntetická izolácia z ultra jemných mikrovlákien, ktorá napodobňuje vlastnosti páperia. Poskytuje vysoký tepelný komfort aj vo vlhkom prostredí a využíva recyklované materiály ako udržateľnejšiu alternatívu.", "p4_more": "Preskúmať všetky technológie", "p6_ey": "Kolekcie", "p6_h2": "Tri svety výkonu", "p6_season": "Sezóna 25/26", "p6_sk1": "Skialpinizmus", "p6_sk2": "Vysokohorská turistika", "p6_sk3": "Luxusné lyžiarske", "p6_d1": "Ľahké vrstvenie pre výstup aj zjazd. Maximálna priedušnosť, minimálna hmotnosť.", "p6_d2": "Odolné shelly a strečové vrstvy pre dlhé dni nad hranicou lesa.", "p6_d3": "Prémiové materiály a strihy pre tých, čo nerobia kompromisy ani na zjazdovke.", "p6_c1": "32 kúskov →", "p6_c2": "41 kúskov →", "p6_c3": "28 kúskov →", "p7_ey": "Vrstvenie", "p7_h2": "Systém troch vrstiev", "p7_lead": "Žiadny jednotlivý kus nezvládne všetko. Peak Flow je navrhnutý ako systém — vrstvy, ktoré spolu pracujú a prispôsobíš ich počasiu aj záťaži.", "p7_r1": "Odvod vlhkosti", "p7_r2": "Tepelná izolácia", "p7_r3": "Ochrana pred živlami", "p7_t1": "Základná vrstva", "p7_t2": "Stredná vrstva", "p7_t3": "Vrchná vrstva", "p7_d1": "Termoprádlo, ktoré drží pokožku suchú a teplú. Základ každého systému.", "p7_d2": "Polartec® alebo páperie — zachytáva teplo a reguluje teplotu počas pohybu.", "p7_d3": "Dermizax® shell, ktorý zastaví vietor, dážď a sneh. Posledná línia obrany.", "p7_c1": "Nakúpiť základnú vrstvu", "p7_c2": "Nakúpiť strednú vrstvu", "p7_c3": "Nakúpiť vrchnú vrstvu", "p7_dg1": "Pokožka", "p7_dg2": "Vrstva 01", "p7_dg3": "Vrstva 02", "p7_dg4": "Vrstva 03", "p7_dg5": "Živly", "p9_ey": "Produkty", "p9_h2": "Vrchol kolekcie", "p9_c1": "Pánska technická bunda", "p9_c2": "Dámska technická bunda", "p9_c3": "Pánske hybridné nohavice", "p9_c4": "Dámske hybridné nohavice", "p9_c5": "Pánska skialp mikina", "p9_c6": "Dámska skialp mikina", "p9_more": "Celá kolekcia Peak Flow™", "p10_ey": "Prečo Peak Flow", "p10_h2": "Rozdiel, ktorý cítiš", "p10_hc1": "Parameter", "p10_hc3": "Bežné oblečenie", "p10_p1": "Vodný stĺpec", "p10_p2": "Priedušnosť", "p10_p3": "Švy", "p10_p4": "Testovanie", "p10_p5": "Strih", "p10_p6": "Záruka výkonu", "p10_pk3": "100 % páskované", "p10_pk4": "Reálny horský terén", "p10_pk5": "Ergonomický, artikulovaný", "p10_pk6": "Pre extrémne podmienky", "p10_s3": "Čiastočne / žiadne", "p10_s4": "Laboratórne", "p10_s5": "Rovný", "p10_s6": "Bežné použitie", "p11_body": "Peak Flow nie je len kolekcia. Je to záväzok výkonu — postavený pre moment, keď na výbave naozaj záleží.", "hb1": "Preskúmať kolekciu →", "hb2": "Technológie", "cb1": "Preskúmať kolekciu", "h2s2": "Päť princípov, na ktorých <span style=\"color:var(--pk-red)\">staviame</span> každý kus.", "h2s11": "Vrchol čaká. <span style=\"color:var(--pk-red)\">Buď pripravený.</span>"}, "de": {"p1_body": "Unsere leistungsstärkste Linie. Membranen, Isolierungen und Schnitte für alle, die über die Grenze gehen — getestet in den echten Bergen der Karpaten.", "p2_ey": "Philosophie", "p2_t1": "Kompromisslose Leistung", "p2_t2": "Innovation", "p2_t3": "Leichte Konstruktion", "p2_t4": "Technische Präzision", "p2_t5": "Für extreme Bedingungen", "p2_d1": "Keine Zugeständnisse. Jedes Teil hält, wo gewöhnliche Ausrüstung endet — bei Wind, Frost und Höhe.", "p2_d2": "Membranen, Isolierungen und Schnitte, die gemeinsam mit Rennfahrern entstehen und jede Saison weiterentwickelt werden.", "p2_d3": "Maximaler Schutz bei minimalem Gewicht. Jedes Gramm hat einen Grund oder es fliegt raus.", "p2_d4": "Ergonomische Schnitte, präzise Nähte und bis zum letzten Reißverschluss durchdachte Details.", "p2_d5": "Entwickelt und getestet im echten Bergterrain — nicht im Labor, sondern auf dem Grat.", "p4_ey": "Premium-Technologien", "p4_tg1": "Technische Materialien", "p4_tg2": "Membran", "p4_tg3": "Isolierung", "p4_d1": "Leichte technische Materialien mit Diamond Fuse™-Technologie, deren Diamant-Faserstruktur die Haltbarkeit erhöht und dabei das Gewicht gering hält. Sie bieten zuverlässigen Schutz vor rauem Wetter und hohen Bewegungskomfort.", "p4_d2": "Eine hydrophile, porenfreie Membran, die Feuchtigkeit auf molekularer Ebene ableitet und hohe Wasserdichtigkeit, Atmungsaktivität und Elastizität bietet. Sie ist die Basis unserer Premium-Skijacken und -hosen für anspruchsvolle Bedingungen.", "p4_d3": "Patentierte synthetische Isolierung aus ultrafeinen Mikrofasern, die die Eigenschaften von Daunen nachahmt. Sie bietet hohen Wärmekomfort auch bei Nässe und nutzt recycelte Materialien als nachhaltigere Alternative.", "p4_more": "Alle Technologien entdecken", "p6_ey": "Kollektionen", "p6_h2": "Drei Welten der Leistung", "p6_season": "Saison 25/26", "p6_sk1": "Skitouring", "p6_sk2": "Hochgebirgs-Wandern", "p6_sk3": "Luxus-Skibekleidung", "p6_d1": "Leichtes Lagensystem für Aufstieg und Abfahrt. Maximale Atmungsaktivität, minimales Gewicht.", "p6_d2": "Robuste Shells und Stretch-Lagen für lange Tage oberhalb der Baumgrenze.", "p6_d3": "Premium-Materialien und Schnitte für alle, die auch auf der Piste keine Kompromisse eingehen.", "p6_c1": "32 Teile →", "p6_c2": "41 Teile →", "p6_c3": "28 Teile →", "p7_ey": "Lagensystem", "p7_h2": "Das Drei-Lagen-System", "p7_lead": "Kein einzelnes Teil kann alles. Peak Flow ist als System konzipiert — Lagen, die zusammenarbeiten und sich an Wetter und Belastung anpassen.", "p7_r1": "Feuchtigkeitsableitung", "p7_r2": "Wärmeisolierung", "p7_r3": "Schutz vor den Elementen", "p7_t1": "Basisschicht", "p7_t2": "Mittelschicht", "p7_t3": "Außenschicht", "p7_d1": "Funktionswäsche, die die Haut trocken und warm hält. Die Basis jedes Systems.", "p7_d2": "Polartec® oder Daunen — speichert Wärme und reguliert die Temperatur bei Bewegung.", "p7_d3": "Ein Dermizax®-Shell, der Wind, Regen und Schnee abhält. Die letzte Verteidigungslinie.", "p7_c1": "Basisschicht kaufen", "p7_c2": "Mittelschicht kaufen", "p7_c3": "Außenschicht kaufen", "p7_dg1": "Haut", "p7_dg2": "Schicht 01", "p7_dg3": "Schicht 02", "p7_dg4": "Schicht 03", "p7_dg5": "Elemente", "p9_ey": "Produkte", "p9_h2": "Höhepunkt der Kollektion", "p9_c1": "Herren-Technikjacke", "p9_c2": "Damen-Technikjacke", "p9_c3": "Herren-Hybridhose", "p9_c4": "Damen-Hybridhose", "p9_c5": "Herren-Skitouring-Hoodie", "p9_c6": "Damen-Skitouring-Hoodie", "p9_more": "Gesamte Peak Flow™-Kollektion", "p10_ey": "Warum Peak Flow", "p10_h2": "Der Unterschied, den du spürst", "p10_hc1": "Parameter", "p10_hc3": "Gewöhnliche Kleidung", "p10_p1": "Wassersäule", "p10_p2": "Atmungsaktivität", "p10_p3": "Nähte", "p10_p4": "Tests", "p10_p5": "Schnitt", "p10_p6": "Leistungsgarantie", "p10_pk3": "100 % getapt", "p10_pk4": "Echtes Bergterrain", "p10_pk5": "Ergonomisch, artikuliert", "p10_pk6": "Für extreme Bedingungen", "p10_s3": "Teilweise / keine", "p10_s4": "Labor", "p10_s5": "Gerade", "p10_s6": "Alltagsgebrauch", "p11_body": "Peak Flow ist nicht nur eine Kollektion. Es ist ein Bekenntnis zur Leistung — gebaut für den Moment, in dem deine Ausrüstung wirklich zählt.", "hb1": "Kollektion entdecken →", "hb2": "Technologien", "cb1": "Kollektion entdecken", "h2s2": "Fünf Prinzipien, auf denen wir jedes Teil <span style=\"color:var(--pk-red)\">aufbauen</span>.", "h2s11": "Der Gipfel wartet. <span style=\"color:var(--pk-red)\">Sei bereit.</span>"}, "hr": {"p1_body": "Naša najzahtjevnija linija. Membrane, izolacije i krojevi za one koji idu preko granice — testirano u pravim planinama Karpata.", "p2_ey": "Filozofija", "p2_t1": "Beskompromisna izvedba", "p2_t2": "Inovacija", "p2_t3": "Lagana konstrukcija", "p2_t4": "Tehnička preciznost", "p2_t5": "Za ekstremne uvjete", "p2_d1": "Bez ustupaka. Svaki komad izdržava ondje gdje obična oprema završava — na vjetru, mrazu i visini.", "p2_d2": "Membrane, izolacije i krojevi razvijeni zajedno s trkačima i usavršavani svake sezone.", "p2_d3": "Maksimalna zaštita uz minimalnu težinu. Svaki gram ima razlog ili odlazi.", "p2_d4": "Ergonomski krojevi, precizni šavovi i detalji promišljeni do posljednjeg patentnog zatvarača.", "p2_d5": "Razvijeno i testirano u pravom planinskom terenu — ne u laboratoriju, nego na grebenu.", "p4_ey": "Vrhunske tehnologije", "p4_tg1": "Tehnički materijali", "p4_tg2": "Membrana", "p4_tg3": "Izolacija", "p4_d1": "Lagani tehnički materijali s tehnologijom Diamond Fuse™, čija dijamantna struktura vlakana povećava izdržljivost uz malu težinu. Pružaju pouzdanu zaštitu od nevremena i visok komfor u pokretu.", "p4_d2": "Hidrofilna neporozna membrana koja odvodi vlagu na molekularnoj razini te pruža visoku vodootpornost, prozračnost i elastičnost. Osnova je naših vrhunskih skijaških jakni i hlača za zahtjevne uvjete.", "p4_d3": "Patentirana sintetička izolacija od ultrafinih mikrovlakana koja oponaša svojstva pahulja. Pruža visok toplinski komfor i u vlažnim uvjetima te koristi reciklirane materijale kao održiviju alternativu.", "p4_more": "Istražite sve tehnologije", "p6_ey": "Kolekcije", "p6_h2": "Tri svijeta izvedbe", "p6_season": "Sezona 25/26", "p6_sk1": "Ski turing", "p6_sk2": "Visokoplaninsko planinarenje", "p6_sk3": "Luksuzna skijaška odjeća", "p6_d1": "Lagano slojevanje za uspon i spust. Maksimalna prozračnost, minimalna težina.", "p6_d2": "Izdržljive ljuske i rastezljivi slojevi za duge dane iznad granice šume.", "p6_d3": "Vrhunski materijali i krojevi za one koji ne rade kompromise ni na stazi.", "p6_c1": "32 komada →", "p6_c2": "41 komad →", "p6_c3": "28 komada →", "p7_ey": "Slojevanje", "p7_h2": "Sustav triju slojeva", "p7_lead": "Nijedan pojedinačni komad ne može sve. Peak Flow je osmišljen kao sustav — slojevi koji rade zajedno i prilagođavaju se vremenu i naporu.", "p7_r1": "Odvod vlage", "p7_r2": "Toplinska izolacija", "p7_r3": "Zaštita od stihije", "p7_t1": "Osnovni sloj", "p7_t2": "Srednji sloj", "p7_t3": "Vanjski sloj", "p7_d1": "Rublje koje kožu drži suhom i toplom. Temelj svakog sustava.", "p7_d2": "Polartec® ili paperje — zadržava toplinu i regulira temperaturu tijekom kretanja.", "p7_d3": "Dermizax® ljuska koja zaustavlja vjetar, kišu i snijeg. Posljednja linija obrane.", "p7_c1": "Kupi osnovni sloj", "p7_c2": "Kupi srednji sloj", "p7_c3": "Kupi vanjski sloj", "p7_dg1": "Koža", "p7_dg2": "Sloj 01", "p7_dg3": "Sloj 02", "p7_dg4": "Sloj 03", "p7_dg5": "Stihija", "p9_ey": "Proizvodi", "p9_h2": "Vrhunac kolekcije", "p9_c1": "Muška tehnička jakna", "p9_c2": "Ženska tehnička jakna", "p9_c3": "Muške hibridne hlače", "p9_c4": "Ženske hibridne hlače", "p9_c5": "Muška ski-touring majica", "p9_c6": "Ženska ski-touring majica", "p9_more": "Cijela Peak Flow™ kolekcija", "p10_ey": "Zašto Peak Flow", "p10_h2": "Razlika koju osjetiš", "p10_hc1": "Parametar", "p10_hc3": "Obična odjeća", "p10_p1": "Vodeni stupac", "p10_p2": "Prozračnost", "p10_p3": "Šavovi", "p10_p4": "Testiranje", "p10_p5": "Kroj", "p10_p6": "Jamstvo izvedbe", "p10_pk3": "100 % lijepljeni", "p10_pk4": "Pravi planinski teren", "p10_pk5": "Ergonomski, zglobni", "p10_pk6": "Za ekstremne uvjete", "p10_s3": "Djelomično / nema", "p10_s4": "Laboratorij", "p10_s5": "Ravan", "p10_s6": "Svakodnevna uporaba", "p11_body": "Peak Flow nije samo kolekcija. To je predanost izvedbi — stvoreno za trenutak kada tvoja oprema stvarno ima značaj.", "hb1": "Istraži kolekciju →", "hb2": "Tehnologije", "cb1": "Istraži kolekciju", "h2s2": "Pet načela na kojima <span style=\"color:var(--pk-red)\">gradimo</span> svaki komad.", "h2s11": "Vrh čeka. <span style=\"color:var(--pk-red)\">Budi spreman.</span>"}, "sl": {"p1_body": "Naša najzmogljivejša linija. Membrane, izolacije in kroji za tiste, ki gredo čez mejo — preizkušeno v pravih gorah Karpatov.", "p2_ey": "Filozofija", "p2_t1": "Brezkompromisna zmogljivost", "p2_t2": "Inovacija", "p2_t3": "Lahka konstrukcija", "p2_t4": "Tehnična natančnost", "p2_t5": "Za ekstremne razmere", "p2_d1": "Brez popuščanja. Vsak kos zdrži tam, kjer se navadna oprema konča — v vetru, mrazu in višini.", "p2_d2": "Membrane, izolacije in kroji, razviti skupaj s tekmovalci in izpopolnjeni vsako sezono.", "p2_d3": "Največja zaščita pri najmanjši teži. Vsak gram ima razlog ali gre stran.", "p2_d4": "Ergonomski kroji, natančni šivi in detajli, premišljeni do zadnje zadrge.", "p2_d5": "Razvito in preizkušeno v pravem gorskem terenu — ne v laboratoriju, ampak na grebenu.", "p4_ey": "Vrhunske tehnologije", "p4_tg1": "Tehnični materiali", "p4_tg2": "Membrana", "p4_tg3": "Izolacija", "p4_d1": "Lahki tehnični materiali s tehnologijo Diamond Fuse™, katere diamantna struktura vlaken poveča trpežnost ob nizki teži. Nudijo zanesljivo zaščito pred vremenom in visoko udobje pri gibanju.", "p4_d2": "Hidrofilna neporozna membrana, ki odvaja vlago na molekularni ravni ter nudi visoko vodoodpornost, zračnost in prožnost. Je osnova naših vrhunskih smučarskih jakn in hlač za zahtevne razmere.", "p4_d3": "Patentirana sintetična izolacija iz ultrafinih mikrovlaken, ki posnema lastnosti puha. Nudi visoko toplotno udobje tudi v vlažnih razmerah in uporablja reciklirane materiale kot bolj trajnostno alternativo.", "p4_more": "Razišči vse tehnologije", "p6_ey": "Kolekcije", "p6_h2": "Trije svetovi zmogljivosti", "p6_season": "Sezona 25/26", "p6_sk1": "Turno smučanje", "p6_sk2": "Visokogorsko pohodništvo", "p6_sk3": "Luksuzna smučarska oblačila", "p6_d1": "Lahko plastenje za vzpon in spust. Največja zračnost, najmanjša teža.", "p6_d2": "Vzdržljive lupine in raztegljive plasti za dolge dni nad gozdno mejo.", "p6_d3": "Vrhunski materiali in kroji za tiste, ki ne sklepajo kompromisov niti na progi.", "p6_c1": "32 kosov →", "p6_c2": "41 kosov →", "p6_c3": "28 kosov →", "p7_ey": "Plastenje", "p7_h2": "Sistem treh plasti", "p7_lead": "Noben posamezen kos ne zmore vsega. Peak Flow je zasnovan kot sistem — plasti, ki delujejo skupaj in se prilagajajo vremenu in obremenitvi.", "p7_r1": "Odvajanje vlage", "p7_r2": "Toplotna izolacija", "p7_r3": "Zaščita pred vremenom", "p7_t1": "Osnovna plast", "p7_t2": "Srednja plast", "p7_t3": "Zunanja plast", "p7_d1": "Perilo, ki kožo ohranja suho in toplo. Temelj vsakega sistema.", "p7_d2": "Polartec® ali puh — zadržuje toploto in uravnava temperaturo med gibanjem.", "p7_d3": "Dermizax® lupina, ki ustavi veter, dež in sneg. Zadnja obrambna linija.", "p7_c1": "Kupi osnovno plast", "p7_c2": "Kupi srednjo plast", "p7_c3": "Kupi zunanjo plast", "p7_dg1": "Koža", "p7_dg2": "Plast 01", "p7_dg3": "Plast 02", "p7_dg4": "Plast 03", "p7_dg5": "Vreme", "p9_ey": "Izdelki", "p9_h2": "Vrhunec kolekcije", "p9_c1": "Moška tehnična jakna", "p9_c2": "Ženska tehnična jakna", "p9_c3": "Moške hibridne hlače", "p9_c4": "Ženske hibridne hlače", "p9_c5": "Moški turnosmučarski pulover", "p9_c6": "Ženski turnosmučarski pulover", "p9_more": "Celotna kolekcija Peak Flow™", "p10_ey": "Zakaj Peak Flow", "p10_h2": "Razlika, ki jo začutiš", "p10_hc1": "Parameter", "p10_hc3": "Navadna oblačila", "p10_p1": "Vodni stolpec", "p10_p2": "Zračnost", "p10_p3": "Šivi", "p10_p4": "Testiranje", "p10_p5": "Kroj", "p10_p6": "Jamstvo zmogljivosti", "p10_pk3": "100 % lepljeni", "p10_pk4": "Pravi gorski teren", "p10_pk5": "Ergonomski, členjeni", "p10_pk6": "Za ekstremne razmere", "p10_s3": "Delno / brez", "p10_s4": "Laboratorij", "p10_s5": "Raven", "p10_s6": "Vsakdanja uporaba", "p11_body": "Peak Flow ni le kolekcija. Je zaveza zmogljivosti — ustvarjena za trenutek, ko je tvoja oprema resnično pomembna.", "hb1": "Razišči kolekcijo →", "hb2": "Tehnologije", "cb1": "Razišči kolekcijo", "h2s2": "Pet načel, na katerih <span style=\"color:var(--pk-red)\">gradimo</span> vsak kos.", "h2s11": "Vrh čaka. <span style=\"color:var(--pk-red)\">Bodi pripravljen.</span>"}, "bg": {"p1_body": "Нашата най-висококачествена линия. Мембрани, изолации и кройки за онези, които преминават границата — тествани в реалните планини на Карпатите.", "p2_ey": "Философия", "p2_t1": "Безкомпромисна ефективност", "p2_t2": "Иновация", "p2_t3": "Лека конструкция", "p2_t4": "Техническа прецизност", "p2_t5": "За екстремни условия", "p2_d1": "Без компромиси. Всяко изделие издържа там, където обикновената екипировка свършва — на вятър, студ и височина.", "p2_d2": "Мембрани, изолации и кройки, разработени заедно със състезатели и усъвършенствани всеки сезон.", "p2_d3": "Максимална защита при минимално тегло. Всеки грам има причина или отпада.", "p2_d4": "Ергономични кройки, прецизни шевове и детайли, обмислени до последния цип.", "p2_d5": "Разработено и тествано в реален планински терен — не в лаборатория, а на билото.", "p4_ey": "Първокласни технологии", "p4_tg1": "Технически материали", "p4_tg2": "Мембрана", "p4_tg3": "Изолация", "p4_d1": "Леки технически материали с технология Diamond Fuse™, чиято диамантена структура на влакната повишава издръжливостта при ниско тегло. Осигуряват надеждна защита от лошо време и висок комфорт при движение.", "p4_d2": "Хидрофилна непорьозна мембрана, която отвежда влагата на молекулярно ниво и осигурява висока водоустойчивост, дишаемост и еластичност. Тя е основата на нашите първокласни ски якета и панталони за трудни условия.", "p4_d3": "Патентована синтетична изолация от ултрафини микровлакна, която имитира свойствата на пуха. Осигурява висок топлинен комфорт дори при влага и използва рециклирани материали като по-устойчива алтернатива.", "p4_more": "Разгледай всички технологии", "p6_ey": "Колекции", "p6_h2": "Три свята на ефективността", "p6_season": "Сезон 25/26", "p6_sk1": "Ски туринг", "p6_sk2": "Високопланински туризъм", "p6_sk3": "Луксозно ски облекло", "p6_d1": "Леко напластяване за изкачване и спускане. Максимална дишаемост, минимално тегло.", "p6_d2": "Издръжливи шели и еластични слоеве за дълги дни над горската граница.", "p6_d3": "Първокласни материали и кройки за онези, които не правят компромиси дори на пистата.", "p6_c1": "32 модела →", "p6_c2": "41 модела →", "p6_c3": "28 модела →", "p7_ey": "Напластяване", "p7_h2": "Системата на трите слоя", "p7_lead": "Нито едно отделно изделие не може всичко. Peak Flow е проектиран като система — слоеве, които работят заедно и се адаптират към времето и натоварването.", "p7_r1": "Отвеждане на влага", "p7_r2": "Топлинна изолация", "p7_r3": "Защита от стихиите", "p7_t1": "Основен слой", "p7_t2": "Среден слой", "p7_t3": "Външен слой", "p7_d1": "Бельо, което пази кожата суха и топла. Основата на всяка система.", "p7_d2": "Polartec® или пух — задържа топлината и регулира температурата при движение.", "p7_d3": "Dermizax® шел, който спира вятър, дъжд и сняг. Последната линия на защита.", "p7_c1": "Купи основния слой", "p7_c2": "Купи средния слой", "p7_c3": "Купи външния слой", "p7_dg1": "Кожа", "p7_dg2": "Слой 01", "p7_dg3": "Слой 02", "p7_dg4": "Слой 03", "p7_dg5": "Стихии", "p9_ey": "Продукти", "p9_h2": "Върхът на колекцията", "p9_c1": "Мъжко техническо яке", "p9_c2": "Дамско техническо яке", "p9_c3": "Мъжки хибриден панталон", "p9_c4": "Дамски хибриден панталон", "p9_c5": "Мъжко ски-туринг суитшърт", "p9_c6": "Дамско ски-туринг суитшърт", "p9_more": "Цялата колекция Peak Flow™", "p10_ey": "Защо Peak Flow", "p10_h2": "Разликата, която усещаш", "p10_hc1": "Параметър", "p10_hc3": "Обикновено облекло", "p10_p1": "Воден стълб", "p10_p2": "Дишаемост", "p10_p3": "Шевове", "p10_p4": "Тестване", "p10_p5": "Кройка", "p10_p6": "Гаранция за ефективност", "p10_pk3": "100% залепени", "p10_pk4": "Реален планински терен", "p10_pk5": "Ергономична, артикулирана", "p10_pk6": "За екстремни условия", "p10_s3": "Частично / няма", "p10_s4": "Лабораторно", "p10_s5": "Прав", "p10_s6": "Ежедневна употреба", "p11_body": "Peak Flow не е просто колекция. Това е ангажимент към ефективността — създаден за момента, в който екипировката ти наистина има значение.", "hb1": "Разгледай колекцията →", "hb2": "Технологии", "cb1": "Разгледай колекцията", "h2s2": "Пет принципа, върху които <span style=\"color:var(--pk-red)\">градим</span> всяко изделие.", "h2s11": "Върхът чака. <span style=\"color:var(--pk-red)\">Бъди готов.</span>"}};
+ var t=T[loc]; if(!t)return;
+ var R=document.getElementById('pkfp'); if(!R)return;
+ function q(s){return R.querySelector(s);}
+ function qa(s){return R.querySelectorAll(s);}
+ function txt(s,v){var e=q(s);if(e&&v!=null)e.textContent=v;}
+ function ih(s,v){var e=q(s);if(e&&v!=null)e.innerHTML=v;}
+ function txa(s,a){var es=qa(s);a.forEach(function(v,i){if(es[i]&&v!=null)es[i].textContent=v;});}
+ // S1
+ txt('._pk1-body',t.p1_body);
+ var hc=qa('._pk1-ctas a'); if(hc[0])hc[0].textContent=t.hb1; if(hc[1])hc[1].textContent=t.hb2;
+ // S2
+ txt('#pk-filozofia .pk-ey',t.p2_ey);
+ ih('._pk2-h2',t.h2s2);
+ txa('._pk2-title',[t.p2_t1,t.p2_t2,t.p2_t3,t.p2_t4,t.p2_t5]);
+ txa('._pk2-desc',[t.p2_d1,t.p2_d2,t.p2_d3,t.p2_d4,t.p2_d5]);
+ // S4
+ txt('#pk-technologie .pk-ey',t.p4_ey);
+ txt('._pk4-h2',t.p4_h2||q('._pk4-h2').textContent);
+ txa('._pk4-tag',[t.p4_tg1,t.p4_tg2,t.p4_tg3]);
+ txa('._pk4-desc',[t.p4_d1,t.p4_d2,t.p4_d3]);
+ ih('._pk4-more a',t.p4_more+' <span style="color:var(--pk-red)">\u2192</span>');
+ // S6
+ txt('#pk-kolekcie .pk-ey',t.p6_ey);
+ txt('._pk6-h2',t.p6_h2); txt('._pk6-season',t.p6_season);
+ txa('._pk6-sk',[t.p6_sk1,t.p6_sk2,t.p6_sk3]);
+ txa('._pk6-desc',[t.p6_d1,t.p6_d2,t.p6_d3]);
+ txa('._pk6-cta',[t.p6_c1,t.p6_c2,t.p6_c3]);
+ // S7
+ txt('#pk-vrstvenie .pk-ey',t.p7_ey);
+ txt('._pk7-h2',t.p7_h2); txt('._pk7-lead',t.p7_lead);
+ txa('._pk7-role',[t.p7_r1,t.p7_r2,t.p7_r3]);
+ txa('._pk7-title',[t.p7_t1,t.p7_t2,t.p7_t3]);
+ txa('._pk7-desc',[t.p7_d1,t.p7_d2,t.p7_d3]);
+ var c7=qa('._pk7-cta');[t.p7_c1,t.p7_c2,t.p7_c3].forEach(function(v,i){if(c7[i])c7[i].innerHTML=v+' <span>\u2192</span>';});
+ var dgs=qa('._pk7-diagram > span:not(._pk7-line):not(._pk7-arr)');[t.p7_dg1,t.p7_dg2,t.p7_dg3,t.p7_dg4,t.p7_dg5].forEach(function(v,i){if(dgs[i])dgs[i].textContent=v;});
+ // S9
+ txt('#pk-produkty .pk-ey',t.p9_ey); txt('._pk9-h2',t.p9_h2);
+ txa('._pk9-cat',[t.p9_c1,t.p9_c2,t.p9_c3,t.p9_c4,t.p9_c5,t.p9_c6]);
+ ih('._pk9-more a',t.p9_more+' <span style="color:var(--pk-red)">\u2192</span>');
+ // S10
+ txt('._pk10-hdr .pk-ey',t.p10_ey); txt('._pk10-h2',t.p10_h2);
+ var hcol=qa('._pk10-hcol'); if(hcol[0])hcol[0].textContent=t.p10_hc1; if(hcol[1])hcol[1].textContent=t.p10_hc3;
+ txa('._pk10-cell',[t.p10_p1,t.p10_p2,t.p10_p3,t.p10_p4,t.p10_p5,t.p10_p6]);
+ var pk=qa('._pk10-cell-peak'),pkv=[null,null,t.p10_pk3,t.p10_pk4,t.p10_pk5,t.p10_pk6];
+ pkv.forEach(function(v,i){if(v&&pk[i]){pk[i].innerHTML='<span class="_pk10-check">\u2713</span> '+v;}});
+ txa('._pk10-cell-std',[null,null,t.p10_s3,t.p10_s4,t.p10_s5,t.p10_s6]);
+ // S11
+ ih('._pk11-h2',t.h2s11); txt('._pk11-body',t.p11_body);
+ var b11=qa('._pk11-ctas a'); if(b11[0])b11[0].textContent=t.hb1;
+})();
+</script>
+<script>
+(function(){
+ var loc=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
+ if(loc==='de-at'||loc==='at')loc='de';
+ var R=document.getElementById('pkfp'); if(!R)return;
+ var H={sk:'Materiály, ktorým môžeš veriť',de:'Materialien, denen du vertrauen kannst',hr:'Materijali kojima možeš vjerovati',sl:'Materiali, ki jim lahko zaupaš',bg:'Материали, на които можеш да се довериш'};
+ if(H[loc]){var e=R.querySelector('._pk4-h2'); if(e)e.textContent=H[loc];}
+ var TAG={
+ 'Hybrid softshell':{sk:'Hybridný softshell',de:'Hybrid-Softshell',hr:'Hibridni softshell',sl:'Hibridni softshell',bg:'Хибриден софтшел'},
+ 'Full-zip':{sk:'Celorozopínacie',de:'Durchgehender Zip',hr:'Puni zip',sl:'Polna zadrga',bg:'Цял цип'},
+ 'Stretch':{sk:'Strečové',de:'Stretch',hr:'Stretch',sl:'Stretch',bg:'Стреч'},
+ 'Quick-dry':{sk:'Rýchloschnúca',de:'Schnelltrocknend',hr:'Brzosušeći',sl:'Hitrosušeč',bg:'Бързосъхнещ'},
+ 'Techno stretch':{sk:'Techno streč',de:'Techno-Stretch',hr:'Techno stretch',sl:'Techno stretch',bg:'Техно стреч'},
+ 'Ski touring':{sk:'Skialp',de:'Skitouring',hr:'Ski touring',sl:'Turno smučanje',bg:'Ски туринг'}
+ };
+ R.querySelectorAll('._pk9-tag').forEach(function(el){var m=TAG[el.textContent.trim()];if(m&&m[loc])el.textContent=m[loc];});
+})();
+</script>
 </div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
 </div></div>
 {% schema %}
 {
- "name": "PeakFLow",
+ "name": "test1",
  "settings": [
  {
  "type": "header",
