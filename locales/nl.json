@@ -7,6 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
+
 {
   "accessibility": {
     "close": "Sluiten",
@@ -118,8 +119,16 @@
       "subtotal_excluding_tax": "Subtotaal exclusief btw",
       "tax": "Btw",
       "title": "Samenvatting",
-      "total": "Geschat totaal"
-    }
+      "total": "Geschat totaal",
+      "savings": "Je bespaart"
+    },
+    "remove": "Verwijderen",
+    "validating_stock": "Voorraad controleren...",
+    "cart_updated_other_tab": "Winkelwagen bijgewerkt vanuit ander tabblad",
+    "failed_remove_item": "Verwijderen mislukt. Probeer het opnieuw.",
+    "failed_adjust_quantity": "Aantal aanpassen mislukt. Probeer het opnieuw.",
+    "stock_validation_warning": "Voorraadcontrole waarschuwing",
+    "stock_validation_error": "We konden de beschikbaarheid niet verifiëren"
   },
   "collections": {
     "general": {
@@ -159,7 +168,9 @@
       "view_addresses": "Adressen bekijken",
       "wishlist": "Favoriete producten",
       "wishlist_empty": "Je hebt nog geen producten in je favorieten.",
-      "return": "Terug naar Accountgegevens"
+      "return": "Terug naar Accountgegevens",
+      "password_changed": "Wachtwoord succesvol bijgewerkt!",
+      "password_update_success": "Wachtwoord succesvol bijgewerkt!"
     },
     "account_fallback": "Account",
     "activate_account": {
@@ -244,7 +255,10 @@
       "password": "Wachtwoord",
       "sign_in": "Inloggen",
       "submit": "Verzenden",
-      "title": "Inloggegevens"
+      "title": "Inloggegevens",
+      "migration_notice_title": "We hebben onze winkel vernieuwd!",
+      "migration_notice_body": "Als je een account had op onze vorige website, zijn je account en loyaliteitspunten overgezet. Stel je wachtwoord opnieuw in om toegang te krijgen tot je account.",
+      "migration_notice_cta": "Wachtwoord opnieuw instellen"
     },
     "order": {
       "billing_address": "Factuuradres",
@@ -383,7 +397,11 @@
     "cart": {
       "item_added": "Artikel toegevoegd aan winkelwagen",
       "view": "Winkelwagen bekijken ({{ count }})",
-      "view_empty_cart": "Winkelwagen bekijken"
+      "view_empty_cart": "Winkelwagen bekijken",
+      "coupon": {
+        "placeholder": "Code"
+      },
+      "save_for_later": "Opslaan voor later"
     },
     "continue_shopping": "Terugkeren naar winkel",
     "discover_northfinder": {
@@ -407,7 +425,8 @@
       "confirmation": "Bedankt voor je inschrijving",
       "email_placeholder": "E-mailadres",
       "newsletter_email": "Schrijf je in voor onze nieuwsbrief",
-      "submit": "Inschrijven"
+      "submit": "Inschrijven",
+      "discount_label": "Kortingscode voor abonnees"
     },
     "pagination": {
       "current_page": "Pagina {{ current }} van {{ total }}",
@@ -503,7 +522,8 @@
       "remaining_html": "{{ balance }} over",
       "shop_link": "Onlinewinkel bezoeken",
       "subtext": "Je cadeaubon",
-      "title": "Dit is het saldo van de cadeaubon ter waarde van {{ value }} voor {{ shop }}"
+      "title": "Dit is het saldo van de cadeaubon ter waarde van {{ value }} voor {{ shop }}",
+      "print_gift_card": "Deze cadeaubon afdrukken"
     }
   },
   "localization": {
@@ -754,7 +774,8 @@
       "share": "Dit product delen",
       "vendor": "Verkoper",
       "video_exit_message": "{{ title }} opent een video op volledig scherm in hetzelfde venster.",
-      "select_variant_aria": "Variant {{ variant }} selecteren"
+      "select_variant_aria": "Variant {{ variant }} selecteren",
+      "include_taxes": "Belastingen inbegrepen."
     }
   },
   "recipient": {
@@ -839,7 +860,19 @@
       "title": "Je winkelwagen",
       "update": "Bijwerken",
       "validating_stock": "Voorraad controleren...",
-      "view_cart": "Winkelwagen bekijken"
+      "view_cart": "Winkelwagen bekijken",
+      "stock_requested_available": "Gevraagd: {{ requested }}, Beschikbaar: {{ available }}",
+      "stock_adjust_to": "Aanpassen naar {{ quantity }}",
+      "stock_removing": "Verwijderen...",
+      "stock_adjusting": "Aanpassen...",
+      "stock_validation_timeout": "Voorraadcontrole verlopen",
+      "subtotal": "Subtotaal",
+      "new_subtotal": "Nieuw subtotaal",
+      "taxes_and_shipping_at_checkout": "Verzending & belastingen berekend bij afrekenen",
+      "taxes_and_shipping_policy_at_checkout_html": "Belastingen en <a href=\"{{ link }}\">verzending</a> worden berekend bij het afrekenen",
+      "taxes_included_and_shipping_policy_html": "Belastingen inbegrepen. <a href=\"{{ link }}\">Verzending</a> wordt berekend bij het afrekenen.",
+      "taxes_included_but_shipping_at_checkout": "Belastingen inbegrepen en verzending berekend bij het afrekenen",
+      "with_taxes_duties": "Inclusief belastingen en invoerrechten"
     },
     "collection_list": {
       "view_all": "Alles bekijken"
@@ -875,9 +908,15 @@
       "view_all": "Alles bekijken",
       "view_all_label": "Bekijk alle producten in de collectie {{ collection_name }}"
     },
+    "info_box": {
+      "title": "Geen compromissen meer in regen en kou",
+      "subtitle": "Ontdek hoogwaardige kleding voor elk weer",
+      "button_text": "SHOP NU"
+    },
     "footer": {
       "contact_us": "Neem contact met ons op",
-      "payment": "Betaalmethoden"
+      "payment": "Betaalmethoden",
+      "copyright": "© Copyright Northfinder {{ year }} / Alle rechten voorbehouden"
     },
     "header": {
       "announcement": "Aankondiging",
@@ -896,7 +935,18 @@
       "main_elements": "Belangrijkste elementen",
       "more_images": "MEER AFBEELDINGEN",
       "parameters": "Parameters",
-      "you_will_like_it": "Dit zal je bevallen"
+      "you_will_like_it": "Dit zal je bevallen",
+      "features_details": {
+        "title": "Kenmerken en details",
+        "adjustability": "Verstelbaarheid",
+        "construction": "Constructiedetails",
+        "pockets_with_count": {
+          "one": "{{ count }} zak",
+          "other": "{{ count }} zakken"
+        },
+        "pockets_with_zipper": "{{ pockets }} ({{ zipper }})",
+        "storage": "Opbergruimte"
+      }
     },
     "main-blog": {
       "name": "Hoofdblog",
@@ -1139,7 +1189,34 @@
       },
       "explore_scent": "Ontdek geur",
       "fragrance_profile": "Geurprofiel",
-      "name": "Parfumgeuren"
+      "name": "Parfumgeuren",
+      "presets": {
+        "name": "Parfumgeuren"
+      },
+      "settings": {
+        "heading": {
+          "default": "Ontdek onze geuren",
+          "label": "Koptekst"
+        },
+        "urls": {
+          "header": "Product-URL's"
+        },
+        "active_fresh_url": {
+          "label": "Active Fresh URL"
+        },
+        "outdoor_flow_url": {
+          "label": "Outdoor Flow URL"
+        },
+        "adventure_mist_url": {
+          "label": "Adventure Mist URL"
+        },
+        "classic_fresh_url": {
+          "label": "Classic Fresh URL"
+        },
+        "pure_essence_url": {
+          "label": "Pure Essence URL"
+        }
+      }
     },
     "quick_order_list": {
       "cancel": "Annuleren",
@@ -1196,6 +1273,86 @@
     },
     "video": {
       "load_video": "Video laden: {{ description }}"
+    },
+    "recent_products": {
+      "heading": "Recent bekeken"
+    },
+    "ecom-69fca16d9321c331d20eea71-context": {
+      "headingtext_4iy4dr4n5yk_html": "<b>LENTE&nbsp;</b><div><b>MEGA SALE</b></div>",
+      "textcontent_1l5nxxac56q_html": "<b>Tot 50% korting</b>",
+      "buttoncontent_t2depqtncq9_html": "Shop collectie",
+      "headingtext_1wg5amtkxd3_html": "Lente-zomercollectie",
+      "textcontent_h7kbcq9hcjl_html": "Ontdek de nieuwste trenddesigns van 2023",
+      "buttoncontent_z0dbt4ahy_html": "Shop nu",
+      "headingtext_88ydej3n3ro_html": "Op zoek naar de beste prijs",
+      "textcontent_5ooutbhc4c_html": "Nieuwe collectie",
+      "buttoncontent_ei28mair6g_html": "Shop nu",
+      "masonryheading0_6qp9q24twgh_html": "<div><br></div>",
+      "masonry_button_title_0_6qp9q24twgh_html": "Heren",
+      "masonry_button_title_1_6qp9q24twgh_html": "Dames",
+      "headingtext_oznj0lc27n_html": "<b>Bestsellers</b>",
+      "badge_tags_08wjs9u73fgd_html": "Hot,Best verkocht,Trending",
+      "product_option_swatch_08wjs9u73fgd_html": "Kleur",
+      "view_more_text_08wjs9u73fgd_html": "Meer bekijken",
+      "add_to_cart_08wjs9u73fgd_html": "Toevoegen aan winkelwagen ",
+      "product_unavailable_08wjs9u73fgd_html": "Niet beschikbaar",
+      "product_soldout_08wjs9u73fgd_html": "Uitverkocht",
+      "added_cart_text_08wjs9u73fgd_html": "Aan winkelwagen toegevoegd",
+      "added_cart_message_08wjs9u73fgd_html": "Aan winkelwagen toegevoegd",
+      "pre_order_08wjs9u73fgd_html": "Pre-order",
+      "sold_out_text_08wjs9u73fgd_html": "Uitverkocht",
+      "quick_shop_text_08wjs9u73fgd_html": "Snel shoppen",
+      "no_product_item_08wjs9u73fgd_html": "Er zijn nog geen producten!",
+      "text_week_08wjs9u73fgd_html": "[%-W] wk",
+      "text_day_08wjs9u73fgd_html": "[%-d] d",
+      "text_hour_08wjs9u73fgd_html": "[%-H] :",
+      "text_minute_08wjs9u73fgd_html": "[%-M] :",
+      "text_second_08wjs9u73fgd_html": "[%-S]",
+      "sale_08wjs9u73fgd_html": "-{{sale}}%",
+      "headingtext_pgp9yyxva5r_html": "<b>Lente-uitrusting voor de halve prijs</b>",
+      "textcontent_idmfm4a9cw_html": "Jassen, broeken, shorts en schoenen. Shop lente-uitrusting voordat de kortingen in de bergen verdwijnen.",
+      "buttoncontent_xlb9nwuhzv_html": "Shop collectie",
+      "headingtext_fa99i9vxy5f_html": "<b>Beoordelingen</b>",
+      "text0_rn38sv8po39_html": "Uit het ruime aanbod koos ik een wandelbroek. Ik maakte me zorgen over de lengte omdat ik lang ben, maar de broek past perfect. Precies wat ik nodig had. De goederen werden heel snel bij de Z-box geleverd, dus maximale tevredenheid.",
+      "name0_rn38sv8po39_html": "Ontrej",
+      "title0_rn38sv8po39_html": "Gekocht artikel: <span> GERON </span>",
+      "text1_rn38sv8po39_html": "Ik ben tevreden over dit merk. Ik heb al meerdere bestellingen bij hen geplaatst. Vooral de mogelijkheid tot probleemloos retourneren waardeer ik enorm. Zelfs wanneer ik mijn gebruikelijke maat bestel, past kleding niet altijd perfect en ik heb items in maten van S tot L.",
+      "name1_rn38sv8po39_html": "Marian",
+      "title1_rn38sv8po39_html": "Gekocht artikel: <span>Pertex® DRACI</span>",
+      "text2_rn38sv8po39_html": "Ik ben erg tevreden over deze winkel. Maximale klantvriendelijkheid en snelle levering. Ik kan deze winkel alleen maar aanbevelen.",
+      "name2_rn38sv8po39_html": "Ludmila",
+      "title2_rn38sv8po39_html": "Gekocht artikel: <span> NORTHKIT </span>"
+    },
+    "parfum-features": {
+      "name": "Parfum Kenmerken",
+      "settings": {
+        "heading": {
+          "label": "Koptekst",
+          "default": "Wat zijn wasparfums?"
+        },
+        "description": {
+          "label": "Beschrijving",
+          "default": "<p>NORTHFINDER wasparfums zijn geconcentreerde geurversterkers ontwikkeld voor sport- en alledaagse kleding.</p><p>In tegenstelling tot wasverzachters behouden ze de ademendheid en stofeigenschappen, terwijl ze langdurige frisheid bieden.</p>"
+        }
+      },
+      "blocks": {
+        "feature": {
+          "name": "Kenmerk",
+          "settings": {
+            "icon": {
+              "label": "Pictogramnaam",
+              "info": "Voer de SVG-pictogrambestandsnaam in (zonder .svg extensie)"
+            },
+            "title": {
+              "label": "Titel",
+              "default": "Kenmerktitel"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Parfum Kenmerken"
+      }
     }
   },
   "size_guide": {
@@ -1511,5 +1668,63 @@
   },
   "video": {
     "no_support": "Je browser ondersteunt de video tag niet."
+  },
+  "mobile_menu": {
+    "back": "Terug",
+    "all_in": "Alle {{ title }}",
+    "view_all": "Bekijk alle {{ title }}"
+  },
+  "customer_accounts": {
+    "account_information": {
+      "profile_card": {
+        "invalid_email_format": "Voer een geldig e-mailadres in"
+      }
+    },
+    "payment_methods": {
+      "add_payment_method_dropdown": {
+        "bank_account": "Bankrekening",
+        "credit_or_debit_card": "Creditcard of betaalpas"
+      }
+    }
+  },
+  "shopify": {
+    "checkout": {
+      "order_summary": {
+        "unconfirmed_label": "Niet bevestigd"
+      },
+      "processing": {
+        "remote_checkout_count": "%{current} van %{total}",
+        "remote_shops_payments_processing": "Betalingen verwerken"
+      },
+      "split_delivery": {
+        "items_for_pickup": "Artikelen om af te halen"
+      },
+      "thank_you": {
+        "checkout_on_remote_shop_link_text": "Afrekenen bij %{remoteShopName}",
+        "confirmed_items_count": "%{confirmed_count} van %{total_count} artikelen bevestigd",
+        "confirmed_orders_title": "Je bestellingen zijn bevestigd",
+        "payment_method_not_charged": "Niet in rekening gebracht",
+        "thank_you_confirmed_items_with_email": {
+          "one": "Je ontvangt binnenkort een bevestigingsmail met je bestelnummer.",
+          "other": "Je ontvangt binnenkort bevestigingsmails met je bestelnummers."
+        },
+        "thank_you_confirmed_items_with_phone": {
+          "one": "Je ontvangt binnenkort een bevestigings-sms met je bestelnummer.",
+          "other": "Je ontvangt binnenkort bevestigings-sms'jes met je bestelnummers."
+        },
+        "thank_you_confirmed_orders_with_email": "Je ontvangt binnenkort afzonderlijke bevestigingsmails met je bestelnummers",
+        "thank_you_confirmed_orders_with_email_and_phone": "Je ontvangt binnenkort afzonderlijke bevestigingsmails met je bestelnummers",
+        "thank_you_confirmed_orders_with_phone": "Je ontvangt binnenkort afzonderlijke bevestigings-sms'jes met je bestelnummers",
+        "thank_you_unconfirmed_items_description": {
+          "one": "Hiervoor is niets in rekening gebracht",
+          "other": "Hiervoor zijn geen kosten in rekening gebracht"
+        },
+        "thank_you_unconfirmed_items_heading": {
+          "one": "Artikel is niet bevestigd",
+          "other": "Sommige artikelen zijn niet bevestigd"
+        },
+        "track_your_order_link_text": "Bestelling volgen"
+      }
+    }
   }
 }

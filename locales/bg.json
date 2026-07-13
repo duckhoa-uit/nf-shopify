@@ -7,6 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
+
 {
   "accessibility": {
     "close": "Затваряне",
@@ -118,8 +119,16 @@
       "subtotal_excluding_tax": "Междинна сума без данък",
       "tax": "Данък",
       "title": "Резюме",
-      "total": "Приблизителна сума"
-    }
+      "total": "Приблизителна сума",
+      "savings": "Спестявате"
+    },
+    "remove": "Премахни",
+    "validating_stock": "Проверка на наличността...",
+    "cart_updated_other_tab": "Количката е актуализирана от друг таб",
+    "failed_remove_item": "Неуспешно премахване на артикул. Моля, опитайте отново.",
+    "failed_adjust_quantity": "Неуспешно коригиране на количеството. Моля, опитайте отново.",
+    "stock_validation_warning": "Предупреждение за проверка на наличността",
+    "stock_validation_error": "Не можахме да проверим наличността"
   },
   "collections": {
     "general": {
@@ -159,7 +168,9 @@
       "view_addresses": "Виж адресите",
       "wishlist": "Списък с любими продукти",
       "wishlist_empty": "Все още нямате продукти в списъка си с любими.",
-      "return": "Назад към информацията за профила"
+      "return": "Назад към информацията за профила",
+      "password_changed": "Паролата беше актуализирана успешно!",
+      "password_update_success": "Паролата беше актуализирана успешно!"
     },
     "account_fallback": "Профил",
     "activate_account": {
@@ -386,7 +397,11 @@
     "cart": {
       "item_added": "Артикулът е добавен в количката",
       "view": "Покажи количката ({{ count }})",
-      "view_empty_cart": "Покажи количката"
+      "view_empty_cart": "Покажи количката",
+      "coupon": {
+        "placeholder": "Код"
+      },
+      "save_for_later": "Запази за по-късно"
     },
     "continue_shopping": "Продължете да пазарувате",
     "discover_northfinder": {
@@ -410,7 +425,8 @@
       "confirmation": "Благодарим за абонамента",
       "email_placeholder": "Имейл адрес",
       "newsletter_email": "Присъединете се към нашия мейлинг лист",
-      "submit": "Абонирай се"
+      "submit": "Абонирай се",
+      "discount_label": "Отстъпка за абонати"
     },
     "pagination": {
       "current_page": "Страница {{ current }} от {{ total }}",
@@ -506,7 +522,8 @@
       "remaining_html": "Остават {{ balance }}",
       "shop_link": "Започнете пазаруване",
       "subtext": "Вашата подаръчна карта",
-      "title": "Ето вашата подаръчна карта за {{ value }} за {{ shop }}!"
+      "title": "Ето вашата подаръчна карта за {{ value }} за {{ shop }}!",
+      "print_gift_card": "Отпечатайте тази подаръчна карта"
     }
   },
   "localization": {
@@ -761,7 +778,8 @@
       "share": "Споделяне на този продукт",
       "vendor": "Доставчик",
       "video_exit_message": "{{ title }} отваря видео на цял екран в същия прозорец.",
-      "select_variant_aria": "Избиране на вариант {{ variant }}"
+      "select_variant_aria": "Избиране на вариант {{ variant }}",
+      "include_taxes": "С включени данъци."
     }
   },
   "recipient": {
@@ -851,7 +869,14 @@
       "title": "Пазарска количка",
       "update": "Актуализирай",
       "validating_stock": "Проверка на наличността...",
-      "view_cart": "Виж количката"
+      "view_cart": "Виж количката",
+      "subtotal": "Междинна сума",
+      "new_subtotal": "Нова междинна сума",
+      "taxes_and_shipping_at_checkout": "Доставка и данъци се изчисляват при плащане",
+      "taxes_and_shipping_policy_at_checkout_html": "Данъците и <a href=\"{{ link }}\">доставката</a> се изчисляват при плащане",
+      "taxes_included_and_shipping_policy_html": "Данъците са включени. <a href=\"{{ link }}\">Доставката</a> се изчислява при плащане.",
+      "taxes_included_but_shipping_at_checkout": "Данъците са включени, а доставката се изчислява при плащане",
+      "with_taxes_duties": "С включени данъци и мита"
     },
     "collection_list": {
       "view_all": "Виж всички"
@@ -887,9 +912,15 @@
       "view_all": "Виж всички",
       "view_all_label": "Виж всички продукти в колекцията {{ collection_name }}"
     },
+    "info_box": {
+      "title": "Без повече компромиси в дъжда и студа",
+      "subtitle": "Открийте висококачествено облекло за всяко време",
+      "button_text": "ПАЗАРУВАЙ СЕГА"
+    },
     "footer": {
       "contact_us": "Свържете се с нас",
-      "payment": "Начини на плащане"
+      "payment": "Начини на плащане",
+      "copyright": "© Copyright Northfinder {{ year }} / Всички права запазени"
     },
     "header": {
       "announcement": "Съобщение",
@@ -1164,7 +1195,34 @@
       },
       "explore_scent": "Разгледай аромата",
       "fragrance_profile": "Профил на аромата",
-      "name": "Аромати на парфюми"
+      "name": "Аромати на парфюми",
+      "presets": {
+        "name": "Аромати на парфюми"
+      },
+      "settings": {
+        "heading": {
+          "default": "Открийте нашите аромати",
+          "label": "Заглавие"
+        },
+        "urls": {
+          "header": "URL адреси на продуктите"
+        },
+        "active_fresh_url": {
+          "label": "Active Fresh URL"
+        },
+        "outdoor_flow_url": {
+          "label": "Outdoor Flow URL"
+        },
+        "adventure_mist_url": {
+          "label": "Adventure Mist URL"
+        },
+        "classic_fresh_url": {
+          "label": "Classic Fresh URL"
+        },
+        "pure_essence_url": {
+          "label": "Pure Essence URL"
+        }
+      }
     },
     "quick_order_list": {
       "cancel": "Отказ",
@@ -1228,6 +1286,83 @@
     },
     "video": {
       "load_video": "Зареди видео: {{ description }}"
+    },
+    "ecom-69fca16d9321c331d20eea71-context": {
+      "headingtext_4iy4dr4n5yk_html": "<b>ПРОЛЕТНА&nbsp;</b><div><b>МЕГА РАЗПРОДАЖБА</b></div>",
+      "textcontent_1l5nxxac56q_html": "<b>До 50% отстъпка</b>",
+      "buttoncontent_t2depqtncq9_html": "Пазарувай колекцията",
+      "headingtext_1wg5amtkxd3_html": "Пролетно-лятна колекция",
+      "textcontent_h7kbcq9hcjl_html": "Открийте най-новите тенденции за 2023",
+      "buttoncontent_z0dbt4ahy_html": "Пазарувай сега",
+      "headingtext_88ydej3n3ro_html": "Търсите най-добрата цена",
+      "textcontent_5ooutbhc4c_html": "Нова колекция",
+      "buttoncontent_ei28mair6g_html": "Пазарувай сега",
+      "masonryheading0_6qp9q24twgh_html": "<div><br></div>",
+      "masonry_button_title_0_6qp9q24twgh_html": "Мъже",
+      "masonry_button_title_1_6qp9q24twgh_html": "Жени",
+      "headingtext_oznj0lc27n_html": "<b>Най-продавани</b>",
+      "badge_tags_08wjs9u73fgd_html": "Горещо,Най-продавано,Тренд",
+      "product_option_swatch_08wjs9u73fgd_html": "Цвят",
+      "view_more_text_08wjs9u73fgd_html": "Виж повече",
+      "add_to_cart_08wjs9u73fgd_html": "Добави в количката ",
+      "product_unavailable_08wjs9u73fgd_html": "Неналичен",
+      "product_soldout_08wjs9u73fgd_html": "Изчерпан",
+      "added_cart_text_08wjs9u73fgd_html": "Добавено в количката",
+      "added_cart_message_08wjs9u73fgd_html": "Добавено в количката",
+      "pre_order_08wjs9u73fgd_html": "Предварителна поръчка",
+      "sold_out_text_08wjs9u73fgd_html": "Изчерпан",
+      "quick_shop_text_08wjs9u73fgd_html": "Бърза покупка",
+      "no_product_item_08wjs9u73fgd_html": "Все още няма продукти!",
+      "text_week_08wjs9u73fgd_html": "[%-W] седм.",
+      "text_day_08wjs9u73fgd_html": "[%-d] д",
+      "text_hour_08wjs9u73fgd_html": "[%-H] :",
+      "text_minute_08wjs9u73fgd_html": "[%-M] :",
+      "text_second_08wjs9u73fgd_html": "[%-S]",
+      "sale_08wjs9u73fgd_html": "-{{sale}}%",
+      "headingtext_pgp9yyxva5r_html": "<b>Пролетна екипировка на половин цена</b>",
+      "textcontent_idmfm4a9cw_html": "Якета, панталони, къси панталони и обувки. Пазарувайте пролетна екипировка, преди отстъпките да изчезнат в планината.",
+      "buttoncontent_xlb9nwuhzv_html": "Пазарувай колекцията",
+      "headingtext_fa99i9vxy5f_html": "<b>Отзиви</b>",
+      "text0_rn38sv8po39_html": "От богатия избор избрах туристически панталон. Притеснявах се за дължината, тъй като съм висока, но панталонът ми пасна идеално. Това беше точно, от което имах нужда. Стоката беше доставена много бързо до Z-box, така че съм напълно доволна.",
+      "name0_rn38sv8po39_html": "Ontrej",
+      "title0_rn38sv8po39_html": "Закупен продукт: <span> GERON </span>",
+      "text1_rn38sv8po39_html": "Доволна съм от тази марка. Вече съм правила няколко поръчки при тях. Особено ценя възможността за безпроблемно връщане. Дори когато поръчам обичайния си размер, дрехите не винаги стоят перфектно, а имам артикули от S до L.",
+      "name1_rn38sv8po39_html": "Marian",
+      "title1_rn38sv8po39_html": "Закупен продукт: <span>Pertex® DRACI</span>",
+      "text2_rn38sv8po39_html": "Много съм доволна от този магазин. Максимално добро отношение към клиента и бърза доставка. Мога само да го препоръчам.",
+      "name2_rn38sv8po39_html": "Ludmila",
+      "title2_rn38sv8po39_html": "Закупен продукт: <span> NORTHKIT </span>"
+    },
+    "parfum-features": {
+      "name": "Характеристики на парфюма",
+      "settings": {
+        "heading": {
+          "label": "Заглавие",
+          "default": "Какво са парфюмите за пране?"
+        },
+        "description": {
+          "label": "Описание",
+          "default": "<p>Парфюмите за пране NORTHFINDER са концентрирани ароматизатори, разработени за спортни и ежедневни дрехи.</p><p>За разлика от омекотителите, те запазват дишащите свойства и качествата на тъканите, като същевременно осигуряват дълготрайна свежест.</p>"
+        }
+      },
+      "blocks": {
+        "feature": {
+          "name": "Характеристика",
+          "settings": {
+            "icon": {
+              "label": "Име на иконата",
+              "info": "Въведете името на SVG иконата (без разширение .svg)"
+            },
+            "title": {
+              "label": "Заглавие",
+              "default": "Заглавие на характеристиката"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Характеристики на парфюма"
+      }
     }
   },
   "size_guide": {
@@ -1582,7 +1717,7 @@
         "confirmed_orders_title": "Вашите поръчки са потвърдени",
         "payment_method_not_charged": "Без такса",
         "thank_you_confirmed_items_with_email": {
-          "one": "Скоро ще получите потвъждаващ имейл с номера на вашата поръчка.",
+          "one": "Скоро ще получите потвърдителен имейл с номера на вашата поръчка.",
           "other": "Скоро ще получите потвърдителни имейли с номерата на вашите поръчки."
         },
         "thank_you_confirmed_items_with_phone": {
@@ -1594,18 +1729,22 @@
         "thank_you_confirmed_orders_with_phone": "Скоро ще получите отделни текстови съобщения за потвърждение с номерата на вашите поръчки",
         "thank_you_unconfirmed_items_description": {
           "one": "Не сте таксувани за това",
-          "other": "Не сте таксувани за това"
+          "other": "Не сте таксувани за тези артикули"
         },
         "thank_you_unconfirmed_items_heading": {
           "one": "Елементът не е потвърден",
           "other": "Някои елементи не са потвърдени"
         },
         "track_your_order_link_text": "Проследете поръчката си"
+      },
+      "split_delivery": {
+        "items_for_pickup": "Артикули за получаване"
       }
     }
   },
   "mobile_menu": {
     "all_in": "Всички {{ title }}",
-    "back": "Назад"
+    "back": "Назад",
+    "view_all": "Виж всички {{ title }}"
   }
 }

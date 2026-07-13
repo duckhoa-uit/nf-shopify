@@ -7,6 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
+
 {
   "accessibility": {
     "close": "Fermer",
@@ -118,8 +119,16 @@
       "subtotal_excluding_tax": "Sous-total hors taxes",
       "tax": "Impôt",
       "title": "Résumé",
-      "total": "Total estimé"
-    }
+      "total": "Total estimé",
+      "savings": "Vous économisez"
+    },
+    "remove": "Supprimer",
+    "validating_stock": "Vérification du stock...",
+    "cart_updated_other_tab": "Panier mis à jour depuis un autre onglet",
+    "failed_remove_item": "Échec de la suppression de l'article. Veuillez réessayer.",
+    "failed_adjust_quantity": "Échec de l'ajustement de la quantité. Veuillez réessayer.",
+    "stock_validation_warning": "Avertissement de disponibilité",
+    "stock_validation_error": "Nous n'avons pas pu vérifier la disponibilité du stock"
   },
   "collections": {
     "general": {
@@ -159,7 +168,9 @@
       "view_addresses": "Voir les adresses",
       "wishlist": "Liste des produits favoris",
       "wishlist_empty": "Vous n'avez encore aucun produit dans votre liste de favoris.",
-      "return": "Retour aux détails du compte"
+      "return": "Retour aux détails du compte",
+      "password_changed": "Mot de passe mis à jour avec succès !",
+      "password_update_success": "Mot de passe mis à jour avec succès !"
     },
     "account_fallback": "Compte",
     "activate_account": {
@@ -244,7 +255,10 @@
       "password": "Mot de passe",
       "sign_in": "Se connecter",
       "submit": "Soumettre",
-      "title": "Connexion"
+      "title": "Connexion",
+      "migration_notice_title": "Nous avons modernisé notre boutique !",
+      "migration_notice_body": "Si vous aviez un compte sur notre ancien site, votre compte et vos points de fidélité ont été transférés. Veuillez réinitialiser votre mot de passe pour accéder à votre compte.",
+      "migration_notice_cta": "Réinitialiser votre mot de passe"
     },
     "order": {
       "billing_address": "Adresse de facturation",
@@ -383,7 +397,11 @@
     "cart": {
       "item_added": "Article ajouté au panier",
       "view": "Voir le panier ({{ count }})",
-      "view_empty_cart": "Voir le panier"
+      "view_empty_cart": "Voir le panier",
+      "coupon": {
+        "placeholder": "Code"
+      },
+      "save_for_later": "Enregistrer pour plus tard"
     },
     "continue_shopping": "Continuer les achats",
     "discover_northfinder": {
@@ -407,7 +425,8 @@
       "confirmation": "Merci de votre abonnement",
       "email_placeholder": "Adresse email",
       "newsletter_email": "Inscrivez-vous à notre liste de diffusion",
-      "submit": "S'abonner"
+      "submit": "S'abonner",
+      "discount_label": "Coupon de réduction pour les abonnés"
     },
     "pagination": {
       "current_page": "Page {{ current }} sur {{ total }}",
@@ -504,7 +523,7 @@
       "shop_link": "Continuer les achats",
       "subtext": "Votre carte-cadeau",
       "title": "Voici votre carte-cadeau {{ value }} pour {{ shop }} !",
-      "print_gift_card": "Imprimer"
+      "print_gift_card": "Imprimez cette carte-cadeau"
     }
   },
   "localization": {
@@ -674,7 +693,8 @@
         "open_media": "Ouvrir le média {{ index }} dans la vue de la galerie",
         "play_model": "Lire la visionneuse 3D",
         "play_video": "Lire la vidéo",
-        "view_in_space": "Vue dans votre espace"
+        "view_in_space": "Vue dans votre espace",
+        "load_image": "Charger l'image {{ index }} dans la vue galerie"
       },
       "navigation_aria_label": "Navigation des sections produit",
       "new": "Nouveau",
@@ -740,7 +760,8 @@
         "note": "Note sur la tarification en fonction du volume",
         "price_at_each": "{{ price }} chacun",
         "price_range": "Gamme de prix",
-        "title": "Tarification en fonction du volume"
+        "title": "Tarification en fonction du volume",
+        "minimum": "{{ quantity }}+"
       },
       "warnings": {
         "title": "Avertissement"
@@ -754,7 +775,9 @@
       "share": "Partager ce produit",
       "vendor": "Distributeur",
       "video_exit_message": "{{ title }} ouvre la vidéo en plein écran dans la même fenêtre.",
-      "select_variant_aria": "Sélectionner la variante {{ variant }}"
+      "select_variant_aria": "Sélectionner la variante {{ variant }}",
+      "choose_options": "Choisir des options",
+      "choose_product_options": "Choisir des options pour {{ product_name }}"
     }
   },
   "recipient": {
@@ -841,12 +864,17 @@
       "validating_stock": "Vérification du stock...",
       "view_cart": "Voir le panier",
       "new_subtotal": "Nouveau sous-total",
-      "subtotal": "Sous-total",
-      "taxes_and_shipping_at_checkout": "Taxes et frais d'expédition calculés lors du paiement",
+      "subtotal": "Total",
+      "taxes_and_shipping_at_checkout": "Frais de livraison et taxes calculés lors du paiement",
       "taxes_and_shipping_policy_at_checkout_html": "Les taxes et <a href=\"{{ link }}\">frais d'expédition</a> sont calculés lors du paiement",
       "taxes_included_and_shipping_policy_html": "Taxes incluses. <a href=\"{{ link }}\">Frais d'expédition</a> calculés lors du paiement.",
       "taxes_included_but_shipping_at_checkout": "Taxes incluses et frais d'expédition calculés lors du paiement",
-      "with_taxes_duties": "Taxes et droits inclus"
+      "with_taxes_duties": "Taxes et droits inclus",
+      "stock_requested_available": "Demandé : {{ requested }}, Disponible : {{ available }}",
+      "stock_adjust_to": "Ajuster à {{ quantity }}",
+      "stock_removing": "Suppression...",
+      "stock_adjusting": "Ajustement...",
+      "stock_validation_timeout": "La validation du stock a expiré"
     },
     "collection_list": {
       "view_all": "Tout afficher"
@@ -882,9 +910,15 @@
       "view_all": "Tout afficher",
       "view_all_label": "Afficher tous les produits de la collection {{ collection_name }}"
     },
+    "info_box": {
+      "title": "Plus aucun compromis sous la pluie et dans le froid",
+      "subtitle": "Découvrez des vêtements de qualité pour tous les temps",
+      "button_text": "ACHETER"
+    },
     "footer": {
       "contact_us": "Nous contacter",
-      "payment": "Moyens de paiement"
+      "payment": "Moyens de paiement",
+      "copyright": "© Copyright Northfinder {{ year }} / Tous droits réservés"
     },
     "header": {
       "announcement": "Annonce",
@@ -904,7 +938,18 @@
       "main_elements": "Éléments principaux",
       "more_images": "PLUS D'IMAGES",
       "parameters": "Paramètres",
-      "you_will_like_it": "Vous allez aimer"
+      "you_will_like_it": "Vous allez aimer",
+      "features_details": {
+        "title": "Caractéristiques et détails",
+        "adjustability": "Ajustabilité",
+        "construction": "Détails de construction",
+        "pockets_with_count": {
+          "one": "{{ count }} poche",
+          "other": "{{ count }} poches"
+        },
+        "pockets_with_zipper": "{{ pockets }} ({{ zipper }})",
+        "storage": "Rangement"
+      }
     },
     "main-blog": {
       "name": "Blog principal",
@@ -1147,7 +1192,34 @@
       },
       "explore_scent": "Découvrir le parfum",
       "fragrance_profile": "Profil de parfum",
-      "name": "Parfums de lessive"
+      "name": "Parfums de lessive",
+      "presets": {
+        "name": "Parfums de lessive"
+      },
+      "settings": {
+        "heading": {
+          "default": "Découvrez nos parfums",
+          "label": "Titre"
+        },
+        "urls": {
+          "header": "URL des produits"
+        },
+        "active_fresh_url": {
+          "label": "Active Fresh URL"
+        },
+        "outdoor_flow_url": {
+          "label": "Outdoor Flow URL"
+        },
+        "adventure_mist_url": {
+          "label": "Adventure Mist URL"
+        },
+        "classic_fresh_url": {
+          "label": "Classic Fresh URL"
+        },
+        "pure_essence_url": {
+          "label": "Pure Essence URL"
+        }
+      }
     },
     "quick_order_list": {
       "cancel": "Annuler",
@@ -1204,6 +1276,86 @@
     },
     "video": {
       "load_video": "Charger la vidéo : {{ description }}"
+    },
+    "recent_products": {
+      "heading": "Vu récemment"
+    },
+    "ecom-69fca16d9321c331d20eea71-context": {
+      "headingtext_4iy4dr4n5yk_html": "<b>PRINTEMPS&nbsp;</b><div><b>MEGA SOLDES</b></div>",
+      "textcontent_1l5nxxac56q_html": "<b>Jusqu'à 50 % de réduction</b>",
+      "buttoncontent_t2depqtncq9_html": "Acheter la collection",
+      "headingtext_1wg5amtkxd3_html": "Collection printemps-été",
+      "textcontent_h7kbcq9hcjl_html": "Découvrez les designs tendance de 2023",
+      "buttoncontent_z0dbt4ahy_html": "Acheter maintenant",
+      "headingtext_88ydej3n3ro_html": "Vous cherchez le meilleur prix",
+      "textcontent_5ooutbhc4c_html": "Nouvelle collection",
+      "buttoncontent_ei28mair6g_html": "Acheter maintenant",
+      "masonryheading0_6qp9q24twgh_html": "<div><br></div>",
+      "masonry_button_title_0_6qp9q24twgh_html": "Hommes",
+      "masonry_button_title_1_6qp9q24twgh_html": "Femmes",
+      "headingtext_oznj0lc27n_html": "<b>Meilleures ventes</b>",
+      "badge_tags_08wjs9u73fgd_html": "Chaud,Meilleure vente,Tendance",
+      "product_option_swatch_08wjs9u73fgd_html": "Couleur",
+      "view_more_text_08wjs9u73fgd_html": "Voir plus",
+      "add_to_cart_08wjs9u73fgd_html": "Ajouter au panier ",
+      "product_unavailable_08wjs9u73fgd_html": "Indisponible",
+      "product_soldout_08wjs9u73fgd_html": "Épuisé",
+      "added_cart_text_08wjs9u73fgd_html": "Ajouté au panier",
+      "added_cart_message_08wjs9u73fgd_html": "Ajouté au panier",
+      "pre_order_08wjs9u73fgd_html": "Précommande",
+      "sold_out_text_08wjs9u73fgd_html": "Épuisé",
+      "quick_shop_text_08wjs9u73fgd_html": "Achat rapide",
+      "no_product_item_08wjs9u73fgd_html": "Il n'y a pas encore de produit !",
+      "text_week_08wjs9u73fgd_html": "[%-W] sem.",
+      "text_day_08wjs9u73fgd_html": "[%-d] j",
+      "text_hour_08wjs9u73fgd_html": "[%-H] :",
+      "text_minute_08wjs9u73fgd_html": "[%-M] :",
+      "text_second_08wjs9u73fgd_html": "[%-S]",
+      "sale_08wjs9u73fgd_html": "-{{sale}}%",
+      "headingtext_pgp9yyxva5r_html": "<b>L'équipement de printemps à moitié prix</b>",
+      "textcontent_idmfm4a9cw_html": "Vestes, pantalons, shorts et chaussures. Achetez votre équipement de printemps avant que les réductions ne disparaissent dans les montagnes.",
+      "buttoncontent_xlb9nwuhzv_html": "Acheter la collection",
+      "headingtext_fa99i9vxy5f_html": "<b>Avis</b>",
+      "text0_rn38sv8po39_html": "Dans le large choix proposé, j'ai choisi un pantalon de randonnée. J'avais peur pour la longueur car je suis grande, mais il me va parfaitement. C'était exactement ce qu'il me fallait. La marchandise a été livrée très rapidement au Z-box, donc satisfaction maximale.",
+      "name0_rn38sv8po39_html": "Ontrej",
+      "title0_rn38sv8po39_html": "Article acheté : <span> GERON </span>",
+      "text1_rn38sv8po39_html": "Je suis satisfaite de cette marque. J'ai déjà passé plusieurs commandes chez eux. J'apprécie particulièrement la possibilité de retour sans problème. Même lorsque je commande ma taille habituelle, les vêtements ne vont pas toujours parfaitement, et j'ai des articles allant du S au L.",
+      "name1_rn38sv8po39_html": "Marian",
+      "title1_rn38sv8po39_html": "Article acheté : <span>Pertex® DRACI</span>",
+      "text2_rn38sv8po39_html": "Je suis très satisfaite de cette boutique. Service client exemplaire et livraison rapide. Je ne peux que la recommander.",
+      "name2_rn38sv8po39_html": "Ludmila",
+      "title2_rn38sv8po39_html": "Article acheté : <span> NORTHKIT </span>"
+    },
+    "parfum-features": {
+      "name": "Caractéristiques du parfum",
+      "settings": {
+        "heading": {
+          "label": "Titre",
+          "default": "Que sont les parfums pour le linge ?"
+        },
+        "description": {
+          "label": "Description",
+          "default": "<p>Les parfums pour le linge NORTHFINDER sont des concentrés de parfum conçus pour une performance optimale et un usage quotidien.</p><p> Contrairement aux adoucissants, ils préservent la respirabilité et les propriétés des tissus, tout en assurant une fraîcheur longue durée.</p>"
+        }
+      },
+      "blocks": {
+        "feature": {
+          "name": "Fonctionnalité",
+          "settings": {
+            "icon": {
+              "label": "Nom de l'icône",
+              "info": "Saisissez le nom du fichier icône SVG (sans l'extension .svg)."
+            },
+            "title": {
+              "label": "Titre",
+              "default": "Titre de l'article"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Caractéristiques du parfum"
+      }
     }
   },
   "size_guide": {
@@ -1526,6 +1678,57 @@
     "checkout": {
       "split_delivery": {
         "items_for_pickup": "Articles à récupérer"
+      },
+      "order_summary": {
+        "unconfirmed_label": "Non confirmé"
+      },
+      "processing": {
+        "remote_checkout_count": "%{current} sur %{total}",
+        "remote_shops_payments_processing": "Traitement des paiements"
+      },
+      "thank_you": {
+        "checkout_on_remote_shop_link_text": "Passer au paiement sur %{remoteShopName}",
+        "confirmed_items_count": "%{confirmed_count} articles confirmés sur %{total_count}",
+        "confirmed_orders_title": "Vos commandes ont été confirmées",
+        "payment_method_not_charged": "Non facturé",
+        "thank_you_confirmed_items_with_email": {
+          "one": "Vous recevrez bientôt un e-mail de confirmation avec le numéro de votre commande.",
+          "other": "Vous recevrez bientôt des e-mails de confirmation avec les numéros de vos commandes."
+        },
+        "thank_you_confirmed_items_with_phone": {
+          "one": "Vous recevrez bientôt un SMS de confirmation avec le numéro de votre commande.",
+          "other": "Vous recevrez bientôt des SMS de confirmation avec les numéros de vos commandes."
+        },
+        "thank_you_confirmed_orders_with_email": "Vous recevrez bientôt des e-mails de confirmation distincts contenant les numéros de vos commandes",
+        "thank_you_confirmed_orders_with_email_and_phone": "Vous recevrez bientôt des e-mails de confirmation distincts contenant les numéros de vos commandes",
+        "thank_you_confirmed_orders_with_phone": "Vous recevrez bientôt des SMS de confirmation distincts contenant les numéros de vos commandes",
+        "thank_you_unconfirmed_items_description": {
+          "one": "Aucun montant ne vous a été facturé pour cet article",
+          "other": "Aucun montant ne vous a été facturé pour ces articles"
+        },
+        "thank_you_unconfirmed_items_heading": {
+          "one": "L’article n’est pas confirmé",
+          "other": "Certains articles ne sont pas confirmés"
+        },
+        "track_your_order_link_text": "Suivre votre commande"
+      }
+    }
+  },
+  "mobile_menu": {
+    "back": "Retour",
+    "all_in": "Tous les {{ title }}",
+    "view_all": "Voir tous les {{ title }}"
+  },
+  "customer_accounts": {
+    "account_information": {
+      "profile_card": {
+        "invalid_email_format": "Veuillez saisir une adresse e-mail valide"
+      }
+    },
+    "payment_methods": {
+      "add_payment_method_dropdown": {
+        "bank_account": "Compte bancaire",
+        "credit_or_debit_card": "Carte de crédit ou de débit"
       }
     }
   }

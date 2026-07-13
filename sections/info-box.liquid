@@ -7,19 +7,19 @@
       "type": "text",
       "id": "title",
       "label": "Title",
-      "default": "Nekompromisne proti vetru, dažďu a zime"
+      "default": ""
     },
     {
       "type": "text",
       "id": "subtitle",
       "label": "Subtitle",
-      "default": "Objavte kvalitné oblečenie do nečasu"
+      "default": ""
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Button Text",
-      "default": "NAKUPOVAŤ"
+      "default": ""
     },
     {
       "type": "url",
@@ -36,21 +36,38 @@
 }
 {% endschema %}
 
+{%- liquid
+  assign info_box_title = section.settings.title
+  if info_box_title == blank
+    assign info_box_title = 'sections.info_box.title' | t
+  endif
+
+  assign info_box_subtitle = section.settings.subtitle
+  if info_box_subtitle == blank
+    assign info_box_subtitle = 'sections.info_box.subtitle' | t
+  endif
+
+  assign info_box_button_text = section.settings.button_text
+  if info_box_button_text == blank
+    assign info_box_button_text = 'sections.info_box.button_text' | t
+  endif
+-%}
+
 <div class="simple_infobox bg-[#F5F5F5] py-3 mb-1.5">
   <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
     <div class="flex flex-col items-center text-center flex-1">
       <h2 class="font-archivo font-medium text-[15px] leading-[1.067em] text-black mb-1">
-        {{ section.settings.title }}
+        {{ info_box_title }}
       </h2>
       <p class="infobox_subtitle font-archivo text-[13px] leading-[1.077em] text-[#4D4D4D]">
-        {{ section.settings.subtitle }}
+        {{ info_box_subtitle }}
       </p>
     </div>
     <a
       href="{{ section.settings.button_url }}"
       class="button_text inline-flex items-center px-4 py-[10px] border border-[#CCCCCC] rounded-3 text-sm font-medium leading-[0.875rem] uppercase text-[#000] transition-colors hover:border-[#000]"
     >
-      {{ section.settings.button_text }}
+      {{ info_box_button_text }}
     </a>
   </div>
 </div>
