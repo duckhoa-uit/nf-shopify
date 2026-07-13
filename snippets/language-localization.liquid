@@ -24,6 +24,24 @@
   <div class="disclosure__list-wrapper language-selector" hidden>
     <ul id="{{ localPosition }}List" role="list" class="disclosure__list list-unstyled">
       {%- render 'language-localization-option',
+        iso_code: 'bg',
+        label: 'Български',
+        fallback_url: 'https://northfinder.bg/',
+        available_languages: localization.available_languages
+      -%}
+      {%- render 'language-localization-option',
+        iso_code: 'cs',
+        label: 'Čeština',
+        fallback_url: 'https://northfinder.com/cs/',
+        available_languages: localization.available_languages
+      -%}
+      {%- render 'language-localization-option',
+        iso_code: 'de',
+        label: 'Deutsch',
+        fallback_url: 'https://shop.northfinder.com/de/',
+        available_languages: localization.available_languages
+      -%}
+      {%- render 'language-localization-option',
         iso_code: 'en',
         label: 'English',
         fallback_url: 'https://shop.northfinder.com/',
@@ -36,42 +54,6 @@
         available_languages: localization.available_languages
       -%}
       {%- render 'language-localization-option',
-        iso_code: 'sl',
-        label: 'Slovenščina',
-        fallback_url: 'https://shop.northfinder.com/sl/',
-        available_languages: localization.available_languages
-      -%}
-      {%- render 'language-localization-option',
-        iso_code: 'de',
-        label: 'Deutsch',
-        fallback_url: 'https://shop.northfinder.com/de/',
-        available_languages: localization.available_languages
-      -%}
-      {%- render 'language-localization-option',
-        iso_code: 'bg',
-        label: 'Български',
-        fallback_url: 'https://northfinder.bg/',
-        available_languages: localization.available_languages
-      -%}
-      {%- render 'language-localization-option',
-        iso_code: 'sk',
-        label: 'Slovenčina',
-        fallback_url: 'https://northfinder.sk/',
-        available_languages: localization.available_languages
-      -%}
-      {%- render 'language-localization-option',
-        iso_code: 'cs',
-        label: 'Čeština',
-        fallback_url: 'https://northfinder.com/cs/',
-        available_languages: localization.available_languages
-      -%}
-      {%- render 'language-localization-option',
-        iso_code: 'ro',
-        label: 'Română',
-        fallback_url: 'https://northfinder.com/ro/',
-        available_languages: localization.available_languages
-      -%}
-      {%- render 'language-localization-option',
         iso_code: 'hu',
         label: 'Magyar',
         fallback_url: 'https://northfinder.com/hu/',
@@ -81,6 +63,24 @@
         iso_code: 'pl',
         label: 'Polski',
         fallback_url: 'https://northfinder.com/pl/',
+        available_languages: localization.available_languages
+      -%}
+      {%- render 'language-localization-option',
+        iso_code: 'ro',
+        label: 'Română',
+        fallback_url: 'https://northfinder.com/ro/',
+        available_languages: localization.available_languages
+      -%}
+      {%- render 'language-localization-option',
+        iso_code: 'sk',
+        label: 'Slovenčina',
+        fallback_url: 'https://northfinder.sk/',
+        available_languages: localization.available_languages
+      -%}
+      {%- render 'language-localization-option',
+        iso_code: 'sl',
+        label: 'Slovenščina',
+        fallback_url: 'https://shop.northfinder.com/sl/',
         available_languages: localization.available_languages
       -%}
     </ul>
