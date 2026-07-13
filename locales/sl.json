@@ -7,6 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
+
 {
   "accessibility": {
     "close": "Zapri",
@@ -118,8 +119,16 @@
       "subtotal_excluding_tax": "Vmesna vsota brez davka",
       "tax": "Davek",
       "title": "Povzetek",
-      "total": "Predvideni skupni znesek"
-    }
+      "total": "Predvideni skupni znesek",
+      "savings": "Prihranite"
+    },
+    "remove": "Odstrani",
+    "validating_stock": "Preverjanje zaloge...",
+    "cart_updated_other_tab": "Košarica posodobljena iz drugega zavihka",
+    "failed_remove_item": "Artikla ni bilo mogoče odstraniti. Poskusite znova.",
+    "failed_adjust_quantity": "Količine ni bilo mogoče prilagoditi. Poskusite znova.",
+    "stock_validation_warning": "Opozorilo o preverjanju zaloge",
+    "stock_validation_error": "Razpoložljivosti zaloge ni bilo mogoče preveriti"
   },
   "collections": {
     "general": {
@@ -159,7 +168,9 @@
       "view_addresses": "Prikaži naslove",
       "wishlist": "Seznam priljubljenih izdelkov",
       "wishlist_empty": "Na vašem seznamu priljubljenih še nimate izdelkov.",
-      "return": "Nazaj na podatke o računu"
+      "return": "Nazaj na podatke o računu",
+      "password_changed": "Geslo je bilo uspešno posodobljeno!",
+      "password_update_success": "Geslo je bilo uspešno posodobljeno!"
     },
     "account_fallback": "Račun",
     "activate_account": {
@@ -386,7 +397,11 @@
     "cart": {
       "item_added": "Artikel je dodan v košarico",
       "view": "Prikaži košarico ({{ count }})",
-      "view_empty_cart": "Prikaži košarico"
+      "view_empty_cart": "Prikaži košarico",
+      "coupon": {
+        "placeholder": "Koda"
+      },
+      "save_for_later": "Shrani za pozneje"
     },
     "continue_shopping": "Nadaljuj nakup",
     "discover_northfinder": {
@@ -410,7 +425,8 @@
       "confirmation": "Hvala za prijavo",
       "email_placeholder": "E-poštni naslov",
       "newsletter_email": "Pridružite se naši e-poštni listi",
-      "submit": "Naroči se"
+      "submit": "Naroči se",
+      "discount_label": "Kupon za popust za naročnike"
     },
     "pagination": {
       "current_page": "Stran {{ current }} od {{ total }}",
@@ -506,7 +522,8 @@
       "remaining_html": "Preostalo: {{ balance }}",
       "shop_link": "Obišči spletno trgovino",
       "subtext": "Vaš darilni bon",
-      "title": "To je darilni bon v vrednosti {{ value }} za trgovino {{ shop }}!"
+      "title": "To je darilni bon v vrednosti {{ value }} za trgovino {{ shop }}!",
+      "print_gift_card": "Natisni ta darilni bon"
     }
   },
   "localization": {
@@ -761,7 +778,8 @@
       "share": "Deli ta izdelek",
       "vendor": "Prodajalec",
       "video_exit_message": "{{ title }} odpre celozaslonski videoposnetek v istem oknu.",
-      "select_variant_aria": "Izberi različico {{ variant }}"
+      "select_variant_aria": "Izberi različico {{ variant }}",
+      "include_taxes": "Davki vključeni."
     }
   },
   "recipient": {
@@ -851,7 +869,14 @@
       "title": "Vaša košarica",
       "update": "Posodobitev",
       "validating_stock": "Preverjanje zaloge...",
-      "view_cart": "Prikaži košarico"
+      "view_cart": "Prikaži košarico",
+      "subtotal": "Vmesna vsota",
+      "new_subtotal": "Nova vmesna vsota",
+      "taxes_and_shipping_at_checkout": "Dostava in davki se izračunajo ob zaključku nakupa",
+      "taxes_and_shipping_policy_at_checkout_html": "Davki in <a href=\"{{ link }}\">dostava</a> se izračunajo ob zaključku nakupa",
+      "taxes_included_and_shipping_policy_html": "Davki vključeni. <a href=\"{{ link }}\">Dostava</a> se izračuna ob zaključku nakupa.",
+      "taxes_included_but_shipping_at_checkout": "Davki vključeni, dostava pa se izračuna ob zaključku nakupa",
+      "with_taxes_duties": "Davki in dajatve vključeni"
     },
     "collection_list": {
       "view_all": "Prikaži vse"
@@ -889,7 +914,8 @@
     },
     "footer": {
       "contact_us": "Kontaktirajte nas",
-      "payment": "Načini plačila"
+      "payment": "Načini plačila",
+      "copyright": "© Copyright Northfinder {{ year }} / Vse pravice pridržane"
     },
     "header": {
       "announcement": "Obvestilo",
@@ -1164,7 +1190,34 @@
       },
       "explore_scent": "Razišči dišavo",
       "fragrance_profile": "Profil dišave",
-      "name": "Dišave parfumov"
+      "name": "Dišave parfumov",
+      "presets": {
+        "name": "Dišave parfumov"
+      },
+      "settings": {
+        "heading": {
+          "default": "Odkrijte naše dišave",
+          "label": "Naslov"
+        },
+        "urls": {
+          "header": "URL-ji izdelkov"
+        },
+        "active_fresh_url": {
+          "label": "Active Fresh URL"
+        },
+        "outdoor_flow_url": {
+          "label": "Outdoor Flow URL"
+        },
+        "adventure_mist_url": {
+          "label": "Adventure Mist URL"
+        },
+        "classic_fresh_url": {
+          "label": "Classic Fresh URL"
+        },
+        "pure_essence_url": {
+          "label": "Pure Essence URL"
+        }
+      }
     },
     "quick_order_list": {
       "cancel": "Prekliči",
@@ -1228,6 +1281,83 @@
     },
     "video": {
       "load_video": "Naloži videoposnetek: {{ description }}"
+    },
+    "ecom-69fca16d9321c331d20eea71-context": {
+      "headingtext_4iy4dr4n5yk_html": "<b>SPOMLADANSKA&nbsp;</b><div><b>MEGA RAZPRODAJA</b></div>",
+      "textcontent_1l5nxxac56q_html": "<b>Do 50 % popusta</b>",
+      "buttoncontent_t2depqtncq9_html": "Nakupuj kolekcijo",
+      "headingtext_1wg5amtkxd3_html": "Pomladno-poletna kolekcija",
+      "textcontent_h7kbcq9hcjl_html": "Odkrijte najnovejše trende leta 2023",
+      "buttoncontent_z0dbt4ahy_html": "Nakupuj zdaj",
+      "headingtext_88ydej3n3ro_html": "Iščete najboljšo ceno",
+      "textcontent_5ooutbhc4c_html": "Nova kolekcija",
+      "buttoncontent_ei28mair6g_html": "Nakupuj zdaj",
+      "masonryheading0_6qp9q24twgh_html": "<div><br></div>",
+      "masonry_button_title_0_6qp9q24twgh_html": "Moški",
+      "masonry_button_title_1_6qp9q24twgh_html": "Ženske",
+      "headingtext_oznj0lc27n_html": "<b>Najbolj prodajano</b>",
+      "badge_tags_08wjs9u73fgd_html": "Vroče,Najbolje prodajano,V trendu",
+      "product_option_swatch_08wjs9u73fgd_html": "Barva",
+      "view_more_text_08wjs9u73fgd_html": "Poglej več",
+      "add_to_cart_08wjs9u73fgd_html": "Dodaj v košarico ",
+      "product_unavailable_08wjs9u73fgd_html": "Ni na voljo",
+      "product_soldout_08wjs9u73fgd_html": "Razprodano",
+      "added_cart_text_08wjs9u73fgd_html": "Dodano v košarico",
+      "added_cart_message_08wjs9u73fgd_html": "Dodano v košarico",
+      "pre_order_08wjs9u73fgd_html": "Prednaročilo",
+      "sold_out_text_08wjs9u73fgd_html": "Razprodano",
+      "quick_shop_text_08wjs9u73fgd_html": "Hitri nakup",
+      "no_product_item_08wjs9u73fgd_html": "Izdelkov še ni!",
+      "text_week_08wjs9u73fgd_html": "[%-W] ted.",
+      "text_day_08wjs9u73fgd_html": "[%-d] d",
+      "text_hour_08wjs9u73fgd_html": "[%-H] :",
+      "text_minute_08wjs9u73fgd_html": "[%-M] :",
+      "text_second_08wjs9u73fgd_html": "[%-S]",
+      "sale_08wjs9u73fgd_html": "-{{sale}}%",
+      "headingtext_pgp9yyxva5r_html": "<b>Pomladna oprema za polovično ceno</b>",
+      "textcontent_idmfm4a9cw_html": "Jakne, hlače, kratke hlače in obutev. Nakupujte pomladno opremo, preden popusti izginejo v gorah.",
+      "buttoncontent_xlb9nwuhzv_html": "Nakupuj kolekcijo",
+      "headingtext_fa99i9vxy5f_html": "<b>Mnenja</b>",
+      "text0_rn38sv8po39_html": "Iz bogate ponudbe sem izbrala pohodniške hlače. Skrbela me je dolžina, ker sem visoka, vendar mi hlače popolnoma pristajajo. Točno to sem potrebovala. Blago je bilo zelo hitro dostavljeno v Z-box, zato sem maksimalno zadovoljna.",
+      "name0_rn38sv8po39_html": "Ontrej",
+      "title0_rn38sv8po39_html": "Kupljen izdelek: <span> GERON </span>",
+      "text1_rn38sv8po39_html": "S to znamko sem zadovoljna. Pri njih sem že večkrat naročila. Zelo cenim možnost brezhibnega vračila. Tudi ko naročim svojo običajno velikost, oblačila ne pristajajo vedno popolno, in imam izdelke v velikostih od S do L.",
+      "name1_rn38sv8po39_html": "Marian",
+      "title1_rn38sv8po39_html": "Kupljen izdelek: <span>Pertex® DRACI</span>",
+      "text2_rn38sv8po39_html": "S to trgovino sem zelo zadovoljna. Maksimalna prijaznost do strank in hitra dostava. Lahko jo samo priporočam.",
+      "name2_rn38sv8po39_html": "Ludmila",
+      "title2_rn38sv8po39_html": "Kupljen izdelek: <span> NORTHKIT </span>"
+    },
+    "parfum-features": {
+      "name": "Lastnosti parfuma",
+      "settings": {
+        "heading": {
+          "label": "Naslov",
+          "default": "Kaj so parfumi za perilo?"
+        },
+        "description": {
+          "label": "Opis",
+          "default": "<p>NORTHFINDER parfumi za perilo so koncentrirani ojačevalci vonja, razviti za športno in vsakodnevno uporabo.</p><p>Za razliko od mehčalcev ohranjajo zračnost in lastnosti tkanin, hkrati pa zagotavljajo dolgotrajno svežino.</p>"
+        }
+      },
+      "blocks": {
+        "feature": {
+          "name": "Lastnost",
+          "settings": {
+            "icon": {
+              "label": "Ime ikone",
+              "info": "Vnesite ime datoteke SVG ikone (brez končnice .svg)"
+            },
+            "title": {
+              "label": "Naslov",
+              "default": "Naslov lastnosti"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Lastnosti parfuma"
+      }
     }
   },
   "size_guide": {
@@ -1556,6 +1686,60 @@
   },
   "mobile_menu": {
     "all_in": "Vse {{ title }}",
-    "back": "Nazaj"
+    "back": "Nazaj",
+    "view_all": "Prikaži vse {{ title }}"
+  },
+  "customer_accounts": {
+    "account_information": {
+      "profile_card": {
+        "invalid_email_format": "Vnesite veljaven e-poštni naslov"
+      }
+    },
+    "payment_methods": {
+      "add_payment_method_dropdown": {
+        "bank_account": "Bančni račun",
+        "credit_or_debit_card": "Kreditna ali debetna kartica"
+      }
+    }
+  },
+  "shopify": {
+    "checkout": {
+      "order_summary": {
+        "unconfirmed_label": "Nepotrjeno"
+      },
+      "processing": {
+        "remote_checkout_count": "%{current} od %{total}",
+        "remote_shops_payments_processing": "Obdelava plačil"
+      },
+      "split_delivery": {
+        "items_for_pickup": "Izdelki za prevzem"
+      },
+      "thank_you": {
+        "checkout_on_remote_shop_link_text": "Na blagajno pri %{remoteShopName}",
+        "confirmed_items_count": "Potrjenih %{confirmed_count} od %{total_count} izdelkov",
+        "confirmed_orders_title": "Vaša naročila so potrjena",
+        "payment_method_not_charged": "Ni zaračunano",
+        "thank_you_confirmed_items_with_email": {
+          "one": "Kmalu boste prejeli potrditveno e-sporočilo s številko naročila.",
+          "other": "Kmalu boste prejeli potrditvena e-sporočila s številkami svojih naročil."
+        },
+        "thank_you_confirmed_items_with_phone": {
+          "one": "Kmalu boste prejeli potrditveni SMS s številko naročila.",
+          "other": "Kmalu boste prejeli potrditvena SMS-sporočila s številkami svojih naročil."
+        },
+        "thank_you_confirmed_orders_with_email": "Kmalu boste prejeli ločena potrditvena e-sporočila s številkami svojih naročil",
+        "thank_you_confirmed_orders_with_email_and_phone": "Kmalu boste prejeli ločena potrditvena e-sporočila s številkami svojih naročil",
+        "thank_you_confirmed_orders_with_phone": "Kmalu boste prejeli ločena potrditvena SMS-sporočila s številkami svojih naročil",
+        "thank_you_unconfirmed_items_description": {
+          "one": "Za to vam ni bilo zaračunano",
+          "other": "Za te izdelke vam ni bilo zaračunano"
+        },
+        "thank_you_unconfirmed_items_heading": {
+          "one": "Izdelek ni potrjen",
+          "other": "Nekateri izdelki niso potrjeni"
+        },
+        "track_your_order_link_text": "Spremljajte svoje naročilo"
+      }
+    }
   }
 }
