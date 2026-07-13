@@ -7,7 +7,7 @@ if (!customElements.get('localization-form')) {
         this.mql = window.matchMedia('(min-width: 750px)');
         this.header = document.querySelector('.header-wrapper');
         this.elements = {
-          input: this.querySelector('input[name="locale_code"], input[name="country_code"]'),
+          input: this.querySelector('input[name="language_code"], input[name="country_code"]'),
           button: this.querySelector('button.localization-form__select'),
           panel: this.querySelector('.disclosure__list-wrapper'),
           search: this.querySelector('input[name="country_filter"]'),
@@ -108,6 +108,11 @@ if (!customElements.get('localization-form')) {
       onItemClick(event) {
         if (event.currentTarget.dataset.externalMarket === 'true') {
           this.hidePanel();
+          const marketUrl = event.currentTarget.dataset.marketUrl;
+          if (marketUrl) {
+            event.preventDefault();
+            window.location.assign(marketUrl);
+          }
           return;
         }
         event.preventDefault();

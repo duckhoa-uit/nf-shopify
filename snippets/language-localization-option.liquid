@@ -1,0 +1,45 @@
+{% doc %}
+  Renders one language option for the global language selector.
+
+  @param {string} iso_code - The language ISO code
+  @param {string} label - The language endonym
+  @param {string} fallback_url - The canonical market URL when the language is unavailable here
+  @param {shop_locale[]} available_languages - Languages available in the current market
+{% enddoc %}
+
+{%- liquid
+  assign native_language = available_languages | where: 'iso_code', iso_code | first
+  assign is_current = false
+  assign is_native = false
+  if iso_code == localization.language.iso_code
+    assign is_current = true
+  endif
+  if native_language != blank
+    assign is_native = true
+  endif
+-%}
+
+<li class="disclosure__item{% unless is_native %} disclosure__item--external{% endunless %}" tabindex="-1">
+  <a
+    class="link link--text disclosure__link caption-large focus-inset"
+    {% if is_native %}
+      href="#"
+      data-value="{{ iso_code }}"
+    {% else %}
+      href="{{ fallback_url }}"
+      rel="alternate"
+      data-external-market="true"
+      data-market-url="{{ fallback_url }}"
+    {% endif %}
+    hreflang="{{ iso_code }}"
+    lang="{{ iso_code }}"
+    {% if is_current %}
+      aria-current="true"
+    {% endif %}
+  >
+    <span{% unless is_current %} class="visibility-hidden"{% endunless %}>
+      {{- 'icon-checkmark.svg' | inline_asset_content -}}
+    </span>
+    <span>{{ label }}</span>
+  </a>
+</li>
