@@ -167,11 +167,14 @@
         endif
       -%}
 
-      {%- if customer -%}
-        <a href="{{ routes.cart_url }}" class="header__icon link px-3 focus-inset ">
-          <span class="svg-wrapper [&_svg]:size-[1.625rem]">{{ 'icon-currency.svg' | inline_asset_content }}</span>
-        </a>
-      {%- endif -%}
+      {%- comment -%} BON NCA fullpage: bon-loyalty-fullpage-extension {%- endcomment -%}
+      <a
+        href="{% if customer %}{{ routes.account_url }}/pages/5b42ee3a-f88b-4d99-a15d-f85a2b92edb6{% else %}{{ routes.account_login_url }}{% endif %}"
+        class="header__icon link px-3 focus-inset"
+        aria-label="{{ 'customer.account.loyalty_bonus' | t }}"
+      >
+        <span class="svg-wrapper [&_svg]:size-[1.625rem]">{{ 'icon-currency.svg' | inline_asset_content }}</span>
+      </a>
 
       {%- for block in section.blocks -%}
         {%- case block.type -%}
