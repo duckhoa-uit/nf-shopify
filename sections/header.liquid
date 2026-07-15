@@ -168,8 +168,16 @@
       -%}
 
       {%- comment -%} BON NCA fullpage: bon-loyalty-fullpage-extension {%- endcomment -%}
+      {%- liquid
+        if customer
+          assign bon_loyalty_account_path = routes.account_url | split: '?' | first
+          assign bon_loyalty_href = bon_loyalty_account_path | append: '/pages/5b42ee3a-f88b-4d99-a15d-f85a2b92edb6'
+        else
+          assign bon_loyalty_href = routes.account_login_url
+        endif
+      -%}
       <a
-        href="{% if customer %}{{ routes.account_url }}/pages/5b42ee3a-f88b-4d99-a15d-f85a2b92edb6{% else %}{{ routes.account_login_url }}{% endif %}"
+        href="{{ bon_loyalty_href }}"
         class="header__icon link px-3 focus-inset"
         aria-label="{{ 'customer.account.loyalty_bonus' | t }}"
       >
