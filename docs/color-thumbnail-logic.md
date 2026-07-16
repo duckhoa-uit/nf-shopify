@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document explains the complex logic used to retrieve color-specific product images (thumbnails) based on color variants in the Shopify theme. The system prioritizes model images with specific naming conventions and fallback strategies.
+This document explains how the theme retrieves color-specific product thumbnails from variant data, SKU references, and product media.
 
 ## Image Naming Convention
 
@@ -59,6 +59,7 @@ A simplified wrapper around the core utility:
 {% render 'get-variant-color-image',
   product: product,
   color_value: color_value,
+  variant: variant,
   width: 80,
   height: 80,
   crop: 'center',
@@ -66,63 +67,29 @@ A simplified wrapper around the core utility:
 %}
 ```
 
-## Priority Logic for Model Images (image_type: 'M')
+## Canonical Priority Logic
 
-When `image_type: 'M'` is specified, the system follows this priority order:
+All PDP and product-card color thumbnails use this order:
 
-### Step 1: Find Reference ID
-```liquid
-{% assign color_value_normalized = color_value | downcase | strip | replace: ' ', '-' %}
-{% if product.metafields.custom.color.value != blank %}
-  {% for color_item in product.metafields.custom.color.value %}
-    {% if color_item.name == color_value_normalized %}
-      {% assign reference_id = color_item.reference_id %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
-```
+1. `variant.featured_image`
+2. Same-reference `-H`
+3. Same-reference `-M`
+4. Same-reference lowest numbered `-M_1`, `-M_2`, `-M_3`...
+5. Same-reference lowest numbered `-D_1`, `-D_2`, `-D_3`...
+6. Same-reference `-BV`
+7. Same-reference `-B`
+8. Native color swatch
+9. Placeholder
 
-### Step 2: Priority Order
-1. **Highest Priority**: Model image without sequence (`-M`)
-   - Example: `NF-TR-4919OR-362-M.jpg`
+The resolver never falls back to another color's model image or product featured image.
 
-2. **Second Priority**: Model image with lowest sequence number (`-M_1`, `-M_2`, `-M_3`...)
-   - Example: `NF-TR-4919OR-362-M_1.jpg` (preferred over `M_2`, `M_3`, etc.)
+The preferred reference source is the numeric segment before the size segment in the variant SKU. For example, `108139-490-372` resolves to reference `490`. The color metaobject `reference_id` is used when the SKU is unavailable or does not contain a valid numeric reference.
 
-### Step 3: Improved Sequence Selection Logic
+Media matching uses the exact `-<reference>-` token, and supports Shopify UUID suffixes such as `-M_1_<uuid>.jpg`.
 
-**Previous Issue**: Logic was selecting the first image found, not necessarily the lowest sequence.
+## Missing Image Behavior
 
-**Current Solution**:
-```liquid
-{% assign lowest_sequence = 999 %}
-{% assign best_model_media = nil %}
-
-{% for media in product.media %}
-  {% if parsed_url contains reference_id and parsed_url contains '-M_' %}
-    {% assign sequence_number = sequence_part | plus: 0 %}
-
-    {% if sequence_number > 0 and sequence_number < lowest_sequence %}
-      {% assign lowest_sequence = sequence_number %}
-      {% assign best_model_media = media %}
-    {% endif %}
-  {% endif %}
-{% endfor %}
-
-{% if best_model_media %}
-  {% assign image_url = best_model_media.preview_image | image_url: width: width, height: height, crop: crop %}
-{% endif %}
-```
-
-## Fallback Strategy
-
-If no model image is found, the system uses this fallback order:
-
-1. **Step 4**: Try to match by color name in URL
-2. **Step 5**: Try to find any image with color reference pattern
-3. **Step 6**: Fallback to first model image of any color
-4. **Step 7**: Final fallback to any product image
+When a color has no direct variant image and no same-reference media, `always` keeps the color visible and renders its native swatch or a placeholder. `thumbnail_only` hides that color. Neither mode may display an image belonging to another color.
 
 ## Files Using Color Thumbnails
 
@@ -133,6 +100,7 @@ If no model image is found, the system uses this fallback order:
 {% capture thumbnail_url %}{% render 'get-variant-color-image',
   product: product,
   color_value: color_value,
+  variant: value.variant,
   width: 80,
   height: 80,
   crop: 'center',
@@ -204,18 +172,19 @@ Given this media list for a product:
 
 ## Key Improvements Made
 
-1. **Fixed Sequence Priority**: Now correctly selects lowest sequence number
-2. **Added Validation**: `sequence_number > 0` to avoid invalid sequences
-3. **Consistent Implementation**: All files now use `image_type: 'M'` parameter
-4. **Better Performance**: Store best candidate and assign URL only once
+1. **Canonical priority**: H, M, M_n, D_n, BV, B after the direct variant image
+2. **SKU reference fallback**: Supports colors whose metafields are incomplete
+3. **Exact reference matching**: Prevents cross-color image leakage
+4. **Native swatch fallback**: Preserves the color when no image exists
+5. **Deterministic sequence selection**: Chooses the lowest numeric M/D sequence
 
 ## Best Practices
 
-1. **Always specify `image_type: 'M'`** for color thumbnails
-2. **Use consistent dimensions** across similar use cases
-3. **Include fallback logic** for when no color-specific image exists
-4. **Normalize color values** before processing
-5. **Strip whitespace** from captured URLs
+1. **Pass the exact variant** when one is available
+2. **Use the SKU reference** before the color metaobject reference
+3. **Match the complete `-<reference>-` token**
+4. **Keep `always` separate from image selection strictness**
+5. **Use native swatches before placeholders**
 
 ## Troubleshooting
 

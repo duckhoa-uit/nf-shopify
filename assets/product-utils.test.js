@@ -1,6 +1,6 @@
 
 import { describe, test, expect } from "vitest";
-import { parseImageUrl, sortImagesByDisplayRules } from "./product-utils.module.js";
+import { filterMediaByColor, parseImageUrl, sortImagesByDisplayRules } from "./product-utils.module.js";
 
 describe("parseImageUrl", () => {
   // New format tests (NF-no-)
@@ -245,6 +245,37 @@ describe("parseImageUrl", () => {
       reference_id: 696,
       unique_id: expect.any(String),
     });
+  });
+
+  test("parses a normalized duplicate suffix after a model sequence", () => {
+    const result = parseImageUrl(
+      "no-4894snw-women-s-ski-comfortable-trousers-with-braces-alma-NF-NO-4894SNW-526-M_1_2.jpg",
+    );
+    expect(result).toEqual({
+      product: "NF-NO-4894SNW",
+      color: "color-526",
+      image_type: "model",
+      sequence: 1,
+      reference_id: 526,
+      unique_id: expect.any(String),
+    });
+  });
+});
+
+describe("filterMediaByColor", () => {
+  test("keeps ALMA model images with normalized duplicate suffixes in the selected color", () => {
+    const mediaUrls = [
+      "no-4894snw-women-s-ski-comfortable-trousers-with-braces-alma-NF-NO-4894SNW-526-H.jpg",
+      "no-4894snw-women-s-ski-comfortable-trousers-with-braces-alma-NF-NO-4894SNW-526-M_1_2.jpg",
+      "no-4894snw-women-s-ski-comfortable-trousers-with-braces-alma-NF-NO-4894SNW-526-M_2_2.jpg",
+      "no-4894snw-women-s-ski-comfortable-trousers-with-braces-alma-NF-NO-4894SNW-269-H.jpg",
+    ];
+    const colorMappings = [
+      { name: "black", reference_id: 269 },
+      { name: "inkblue", reference_id: 526 },
+    ];
+
+    expect(filterMediaByColor(mediaUrls, "526", colorMappings)).toEqual(mediaUrls.slice(0, 3));
   });
 });
 

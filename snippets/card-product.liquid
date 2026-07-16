@@ -383,33 +383,46 @@
 
             {%- if color_variant -%}
               {%- liquid
-                # ============================================================
-                # PRIORITY ORDER (matches get-variant-color-image snippet):
-                # 1. variant.featured_image / variant.image (direct Shopify association)
-                # 2. reference_id from metafields + image naming patterns (-M, -M_N)
-                # 3. Color name matching in URL or alt text
-                # 4. featured_media fallback
-                # ============================================================
                 assign variant_image = null
                 assign variant_image_is_color_match = false
+                assign card_swatch = null
                 assign color_value = color | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
 
-                # PRIORITY 1: Check variant.featured_image first (matching main product page logic)
                 if color_variant.featured_image
                   assign variant_image = color_variant.featured_image
                   assign variant_image_is_color_match = true
-                elsif color_variant.image
-                  assign variant_image = color_variant.image
-                  assign variant_image_is_color_match = true
                 endif
 
-                # PRIORITY 2: Use reference_id from metafields + image naming patterns
+                for product_option in card_product.options_with_values
+                  if product_option.position == color_option_position
+                    for option_value in product_option.values
+                      if option_value == color
+                        assign card_swatch = option_value.swatch
+                        break
+                      endif
+                    endfor
+                    break
+                  endif
+                endfor
+
                 unless variant_image
                   assign reference_id = ''
+                  if color_variant.sku != blank
+                    assign sku_parts = color_variant.sku | split: '-'
+                    assign reference_index = sku_parts.size | minus: 2
+                    if reference_index >= 0
+                      assign sku_reference_id = sku_parts[reference_index] | strip
+                      assign sku_reference_number = sku_reference_id | plus: 0
+                      if sku_reference_number > 0
+                        assign reference_id = sku_reference_id
+                      endif
+                    endif
+                  endif
 
-                  if card_product.metafields.custom.color.value != blank
+                  if reference_id == '' and card_product.metafields.custom.color.value != blank
                     for color_item in card_product.metafields.custom.color.value
-                      if color_item.name == color_value
+                      assign handle_root = color_item.system.handle | split: '-' | first | downcase
+                      if color_item.name == color_value or handle_root == color_value
                         assign reference_id = color_item.reference_id
                         break
                       endif
@@ -417,87 +430,59 @@
                   endif
 
                   if reference_id != '' and card_product.media.size > 0
-                    assign found_variant_image = false
-                    assign best_variant_seq = 999
+                    assign reference_token = '-' | append: reference_id | append: '-'
+                    assign hero_media = null
+                    assign model_media = null
+                    assign model_sequence_media = null
+                    assign detail_media = null
+                    assign back_variant_media = null
+                    assign back_media = null
+                    assign lowest_model_sequence = 999
+                    assign lowest_detail_sequence = 999
 
                     for media in card_product.media
                       assign media_src = media.src | default: ''
-                      assign parsed_url = media_src | split: '/' | last
-
-                      if parsed_url contains reference_id
-                        # Priority 2a: -M without sequence
-                        if parsed_url contains '-M'
-                          unless parsed_url contains '-M_'
-                            assign variant_image = media
-                            assign variant_image_is_color_match = true
-                            assign found_variant_image = true
-                            break
-                          endunless
+                      assign filename = media_src | split: '/' | last | split: '?' | first
+                      if filename contains reference_token
+                        assign type_token = filename | split: reference_token | last | split: '.' | first
+                        assign type_parts = type_token | split: '_'
+                        assign type_name = type_parts.first
+                        assign type_sequence = 0
+                        if type_parts.size > 1
+                          assign type_sequence = type_parts[1] | plus: 0
                         endif
 
-                        # Priority 2b: -M_N with lowest sequence
-                        if parsed_url contains '-M_' and found_variant_image == false
-                          assign seq_part = parsed_url | split: '-M_' | last | split: '.' | first
-                          assign seq_num = seq_part | plus: 0
-                          if seq_num > 0 and seq_num < best_variant_seq
-                            assign best_variant_seq = seq_num
-                            assign variant_image = media
-                            assign variant_image_is_color_match = true
+                        if type_name == 'H' and hero_media == null
+                          assign hero_media = media
+                        elsif type_name == 'M'
+                          if type_sequence > 0
+                            if type_sequence < lowest_model_sequence
+                              assign lowest_model_sequence = type_sequence
+                              assign model_sequence_media = media
+                            endif
+                          elsif model_media == null
+                            assign model_media = media
                           endif
-                        endif
-
-                        # Priority 2c: Other image types (H, B, BV, D)
-                        if variant_image == null
-                          if parsed_url contains '-H' or parsed_url contains '-B' or parsed_url contains '-BV' or parsed_url contains '-D'
-                            assign variant_image = media
-                            assign variant_image_is_color_match = true
+                        elsif type_name == 'D' and type_sequence > 0
+                          if type_sequence < lowest_detail_sequence
+                            assign lowest_detail_sequence = type_sequence
+                            assign detail_media = media
                           endif
+                        elsif type_name == 'BV' and back_variant_media == null
+                          assign back_variant_media = media
+                        elsif type_name == 'B' and back_media == null
+                          assign back_media = media
                         endif
                       endif
                     endfor
-                  endif
-                endunless
 
-                # PRIORITY 3: Try to find by color name in URL or alt text
-                unless variant_image
-                  if card_product.media.size > 0
-                    for media in card_product.media
-                      assign media_src = media.src | default: ''
-                      assign parsed_url = media_src | split: '/' | last
-
-                      if parsed_url contains color_value
-                        assign variant_image = media
-                        assign variant_image_is_color_match = true
-                        break
-                      endif
-
-                      if media.alt contains color or media.alt contains color_variant.title
-                        assign variant_image = media
-                        assign variant_image_is_color_match = true
-                        break
-                      endif
-                    endfor
-                  endif
-                endunless
-
-                # PRIORITY 4: Try product.images as last resort
-                unless variant_image
-                  for image in card_product.images
-                    if image.alt contains color or image.alt contains color_variant.title
-                      assign variant_image = image
+                    assign variant_image = hero_media | default: model_media | default: model_sequence_media | default: detail_media | default: back_variant_media | default: back_media
+                    if variant_image
                       assign variant_image_is_color_match = true
-                      break
                     endif
-                  endfor
+                  endif
                 endunless
 
-                # PRIORITY 5: Final fallback to featured_media (NOT a color-specific match)
-                unless variant_image
-                  assign variant_image = card_product.featured_media
-                endunless
-
-                # Strict mode: when merchant chose "Only with thumbnail", skip colors
-                # whose image could not be resolved by a color-specific match (P1-P4).
                 assign skip_card_color_value = false
                 if card_strict_thumbnail and variant_image_is_color_match == false
                   assign skip_card_color_value = true
@@ -536,13 +521,30 @@
                     class="w-full h-full object-cover"
                   >
                 {%- else -%}
-                  {%- comment -%} Show placeholder when no variant image is available {%- endcomment -%}
-                  <div class="variant-swatch-placeholder w-full h-full bg-gray-100 flex items-center justify-center">
-                    {{
-                      'product-apparel-2'
-                      | placeholder_svg_tag: 'variant-swatch-placeholder-svg w-3/5 h-3/5 text-gray-400 opacity-70'
-                    }}
-                  </div>
+                  {%- if card_swatch.image -%}
+                    <img
+                      src="{{ card_swatch.image | image_url: width: 120 }}"
+                      alt="{{ color | escape }}"
+                      loading="lazy"
+                      decoding="async"
+                      width="120"
+                      height="120"
+                      class="w-full h-full object-cover"
+                    >
+                  {%- elsif card_swatch.color -%}
+                    <span
+                      class="w-full h-full"
+                      style="background-color: rgb({{ card_swatch.color.rgb }});"
+                      aria-hidden="true"
+                    ></span>
+                  {%- else -%}
+                    <div class="variant-swatch-placeholder w-full h-full bg-gray-100 flex items-center justify-center">
+                      {{
+                        'product-apparel-2'
+                        | placeholder_svg_tag: 'variant-swatch-placeholder-svg w-3/5 h-3/5 text-gray-400 opacity-70'
+                      }}
+                    </div>
+                  {%- endif -%}
                 {%- endif -%}
               </a>
             {%- endif -%}
