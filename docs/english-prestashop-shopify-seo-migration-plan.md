@@ -281,9 +281,9 @@ Make PrestaShop the preferred English destination without changing Shopify's def
 
 ### P1-02 - Route the English language selector externally
 
-- [ ] Add an explicit external override to `snippets/language-localization-option.liquid` so a language can use its external destination even when it exists in `localization.available_languages`.
-- [ ] Configure the English entry in `snippets/language-localization.liquid` to use the approved PrestaShop English URL and the external override.
-- [ ] Preserve Shopify native localization submission for DE, HR, SL, and every other language that remains native to its current market.
+- [x] Add an explicit external override to `snippets/language-localization-option.liquid` so a language can use its external destination even when it exists in `localization.available_languages`.
+- [x] Configure the English entry in `snippets/language-localization.liquid` to use `https://northfinder.com/en/` and the external override.
+- [x] Preserve Shopify native localization submission for DE, HR, SL, and every other language that remains native to its current market.
 - [ ] Verify all selector surfaces: announcement bar, desktop header if present, mobile drawer, and footer.
 - [ ] Verify current-language labels, keyboard interaction, focus behavior, and analytics events.
 - [ ] Decide whether the selector goes to the PrestaShop homepage or an equivalent current page. Use current-page mapping only if coverage and behavior are reliable.
@@ -741,4 +741,5 @@ Record approved decisions here. Do not overwrite older entries.
 
 | Date | Change | Author |
 | --- | --- | --- |
+| 2026-07-17 | Implemented the external PrestaShop destination for the English language selector | Codex |
 | 2026-07-17 | Initial full-phase migration plan created | Codex |
