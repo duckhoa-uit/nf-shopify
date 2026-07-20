@@ -394,7 +394,17 @@
   cursor: default;
 }
 
-.child-collections-scroll.scrollable {
+.child-collections-scroll.has-left-overflow {
+  mask-image: linear-gradient(to right, transparent 0, black 5%, black 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 5%, black 100%);
+}
+
+.child-collections-scroll.has-right-overflow {
+  mask-image: linear-gradient(to right, black 0, black 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 0, black 95%, transparent 100%);
+}
+
+.child-collections-scroll.has-left-overflow.has-right-overflow {
   mask-image: linear-gradient(to right, transparent 0, black 5% 95%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0, black 5% 95%, transparent 100%);
 }
@@ -474,11 +484,11 @@
   }
 
   .child-collection-link {
-    padding: 6px 12px;
-    min-height: 36px;
+    padding: 8px 16px;
+    min-height: 40px;
   }
 
   .child-collection-title {
-    font-size: 13px;
+    font-size: 14px;
   }
 }
