@@ -85,46 +85,77 @@
 
       <div class="collection-header-controls mt-6 md:mb-12">
         {%- liquid
-          assign has_children = false
+          # Use the current collection's parent as the navigation context when
+          # rendering a child collection. This keeps sibling category links
+          # visible on filtered/deep collection pages, like the legacy store.
+          assign navigation_parent = collection
+          assign collection_parent = collection.metafields.custom.parent_collection.value
+
+          if collection_parent != blank
+            assign navigation_parent = collection_parent
+          endif
+
+          assign has_navigation_links = false
 
           for child in collections
-            if child.metafields.custom.parent_collection.value.handle == collection.handle or child.metafields.custom.parent_collection.value.id == collection.id
-              assign has_children = true
-              break
+            assign child_parent = child.metafields.custom.parent_collection.value
+
+            if child_parent != blank
+              if child_parent.handle == navigation_parent.handle or child_parent.id == navigation_parent.id
+                assign has_navigation_links = true
+                break
+              endif
             endif
           endfor
         -%}
 
         <div class="collection-header-left">
-          {%- if has_children -%}
+          {%- if has_navigation_links -%}
             <div class="child-collections-wrapper">
               <div class="child-collections-scroll">
                 <div class="child-collections-list">
                   {%- for child_collection in collections -%}
-                    {%- if child_collection.metafields.custom.parent_collection.value.handle == collection.handle
-                      or child_collection.metafields.custom.parent_collection.value.id == collection.id
+                    {%- liquid
+                      assign child_parent = child_collection.metafields.custom.parent_collection.value
+                      assign child_matches_parent = false
+
+                      if child_parent != blank
+                        if child_parent.handle == navigation_parent.handle or child_parent.id == navigation_parent.id
+                          assign child_matches_parent = true
+                        endif
+                      endif
                     -%}
-                      {%- if child_collection.products.size > 0 -%}
-                        <a
-                          href="{{ child_collection.url }}"
-                          class="child-collection-link {% if request.path == child_collection.url %}active{% endif %}"
-                        >
-                          <span class="child-collection-title">
-                            {{- child_collection.metafields.custom.display_name | default: child_collection.title -}}
-                          </span>
-                        </a>
-                      {%- endif -%}
+
+                    {%- if child_matches_parent and child_collection.products_count > 0 -%}
+                      {%- liquid
+                        assign child_label = child_collection.metafields.custom.display_name.value | default: child_collection.title
+
+                        if child_label contains navigation_parent.title
+                          assign child_label = child_label | remove_first: navigation_parent.title | remove_first: ' - ' | strip
+                        endif
+                      -%}
+
+                      <a
+                        href="{{ child_collection.url }}"
+                        class="child-collection-link{% if child_collection.id == collection.id %} active{% endif %}"
+                        {% if child_collection.id == collection.id %}aria-current="page"{% endif %}
+                      >
+                        <span class="child-collection-title">{{- child_label | escape -}}</span>
+                      </a>
                     {%- endif -%}
                   {%- endfor -%}
                 </div>
               </div>
             </div>
           {%- else -%}
-            {%- comment -%} Fallback: Render activities filter when no child collections exist {%- endcomment -%}
+            {%- comment -%} Fallback: Render activities when no category hierarchy exists {%- endcomment -%}
             {%- liquid
               assign activities_filter = null
               for filter in collection.filters
-                if filter.param_name == 'filter.p.m.features.activities'
+                if filter.param_name == 'filter.p.m.custom_features.activities'
+                  assign activities_filter = filter
+                  break
+                elsif filter.param_name == 'filter.p.m.features.activities'
                   assign activities_filter = filter
                   break
                 endif
@@ -139,36 +170,10 @@
                       {%- unless value.count == 0 and value.active == false -%}
                         <a
                           href="{{ value.url_to_add }}"
-                          class="child-collection-link {% if value.active %}active{% endif %}"
+                          class="child-collection-link{% if value.active %} active{% endif %}"
+                          {% if value.active %}aria-current="page"{% endif %}
                         >
-                          <span class="child-collection-title">
-                            {%- liquid
-                              # Try to get translated label from metaobject entries
-                              assign translated_label = value.label
-                              assign metaobject_entries = shop.metaobjects.product_feature
-
-                              if metaobject_entries and metaobject_entries.size > 0
-                                for entry in metaobject_entries
-                                  if entry.name and entry.name.value == value.label
-                                    assign translated_label = entry.name.value
-                                    break
-                                  endif
-                                endfor
-
-                                # Try handle match if no exact match found
-                                if translated_label == value.label
-                                  assign value_handle = value.label | handleize
-                                  for entry in metaobject_entries
-                                    if entry.handle == value_handle and entry.name and entry.name.value != blank
-                                      assign translated_label = entry.name.value
-                                      break
-                                    endif
-                                  endfor
-                                endif
-                              endif
-                            -%}
-                            {{- translated_label -}}
-                          </span>
+                          <span class="child-collection-title">{{- value.label | escape -}}</span>
                         </a>
                       {%- endunless -%}
                     {%- endfor -%}
@@ -301,7 +306,7 @@
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path d="M0.75 6.26308H12.9615C13.2984 7.62405 14.5295 8.63622 15.9931 8.63622C17.4567 8.63622 18.6878 7.62405 19.0246 6.26308H23.25C23.6642 6.26308 24 5.92727 24 5.51308C24 5.09889 23.6642 4.76308 23.25 4.76308H19.0246C18.6878 3.40211 17.4567 2.38989 15.993 2.38989C14.5294 2.38989 13.2983 3.40211 12.9615 4.76308H0.75C0.335812 4.76308 0 5.09889 0 5.51308C0 5.92727 0.335812 6.26308 0.75 6.26308ZM15.9931 3.88989C16.8881 3.88989 17.6163 4.61805 17.6163 5.51303C17.6163 6.40806 16.8881 7.13622 15.9931 7.13622C15.0981 7.13622 14.3699 6.40806 14.3699 5.51303C14.3699 4.61805 15.0981 3.88989 15.9931 3.88989ZM0.75 12.75H4.97541C5.31225 14.111 6.54333 15.1232 8.00695 15.1232C9.47058 15.1232 10.7017 14.111 11.0385 12.75H23.25C23.6642 12.75 24 12.4142 24 12C24 11.5858 23.6642 11.25 23.25 11.25H11.0385C10.7016 9.88905 9.47053 8.87683 8.00691 8.87683C6.54328 8.87683 5.3122 9.88905 4.97536 11.25H0.75C0.335812 11.25 0 11.5858 0 12C0 12.4142 0.335766 12.75 0.75 12.75ZM8.00691 10.3768C8.90194 10.3768 9.63009 11.105 9.63009 12C9.63009 12.895 8.90194 13.6232 8.00691 13.6232C7.11187 13.6232 6.38372 12.895 6.38372 12C6.38372 11.105 7.11187 10.3768 8.00691 10.3768ZM23.25 17.737H19.0246C18.6877 16.376 17.4567 15.3638 15.993 15.3638C14.5294 15.3638 13.2983 16.376 12.9615 17.737H0.75C0.335812 17.737 0 18.0728 0 18.487C0 18.9011 0.335812 19.237 0.75 19.237H12.9615C13.2984 20.5979 14.5295 21.6101 15.9931 21.6101C17.4567 21.6101 18.6878 20.5979 19.0246 19.237H23.25C23.6642 19.237 24 18.9011 24 18.487C24 18.0728 23.6642 17.737 23.25 17.737ZM15.9931 20.1101C15.0981 20.1101 14.3699 19.382 14.3699 18.487C14.3699 17.5919 15.0981 16.8638 15.9931 16.8638C16.8881 16.8638 17.6163 17.5919 17.6163 18.487C17.6163 19.382 16.8881 20.1101 15.9931 20.1101Z" fill="#EC0009"></path>
+                      <path d="M0.75 6.26308H12.9615C13.2984 7.62405 14.5295 8.63622 15.9931 8.63622C17.4567 8.63622 18.6878 7.62405 19.0246 6.26308H23.25C23.6642 6.26308 24 5.92727 24 5.51308C24 5.09889 23.6642 4.76308 23.25 4.76308H19.0246C18.6878 3.40211 17.4567 2.38989 15.993 2.38989C14.5294 2.38989 13.2983 3.40211 12.9615 4.76308H0.75C0.335812 4.76308 0 5.09889 0 5.51308C0 5.92727 0.335812 6.26308 0.75 6.26308ZM15.9931 3.88989C16.8881 3.88989 17.6163 4.61805 17.6163 5.51303C17.6163 6.40806 16.8881 7.13622 15.9931 7.13622C15.0981 7.13622 14.3699 6.40806 14.3699 5.51303C14.3699 4.61805 15.0981 3.88989 15.9931 3.88989ZM0.75 12.75H4.97541C5.31225 14.111 6.54333 15.1232 8.00695 15.1232C9.47058 15.1232 10.7017 14.111 11.0385 12.75H23.25C23.6642 12.75 24 12.4142 24 12C24 11.5858 23.6642 11.25 23.25 11.25H11.0385C10.7016 9.88905 9.47053 8.87683 8.00691 8.87683C6.54328 8.87683 5.3122 9.88905 4.97536 11.25H0.75C0.335812 11.25 0 11.5858 0 12C0 12.4142 0.335766 12.75 0.75 12.75ZM8.00691 10.3768C8.90194 10.3768 9.63009 11.105 9.63009 12C9.63009 12.895 8.90194 13.6232 8.00691 13.6232C7.11187 13.6232 6.38372 12.895 6.38372 12C6.38372 11.105 7.11187 10.3768 8.00691 10.3768ZM23.25 17.737H19.0246C18.6877 16.376 17.4567 15.3638 15.993 15.3638C14.5294 15.3638 13.2983 16.376 12.9615 17.737H0.75C0.335812 17.737 0 18.0728 0 18.487C0 18.9011 0.335766 19.237 0.75 19.237H12.9615C13.2984 20.5979 14.5295 21.6101 15.9931 21.6101C17.4567 21.6101 18.6878 20.5979 19.0246 19.237H23.25C23.6642 19.237 24 18.9011 24 18.487C24 18.0728 23.6642 17.737 23.25 17.737ZM15.9931 20.1101C15.0981 20.1101 14.3699 19.382 14.3699 18.487C14.3699 17.5919 15.0981 16.8638 15.9931 16.8638C16.8881 16.8638 17.6163 17.5919 17.6163 18.487C17.6163 19.382 16.8881 20.1101 15.9931 20.1101Z" fill="#EC0009"></path>
                     </svg>
                   </span>
                   <span class="filter-text">{{ 'products.facets.hide_filters' | t }}</span>
@@ -998,19 +1003,28 @@
     // Child collections scroll functionality
     const childCollectionsScroll = document.querySelector('.child-collections-scroll');
     if (childCollectionsScroll) {
-      // Check if scrolling is needed
-      const checkScrollable = function() {
-        const isScrollable = childCollectionsScroll.scrollWidth > childCollectionsScroll.clientWidth;
-        childCollectionsScroll.classList.toggle('scrollable', isScrollable);
+      // Keep the fade mask directional so it only hints at content still available to scroll.
+      const updateScrollState = function() {
+        const maxScrollLeft = Math.max(0, childCollectionsScroll.scrollWidth - childCollectionsScroll.clientWidth);
+        const currentScrollLeft = Math.max(0, Math.min(childCollectionsScroll.scrollLeft, maxScrollLeft));
+        const isScrollable = maxScrollLeft > 1;
+        const hasLeftOverflow = currentScrollLeft > 1;
+        const hasRightOverflow = currentScrollLeft < maxScrollLeft - 1;
+
         childCollectionsScroll.classList.toggle('grabbable', isScrollable);
+        childCollectionsScroll.classList.toggle('has-left-overflow', hasLeftOverflow);
+        childCollectionsScroll.classList.toggle('has-right-overflow', hasRightOverflow);
       };
 
       // Check on load
-      checkScrollable();
+      updateScrollState();
+
+      // Update the directional mask as the chips are scrolled.
+      childCollectionsScroll.addEventListener('scroll', updateScrollState, { passive: true });
 
       // Check on resize
       window.addEventListener('resize', function() {
-        checkScrollable();
+        updateScrollState();
       });
 
       // Grab to scroll functionality
