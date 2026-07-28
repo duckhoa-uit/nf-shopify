@@ -23,18 +23,7 @@
       assign ratio = media_aspect_ratio
     endif
 
-    # Pre-compute whether the article has any user-facing tags (excludes internal ones).
-    assign _has_visible_tag = false
-    for _t in article.tags
-      assign _t_lc = _t | downcase
-      assign _t3 = _t_lc | slice: 0, 3
-      assign _t7 = _t_lc | slice: 0, 7
-      if _t_lc == 'legacy-blog' or _t3 == 'ps-' or _t3 == 'qa-' or _t7 == 'locale-'
-        continue
-      endif
-      assign _has_visible_tag = true
-      break
-    endfor
+    assign _has_visible_tag = article.tags.size > 0
   -%}
   <div class="article-card-wrapper card-wrapper" style="container-type: inline-size;">
     <div class="article-card">
@@ -58,15 +47,7 @@
                 {%- assign _img_tag_count = 0 -%}
                 {% for tag in article.tags %}
                   {%- if _img_tag_count >= 3 -%}{%- break -%}{%- endif -%}
-                  {%- liquid
-                    assign _t_lc = tag | downcase
-                    assign _t3 = _t_lc | slice: 0, 3
-                    assign _t7 = _t_lc | slice: 0, 7
-                    if _t_lc == 'legacy-blog' or _t3 == 'ps-' or _t3 == 'qa-' or _t7 == 'locale-'
-                      continue
-                    endif
-                    assign _img_tag_count = _img_tag_count | plus: 1
-                  -%}
+                  {%- assign _img_tag_count = _img_tag_count | plus: 1 -%}
                   {%- render 'article-tag-label', tag: tag, class: 'article-card__image-tag' -%}
                 {% endfor %}
               </div>

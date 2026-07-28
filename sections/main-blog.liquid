@@ -184,38 +184,12 @@
         {{ 'blogs.main_blog.all_articles' | t }}
       </a>
 
-      {% comment %}
-        Use Shopify's built-in tags for category filtering. The migration tags
-        are hidden until the live Article cleanup removes them.
-      {% endcomment %}
       {%- for tag in blog.all_tags -%}
         {%- liquid
-          assign tag_lc = tag | downcase
-          assign hide_tag = false
-          if tag_lc == 'legacy-blog'
-            assign hide_tag = true
-          endif
-          assign locale_prefix = tag_lc | slice: 0, 7
-          if locale_prefix == 'locale-'
-            assign hide_tag = true
-          endif
-          assign ps_prefix = tag_lc | slice: 0, 3
-          if ps_prefix == 'ps-'
-            assign hide_tag = true
-          endif
-          assign qa_prefix = tag_lc | slice: 0, 3
-          if qa_prefix == 'qa-'
-            assign hide_tag = true
-          endif
-          assign cat_prefix = tag_lc | slice: 0, 4
-        -%}
-        {%- if hide_tag -%}{%- continue -%}{%- endif -%}
-        {%- liquid
           assign tag_handle = tag | handleize
+          assign tag_lc = tag | downcase
           assign chip_label = tag
-          if cat_prefix == 'cat:'
-            # Translatable label via `blog_category` metaobject. Fall back to
-            # humanized slug when no matching entry exists.
+          if tag_lc contains 'cat:'
             assign cat_slug = tag | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | downcase | handleize
             assign cat_entry = shop.metaobjects.blog_category[cat_slug]
             if cat_entry != blank and cat_entry.name != blank
