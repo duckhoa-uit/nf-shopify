@@ -23,7 +23,10 @@
       assign ratio = media_aspect_ratio
     endif
 
-    assign _has_visible_tag = article.tags.size > 0
+    assign _has_visible_tag = false
+    if article.tags.size > 0
+      assign _has_visible_tag = true
+    endif
   -%}
   <div class="article-card-wrapper card-wrapper" style="container-type: inline-size;">
     <div class="article-card">
