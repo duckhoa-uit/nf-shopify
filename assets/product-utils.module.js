@@ -1,6 +1,6 @@
 // Pre-compiled patterns for better performance
 const TYPE_CODES = ['H', 'D', 'M', 'B', 'BV', 'X'];
-const TYPE_CODE_PATTERN = /^(H|D|M|B|BV|X)(_\d+)?$/;
+const TYPE_CODE_PATTERN = /^(H|D|M|B|BV|X)(?:_\d+)*$/;
 const URL_SPLIT_QUERY = /\?v=/;
 const PATH_SPLIT_SLASH = /\//;
 const EXTENSION_PATTERN = /\.[^/.]+$/;

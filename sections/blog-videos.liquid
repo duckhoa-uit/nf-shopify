@@ -149,41 +149,6 @@
     {{ section.settings.heading | escape }}
   </h2>
 
-  {%- comment -%}
-    Locale-aware chip allow-list.
-    Video filtering is JS-side via data-category (not URL pre-filtering),
-    so the walk operates on the unfiltered `blogs.video.articles` and is
-    capped by Shopify's 50-iteration limit. Acceptable for typical video
-    blogs (≤50 entries); larger video blogs would need a paginated walk.
-  {%- endcomment -%}
-  {%- liquid
-    assign chip_locale = request.locale.iso_code | downcase
-    assign chip_locale_tag = 'locale-' | append: chip_locale
-    assign locale_cat_tags = '|'
-    for article in blogs.video.articles
-      assign a_tags_lc = article.tags | join: '|' | downcase
-      assign a_is_legacy = false
-      if a_tags_lc contains 'legacy-blog'
-        assign a_is_legacy = true
-      endif
-      if a_is_legacy
-        unless a_tags_lc contains chip_locale_tag
-          continue
-        endunless
-      endif
-      for t in article.tags
-        assign t_lc = t | downcase
-        assign t_prefix = t_lc | slice: 0, 4
-        if t_prefix == 'cat:'
-          assign t_needle = '|' | append: t_lc | append: '|'
-          unless locale_cat_tags contains t_needle
-            assign locale_cat_tags = locale_cat_tags | append: t_lc | append: '|'
-          endunless
-        endif
-      endfor
-    endfor
-  -%}
-
   {% if section.settings.enable_filtering %}
     <div class="blog-categories">
       <div class="blog-category active" data-category="all">{{ 'blogs.main_blog.all_articles' | t }}</div>
@@ -196,7 +161,8 @@
           if tag_lower == 'legacy-blog'
             assign hide_tag = true
           endif
-          if tag_lower contains 'locale-'
+          assign locale_prefix = tag_lower | slice: 0, 7
+          if locale_prefix == 'locale-'
             assign hide_tag = true
           endif
           assign ps_prefix = tag_lower | slice: 0, 3
@@ -208,12 +174,6 @@
             assign hide_tag = true
           endif
           assign cat_prefix = tag_lower | slice: 0, 4
-          if cat_prefix == 'cat:'
-            assign needle = '|' | append: tag_lower | append: '|'
-            unless locale_cat_tags contains needle
-              assign hide_tag = true
-            endunless
-          endif
         -%}
         {%- if hide_tag -%}{%- continue -%}{%- endif -%}
         {%- liquid

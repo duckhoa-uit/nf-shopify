@@ -33,95 +33,65 @@
 {% assign crop = crop | default: 'center' %}
 {% assign image_type = image_type | default: '' %}
 
-{% comment %}
-  IMPROVED LOGIC: Priority order for variant color thumbnails
-  1. PRIMARY: Get variant image directly from variant.featured_image or variant.image
-  2. FALLBACK: Use existing product-color-utils logic
-{% endcomment %}
-
 {% assign image_url = '' %}
 {% assign color_value_normalized = color_value | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', '' %}
+{% assign target_variant = variant | default: nil %}
 
-{% comment %} Step 1: Try to find variant with matching color and get its direct image {% endcomment %}
-{% if product.variants and color_value_normalized != blank %}
-  {% comment %} Find the color option position using centralized snippet {% endcomment %}
+{% if target_variant == blank and product.variants and color_value_normalized != blank %}
   {% capture color_option_position_raw %}
     {% render 'get-color-option-position', product: product %}
   {% endcapture %}
   {% assign color_option_position = color_option_position_raw | strip | plus: 0 %}
 
-  {% comment %} Find variant that matches the color value {% endcomment %}
   {% if color_option_position > 0 %}
-    {% comment %} First pass: Look for available variants with matching color {% endcomment %}
-    {% for variant in product.variants %}
-      {% if variant.available %}
-        {% comment %} Get the color option value for this variant {% endcomment %}
+    {% for variant_candidate in product.variants %}
+      {% if variant_candidate.available %}
         {% case color_option_position %}
           {% when 1 %}
-            {% assign variant_color = variant.option1 %}
+            {% assign variant_color = variant_candidate.option1 %}
           {% when 2 %}
-            {% assign variant_color = variant.option2 %}
+            {% assign variant_color = variant_candidate.option2 %}
           {% when 3 %}
-            {% assign variant_color = variant.option3 %}
+            {% assign variant_color = variant_candidate.option3 %}
         {% endcase %}
 
-        {% comment %} Normalize variant color for comparison {% endcomment %}
         {% assign variant_color_normalized = variant_color | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', '' %}
-
-        {% comment %} Check if this variant matches our target color {% endcomment %}
         {% if variant_color_normalized == color_value_normalized %}
-          {% comment %} Priority 1: Use variant.featured_image {% endcomment %}
-          {% if variant.featured_image %}
-            {% assign image_url = variant.featured_image | image_url: width: width, height: height, crop: crop %}
-            {% break %}
-          {% comment %} Priority 2: Use variant.image {% endcomment %}
-          {% elsif variant.image %}
-            {% assign image_url = variant.image | image_url: width: width, height: height, crop: crop %}
-            {% break %}
-          {% endif %}
+          {% assign target_variant = variant_candidate %}
+          {% break %}
         {% endif %}
       {% endif %}
     {% endfor %}
 
-    {% comment %} Second pass: If no available variant found, look for any variant with matching color {% endcomment %}
-    {% if image_url == blank %}
-      {% for variant in product.variants %}
-        {% comment %} Get the color option value for this variant {% endcomment %}
+    {% if target_variant == blank %}
+      {% for variant_candidate in product.variants %}
         {% case color_option_position %}
           {% when 1 %}
-            {% assign variant_color = variant.option1 %}
+            {% assign variant_color = variant_candidate.option1 %}
           {% when 2 %}
-            {% assign variant_color = variant.option2 %}
+            {% assign variant_color = variant_candidate.option2 %}
           {% when 3 %}
-            {% assign variant_color = variant.option3 %}
+            {% assign variant_color = variant_candidate.option3 %}
         {% endcase %}
 
-        {% comment %} Normalize variant color for comparison {% endcomment %}
         {% assign variant_color_normalized = variant_color | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', '' %}
-
-        {% comment %} Check if this variant matches our target color {% endcomment %}
         {% if variant_color_normalized == color_value_normalized %}
-          {% comment %} Priority 1: Use variant.featured_image {% endcomment %}
-          {% if variant.featured_image %}
-            {% assign image_url = variant.featured_image | image_url: width: width, height: height, crop: crop %}
-            {% break %}
-          {% comment %} Priority 2: Use variant.image {% endcomment %}
-          {% elsif variant.image %}
-            {% assign image_url = variant.image | image_url: width: width, height: height, crop: crop %}
-            {% break %}
-          {% endif %}
+          {% assign target_variant = variant_candidate %}
+          {% break %}
         {% endif %}
       {% endfor %}
     {% endif %}
   {% endif %}
 {% endif %}
 
-{% comment %} Step 2: Fallback to existing product-color-utils logic if no variant image found {% endcomment %}
-{% if image_url == blank %}
+{% if target_variant != blank and target_variant.featured_image %}
+  {% assign image_url = target_variant.featured_image | image_url: width: width, height: height, crop: crop %}
+{% else %}
   {% capture fallback_image_url %}{% render 'product-color-utils',
     with: 'get_color_image',
     product: product,
     color_value: color_value,
+    variant: target_variant,
     image_type: image_type,
     width: width,
     height: height,
@@ -131,5 +101,4 @@
   {% assign image_url = fallback_image_url | strip %}
 {% endif %}
 
-{% comment %} Output the image_url variable directly to make it accessible to the parent template {% endcomment %}
 {%- if image_url != blank -%}{{ image_url }}{%- endif -%}

@@ -37,13 +37,14 @@
         <div class="swiper-wrapper">
           {% assign related_count = 0 %}
 
-          {% comment %} First try to find articles with matching tags {% endcomment %}
+          {% comment %} First try to find articles with matching category tags {% endcomment %}
           {% for blog_article in blog.articles %}
             {% if blog_article.handle != article.handle and related_count < post_limit %}
               {% assign has_matching_tag = false %}
 
               {% for tag in article.tags %}
-                {% if blog_article.tags contains tag %}
+                {% assign tag_prefix = tag | downcase | slice: 0, 4 %}
+                {% if tag_prefix == 'cat:' and blog_article.tags contains tag %}
                   {% assign has_matching_tag = true %}
                   {% break %}
                 {% endif %}
