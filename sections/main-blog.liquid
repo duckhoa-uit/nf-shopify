@@ -126,32 +126,6 @@
   }
 {%- endstyle -%}
 
-{%- comment -%}
-  Bare /blogs/<handle> shows articles in `blog.articles` order without any
-  server-side locale pre-filter. Because Liquid hard-caps unpaginated loops
-  over `blog.articles` at 50 items, a Liquid post-filter for the current
-  locale yields very sparse pages when other locales' articles dominate.
-  Redirect to /tagged/locale-{{ iso }} so Shopify pre-filters server-side.
-  Skip this redirect if the blog has no `legacy-blog` content (no need).
-{%- endcomment -%}
-{%- liquid
-  assign _redirect_locale = request.locale.iso_code | downcase
-  assign _redirect_locale_tag = 'locale-' | append: _redirect_locale
-  assign _redirect_locale_handle = _redirect_locale_tag | handleize
-  assign _has_locale_tag_in_blog = false
-  for _t in blog.all_tags
-    if _t == _redirect_locale_tag
-      assign _has_locale_tag_in_blog = true
-      break
-    endif
-  endfor
--%}
-{%- if current_tags == blank and _has_locale_tag_in_blog -%}
-  {%- capture _redirect_url -%}{{ blog.url }}/tagged/{{ _redirect_locale_handle }}{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}{%- endcapture -%}
-  <meta http-equiv="refresh" content="0; url={{ _redirect_url }}">
-  <script>window.location.replace({{ _redirect_url | json }});</script>
-{%- endif -%}
-
 <div class="main-blog page-width section-{{ section.id }}-padding">
   <h1 class="font-extrabold font-archivo-expanded text-lg lg:text-2xl leading-7 text-gray-950 uppercase mb-6{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
     {{ blog.title | escape }}
@@ -195,100 +169,24 @@
     </div>
   {% endif %}
 
-  {%- comment -%}
-    Locale-aware chip allow-list.
-    Only run the walk when `current_tags` is set (the redirect at the top of
-    this section has already routed us to /tagged/locale-{{ iso }}, so
-    `blog.articles` is server-pre-filtered to current-locale articles).
-    Without that pre-filter, Shopify's hard 50-iteration cap on
-    unpaginated `for article in blog.articles` makes this walk silently
-    incomplete on the bare /blogs/<handle> URL. Skipping the walk there
-    is fine — the chip strip is hidden until the redirect lands.
-  {%- endcomment -%}
-  {%- liquid
-    assign chip_locale = request.locale.iso_code | downcase
-    assign chip_locale_tag = 'locale-' | append: chip_locale
-    assign locale_cat_tags = '|'
-    if current_tags != blank
-      # Pass 1 — scan currently-rendered (locale + tag pre-filtered) articles
-      # for cat:* tags. Captures the active-locale set when on bare
-      # /tagged/locale-{{ iso }} URLs.
-      for article in blog.articles
-        for t in article.tags
-          assign t_lc = t | downcase
-          assign t_prefix = t_lc | slice: 0, 4
-          if t_prefix == 'cat:'
-            assign t_needle = '|' | append: t_lc | append: '|'
-            unless locale_cat_tags contains t_needle
-              assign locale_cat_tags = locale_cat_tags | append: t_lc | append: '|'
-            endunless
-          endif
-        endfor
-      endfor
-
-      # Pass 2 — when on a multi-tag URL like /tagged/cat-X+locale-Y,
-      # blog.articles is pre-filtered to articles tagged cat:X, so Pass 1
-      # only sees cat:X. To restore sibling chips (cat:other-categories),
-      # scan blog.all_tags (full, unscoped) and accept any cat:* tag whose
-      # corresponding `blog_category` metaobject entry exists. The metaobject
-      # is shared across locales, so this is locale-safe: foreign native-slug
-      # tags (cat:vzdrževanje, cat:materiály) without metaobject entries are
-      # filtered out automatically.
-      for tag in blog.all_tags
-        assign t_lc = tag | downcase
-        assign t_prefix = t_lc | slice: 0, 4
-        if t_prefix == 'cat:'
-          assign t_needle = '|' | append: t_lc | append: '|'
-          unless locale_cat_tags contains t_needle
-            assign t_slug = tag | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | downcase | handleize
-            assign t_entry = shop.metaobjects.blog_category[t_slug]
-            if t_entry != blank
-              assign locale_cat_tags = locale_cat_tags | append: t_lc | append: '|'
-            endif
-          endunless
-        endif
-      endfor
-    endif
-  -%}
-
-  {%- comment -%}
-    "All articles" routes to /tagged/locale-{{ iso }} so Shopify pre-filters
-    server-side instead of relying on a Liquid post-filter (which broke
-    pagination for legacy-blog imports). Category chips append the locale
-    tag with `+` so multi-tag filtering also stays within the current locale.
-    A chip is "active" only when it itself appears in `current_tags`
-    (locale-{{ iso }} alone is the default/All view).
-  {%- endcomment -%}
-  {%- assign locale_handle = chip_locale_tag | handleize -%}
   {%- assign has_user_tag = false -%}
-  {%- if current_tags -%}
-    {%- for ct in current_tags -%}
-      {%- assign ct_lc = ct | downcase -%}
-      {%- unless ct_lc == chip_locale_tag -%}
-        {%- assign has_user_tag = true -%}
-      {%- endunless -%}
-    {%- endfor -%}
+  {%- if current_tags != blank -%}
+    {%- assign has_user_tag = true -%}
   {%- endif -%}
 
   {% if section.settings.enable_filtering %}
     <div class="blog-categories">
       <!-- All articles link - active when no chip-tag is selected -->
       <a
-        href="{{ blog.url }}/tagged/{{ locale_handle }}{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
+        href="{{ blog.url }}{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
         class="blog-category{% unless has_user_tag %} active{% endunless %}"
       >
         {{ 'blogs.main_blog.all_articles' | t }}
       </a>
 
       {% comment %}
-        Use Shopify's built-in blog.all_tags with native tag filtering.
-        Hide internal tags used for the legacy-blog migration:
-          locale-*  → drives the per-locale article filter (functional)
-          ps-*      → maps to the original PrestaShop article id (audit)
-          legacy-blog → marks an article as imported from PrestaShop
-          qa-*      → temporary QA/test markers
-        Also hide cat:* chips that would resolve to articles in other locales
-        only (computed in `locale_cat_tags` above).
+        Use Shopify's built-in tags for category filtering. The migration tags
+        are hidden until the live Article cleanup removes them.
       {% endcomment %}
       {%- for tag in blog.all_tags -%}
         {%- liquid
@@ -297,28 +195,19 @@
           if tag_lc == 'legacy-blog'
             assign hide_tag = true
           endif
-          if tag_lc contains 'locale-'
+          assign locale_prefix = tag_lc | slice: 0, 7
+          if locale_prefix == 'locale-'
             assign hide_tag = true
           endif
-          if tag_lc contains 'ps-'
-            assign first_two = tag_lc | slice: 0, 3
-            if first_two == 'ps-'
-              assign hide_tag = true
-            endif
+          assign ps_prefix = tag_lc | slice: 0, 3
+          if ps_prefix == 'ps-'
+            assign hide_tag = true
           endif
-          if tag_lc contains 'qa-'
-            assign first_three = tag_lc | slice: 0, 3
-            if first_three == 'qa-'
-              assign hide_tag = true
-            endif
+          assign qa_prefix = tag_lc | slice: 0, 3
+          if qa_prefix == 'qa-'
+            assign hide_tag = true
           endif
           assign cat_prefix = tag_lc | slice: 0, 4
-          if cat_prefix == 'cat:'
-            assign needle = '|' | append: tag_lc | append: '|'
-            unless locale_cat_tags contains needle
-              assign hide_tag = true
-            endunless
-          endif
         -%}
         {%- if hide_tag -%}{%- continue -%}{%- endif -%}
         {%- liquid
@@ -337,7 +226,7 @@
           endif
         -%}
         <a
-          href="{{ blog.url }}/tagged/{{ tag_handle }}+{{ locale_handle }}{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
+          href="{{ blog.url }}/tagged/{{ tag_handle }}{% if request.params.search %}?search={{ request.params.search | url_encode }}{% endif %}"
           class="blog-category{% if current_tags contains tag %} active{% endif %}"
           aria-current="{% if current_tags contains tag %}page{% endif %}"
         >
@@ -347,13 +236,6 @@
     </div>
   {% endif %}
 
-  {%- comment -%}
-    The redirect at the top of this section forces bare /blogs/<handle> to
-    /tagged/locale-{{ iso }} so Shopify pre-filters `blog.articles` to the
-    current locale server-side. The previous in-loop locale post-filter is
-    therefore unnecessary; removing it also lets `paginate` pages stay full
-    instead of being decimated by a runtime `continue`.
-  {%- endcomment -%}
   {%- paginate blog.articles by section.settings.posts_per_page -%}
     <div class="blog-articles">
       <div class="no-results-message">{{ 'blogs.main_blog.no_results' | t }}</div>
