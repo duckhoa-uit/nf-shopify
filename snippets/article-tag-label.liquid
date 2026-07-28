@@ -1,7 +1,6 @@
 {% comment %}
-  Renders a single article tag as a chip, hiding internal/system tags
-  (legacy-blog, locale-*, ps-*, qa-*) and humanizing structured tags
-  (cat:* → category name). Emits nothing for hidden tags.
+  Renders a single article tag as a chip and humanizes structured category tags
+  (cat:* → category name).
 
   Accepts:
   - tag:    {String}  Raw tag value
@@ -19,22 +18,6 @@
   assign _class = class | default: 'article-card__tag'
   assign _prefix = prefix | default: '#'
   assign _tag_lc = _tag | downcase
-  assign _hide = false
-
-  if _tag_lc == 'legacy-blog'
-    assign _hide = true
-  endif
-
-  assign _slice3 = _tag_lc | slice: 0, 3
-  if _slice3 == 'ps-' or _slice3 == 'qa-'
-    assign _hide = true
-  endif
-
-  assign _slice7 = _tag_lc | slice: 0, 7
-  if _slice7 == 'locale-'
-    assign _hide = true
-  endif
-
   assign _slice4 = _tag_lc | slice: 0, 4
   assign _label = _tag
   if _slice4 == 'cat:'
@@ -51,10 +34,8 @@
     endif
   endif
 -%}
-{%- unless _hide -%}
-  {%- if href != blank -%}
-    <a class="{{ _class }}" href="{{ href }}">{{ _prefix }}{{ _label }}</a>
-  {%- else -%}
-    <span class="{{ _class }}">{{ _prefix }}{{ _label }}</span>
-  {%- endif -%}
-{%- endunless -%}
+{%- if href != blank -%}
+  <a class="{{ _class }}" href="{{ href }}">{{ _prefix }}{{ _label }}</a>
+{%- else -%}
+  <span class="{{ _class }}">{{ _prefix }}{{ _label }}</span>
+{%- endif -%}

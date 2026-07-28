@@ -153,34 +153,12 @@
     <div class="blog-categories">
       <div class="blog-category active" data-category="all">{{ 'blogs.main_blog.all_articles' | t }}</div>
 
-      {% comment %}Use Shopify's built-in blog.all_tags for better performance{% endcomment %}
       {%- for tag in blogs.video.all_tags -%}
         {%- liquid
           assign tag_lower = tag | downcase
-          assign hide_tag = false
-          if tag_lower == 'legacy-blog'
-            assign hide_tag = true
-          endif
-          assign locale_prefix = tag_lower | slice: 0, 7
-          if locale_prefix == 'locale-'
-            assign hide_tag = true
-          endif
-          assign ps_prefix = tag_lower | slice: 0, 3
-          if ps_prefix == 'ps-'
-            assign hide_tag = true
-          endif
-          assign qa_prefix = tag_lower | slice: 0, 3
-          if qa_prefix == 'qa-'
-            assign hide_tag = true
-          endif
-          assign cat_prefix = tag_lower | slice: 0, 4
-        -%}
-        {%- if hide_tag -%}{%- continue -%}{%- endif -%}
-        {%- liquid
           assign chip_label = tag
+          assign cat_prefix = tag_lower | slice: 0, 4
           if cat_prefix == 'cat:'
-            # Translatable label via `blog_category` metaobject. Fall back to
-            # humanized slug when no matching entry exists.
             assign cat_slug = tag | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | downcase | handleize
             assign cat_entry = shop.metaobjects.blog_category[cat_slug]
             if cat_entry != blank and cat_entry.name != blank
@@ -210,19 +188,7 @@
          data-total-articles="{{ blogs.video.articles.size }}">
       <div class="no-results-message">{{ 'blogs.main_blog.no_results' | t }}</div>
       {%- for article in blogs.video.articles -%}
-        {%- liquid
-          assign _has_visible_tag = false
-          for _t in article.tags
-            assign _t_lc = _t | downcase
-            assign _t3 = _t_lc | slice: 0, 3
-            assign _t7 = _t_lc | slice: 0, 7
-            if _t_lc == 'legacy-blog' or _t3 == 'ps-' or _t3 == 'qa-' or _t7 == 'locale-'
-              continue
-            endif
-            assign _has_visible_tag = true
-            break
-          endfor
-        -%}
+        {%- assign _has_visible_tag = article.tags.size > 0 -%}
         <div
           class="blog-videos-grid__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           {% if settings.animations_reveal_on_scroll %}
