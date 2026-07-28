@@ -188,9 +188,9 @@
          data-total-articles="{{ blogs.video.articles.size }}">
       <div class="no-results-message">{{ 'blogs.main_blog.no_results' | t }}</div>
       {%- for article in blogs.video.articles -%}
-        {%- assign _has_visible_tag = false -%}
+        {%- assign has_visible_tag = false -%}
         {%- if article.tags.size > 0 -%}
-          {%- assign _has_visible_tag = true -%}
+          {%- assign has_visible_tag = true -%}
         {%- endif -%}
         <div
           class="blog-videos-grid__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
@@ -257,7 +257,7 @@
               </div>
 
               <div class="article-video-card__content">
-                {% if _has_visible_tag %}
+                {% if has_visible_tag %}
                   <div class="article-card__tags">
                     {% for tag in article.tags %}
                       {%- render 'article-tag-label', tag: tag, class: 'article-card__tag' -%}

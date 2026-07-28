@@ -14,28 +14,28 @@
 {% endcomment %}
 
 {%- liquid
-  assign _tag = tag | default: ''
-  assign _class = class | default: 'article-card__tag'
-  assign _prefix = prefix | default: '#'
-  assign _tag_lc = _tag | downcase
-  assign _slice4 = _tag_lc | slice: 0, 4
-  assign _label = _tag
-  if _slice4 == 'cat:'
+  assign tag_value = tag | default: ''
+  assign tag_class = class | default: 'article-card__tag'
+  assign tag_prefix = prefix | default: '#'
+  assign tag_lowercase = tag_value | downcase
+  assign tag_prefix_length = tag_lowercase | slice: 0, 4
+  assign tag_label = tag_value
+  if tag_prefix_length == 'cat:'
     # Resolve the chip label via the `blog_category` metaobject so it can be
     # translated through Shopify's native Translate & Adapt. The metaobject
     # entry handle matches the `cat:<handle>` slug. Fall back to a humanized
     # label if no entry exists for the slug.
-    assign _slug = _tag | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | downcase | handleize
-    assign _entry = shop.metaobjects.blog_category[_slug]
-    if _entry != blank and _entry.name != blank
-      assign _label = _entry.name
+    assign category_slug = tag_value | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | downcase | handleize
+    assign category_entry = shop.metaobjects.blog_category[category_slug]
+    if category_entry != blank and category_entry.name != blank
+      assign tag_label = category_entry.name
     else
-      assign _label = _tag | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | capitalize
+      assign tag_label = tag_value | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | capitalize
     endif
   endif
 -%}
 {%- if href != blank -%}
-  <a class="{{ _class }}" href="{{ href }}">{{ _prefix }}{{ _label }}</a>
+  <a class="{{ tag_class }}" href="{{ href }}">{{ tag_prefix }}{{ tag_label }}</a>
 {%- else -%}
-  <span class="{{ _class }}">{{ _prefix }}{{ _label }}</span>
+  <span class="{{ tag_class }}">{{ tag_prefix }}{{ tag_label }}</span>
 {%- endif -%}
