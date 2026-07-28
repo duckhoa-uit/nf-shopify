@@ -23,7 +23,10 @@
       assign ratio = media_aspect_ratio
     endif
 
-    assign _has_visible_tag = article.tags.size > 0
+    assign has_visible_tag = false
+    if article.tags.size > 0
+      assign has_visible_tag = true
+    endif
   -%}
   <div class="article-card-wrapper card-wrapper" style="container-type: inline-size;">
     <div class="article-card">
@@ -42,12 +45,12 @@
             </a>
             {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
 
-            {% if _has_visible_tag %}
+            {% if has_visible_tag %}
               <div class="article-card__image-tags">
-                {%- assign _img_tag_count = 0 -%}
+                {%- assign img_tag_count = 0 -%}
                 {% for tag in article.tags %}
-                  {%- if _img_tag_count >= 3 -%}{%- break -%}{%- endif -%}
-                  {%- assign _img_tag_count = _img_tag_count | plus: 1 -%}
+                  {%- if img_tag_count >= 3 -%}{%- break -%}{%- endif -%}
+                  {%- assign img_tag_count = img_tag_count | plus: 1 -%}
                   {%- render 'article-tag-label', tag: tag, class: 'article-card__image-tag' -%}
                 {% endfor %}
               </div>
@@ -57,7 +60,7 @@
       {%- endif -%}
 
       <div class="article-card__content">
-        {% if _has_visible_tag %}
+        {% if has_visible_tag %}
           <div class="article-card__tags">
             {% for tag in article.tags %}
               {%- render 'article-tag-label', tag: tag, class: 'article-card__tag' -%}
