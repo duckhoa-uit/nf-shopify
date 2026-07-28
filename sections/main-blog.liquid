@@ -188,8 +188,9 @@
         {%- liquid
           assign tag_handle = tag | handleize
           assign tag_lc = tag | downcase
+          assign cat_prefix = tag_lc | slice: 0, 4
           assign chip_label = tag
-          if tag_lc contains 'cat:'
+          if cat_prefix == 'cat:'
             assign cat_slug = tag | remove_first: 'cat:' | remove_first: 'CAT:' | remove_first: 'Cat:' | strip | downcase | handleize
             assign cat_entry = shop.metaobjects.blog_category[cat_slug]
             if cat_entry != blank and cat_entry.name != blank
