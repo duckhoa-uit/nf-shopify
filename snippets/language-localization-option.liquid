@@ -4,6 +4,7 @@
   @param {string} iso_code - The language ISO code
   @param {string} label - The language endonym
   @param {string} fallback_url - The canonical market URL when the language is unavailable here
+  @param {boolean} [force_external] - Always use the fallback URL instead of Shopify localization
   @param {shop_locale[]} available_languages - Languages available in the current market
 {% enddoc %}
 
@@ -14,7 +15,7 @@
   if iso_code == localization.language.iso_code
     assign is_current = true
   endif
-  if native_language != blank
+  if native_language != blank and force_external != true
     assign is_native = true
   endif
 -%}
