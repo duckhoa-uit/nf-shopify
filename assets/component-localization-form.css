@@ -756,6 +756,34 @@ localization-form .disclosure__list-wrapper .disclosure__list {
   font-size: 0.875rem;
 }
 
+/* The global language registry has ten entries. Let them fit without
+   scrolling on typical viewports, while retaining a compact scrollable
+   fallback on shorter screens. */
+localization-form .disclosure__list-wrapper.language-selector {
+  max-height: min(28rem, 100dvh - 6rem);
+}
+
+localization-form .disclosure__list-wrapper.language-selector .disclosure__list {
+  max-height: min(27.5rem, 100dvh - 6.5rem);
+  scrollbar-color: rgba(var(--color-base-foreground), 0.32) transparent;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+localization-form .disclosure__list-wrapper.language-selector .disclosure__list::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+localization-form .disclosure__list-wrapper.language-selector .disclosure__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+localization-form .disclosure__list-wrapper.language-selector .disclosure__list::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--color-base-foreground), 0.32);
+  border: 0.125rem solid rgb(var(--color-base-background));
+  border-radius: 999px;
+}
+
 /* Country list needs more room for the currency column */
 localization-form .country-selector .disclosure__list {
   min-width: 16rem;
@@ -775,7 +803,7 @@ localization-form .popular-countries {
   padding-bottom: 0.25rem;
 }
 
-/* Items: concentric radius (panel 12 − padding 4 = inner 8), 40px hit area */
+/* Items: concentric radius (panel 12 − padding 4 = inner 8), compact 36px rows */
 localization-form .disclosure__item {
   margin: 0;
 }
@@ -784,10 +812,11 @@ localization-form .disclosure__link {
   grid-template-columns: 1.25rem auto 1fr auto;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.625rem;
-  min-height: 2.5rem;
+  min-height: 2.25rem;
+  padding: 0.375rem 0.625rem;
   border-radius: 8px;
   color: #4a4a4a;
+  line-height: 1.25rem;
   transition-property: background-color, color;
   transition-duration: 120ms;
   transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
@@ -937,16 +966,17 @@ localization-form .disclosure__button .icon-caret {
     display: none !important;
   }
 
-  /* Reset the global compact sizing — drawer items should match menu rows */
+  /* Keep drawer options compact while preserving a 44px touch target. */
   .menu-drawer__localization--mobile localization-form .disclosure__list {
-    font-size: 1rem;
+    font-size: 0.9375rem;
     min-width: 0;
   }
 
   .menu-drawer__localization--mobile localization-form .disclosure__link {
-    padding: 10px 14px;
     min-height: 44px;
-    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
     border-radius: 6px;
   }
 }
