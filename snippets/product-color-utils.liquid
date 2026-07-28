@@ -182,213 +182,84 @@
 {% endcomment %}
 {% capture get_color_image %}
   {% assign image_url = '' %}
+  {% assign resolved_reference_id = reference_id | default: '' | strip %}
 
-  {% if color_value != blank and product != blank %}
-    {% comment %} Step 1: Normalize color value {% endcomment %}
-    {% assign color_value_normalized = color_value | downcase | strip | replace: ' ', '-' | replace: "'", "" | replace: ".", "" | replace: ",", "" %}
-    {% assign reference_id = '' %}
+  {% if product != blank %}
+    {% if resolved_reference_id == blank and variant != blank and variant.sku != blank %}
+      {% assign sku_parts = variant.sku | split: '-' %}
+      {% assign reference_index = sku_parts.size | minus: 2 %}
+      {% if reference_index >= 0 %}
+        {% assign sku_reference_id = sku_parts[reference_index] | strip %}
+        {% assign sku_reference_number = sku_reference_id | plus: 0 %}
+        {% if sku_reference_number > 0 %}
+          {% assign resolved_reference_id = sku_reference_id %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
 
-    {% comment %} Step 2: Try to find reference ID from metafields {% endcomment %}
-    {% if product.metafields.custom.color.value != blank %}
+    {% if resolved_reference_id == blank and color_value != blank and product.metafields.custom.color.value != blank %}
+      {% assign color_value_normalized = color_value | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', '' %}
       {% for color_item in product.metafields.custom.color.value %}
-        {%- comment -%}
-          Locale-safe match: metaobject `name` field is translatable, fall back to
-          system.handle (root part before trailing -N) which is never translated.
-        {%- endcomment -%}
-        {%- assign handle_root = color_item.system.handle | split: '-' | first | downcase -%}
+        {% assign handle_root = color_item.system.handle | split: '-' | first | downcase %}
         {% if color_item.name == color_value_normalized or handle_root == color_value_normalized %}
-          {% assign reference_id = color_item.reference_id %}
+          {% assign resolved_reference_id = color_item.reference_id | strip %}
           {% break %}
         {% endif %}
       {% endfor %}
     {% endif %}
 
-    {% comment %} Store first model image and first image for fallback {% endcomment %}
-    {% assign first_model_image = nil %}
-    {% assign first_image = nil %}
+    {% if resolved_reference_id != blank %}
+      {% assign reference_token = '-' | append: resolved_reference_id | append: '-' %}
+      {% assign hero_media = nil %}
+      {% assign model_media = nil %}
+      {% assign model_sequence_media = nil %}
+      {% assign detail_media = nil %}
+      {% assign back_variant_media = nil %}
+      {% assign back_media = nil %}
+      {% assign lowest_model_sequence = 999 %}
+      {% assign lowest_detail_sequence = 999 %}
 
-    {% comment %} Step 3: Find image by reference ID and image type {% endcomment %}
-    {% if reference_id != '' %}
-      {% if image_type == 'M' %}
-        {% comment %} Look for model images (M) with exact color reference ID {% endcomment %}
-        {% assign lowest_sequence = 999 %}
-        {% assign found_model_image = false %}
-
-        {% comment %} First look for model images without sequence (just -M) {% endcomment %}
-        {% for media in product.media %}
-          {% assign media_src = media.src | default: '' %}
-          {% assign parsed_url = media_src | split: '/' | last %}
-
-          {% comment %} Track first model image for any color (fallback) {% endcomment %}
-          {% if first_model_image == nil and parsed_url contains '-M' %}
-            {% unless parsed_url contains '-M_' %}
-              {% assign first_model_image = media %}
-            {% endunless %}
-          {% endif %}
-
-          {% comment %} Track first image (final fallback) {% endcomment %}
-          {% if first_image == nil %}
-            {% assign first_image = media %}
-          {% endif %}
-
-          {% if parsed_url contains reference_id %}
-            {% if parsed_url contains '-M' %}
-              {% unless parsed_url contains '-M_' %}
-                {% assign image_url = media.preview_image | image_url: width: width, height: height, crop: crop %}
-                {% assign found_model_image = true %}
-                {% break %}
-              {% endunless %}
-            {% endif %}
-          {% endif %}
-        {% endfor %}
-
-        {% comment %} If no model image without sequence found, look for one with lowest sequence {% endcomment %}
-        {% unless found_model_image %}
-          {% assign best_model_media = nil %}
-          {% for media in product.media %}
-            {% assign media_src = media.src | default: '' %}
-            {% assign parsed_url = media_src | split: '/' | last %}
-            {% if parsed_url contains reference_id and parsed_url contains '-M_' %}
-              {% assign sequence_part = parsed_url | split: '-M_' | last | split: '.' | first %}
-              {% assign sequence_number = sequence_part | plus: 0 %}
-
-              {% comment %} Only update if this sequence is lower than current lowest {% endcomment %}
-              {% if sequence_number > 0 and sequence_number < lowest_sequence %}
-                {% assign lowest_sequence = sequence_number %}
-                {% assign best_model_media = media %}
-                {% assign found_model_image = true %}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-
-          {% comment %} Set the image URL from the best model media found {% endcomment %}
-          {% if best_model_media %}
-            {% assign image_url = best_model_media.preview_image | image_url: width: width, height: height, crop: crop %}
-          {% endif %}
-        {% endunless %}
-
-        {% comment %}
-          When the product has no model (-M) image for this color reference_id
-          (common for shoes), fall back to the typed-priority loop (H -> BV -> B -> D)
-          on the SAME reference_id instead of dropping into Step 5, which would
-          otherwise return the first media item containing the ref_id in admin
-          drag-drop order (e.g. a sole or close-up shot).
-        {% endcomment %}
-        {% if image_url == '' %}
-          {% assign fallback_types = 'H,BV,B,D' | split: ',' %}
-          {% for type in fallback_types %}
-            {% if image_url == '' %}
-              {% for media in product.media %}
-                {% assign media_src = media.src | default: '' %}
-                {% assign parsed_url = media_src | split: '/' | last %}
-                {% assign type_code = '-' | append: type %}
-                {% if parsed_url contains reference_id and parsed_url contains type_code %}
-                  {% assign image_url = media.preview_image | image_url: width: width, height: height, crop: crop %}
-                  {% break %}
-                {% endif %}
-              {% endfor %}
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      {% else %}
-        {% comment %} Look for specific image type or use priority order {% endcomment %}
-        {% assign image_types = image_type | default: 'H,B,BV,D' | split: ',' %}
-
-        {% for type in image_types %}
-          {% if image_url == '' %}
-            {% for media in product.media %}
-              {% assign media_src = media.src | default: '' %}
-              {% assign parsed_url = media_src | split: '/' | last %}
-
-              {% comment %} Track first model image for any color (fallback) {% endcomment %}
-              {% if first_model_image == nil and parsed_url contains '-M' %}
-                {% unless parsed_url contains '-M_' %}
-                  {% assign first_model_image = media %}
-                {% endunless %}
-              {% endif %}
-
-              {% comment %} Track first image (final fallback) {% endcomment %}
-              {% if first_image == nil %}
-                {% assign first_image = media %}
-              {% endif %}
-
-              {% comment %} Check if the image contains both the reference_id and the current image type {% endcomment %}
-              {% assign type_code = '-' | append: type %}
-              {% if parsed_url contains reference_id and parsed_url contains type_code %}
-                {% assign image_url = media.preview_image | image_url: width: width, height: height, crop: crop %}
-                {% break %}
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    {% else %}
-      {% comment %} If no reference ID, still track first model image and first image for fallback {% endcomment %}
       {% for media in product.media %}
         {% assign media_src = media.src | default: '' %}
-        {% assign parsed_url = media_src | split: '/' | last %}
+        {% assign filename = media_src | split: '/' | last | split: '?' | first %}
+        {% if filename contains reference_token %}
+          {% assign type_token = filename | split: reference_token | last | split: '.' | first %}
+          {% assign type_parts = type_token | split: '_' %}
+          {% assign type_name = type_parts.first %}
+          {% assign type_sequence = 0 %}
+          {% if type_parts.size > 1 %}
+            {% assign type_sequence = type_parts[1] | plus: 0 %}
+          {% endif %}
 
-        {% comment %} Track first model image for any color (fallback) {% endcomment %}
-        {% if first_model_image == nil and parsed_url contains '-M' %}
-          {% unless parsed_url contains '-M_' %}
-            {% assign first_model_image = media %}
-          {% endunless %}
-        {% endif %}
-
-        {% comment %} Track first image (final fallback) {% endcomment %}
-        {% if first_image == nil %}
-          {% assign first_image = media %}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-
-    {% comment %} Step 4: If no image found by reference ID, try by color name {% endcomment %}
-    {% if image_url == '' %}
-      {% for media in product.media %}
-        {% assign media_src = media.src | default: '' %}
-        {% assign parsed_url = media_src | split: '/' | last %}
-
-        {% if parsed_url contains color_value_normalized %}
-          {% assign image_url = media.preview_image | image_url: width: width, height: height, crop: crop %}
-          {% break %}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-
-    {% comment %} Step 5: If still no image found, try to find any image with a color reference pattern {% endcomment %}
-    {% if image_url == '' and reference_id != '' %}
-      {% assign reference_pattern = reference_id | slice: 0, 3 %}
-      {% for media in product.media %}
-        {% assign media_src = media.src | default: '' %}
-        {% assign parsed_url = media_src | split: '/' | last %}
-
-        {% if parsed_url contains reference_pattern %}
-          {% assign image_url = media.preview_image | image_url: width: width, height: height, crop: crop %}
-          {% break %}
+          {% if type_name == 'H' and hero_media == nil %}
+            {% assign hero_media = media %}
+          {% elsif type_name == 'M' %}
+            {% if type_sequence > 0 %}
+              {% if type_sequence < lowest_model_sequence %}
+                {% assign lowest_model_sequence = type_sequence %}
+                {% assign model_sequence_media = media %}
+              {% endif %}
+            {% elsif model_media == nil %}
+              {% assign model_media = media %}
+            {% endif %}
+          {% elsif type_name == 'D' and type_sequence > 0 %}
+            {% if type_sequence < lowest_detail_sequence %}
+              {% assign lowest_detail_sequence = type_sequence %}
+              {% assign detail_media = media %}
+            {% endif %}
+          {% elsif type_name == 'BV' and back_variant_media == nil %}
+            {% assign back_variant_media = media %}
+          {% elsif type_name == 'B' and back_media == nil %}
+            {% assign back_media = media %}
+          {% endif %}
         {% endif %}
       {% endfor %}
+
+      {% assign selected_media = hero_media | default: model_media | default: model_sequence_media | default: detail_media | default: back_variant_media | default: back_media %}
+      {% if selected_media != blank %}
+        {% assign image_url = selected_media.preview_image | image_url: width: width, height: height, crop: crop %}
+      {% endif %}
     {% endif %}
-
-    {% comment %}
-      Steps 6-8 are generic fallbacks (not color-specific).
-      Skipped when `strict` is true so callers can detect "no real color match".
-    {% endcomment %}
-    {% unless strict %}
-      {% comment %} Step 6: If still no image found, fallback to first model image of any color {% endcomment %}
-      {% if image_url == '' and first_model_image != nil %}
-        {% assign image_url = first_model_image.preview_image | image_url: width: width, height: height, crop: crop %}
-      {% endif %}
-
-      {% comment %} Step 7: If still no image found, fallback to product featured image {% endcomment %}
-      {% if image_url == '' and product.featured_image %}
-        {% assign image_url = product.featured_image | image_url: width: width, height: height, crop: crop %}
-      {% endif %}
-
-      {% comment %} Step 8: Final fallback - use any random image from the product {% endcomment %}
-      {% if image_url == '' and first_image != nil %}
-        {% assign image_url = first_image.preview_image | image_url: width: width, height: height, crop: crop %}
-      {% endif %}
-    {% endunless %}
   {% endif %}
 
   {{ image_url }}

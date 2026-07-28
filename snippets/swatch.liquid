@@ -24,8 +24,7 @@
 >
   {%- if thumbnail_url != blank -%}
     <img src="{{ thumbnail_url }}" alt="" class="swatch-thumbnail" width="50" height="50" loading="lazy">
-  {%- else -%}
-    {%- comment -%} Show placeholder when no thumbnail is available {%- endcomment -%}
+  {%- elsif swatch.image == blank and swatch.color == blank -%}
     <div class="swatch-thumbnail-placeholder">
       {{ 'product-apparel-2' | placeholder_svg_tag: 'swatch-placeholder-svg' }}
     </div>

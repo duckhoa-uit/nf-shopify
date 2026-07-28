@@ -125,6 +125,7 @@
                           {% capture variant_image_url %}{% render 'get-variant-color-image',
                             product: line_item.product,
                             color_value: color_value,
+                            variant: line_item.variant,
                             width: 100,
                             height: 100,
                             crop: 'center',
@@ -144,14 +145,6 @@
                         {% elsif line_item.image %}
                           <img
                             src="{{ line_item.image | image_url: width: 100, height: 100, crop: 'center' }}"
-                            alt="{{ line_item.title | escape }}"
-                            width="100"
-                            height="100"
-                            loading="lazy"
-                          >
-                        {% elsif line_item.product.featured_image %}
-                          <img
-                            src="{{ line_item.product.featured_image | image_url: width: 100, height: 100, crop: 'center' }}"
                             alt="{{ line_item.title | escape }}"
                             width="100"
                             height="100"
