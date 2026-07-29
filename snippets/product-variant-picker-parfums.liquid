@@ -18,12 +18,9 @@
 {% endcomment %}
 
 {%- liquid
+  assign size_variants = product.metafields.custom.product_in_group.value
   assign has_size_variants = false
-  assign size_variants = null
-
-  # Check if product has size variants in metafield
-  if product.metafields.custom.product_in_group.value != blank
-    assign size_variants = product.metafields.custom.product_in_group.value
+  if size_variants != blank
     assign has_size_variants = true
   endif
 -%}
@@ -35,6 +32,7 @@
       <legend class="form__label">{{ 'products.product.size_label' | t }}</legend>
 
       <div class="product-form__buttons">
+        {%- assign rendered_sizes = '' -%}
         {%- for variant_product in size_variants -%}
           {%- liquid
             assign variant_size = ''
@@ -43,74 +41,68 @@
               assign is_current = true
             endif
 
-            # Priority 1: Extract from Shopify's native product size variants
             for option in variant_product.options_with_values
               assign option_name_downcase = option.name | downcase
               if option_name_downcase contains 'size' or option_name_downcase contains 'größe' or option_name_downcase contains 'taille'
-                if option.selected_value != blank
-                  assign variant_size = option.selected_value
-                  break
-                endif
+                assign variant_size = option.selected_value
+                break
               endif
             endfor
 
-            # Priority 2: Extract from custom size metafield
-            if variant_size == blank and variant_product.metafields.custom.size.value != blank
-              if variant_product.metafields.custom.size.type == 'single_line_text_field'
-                assign variant_size = variant_product.metafields.custom.size.value
-              elsif variant_product.metafields.custom.size.type == 'list.single_line_text_field'
-                assign variant_size = variant_product.metafields.custom.size.value | first
-              endif
+            if variant_size == blank and variant_product.metafields.custom.size != blank
+              assign variant_size = variant_product.metafields.custom.size | metafield_text: field: 'name'
             endif
 
-            # Priority 3: Fallback to title-based extraction
             if variant_size == blank
               assign title_parts = variant_product.title | split: ' - '
               if title_parts.size > 1
                 assign variant_size = title_parts | last
               else
-                # Try other common separators
                 assign title_parts = variant_product.title | split: ' | '
                 if title_parts.size > 1
                   assign variant_size = title_parts | last
                 else
                   assign title_parts = variant_product.title | split: ' ('
                   if title_parts.size > 1
-                    assign last_part = title_parts | last
-                    assign variant_size = last_part | replace: ')', ''
-                  else
-                    # Final fallback - use product handle or title
-                    assign variant_size = variant_product.handle | split: '-' | last | capitalize
+                    assign variant_size = title_parts | last | replace: ')', ''
                   endif
                 endif
               endif
             endif
 
-            # Ensure we have a size value
             if variant_size == blank
-              assign variant_size = 'Size'
+              assign variant_size = variant_product.handle | split: '-' | last | capitalize
             endif
+
+            assign size_key = variant_size | strip | downcase
+            assign size_already_rendered = rendered_sizes | split: '|' | has: size_key
+            assign rendered_sizes = rendered_sizes | append: size_key | append: '|'
           -%}
 
-          <input
-            type="radio"
-            id="size-variant-{{ variant_product.id }}"
-            name="size-variant"
-            value="{{ variant_product.handle }}"
-            class="sr-only size-variant-input"
-            {% if is_current %}
-              checked
-            {% endif %}
-            data-product-url="{{ variant_product.url }}"
-            data-product-id="{{ variant_product.id }}"
-            data-size="{{ variant_size }}"
-          >
-          <label
-            for="size-variant-{{ variant_product.id }}"
-            class="product-form__input-label{% if is_current %} product-form__input-label--active{% endif %}"
-          >
-            {{ variant_size }}
-          </label>
+          {%- unless size_already_rendered -%}
+            <input
+              type="radio"
+              id="size-variant-{{ variant_product.id }}"
+              name="size-variant"
+              value="{{ variant_product.handle }}"
+              class="sr-only size-variant-input"
+              {% if is_current %}
+                checked
+              {% endif %}
+              {% unless variant_product.available %}
+                disabled
+              {% endunless %}
+              data-product-url="{{ variant_product.url }}"
+              data-product-id="{{ variant_product.id }}"
+              data-size="{{ variant_size }}"
+            >
+            <label
+              for="size-variant-{{ variant_product.id }}"
+              class="product-form__input-label{% if is_current %} product-form__input-label--active{% endif %}"
+            >
+              {{ variant_size }}
+            </label>
+          {%- endunless -%}
         {%- endfor -%}
       </div>
     </fieldset>
@@ -134,8 +126,13 @@
           }
 
           // Navigate to the selected variant product
-          if (productUrl && productUrl !== window.location.pathname) {
-            window.location.href = productUrl;
+          if (productUrl) {
+            const targetUrl = new URL(productUrl, window.location.origin);
+            const currentUrl = new URL(window.location.href);
+
+            if (targetUrl.pathname !== currentUrl.pathname || targetUrl.search !== currentUrl.search) {
+              window.location.href = targetUrl.href;
+            }
           }
         }
       });
