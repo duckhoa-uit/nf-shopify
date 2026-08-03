@@ -104,9 +104,45 @@
   class="header-wrapper color-{{ section.settings.color_scheme }} gradient"
 >
   {%- liquid
+  assign market_social_facebook_link = settings.social_facebook_link
+  if localization.market.handle != blank and settings.market_social_facebook_link != blank
+    assign market_social_facebook_link = settings.market_social_facebook_link
+  endif
+  assign market_social_instagram_link = settings.social_instagram_link
+  if localization.market.handle != blank and settings.market_social_instagram_link != blank
+    assign market_social_instagram_link = settings.market_social_instagram_link
+  endif
+  assign market_social_youtube_link = settings.social_youtube_link
+  if localization.market.handle != blank and settings.market_social_youtube_link != blank
+    assign market_social_youtube_link = settings.market_social_youtube_link
+  endif
+  assign market_social_tiktok_link = settings.social_tiktok_link
+  if localization.market.handle != blank and settings.market_social_tiktok_link != blank
+    assign market_social_tiktok_link = settings.market_social_tiktok_link
+  endif
+  assign market_social_twitter_link = settings.social_twitter_link
+  if localization.market.handle != blank and settings.market_social_twitter_link != blank
+    assign market_social_twitter_link = settings.market_social_twitter_link
+  endif
+  assign market_social_pinterest_link = settings.social_pinterest_link
+  if localization.market.handle != blank and settings.market_social_pinterest_link != blank
+    assign market_social_pinterest_link = settings.market_social_pinterest_link
+  endif
+  assign market_social_snapchat_link = settings.social_snapchat_link
+  if localization.market.handle != blank and settings.market_social_snapchat_link != blank
+    assign market_social_snapchat_link = settings.market_social_snapchat_link
+  endif
+  assign market_social_tumblr_link = settings.social_tumblr_link
+  if localization.market.handle != blank and settings.market_social_tumblr_link != blank
+    assign market_social_tumblr_link = settings.market_social_tumblr_link
+  endif
+  assign market_social_vimeo_link = settings.social_vimeo_link
+  if localization.market.handle != blank and settings.market_social_vimeo_link != blank
+    assign market_social_vimeo_link = settings.market_social_vimeo_link
+  endif
     assign social_links = false
 
-    if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
+    if market_social_twitter_link != blank or market_social_facebook_link != blank or market_social_pinterest_link != blank or market_social_instagram_link != blank or market_social_youtube_link != blank or market_social_vimeo_link != blank or market_social_tiktok_link != blank or market_social_tumblr_link != blank or market_social_snapchat_link != blank
       assign social_links = true
     endif
   -%}
@@ -264,15 +300,15 @@
       "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
     {% endif %}
     "sameAs": [
-      {{ settings.social_twitter_link | json }},
-      {{ settings.social_facebook_link | json }},
-      {{ settings.social_pinterest_link | json }},
-      {{ settings.social_instagram_link | json }},
-      {{ settings.social_tiktok_link | json }},
-      {{ settings.social_tumblr_link | json }},
-      {{ settings.social_snapchat_link | json }},
-      {{ settings.social_youtube_link | json }},
-      {{ settings.social_vimeo_link | json }}
+      {{ market_social_twitter_link | json }},
+      {{ market_social_facebook_link | json }},
+      {{ market_social_pinterest_link | json }},
+      {{ market_social_instagram_link | json }},
+      {{ market_social_tiktok_link | json }},
+      {{ market_social_tumblr_link | json }},
+      {{ market_social_snapchat_link | json }},
+      {{ market_social_youtube_link | json }},
+      {{ market_social_vimeo_link | json }}
     ],
     "url": {{ request.origin | append: page.url | json }}
   }

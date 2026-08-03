@@ -138,8 +138,44 @@
 
 <footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding border-0">
   {%- liquid
+  assign market_social_facebook_link = settings.social_facebook_link
+  if localization.market.handle != blank and settings.market_social_facebook_link != blank
+    assign market_social_facebook_link = settings.market_social_facebook_link
+  endif
+  assign market_social_instagram_link = settings.social_instagram_link
+  if localization.market.handle != blank and settings.market_social_instagram_link != blank
+    assign market_social_instagram_link = settings.market_social_instagram_link
+  endif
+  assign market_social_youtube_link = settings.social_youtube_link
+  if localization.market.handle != blank and settings.market_social_youtube_link != blank
+    assign market_social_youtube_link = settings.market_social_youtube_link
+  endif
+  assign market_social_tiktok_link = settings.social_tiktok_link
+  if localization.market.handle != blank and settings.market_social_tiktok_link != blank
+    assign market_social_tiktok_link = settings.market_social_tiktok_link
+  endif
+  assign market_social_twitter_link = settings.social_twitter_link
+  if localization.market.handle != blank and settings.market_social_twitter_link != blank
+    assign market_social_twitter_link = settings.market_social_twitter_link
+  endif
+  assign market_social_pinterest_link = settings.social_pinterest_link
+  if localization.market.handle != blank and settings.market_social_pinterest_link != blank
+    assign market_social_pinterest_link = settings.market_social_pinterest_link
+  endif
+  assign market_social_snapchat_link = settings.social_snapchat_link
+  if localization.market.handle != blank and settings.market_social_snapchat_link != blank
+    assign market_social_snapchat_link = settings.market_social_snapchat_link
+  endif
+  assign market_social_tumblr_link = settings.social_tumblr_link
+  if localization.market.handle != blank and settings.market_social_tumblr_link != blank
+    assign market_social_tumblr_link = settings.market_social_tumblr_link
+  endif
+  assign market_social_vimeo_link = settings.social_vimeo_link
+  if localization.market.handle != blank and settings.market_social_vimeo_link != blank
+    assign market_social_vimeo_link = settings.market_social_vimeo_link
+  endif
     assign has_social_icons = true
-    if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
+    if market_social_facebook_link == blank and market_social_instagram_link == blank and market_social_youtube_link == blank and market_social_tiktok_link == blank and market_social_twitter_link == blank and market_social_pinterest_link == blank and market_social_snapchat_link == blank and market_social_tumblr_link == blank and market_social_vimeo_link == blank
       assign has_social_icons = false
     endif
 

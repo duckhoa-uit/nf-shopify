@@ -9,10 +9,49 @@
   %}
 {% endcomment %}
 
+{%- liquid
+  assign market_social_facebook_link = settings.social_facebook_link
+  if localization.market.handle != blank and settings.market_social_facebook_link != blank
+    assign market_social_facebook_link = settings.market_social_facebook_link
+  endif
+  assign market_social_instagram_link = settings.social_instagram_link
+  if localization.market.handle != blank and settings.market_social_instagram_link != blank
+    assign market_social_instagram_link = settings.market_social_instagram_link
+  endif
+  assign market_social_youtube_link = settings.social_youtube_link
+  if localization.market.handle != blank and settings.market_social_youtube_link != blank
+    assign market_social_youtube_link = settings.market_social_youtube_link
+  endif
+  assign market_social_tiktok_link = settings.social_tiktok_link
+  if localization.market.handle != blank and settings.market_social_tiktok_link != blank
+    assign market_social_tiktok_link = settings.market_social_tiktok_link
+  endif
+  assign market_social_twitter_link = settings.social_twitter_link
+  if localization.market.handle != blank and settings.market_social_twitter_link != blank
+    assign market_social_twitter_link = settings.market_social_twitter_link
+  endif
+  assign market_social_pinterest_link = settings.social_pinterest_link
+  if localization.market.handle != blank and settings.market_social_pinterest_link != blank
+    assign market_social_pinterest_link = settings.market_social_pinterest_link
+  endif
+  assign market_social_snapchat_link = settings.social_snapchat_link
+  if localization.market.handle != blank and settings.market_social_snapchat_link != blank
+    assign market_social_snapchat_link = settings.market_social_snapchat_link
+  endif
+  assign market_social_tumblr_link = settings.social_tumblr_link
+  if localization.market.handle != blank and settings.market_social_tumblr_link != blank
+    assign market_social_tumblr_link = settings.market_social_tumblr_link
+  endif
+  assign market_social_vimeo_link = settings.social_vimeo_link
+  if localization.market.handle != blank and settings.market_social_vimeo_link != blank
+    assign market_social_vimeo_link = settings.market_social_vimeo_link
+  endif
+-%}
+
 <ul class="list-unstyled list-social{% if class %} {{ class}}{% endif %} gap-4 mt-6" role="list">
-  {%- if settings.social_instagram_link != blank -%}
+  {%- if market_social_instagram_link != blank -%}
     <li class="list-social__item">
-      <a href="{{ settings.social_instagram_link }}" class="link list-social__link">
+      <a href="{{ market_social_instagram_link }}" class="link list-social__link">
         <span class="svg-wrapper size-6">
           {{- 'icon-instagram.svg' | inline_asset_content -}}
         </span>
@@ -20,9 +59,9 @@
       </a>
     </li>
   {%- endif -%}
-  {%- if settings.social_facebook_link != blank -%}
+  {%- if market_social_facebook_link != blank -%}
     <li class="list-social__item">
-      <a href="{{ settings.social_facebook_link }}" class="link list-social__link">
+      <a href="{{ market_social_facebook_link }}" class="link list-social__link">
         <span class="svg-wrapper size-6">
           {{- 'icon-facebook.svg' | inline_asset_content -}}
         </span>
@@ -30,9 +69,9 @@
       </a>
     </li>
   {%- endif -%}
-  {%- if settings.social_youtube_link != blank -%}
+  {%- if market_social_youtube_link != blank -%}
     <li class="list-social__item">
-      <a href="{{ settings.social_youtube_link }}" class="link list-social__link">
+      <a href="{{ market_social_youtube_link }}" class="link list-social__link">
         <span class="svg-wrapper size-6">
           {{- 'icon-youtube.svg' | inline_asset_content -}}
         </span>
@@ -40,9 +79,9 @@
       </a>
     </li>
   {%- endif -%}
-  {%- if settings.social_tiktok_link != blank -%}
+  {%- if market_social_tiktok_link != blank -%}
     <li class="list-social__item">
-      <a href="{{ settings.social_tiktok_link }}" class="link list-social__link">
+      <a href="{{ market_social_tiktok_link }}" class="link list-social__link">
         <span class="svg-wrapper size-6">
           {{- 'icon-tiktok.svg' | inline_asset_content -}}
         </span>
@@ -50,9 +89,9 @@
       </a>
     </li>
   {%- endif -%}
-  {%- if settings.social_twitter_link != blank -%}
+  {%- if market_social_twitter_link != blank -%}
     <li class="list-social__item">
-      <a href="{{ settings.social_twitter_link }}" class="link list-social__link">
+      <a href="{{ market_social_twitter_link }}" class="link list-social__link">
         <span class="svg-wrapper size-6">
           {{- 'icon-twitter.svg' | inline_asset_content -}}
         </span>
@@ -60,9 +99,9 @@
       </a>
     </li>
   {%- endif -%}
-  {%- if settings.social_pinterest_link != blank -%}
+  {%- if market_social_pinterest_link != blank -%}
     <li class="list-social__item">
-      <a href="{{ settings.social_pinterest_link }}" class="link list-social__link">
+      <a href="{{ market_social_pinterest_link }}" class="link list-social__link">
         <span class="svg-wrapper size-6">
           {{- 'icon-pinterest.svg' | inline_asset_content -}}
         </span>
@@ -70,9 +109,9 @@
       </a>
     </li>
   {%- endif -%}
-  {%- if settings.social_snapchat_link != blank -%}
+  {%- if market_social_snapchat_link != blank -%}
     <li class="list-social__item">
-      <a href="{{ settings.social_snapchat_link }}" class="link list-social__link">
+      <a href="{{ market_social_snapchat_link }}" class="link list-social__link">
         <span class="svg-wrapper size-6">
           {{- 'icon-snapchat.svg' | inline_asset_content -}}
         </span>
@@ -80,9 +119,9 @@
       </a>
     </li>
   {%- endif -%}
-  {%- if settings.social_tumblr_link != blank -%}
+  {%- if market_social_tumblr_link != blank -%}
     <li class="list-social__item">
-      <a href="{{ settings.social_tumblr_link }}" class="link list-social__link">
+      <a href="{{ market_social_tumblr_link }}" class="link list-social__link">
         <span class="svg-wrapper size-6">
           {{- 'icon-tumblr.svg' | inline_asset_content -}}
         </span>
@@ -90,9 +129,9 @@
       </a>
     </li>
   {%- endif -%}
-  {%- if settings.social_vimeo_link != blank -%}
+  {%- if market_social_vimeo_link != blank -%}
     <li class="list-social__item">
-      <a href="{{ settings.social_vimeo_link }}" class="link list-social__link">
+      <a href="{{ market_social_vimeo_link }}" class="link list-social__link">
         <span class="svg-wrapper size-6">
           {{- 'icon-vimeo.svg' | inline_asset_content -}}
         </span>
