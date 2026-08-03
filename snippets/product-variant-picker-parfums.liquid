@@ -9,7 +9,14 @@
   {% render 'product-variant-picker-parfums', product: product, block: block %}
 {% endcomment %}
 
-{%- assign size_products = product.metafields.custom.product_in_group.value -%}
+{%- liquid
+  assign parfum_group = product.metafields.custom.parfum_group.value
+  assign size_products = parfum_group.products.value
+
+  if size_products == blank
+    assign size_products = product.metafields.custom.product_in_group.value
+  endif
+-%}
 
 {%- if size_products != blank -%}
   <div class="product-variant-picker-parfums-metafield mt-3" {{ block.shopify_attributes }}>
@@ -34,7 +41,7 @@
 
             if size_label == blank and size_product.metafields.custom.size.value != blank
               assign size_metaobject = size_product.metafields.custom.size.value | first
-              assign size_label = size_metaobject.name.value
+              assign size_label = size_metaobject.value.value
             endif
 
             assign size_key = size_label | strip | downcase
