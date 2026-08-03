@@ -14,6 +14,27 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  assign contact_email = settings.contact_email
+  assign contact_phone = settings.contact_phone
+  assign contact_address = settings.contact_address
+  assign contact_hours = settings.contact_hours
+  if localization.market.handle != blank
+    if settings.market_contact_email != blank
+      assign contact_email = settings.market_contact_email
+    endif
+    if settings.market_contact_phone != blank
+      assign contact_phone = settings.market_contact_phone
+    endif
+    if settings.market_contact_address != blank
+      assign contact_address = settings.market_contact_address
+    endif
+    if settings.market_contact_hours != blank
+      assign contact_hours = settings.market_contact_hours
+    endif
+  endif
+-%}
+
 <div class="color-{{ section.settings.color_scheme }} gradient bg-gray-100">
   <div class="page-width section-{{ section.id }}-padding">
     <h2 class="font-extrabold font-archivo-expanded text-base lg:text-2xl leading-7 text-[#0F0F0F] uppercase mb-3 lg:mb-6{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
@@ -30,7 +51,7 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {{ 'templates.contact.info.address' | t }}
+              {%- if contact_address != blank -%}{{ contact_address }}{%- else -%}{{ 'templates.contact.info.address' | t }}{%- endif -%}
             </p>
           </div>
         </div>
@@ -50,10 +71,10 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {{ 'templates.contact.info.phone' | t }}
+              {%- if contact_phone != blank -%}{{ contact_phone }}{%- else -%}{{ 'templates.contact.info.phone' | t }}{%- endif -%}
             </p>
             <p class="contact-info__hours">
-              {{ 'templates.contact.info.hours' | t }}
+              {%- if contact_hours != blank -%}{{ contact_hours }}{%- else -%}{{ 'templates.contact.info.hours' | t }}{%- endif -%}
             </p>
           </div>
         </div>
@@ -74,7 +95,7 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {{ 'templates.contact.info.email' | t }}
+              {%- if contact_email != blank -%}{{ contact_email }}{%- else -%}{{ 'templates.contact.info.email' | t }}{%- endif -%}
             </p>
           </div>
         </div>

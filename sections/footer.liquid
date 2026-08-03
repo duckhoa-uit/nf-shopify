@@ -174,6 +174,16 @@
   if localization.market.handle != blank and settings.market_social_vimeo_link != blank
     assign market_social_vimeo_link = settings.market_social_vimeo_link
   endif
+  assign market_contact_phone = settings.contact_phone
+  assign market_contact_email = settings.contact_email
+  if localization.market.handle != blank
+    if settings.market_contact_phone != blank
+      assign market_contact_phone = settings.market_contact_phone
+    endif
+    if settings.market_contact_email != blank
+      assign market_contact_email = settings.market_contact_email
+    endif
+  endif
     assign has_social_icons = true
     if market_social_facebook_link == blank and market_social_instagram_link == blank and market_social_youtube_link == blank and market_social_tiktok_link == blank and market_social_twitter_link == blank and market_social_pinterest_link == blank and market_social_snapchat_link == blank and market_social_tumblr_link == blank and market_social_vimeo_link == blank
       assign has_social_icons = false
@@ -316,14 +326,8 @@
                         {%- endif -%}
                       {% endcomment %}
                       {%- liquid
-                        assign contact_phone = 'footer.contact.phone' | t
-                        if contact_phone == 'translation missing' or contact_phone == blank
-                          assign contact_phone = settings.contact_phone
-                        endif
-                        assign contact_email = 'footer.contact.email' | t
-                        if contact_email == 'translation missing' or contact_email == blank
-                          assign contact_email = settings.contact_email
-                        endif
+                        assign contact_phone = market_contact_phone
+                        assign contact_email = market_contact_email
                       -%}
                       <div class="flex flex-col w-full gap-y-3 [&_a]:flex [&_a]:items-center [&_a]:gap-2 [&_a]:text-gray-850 [&_a]:text-sm [&_a]:hover:text-accent [&_a]:transition-colors">
                         {%- if contact_phone != blank -%}
