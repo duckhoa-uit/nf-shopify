@@ -187,4 +187,47 @@ variant-selects {
   }
 }
 
+.product-variant-picker-parfums__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.product-variant-picker-parfums__option {
+  border: var(--variant-pills-border-width) solid
+    rgba(var(--color-base-foreground), calc(var(--variant-pills-border-opacity) * 0.15));
+  border-radius: 3px;
+  color: rgb(var(--color-base-foreground));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  text-decoration: none;
+  transition: border-color var(--duration-short) ease;
+}
+
+.product-variant-picker-parfums__option--link:hover {
+  border-color: rgb(var(--color-base-foreground));
+}
+
+.product-variant-picker-parfums__option--link:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-base-foreground), 0.55);
+  outline-offset: 0.2rem;
+}
+
+.product-variant-picker-parfums__option--current {
+  border-color: rgb(var(--color-base-foreground));
+  font-weight: 500;
+}
+
+.product-variant-picker-parfums__option--unavailable {
+  border-color: rgba(var(--color-base-foreground), 0.1);
+  color: rgba(var(--color-base-foreground), 0.4);
+  cursor: not-allowed;
+}
+
 /* End custom styles for Swatch display type */
