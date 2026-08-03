@@ -77,7 +77,10 @@ cart-drawer:not(.is-empty) .cart-drawer__collection {
 }
 
 .drawer__heading {
+  flex: 1;
+  min-width: 0;
   margin: 0 0 1rem;
+  overflow-wrap: anywhere;
 }
 
 .drawer__close {
@@ -261,14 +264,18 @@ cart-drawer-items {
 
 .cart-drawer .cart-item__details {
   width: auto;
+  min-width: 0;
   grid-column: 2 / 4;
+  overflow-wrap: anywhere;
 }
 
 .cart-drawer .cart-item__totals {
   pointer-events: none;
+  min-width: 0;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
+  overflow-wrap: anywhere;
 }
 
 .cart-drawer.cart-drawer .cart-item__price-wrapper > *:only-child {
