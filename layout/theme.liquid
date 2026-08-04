@@ -414,6 +414,7 @@
         cart_change_url: '{{ routes.cart_change_url }}',
         cart_update_url: '{{ routes.cart_update_url }}',
         cart_url: '{{ routes.cart_url }}',
+        search_url: '{{ routes.search_url }}',
         predictive_search_url: '{{ routes.predictive_search_url }}',
       };
 
@@ -525,6 +526,10 @@
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.predictive_search_enabled -%}
+      {%- assign search_view_all_results = 'templates.search.view_all_results' | t -%}
+      {%- if search_view_all_results contains 'Translation missing' -%}
+        {%- assign search_view_all_results = 'View all results' -%}
+      {%- endif -%}
       <script>
         window.theme = window.theme || {};
         window.theme.strings = window.theme.strings || {};
@@ -532,7 +537,7 @@
           categories: `{{ 'templates.search.categories' | t | escape }}`,
           articles: `{{ 'templates.search.articles' | t | escape }}`,
           products: `{{ 'templates.search.products' | t | escape }}`,
-          view_all_results: `{{ 'templates.search.view_all_results' | t | escape }}`,
+          view_all_results: `{{ search_view_all_results | escape }}`,
           no_results: `{{ 'templates.search.no_results' | t | escape }}`,
           no_results_suggestion: `{{ 'templates.search.no_results_suggestion' | t | escape }}`
         };

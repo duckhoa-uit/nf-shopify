@@ -317,7 +317,8 @@ class PredictiveSearch extends SearchForm {
       })
       .filter(({ items }) => items.length);
     const resultCount = resultGroups.reduce((count, { items }) => count + items.length, 0);
-    const allResultsUrl = `${window.Shopify?.routes?.search_url || routes.search_url || '/search'}?q=${encodeURIComponent(this.searchTerm)}`;
+    const allResultsUrl = new URL(routes.search_url, window.location.origin);
+    allResultsUrl.searchParams.set('q', this.searchTerm);
 
     const html = template`
     <div class="nf__predictive-search-results">
