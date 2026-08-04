@@ -8,7 +8,8 @@
       * If the child has its own children, the tile is a <details>/<summary>
         and embeds a nested panel (one more level deep).
       * Otherwise it's a direct <a> tile.
-    - Footer "All <title>" CTA pointing to the parent link's URL.
+    - Footer "All <title>" CTA pointing to the parent link's URL when
+      the merchant hasn't already added an equivalent menu item.
 
   Shopify navigation supports up to 3 levels, so this snippet only renders
   one additional level of nesting (not recursive).
@@ -24,6 +25,7 @@
   class="menu-drawer__submenu has-submenu gradient motion-reduce"
   tabindex="-1"
 >
+  {%- assign authored_all_link = link.links | where: 'url', link.url | first -%}
   <div class="menu-drawer__inner-submenu">
     <div class="menu-drawer__title-bar">
       <button
@@ -36,18 +38,14 @@
       <h2 class="menu-drawer__title">{{ link.title | escape }}</h2>
     </div>
 
-    <a href="{{ link.url }}" class="menu-drawer__cta-all menu-drawer__cta-all--top">
-      {{ 'mobile_menu.view_all' | t: title: link.title }}
-    </a>
+    {%- if authored_all_link == blank -%}
+      <a href="{{ link.url }}" class="menu-drawer__cta-all menu-drawer__cta-all--top">
+        {{ 'mobile_menu.view_all' | t: title: link.title }}
+      </a>
+    {%- endif -%}
 
     <div class="menu-drawer__grid">
       {%- for childlink in link.links -%}
-        {%- comment -%}
-          Skip the merchant-authored "All <category>" tile (its URL matches
-          the parent link's URL). On mobile we render that as the underlined
-          CTA at the bottom of the panel instead, to avoid duplication.
-        {%- endcomment -%}
-        {%- if childlink.url == link.url -%}{%- continue -%}{%- endif -%}
         {%- if childlink.links == blank -%}
           <a
             id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
@@ -73,6 +71,7 @@
               class="menu-drawer__submenu has-submenu gradient motion-reduce"
               tabindex="-1"
             >
+              {%- assign authored_grandchild_all_link = childlink.links | where: 'url', childlink.url | first -%}
               <div class="menu-drawer__inner-submenu">
                 <div class="menu-drawer__title-bar">
                   <button
@@ -85,17 +84,14 @@
                   <h2 class="menu-drawer__title">{{ childlink.title | escape }}</h2>
                 </div>
 
-                <a href="{{ childlink.url }}" class="menu-drawer__cta-all menu-drawer__cta-all--top">
-                  {{ 'mobile_menu.view_all' | t: title: childlink.title }}
-                </a>
+                {%- if authored_grandchild_all_link == blank -%}
+                  <a href="{{ childlink.url }}" class="menu-drawer__cta-all menu-drawer__cta-all--top">
+                    {{ 'mobile_menu.view_all' | t: title: childlink.title }}
+                  </a>
+                {%- endif -%}
 
                 <div class="menu-drawer__grid">
                   {%- for grandchild in childlink.links -%}
-                    {%- comment -%}
-                      Same as L2: skip the "All <subcategory>" tile so only
-                      the bottom CTA links to the parent collection.
-                    {%- endcomment -%}
-                    {%- if grandchild.url == childlink.url -%}{%- continue -%}{%- endif -%}
                     <a
                       id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchild.handle }}"
                       href="{{ grandchild.url }}"
@@ -108,9 +104,11 @@
                   {%- endfor -%}
                 </div>
 
-                <a href="{{ childlink.url }}" class="menu-drawer__cta-all">
-                  {{ 'mobile_menu.all_in' | t: title: childlink.title }}
-                </a>
+                {%- if authored_grandchild_all_link == blank -%}
+                  <a href="{{ childlink.url }}" class="menu-drawer__cta-all">
+                    {{ 'mobile_menu.all_in' | t: title: childlink.title }}
+                  </a>
+                {%- endif -%}
               </div>
             </div>
           </details>
@@ -118,8 +116,10 @@
       {%- endfor -%}
     </div>
 
-    <a href="{{ link.url }}" class="menu-drawer__cta-all">
-      {{ 'mobile_menu.all_in' | t: title: link.title }}
-    </a>
+    {%- if authored_all_link == blank -%}
+      <a href="{{ link.url }}" class="menu-drawer__cta-all">
+        {{ 'mobile_menu.all_in' | t: title: link.title }}
+      </a>
+    {%- endif -%}
   </div>
 </div>
