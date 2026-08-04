@@ -1,144 +1,86 @@
 {% comment %}
-  Enhanced Product Variant Picker for Parfums Template with Metafield Support
+  Renders cross-product size navigation for Parfum products.
 
   Accepts:
-  - product: {Object} product object.
-  - block: {Object} passing the block information.
-  - product_form_id: {String} Id of the product form to which the variant picker is associated.
-
-  Features:
-  - Uses custom.product_in_group metafield for size variants only
-  - Navigation behavior for size variant clicks
-  - Enhanced hover effects and interactions
-  - Better mobile responsiveness
-  - Consistent UI styling with Shopify native variants
+  - product: {Object} Current product.
+  - block: {Object} Variant picker block.
 
   Usage:
-  {% render 'product-variant-picker-parfums', product: product, block: block, product_form_id: product_form_id %}
+  {% render 'product-variant-picker-parfums', product: product, block: block %}
 {% endcomment %}
 
 {%- liquid
-  assign has_size_variants = false
-  assign size_variants = null
+  assign parfum_group = product.metafields.custom.parfum_group.value
+  assign size_products = parfum_group.products.value
 
-  # Check if product has size variants in metafield
-  if product.metafields.custom.product_in_group.value != blank
-    assign size_variants = product.metafields.custom.product_in_group.value
-    assign has_size_variants = true
+  if size_products == blank
+    assign size_products = product.metafields.custom.product_in_group.value
   endif
 -%}
 
-{%- comment -%} Metafield-based Size Variants {%- endcomment -%}
-{%- if has_size_variants -%}
+{%- if size_products != blank -%}
   <div class="product-variant-picker-parfums-metafield mt-3" {{ block.shopify_attributes }}>
-    <fieldset class="js product-form__input product-form__input--pill product-form__input--size">
-      <legend class="form__label">{{ 'products.product.size_label' | t }}</legend>
+    <div
+      class="product-form__input product-form__input--pill product-form__input--size"
+      role="group"
+      aria-labelledby="ParfumSizeLabel-{{ block.id }}"
+    >
+      <div id="ParfumSizeLabel-{{ block.id }}" class="form__label">
+        {{- 'products.product.size_label' | t -}}
+      </div>
 
-      <div class="product-form__buttons">
-        {%- for variant_product in size_variants -%}
+      <div class="product-variant-picker-parfums__options">
+        {%- assign rendered_size_keys = '' -%}
+        {%- for size_product in size_products -%}
           {%- liquid
-            assign variant_size = ''
+            assign size_label = ''
+            assign size_option = size_product.options_by_name.Size
+            if size_option != blank
+              assign size_label = size_option.values | first
+            endif
+
+            if size_label == blank and size_product.metafields.custom.size.value != blank
+              assign size_metaobject = size_product.metafields.custom.size.value | first
+              assign size_label = size_metaobject.value.value
+            endif
+
+            assign size_key = size_label | strip | downcase
+            assign size_token = '|' | append: size_key | append: '|'
             assign is_current = false
-            if variant_product.id == product.id
+            if size_product.id == product.id
               assign is_current = true
-            endif
-
-            # Priority 1: Extract from Shopify's native product size variants
-            for option in variant_product.options_with_values
-              assign option_name_downcase = option.name | downcase
-              if option_name_downcase contains 'size' or option_name_downcase contains 'größe' or option_name_downcase contains 'taille'
-                if option.selected_value != blank
-                  assign variant_size = option.selected_value
-                  break
-                endif
-              endif
-            endfor
-
-            # Priority 2: Extract from custom size metafield
-            if variant_size == blank and variant_product.metafields.custom.size.value != blank
-              if variant_product.metafields.custom.size.type == 'single_line_text_field'
-                assign variant_size = variant_product.metafields.custom.size.value
-              elsif variant_product.metafields.custom.size.type == 'list.single_line_text_field'
-                assign variant_size = variant_product.metafields.custom.size.value | first
-              endif
-            endif
-
-            # Priority 3: Fallback to title-based extraction
-            if variant_size == blank
-              assign title_parts = variant_product.title | split: ' - '
-              if title_parts.size > 1
-                assign variant_size = title_parts | last
-              else
-                # Try other common separators
-                assign title_parts = variant_product.title | split: ' | '
-                if title_parts.size > 1
-                  assign variant_size = title_parts | last
-                else
-                  assign title_parts = variant_product.title | split: ' ('
-                  if title_parts.size > 1
-                    assign last_part = title_parts | last
-                    assign variant_size = last_part | replace: ')', ''
-                  else
-                    # Final fallback - use product handle or title
-                    assign variant_size = variant_product.handle | split: '-' | last | capitalize
-                  endif
-                endif
-              endif
-            endif
-
-            # Ensure we have a size value
-            if variant_size == blank
-              assign variant_size = 'Size'
             endif
           -%}
 
-          <input
-            type="radio"
-            id="size-variant-{{ variant_product.id }}"
-            name="size-variant"
-            value="{{ variant_product.handle }}"
-            class="sr-only size-variant-input"
-            {% if is_current %}
-              checked
-            {% endif %}
-            data-product-url="{{ variant_product.url }}"
-            data-product-id="{{ variant_product.id }}"
-            data-size="{{ variant_size }}"
-          >
-          <label
-            for="size-variant-{{ variant_product.id }}"
-            class="product-form__input-label{% if is_current %} product-form__input-label--active{% endif %}"
-          >
-            {{ variant_size }}
-          </label>
+          {%- if size_label != blank -%}
+            {%- unless rendered_size_keys contains size_token -%}
+              {%- assign rendered_size_keys = rendered_size_keys | append: size_token -%}
+              {%- if is_current -%}
+                <span
+                  class="product-variant-picker-parfums__option product-variant-picker-parfums__option--current"
+                  aria-current="page"
+                >
+                  {{- size_label | escape -}}
+                </span>
+              {%- elsif size_product.available -%}
+                <a
+                  class="product-variant-picker-parfums__option product-variant-picker-parfums__option--link"
+                  href="{{ size_product.url | escape }}"
+                >
+                  {{- size_label | escape -}}
+                </a>
+              {%- else -%}
+                <span
+                  class="product-variant-picker-parfums__option product-variant-picker-parfums__option--unavailable"
+                  aria-disabled="true"
+                >
+                  {{- size_label | escape -}}
+                </span>
+              {%- endif -%}
+            {%- endunless -%}
+          {%- endif -%}
         {%- endfor -%}
       </div>
-    </fieldset>
+    </div>
   </div>
 {%- endif -%}
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const sizeVariantInputs = document.querySelectorAll('.size-variant-input');
-
-    sizeVariantInputs.forEach((input) => {
-      input.addEventListener('change', function () {
-        if (this.checked) {
-          const productUrl = this.dataset.productUrl;
-          const selectedSize = this.dataset.size;
-
-          // Update selected size display
-          const selectedSizeSpan = document.querySelector('[data-selected-value]');
-          if (selectedSizeSpan) {
-            selectedSizeSpan.textContent = selectedSize;
-          }
-
-          // Navigate to the selected variant product
-          if (productUrl && productUrl !== window.location.pathname) {
-            window.location.href = productUrl;
-          }
-        }
-      });
-    });
-  });
-</script>

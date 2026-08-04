@@ -16,8 +16,8 @@
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
+  {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
   {% unless product.has_only_default_variant %}
-    {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
   {% endunless %}
@@ -26,7 +26,7 @@
   {%- endif -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
-
+  <script src="{{ 'scroll-more.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 
   {%- if product.quantity_price_breaks_configured? -%}
@@ -213,8 +213,7 @@
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker-parfums',
                   product: product,
-                  block: block,
-                  product_form_id: product_form_id
+                  block: block
                 %}
               {%- when 'inventory' -%}
                 <p
@@ -540,14 +539,6 @@
     {% render 'size-fit-modal', product: product, modal_id: 'size-fit-modal' %}
     <script src="{{ 'size-fit-modal.js' | asset_url }}" defer></script>
 
-    {%- liquid
-      if product.selected_or_first_available_variant.featured_media
-        assign seo_media = product.selected_or_first_available_variant.featured_media
-      else
-        assign seo_media = product.featured_media
-      endif
-    -%}
-
     <!-- Enhanced JavaScript for improved functionality -->
     <script>
       document.addEventListener('DOMContentLoaded', function () {
@@ -761,10 +752,6 @@
             {
               "value": "button",
               "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__2.label"
-            },
-            {
-              "value": "swatch",
-              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__3.label"
             }
           ],
           "default": "button",
@@ -1059,7 +1046,7 @@
       "id": "image_zoom",
       "options": [
         {
-          "value": "no-zoom",
+          "value": "none",
           "label": "t:sections.main-product.settings.image_zoom.options__1.label"
         },
         {
@@ -1073,16 +1060,6 @@
       ],
       "default": "lightbox",
       "label": "t:sections.main-product.settings.image_zoom.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.main-product.settings.sticky_navigation.header"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_sticky_navigation",
-      "default": true,
-      "label": "t:sections.main-product.settings.sticky_navigation.enable_label"
     },
     {
       "type": "header",
