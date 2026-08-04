@@ -11,6 +11,11 @@
   elsif request.page_type == 'password'
     assign og_url = request.origin
   endif
+
+  assign market_social_twitter_link = settings.social_twitter_link
+  if localization.market.handle != blank and settings.market_social_twitter_link != blank
+    assign market_social_twitter_link = settings.market_social_twitter_link
+  endif
 %}
 
 <meta property="og:site_name" content="{{ shop.name }}">
