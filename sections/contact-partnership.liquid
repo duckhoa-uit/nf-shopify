@@ -12,6 +12,11 @@
   elsif partnership_email == blank
     assign partnership_email = settings.contact_email
   endif
+  if localization.language.iso_code == 'de'
+    assign partnership_email = 'templates.contact.partnership.contact_email' | t
+    assign partnership_name = 'templates.contact.partnership.contact_name' | t
+    assign partnership_phone = 'templates.contact.partnership.contact_phone' | t
+  endif
 -%}
 
 {%- style -%}

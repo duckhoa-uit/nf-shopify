@@ -325,6 +325,10 @@
                       {%- liquid
                         assign contact_phone = market_contact_phone
                         assign contact_email = market_contact_email
+                        if localization.language.iso_code == 'de'
+                          assign contact_phone = 'templates.contact.info.phone' | t
+                          assign contact_email = 'templates.contact.info.email' | t
+                        endif
                       -%}
                       <div class="flex flex-col w-full gap-y-3 [&_a]:flex [&_a]:items-center [&_a]:gap-2 [&_a]:text-gray-850 [&_a]:text-sm [&_a]:hover:text-accent [&_a]:transition-colors">
                         {%- if contact_phone != blank -%}

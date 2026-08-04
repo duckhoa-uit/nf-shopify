@@ -26,6 +26,12 @@
     assign contact_address = settings.market_contact_address
     assign contact_hours = settings.market_contact_hours
   endif
+  if localization.language.iso_code == 'de'
+    assign contact_email = 'templates.contact.info.email' | t
+    assign contact_phone = 'templates.contact.info.phone' | t
+    assign contact_address = 'templates.contact.info.address' | t
+    assign contact_hours = 'templates.contact.info.hours' | t
+  endif
 -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient bg-gray-100">
