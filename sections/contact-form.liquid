@@ -20,18 +20,11 @@
   assign contact_address = settings.contact_address
   assign contact_hours = settings.contact_hours
   if localization.market.handle != blank
-    if settings.market_contact_email != blank
-      assign contact_email = settings.market_contact_email
-    endif
-    if settings.market_contact_phone != blank
-      assign contact_phone = settings.market_contact_phone
-    endif
-    if settings.market_contact_address != blank
-      assign contact_address = settings.market_contact_address
-    endif
-    if settings.market_contact_hours != blank
-      assign contact_hours = settings.market_contact_hours
-    endif
+    # Market overrides are merchant-managed. Do not fall back to default-market values.
+    assign contact_email = settings.market_contact_email
+    assign contact_phone = settings.market_contact_phone
+    assign contact_address = settings.market_contact_address
+    assign contact_hours = settings.market_contact_hours
   endif
 -%}
 
@@ -50,9 +43,11 @@
             </svg>
           </div>
           <div class="contact-info__content">
-            <p class="contact-info__text">
-              {%- if contact_address != blank -%}{{ contact_address }}{%- else -%}{{ 'templates.contact.info.address' | t }}{%- endif -%}
-            </p>
+            {%- if contact_address != blank or localization.market.handle == blank -%}
+              <p class="contact-info__text">
+                {%- if contact_address != blank -%}{{ contact_address | escape }}{%- else -%}{{ 'templates.contact.info.address' | t }}{%- endif -%}
+              </p>
+            {%- endif -%}
           </div>
         </div>
 
@@ -71,10 +66,10 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {%- if contact_phone != blank -%}{{ contact_phone }}{%- else -%}{{ 'templates.contact.info.phone' | t }}{%- endif -%}
+              {%- if contact_phone != blank -%}<a href="tel:{{ contact_phone | remove: ' ' | escape }}">{{ contact_phone | escape }}</a>{%- elsif localization.market.handle == blank -%}{{ 'templates.contact.info.phone' | t }}{%- endif -%}
             </p>
             <p class="contact-info__hours">
-              {%- if contact_hours != blank -%}{{ contact_hours }}{%- else -%}{{ 'templates.contact.info.hours' | t }}{%- endif -%}
+              {%- if contact_hours != blank -%}{{ contact_hours | escape }}{%- elsif localization.market.handle == blank -%}{{ 'templates.contact.info.hours' | t }}{%- endif -%}
             </p>
           </div>
         </div>
@@ -95,7 +90,7 @@
           </div>
           <div class="contact-info__content">
             <p class="contact-info__text">
-              {%- if contact_email != blank -%}{{ contact_email }}{%- else -%}{{ 'templates.contact.info.email' | t }}{%- endif -%}
+              {%- if contact_email != blank -%}<a href="mailto:{{ contact_email | escape }}">{{ contact_email | escape }}</a>{%- elsif localization.market.handle == blank -%}{{ 'templates.contact.info.email' | t }}{%- endif -%}
             </p>
           </div>
         </div>

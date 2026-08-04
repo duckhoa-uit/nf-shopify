@@ -5,20 +5,11 @@
   assign partnership_name = section.settings.contact_name
   assign partnership_phone = section.settings.contact_phone
   if localization.market.handle != blank
-    if partnership_email == blank and settings.market_contact_person_email != blank
-      assign partnership_email = settings.market_contact_person_email
-    endif
-    if partnership_name == blank and settings.market_contact_person_name != blank
-      assign partnership_name = settings.market_contact_person_name
-    endif
-    if partnership_phone == blank and settings.market_contact_person_phone != blank
-      assign partnership_phone = settings.market_contact_person_phone
-    endif
-  endif
-  if partnership_email == blank and localization.market.handle != blank and settings.market_contact_email != blank
-    assign partnership_email = settings.market_contact_email
-  endif
-  if partnership_email == blank
+    # Market overrides are merchant-managed. Do not fall back to default-market values.
+    assign partnership_email = settings.market_contact_person_email
+    assign partnership_name = settings.market_contact_person_name
+    assign partnership_phone = settings.market_contact_person_phone
+  elsif partnership_email == blank
     assign partnership_email = settings.contact_email
   endif
 -%}
@@ -79,17 +70,26 @@
             <p class="contact-partnership__name">
               {%- if partnership_name != blank -%}
                 {{ partnership_name | escape }}
-              {%- else -%}
+              {%- elsif localization.market.handle == blank -%}
                 {{ 'templates.contact.partnership.contact_name' | t }}
               {%- endif -%}
             </p>
 
             <div class="contact-partnership__info">
-              <p class="contact-partnership__email">
-                <a href="mailto:{{ partnership_email | escape }}">
-                  {{ partnership_email | escape }}
-                </a>
-              </p>
+              {%- if partnership_email != blank -%}
+                <p class="contact-partnership__email">
+                  <a href="mailto:{{ partnership_email | escape }}">
+                    {{ partnership_email | escape }}
+                  </a>
+                </p>
+              {%- endif -%}
+              {%- if partnership_phone != blank -%}
+                <p class="contact-partnership__phone">
+                  <a href="tel:{{ partnership_phone | remove: ' ' | escape }}">
+                    {{ partnership_phone | escape }}
+                  </a>
+                </p>
+              {%- endif -%}
             </div>
           </div>
         </div>

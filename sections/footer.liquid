@@ -177,12 +177,9 @@
   assign market_contact_phone = settings.contact_phone
   assign market_contact_email = settings.contact_email
   if localization.market.handle != blank
-    if settings.market_contact_phone != blank
-      assign market_contact_phone = settings.market_contact_phone
-    endif
-    if settings.market_contact_email != blank
-      assign market_contact_email = settings.market_contact_email
-    endif
+    # Market overrides are merchant-managed. Do not fall back to default-market values.
+    assign market_contact_phone = settings.market_contact_phone
+    assign market_contact_email = settings.market_contact_email
   endif
     assign has_social_icons = true
     if market_social_facebook_link == blank and market_social_instagram_link == blank and market_social_youtube_link == blank and market_social_tiktok_link == blank and market_social_twitter_link == blank and market_social_pinterest_link == blank and market_social_snapchat_link == blank and market_social_tumblr_link == blank and market_social_vimeo_link == blank
@@ -333,13 +330,13 @@
                         {%- if contact_phone != blank -%}
                           <a href="tel:{{ contact_phone | remove: ' ' | escape }}" class="flex_address">
                             <span class="svg-wrapper size-4">{{ 'icon-telephone.svg' | inline_asset_content }}</span>
-                            <span>{{ contact_phone }}</span>
+                            <span>{{ contact_phone | escape }}</span>
                           </a>
                         {%- endif -%}
                         {%- if contact_email != blank -%}
-                          <a href="mailto:{{ contact_email }}" class="flex_address">
+                          <a href="mailto:{{ contact_email | escape }}" class="flex_address">
                             <span class="svg-wrapper size-4">{{ 'icon-email.svg' | inline_asset_content }}</span>
-                            <span itemprop="email">{{ contact_email }}</span>
+                            <span itemprop="email">{{ contact_email | escape }}</span>
                           </a>
                         {%- endif -%}
                         <a href="{{ settings.contact_page_url | default: '/pages/contact' }}">
