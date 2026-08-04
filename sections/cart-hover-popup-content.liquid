@@ -59,7 +59,7 @@
 
             <!-- Price display matching Figma design -->
             <div class="cart-hover-popup__item-price">
-              <span class="cart-hover-popup__item-price-label">Cena:</span>
+              <span class="cart-hover-popup__item-price-label">{{ 'sections.cart.headings.price' | t }}:</span>
               {%- if item.original_price != item.final_price -%}
                 <span class="cart-hover-popup__item-price-value">
                   {{ item.final_price | money }} / {{ item.original_price | money }}
