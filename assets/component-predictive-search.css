@@ -490,56 +490,8 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   color: var(--color-black);  /* #000000 */
 }
 
-button.nf__predictive-search__view-all-button {
-  /* Use unified button system */
-  @extend .button;
-  @extend .button--primary;
-
-  /* Keep specific styling for predictive search */
-  width: 100%;
-  height: 2.25rem;
-  text-transform: uppercase;
-  font-size: 0.875rem;
-  line-height: 1rem;
-  gap: 0.5rem;
-  margin-top: auto;
-
-  /* Ensure unified button structure works */
-  position: relative;
-}
-
-/* Unified loading state for predictive search button */
-button.nf__predictive-search__view-all-button.loading {
-  background-color: var(--color-gray-900) !important;
-  display: grid;
-  place-items: center;
-}
-
-button.nf__predictive-search__view-all-button.loading .button-text {
-  visibility: hidden;
-  grid-area: 1 / 1;
-}
-
-button.nf__predictive-search__view-all-button.loading .button-spinner {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  grid-area: 1 / 1;
-  width: 20px;
-  height: 20px;
-}
-
-button.nf__predictive-search__view-all-button.loading .button-spinner svg {
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
-}
 @media screen and (min-width: 750px) {
   .nf__predictive-search__results-groups-wrapper{
     height: auto;
-  }
-
-  button.nf__predictive-search__view-all-button {
-    margin-top: 0;
   }
 }
