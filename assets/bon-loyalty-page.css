@@ -96,3 +96,22 @@
 .bon-loyalty-page [id='profile-balance-table'] .bon-table-custom tbody td:last-child {
   color: var(--bon-loyalty-success) !important;
 }
+
+/* BON injects inline positioning and nowrap styles, so tier labels need priority to wrap safely. */
+.bon-loyalty-page .bon-table-tier .bon-progress .bon-text-vip-tier {
+  box-sizing: border-box !important;
+  inline-size: calc(100% - 8px) !important;
+  max-inline-size: calc(100% - 8px) !important;
+  inset-block-start: 50% !important;
+  inset-inline-start: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  white-space: normal !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+}
+
+@media screen and (max-width: 1100px) {
+  .bon-loyalty-page .bon-table-tier .bon-progress .bon-text-vip-tier {
+    font-size: 12px !important;
+  }
+}
