@@ -1,0 +1,237 @@
+{% comment %}
+  Renders a deterministic Shopify automatic-discount preview.
+
+  Contract:
+  - JSON metafield: custom.automatic_discount_preview
+  - Payload version: 1
+  - Rule preview: EXACT_PRICE
+  - Audience types: ALL, AUTHENTICATED_CUSTOMER, CUSTOMER_TAG
+  - Value types: PERCENTAGE, FIXED_AMOUNT
+
+  Unsupported, invalid, inactive, quantity-dependent, or ambiguous rules render
+  the normal Shopify price instead. Shopify cart allocations remain authoritative.
+
+  Accepts:
+  - product: Product object (required)
+  - variant: Variant object (optional)
+  - presentation: 'pdp' or 'card' (optional, defaults to 'pdp')
+  - quantity: Current quantity (optional, defaults to 1)
+{% endcomment %}
+
+{%- liquid
+  assign preview_enabled = settings.automatic_discount_preview_enabled
+  if preview_enabled == blank
+    assign preview_enabled = true
+  endif
+
+  assign target_variant = variant | default: product.selected_or_first_available_variant
+  assign target_price = target_variant.price | default: product.price | plus: 0
+  assign preview_payload = target_variant.metafields.custom.automatic_discount_preview.value
+
+  if preview_payload == blank
+    assign preview_payload = product.metafields.custom.automatic_discount_preview.value
+  endif
+
+  assign preview_rule_count = 0
+  assign preview_rule = blank
+  assign preview_price = blank
+  assign preview_discount_amount = blank
+  assign preview_badge = blank
+  assign preview_kind = blank
+  assign current_quantity = quantity | default: 1 | plus: 0
+  assign now_timestamp = 'now' | date: '%s' | plus: 0
+  assign current_currency = cart.currency.iso_code | default: shop.currency
+
+  if preview_enabled and preview_payload != blank and preview_payload.version == 1
+    for rule in preview_payload.rules
+      assign rule_is_active = true
+      assign rule_is_eligible = false
+      assign rule_minimum_quantity = rule.minimumQuantity | default: 1 | plus: 0
+
+      if rule.startsAt != blank
+        assign rule_start_timestamp = rule.startsAt | date: '%s' | plus: 0
+        if rule_start_timestamp > now_timestamp
+          assign rule_is_active = false
+        endif
+      endif
+
+      if rule.endsAt != blank
+        assign rule_end_timestamp = rule.endsAt | date: '%s' | plus: 0
+        if rule_end_timestamp <= now_timestamp
+          assign rule_is_active = false
+        endif
+      endif
+
+      if current_quantity < rule_minimum_quantity
+        assign rule_is_active = false
+      endif
+
+      if rule.preview == 'EXACT_PRICE' and rule_is_active
+        case rule.audience.type
+          when 'ALL'
+            assign rule_is_eligible = true
+          when 'AUTHENTICATED_CUSTOMER'
+            if customer != blank
+              assign rule_is_eligible = true
+            endif
+          when 'CUSTOMER_TAG'
+            if customer != blank and rule.audience.value != blank and customer.tags contains rule.audience.value
+              assign rule_is_eligible = true
+            endif
+        endcase
+      endif
+
+      if rule_is_eligible
+        assign preview_rule_count = preview_rule_count | plus: 1
+        if preview_rule_count == 1
+          assign preview_rule = rule
+        endif
+      endif
+    endfor
+  endif
+
+  if preview_rule_count == 1 and preview_rule != blank
+    case preview_rule.value.type
+      when 'PERCENTAGE'
+        assign percentage = preview_rule.value.value | plus: 0
+        if percentage > 0 and percentage <= 100
+          assign preview_discount_amount = target_price | times: percentage | divided_by: 100 | round
+          assign preview_price = target_price | minus: preview_discount_amount
+          assign preview_badge = '-' | append: percentage | append: '%'
+          assign preview_kind = 'percentage'
+        endif
+      when 'FIXED_AMOUNT'
+        assign fixed_currency = preview_rule.value.currency | default: preview_rule.value.currencyCode
+        assign fixed_amount = preview_rule.value.amount | default: preview_rule.value.value | plus: 0
+        if fixed_currency == current_currency and fixed_amount > 0 and fixed_amount < target_price
+          assign preview_discount_amount = fixed_amount
+          assign preview_price = target_price | minus: fixed_amount
+          assign formatted_fixed_amount = fixed_amount | money
+          assign preview_badge = '-' | append: formatted_fixed_amount
+          assign preview_kind = 'fixed-amount'
+        endif
+    endcase
+  endif
+
+  assign has_preview = false
+  if preview_price != blank and preview_price >= 0 and preview_price < target_price
+    assign has_preview = true
+  endif
+-%}
+
+{%- if presentation == 'card' -%}
+  <div
+    class="flex gap-3 items-center mt-0.5{% if has_preview %} automatic-discount-preview{% endif %}"
+    {% if has_preview %}
+      data-discount-preview="true" data-discount-preview-kind="{{ preview_kind }}"
+    {% endif %}
+  >
+    {% if has_preview %}
+      <s class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">
+        {% if settings.currency_code_enabled -%}
+          {{- target_price | money_with_currency -}}
+        {%- else -%}
+          {{- target_price | money -}}
+        {%- endif %}
+      </s>
+      <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+        {% if settings.currency_code_enabled -%}
+          {{- preview_price | money_with_currency -}}
+        {%- else -%}
+          {{- preview_price | money -}}
+        {%- endif %}
+      </span>
+      <span
+        class="automatic-discount-preview__badge text-[#EC0009] font-medium text-sm leading-5"
+        aria-label="{{ preview_badge }}"
+      >
+        {{- preview_badge -}}
+      </span>
+    {% elsif target_variant.compare_at_price > target_price and product.available %}
+      <span class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">
+        {{- target_variant.compare_at_price | money -}}
+      </span>
+      <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+        {{- target_price | money -}}
+      </span>
+    {% else %}
+      <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+        {{- target_price | money -}}
+      </span>
+    {% endif %}
+  </div>
+{%- else -%}
+  <div
+    class="price-wrapper flex flex-col{% if has_preview %} automatic-discount-preview{% endif %}"
+    {% if has_preview %}
+      data-discount-preview="true" data-discount-preview-kind="{{ preview_kind }}"
+    {% endif %}
+  >
+    {% if has_preview %}
+      <div class="flex items-baseline gap-2">
+        <s class="original-price text-[14px] font-normal font-archivo-expanded text-[#3D3D3D] leading-[1.14]">
+          {% if settings.currency_code_enabled -%}
+            {{- target_price | money_with_currency -}}
+          {%- else -%}
+            {{- target_price | money -}}
+          {%- endif %}
+        </s>
+        <span
+          class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]"
+          {% if settings.currency_code_enabled %}
+            data-format="{{ shop.money_with_currency_format }}"
+          {% else %}
+            data-format="{{ shop.money_format }}"
+          {% endif %}
+        >
+          {% if settings.currency_code_enabled -%}
+            {{- preview_price | money_with_currency -}}
+          {%- else -%}
+            {{- preview_price | money -}}
+          {%- endif %}
+        </span>
+      </div>
+      <span
+        class="automatic-discount-preview__badge text-[#EC0009] font-medium text-sm leading-5 mt-1"
+        aria-label="{{ preview_badge }}"
+      >
+        {{- preview_badge -}}
+      </span>
+    {% else %}
+      <span
+        class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]"
+        {% if settings.currency_code_enabled %}
+          data-format="{{ shop.money_with_currency_format }}"
+        {% else %}
+          data-format="{{ shop.money_format }}"
+        {% endif %}
+      >
+        {% if settings.currency_code_enabled -%}
+          {{- target_price | money_with_currency -}}
+        {%- else -%}
+          {{- target_price | money -}}
+        {%- endif %}
+      </span>
+      {% if target_variant.compare_at_price > target_price %}
+        <div class="flex items-center mt-2">
+          <span class="original-price text-[14px] font-normal font-archivo-expanded text-[#3D3D3D] leading-[1.14]">
+            {% if settings.currency_code_enabled -%}
+              {{- target_variant.compare_at_price | money_with_currency -}}
+            {%- else -%}
+              {{- target_variant.compare_at_price | money -}}
+            {%- endif %}
+          </span>
+          <span class="price-label text-[14px] font-light font-['Archivo'] text-[#4D4D4D] leading-[1.14] ml-1">
+            {{- 'products.product.original_recommended_price' | t -}}
+          </span>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .automatic-discount-preview__badge {
+    white-space: nowrap;
+  }
+{% endstylesheet %}

@@ -143,36 +143,7 @@
                       assign current_variant = product.variants.first
                     endif
                   -%}
-                  <div class="price-wrapper flex flex-col">
-                    <span
-                      class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]"
-                      {% if settings.currency_code_enabled %}
-                        data-format="{{ shop.money_with_currency_format }}"
-                      {% else %}
-                        data-format="{{ shop.money_format }}"
-                      {% endif %}
-                    >
-                      {% if settings.currency_code_enabled %}
-                        {{ current_variant.price | money_with_currency }}
-                      {% else %}
-                        {{ current_variant.price | money }}
-                      {% endif %}
-                    </span>
-                    {% if current_variant.compare_at_price > current_variant.price %}
-                      <div class="flex items-center mt-2">
-                        <span class="original-price text-[14px] font-normal font-archivo-expanded text-[#3D3D3D] leading-[1.14]">
-                          {% if settings.currency_code_enabled %}
-                            {{ current_variant.compare_at_price | money_with_currency }}
-                          {% else %}
-                            {{ current_variant.compare_at_price | money }}
-                          {% endif %}
-                        </span>
-                        <span class="price-label text-[14px] font-light font-['Archivo'] text-[#4D4D4D] leading-[1.14] ml-1">
-                          {{- 'products.product.original_recommended_price' | t -}}
-                        </span>
-                      </div>
-                    {% endif %}
-                  </div>
+                  {% render 'automatic-discount-preview', product: product, variant: current_variant, presentation: 'pdp' %}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">

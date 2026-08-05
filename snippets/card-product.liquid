@@ -566,25 +566,8 @@
           <h3 class="text-base font-semibold leading-[1.625rem] text-[#0F0F0F]">{{ card_product.title | escape }}</h3>
         </a>
 
-        <div class="flex gap-3 items-center mt-0.5">
-          {%- liquid
-            assign display_variant = card_product.selected_or_first_available_variant
-            assign display_price = display_variant.price | default: card_product.price
-            assign display_compare_at_price = display_variant.compare_at_price | default: card_product.compare_at_price
-          -%}
-          {%- if display_compare_at_price > display_price and card_product.available -%}
-            <span class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">
-              {{- display_compare_at_price | money -}}
-            </span>
-            <span class="text-black font-medium font-archivo-expanded text-base leading-6">
-              {{- display_price | money -}}
-            </span>
-          {%- else -%}
-            <span class="text-black font-medium font-archivo-expanded text-base leading-6">
-              {{- display_price | money -}}
-            </span>
-          {%- endif -%}
-        </div>
+        {%- assign display_variant = card_product.selected_or_first_available_variant -%}
+        {% render 'automatic-discount-preview', product: card_product, variant: display_variant, presentation: 'card' %}
       </div>
     </div>
   </div>
