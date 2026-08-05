@@ -30,12 +30,12 @@ feature/<x>                   → Short-lived, merges into store/international
 
 ### Store ↔ Environment Mapping
 
-| Store | Shopify Store | CLI Environment | Primary Locale |
-|---|---|---|---|
-| International | sportfinder-international.myshopify.com | `international` | en + bg/de/hr/sl |
-| Czech Republic | northfinder-cz.myshopify.com | `czech` | cs |
-| Romania | northfinder-ro.myshopify.com | `romania` | ro |
-| Perfumes | northfinder-parfums.myshopify.com | `perfumes` | en + multi |
+| Store          | Shopify Store                           | CLI Environment | Primary Locale   |
+| -------------- | --------------------------------------- | --------------- | ---------------- |
+| International  | sportfinder-international.myshopify.com | `international` | en + bg/de/hr/sl |
+| Czech Republic | northfinder-cz.myshopify.com            | `czech`         | cs               |
+| Romania        | northfinder-ro.myshopify.com            | `romania`       | ro               |
+| Perfumes       | northfinder-parfums.myshopify.com       | `perfumes`      | en + multi       |
 
 ### Per-store overrides
 
@@ -60,13 +60,15 @@ When a store loads the theme, Shopify auto-applies the overlay matching that sto
 
 ### Prerequisites
 
-```bash
-# Install pnpm globally if you haven't already
-npm install -g pnpm
+- Node.js 22.13 or newer
+- Corepack (included with Node.js) to install the pinned pnpm version
 
-# Install Shopify CLI
-npm install -g @shopify/cli @shopify/theme
+```bash
+corepack enable
+corepack prepare pnpm@11.20.0 --activate
 ```
+
+Shopify CLI is installed as a project dependency, so local scripts and CI use the same pinned version.
 
 ### Installation
 
@@ -168,39 +170,40 @@ Snapshots land in `config/backups/settings_data.<env>.json` and are read-only re
 
 ### Active Stores
 
-| Store | Shopify Store | CLI Environment | Primary Locale | Market handle |
-|---|---|---|---|---|
-| International | sportfinder-international.myshopify.com | `international` | en (+ bg, de, hr, sl) | (default) |
-| Czech Republic | northfinder-cz.myshopify.com | `czech` | cs | `czech` |
-| Romania | northfinder-ro.myshopify.com | `romania` | ro | `romania` |
-| Perfumes | northfinder-parfums.myshopify.com | `perfumes` | en (+ multi) | (default) |
+| Store          | Shopify Store                           | CLI Environment | Primary Locale        | Market handle |
+| -------------- | --------------------------------------- | --------------- | --------------------- | ------------- |
+| International  | sportfinder-international.myshopify.com | `international` | en (+ bg, de, hr, sl) | (default)     |
+| Czech Republic | northfinder-cz.myshopify.com            | `czech`         | cs                    | `czech`       |
+| Romania        | northfinder-ro.myshopify.com            | `romania`       | ro                    | `romania`     |
+| Perfumes       | northfinder-parfums.myshopify.com       | `perfumes`      | en (+ multi)          | (default)     |
 
 All stores deploy from the `store/international` branch.
 
 ## Testing
 
-### Running Tests
+### Running Quality Checks
 
 ```bash
-# Watch mode (development)
-pnpm test
-
-# Single run (CI)
-pnpm test:ci
-
-# Format code
-pnpm format
+pnpm lint          # Theme Check + Prettier check for changed files
+pnpm validate      # Vitest in CI mode
+pnpm check         # Full local/CI quality gate
+pnpm test          # Vitest watch mode
+pnpm format        # Write Prettier formatting across the repository
 ```
+
+Theme Check and Prettier skip app-managed output from EComposer, PageFly, Swym, BON Loyalty, and theMarketer. The ignore rules are intentionally path-specific in `.theme-check.yml` and `.prettierignore`, so first-party templates remain validated. Prettier is enforced incrementally on files changed from the Git base commit, avoiding a repository-wide rewrite of legacy formatting while preventing new drift.
 
 ### Manual Testing Checklist
 
 Before merging to `store/international`:
+
 - [ ] Test locally with `pnpm dev` (international store)
 - [ ] If change affects market overlays: test with `pnpm dev:czech` and `pnpm dev:romania`
-- [ ] Run `pnpm test:ci`
+- [ ] Run `pnpm check`
 - [ ] Verify no console errors on home, PDP, cart, checkout
 
 Before publishing to a live store:
+
 - [ ] `shopify theme push -e <env> --unpublished` first
 - [ ] Smoke test the unpublished theme on the target store
 - [ ] Verify market-specific footer / language picker / FAQ render correctly
@@ -223,7 +226,7 @@ Before publishing to a live store:
 - **Technology Stack**: Shopify Liquid, Tailwind CSS v4.0, Vanilla JavaScript, Vitest
 - **Design System**: 150+ custom properties with unified design tokens
 - **Key Features**: Size fit algorithm, predictive search, multi-currency, 25+ languages
-- **Package Manager**: pnpm (requires Node.js 20+)
+- **Package Manager**: pnpm 11 (requires Node.js 22.13+)
 
 ## Development Commands
 
@@ -239,9 +242,11 @@ pnpm start:romania     # RO dev server only
 pnpm start:perfumes    # Perfumes dev server only
 
 pnpm watch             # Tailwind CSS watcher only
+pnpm lint              # Theme Check + Prettier check
+pnpm validate          # Vitest (run once)
+pnpm check             # Full quality gate used by CI
 pnpm test              # Vitest (watch)
-pnpm test:ci           # Vitest (run once)
-pnpm format            # Prettier
+pnpm format            # Write Prettier formatting
 ```
 
 ### Manual Shopify CLI Commands
@@ -259,6 +264,7 @@ shopify theme push -e <env> --allow-live       # ⚠️ Overwrite live theme
 ## Important Files
 
 ### Shared Files (merge from develop to all stores)
+
 - `/assets/*` - CSS, JS, images, fonts
 - `/sections/*` - Section templates
 - `/snippets/*` - Reusable components
@@ -267,6 +273,7 @@ shopify theme push -e <env> --allow-live       # ⚠️ Overwrite live theme
 - `config/settings_schema.json` - Theme customization schema
 
 ### Per-store overlays (auto-applied by Shopify at runtime)
+
 - `config/settings_data.context.<market>.json`
 - `templates/<x>.context.<market>.json`
 - `sections/<x>.context.<market>.json`
@@ -281,6 +288,7 @@ Overlays apply when the loading store's primary market handle matches the file s
 Use conventional commits with store prefix for store-specific changes:
 
 **Shared changes:**
+
 ```
 feat: add new product card design
 fix: resolve checkout button issue
@@ -289,6 +297,7 @@ docs: update README with new workflow
 ```
 
 **Store-specific config sync:**
+
 ```
 config(international): sync settings_data from live
 config(czech): add cross-market language slot 2
@@ -308,6 +317,7 @@ config(perfumes): enable new payment method
 ### Common Issues
 
 **Issue: live store edited theme settings, local out of sync**
+
 ```bash
 shopify theme pull -e <env> --only config/settings_data.json
 git add config/settings_data.json
@@ -315,6 +325,7 @@ git commit -m "config(<env>): sync settings_data from live"
 ```
 
 **Issue: market overlay (footer/picker) doesn't render**
+
 - Confirm the market handle exists in the store's admin (Settings → Markets) and matches the file suffix exactly (`czech`, `romania`, `slovenia`, ...).
 - Confirm the locale you're testing is published on that store.
 - Real `request.host` is required to test cross-market language picker — use `shopify theme push -e <env> --unpublished` and preview the live URL with `?preview_theme_id=`.
@@ -322,6 +333,7 @@ git commit -m "config(<env>): sync settings_data from live"
 ## Support
 
 For questions or issues:
+
 - Review [AGENTS.md](AGENTS.md) for development guidelines
 - Contact the development team
 

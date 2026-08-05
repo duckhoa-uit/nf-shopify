@@ -1,0 +1,36 @@
+# Dependencies, local tooling, and transient output
+node_modules/
+.shopify/
+.tmp/
+.firecrawl/
+coverage/
+
+# Compiled output
+assets/application.css
+
+# Merchant-managed settings and snapshots contain third-party app embed IDs.
+config/settings_data.json
+config/backups/settings_data.*.json
+
+# Third-party app output is overwritten when the app republishes it.
+# EComposer
+layout/ecom.liquid
+assets/ecom-*
+sections/ecom*.liquid
+snippets/ecom*.liquid
+templates/*ecom*
+
+# PageFly
+layout/theme.pagefly.liquid
+assets/pagefly-*
+assets/pf-*
+sections/pagefly*.liquid
+sections/pf-*.liquid
+snippets/pagefly*.liquid
+snippets/pf-*.liquid
+templates/*.pf-*
+
+# App-managed legacy templates and integrations
+sections/mktr_custom_app.liquid
+templates/page.swym.liquid
+templates/page.bon-loyalty.liquid
