@@ -1,6 +1,6 @@
 # Merchant-authored “All …” menu links evidence
 
-Verified on 2026-08-04 against the International store.
+Verified on 2026-08-05 against the International store and the Slovak storefront at `northfinder.sk`, matching the locale in the tester's report.
 
 ## Root cause confirmation
 
@@ -20,15 +20,19 @@ The live desktop theme returned no matching nested `.mega-menu__link` elements. 
 - Theme: `QA Authored All Menu Links 2026-08-04`
 - Theme ID: `203133616460`
 - Role: unpublished
-- Preview: <https://sportfinder-international.myshopify.com?preview_theme_id=203133616460>
+- Slovak preview: <https://northfinder.sk/?preview_theme_id=203133616460>
+- MyShopify preview: <https://sportfinder-international.myshopify.com?preview_theme_id=203133616460>
 - Editor: <https://sportfinder-international.myshopify.com/admin/themes/203133616460/editor>
 
-The draft renders all six merchant-authored links in both navigation variants:
+The draft was pushed again without any `--ignore` flags so it includes `config/settings_data.json` and all valid EComposer templates/sections from the repository. Shopify retained all 129 current settings keys; it only normalized the app-embed `blocks` payload when persisting `settings_data.json`. Nine legacy EComposer JSON templates were rejected because each references a section file that does not exist in the repository; they are unrelated to the active storefront and are listed in the validation notes below.
+
+The Slovak draft renders all six merchant-authored links in both navigation variants:
 
 - [`draft-desktop-dom.json`](evidence/authored-all-links/draft-desktop-dom.json)
 - [`draft-mobile-dom.json`](evidence/authored-all-links/draft-mobile-dom.json)
+- [`full-draft-upload-verification.json`](evidence/authored-all-links/full-draft-upload-verification.json)
 
-The uploaded draft snippets were pulled back from Shopify and matched the local files byte-for-byte.
+The uploaded draft snippets, a representative EComposer section/template pair, and active styling files were pulled back from Shopify and matched the local files byte-for-byte. The preview reports `lang="sk"`, draft theme ID `203133616460`, and the repository-configured logo/color settings.
 
 ## Screenshots
 
@@ -40,17 +44,21 @@ Shopify Admin contains `All Jackets`, while the reported storefront menu omits i
 
 ![Reported storefront menu without All Jackets](evidence/authored-all-links/reporter-storefront-menu.png)
 
-### Draft desktop
+### Slovak desktop before and after
 
-The desktop mega menu now includes `All Jackets`, `All Trousers`, and `All Fleece & Midlayer` in their merchant-authored positions:
+The live Slovak mega menu omits the authored links:
 
-![Draft desktop mega menu with authored All links](evidence/authored-all-links/draft-desktop-men-menu.png)
+![Live Slovak desktop menu without authored Všetky links](evidence/authored-all-links/live-sk-desktop-men-menu.png)
 
-### Draft mobile
+The full-style Slovak draft now includes `Všetky bundy`, `Všetky nohavice`, and `Všetky fleecy a midlayery` in their merchant-authored positions:
 
-The mobile drawer now renders the authored `All Jackets` tile instead of replacing it with a generated label:
+![Draft Slovak desktop mega menu with authored Všetky links](evidence/authored-all-links/draft-desktop-men-menu.png)
 
-![Draft mobile menu with authored All Jackets tile](evidence/authored-all-links/draft-mobile-all-jackets-visible.png)
+### Slovak mobile draft
+
+The full-style mobile drawer renders the merchant-authored `Všetky bundy` tile, with collection imagery and settings from the complete draft theme:
+
+![Draft Slovak mobile menu with authored Všetky bundy tile](evidence/authored-all-links/draft-mobile-all-jackets-visible.png)
 
 ## Validation
 
@@ -60,3 +68,13 @@ The mobile drawer now renders the authored `All Jackets` tile instead of replaci
   - `OrphanedSnippet` for both menu snippets, because Theme Check does not resolve their dynamic render path.
   - `ValidRenderSnippetArgumentTypes` for the pre-existing numeric `size: 400` argument in `header-mega-menu.liquid`.
 - Full repository Theme Check remains red because of the existing legacy baseline: 314 errors and 816 warnings across unrelated files.
+- The no-ignore draft push uploaded the full valid theme but Shopify rejected these nine orphaned legacy templates because their referenced section files are absent from the repository:
+  - `templates/index.ecom-69eb1f8f5ae781310c01bc862.json`
+  - `templates/index.ecom-69eb1f8f5ae781310c01bc8627.json`
+  - `templates/index.ecom-69eb1f8f5ae781310c01bc863.json`
+  - `templates/index.ecom-69eb1f8f5ae781310c01bc8626.json`
+  - `templates/index.ecom-69eb1f8f5ae781310c01bc86272.json`
+  - `templates/index.ecom-homepage.json`
+  - `templates/index.ecom-homepagenew2.json`
+  - `templates/index.ecom-hp-new.json`
+  - `templates/index.ecom-northfinder-homepage-new.json`
