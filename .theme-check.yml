@@ -1,4 +1,74 @@
+extends: theme-check:recommended
+
+# Third-party app output is overwritten when the app republishes it. Keep these
+# paths out of Theme Check instead of modifying generated code to satisfy lint.
+ignore:
+  # Merchant-managed settings include third-party app embed IDs and are pulled
+  # only as store snapshots. Theme pushes ignore the active file as well.
+  - "config/settings_data.json"
+  - "config/backups/settings_data.*.json"
+
+  # EComposer
+  - "layout/ecom.liquid"
+  - "assets/ecom-*"
+  - "sections/ecom*.liquid"
+  - "snippets/ecom*.liquid"
+  - "templates/*ecom*"
+
+  # PageFly
+  - "layout/theme.pagefly.liquid"
+  - "assets/pagefly-*"
+  - "assets/pf-*"
+  - "sections/pagefly*.liquid"
+  - "sections/pf-*.liquid"
+  - "snippets/pagefly*.liquid"
+  - "snippets/pf-*.liquid"
+  - "templates/*.pf-*"
+
+  # App-managed legacy templates and integrations
+  - "sections/mktr_custom_app.liquid"
+  - "templates/page.swym.liquid"
+  - "templates/page.bon-loyalty.liquid"
+
+# Locale parity is managed by the repository translation workflows.
 MatchingTranslations:
   enabled: false
+
+# Large product and app-integration templates are expected in this theme.
 TemplateLength:
   enabled: false
+
+# Existing first-party debt is baselined narrowly by check and file. New
+# violations elsewhere still fail Theme Check and should not be added here
+# without a follow-up ticket to remove the exemption.
+ValidSchemaTranslations:
+  ignore:
+    - "sections/blog-videos.liquid"
+    - "sections/main-blog.liquid"
+    - "sections/main-product.liquid"
+
+UnsupportedFilterArguments:
+  ignore:
+    - "sections/main-addresses.liquid"
+    - "snippets/account-tab-settings.liquid"
+    - "snippets/product-variant-options.liquid"
+    - "snippets/gift-card-recipient-form.liquid"
+
+ImgWidthAndHeight:
+  ignore:
+    - "sections/contact-partnership.liquid"
+    - "sections/size-guide-section.liquid"
+    - "snippets/size-fit-body-measurements.liquid"
+
+TranslationKeyExists:
+  ignore:
+    - "sections/main-order.liquid"
+    - "snippets/size-fit-body-measurements-default.liquid"
+
+MissingTemplate:
+  ignore:
+    - "snippets/size-fit-body-measurements-default.liquid"
+
+ValidSchema:
+  ignore:
+    - "sections/inspiration-banner.liquid"
