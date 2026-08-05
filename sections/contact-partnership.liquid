@@ -1,5 +1,24 @@
 {{ 'section-contact-partnership.css' | asset_url | stylesheet_tag }}
 
+{%- liquid
+  assign partnership_email = section.settings.contact_email
+  assign partnership_name = section.settings.contact_name
+  assign partnership_phone = section.settings.contact_phone
+  if localization.market.handle != blank
+    # Market overrides are merchant-managed. Do not fall back to default-market values.
+    assign partnership_email = settings.market_contact_person_email
+    assign partnership_name = settings.market_contact_person_name
+    assign partnership_phone = settings.market_contact_person_phone
+  elsif partnership_email == blank
+    assign partnership_email = settings.contact_email
+  endif
+  if localization.language.iso_code == 'de'
+    assign partnership_email = 'templates.contact.partnership.contact_email' | t
+    assign partnership_name = 'templates.contact.partnership.contact_name' | t
+    assign partnership_phone = 'templates.contact.partnership.contact_phone' | t
+  endif
+-%}
+
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
@@ -54,23 +73,28 @@
 
           <div class="contact-partnership__details">
             <p class="contact-partnership__name">
-              {%- if section.settings.contact_name != blank -%}
-                {{ section.settings.contact_name | escape }}
-              {%- else -%}
+              {%- if partnership_name != blank -%}
+                {{ partnership_name | escape }}
+              {%- elsif localization.market.handle == blank -%}
                 {{ 'templates.contact.partnership.contact_name' | t }}
               {%- endif -%}
             </p>
 
             <div class="contact-partnership__info">
-              <p class="contact-partnership__email">
-                <a href="mailto:{% if section.settings.contact_email != blank %}{{ section.settings.contact_email }}{% else %}{{ settings.contact_email }}{% endif %}">
-                  {%- if section.settings.contact_email != blank -%}
-                    {{ section.settings.contact_email | escape }}
-                  {%- else -%}
-                    {{ settings.contact_email | escape }}
-                  {%- endif -%}
-                </a>
-              </p>
+              {%- if partnership_email != blank -%}
+                <p class="contact-partnership__email">
+                  <a href="mailto:{{ partnership_email | escape }}">
+                    {{ partnership_email | escape }}
+                  </a>
+                </p>
+              {%- endif -%}
+              {%- if partnership_phone != blank -%}
+                <p class="contact-partnership__phone">
+                  <a href="tel:{{ partnership_phone | remove: ' ' | escape }}">
+                    {{ partnership_phone | escape }}
+                  </a>
+                </p>
+              {%- endif -%}
             </div>
           </div>
         </div>

@@ -11,6 +11,11 @@
   elsif request.page_type == 'password'
     assign og_url = request.origin
   endif
+
+  assign market_social_twitter_link = settings.social_twitter_link
+  if localization.market.handle != blank and settings.market_social_twitter_link != blank
+    assign market_social_twitter_link = settings.market_social_twitter_link
+  endif
 %}
 
 <meta property="og:site_name" content="{{ shop.name }}">
@@ -25,6 +30,45 @@
   <meta property="og:image:width" content="{{ page_image.width }}">
   <meta property="og:image:height" content="{{ page_image.height }}">
   <meta property="og:image:alt" content="{{ page_image.alt | escape }}">
+{%- liquid
+  assign market_social_facebook_link = settings.social_facebook_link
+  if localization.market.handle != blank and settings.market_social_facebook_link != blank
+    assign market_social_facebook_link = settings.market_social_facebook_link
+  endif
+  assign market_social_instagram_link = settings.social_instagram_link
+  if localization.market.handle != blank and settings.market_social_instagram_link != blank
+    assign market_social_instagram_link = settings.market_social_instagram_link
+  endif
+  assign market_social_youtube_link = settings.social_youtube_link
+  if localization.market.handle != blank and settings.market_social_youtube_link != blank
+    assign market_social_youtube_link = settings.market_social_youtube_link
+  endif
+  assign market_social_tiktok_link = settings.social_tiktok_link
+  if localization.market.handle != blank and settings.market_social_tiktok_link != blank
+    assign market_social_tiktok_link = settings.market_social_tiktok_link
+  endif
+  assign market_social_twitter_link = settings.social_twitter_link
+  if localization.market.handle != blank and settings.market_social_twitter_link != blank
+    assign market_social_twitter_link = settings.market_social_twitter_link
+  endif
+  assign market_social_pinterest_link = settings.social_pinterest_link
+  if localization.market.handle != blank and settings.market_social_pinterest_link != blank
+    assign market_social_pinterest_link = settings.market_social_pinterest_link
+  endif
+  assign market_social_snapchat_link = settings.social_snapchat_link
+  if localization.market.handle != blank and settings.market_social_snapchat_link != blank
+    assign market_social_snapchat_link = settings.market_social_snapchat_link
+  endif
+  assign market_social_tumblr_link = settings.social_tumblr_link
+  if localization.market.handle != blank and settings.market_social_tumblr_link != blank
+    assign market_social_tumblr_link = settings.market_social_tumblr_link
+  endif
+  assign market_social_vimeo_link = settings.social_vimeo_link
+  if localization.market.handle != blank and settings.market_social_vimeo_link != blank
+    assign market_social_vimeo_link = settings.market_social_vimeo_link
+  endif
+-%}
+
 {%- endif -%}
 
 {%- if request.page_type == 'product' -%}
@@ -32,8 +76,8 @@
   <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
 {%- endif -%}
 
-{%- if settings.social_twitter_link != blank -%}
-  <meta name="twitter:site" content="{{ settings.social_twitter_link | split: 'twitter.com/' | last | prepend: '@' }}">
+{%- if market_social_twitter_link != blank -%}
+  <meta name="twitter:site" content="{{ market_social_twitter_link | split: 'twitter.com/' | last | prepend: '@' }}">
 {%- endif -%}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ og_title | escape }}">

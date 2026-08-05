@@ -348,6 +348,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
 }
 
 .nf__predictive-search__result-group .predictive-search__list-item-articles .predictive-search__item {
+  min-width: 0;
   padding: 0;
   flex: 1;
 }
@@ -357,10 +358,10 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   font-weight: 400;
   line-height: 1.125rem;
   color: var(--color-black);  /* #000000 */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 300px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
   display: block;
   padding: 0;
 }
@@ -374,6 +375,7 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   line-height: 1.125rem;
   color: var(--color-gray-700);  /* #666666 */
   white-space: nowrap;
+  flex-shrink: 0;
   min-width: 160px;
   justify-content: flex-end;
 }
@@ -434,10 +436,10 @@ predictive-search[loading] .predictive-search__results-groups-wrapper ~ .predict
   font-weight: 600;
   line-height: 1.125rem;
   color: rgb(var(--color-base-foreground));
-  max-width: 300px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
 }
 
 .nf__predictive-search__result-group .predictive-search__list-item-products .predictive-search__item .meta {

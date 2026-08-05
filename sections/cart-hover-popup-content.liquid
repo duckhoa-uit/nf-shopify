@@ -59,7 +59,7 @@
 
             <!-- Price display matching Figma design -->
             <div class="cart-hover-popup__item-price">
-              <span class="cart-hover-popup__item-price-label">Cena:</span>
+              <span class="cart-hover-popup__item-price-label">{{ 'sections.cart.headings.price' | t }}:</span>
               {%- if item.original_price != item.final_price -%}
                 <span class="cart-hover-popup__item-price-value">
                   {{ item.final_price | money }} / {{ item.original_price | money }}
@@ -120,7 +120,7 @@
   <!-- Footer with view cart button -->
   <div class="cart-hover-popup__footer base-hover-popup__footer">
     <a href="{{ routes.cart_url }}" class="cart-hover-popup__view-cart">
-      {{ 'sections.cart.view_cart' | t | default: 'prejsť do košíka' }}
+      {{ 'sections.cart.view_cart' | t | default: 'View cart' }}
     </a>
   </div>
 </div>

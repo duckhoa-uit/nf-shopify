@@ -29,7 +29,9 @@
 
 .accordion__title {
   display: inline-block;
-  max-width: calc(100% - 6rem);
+  flex: 1;
+  min-width: 0;
+  max-width: none;
   min-height: 1.6rem;
   margin: 0;
   word-break: break-word;
@@ -39,6 +41,7 @@
 }
 
 .accordion .svg-wrapper {
+  flex: 0 0 auto;
   align-self: center;
   fill: rgb(var(--color-base-foreground));
   height: calc(var(--font-heading-scale) * 2rem);

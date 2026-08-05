@@ -12,6 +12,21 @@
 .faq-tabbed-section__container {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+}
+
+.faq-tabbed-section__content,
+.faq-category-content,
+.faq-category-content .accordion,
+.faq-category-content .accordion summary {
+  min-width: 0;
+}
+
+.faq-tab-button,
+.faq-category-content .accordion__title,
+.faq-mobile-category-title,
+.faq-contact-block__button {
+  overflow-wrap: anywhere;
 }
 
 /* Mobile-first: Stacked layout */
@@ -76,6 +91,8 @@ details[open] .accordion__title {
 }
 
 .faq-category-content .accordion summary {
+  align-items: flex-start;
+  gap: 1rem;
   padding: 1rem 2rem;
 }
 
@@ -204,6 +221,7 @@ details[open] .accordion__title {
     color: #000;
   }
   .faq-category-content .accordion summary {
+    gap: 0.75rem;
     padding: 1rem;
   }
 

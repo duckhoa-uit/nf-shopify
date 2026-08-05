@@ -20,6 +20,7 @@ class PredictiveSearch extends SearchForm {
       categories: this.decodeHtmlEntities(window.theme?.strings?.search?.categories || 'Categories'),
       articles: this.decodeHtmlEntities(window.theme?.strings?.search?.articles || 'Articles'),
       products: this.decodeHtmlEntities(window.theme?.strings?.search?.products || 'Products'),
+      view_all_results: this.decodeHtmlEntities(window.theme?.strings?.search?.view_all_results || 'View all results'),
       no_results: this.decodeHtmlEntities(window.theme?.strings?.search?.no_results || 'No results found for {{ terms }}. Check the spelling or use a different word or phrase.'),
       no_results_suggestion: this.decodeHtmlEntities(window.theme?.strings?.search?.no_results_suggestion || 'Try checking your spelling or using different words.')
     };
@@ -150,7 +151,7 @@ class PredictiveSearch extends SearchForm {
 
     const moveUp = direction === 'up';
     const selectedElement = this.querySelector('[aria-selected="true"]');
-    const allVisibleElements = Array.from(this.querySelectorAll('li, button.predictive-search__item')).filter(
+    const allVisibleElements = Array.from(this.querySelectorAll('[role="option"]')).filter(
       (element) => element.offsetParent !== null,
     );
 
@@ -181,8 +182,9 @@ class PredictiveSearch extends SearchForm {
   }
 
   selectOption() {
-    const selectedOption = this.querySelector('[aria-selected="true"] a, button[aria-selected="true"]');
-    if (selectedOption) selectedOption.click();
+    const selectedOption = this.querySelector('[aria-selected="true"]');
+    const selectedLink = selectedOption?.querySelector('a') || selectedOption;
+    if (selectedLink) selectedLink.click();
   }
 
   getMarkupFromResults(results) {
@@ -206,7 +208,7 @@ class PredictiveSearch extends SearchForm {
     };
 
     // Check if we have any results
-    const hasResults = ['collections', 'articles', 'products'].some(type => {
+    const hasResults = ['collections', 'articles', 'products'].some((type) => {
       const items = results[type] || [];
       return items.length > 0;
     });
@@ -284,6 +286,40 @@ class PredictiveSearch extends SearchForm {
       return `${day}.${month}.${year}`;
     }
 
+    const normalizedSearchTerm = this.searchTerm.trim().toLocaleLowerCase();
+    const resultGroups = ['products', 'collections', 'articles']
+      .map((type) => {
+        const seen = new Set();
+        const seenArticleUrls = new Set();
+        const seenArticleTitles = new Set();
+        const items = (results[type] || []).filter((item) => {
+          const url = (item.url || '').split('?')[0].replace(/\/$/, '').toLocaleLowerCase();
+          const title = (item.title || '').trim().toLocaleLowerCase();
+          const key = url || title;
+          if (!key || seen.has(key)) return false;
+          if (type === 'articles' && (seenArticleUrls.has(url) || seenArticleTitles.has(title))) return false;
+          seen.add(key);
+          if (type === 'articles') {
+            seenArticleUrls.add(url);
+            seenArticleTitles.add(title);
+          }
+          return true;
+        });
+        if (type !== 'products') return { type, items };
+        return {
+          type,
+          items: items.sort((a, b) => {
+            const aExact = (a.title || '').trim().toLocaleLowerCase() === normalizedSearchTerm;
+            const bExact = (b.title || '').trim().toLocaleLowerCase() === normalizedSearchTerm;
+            return Number(bExact) - Number(aExact);
+          }),
+        };
+      })
+      .filter(({ items }) => items.length);
+    const resultCount = resultGroups.reduce((count, { items }) => count + items.length, 0);
+    const allResultsUrl = new URL(routes.search_url, window.location.origin);
+    allResultsUrl.searchParams.set('q', this.searchTerm);
+
     const html = template`
     <div class="nf__predictive-search-results">
       <div class="nf__predictive-search__results-groups-wrapper" id="predictive-search-results-groups-wrapper">
@@ -294,21 +330,20 @@ class PredictiveSearch extends SearchForm {
               <p class="nf__predictive-search__no-results-suggestion">${this.translations.no_results_suggestion}</p>
             </div>
           ` :
-          ['collections', 'articles', 'products']
-            .map((type) => {
-              const items = results[type] || [];
-              if (!items.length) return null;
+          resultGroups
+            .map(({ type, items }) => {
               return hyperHTML.wire(items)`
                 <div class="nf__predictive-search__result-group">
                   <h2>
                     ${categoryLabelMap[type]}
                   </h2>
-                  <ul class="predictive-search__result-list list-unstyled" role="list">
-                    ${items.map((item) => {
+                  <ul class="predictive-search__result-list list-unstyled" role="listbox" aria-label="${categoryLabelMap[type]}">
+                    ${items.map((item, itemIndex) => {
+                    const optionId = `predictive-search-${type}-${itemIndex}`;
                     if (type === 'collections')
                       return hyperHTML.wire(item)`
-                        <li class="predictive-search__list-item-collections" role="option">
-                          <a href="${item.url}" class="predictive-search__item" tabindex="-1">
+                        <li id="${optionId}" class="predictive-search__list-item-collections" role="option" aria-selected="false">
+                          <a href="${item.url}" class="predictive-search__item" tabindex="-1" aria-label="${item.title}">
                             <span class="predictive-search__item-heading">${item.title}</span>
                           </a>
                         </li>
@@ -316,8 +351,8 @@ class PredictiveSearch extends SearchForm {
 
                     if (type === 'articles')
                       return hyperHTML.wire(item)`
-                        <li class="predictive-search__list-item-articles" role="option">
-                          <a href="${item.url}" class="predictive-search__item" tabindex="-1">
+                        <li id="${optionId}" class="predictive-search__list-item-articles" role="option" aria-selected="false">
+                          <a href="${item.url}" class="predictive-search__item" tabindex="-1" aria-label="${item.title}">
                             <span class="predictive-search__item-heading">${item.title}</span>
                           </a>
                           <div class="article-meta">
@@ -343,8 +378,8 @@ class PredictiveSearch extends SearchForm {
                     discountPrice = parseFloat(discountPrice) || 0;
 
                     return hyperHTML.wire(item)`
-                      <li class="predictive-search__list-item-products" role="option">
-                        <a href="${item.url}" class="predictive-search__item" tabindex="-1">
+                      <li id="${optionId}" class="predictive-search__list-item-products" role="option" aria-selected="false">
+                        <a href="${item.url}" class="predictive-search__item" tabindex="-1" aria-label="${item.title}">
                           <div class="product">
                             <img src="${item.image}"/>
                             <h3>${item.title}
@@ -390,6 +425,16 @@ class PredictiveSearch extends SearchForm {
           })
           .filter(Boolean)}
       </div>
+      ${resultCount ? hyperHTML.wire()`
+        <a
+          id="predictive-search-view-all"
+          class="nf__predictive-search__view-all-button button button--primary"
+          href="${allResultsUrl}"
+          role="option"
+          aria-selected="false"
+          tabindex="-1"
+        >${this.translations.view_all_results}</a>
+      ` : ''}
     </div>
   `;
 

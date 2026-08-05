@@ -90,14 +90,14 @@
     position-try-fallbacks: none !important;
   }
 
-  /* Carousel container: keep the bar at a fixed 30px height even with the slider. */
+  /* Keep the utility bar compact while allowing localized copy to wrap. */
   .announcement-bar-section .announcement-bar {
     width: 100%;
     min-width: 0;
-    height: 1.875rem;
+    min-height: 1.875rem;
+    height: auto;
     display: flex;
     align-items: center;
-    overflow: hidden;
   }
   .announcement-bar-section .announcement-bar-slider {
     width: 100%;
@@ -113,7 +113,8 @@
     margin: 0;
     display: flex;
     flex-direction: row;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     scrollbar-width: none;
   }
   .announcement-bar-section .ab-slider::-webkit-scrollbar {
@@ -131,13 +132,12 @@
     padding: 0;
     text-align: center;
     font-size: inherit;
-    line-height: 1.875rem;
+    line-height: 1.25;
     letter-spacing: 0;
-    min-height: 0;
-    /* Keep one line; never push the bar taller. */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    min-height: 1.875rem;
+    display: flex;
+    align-items: center;
+    overflow-wrap: anywhere;
   }
   @media screen and (min-width: 990px) {
     .announcement-bar-section .announcement-bar__message {
@@ -198,7 +198,7 @@
 
 <div class="bg-[#F5F5F5] text-[0.8125rem] leading-[0.875rem] text-secondary-foreground relative z-30">
   <div class="page-width">
-    <nav class="w-full flex flex-row justify-center lg:justify-between h-[1.875rem] items-center gap-4">
+    <nav class="w-full flex min-h-[1.875rem] flex-row justify-center lg:justify-between items-center gap-4">
       <div class="italic flex items-center justify-center lg:justify-start overflow-hidden lg:overflow-visible" style="min-width: 0; flex: 1 1 0; max-width: 100%;">
         {%- if section.blocks.size == 0 -%}
           {%- if section.settings.announcement_text != blank -%}
