@@ -20,7 +20,6 @@ class PredictiveSearch extends SearchForm {
       categories: this.decodeHtmlEntities(window.theme?.strings?.search?.categories || 'Categories'),
       articles: this.decodeHtmlEntities(window.theme?.strings?.search?.articles || 'Articles'),
       products: this.decodeHtmlEntities(window.theme?.strings?.search?.products || 'Products'),
-      view_all_results: this.decodeHtmlEntities(window.theme?.strings?.search?.view_all_results || 'View all results'),
       no_results: this.decodeHtmlEntities(window.theme?.strings?.search?.no_results || 'No results found for {{ terms }}. Check the spelling or use a different word or phrase.'),
       no_results_suggestion: this.decodeHtmlEntities(window.theme?.strings?.search?.no_results_suggestion || 'Try checking your spelling or using different words.')
     };
@@ -316,9 +315,6 @@ class PredictiveSearch extends SearchForm {
         };
       })
       .filter(({ items }) => items.length);
-    const resultCount = resultGroups.reduce((count, { items }) => count + items.length, 0);
-    const allResultsUrl = new URL(routes.search_url, window.location.origin);
-    allResultsUrl.searchParams.set('q', this.searchTerm);
 
     const html = template`
     <div class="nf__predictive-search-results">
@@ -425,16 +421,6 @@ class PredictiveSearch extends SearchForm {
           })
           .filter(Boolean)}
       </div>
-      ${resultCount ? hyperHTML.wire()`
-        <a
-          id="predictive-search-view-all"
-          class="nf__predictive-search__view-all-button button button--primary"
-          href="${allResultsUrl}"
-          role="option"
-          aria-selected="false"
-          tabindex="-1"
-        >${this.translations.view_all_results}</a>
-      ` : ''}
     </div>
   `;
 
