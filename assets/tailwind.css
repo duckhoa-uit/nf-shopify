@@ -52,8 +52,8 @@
   /* Focus states */
   --focused-base-outline: 0.2rem solid rgba(var(--color-base-foreground), 0.5);
   --focused-base-outline-offset: 0.3rem;
-  --focused-base-box-shadow: 0 0 0 0.3rem rgb(var(--color-base-background)),
-    0 0 0.5rem 0.4rem rgba(var(--color-base-foreground), 0.3);
+  --focused-base-box-shadow:
+    0 0 0 0.3rem rgb(var(--color-base-background)), 0 0 0.5rem 0.4rem rgba(var(--color-base-foreground), 0.3);
 
   /* === DESIGN SYSTEM OVERRIDES === */
   /* Override Tailwind defaults to match current design system */
@@ -172,4 +172,10 @@
   &::after {
     clear: both;
   }
+}
+
+/* Keep transparent product assets legible across native and EComposer cards. */
+.card-product-northfinder__media,
+.ecom-collection__product-media--container {
+  background-color: var(--color-white);
 }
