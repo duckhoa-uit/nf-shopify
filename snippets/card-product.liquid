@@ -1,8 +1,8 @@
 {% comment %}
   Renders a product card in the Northfinder style
-  
+
   OPTIMIZED VERSION - Single pass media indexing, efficient Liquid filters
-  
+
   Accepts:
   - card_product: {Object} Product Liquid object (required)
   - section_id: {String} The ID of the section that contains this card (required)
@@ -16,43 +16,49 @@
 
 {%- if card_product and card_product != empty -%}
   <div class="card-wrapper h-full">
-    <div class="flex flex-col h-full relative">
+    <div class="relative flex h-full flex-col">
       <div class="relative">
-        <div class="flex items-center gap-2 mb-1.5 h-8 overflow-x-auto scrollbar-hide tag-container"
-             style="scrollbar-width: none; -ms-overflow-style: none;"
-             onscroll="this.style.setProperty('--scroll-shadow-left', this.scrollLeft > 0 ? '1' : '0'); this.style.setProperty('--scroll-shadow-right', this.scrollLeft < this.scrollWidth - this.clientWidth ? '1' : '0')">
-        {%- assign tag_count = 0 -%}
+        <div
+          class="scrollbar-hide tag-container mb-1.5 flex h-8 items-center gap-2 overflow-x-auto"
+          style="scrollbar-width: none; -ms-overflow-style: none;"
+          onscroll="this.style.setProperty('--scroll-shadow-left', this.scrollLeft > 0 ? '1' : '0'); this.style.setProperty('--scroll-shadow-right', this.scrollLeft < this.scrollWidth - this.clientWidth ? '1' : '0')"
+        >
+          {%- assign tag_count = 0 -%}
 
-        {% render 'discount-badge', product: card_product %}
+          {% render 'discount-badge', product: card_product %}
 
-        <!-- Product tags from metafields (max 3) -->
-        {%- if card_product.metafields.custom_features.extra.value -%}
-          {%- for extra_tag in card_product.metafields.custom_features.extra.value -%}
-            {%- if tag_count < 3 -%}
-              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">
-                {{- extra_tag.name -}}
-              </span>
-              {%- assign tag_count = tag_count | plus: 1 -%}
-            {%- endif -%}
-          {%- endfor -%}
-        {%- endif -%}
+          <!-- Product tags from metafields (max 3) -->
+          {%- if card_product.metafields.custom_features.extra.value -%}
+            {%- for extra_tag in card_product.metafields.custom_features.extra.value -%}
+              {%- if tag_count < 3 -%}
+                <span class="text-medium flex-shrink-0 rounded-[2px] border border-[#ccc] px-2 py-1 text-[13px] leading-4 text-[#4d4d4d] uppercase">
+                  {{- extra_tag.name -}}
+                </span>
+                {%- assign tag_count = tag_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
 
-        <!-- Promotion metafield -->
-        {%- if card_product.metafields.custom_features.promotion.value -%}
-          {%- for promotion in card_product.metafields.custom_features.promotion.value -%}
-            {%- if tag_count < 3 -%}
-              <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">
-                {{- promotion.name -}}
-              </span>
-              {%- assign tag_count = tag_count | plus: 1 -%}
-            {%- endif -%}
-          {%- endfor -%}
-        {%- endif -%}
+          <!-- Promotion metafield -->
+          {%- if card_product.metafields.custom_features.promotion.value -%}
+            {%- for promotion in card_product.metafields.custom_features.promotion.value -%}
+              {%- if tag_count < 3 -%}
+                <span class="text-medium flex-shrink-0 rounded-[2px] border border-[#ccc] px-2 py-1 text-[13px] leading-4 text-[#4d4d4d] uppercase">
+                  {{- promotion.name -}}
+                </span>
+                {%- assign tag_count = tag_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
         </div>
 
         <!-- Shadow indicators for scrollable content -->
-        <div class="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none opacity-0 transition-opacity duration-200 shadow-left"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none opacity-100 transition-opacity duration-200 shadow-right"></div>
+        <div
+          class="shadow-left pointer-events-none absolute top-0 bottom-0 left-0 w-4 bg-gradient-to-r from-white to-transparent opacity-0 transition-opacity duration-200"
+        ></div>
+        <div
+          class="shadow-right pointer-events-none absolute top-0 right-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent opacity-100 transition-opacity duration-200"
+        ></div>
       </div>
 
       {%- if card_product.media.size > 0 -%}
@@ -62,10 +68,10 @@
           # Instead of multiple loops over media, we do ONE pass to collect:
           # - model_image_simple: -M without sequence
           # - model_images_sequenced: -M_N with sequences (stored as string for sorting)
-          # - main_image: -H suffix for hover
+          # - main_image: exact -H image type for hover
           # - fallback images by type: H, B, BV, D
           # ============================================================
-          
+
           assign model_image = null
           assign main_image = null
           assign model_image_simple = null
@@ -77,27 +83,34 @@
           assign fallback_b = null
           assign fallback_bv = null
           assign fallback_d = null
-          
+
           for media in card_product.media
             assign media_src = media.src | default: ''
-            assign parsed_url = media_src | split: '/' | last
-            
-            # Check for -H (hover image)
-            if parsed_url contains '-H' or parsed_url contains '-H.'
+            assign parsed_url = media_src | split: '/' | last | split: '?' | first
+            assign filename_without_extension = parsed_url | split: '.' | first
+            assign filename_parts = filename_without_extension | split: '-'
+            assign image_type_token = filename_parts | last
+            assign image_type_parts = image_type_token | split: '_'
+            assign image_type = image_type_parts.first
+            assign image_sequence = 0
+            if image_type_parts.size > 1
+              assign image_sequence = image_type_parts[1] | plus: 0
+            endif
+
+            # Match the final image-type token so product codes such as MI and BU
+            # are not mistaken for model and back images.
+            if image_type == 'H'
               if main_image == null
                 assign main_image = media
               endif
             endif
-            
+
             # Check for model images
-            if parsed_url contains '-M'
-              if parsed_url contains '-M_'
-                # Sequenced model image - extract sequence number
-                assign seq_part = parsed_url | split: '-M_' | last | split: '.' | first
-                assign seq_num = seq_part | plus: 0
-                if seq_num > 0 and seq_num < best_sequence_num
+            if image_type == 'M'
+              if image_sequence > 0
+                if image_sequence < best_sequence_num
                   # Track for primary model (lowest sequence)
-                  assign best_sequence_num = seq_num
+                  assign best_sequence_num = image_sequence
                   assign best_sequenced_model = media
                 endif
               else
@@ -107,24 +120,22 @@
                 endif
               endif
             endif
-            
+
             # Collect fallback images by type (first match only)
-            if fallback_h == null and parsed_url contains '-H'
+            if fallback_h == null and image_type == 'H'
               assign fallback_h = media
             endif
-            if fallback_b == null and parsed_url contains '-B'
-              unless parsed_url contains '-BV'
-                assign fallback_b = media
-              endunless
+            if fallback_b == null and image_type == 'B'
+              assign fallback_b = media
             endif
-            if fallback_bv == null and parsed_url contains '-BV'
+            if fallback_bv == null and image_type == 'BV'
               assign fallback_bv = media
             endif
-            if fallback_d == null and parsed_url contains '-D'
+            if fallback_d == null and image_type == 'D'
               assign fallback_d = media
             endif
           endfor
-          
+
           # Resolve model_image with priority: simple -M > sequenced -M_N > fallbacks > featured
           if model_image_simple
             assign model_image = model_image_simple
@@ -141,7 +152,7 @@
           else
             assign model_image = card_product.featured_media
           endif
-          
+
           # Find alternative model for hover if no -H image found
           unless main_image
             # Look for a different sequenced model image
@@ -152,17 +163,24 @@
               # Find next lowest sequence model image different from current
               for media in card_product.media
                 assign media_src = media.src | default: ''
-                assign parsed_url = media_src | split: '/' | last
-                if parsed_url contains '-M_' and media.id != model_image.id
-                  assign seq_part = parsed_url | split: '-M_' | last | split: '.' | first
-                  assign seq_num = seq_part | plus: 0
-                  if seq_num > 0 and seq_num < alt_sequence_num
-                    assign alt_sequence_num = seq_num
+                assign parsed_url = media_src | split: '/' | last | split: '?' | first
+                assign filename_without_extension = parsed_url | split: '.' | first
+                assign filename_parts = filename_without_extension | split: '-'
+                assign image_type_token = filename_parts | last
+                assign image_type_parts = image_type_token | split: '_'
+                assign image_type = image_type_parts.first
+                assign image_sequence = 0
+                if image_type_parts.size > 1
+                  assign image_sequence = image_type_parts[1] | plus: 0
+                endif
+                if image_type == 'M' and image_sequence > 0 and media.id != model_image.id
+                  if image_sequence < alt_sequence_num
+                    assign alt_sequence_num = image_sequence
                     assign alt_sequenced_model = media
                   endif
                 endif
               endfor
-              
+
               if alt_sequenced_model
                 assign main_image = alt_sequenced_model
               else
@@ -170,7 +188,7 @@
               endif
             endif
           endunless
-          
+
           # Check if we have a real hover image
           assign has_real_main_image = false
           if main_image and main_image.id != model_image.id
@@ -178,7 +196,7 @@
           endif
         -%}
 
-        <div class="relative overflow-hidden mb-3">
+        <div class="card-product-northfinder__media relative mb-3 overflow-hidden">
           <a
             href="{{ card_product.url }}"
             class="card-product-northfinder__link"
@@ -202,7 +220,7 @@
                 decoding="async"
                 width="{{ model_image.width }}"
                 height="{{ model_image.height }}"
-                class="w-full h-auto object-cover aspect-square transition-opacity duration-300 ease-in-out"
+                class="aspect-square h-auto w-full object-cover transition-opacity duration-300 ease-in-out"
               >
             </div>
           </a>
@@ -210,14 +228,14 @@
 
       {%- else -%}
         {%- comment -%} Product has no media - show placeholder with consistent dimensions {%- endcomment -%}
-        <div class="relative overflow-hidden mb-3">
+        <div class="card-product-northfinder__media relative mb-3 overflow-hidden">
           <a
             href="{{ card_product.url }}"
             class="card-product-northfinder__link block"
             data-product-id="{{ card_product.id }}"
             data-section-id="{{ section_id }}"
           >
-            <div class="w-full aspect-square bg-gray-100 flex items-center justify-center">
+            <div class="flex aspect-square w-full items-center justify-center bg-gray-100">
               {{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}
             </div>
           </a>
@@ -241,13 +259,13 @@
           # OPTIMIZATION: Efficient color extraction using Liquid filters
           # Uses centralized is-color-option snippet to detect color option position
           # ============================================================
-          
+
           # Detect which option position is the color option (1, 2, or 3)
           capture color_option_position
             render 'get-color-option-position', product: card_product
           endcapture
           assign color_option_position = color_option_position | strip | plus: 0
-          
+
           # Get unique colors based on detected color option position
           case color_option_position
             when 2
@@ -257,7 +275,7 @@
             else
               assign all_colors = card_product.variants | map: 'option1' | uniq
           endcase
-          
+
           # Get available variants and their colors
           # Filter out variants where inventory_management is nil (not tracked)
           # These variants show available=true but have no actual stock
@@ -272,7 +290,7 @@
                 else
                   assign variant_color = variant.option1
               endcase
-              
+
               if truly_available_variants == ''
                 assign truly_available_variants = variant_color
               else
@@ -281,7 +299,7 @@
             endif
           endfor
           assign available_color_list = truly_available_variants | split: '|||' | uniq
-          
+
           # Build available_colors string for compatibility with sorting logic
           assign available_colors = ''
           for color in available_color_list
@@ -292,7 +310,7 @@
             endif
           endfor
           assign available_colors = available_colors | split: ','
-          
+
           # Fallback: if no colors have stock, show first color for visual consistency
           if available_colors.size == 0 and all_colors.size > 0
             assign available_colors = all_colors | slice: 0, 1
@@ -347,14 +365,14 @@
           {%- assign remaining_count = colors_count | minus: display_count -%}
         {%- endif -%}
 
-        <div class="grid mb-0 grid-cols-5 w-fit gap-0.5">
+        <div class="mb-0 grid w-fit grid-cols-5 gap-0.5">
           {%- for color in available_colors limit: display_count -%}
             {%- liquid
               # ============================================================
               # OPTIMIZATION: Use where filter for variant lookup
               # Uses dynamic color_option_position for correct option matching
               # ============================================================
-              
+
               # Build option key based on color position
               case color_option_position
                 when 2
@@ -495,7 +513,7 @@
 
               <a
                 href="{{ card_product.url }}?variant={{ color_variant.id }}"
-                class="size-9 xl:size-[3.75rem] overflow-hidden bg-background flex items-center justify-center transition-colors variant-swatch border-b-2 border-transparent hover:border-accent"
+                class="bg-background variant-swatch hover:border-accent flex size-9 items-center justify-center overflow-hidden border-b-2 border-transparent transition-colors xl:size-[3.75rem]"
                 data-variant-id="{{ color_variant.id }}"
                 data-product-id="{{ card_product.id }}"
                 data-section-id="{{ section_id }}"
@@ -518,7 +536,7 @@
                     decoding="async"
                     width="120"
                     height="120"
-                    class="w-full h-full object-cover"
+                    class="h-full w-full object-cover"
                   >
                 {%- else -%}
                   {%- if card_swatch.image -%}
@@ -529,16 +547,16 @@
                       decoding="async"
                       width="120"
                       height="120"
-                      class="w-full h-full object-cover"
+                      class="h-full w-full object-cover"
                     >
                   {%- elsif card_swatch.color -%}
                     <span
-                      class="w-full h-full"
+                      class="h-full w-full"
                       style="background-color: rgb({{ card_swatch.color.rgb }});"
                       aria-hidden="true"
                     ></span>
                   {%- else -%}
-                    <div class="variant-swatch-placeholder w-full h-full bg-gray-100 flex items-center justify-center">
+                    <div class="variant-swatch-placeholder flex h-full w-full items-center justify-center bg-gray-100">
                       {{
                         'product-apparel-2'
                         | placeholder_svg_tag: 'variant-swatch-placeholder-svg w-3/5 h-3/5 text-gray-400 opacity-70'
@@ -553,7 +571,7 @@
           {%- if remaining_count > 0 -%}
             <a
               href="{{ card_product.url }}"
-              class="size-9 xl:size-[3.75rem] rounded-full border border-[#E5E5E5] bg-white flex items-center justify-center text-center text-[#4D4D4D] font-medium"
+              class="flex size-9 items-center justify-center rounded-full border border-[#E5E5E5] bg-white text-center font-medium text-[#4D4D4D] xl:size-[3.75rem]"
             >
               +{{ remaining_count }}
             </a>
@@ -563,7 +581,7 @@
 
       <div class="flex flex-col gap-1 pt-3">
         <a href="{{ card_product.url }}" class="card-product-northfinder__title-link">
-          <h3 class="text-base font-semibold leading-[1.625rem] text-[#0F0F0F]">{{ card_product.title | escape }}</h3>
+          <h3 class="text-base leading-[1.625rem] font-semibold text-[#0F0F0F]">{{ card_product.title | escape }}</h3>
         </a>
 
         {%- assign display_variant = card_product.selected_or_first_available_variant -%}
@@ -573,34 +591,34 @@
   </div>
 {%- else -%}
   <div class="card-wrapper h-full">
-    <div class="flex flex-col h-full relative">
+    <div class="relative flex h-full flex-col">
       {%- comment -%} Empty tags container to match the spacing {%- endcomment -%}
       <div class="relative">
-        <div class="flex items-center gap-2 mb-1.5 h-8 overflow-x-auto scrollbar-hide tag-container">
-          <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px] flex-shrink-0">
+        <div class="scrollbar-hide tag-container mb-1.5 flex h-8 items-center gap-2 overflow-x-auto">
+          <span class="text-medium flex-shrink-0 rounded-[2px] border border-[#ccc] px-2 py-1 text-[13px] leading-4 text-[#4d4d4d] uppercase">
             {{ 'onboarding.product_tag' | t | default: 'Sample Tag' }}
           </span>
         </div>
       </div>
 
       {%- comment -%} Placeholder image with same structure as product media {%- endcomment -%}
-      <div class="relative overflow-hidden mb-3">
+      <div class="card-product-northfinder__media relative mb-3 overflow-hidden">
         <a href="#" class="card-product-northfinder__link block">
-          <div class="w-full aspect-square bg-gray-100 flex items-center justify-center">
+          <div class="flex aspect-square w-full items-center justify-center bg-gray-100">
             {{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}
           </div>
         </a>
       </div>
 
       {%- comment -%} Placeholder variant swatches {%- endcomment -%}
-      <div class="flex flex-wrap gap-1 py-3 border-t border-[#E5E5E5]">
-        <div class="size-9 xl:size-[3.75rem] overflow-hidden bg-gray-100 flex items-center justify-center border-b-2 border-transparent">
+      <div class="flex flex-wrap gap-1 border-t border-[#E5E5E5] py-3">
+        <div class="flex size-9 items-center justify-center overflow-hidden border-b-2 border-transparent bg-gray-100 xl:size-[3.75rem]">
           {{ 'product-apparel-2' | placeholder_svg_tag: 'w-3/5 h-3/5 text-gray-400 opacity-70' }}
         </div>
-        <div class="size-9 xl:size-[3.75rem] overflow-hidden bg-gray-100 flex items-center justify-center border-b-2 border-transparent">
+        <div class="flex size-9 items-center justify-center overflow-hidden border-b-2 border-transparent bg-gray-100 xl:size-[3.75rem]">
           {{ 'product-apparel-2' | placeholder_svg_tag: 'w-3/5 h-3/5 text-gray-400 opacity-70' }}
         </div>
-        <div class="size-9 xl:size-[3.75rem] overflow-hidden bg-gray-100 flex items-center justify-center border-b-2 border-transparent">
+        <div class="flex size-9 items-center justify-center overflow-hidden border-b-2 border-transparent bg-gray-100 xl:size-[3.75rem]">
           {{ 'product-apparel-2' | placeholder_svg_tag: 'w-3/5 h-3/5 text-gray-400 opacity-70' }}
         </div>
       </div>
@@ -608,20 +626,24 @@
       {%- comment -%} Placeholder title and price {%- endcomment -%}
       <div class="flex flex-col gap-1 pt-3">
         <a href="#" class="card-product-northfinder__title-link">
-          <h3 class="text-base font-semibold leading-[1.625rem] text-[#0F0F0F]">{{ 'onboarding.product_title' | t }}</h3>
+          <h3 class="text-base leading-[1.625rem] font-semibold text-[#0F0F0F]">
+            {{ 'onboarding.product_title' | t }}
+          </h3>
         </a>
 
-        <div class="flex gap-3 items-center mt-0.5">
-          <span class="text-black font-medium font-archivo-expanded text-base leading-6">$29.99</span>
+        <div class="mt-0.5 flex items-center gap-3">
+          <span class="font-archivo-expanded text-base leading-6 font-medium text-black">$29.99</span>
         </div>
       </div>
     </div>
   </div>
 {%- endif -%}
 
-{% comment %} ============================================================
-  Styles - Scoped to this component
-============================================================ {% endcomment %}
+{% comment %}
+  ============================================================
+    Styles - Scoped to this component
+  ============================================================
+{% endcomment %}
 {% stylesheet %}
   /* Hide scrollbar for tag container while maintaining scroll functionality */
   .scrollbar-hide {
@@ -647,11 +669,11 @@
   }
 
   /* Shadow indicators for scrollable content */
-  .tag-container[style*="--scroll-shadow-left: 1"] ~ .shadow-left {
+  .tag-container[style*='--scroll-shadow-left: 1'] ~ .shadow-left {
     opacity: 1 !important;
   }
 
-  .tag-container[style*="--scroll-shadow-right: 0"] ~ .shadow-right {
+  .tag-container[style*='--scroll-shadow-right: 0'] ~ .shadow-right {
     opacity: 0 !important;
   }
 
@@ -661,19 +683,21 @@
   }
 {% endstylesheet %}
 
-{% comment %} ============================================================
-  JavaScript - Scoped and optimized with passive listeners
-============================================================ {% endcomment %}
+{% comment %}
+  ============================================================
+    JavaScript - Scoped and optimized with passive listeners
+  ============================================================
+{% endcomment %}
 {% javascript %}
   // Initialize shadow visibility for tag containers - uses event delegation
-  (function() {
+  (function () {
     function updateShadows(container) {
       const parent = container.parentElement;
       const leftShadow = parent.querySelector('.shadow-left');
       const rightShadow = parent.querySelector('.shadow-right');
-      
+
       if (!leftShadow || !rightShadow) return;
-      
+
       const isScrollable = container.scrollWidth > container.clientWidth;
       const isAtStart = container.scrollLeft <= 0;
       const isAtEnd = container.scrollLeft >= container.scrollWidth - container.clientWidth - 1;
@@ -686,36 +710,47 @@
         rightShadow.style.opacity = isAtEnd ? '0' : '1';
       }
     }
-    
+
     // Use Intersection Observer for lazy initialization
-    const observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          const container = entry.target;
-          updateShadows(container);
-          
-          // Add scroll listener with passive flag for performance
-          container.addEventListener('scroll', function() {
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            const container = entry.target;
             updateShadows(container);
-          }, { passive: true });
-          
-          observer.unobserve(container);
-        }
-      });
-    }, { rootMargin: '50px' });
-    
+
+            // Add scroll listener with passive flag for performance
+            container.addEventListener(
+              'scroll',
+              function () {
+                updateShadows(container);
+              },
+              { passive: true },
+            );
+
+            observer.unobserve(container);
+          }
+        });
+      },
+      { rootMargin: '50px' },
+    );
+
     // Observe all tag containers
-    document.querySelectorAll('.tag-container').forEach(function(container) {
+    document.querySelectorAll('.tag-container').forEach(function (container) {
       observer.observe(container);
     });
-    
+
     // Debounced resize handler
     let resizeTimeout;
-    window.addEventListener('resize', function() {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(function() {
-        document.querySelectorAll('.tag-container').forEach(updateShadows);
-      }, 100);
-    }, { passive: true });
+    window.addEventListener(
+      'resize',
+      function () {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function () {
+          document.querySelectorAll('.tag-container').forEach(updateShadows);
+        }, 100);
+      },
+      { passive: true },
+    );
   })();
 {% endjavascript %}
