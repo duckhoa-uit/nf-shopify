@@ -57,9 +57,11 @@ describe("automatic discount preview contract", () => {
     expect(productInfoSource).toContain("this.updateVariantInputs(variant?.id)");
   });
 
-  test("provides a default-on kill switch for release rollback", () => {
+  test("preserves an explicit false kill switch and defaults only when unset", () => {
     expect(settingsSource).toContain("automatic_discount_preview_enabled");
     expect(settingsSource).toContain('"default": true');
     expect(previewSource).toContain("settings.automatic_discount_preview_enabled");
+    expect(previewSource).toContain("preview_enabled == null");
+    expect(previewSource).not.toContain("preview_enabled == blank");
   });
 });

@@ -20,7 +20,7 @@
 
 {%- liquid
   assign preview_enabled = settings.automatic_discount_preview_enabled
-  if preview_enabled == blank
+  if preview_enabled == null
     assign preview_enabled = true
   endif
 
@@ -121,20 +121,20 @@
 
 {%- if presentation == 'card' -%}
   <div
-    class="flex gap-3 items-center mt-0.5{% if has_preview %} automatic-discount-preview{% endif %}"
+    class="flex items-center gap-3 mt-0.5{% if has_preview %} automatic-discount-preview{% endif %}"
     {% if has_preview %}
       data-discount-preview="true" data-discount-preview-kind="{{ preview_kind }}"
     {% endif %}
   >
     {% if has_preview %}
-      <s class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">
+      <s class="font-archivo-expanded text-base leading-6 font-medium text-[#666666] line-through">
         {% if settings.currency_code_enabled -%}
           {{- target_price | money_with_currency -}}
         {%- else -%}
           {{- target_price | money -}}
         {%- endif %}
       </s>
-      <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+      <span class="font-archivo-expanded text-base leading-6 font-medium text-black">
         {% if settings.currency_code_enabled -%}
           {{- preview_price | money_with_currency -}}
         {%- else -%}
@@ -142,20 +142,20 @@
         {%- endif %}
       </span>
       <span
-        class="automatic-discount-preview__badge text-[#EC0009] font-medium text-sm leading-5"
+        class="automatic-discount-preview__badge text-sm leading-5 font-medium text-[#EC0009]"
         aria-label="{{ preview_badge }}"
       >
         {{- preview_badge -}}
       </span>
     {% elsif target_variant.compare_at_price > target_price and product.available %}
-      <span class="line-through text-[#666666] font-medium font-archivo-expanded text-base leading-6">
+      <span class="font-archivo-expanded text-base leading-6 font-medium text-[#666666] line-through">
         {{- target_variant.compare_at_price | money -}}
       </span>
-      <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+      <span class="font-archivo-expanded text-base leading-6 font-medium text-black">
         {{- target_price | money -}}
       </span>
     {% else %}
-      <span class="text-black font-medium font-archivo-expanded text-base leading-6">
+      <span class="font-archivo-expanded text-base leading-6 font-medium text-black">
         {{- target_price | money -}}
       </span>
     {% endif %}
@@ -169,7 +169,7 @@
   >
     {% if has_preview %}
       <div class="flex items-baseline gap-2">
-        <s class="original-price text-[14px] font-normal font-archivo-expanded text-[#3D3D3D] leading-[1.14]">
+        <s class="original-price font-archivo-expanded text-[14px] leading-[1.14] font-normal text-[#3D3D3D]">
           {% if settings.currency_code_enabled -%}
             {{- target_price | money_with_currency -}}
           {%- else -%}
@@ -177,7 +177,7 @@
           {%- endif %}
         </s>
         <span
-          class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]"
+          class="current-price font-archivo-expanded text-[21px] leading-[1.14] font-medium"
           {% if settings.currency_code_enabled %}
             data-format="{{ shop.money_with_currency_format }}"
           {% else %}
@@ -192,14 +192,14 @@
         </span>
       </div>
       <span
-        class="automatic-discount-preview__badge text-[#EC0009] font-medium text-sm leading-5 mt-1"
+        class="automatic-discount-preview__badge mt-1 text-sm leading-5 font-medium text-[#EC0009]"
         aria-label="{{ preview_badge }}"
       >
         {{- preview_badge -}}
       </span>
     {% else %}
       <span
-        class="current-price text-[21px] font-medium font-archivo-expanded leading-[1.14]"
+        class="current-price font-archivo-expanded text-[21px] leading-[1.14] font-medium"
         {% if settings.currency_code_enabled %}
           data-format="{{ shop.money_with_currency_format }}"
         {% else %}
@@ -213,15 +213,15 @@
         {%- endif %}
       </span>
       {% if target_variant.compare_at_price > target_price %}
-        <div class="flex items-center mt-2">
-          <span class="original-price text-[14px] font-normal font-archivo-expanded text-[#3D3D3D] leading-[1.14]">
+        <div class="mt-2 flex items-center">
+          <span class="original-price font-archivo-expanded text-[14px] leading-[1.14] font-normal text-[#3D3D3D]">
             {% if settings.currency_code_enabled -%}
               {{- target_variant.compare_at_price | money_with_currency -}}
             {%- else -%}
               {{- target_variant.compare_at_price | money -}}
             {%- endif %}
           </span>
-          <span class="price-label text-[14px] font-light font-['Archivo'] text-[#4D4D4D] leading-[1.14] ml-1">
+          <span class="price-label ml-1 font-['Archivo'] text-[14px] leading-[1.14] font-light text-[#4D4D4D]">
             {{- 'products.product.original_recommended_price' | t -}}
           </span>
         </div>

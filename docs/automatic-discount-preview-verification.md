@@ -56,12 +56,30 @@ These require an unpublished theme containing the sync job's metafields and acce
 
 The live authenticated cases must be completed by the store owner or authorized QA user directly in isolated persistent browser profiles. No OTP, password, cookie, or session token belongs in this repository, PR, or evidence upload.
 
-## Verification status
+## Live QA status (nf-development)
 
-- [x] Contract and failure-mode source tests added.
-- [ ] Shopify Admin sync job/metafield definition is available in this theme repository.
-- [ ] Unpublished theme contains live preview payloads for DAMIR/LADOVY/PATH/PEAK.
-- [ ] Owner-assisted regular/PATH/PEAK passwordless sessions completed.
-- [ ] Cart line prices compared with each rendered preview.
+- [x] Clean repository theme published as the dev-store live theme.
+- [x] Guest `ALL` percentage preview on PDP and PLP.
+- [x] Authenticated customer percentage preview on LADOVY.
+- [x] `BON_path` and `BON_peak` tag previews on PDP.
+- [x] Matching-currency fixed amount on PDP and PLP.
+- [x] Fixed amount Shopify native cart parity.
+- [x] Currency mismatch, lifecycle, quantity, unsupported, invalid, zero, oversized, and ambiguous fail-closed cases.
+- [x] Variant-level precedence and product-level fallback.
+- [x] Perfume template preview.
+- [x] Kill switch live OFF and ON behavior.
+- [x] Percentage native cart parity for DAMIR/LADOVY/PATH/PEAK.
+- [x] Final QA resource restoration verified.
 
-The repository currently contains the Shopify theme only. The sync service and live metafield provisioning are outside this checkout, so live discount/cart parity is explicitly not claimed by the source-level test evidence.
+## Maintenance update requirement
+
+A live maintenance update from 30% to 25% was verified. When the preview metafield and Shopify native automatic discount were updated together, PDP, PLP, and cart converged on `€89.25` / `25%`.
+
+Updating only the native discount first produced a temporary mismatch: Shopify cart changed to `€89.25` while the Liquid preview still showed the old `€83.30`. Therefore the external sync/provisioning service must update the versioned preview metafield and the native discount as one coordinated/versioned release, then wait for storefront propagation before publishing the new customer-facing rule.
+
+## Remaining scope boundaries
+
+- The repository contains the Shopify theme, not the external sync/provisioning service. The service must own atomic/versioned updates of the native discount and preview metafield.
+- Client-side multi-variant selector refresh was not separately replayed with multiple priced variants; server-rendered refresh and variant precedence were covered.
+- Free shipping remains cart/checkout-authoritative and is outside the product-price preview contract.
+- Pixel screenshot capture was blocked by local Chrome/CDP renderer failures; DOM assertions, Admin readbacks, cart allocations, and restoration checks are the authoritative attached evidence.
