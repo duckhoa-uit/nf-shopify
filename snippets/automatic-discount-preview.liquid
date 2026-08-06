@@ -20,7 +20,7 @@
 
 {%- liquid
   assign preview_enabled = settings.automatic_discount_preview_enabled
-  if preview_enabled == blank
+  if preview_enabled == nil
     assign preview_enabled = true
   endif
 
