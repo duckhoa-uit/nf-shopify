@@ -33,24 +33,58 @@
   if compare_price > current_price
     # Calculate discount percentage using floating-point arithmetic
     assign savings = compare_price | minus: current_price | times: 100.0 | divided_by: compare_price | round
-
-    # Set badge classes - use custom class if provided, otherwise use default Tailwind classes
-    if badge_class and badge_class != blank
-      assign final_classes = badge_class
-    else
-      assign final_classes = 'bg-[#EC0009] text-white font-bold px-2 py-1 rounded-[2px] text-[15px] leading-[16px]'
-    endif
   endif
+
+  # Set badge classes - use custom class if provided, otherwise use default Tailwind classes
+  if badge_class and badge_class != blank
+    assign final_classes = badge_class
+  else
+    assign final_classes = 'bg-[#EC0009] text-white font-bold px-2 py-1 rounded-[2px] text-[15px] leading-[16px]'
+  endif
+
+  assign preview_variant = variant | default: product.selected_or_first_available_variant
 -%}
 
-{%- if compare_price > current_price -%}
-  <div class="{{ final_classes }}">
-    {%- if savings >= minimum_discount -%}
-      -{{ savings }}%
-    {%- elsif show_sale_text -%}
-      {{ 'products.product.sale_badge' | t | default: 'SALE' }}
-    {%- else -%}
-      -{{ savings }}%
-    {%- endif -%}
-  </div>
-{%- endif -%}
+<div
+  {% if badge_class == 'product-discount-badge' %}
+    id="AutomaticDiscountBadge-{{ section.id }}"
+  {% endif %}
+  class="contents"
+>
+  {% render 'automatic-discount-preview',
+    product: product,
+    variant: preview_variant,
+    presentation: 'badge',
+    badge_class: final_classes
+  %}
+
+  {%- if compare_price > current_price -%}
+    <div class="{{ final_classes }}">
+      {%- if savings >= minimum_discount -%}
+        -{{ savings }}%
+      {%- elsif show_sale_text -%}
+        {{ 'products.product.sale_badge' | t | default: 'SALE' }}
+      {%- else -%}
+        -{{ savings }}%
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% if badge_class == 'product-discount-badge' %}
+  <script>
+    (() => {
+      const badgeContainer = document.getElementById('AutomaticDiscountBadge-{{ section.id }}');
+
+      if (!badgeContainer || badgeContainer.dataset.variantRefreshBound) return;
+
+      badgeContainer.dataset.variantRefreshBound = 'true';
+      subscribe(PUB_SUB_EVENTS.variantChange, (event) => {
+        if (event.data.sectionId !== '{{ section.id }}') return;
+
+        const source = event.data.html?.getElementById('AutomaticDiscountBadge-{{ section.id }}');
+        if (source) badgeContainer.innerHTML = source.innerHTML;
+      });
+    })();
+  </script>
+{% endif %}

@@ -5,6 +5,7 @@ import { describe, expect, test } from "vitest";
 const readFile = (path) => readFileSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), "utf8");
 
 const previewSource = readFile("snippets/automatic-discount-preview.liquid");
+const discountBadgeSource = readFile("snippets/discount-badge.liquid");
 const productSource = readFile("sections/main-product.liquid");
 const parfumProductSource = readFile("sections/main-product-parfums.liquid");
 const cardSource = readFile("snippets/card-product.liquid");
@@ -45,16 +46,28 @@ describe("automatic discount preview contract", () => {
     expect(previewSource).toContain("if rule.preview == 'EXACT_PRICE'");
   });
 
-  test("integrates the same preview component on standard PDP, perfume PDP, and main cards", () => {
-    expect(productSource).toContain("render 'automatic-discount-preview'");
-    expect(parfumProductSource).toContain("render 'automatic-discount-preview'");
-    expect(cardSource).toContain("render 'automatic-discount-preview'");
+  test("integrates shared price and badge presentations through existing tag containers", () => {
+    expect(productSource).toContain("render 'discount-badge'");
+    expect(parfumProductSource).toContain("render 'discount-badge'");
+    expect(cardSource).toContain("render 'discount-badge'");
+    expect(discountBadgeSource).toContain("presentation: 'badge'");
+    expect(discountBadgeSource).toContain('id="AutomaticDiscountBadge-{{ section.id }}"');
+    expect(discountBadgeSource).toContain('class="contents"');
+    expect(discountBadgeSource).toContain("badge_class == 'product-discount-badge'");
+    expect(discountBadgeSource).toContain("variantChange");
+    expect(discountBadgeSource).toContain("event.data.html?.getElementById");
+    expect(cardSource).toContain(
+      'class="flex items-center gap-2 mb-1.5 h-8 overflow-x-auto scrollbar-hide tag-container"',
+    );
     expect(cardSource).toContain("presentation: 'card'");
+    expect(previewSource).toContain("when 'badge'");
+    expect(previewSource).not.toContain("automatic-discount-preview__badge mt-1");
   });
 
-  test("keeps variant refresh server-rendered through the existing price target", () => {
+  test("keeps variant price refresh server-rendered and badge refresh event-driven", () => {
     expect(productInfoSource).toContain("updateSourceFromDestination('price')");
     expect(productInfoSource).toContain("this.updateVariantInputs(variant?.id)");
+    expect(discountBadgeSource).toContain("event.data.sectionId !== '{{ section.id }}'");
   });
 
   test("preserves an explicit false kill switch and defaults only when unset", () => {
