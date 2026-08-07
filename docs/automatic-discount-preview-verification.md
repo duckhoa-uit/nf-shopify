@@ -73,9 +73,18 @@ The live authenticated cases must be completed by the store owner or authorized 
 
 ## Maintenance update requirement
 
-A live maintenance update from 30% to 25% was verified. When the preview metafield and Shopify native automatic discount were updated together, PDP, PLP, and cart converged on `€89.25` / `25%`.
+A live maintenance update from 30% to 25% was verified after the badge-container refactor. The matrix read back both Admin sources and compared PDP price, PDP badge, PLP card price, PLP badge, and the native cart allocation.
 
-Updating only the native discount first produced a temporary mismatch: Shopify cart changed to `€89.25` while the Liquid preview still showed the old `€83.30`. Therefore the external sync/provisioning service must update the versioned preview metafield and the native discount as one coordinated/versioned release, then wait for storefront propagation before publishing the new customer-facing rule.
+| Update stage             | Preview metafield | Native discount | PDP/PLP price and badge                   | Cart                     | Result                      |
+| ------------------------ | ----------------: | --------------: | ----------------------------------------- | ------------------------ | --------------------------- |
+| Baseline                 |               30% |             30% | `€119.00 → €83.30`, `-30%`                | `€83.30`, allocation 30% | PASS                        |
+| Native-only update       |               30% |             25% | Still `€119.00 → €83.30`, `-30%`          | `€89.25`, allocation 25% | Expected temporary mismatch |
+| Preview update completed |               25% |             25% | `€119.00 → €89.25`, `-25%` on PDP and PLP | `€89.25`, allocation 25% | PASS                        |
+| Restored                 |               30% |             30% | `€119.00 → €83.30`, `-30%`                | `€83.30`, allocation 30% | PASS                        |
+
+The native-only stage proves that the theme does not and cannot infer a new preview from the native discount. The stale badge/price was exactly the old metafield value, not an unexplained storefront cache. After the preview metafield was updated and propagation completed, cache-busted canonical requests rendered the new price and badge on both PDP and PLP, and cart parity converged.
+
+Therefore the external sync/provisioning service must update the versioned preview metafield and the native discount as one coordinated/versioned release, then wait for Admin and storefront propagation before publishing the new customer-facing rule. If the native discount is published first, customers can temporarily see an old badge/preview while cart pricing already uses the new rule.
 
 ## Remaining scope boundaries
 
