@@ -74,17 +74,10 @@
           class="product__info-container product-info-container"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
-          {%- assign current_variant = product.selected_or_first_available_variant | default: product.variants.first -%}
 
           <div class="flex items-center justify-between">
             <!-- Discount badge and product tags -->
-            <div class="flex items-center gap-2" id="AutomaticDiscountBadge-{{ section.id }}">
-              {% render 'automatic-discount-preview',
-                product: product,
-                variant: current_variant,
-                presentation: 'badge',
-                badge_class: 'product-discount-badge'
-              %}
+            <div class="flex items-center gap-2">
               {% render 'discount-badge', product: product, badge_class: 'product-discount-badge' %}
 
               <!-- Product tags from metafields -->
