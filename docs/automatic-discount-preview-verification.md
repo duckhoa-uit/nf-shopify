@@ -82,4 +82,4 @@ Updating only the native discount first produced a temporary mismatch: Shopify c
 - The repository contains the Shopify theme, not the external sync/provisioning service. The service must own atomic/versioned updates of the native discount and preview metafield.
 - Client-side multi-variant selector refresh was not separately replayed with multiple priced variants; server-rendered refresh and variant precedence were covered.
 - Free shipping remains cart/checkout-authoritative and is outside the product-price preview contract.
-- Pixel screenshot capture was blocked by local Chrome/CDP renderer failures; DOM assertions, Admin readbacks, cart allocations, and restoration checks are the authoritative attached evidence.
+- Pixel screenshots were captured after isolating each QA Chrome process and waiting for the delayed surface paint; the attached visual evidence uses validated `560x757` JPEG captures. DOM assertions, Admin readbacks, cart allocations, and restoration checks remain the functional evidence.
