@@ -119,85 +119,63 @@
   endif
 -%}
 
-{%- case presentation -%}
-  {%- when 'badge' -%}
+{%- if presentation == 'card' -%}
+  <div
+    class="flex items-center gap-3 mt-0.5{% if has_preview %} automatic-discount-preview{% endif %}"
     {% if has_preview %}
+      data-discount-preview="true" data-discount-preview-kind="{{ preview_kind }}"
+    {% endif %}
+  >
+    {% if has_preview %}
+      <s class="font-archivo-expanded text-base leading-6 font-medium text-[#666666] line-through">
+        {% if settings.currency_code_enabled -%}
+          {{- target_price | money_with_currency -}}
+        {%- else -%}
+          {{- target_price | money -}}
+        {%- endif %}
+      </s>
+      <span class="font-archivo-expanded text-base leading-6 font-medium text-black">
+        {% if settings.currency_code_enabled -%}
+          {{- preview_price | money_with_currency -}}
+        {%- else -%}
+          {{- preview_price | money -}}
+        {%- endif %}
+      </span>
       <span
-        class="{{ badge_class | default: 'bg-[#EC0009] text-white font-bold px-2 py-1 rounded-[2px] text-[15px] leading-[16px]' }} automatic-discount-preview__badge"
+        class="automatic-discount-preview__badge text-sm leading-5 font-medium text-[#EC0009]"
         aria-label="{{ preview_badge }}"
-        data-discount-preview="true"
-        data-discount-preview-kind="{{ preview_kind }}"
       >
         {{- preview_badge -}}
       </span>
+    {% elsif target_variant.compare_at_price > target_price and product.available %}
+      <span class="font-archivo-expanded text-base leading-6 font-medium text-[#666666] line-through">
+        {{- target_variant.compare_at_price | money -}}
+      </span>
+      <span class="font-archivo-expanded text-base leading-6 font-medium text-black">
+        {{- target_price | money -}}
+      </span>
+    {% else %}
+      <span class="font-archivo-expanded text-base leading-6 font-medium text-black">
+        {{- target_price | money -}}
+      </span>
     {% endif %}
-  {%- when 'card' -%}
-    <div
-      class="flex items-center gap-3 mt-0.5{% if has_preview %} automatic-discount-preview{% endif %}"
-      {% if has_preview %}
-        data-discount-preview="true" data-discount-preview-kind="{{ preview_kind }}"
-      {% endif %}
-    >
-      {% if has_preview %}
-        <s class="font-archivo-expanded text-base leading-6 font-medium text-[#666666] line-through">
+  </div>
+{%- else -%}
+  <div
+    class="price-wrapper flex flex-col{% if has_preview %} automatic-discount-preview{% endif %}"
+    {% if has_preview %}
+      data-discount-preview="true" data-discount-preview-kind="{{ preview_kind }}"
+    {% endif %}
+  >
+    {% if has_preview %}
+      <div class="flex items-baseline gap-2">
+        <s class="original-price font-archivo-expanded text-[14px] leading-[1.14] font-normal text-[#3D3D3D]">
           {% if settings.currency_code_enabled -%}
             {{- target_price | money_with_currency -}}
           {%- else -%}
             {{- target_price | money -}}
           {%- endif %}
         </s>
-        <span class="font-archivo-expanded text-base leading-6 font-medium text-black">
-          {% if settings.currency_code_enabled -%}
-            {{- preview_price | money_with_currency -}}
-          {%- else -%}
-            {{- preview_price | money -}}
-          {%- endif %}
-        </span>
-      {% elsif target_variant.compare_at_price > target_price and product.available %}
-        <span class="font-archivo-expanded text-base leading-6 font-medium text-[#666666] line-through">
-          {{- target_variant.compare_at_price | money -}}
-        </span>
-        <span class="font-archivo-expanded text-base leading-6 font-medium text-black">
-          {{- target_price | money -}}
-        </span>
-      {% else %}
-        <span class="font-archivo-expanded text-base leading-6 font-medium text-black">
-          {{- target_price | money -}}
-        </span>
-      {% endif %}
-    </div>
-  {%- else -%}
-    <div
-      class="price-wrapper flex flex-col{% if has_preview %} automatic-discount-preview{% endif %}"
-      {% if has_preview %}
-        data-discount-preview="true" data-discount-preview-kind="{{ preview_kind }}"
-      {% endif %}
-    >
-      {% if has_preview %}
-        <div class="flex items-baseline gap-2">
-          <s class="original-price font-archivo-expanded text-[14px] leading-[1.14] font-normal text-[#3D3D3D]">
-            {% if settings.currency_code_enabled -%}
-              {{- target_price | money_with_currency -}}
-            {%- else -%}
-              {{- target_price | money -}}
-            {%- endif %}
-          </s>
-          <span
-            class="current-price font-archivo-expanded text-[21px] leading-[1.14] font-medium"
-            {% if settings.currency_code_enabled %}
-              data-format="{{ shop.money_with_currency_format }}"
-            {% else %}
-              data-format="{{ shop.money_format }}"
-            {% endif %}
-          >
-            {% if settings.currency_code_enabled -%}
-              {{- preview_price | money_with_currency -}}
-            {%- else -%}
-              {{- preview_price | money -}}
-            {%- endif %}
-          </span>
-        </div>
-      {% else %}
         <span
           class="current-price font-archivo-expanded text-[21px] leading-[1.14] font-medium"
           {% if settings.currency_code_enabled %}
@@ -207,28 +185,50 @@
           {% endif %}
         >
           {% if settings.currency_code_enabled -%}
-            {{- target_price | money_with_currency -}}
+            {{- preview_price | money_with_currency -}}
           {%- else -%}
-            {{- target_price | money -}}
+            {{- preview_price | money -}}
           {%- endif %}
         </span>
-        {% if target_variant.compare_at_price > target_price %}
-          <div class="mt-2 flex items-center">
-            <span class="original-price font-archivo-expanded text-[14px] leading-[1.14] font-normal text-[#3D3D3D]">
-              {% if settings.currency_code_enabled -%}
-                {{- target_variant.compare_at_price | money_with_currency -}}
-              {%- else -%}
-                {{- target_variant.compare_at_price | money -}}
-              {%- endif %}
-            </span>
-            <span class="price-label ml-1 font-['Archivo'] text-[14px] leading-[1.14] font-light text-[#4D4D4D]">
-              {{- 'products.product.original_recommended_price' | t -}}
-            </span>
-          </div>
+      </div>
+      <span
+        class="automatic-discount-preview__badge mt-1 text-sm leading-5 font-medium text-[#EC0009]"
+        aria-label="{{ preview_badge }}"
+      >
+        {{- preview_badge -}}
+      </span>
+    {% else %}
+      <span
+        class="current-price font-archivo-expanded text-[21px] leading-[1.14] font-medium"
+        {% if settings.currency_code_enabled %}
+          data-format="{{ shop.money_with_currency_format }}"
+        {% else %}
+          data-format="{{ shop.money_format }}"
         {% endif %}
+      >
+        {% if settings.currency_code_enabled -%}
+          {{- target_price | money_with_currency -}}
+        {%- else -%}
+          {{- target_price | money -}}
+        {%- endif %}
+      </span>
+      {% if target_variant.compare_at_price > target_price %}
+        <div class="mt-2 flex items-center">
+          <span class="original-price font-archivo-expanded text-[14px] leading-[1.14] font-normal text-[#3D3D3D]">
+            {% if settings.currency_code_enabled -%}
+              {{- target_variant.compare_at_price | money_with_currency -}}
+            {%- else -%}
+              {{- target_variant.compare_at_price | money -}}
+            {%- endif %}
+          </span>
+          <span class="price-label ml-1 font-['Archivo'] text-[14px] leading-[1.14] font-light text-[#4D4D4D]">
+            {{- 'products.product.original_recommended_price' | t -}}
+          </span>
+        </div>
       {% endif %}
-    </div>
-{%- endcase -%}
+    {% endif %}
+  </div>
+{%- endif -%}
 
 {% stylesheet %}
   .automatic-discount-preview__badge {
