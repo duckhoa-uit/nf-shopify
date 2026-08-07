@@ -89,7 +89,7 @@
               <!-- Product tags from metafields -->
               {%- if product.metafields.custom_features.extra.value -%}
                 {%- for extra_tag in product.metafields.custom_features.extra.value -%}
-                  <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
+                  <span class="text-medium rounded-[2px] border border-[#ccc] px-2 py-1 text-[13px] leading-4 text-[#4d4d4d] uppercase">
                     {{- extra_tag.name -}}
                   </span>
                 {%- endfor -%}
@@ -98,7 +98,7 @@
               <!-- Promotion metafield -->
               {%- if product.metafields.custom_features.promotion.value -%}
                 {%- for promotion in product.metafields.custom_features.promotion.value -%}
-                  <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
+                  <span class="text-medium rounded-[2px] border border-[#ccc] px-2 py-1 text-[13px] leading-4 text-[#4d4d4d] uppercase">
                     {{- promotion.name -}}
                   </span>
                 {%- endfor -%}
@@ -123,7 +123,7 @@
                 </div>
               {%- when 'product_code' -%}
                 {%- if product.metafields.custom.catalog_code or product.metafields.custom.reference_code -%}
-                  <div class="product__code text-[#3D3D3D] text-sm leading-4 mt-1" {{ block.shopify_attributes }}>
+                  <div class="product__code mt-1 text-sm leading-4 text-[#3D3D3D]" {{ block.shopify_attributes }}>
                     {{ 'products.product.product_codes_label' | t }}
                     {%- if product.metafields.custom.catalog_code -%}
                       <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span>
@@ -150,7 +150,11 @@
                       assign current_variant = product.variants.first
                     endif
                   -%}
-                  {% render 'automatic-discount-preview', product: product, variant: current_variant, presentation: 'pdp' %}
+                  {% render 'automatic-discount-preview',
+                    product: product,
+                    variant: current_variant,
+                    presentation: 'pdp'
+                  %}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
@@ -401,7 +405,7 @@
                   </div>
                 </div>
               {%- when 'delivery_info' -%}
-                <div class="delivery_wrapper flex items-center gap-2 mt-6 mb-4" {{ block.shopify_attributes }}>
+                <div class="delivery_wrapper mt-6 mb-4 flex items-center gap-2" {{ block.shopify_attributes }}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -503,23 +507,23 @@
 
           {%- if product.metafields.custom.short_description != blank -%}
             <div class="mt-3">
-              <h2 id="short_description_heading" class="mb-3 font-semibold text-base">
+              <h2 id="short_description_heading" class="mb-3 text-base font-semibold">
                 {{ 'sections.main_product.you_will_like_it' | t }}
               </h2>
               <div
                 id="short_description"
-                class="text-[0.9375rem] font-medium text-[#0f0f0f] leading-6 [&_ul]:list-disc [&_ul]:pl-5"
+                class="text-[0.9375rem] leading-6 font-medium text-[#0f0f0f] [&_ul]:list-disc [&_ul]:pl-5"
               >
                 {% render 'format-short-description', text: product.metafields.custom.short_description %}
               </div>
               <div class="mt-3 mb-10 flex items-center gap-1">
                 <a
-                  class="product_description_more scroll-more text-[#0F0F0F] border-b border-[#0F0F0F] cursor-pointer"
+                  class="product_description_more scroll-more cursor-pointer border-b border-[#0F0F0F] text-[#0F0F0F]"
                   data-scroll_more="#description_and_parameters"
                 >
                   {{- 'sections.main_product.detailed_product_description' | t -}}
                 </a>
-                <span class="[&_svg]:rotate-90 [&_svg]:size-4">
+                <span class="[&_svg]:size-4 [&_svg]:rotate-90">
                   {{- 'icon-arrow.svg' | inline_asset_content -}}
                 </span>
               </div>
@@ -585,15 +589,15 @@
       endif
     -%}
 
-    <div class="mt-10 flex flex-col w-full md:pb-12">
-      <h2 id="description_and_parameters" class="py-3 text-2xl font-bold leading-[1.5]">
+    <div class="mt-10 flex w-full flex-col md:pb-12">
+      <h2 id="description_and_parameters" class="py-3 text-2xl leading-[1.5] font-bold">
         {{ 'sections.main_product.description_and_parameters' | t }}
       </h2>
       <div
         id="description-parameters-grid"
-        class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20 relative transition-all duration-300"
+        class="relative grid grid-cols-1 gap-x-20 gap-y-8 transition-all duration-300 md:grid-cols-2"
       >
-        <div class="[&_ul]:list-disc [&_ul]:pl-5 *:text-[#0F0F0F] *:text-[0.9375rem] [&_iframe]:max-w-full [&_p]:leading-[1.5]">
+        <div class="*:text-[0.9375rem] *:text-[#0F0F0F] [&_iframe]:max-w-full [&_p]:leading-[1.5] [&_ul]:list-disc [&_ul]:pl-5">
           <div class="">{{ product.description }}</div>
 
           {% if product.metafields.custom.short_description != blank %}
@@ -603,7 +607,7 @@
           {% endif %}
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-20">
+        <div class="grid grid-cols-1 gap-x-20 gap-y-8 md:grid-cols-2">
           {% if product.metafields.custom_features.size > 0 %}
             {% comment %}
               Pre-filter features to display, then sort by metaobject `position` ascending
@@ -620,7 +624,9 @@
                 Skip features rendered in the dedicated "Features & details" block
                 (Construction / Storage / Adjustability) — see product-features-details snippet.
               {%- endcomment -%}
-              {%- assign features_details_keys = 'hood,collar,sleeve,shoulders,inside,ventilation,pockets,zipper,hydration,waist,knee,bottom_legs,back,hips' | split: ',' -%}
+              {%- assign features_details_keys = 'hood,collar,sleeve,shoulders,inside,ventilation,pockets,zipper,hydration,waist,knee,bottom_legs,back,hips'
+                | split: ','
+              -%}
               {% for metafield in product.metafields.custom_features %}
                 {% assign key = metafield | first %}
                 {% assign arr_values = metafield | last %}
@@ -661,7 +667,7 @@
               {% assign sorted_entries = sortable_entries | split: ',' | sort %}
               <div id="parameters-section" class="product-info flex flex-col">
                 {% render 'nf-flow-series-badge', product: product %}
-                <h3 class="text-lg font-bold leading-7 mb-4">{{ 'sections.main_product.parameters' | t }}</h3>
+                <h3 class="mb-4 text-lg leading-7 font-bold">{{ 'sections.main_product.parameters' | t }}</h3>
                 <ul class="list-disc pl-4 [&_li]:text-[0.9375rem]">
                   {% comment %} Apply pagination to display block to overcome 50-item limit {% endcomment %}
                   {% paginate shop.metaobjects.product_feature.values by 250 %}
@@ -674,7 +680,9 @@
                         same row (rendered together below for the water_column entry).
                       {% endcomment %}
                       {% assign is_paired_vapor = false %}
-                      {% if key == 'vapor_permeability_g_m2_24hr' and product.metafields.custom_features.water_column_wp_mm.value != blank %}
+                      {% if key == 'vapor_permeability_g_m2_24hr'
+                        and product.metafields.custom_features.water_column_wp_mm.value != blank
+                      %}
                         {% assign is_paired_vapor = true %}
                       {% endif %}
                       {% if arr_values.value != blank and is_paired_vapor == false %}
@@ -690,7 +698,7 @@
                             endfor
                             assign translated_label = feature_obj.name.value
                           -%}
-                          <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
+                          <strong class="leading-6 font-semibold text-[#0F0F0F] uppercase">
                             {{- translated_label -}}
                             :</strong
                           >
@@ -719,7 +727,7 @@
                                 %}
                               {% endif %}
                             {% endfor %}
-                            <span class="text-[#3D3D3D] text-sm">
+                            <span class="text-sm text-[#3D3D3D]">
                               {{ translated_items }}
                             </span>
                           {% endif %}
@@ -728,7 +736,9 @@
                             Pair vapor_permeability inline with water_column when both
                             are present, per customer feedback (Tab 1, #7 + #8).
                           {%- endcomment -%}
-                          {% if key == 'water_column_wp_mm' and product.metafields.custom_features.vapor_permeability_g_m2_24hr.value != blank %}
+                          {% if key == 'water_column_wp_mm'
+                            and product.metafields.custom_features.vapor_permeability_g_m2_24hr.value != blank
+                          %}
                             {%- liquid
                               assign vapor_obj = null
                               for feature in shop.metaobjects.product_feature.values
@@ -739,12 +749,14 @@
                               endfor
                               assign vapor_label = vapor_obj.name.value
                             -%}
-                            <span class="mx-2 text-[#3D3D3D] text-sm">·</span>
-                            <strong class="text-[#0F0F0F] font-semibold leading-6 uppercase">
+                            <span class="mx-2 text-sm text-[#3D3D3D]">·</span>
+                            <strong class="leading-6 font-semibold text-[#0F0F0F] uppercase">
                               {{- vapor_label -}}
                               :</strong
                             >
-                            {% assign vapor_items = product.metafields.custom_features.vapor_permeability_g_m2_24hr.value | map: 'name' %}
+                            {% assign vapor_items = product.metafields.custom_features.vapor_permeability_g_m2_24hr.value
+                              | map: 'name'
+                            %}
                             {% assign vapor_text = '' %}
                             {% for item in vapor_items %}
                               {% if forloop.first %}
@@ -753,7 +765,7 @@
                                 {% assign vapor_text = vapor_text | append: ', ' | append: item | metafield_text %}
                               {% endif %}
                             {% endfor %}
-                            <span class="text-[#3D3D3D] text-sm">
+                            <span class="text-sm text-[#3D3D3D]">
                               {{ vapor_text }}
                             </span>
                           {% endif %}
@@ -770,18 +782,18 @@
 
           <div id="main-elements-section" class="product-info flex flex-col">
             {% if product.metafields.custom.main_elements.value != blank %}
-              <h3 class="text-lg font-bold leading-7 mb-4">{{ 'sections.main_product.main_elements' | t }}</h3>
-              <div class="flex flex-col main-elements-container">
+              <h3 class="mb-4 text-lg leading-7 font-bold">{{ 'sections.main_product.main_elements' | t }}</h3>
+              <div class="main-elements-container flex flex-col">
                 {% for field in product.metafields.custom.main_elements.value %}
                   {% assign name = field.name | metafield_text %}
                   {% assign logo = field.logo %}
                   {% assign description = field.description | metafield_text %}
 
-                  <div class="w-full flex items-start">
-                    <div class="min-w-12 mr-4 size-12">
+                  <div class="flex w-full items-start">
+                    <div class="mr-4 size-12 min-w-12">
                       {%- if logo != blank -%}
                         <img
-                          class="block max-w-full h-auto"
+                          class="block h-auto max-w-full"
                           width="48"
                           height="48"
                           src="{{ logo | image_url: width: 48 }}"
@@ -789,15 +801,15 @@
                         >
                       {%- else -%}
                         {%- comment -%} Fallback placeholder when logo is missing {%- endcomment -%}
-                        <div class="w-full h-full bg-gray-100 flex items-center justify-center rounded">
+                        <div class="flex h-full w-full items-center justify-center rounded bg-gray-100">
                           {{ 'image' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[70%] max-h-[70%]' }}
                         </div>
                       {%- endif -%}
                     </div>
                     <div class="flex-1">
                       <div class="flex flex-col">
-                        <h2 class="text-base font-semibold mb-2">{{ name }}</h2>
-                        <div class="text-[0.9375rem] text-[#0F0F0F] leading-6">
+                        <h2 class="mb-2 text-base font-semibold">{{ name }}</h2>
+                        <div class="text-[0.9375rem] leading-6 text-[#0F0F0F]">
                           <div class="desc">
                             {% render 'text-truncation', text: description, id: name %}
                           </div>
@@ -867,7 +879,7 @@
     {% endcomment %}
 
     <!-- Mobile-only collapsible tabs, shown below the description/parameters section -->
-    <div class="block md:hidden mt-6">
+    <div class="mt-6 block md:hidden">
       {% for block in section.blocks %}
         {% if block.type == 'collapsible_tab' %}
           <div class="product__accordion accordion quick-add-hidden" {{ block.shopify_attributes }}>
@@ -921,7 +933,6 @@
         {% endfor %}
       </div>
     {% endif %}
-
 
     <script type="application/ld+json">
       {{ product | structured_data }}
