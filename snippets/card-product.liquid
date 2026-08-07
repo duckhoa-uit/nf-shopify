@@ -24,6 +24,11 @@
              onscroll="this.style.setProperty('--scroll-shadow-left', this.scrollLeft > 0 ? '1' : '0'); this.style.setProperty('--scroll-shadow-right', this.scrollLeft < this.scrollWidth - this.clientWidth ? '1' : '0')">
         {%- assign tag_count = 0 -%}
 
+        {% render 'automatic-discount-preview',
+          product: card_product,
+          variant: display_variant,
+          presentation: 'badge'
+        %}
         {% render 'discount-badge', product: card_product %}
 
         <!-- Product tags from metafields (max 3) -->
