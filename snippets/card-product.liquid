@@ -15,6 +15,7 @@
 {% endcomment %}
 
 {%- if card_product and card_product != empty -%}
+  {%- assign display_variant = card_product.selected_or_first_available_variant -%}
   <div class="card-wrapper h-full">
     <div class="flex flex-col h-full relative">
       <div class="relative">
@@ -23,6 +24,11 @@
              onscroll="this.style.setProperty('--scroll-shadow-left', this.scrollLeft > 0 ? '1' : '0'); this.style.setProperty('--scroll-shadow-right', this.scrollLeft < this.scrollWidth - this.clientWidth ? '1' : '0')">
         {%- assign tag_count = 0 -%}
 
+        {% render 'automatic-discount-preview',
+          product: card_product,
+          variant: display_variant,
+          presentation: 'badge'
+        %}
         {% render 'discount-badge', product: card_product %}
 
         <!-- Product tags from metafields (max 3) -->
@@ -566,7 +572,6 @@
           <h3 class="text-base font-semibold leading-[1.625rem] text-[#0F0F0F]">{{ card_product.title | escape }}</h3>
         </a>
 
-        {%- assign display_variant = card_product.selected_or_first_available_variant -%}
         {% render 'automatic-discount-preview', product: card_product, variant: display_variant, presentation: 'card' %}
       </div>
     </div>
