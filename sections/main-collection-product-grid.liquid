@@ -85,102 +85,54 @@
 
       <div class="collection-header-controls mt-6 md:mb-12">
         {%- liquid
-          # Use the current collection's parent as the navigation context when
-          # rendering a child collection. This keeps sibling category links
-          # visible on filtered/deep collection pages, like the legacy store.
-          assign navigation_parent = collection
-          assign collection_parent = collection.metafields.custom.parent_collection.value
+          assign activities_filter = null
 
-          if collection_parent != blank
-            assign navigation_parent = collection_parent
-          endif
-
-          assign has_navigation_links = false
-
-          for child in collections
-            assign child_parent = child.metafields.custom.parent_collection.value
-
-            if child_parent != blank
-              if child_parent.handle == navigation_parent.handle or child_parent.id == navigation_parent.id
-                assign has_navigation_links = true
-                break
-              endif
+          for filter in collection.filters
+            if filter.param_name == 'filter.p.m.custom_features.activities'
+              assign activities_filter = filter
+              break
+            elsif filter.param_name == 'filter.p.m.features.activities'
+              assign activities_filter = filter
+              break
             endif
           endfor
         -%}
 
-        <div class="collection-header-left">
-          {%- if has_navigation_links -%}
+        <div class="collection-header-left" id="ActivityFilterChips">
+          {%- if activities_filter and activities_filter.values.size > 0 -%}
+            {%- liquid
+              assign activity_values = activities_filter.values
+
+              if activities_filter.operator == 'AND'
+                assign active_activity_values = activities_filter.values | where: 'active', true
+                assign inactive_activity_values = activities_filter.values | where: 'active', false
+                assign activity_values = active_activity_values | concat: inactive_activity_values
+              endif
+            -%}
+
             <div class="child-collections-wrapper">
               <div class="child-collections-scroll">
                 <div class="child-collections-list">
-                  {%- for child_collection in collections -%}
-                    {%- liquid
-                      assign child_parent = child_collection.metafields.custom.parent_collection.value
-                      assign child_matches_parent = false
-
-                      if child_parent != blank
-                        if child_parent.handle == navigation_parent.handle or child_parent.id == navigation_parent.id
-                          assign child_matches_parent = true
-                        endif
-                      endif
-                    -%}
-
-                    {%- if child_matches_parent and child_collection.products_count > 0 -%}
-                      {%- liquid
-                        assign child_label = child_collection.metafields.custom.display_name.value | default: child_collection.title
-
-                        if child_label contains navigation_parent.title
-                          assign child_label = child_label | remove_first: navigation_parent.title | remove_first: ' - ' | strip
-                        endif
-                      -%}
-
+                  {%- for value in activity_values -%}
+                    {%- if value.count == 0 and value.active == false -%}
+                      <span class="child-collection-link disabled" aria-disabled="true">
+                        <span class="child-collection-title">{{- value.label | escape -}}</span>
+                      </span>
+                    {%- else -%}
                       <a
-                        href="{{ child_collection.url }}"
-                        class="child-collection-link{% if child_collection.id == collection.id %} active{% endif %}"
-                        {% if child_collection.id == collection.id %}aria-current="page"{% endif %}
+                        href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+                        class="child-collection-link{% if value.active %} active{% endif %}"
+                        {% if value.active %}
+                          aria-current="true"
+                        {% endif %}
                       >
-                        <span class="child-collection-title">{{- child_label | escape -}}</span>
+                        <span class="child-collection-title">{{- value.label | escape -}}</span>
                       </a>
                     {%- endif -%}
                   {%- endfor -%}
                 </div>
               </div>
             </div>
-          {%- else -%}
-            {%- comment -%} Fallback: Render activities when no category hierarchy exists {%- endcomment -%}
-            {%- liquid
-              assign activities_filter = null
-              for filter in collection.filters
-                if filter.param_name == 'filter.p.m.custom_features.activities'
-                  assign activities_filter = filter
-                  break
-                elsif filter.param_name == 'filter.p.m.features.activities'
-                  assign activities_filter = filter
-                  break
-                endif
-              endfor
-            -%}
-
-            {%- if activities_filter and activities_filter.values.size > 0 -%}
-              <div class="child-collections-wrapper">
-                <div class="child-collections-scroll">
-                  <div class="child-collections-list">
-                    {%- for value in activities_filter.values -%}
-                      {%- unless value.count == 0 and value.active == false -%}
-                        <a
-                          href="{{ value.url_to_add }}"
-                          class="child-collection-link{% if value.active %} active{% endif %}"
-                          {% if value.active %}aria-current="page"{% endif %}
-                        >
-                          <span class="child-collection-title">{{- value.label | escape -}}</span>
-                        </a>
-                      {%- endunless -%}
-                    {%- endfor -%}
-                  </div>
-                </div>
-              </div>
-            {%- endif -%}
           {%- endif -%}
         </div>
 
@@ -544,8 +496,8 @@
               </div>
             {%- endif -%}
           </div>
-          <div class="max-w-[800px] mt-12 mb-8" id="collection-description-full">
-            <div class="text-balance text-sm leading-5 lg:text-base lg:leading-6 text-[#3d3d3d]">
+          <div class="mt-12 mb-8 max-w-[800px]" id="collection-description-full">
+            <div class="text-sm leading-5 text-balance text-[#3d3d3d] lg:text-base lg:leading-6">
               {{ collection.description }}
             </div>
           </div>

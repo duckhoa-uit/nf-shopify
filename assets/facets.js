@@ -288,7 +288,7 @@ class FacetFiltersForm extends HTMLElement {
 
   static renderAdditionalElements(html) {
     // Handle elements that have single instances
-    const singleElementSelectors = [".mobile-facets__open", ".sorting"];
+    const singleElementSelectors = ["#ActivityFilterChips", ".mobile-facets__open", ".sorting"];
 
     singleElementSelectors.forEach((selector) => {
       const sourceElement = html.querySelector(selector);
