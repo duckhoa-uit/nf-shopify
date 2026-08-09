@@ -93,53 +93,53 @@ class FacetFiltersForm extends HTMLElement {
       });
 
     // Re-initialize product card hover functionality after DOM update
-    if (window.ProductCardHover && typeof window.ProductCardHover.reinitialize === 'function') {
+    if (window.ProductCardHover && typeof window.ProductCardHover.reinitialize === "function") {
       window.ProductCardHover.reinitialize();
     }
 
     // Re-run products per page JavaScript after AJAX update
-    if (window.handleProductsPerPageWithJS && typeof window.handleProductsPerPageWithJS === 'function') {
+    if (window.handleProductsPerPageWithJS && typeof window.handleProductsPerPageWithJS === "function") {
       setTimeout(() => {
         try {
-          console.log('Updating pagination after filter change...');
+          console.log("Updating pagination after filter change...");
 
           if (window.handleProductsPerPageWithJS) {
             window.handleProductsPerPageWithJS();
           }
 
           // Check if facets system already updated pagination text correctly
-          const productCountElement = document.getElementById('ProductCount');
-          const wasFacetsUpdated = productCountElement?.getAttribute('data-facets-updated') === 'true';
+          const productCountElement = document.getElementById("ProductCount");
+          const wasFacetsUpdated = productCountElement?.getAttribute("data-facets-updated") === "true";
 
-          console.log('Facets update check:', { wasFacetsUpdated, hasProductCount: !!productCountElement });
+          console.log("Facets update check:", { wasFacetsUpdated, hasProductCount: !!productCountElement });
 
           // Only call updateProductCount if facets didn't already update it correctly
-          if (!wasFacetsUpdated && window.updateProductCount && typeof window.updateProductCount === 'function') {
-            console.log('Calling updateProductCount because facets did not update');
+          if (!wasFacetsUpdated && window.updateProductCount && typeof window.updateProductCount === "function") {
+            console.log("Calling updateProductCount because facets did not update");
             window.updateProductCount();
           } else if (wasFacetsUpdated) {
-            console.log('Skipping updateProductCount because facets already updated correctly');
+            console.log("Skipping updateProductCount because facets already updated correctly");
           }
 
-          if (window.updateViewMoreButton && typeof window.updateViewMoreButton === 'function') {
+          if (window.updateViewMoreButton && typeof window.updateViewMoreButton === "function") {
             window.updateViewMoreButton();
           }
 
-          console.log('Pagination update completed successfully');
+          console.log("Pagination update completed successfully");
         } catch (error) {
-          console.error('Error updating pagination after filter change:', error);
+          console.error("Error updating pagination after filter change:", error);
 
           // Fallback: try to update at least the product count if facets didn't
           try {
-            const productCountElement = document.getElementById('ProductCount');
-            const wasFacetsUpdated = productCountElement?.getAttribute('data-facets-updated') === 'true';
+            const productCountElement = document.getElementById("ProductCount");
+            const wasFacetsUpdated = productCountElement?.getAttribute("data-facets-updated") === "true";
 
             if (!wasFacetsUpdated && window.updateProductCount) {
-              console.log('Fallback: Calling updateProductCount');
+              console.log("Fallback: Calling updateProductCount");
               window.updateProductCount();
             }
           } catch (fallbackError) {
-            console.error('Fallback product count update also failed:', fallbackError);
+            console.error("Fallback product count update also failed:", fallbackError);
           }
         }
       }, 200); // Increased timeout from 100ms to 200ms for better reliability
@@ -166,15 +166,15 @@ class FacetFiltersForm extends HTMLElement {
       container.classList.remove("loading");
 
       // CRITICAL: Extract and store filtered total count as data attribute
-      const filteredTotalCount = productCountElement.getAttribute('data-total-count');
+      const filteredTotalCount = productCountElement.getAttribute("data-total-count");
       if (filteredTotalCount) {
-        container.setAttribute('data-total-count', filteredTotalCount);
-        console.log('renderProductCount: Updated data-total-count to:', filteredTotalCount);
+        container.setAttribute("data-total-count", filteredTotalCount);
+        console.log("renderProductCount: Updated data-total-count to:", filteredTotalCount);
       }
 
       // Mark that this was updated by facets system (filtered results)
-      container.setAttribute('data-facets-updated', 'true');
-      console.log('renderProductCount: Updated with filtered results');
+      container.setAttribute("data-facets-updated", "true");
+      console.log("renderProductCount: Updated with filtered results");
     }
 
     if (containerDesktop) {
@@ -182,13 +182,13 @@ class FacetFiltersForm extends HTMLElement {
       containerDesktop.classList.remove("loading");
 
       // Also update desktop container data attribute if it exists
-      const filteredTotalCount = productCountElement.getAttribute('data-total-count');
+      const filteredTotalCount = productCountElement.getAttribute("data-total-count");
       if (filteredTotalCount) {
-        containerDesktop.setAttribute('data-total-count', filteredTotalCount);
+        containerDesktop.setAttribute("data-total-count", filteredTotalCount);
       }
 
       // Mark that this was updated by facets system (filtered results)
-      containerDesktop.setAttribute('data-facets-updated', 'true');
+      containerDesktop.setAttribute("data-facets-updated", "true");
     }
 
     const loadingSpinners = document.querySelectorAll(
@@ -305,18 +305,18 @@ class FacetFiltersForm extends HTMLElement {
 
     // Update each counter by matching their parent summary elements
     sourceCountElements.forEach((sourceCount) => {
-      const sourceSummary = sourceCount.closest('.mobile-facets__summary');
+      const sourceSummary = sourceCount.closest(".mobile-facets__summary");
       if (!sourceSummary) return;
 
-      const sourceLabelText = sourceSummary.querySelector('.mobile-facets__label')?.textContent?.trim();
+      const sourceLabelText = sourceSummary.querySelector(".mobile-facets__label")?.textContent?.trim();
       if (!sourceLabelText) return;
 
       // Find the corresponding target element by matching label text
       targetCountElements.forEach((targetCount) => {
-        const targetSummary = targetCount.closest('.mobile-facets__summary');
+        const targetSummary = targetCount.closest(".mobile-facets__summary");
         if (!targetSummary) return;
 
-        const targetLabelText = targetSummary.querySelector('.mobile-facets__label')?.textContent?.trim();
+        const targetLabelText = targetSummary.querySelector(".mobile-facets__label")?.textContent?.trim();
         if (targetLabelText === sourceLabelText) {
           targetCount.innerHTML = sourceCount.innerHTML;
         }
@@ -331,7 +331,7 @@ class FacetFiltersForm extends HTMLElement {
         // Remove existing event listeners to prevent duplicates
         const existingHandlers = menuDrawer._facetEventHandlers;
         if (existingHandlers) {
-          existingHandlers.forEach(handler => {
+          existingHandlers.forEach((handler) => {
             handler.element.removeEventListener(handler.event, handler.listener);
           });
         }
@@ -340,40 +340,40 @@ class FacetFiltersForm extends HTMLElement {
         menuDrawer._facetEventHandlers = [];
 
         // Rebind summary click events for mobile facets details
-        menuDrawer.querySelectorAll('.mobile-facets__details summary').forEach((summary) => {
+        menuDrawer.querySelectorAll(".mobile-facets__details summary").forEach((summary) => {
           const clickHandler = menuDrawer.onSummaryClick.bind(menuDrawer);
-          summary.addEventListener('click', clickHandler);
+          summary.addEventListener("click", clickHandler);
           menuDrawer._facetEventHandlers.push({
             element: summary,
-            event: 'click',
-            listener: clickHandler
+            event: "click",
+            listener: clickHandler,
           });
         });
 
         // Rebind mobile facets close button events
-        menuDrawer.querySelectorAll('.mobile-facets__close-button').forEach((button) => {
+        menuDrawer.querySelectorAll(".mobile-facets__close-button").forEach((button) => {
           const clickHandler = menuDrawer.onCloseButtonClick.bind(menuDrawer);
-          button.addEventListener('click', clickHandler);
+          button.addEventListener("click", clickHandler);
           menuDrawer._facetEventHandlers.push({
             element: button,
-            event: 'click',
-            listener: clickHandler
+            event: "click",
+            listener: clickHandler,
           });
         });
 
         // Rebind close elements
-        menuDrawer.querySelectorAll('.mobile-facets__close').forEach((closeElement) => {
+        menuDrawer.querySelectorAll(".mobile-facets__close").forEach((closeElement) => {
           const clickHandler = menuDrawer.onMobileFacetsCloseClick.bind(menuDrawer);
-          closeElement.addEventListener('click', clickHandler);
+          closeElement.addEventListener("click", clickHandler);
           menuDrawer._facetEventHandlers.push({
             element: closeElement,
-            event: 'click',
-            listener: clickHandler
+            event: "click",
+            listener: clickHandler,
           });
         });
 
         // Re-call bindEvents to ensure all other events are properly bound
-        if (typeof menuDrawer.bindEvents === 'function') {
+        if (typeof menuDrawer.bindEvents === "function") {
           menuDrawer.bindEvents();
         }
       }
@@ -516,9 +516,9 @@ class FacetFiltersForm extends HTMLElement {
 
     // Always preserve products_per_page from current URL if it exists
     const currentUrlParams = new URLSearchParams(window.location.search);
-    const currentProductsPerPage = currentUrlParams.get('products_per_page');
-    if (currentProductsPerPage && currentProductsPerPage !== '24') {
-      params.set('products_per_page', currentProductsPerPage);
+    const currentProductsPerPage = currentUrlParams.get("products_per_page");
+    if (currentProductsPerPage && currentProductsPerPage !== "24") {
+      params.set("products_per_page", currentProductsPerPage);
     }
 
     return params.toString();
@@ -541,7 +541,8 @@ class FacetFiltersForm extends HTMLElement {
     } else {
       const forms = [];
       const targetForm = event.target.closest("form");
-      const isMobile = targetForm && (targetForm.id === "FacetFiltersFormMobile" || targetForm.id === "FacetSortFormMobile");
+      const isMobile =
+        targetForm && (targetForm.id === "FacetFiltersFormMobile" || targetForm.id === "FacetSortFormMobile");
 
       sortFilterForms.forEach((form) => {
         if (!isMobile) {
@@ -744,11 +745,11 @@ class PriceRange extends HTMLElement {
     const max = Number(this.maxInput.getAttribute("data-max")) || 500;
 
     // Debug log to check values
-    console.log('Price slider debug:', {
+    console.log("Price slider debug:", {
       min,
       max,
       dataMaxAttr: this.maxInput.getAttribute("data-max"),
-      inputValue: this.maxInput.value
+      inputValue: this.maxInput.value,
     });
 
     // Get current values directly from the input fields
@@ -783,7 +784,7 @@ class PriceRange extends HTMLElement {
       this.initialized = true;
       // Add initialized class to show the slider
       if (this.sliderContainer) {
-        this.sliderContainer.classList.add('initialized');
+        this.sliderContainer.classList.add("initialized");
       }
     }
   }
