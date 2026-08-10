@@ -8,13 +8,13 @@
     4. gray-100 placeholder
 
   @param {object} link - Liquid link object from a linklist
-  @param {string} [size] - Image source width hint (defaults to 256)
+  @param {number} [size] - Image source width hint (defaults to 256)
   @param {string} [image_class] - CSS class for the <img> / placeholder (defaults to menu-drawer__tile-img)
   @param {string} [widths] - image_tag widths attribute (defaults to '128,256')
   @param {string} [sizes] - image_tag sizes attribute (defaults to '128px')
 
   @example
-    {% render 'menu-link-image', link: childlink %}
+  {% render 'menu-link-image', link: childlink %}
 {% enddoc %}
 
 {%- liquid
@@ -41,12 +41,7 @@
   {{
     img
     | image_url: width: target_width
-    | image_tag:
-      class: img_class,
-      loading: 'lazy',
-      widths: img_widths,
-      sizes: img_sizes,
-      alt: link.title
+    | image_tag: class: img_class, loading: 'lazy', widths: img_widths, sizes: img_sizes, alt: link.title
   }}
 {%- else -%}
   <span class="{{ placeholder_class }}" aria-hidden="true"></span>
