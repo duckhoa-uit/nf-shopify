@@ -174,13 +174,8 @@
   if localization.market.handle != blank and settings.market_social_vimeo_link != blank
     assign market_social_vimeo_link = settings.market_social_vimeo_link
   endif
-  assign market_contact_phone = settings.contact_phone
-  assign market_contact_email = settings.contact_email
-  if localization.market.handle != blank
-    # Market overrides are merchant-managed. Do not fall back to default-market values.
-    assign market_contact_phone = settings.market_contact_phone
-    assign market_contact_email = settings.market_contact_email
-  endif
+  assign contact_phone = 'templates.contact.info.phone' | t
+  assign contact_email = 'templates.contact.info.email' | t
     assign has_social_icons = true
     if market_social_facebook_link == blank and market_social_instagram_link == blank and market_social_youtube_link == blank and market_social_tiktok_link == blank and market_social_twitter_link == blank and market_social_pinterest_link == blank and market_social_snapchat_link == blank and market_social_tumblr_link == blank and market_social_vimeo_link == blank
       assign has_social_icons = false
@@ -322,14 +317,6 @@
                           <div class="rte">{{ settings.brand_description }}</div>
                         {%- endif -%}
                       {% endcomment %}
-                      {%- liquid
-                        assign contact_phone = market_contact_phone
-                        assign contact_email = market_contact_email
-                        if localization.language.iso_code == 'de'
-                          assign contact_phone = 'templates.contact.info.phone' | t
-                          assign contact_email = 'templates.contact.info.email' | t
-                        endif
-                      -%}
                       <div class="flex flex-col w-full gap-y-3 [&_a]:flex [&_a]:items-center [&_a]:gap-2 [&_a]:text-gray-850 [&_a]:text-sm [&_a]:hover:text-accent [&_a]:transition-colors">
                         {%- if contact_phone != blank -%}
                           <a href="tel:{{ contact_phone | remove: ' ' | escape }}" class="flex_address">
