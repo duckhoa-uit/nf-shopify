@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-08-12 16:16:02
+ At 2026-08-12 16:20:26
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -56,8 +56,8 @@
  endif
  endif
  %}
- <section class="ecom-row ecom-core ecom-section ecom-6mppp6jyvbx" data-id="ecom-6mppp6jyvbx" style="z-index: inherit;"><div class="core__row--columns core__row--full"><div class="ecom-column ecom-core core__column--first core__column--last ecom-lpos7r9pdoj"><div class="core__column--wrapper" id="ecom-lpos7r9pdoj"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks" style="--ecom-global-elements-space: 0px;"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-43oc4az2544"><div class="ecom-element ecom-shopify__search-and-filter ecom-search-and-filter" section_id="ecom-6mppp6jyvbx" deep="1"><div class="ecom-shopify__search-and-filter-inner"><form class="ecom-filter-form"><ul class="ecom-iconlist--list" data-layout="default"><li class="ecom-filter-search--item ecom-html"><label class="ecom__form-field-label">Year</label><div class="ecom-filter-search--container"><div class="ecom-filter-search-content"><select name="custom.year" class="ecom__filter-select" id="ecom-select-filter-search-custom_select-0" placeholder="All" value="all"><option selected="" value="all">All</option><option value="1990">1990</option><option value="1995">1995</option><option value="2000">2000</option><option value="2001">2001</option><option value="2024">2024</option></select></div></div><label style="display: none;"><small style="color: red;">* The required field is not filled</small></label><label style="display: none;"><small style="color: red;">* Custom name must be unique</small></label></li><li class="ecom-filter-search--item ecom-html"><label class="ecom__form-field-label">Make</label><div class="ecom-filter-search--container"><div class="ecom-filter-search-content"><select name="custom.make" class="ecom__filter-select" id="ecom-select-filter-search-custom_select-1" placeholder="All" value="all"><option selected="" value="all">All</option><option value="Toyota">Toyota</option><option value="Huyndai">Huyndai</option><option value="Kia">Kia</option><option value="Mazda">Mazda</option></select></div></div><label style="display: none;"><small style="color: red;">* The required field is not filled</small></label><label style="display: none;"><small style="color: red;">* Custom name must be unique</small></label></li><li class="ecom-filter-search--item ecom-html"><label class="ecom__form-field-label">Modern</label><div class="ecom-filter-search--container"><div class="ecom-filter-search-content"><select name="custom.modern" class="ecom__filter-select" id="ecom-select-filter-search-custom_select-2" placeholder="All" value="all"><option selected="" value="all">All</option><option value="Camry">Camry</option><option value="K3">K3</option><option value="Kona">Kona</option><option value="CX5">CX5</option></select></div></div><label style="display: none;"><small style="color: red;">* The required field is not filled</small></label><label style="display: none;"><small style="color: red;">* Custom name must be unique</small></label></li><li ecom-filter-search--item="" ecom-html=""><div class="ecom__form-action"><button type="button" class="ecom__form-filter-search-button" data="_self"><span class="ecom_form-filter-search-submit--text">Search</span></button></div></li></ul></form></div></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-kz0ckrb05zr"><div class="ecom-element ecom-shopify ecom-shopify__collection" section_id="ecom-6mppp6jyvbx" deep="1"><div class="ecom-element ecom-shopify ecom-shopify__collection-wrapper"><div class="ecom-element ecom-shopify ecom-shopify__collection-container ecom-shopify__collection-style-grid ecom-shopify__collection-layout-1">
- {% capture limit%}4{%endcapture%}
+ <section class="ecom-row ecom-core ecom-section ecom-6mppp6jyvbx" data-id="ecom-6mppp6jyvbx" style="z-index: inherit;"><div class="core__row--columns core__row--full"><div class="ecom-column ecom-core core__column--first core__column--last ecom-lpos7r9pdoj"><div class="core__column--wrapper" id="ecom-lpos7r9pdoj"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks" style="--ecom-global-elements-space: 0px;"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-kz0ckrb05zr"><div class="ecom-element ecom-shopify ecom-shopify__collection" section_id="ecom-6mppp6jyvbx" deep="1"><div class="ecom-element ecom-shopify ecom-shopify__collection-wrapper"><div class="ecom-element ecom-shopify ecom-shopify__collection-container ecom-shopify__collection-style-grid ecom-shopify__collection-layout-1">
+ {% capture limit%}12{%endcapture%}
  {% assign limit = limit | plus: 0 %}
  {% assign count = 0 %}
  {% capture image_ratio%}adapt{% endcapture %}
@@ -65,22 +65,12 @@
  {% assign description_length = description_length | plus: 0 %}
  
  <div class="ecom-shopify__list-collections " role="list">
- 
- 
- 
- {%- capture menu-%}846890402124-child-f0271859a3c680e4b00f55c05da2fcc4-legacy-equipment{%- endcapture -%}
- {%- liquid
- assign handles = ''
- for link in linklists[menu].links
- assign handle = link.url | split: '/' | last
- assign handles = handles | append: handle | append: ','
- endfor
- -%}
+ {% capture handles %}summer-mega-sale,outdoor-sale-autumn,outdoor-sale-winter{% endcapture %}
  {% assign handles = handles | split: ','%}
+ 
  {% for handle in handles %}
  {% assign collection_item = collections[handle] %}
  {%- if collection_item == empty -%}{% continue %}{%- endif -%}
- 
  
  
  
