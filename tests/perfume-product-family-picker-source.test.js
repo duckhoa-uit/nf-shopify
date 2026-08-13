@@ -40,6 +40,24 @@ describe("perfume product-family picker", () => {
     expect(source).toContain("instance_id | default: product.id | handleize");
   });
 
+  test("uses an EComposer adapter to hide only a singleton family size option", () => {
+    const adapter = readProjectFile("snippets/perfume-product-family-picker-ecomposer.liquid");
+
+    expect(adapter).toContain("render 'is-size-option', option: option, product: product");
+    expect(adapter).toContain("option.values.size == 1");
+    expect(adapter).toContain("ecomposer_size_option_handle = option.name | handleize");
+    expect(adapter).toContain("ecomposer_size_option_index = option.position | minus: 1");
+    expect(adapter).toContain("assign size_option = product.options_by_name.Size");
+    expect(adapter).toContain("size_option.values.size == 1");
+    expect(adapter).toContain("ecom-product-single__picker-option-{{ ecomposer_size_option_handle }}");
+    expect(adapter).toContain(
+      '.selector-wrapper:has(.single-option-selector[data-option-index="{{ ecomposer_size_option_index }}"])',
+    );
+    expect(adapter).toContain("display: none !important");
+    expect(adapter).toContain("render 'perfume-product-family-picker'");
+    expect(adapter).not.toContain("ecom-product-single__picker-option-color");
+  });
+
   test("loads the component stylesheet on the maintained perfume PDP", () => {
     const section = readProjectFile("sections/main-product-parfums.liquid");
     const styles = readProjectFile("assets/perfume-product-family-picker.css");

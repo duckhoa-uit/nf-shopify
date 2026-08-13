@@ -1,0 +1,65 @@
+{% comment %}
+  EComposer placement adapter for the perfume product-family picker.
+
+  EComposer owns real in-product variant options such as Color. Perfume volume
+  is represented by sibling products, so a singleton size option is hidden from
+  EComposer's generated presentation while its only value remains part of the
+  product's variant data.
+
+  Accepts:
+  - product: {Object} Current product.
+  - instance_id: {String} Unique component instance identifier.
+
+  Usage:
+  {% render 'perfume-product-family-picker-ecomposer', product: product, instance_id: 'EComposerPerfumeFamilyPicker' %}
+{% endcomment %}
+
+{%- liquid
+  assign perfume_group = product.metafields.custom.parfum_group.value
+  assign family_products = perfume_group.products.value
+
+  if family_products == blank
+    assign family_products = product.metafields.custom.product_in_group.value
+  endif
+
+  assign ecomposer_size_option_handle = blank
+  assign ecomposer_size_option_index = blank
+  assign picker_instance_id = instance_id | default: 'EComposerPerfumeFamilyPicker'
+
+  if family_products != blank
+    for option in product.options_with_values
+      capture is_size_option
+        render 'is-size-option', option: option, product: product
+      endcapture
+      assign is_size_option = is_size_option | strip
+
+      if is_size_option == 'true' and option.values.size == 1
+        assign ecomposer_size_option_handle = option.name | handleize
+        assign ecomposer_size_option_index = option.position | minus: 1
+        break
+      endif
+    endfor
+
+    if ecomposer_size_option_handle == blank
+      assign size_option = product.options_by_name.Size
+      if size_option != blank and size_option.values.size == 1
+        assign ecomposer_size_option_handle = size_option.name | handleize
+        assign ecomposer_size_option_index = size_option.position | minus: 1
+      endif
+    endif
+  endif
+-%}
+
+{{ 'perfume-product-family-picker.css' | asset_url | stylesheet_tag }}
+
+{%- if ecomposer_size_option_handle != blank -%}
+  <style data-perfume-ecomposer-size-ownership>
+    .ecom-product-single__variant-picker .ecom-product-single__picker-option-{{ ecomposer_size_option_handle }},
+    .ecom-product-single__variant-picker .selector-wrapper:has(.single-option-selector[data-option-index="{{ ecomposer_size_option_index }}"]) {
+      /* EComposer's generated rules otherwise re-display its duplicate volume control. */
+      display: none !important;
+    }
+  </style>
+{%- endif -%}
+
+{% render 'perfume-product-family-picker', product: product, instance_id: picker_instance_id %}
