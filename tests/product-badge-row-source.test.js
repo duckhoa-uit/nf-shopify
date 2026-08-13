@@ -25,6 +25,15 @@ describe("canonical product badge rendering", () => {
     expect(source).not.toContain("metafields.custom_features.extra.value");
   });
 
+  test("preserves the promotion metafield reference order", () => {
+    const source = readProjectFile("snippets/product-badge-row.liquid");
+
+    expect(source).toContain("for promotion in product.metafields.custom_features.promotion.value");
+    expect(source).not.toMatch(/custom_features\.promotion\.value\s*\|\s*(sort|sort_natural|reverse)/);
+    expect(source).not.toMatch(/assign\s+\w*promotions?\s*=.*\|\s*(sort|sort_natural|reverse)/);
+    expect(source).not.toContain("promotion.name contains");
+  });
+
   test("keeps badges on one clipped row without a horizontal scroller", () => {
     const sharedRow = readProjectFile("snippets/product-badge-row.liquid");
     const card = readProjectFile("snippets/card-product.liquid");

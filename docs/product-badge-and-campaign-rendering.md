@@ -128,6 +128,11 @@ standard/Northkit PDPs, and maintained parfum PDPs. It renders:
 The highest-priority promotion must therefore be the first reference in
 `custom_features.promotion`.
 
+The renderer preserves the reference order stored on the Product metafield. It
+does not sort, reverse, group, or reprioritize promotions by name, style, or
+campaign type. Blank names are skipped without changing the relative order of
+the remaining entries, and the first two nonblank references are rendered.
+
 `custom_features.extra` is not rendered. This prevents category-like,
 internal, durable, or legacy Extra values from displacing active campaign
 labels.
