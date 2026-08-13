@@ -43,10 +43,15 @@
   endif
 
   assign preview_variant = variant | default: product.selected_or_first_available_variant
+
+  assign refresh_on_variant_change = false
+  if badge_class contains 'product-discount-badge'
+    assign refresh_on_variant_change = true
+  endif
 -%}
 
 <div
-  {% if badge_class == 'product-discount-badge' %}
+  {% if refresh_on_variant_change %}
     id="AutomaticDiscountBadge-{{ section.id }}"
   {% endif %}
   class="contents"
@@ -71,7 +76,7 @@
   {%- endif -%}
 </div>
 
-{% if badge_class == 'product-discount-badge' %}
+{% if refresh_on_variant_change %}
   <script>
     (() => {
       const badgeContainer = document.getElementById('AutomaticDiscountBadge-{{ section.id }}');

@@ -1,0 +1,102 @@
+{% comment %}
+  Renders the canonical product badge row.
+
+  Badge priority:
+  1. Price/automatic-discount badges
+  2. Promotion metafields
+
+  `custom_features.extra` is intentionally not rendered as a badge. Extra
+  values are durable product metadata and must not displace campaign labels.
+
+  Accepts:
+  - product: Product object (required)
+  - variant: Variant object (optional)
+  - context: 'card' or 'pdp' (optional, defaults to 'card')
+  - promotion_limit: Maximum promotion labels to render (optional, defaults to 2)
+{% endcomment %}
+
+{%- liquid
+  assign badge_context = context | default: 'card'
+  assign maximum_promotions = promotion_limit | default: 2
+  assign promotion_count = 0
+
+  if badge_context == 'pdp'
+    assign discount_badge_class = 'product-discount-badge product-badge-row__discount'
+  else
+    assign discount_badge_class = 'product-badge-row__discount'
+  endif
+-%}
+
+<div class="product-badge-row product-badge-row--{{ badge_context }}">
+  {% render 'discount-badge', product: product, variant: variant, badge_class: discount_badge_class %}
+
+  {%- if product.metafields.custom_features.promotion.value != blank -%}
+    {%- for promotion in product.metafields.custom_features.promotion.value -%}
+      {%- capture promotion_name -%}{{ promotion.name }}{%- endcapture -%}
+      {%- assign promotion_name = promotion_name | strip -%}
+
+      {%- if promotion_count < maximum_promotions and promotion_name != blank -%}
+        <span class="product-badge-row__promotion{% if promotion_count == 0 %} product-badge-row__promotion--primary{% else %} product-badge-row__promotion--secondary{% endif %}">
+          {{- promotion_name -}}
+        </span>
+        {%- assign promotion_count = promotion_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .product-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .product-badge-row--card {
+    min-height: 2rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .product-badge-row__discount {
+    flex: 0 0 auto;
+    max-width: 100%;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.125rem;
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1rem;
+    overflow-wrap: anywhere;
+  }
+
+  .product-badge-row__promotion {
+    flex: 0 1 auto;
+    max-width: 100%;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.125rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1rem;
+    letter-spacing: 0.01em;
+    overflow-wrap: anywhere;
+    text-transform: uppercase;
+    white-space: normal;
+  }
+
+  .product-badge-row__promotion--primary {
+    border-color: var(--color-gray-950);
+    background-color: var(--color-gray-950);
+    color: var(--color-white);
+  }
+
+  .product-badge-row__promotion--secondary {
+    border-color: var(--color-border-medium);
+    background-color: var(--color-background);
+    color: var(--color-gray-850);
+  }
+{% endstylesheet %}

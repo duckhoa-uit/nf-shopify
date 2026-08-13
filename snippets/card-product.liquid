@@ -17,49 +17,7 @@
 {%- if card_product and card_product != empty -%}
   <div class="card-wrapper h-full">
     <div class="relative flex h-full flex-col">
-      <div class="relative">
-        <div
-          class="scrollbar-hide tag-container mb-1.5 flex h-8 items-center gap-2 overflow-x-auto"
-          style="scrollbar-width: none; -ms-overflow-style: none;"
-          onscroll="this.style.setProperty('--scroll-shadow-left', this.scrollLeft > 0 ? '1' : '0'); this.style.setProperty('--scroll-shadow-right', this.scrollLeft < this.scrollWidth - this.clientWidth ? '1' : '0')"
-        >
-          {%- assign tag_count = 0 -%}
-
-          {% render 'discount-badge', product: card_product %}
-
-          <!-- Product tags from metafields (max 3) -->
-          {%- if card_product.metafields.custom_features.extra.value -%}
-            {%- for extra_tag in card_product.metafields.custom_features.extra.value -%}
-              {%- if tag_count < 3 -%}
-                <span class="text-medium flex-shrink-0 rounded-[2px] border border-[#ccc] px-2 py-1 text-[13px] leading-4 text-[#4d4d4d] uppercase">
-                  {{- extra_tag.name -}}
-                </span>
-                {%- assign tag_count = tag_count | plus: 1 -%}
-              {%- endif -%}
-            {%- endfor -%}
-          {%- endif -%}
-
-          <!-- Promotion metafield -->
-          {%- if card_product.metafields.custom_features.promotion.value -%}
-            {%- for promotion in card_product.metafields.custom_features.promotion.value -%}
-              {%- if tag_count < 3 -%}
-                <span class="text-medium flex-shrink-0 rounded-[2px] border border-[#ccc] px-2 py-1 text-[13px] leading-4 text-[#4d4d4d] uppercase">
-                  {{- promotion.name -}}
-                </span>
-                {%- assign tag_count = tag_count | plus: 1 -%}
-              {%- endif -%}
-            {%- endfor -%}
-          {%- endif -%}
-        </div>
-
-        <!-- Shadow indicators for scrollable content -->
-        <div
-          class="shadow-left pointer-events-none absolute top-0 bottom-0 left-0 w-4 bg-gradient-to-r from-white to-transparent opacity-0 transition-opacity duration-200"
-        ></div>
-        <div
-          class="shadow-right pointer-events-none absolute top-0 right-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent opacity-100 transition-opacity duration-200"
-        ></div>
-      </div>
+      {% render 'product-badge-row', product: card_product, context: 'card', promotion_limit: 2 %}
 
       {%- if card_product.media.size > 0 -%}
         {%- liquid
@@ -592,13 +550,10 @@
 {%- else -%}
   <div class="card-wrapper h-full">
     <div class="relative flex h-full flex-col">
-      {%- comment -%} Empty tags container to match the spacing {%- endcomment -%}
-      <div class="relative">
-        <div class="scrollbar-hide tag-container mb-1.5 flex h-8 items-center gap-2 overflow-x-auto">
-          <span class="text-medium flex-shrink-0 rounded-[2px] border border-[#ccc] px-2 py-1 text-[13px] leading-4 text-[#4d4d4d] uppercase">
-            {{ 'onboarding.product_tag' | t | default: 'Sample Tag' }}
-          </span>
-        </div>
+      <div class="product-badge-row product-badge-row--card">
+        <span class="product-badge-row__promotion product-badge-row__promotion--primary">
+          {{- 'onboarding.product_tag' | t | default: 'Sample Tag' -}}
+        </span>
       </div>
 
       {%- comment -%} Placeholder image with same structure as product media {%- endcomment -%}
@@ -638,119 +593,3 @@
     </div>
   </div>
 {%- endif -%}
-
-{% comment %}
-  ============================================================
-    Styles - Scoped to this component
-  ============================================================
-{% endcomment %}
-{% stylesheet %}
-  /* Hide scrollbar for tag container while maintaining scroll functionality */
-  .scrollbar-hide {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Ensure tags don't wrap and maintain minimum width */
-  .scrollbar-hide .text-medium {
-    white-space: nowrap;
-    flex-shrink: 0;
-    min-width: fit-content;
-  }
-
-  /* Smooth scrolling behavior */
-  @media (prefers-reduced-motion: no-preference) {
-    .scrollbar-hide {
-      scroll-behavior: smooth;
-    }
-  }
-
-  /* Shadow indicators for scrollable content */
-  .tag-container[style*='--scroll-shadow-left: 1'] ~ .shadow-left {
-    opacity: 1 !important;
-  }
-
-  .tag-container[style*='--scroll-shadow-right: 0'] ~ .shadow-right {
-    opacity: 0 !important;
-  }
-
-  /* Initial state - show right shadow only if content overflows */
-  .tag-container {
-    position: relative;
-  }
-{% endstylesheet %}
-
-{% comment %}
-  ============================================================
-    JavaScript - Scoped and optimized with passive listeners
-  ============================================================
-{% endcomment %}
-{% javascript %}
-  // Initialize shadow visibility for tag containers - uses event delegation
-  (function () {
-    function updateShadows(container) {
-      const parent = container.parentElement;
-      const leftShadow = parent.querySelector('.shadow-left');
-      const rightShadow = parent.querySelector('.shadow-right');
-
-      if (!leftShadow || !rightShadow) return;
-
-      const isScrollable = container.scrollWidth > container.clientWidth;
-      const isAtStart = container.scrollLeft <= 0;
-      const isAtEnd = container.scrollLeft >= container.scrollWidth - container.clientWidth - 1;
-
-      if (!isScrollable) {
-        leftShadow.style.opacity = '0';
-        rightShadow.style.opacity = '0';
-      } else {
-        leftShadow.style.opacity = isAtStart ? '0' : '1';
-        rightShadow.style.opacity = isAtEnd ? '0' : '1';
-      }
-    }
-
-    // Use Intersection Observer for lazy initialization
-    const observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            const container = entry.target;
-            updateShadows(container);
-
-            // Add scroll listener with passive flag for performance
-            container.addEventListener(
-              'scroll',
-              function () {
-                updateShadows(container);
-              },
-              { passive: true },
-            );
-
-            observer.unobserve(container);
-          }
-        });
-      },
-      { rootMargin: '50px' },
-    );
-
-    // Observe all tag containers
-    document.querySelectorAll('.tag-container').forEach(function (container) {
-      observer.observe(container);
-    });
-
-    // Debounced resize handler
-    let resizeTimeout;
-    window.addEventListener(
-      'resize',
-      function () {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function () {
-          document.querySelectorAll('.tag-container').forEach(updateShadows);
-        }, 100);
-      },
-      { passive: true },
-    );
-  })();
-{% endjavascript %}

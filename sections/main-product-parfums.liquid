@@ -75,31 +75,7 @@
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
-          <div class="flex items-center justify-between">
-            <!-- Discount badge and product tags -->
-            <div class="flex items-center gap-2">
-              {% render 'discount-badge', product: product, badge_class: 'product-discount-badge' %}
-
-              <!-- Product tags from metafields -->
-              {%- if product.metafields.custom_features.extra.value -%}
-                {%- for extra_tag in product.metafields.custom_features.extra.value -%}
-                  <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
-                    {{- extra_tag.name -}}
-                  </span>
-                {%- endfor -%}
-              {%- endif -%}
-
-              <!-- Promotion metafield -->
-              {%- if product.metafields.custom_features.promotion.value -%}
-                {%- for promotion in product.metafields.custom_features.promotion.value -%}
-                  <span class="text-medium text-[13px] leading-4 uppercase text-[#4d4d4d] border border-[#ccc] px-2 py-1 rounded-[2px]">
-                    {{- promotion.name -}}
-                  </span>
-                {%- endfor -%}
-              {%- endif -%}
-            </div>
-            {% comment %} {% render 'wishlist-button', product: product, btn_class: 'bg-[#F5F5F5] size-10 rounded-full flex items-center justify-center' %} {% endcomment %}
-          </div>
+          {% render 'product-badge-row', product: product, context: 'pdp', promotion_limit: 2 %}
           {%- for block in section.blocks -%}
             {%- case block.type -%}
               {%- when '@app' -%}
@@ -117,7 +93,7 @@
                 </div>
               {%- when 'product_code' -%}
                 {%- if product.metafields.custom.catalog_code or product.metafields.custom.reference_code -%}
-                  <div class="product__code text-[#3D3D3D] text-sm leading-4 mt-1" {{ block.shopify_attributes }}>
+                  <div class="product__code mt-1 text-sm leading-4 text-[#3D3D3D]" {{ block.shopify_attributes }}>
                     {{ 'products.product.product_codes_label' | t }}
                     {%- if product.metafields.custom.catalog_code -%}
                       <span id="product-catalog">{{ product.metafields.custom.catalog_code }}</span>
@@ -144,7 +120,11 @@
                       assign current_variant = product.variants.first
                     endif
                   -%}
-                  {% render 'automatic-discount-preview', product: product, variant: current_variant, presentation: 'pdp' %}
+                  {% render 'automatic-discount-preview',
+                    product: product,
+                    variant: current_variant,
+                    presentation: 'pdp'
+                  %}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
@@ -182,10 +162,7 @@
                   </div>
                 {% endcomment %}
               {%- when 'variant_picker' -%}
-                {% render 'product-variant-picker-parfums',
-                  product: product,
-                  block: block
-                %}
+                {% render 'product-variant-picker-parfums', product: product, block: block %}
               {%- when 'inventory' -%}
                 <p
                   class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
@@ -345,7 +322,7 @@
                   </div>
                 </div>
               {%- when 'delivery_info' -%}
-                <div class="delivery_wrapper flex items-center gap-2 mt-6 mb-4" {{ block.shopify_attributes }}>
+                <div class="delivery_wrapper mt-6 mb-4 flex items-center gap-2" {{ block.shopify_attributes }}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -447,12 +424,12 @@
 
           {%- if product.metafields.custom.short_description != blank -%}
             <div class="mt-3">
-              <h2 id="short_description_heading" class="mb-3 font-semibold text-base">
+              <h2 id="short_description_heading" class="mb-3 text-base font-semibold">
                 {{ 'sections.main_product.you_will_like_it' | t }}
               </h2>
               <div
                 id="short_description"
-                class="text-[0.9375rem] font-medium text-[#0f0f0f] leading-6 [&_ul]:list-disc [&_ul]:pl-5"
+                class="text-[0.9375rem] leading-6 font-medium text-[#0f0f0f] [&_ul]:list-disc [&_ul]:pl-5"
               >
                 {% render 'format-short-description', text: product.metafields.custom.short_description %}
               </div>
@@ -563,7 +540,7 @@
     </script>
 
     <!-- Mobile-only collapsible tabs -->
-    <div class="block md:hidden mt-6">
+    <div class="mt-6 block md:hidden">
       {% for block in section.blocks %}
         {% if block.type == 'collapsible_tab' %}
           <div class="product__accordion accordion quick-add-hidden" {{ block.shopify_attributes }}>
