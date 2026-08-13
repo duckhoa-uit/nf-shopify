@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-08-13 10:10:31
+ At 2026-08-13 10:15:55
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -269,31 +269,9 @@
  </div>
  {% endif %}
  
- <div class="ecom-collection__product-badge">
  
  
- <span class="ecom-collection__product-badge--sold-out" aria-hidden="true" style="{%- if product.available == true -%}display: none; {%- endif -%}">
- {{ translation.ecom-7kxkj1lm3ew.ecom-67hyvqs1xa4.sold_text }}
- </span>
- <span class="ecom-collection__product-badge--sale" aria-hidden="true" style="{%- unless product.compare_at_price > product.price and product.available -%}display: none;{%- endunless -%}">
- {{ translation.ecom-7kxkj1lm3ew.ecom-67hyvqs1xa4.sale_text }}
- </span>
  
- {% if badge_tags %}
- {% for badge in badge_tags %}
- {% for original_tag in product.tags %}
- {% assign tag = original_tag | replace: ' ', ' ' %}
- {% if tag == badge %}
- <span class="ecom-collection__product-badge--custom ecom-collection__product-badge--{{ badge | handleize}}" aria-hidden="true">
- {{ badge }}
- </span>
- {% endif %}
- {% endfor %}
- {%- assign bad = badge | strip -%}
- {% endfor %}
- {% endif %}
- 
- </div>
  </a>
  
  <div class="ecom-collection__product-group-button-action " style="justify-content: start">
@@ -721,31 +699,9 @@
  </div>
  {% endif %}
  
- <div class="ecom-collection__product-badge">
  
  
- <span class="ecom-collection__product-badge--sold-out" aria-hidden="true" style="{%- if product.available == true -%}display: none; {%- endif -%}">
- {{ translation.ecom-u8oomtfoxo.ecom-er2hcxdfmur.sold_text }}
- </span>
- <span class="ecom-collection__product-badge--sale" aria-hidden="true" style="{%- unless product.compare_at_price > product.price and product.available -%}display: none;{%- endunless -%}">
- {{ translation.ecom-u8oomtfoxo.ecom-er2hcxdfmur.sale_text }}
- </span>
  
- {% if badge_tags %}
- {% for badge in badge_tags %}
- {% for original_tag in product.tags %}
- {% assign tag = original_tag | replace: ' ', ' ' %}
- {% if tag == badge %}
- <span class="ecom-collection__product-badge--custom ecom-collection__product-badge--{{ badge | handleize}}" aria-hidden="true">
- {{ badge }}
- </span>
- {% endif %}
- {% endfor %}
- {%- assign bad = badge | strip -%}
- {% endfor %}
- {% endif %}
- 
- </div>
  </a>
  
  <div class="ecom-collection__product-group-button-action " style="justify-content: start">
@@ -1173,31 +1129,9 @@
  </div>
  {% endif %}
  
- <div class="ecom-collection__product-badge">
  
  
- <span class="ecom-collection__product-badge--sold-out" aria-hidden="true" style="{%- if product.available == true -%}display: none; {%- endif -%}">
- {{ translation.ecom-ogo6isl6y3t.ecom-cntza7cbnkv.sold_text }}
- </span>
- <span class="ecom-collection__product-badge--sale" aria-hidden="true" style="{%- unless product.compare_at_price > product.price and product.available -%}display: none;{%- endunless -%}">
- {{ translation.ecom-ogo6isl6y3t.ecom-cntza7cbnkv.sale_text }}
- </span>
  
- {% if badge_tags %}
- {% for badge in badge_tags %}
- {% for original_tag in product.tags %}
- {% assign tag = original_tag | replace: ' ', ' ' %}
- {% if tag == badge %}
- <span class="ecom-collection__product-badge--custom ecom-collection__product-badge--{{ badge | handleize}}" aria-hidden="true">
- {{ badge }}
- </span>
- {% endif %}
- {% endfor %}
- {%- assign bad = badge | strip -%}
- {% endfor %}
- {% endif %}
- 
- </div>
  </a>
  
  <div class="ecom-collection__product-group-button-action " style="justify-content: start">
