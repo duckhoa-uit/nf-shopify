@@ -1,5 +1,5 @@
 {% comment %}
-  Renders cross-product size navigation for Parfum products.
+  Backward-compatible wrapper for perfume product-family navigation.
 
   Accepts:
   - product: {Object} Current product.
@@ -9,78 +9,8 @@
   {% render 'product-variant-picker-parfums', product: product, block: block %}
 {% endcomment %}
 
-{%- liquid
-  assign parfum_group = product.metafields.custom.parfum_group.value
-  assign size_products = parfum_group.products.value
-
-  if size_products == blank
-    assign size_products = product.metafields.custom.product_in_group.value
-  endif
--%}
-
-{%- if size_products != blank -%}
-  <div class="product-variant-picker-parfums-metafield mt-3" {{ block.shopify_attributes }}>
-    <div
-      class="product-form__input product-form__input--pill product-form__input--size"
-      role="group"
-      aria-labelledby="ParfumSizeLabel-{{ block.id }}"
-    >
-      <div id="ParfumSizeLabel-{{ block.id }}" class="form__label">
-        {{- 'products.product.size_label' | t -}}
-      </div>
-
-      <div class="product-variant-picker-parfums__options">
-        {%- assign rendered_size_keys = '' -%}
-        {%- for size_product in size_products -%}
-          {%- liquid
-            assign size_label = ''
-            assign size_option = size_product.options_by_name.Size
-            if size_option != blank
-              assign size_label = size_option.values | first
-            endif
-
-            if size_label == blank and size_product.metafields.custom.size.value != blank
-              assign size_metaobject = size_product.metafields.custom.size.value | first
-              assign size_label = size_metaobject.value.value
-            endif
-
-            assign size_key = size_label | strip | downcase
-            assign size_token = '|' | append: size_key | append: '|'
-            assign is_current = false
-            if size_product.id == product.id
-              assign is_current = true
-            endif
-          -%}
-
-          {%- if size_label != blank -%}
-            {%- unless rendered_size_keys contains size_token -%}
-              {%- assign rendered_size_keys = rendered_size_keys | append: size_token -%}
-              {%- if is_current -%}
-                <span
-                  class="product-variant-picker-parfums__option product-variant-picker-parfums__option--current"
-                  aria-current="page"
-                >
-                  {{- size_label | escape -}}
-                </span>
-              {%- elsif size_product.available -%}
-                <a
-                  class="product-variant-picker-parfums__option product-variant-picker-parfums__option--link"
-                  href="{{ size_product.url | escape }}"
-                >
-                  {{- size_label | escape -}}
-                </a>
-              {%- else -%}
-                <span
-                  class="product-variant-picker-parfums__option product-variant-picker-parfums__option--unavailable"
-                  aria-disabled="true"
-                >
-                  {{- size_label | escape -}}
-                </span>
-              {%- endif -%}
-            {%- endunless -%}
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-    </div>
-  </div>
-{%- endif -%}
+{% render 'perfume-product-family-picker',
+  product: product,
+  instance_id: block.id,
+  shopify_attributes: block.shopify_attributes
+%}
