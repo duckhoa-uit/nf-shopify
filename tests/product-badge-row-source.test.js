@@ -25,14 +25,29 @@ describe("canonical product badge rendering", () => {
     expect(source).not.toContain("metafields.custom_features.extra.value");
   });
 
-  test("wraps long badges without a horizontal scroller", () => {
+  test("keeps badges on one clipped row without a horizontal scroller", () => {
     const sharedRow = readProjectFile("snippets/product-badge-row.liquid");
     const card = readProjectFile("snippets/card-product.liquid");
 
-    expect(sharedRow).toContain("flex-wrap: wrap");
-    expect(sharedRow).toContain("overflow-wrap: anywhere");
+    expect(sharedRow).toContain("flex-wrap: nowrap");
+    expect(sharedRow).toContain("overflow: hidden");
+    expect(sharedRow).toContain("product-badge-row__label");
+    expect(sharedRow).toContain("text-overflow: ellipsis");
+    expect(sharedRow).toContain("white-space: nowrap");
     expect(card).not.toContain("tag-container");
     expect(card).not.toContain("scrollbar-hide");
     expect(card).not.toContain("overflow-x-auto");
+  });
+
+  test("uses semantic badge variants instead of styling promotions by position", () => {
+    const source = readProjectFile("snippets/product-badge-row.liquid");
+
+    expect(source).toContain("product-badge-row__badge--discount");
+    expect(source).toContain("product-badge-row__badge--promotion");
+    expect(source).not.toContain("product-badge-row__promotion--primary");
+    expect(source).not.toContain("product-badge-row__promotion--secondary");
+    expect(source).toContain("--product-badge-background-color");
+    expect(source).toContain("--product-badge-border-color");
+    expect(source).toContain("--product-badge-text-color");
   });
 });

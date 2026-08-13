@@ -46,7 +46,7 @@ row. It remains product metadata, but cannot displace campaign promotions.
 However, the implementation is not fully consistent across the entire theme:
 
 - Canonical cards and maintained PDPs share the same renderer, promotion limit,
-  wrapping behavior, and badge priority.
+  single-line overflow behavior, and badge priority.
 - Canonical compare-at badges are calculated at product level, while PDP and
   card price displays are based on a selected variant.
 - The Featured Product section still uses Dawn's textual `Sale` and
@@ -136,14 +136,19 @@ labels.
 
 The canonical row does not scroll and does not display a scrollbar. It uses:
 
-- `flex-wrap: wrap` so badges move to the next line when their combined width
-  exceeds the parent.
-- `max-width: 100%` so an individual badge cannot exceed the row width.
-- `overflow-wrap: anywhere` and normal whitespace on promotion labels so long
-  or unbroken values remain inside the parent.
+- `flex-wrap: nowrap` so every badge remains on one row.
+- `overflow: hidden` on the row so its content cannot exceed the parent.
+- `min-width: 0`, `white-space: nowrap`, and `text-overflow: ellipsis` so long
+  promotion labels shrink and truncate instead of wrapping or creating a
+  horizontal scrollbar.
+- A non-shrinking discount badge so pricing information keeps priority while
+  promotion labels use the remaining width.
 - The same maximum of two promotion labels on cards and maintained PDPs.
-- A dark filled style for the first, primary campaign promotion.
-- A neutral outline style for the second, secondary merchandising promotion.
+- One neutral outline style for all promotions, matching the earlier canonical
+  card and PDP presentation.
+- Shared base badge dimensions with semantic `discount` and `promotion`
+  variants. Each variant maps its background, border, and text colors to the
+  theme's existing design tokens.
 
 The old card-only horizontal scroller, gradient shadows, scroll listeners, and
 resize observer were removed.
@@ -155,6 +160,10 @@ Canonical precedence is now:
 ```text
 automatic/price discount badges > primary promotion > secondary promotion
 ```
+
+Here, primary and secondary describe data priority only. Promotion order still
+determines which labels are retained by the two-item limit, but it no longer
+changes their visual styling.
 
 If both an automatic preview badge and a compare-at badge are valid, the shared
 discount renderer can still output both before promotions. That separate
@@ -654,15 +663,15 @@ The 2026-08-12 International snapshot has no definition and no values for
 
 ## Consistency matrix
 
-| Surface                                                | Sale source                                            | Sale text                         | Promotion source                                        | Limit/order                              | Standardized?             |
-| ------------------------------------------------------ | ------------------------------------------------------ | --------------------------------- | ------------------------------------------------------- | ---------------------------------------- | ------------------------- |
-| Collection/search/related/recent/feature/collage cards | Product-level compare-at price                         | `-N%` at 15%+, otherwise `SALE`   | `custom_features.promotion`                             | Discount first, then first 2 promotions  | Yes, canonical shared row |
-| Standard/Northkit PDP                                  | Product-level compare-at badge; selected-variant price | Same shared badge                 | `custom_features.promotion`                             | Same order, limit, and wrapping as cards | Yes, canonical shared row |
-| Maintained parfum PDP                                  | Same as standard PDP                                   | Same shared badge                 | `custom_features.promotion`                             | Same order, limit, and wrapping as cards | Yes, canonical shared row |
-| Featured Product                                       | Dawn price state                                       | Localized `Sale`/`Sold out`       | None                                                    | Dawn behavior                            | No                        |
-| NF Flow Parameters                                     | None                                                   | NF Flow name                      | `custom_features.nf_flow_series`                        | All references, Parameters-gated         | Separate PDP-only feature |
-| Outdoor Sale EComposer cards                           | Generated compare-at logic                             | Textual sale plus monetary saving | Exact `product.tags` allowlist                          | Generated order                          | No                        |
-| EComposer scent PDP/cards                              | Generated selected-target logic                        | `N% OFF`, sale, sold out          | Hardcoded label, raw EComposer metafield, or exact tags | Generated order                          | No                        |
+| Surface                                                | Sale source                                            | Sale text                         | Promotion source                                        | Limit/order                                            | Standardized?             |
+| ------------------------------------------------------ | ------------------------------------------------------ | --------------------------------- | ------------------------------------------------------- | ------------------------------------------------------ | ------------------------- |
+| Collection/search/related/recent/feature/collage cards | Product-level compare-at price                         | `-N%` at 15%+, otherwise `SALE`   | `custom_features.promotion`                             | Discount first, then first 2 promotions                | Yes, canonical shared row |
+| Standard/Northkit PDP                                  | Product-level compare-at badge; selected-variant price | Same shared badge                 | `custom_features.promotion`                             | Same order, limit, and single-line truncation as cards | Yes, canonical shared row |
+| Maintained parfum PDP                                  | Same as standard PDP                                   | Same shared badge                 | `custom_features.promotion`                             | Same order, limit, and single-line truncation as cards | Yes, canonical shared row |
+| Featured Product                                       | Dawn price state                                       | Localized `Sale`/`Sold out`       | None                                                    | Dawn behavior                                          | No                        |
+| NF Flow Parameters                                     | None                                                   | NF Flow name                      | `custom_features.nf_flow_series`                        | All references, Parameters-gated                       | Separate PDP-only feature |
+| Outdoor Sale EComposer cards                           | Generated compare-at logic                             | Textual sale plus monetary saving | Exact `product.tags` allowlist                          | Generated order                                        | No                        |
+| EComposer scent PDP/cards                              | Generated selected-target logic                        | `N% OFF`, sale, sold out          | Hardcoded label, raw EComposer metafield, or exact tags | Generated order                                        | No                        |
 
 ## Campaign configuration playbook
 
@@ -785,7 +794,8 @@ Use each data source for one responsibility:
 - [ ] Card is checked on collection and search.
 - [ ] PDP is checked before and after changing variants.
 - [ ] Sold-out behavior is checked.
-- [ ] Mobile wrapping is checked for multiple or long promotion labels.
+- [ ] Mobile single-line truncation is checked for multiple or long promotion
+      labels.
 - [ ] Localized metaobject names are verified.
 - [ ] An end-of-campaign task exists to remove promotion references and stale
       product tags.
