@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-08-13 07:12:59
+ At 2026-08-13 07:31:02
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -292,25 +292,6 @@
  {%- assign bad = badge | strip -%}
  {% endfor %}
  {% endif %}
- 
- {%- if product.has_only_default_variant -%}
- {%- if product.compare_at_price != null and product.compare_at_price > product.price -%}
- {%- assign sale = product.compare_at_price | minus: product.price | money -%}
- <span class="ecom-collection__product-price--bage-sale">
- {{ translation.ecom-7kxkj1lm3ew.ecom-67hyvqs1xa4.sale_badge | replace: '((sale))',sale }}
- </span>
- {%- endif -%}
- {%- else -%}
- {%- if product.selected_or_first_available_variant.compare_at_price != null and product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
- {%- assign sale = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money -%}
- {%else%}
- {%- assign sale = null %}
- {%- endif -%}
- <span class="ecom-collection__product-price--bage-sale" style="{% unless sale %}display:none{% endunless %}">
- {{ translation.ecom-7kxkj1lm3ew.ecom-67hyvqs1xa4.sale_badge | replace: '((sale))',sale }}
- </span>
- {%- endif -%}
- {%- assign sale = null -%}
  
  </div>
  </a>
@@ -764,25 +745,6 @@
  {% endfor %}
  {% endif %}
  
- {%- if product.has_only_default_variant -%}
- {%- if product.compare_at_price != null and product.compare_at_price > product.price -%}
- {%- assign sale = product.compare_at_price | minus: product.price | money -%}
- <span class="ecom-collection__product-price--bage-sale">
- {{ translation.ecom-s8gn73kat1i.ecom-er2hcxdfmur.sale_badge | replace: '((sale))',sale }}
- </span>
- {%- endif -%}
- {%- else -%}
- {%- if product.selected_or_first_available_variant.compare_at_price != null and product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
- {%- assign sale = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money -%}
- {%else%}
- {%- assign sale = null %}
- {%- endif -%}
- <span class="ecom-collection__product-price--bage-sale" style="{% unless sale %}display:none{% endunless %}">
- {{ translation.ecom-s8gn73kat1i.ecom-er2hcxdfmur.sale_badge | replace: '((sale))',sale }}
- </span>
- {%- endif -%}
- {%- assign sale = null -%}
- 
  </div>
  </a>
  
@@ -1234,25 +1196,6 @@
  {%- assign bad = badge | strip -%}
  {% endfor %}
  {% endif %}
- 
- {%- if product.has_only_default_variant -%}
- {%- if product.compare_at_price != null and product.compare_at_price > product.price -%}
- {%- assign sale = product.compare_at_price | minus: product.price | money -%}
- <span class="ecom-collection__product-price--bage-sale">
- {{ translation.ecom-ogo6isl6y3t.ecom-cntza7cbnkv.sale_badge | replace: '((sale))',sale }}
- </span>
- {%- endif -%}
- {%- else -%}
- {%- if product.selected_or_first_available_variant.compare_at_price != null and product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
- {%- assign sale = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | money -%}
- {%else%}
- {%- assign sale = null %}
- {%- endif -%}
- <span class="ecom-collection__product-price--bage-sale" style="{% unless sale %}display:none{% endunless %}">
- {{ translation.ecom-ogo6isl6y3t.ecom-cntza7cbnkv.sale_badge | replace: '((sale))',sale }}
- </span>
- {%- endif -%}
- {%- assign sale = null -%}
  
  </div>
  </a>
