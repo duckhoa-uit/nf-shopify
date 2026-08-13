@@ -1,0 +1,106 @@
+{% doc %}
+  Renders the canonical single-line product badge row.
+
+  @param {product} product - Product whose discount and promotion badges are rendered.
+  @param {variant} [variant] - Variant used for discount calculations.
+  @param {string} [context] - `card` or `pdp`; defaults to `card`.
+  @param {number} [promotion_limit] - Maximum promotion labels; defaults to 2.
+
+  @example
+  {% render 'product-badge-row', product: product, context: 'pdp', promotion_limit: 2 %}
+{% enddoc %}
+
+{%- liquid
+  assign badge_context = context | default: 'card'
+  assign maximum_promotions = promotion_limit | default: 2
+  assign promotion_count = 0
+
+  if badge_context == 'pdp'
+    assign discount_badge_class = 'product-discount-badge product-badge-row__badge product-badge-row__badge--discount'
+  else
+    assign discount_badge_class = 'product-badge-row__badge product-badge-row__badge--discount'
+  endif
+-%}
+
+<div class="product-badge-row product-badge-row--{{ badge_context }}">
+  {% render 'discount-badge', product: product, variant: variant, badge_class: discount_badge_class %}
+
+  {%- if product.metafields.custom_features.promotion.value != blank -%}
+    {%- for promotion in product.metafields.custom_features.promotion.value -%}
+      {%- capture promotion_name -%}{{ promotion.name }}{%- endcapture -%}
+      {%- assign promotion_name = promotion_name | strip -%}
+
+      {%- if promotion_count < maximum_promotions and promotion_name != blank -%}
+        <span
+          class="product-badge-row__badge product-badge-row__badge--promotion"
+          title="{{ promotion_name | escape }}"
+        >
+          <span class="product-badge-row__label">{{ promotion_name }}</span>
+        </span>
+        {%- assign promotion_count = promotion_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .product-badge-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .product-badge-row--card {
+    min-height: 2rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .product-badge-row__badge {
+    display: inline-flex;
+    flex: 0 1 auto;
+    align-items: center;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0.25rem 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--product-badge-border-color);
+    border-radius: 0.125rem;
+    background-color: var(--product-badge-background-color);
+    color: var(--product-badge-text-color);
+    line-height: 1rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .product-badge-row__label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .product-badge-row__badge--discount {
+    --product-badge-background-color: var(--color-accent);
+    --product-badge-border-color: var(--color-accent);
+    --product-badge-text-color: var(--color-white);
+
+    flex-shrink: 0;
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  .product-badge-row__badge--promotion {
+    --product-badge-background-color: transparent;
+    --product-badge-border-color: var(--color-border-medium);
+    --product-badge-text-color: var(--color-gray-800);
+
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+{% endstylesheet %}
