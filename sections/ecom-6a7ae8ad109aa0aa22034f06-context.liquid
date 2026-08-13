@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-08-13 09:40:04
+ At 2026-08-13 09:41:00
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -42,9 +42,9 @@
  {%- capture handle_collection -%}outdoor-sale-summer{% endcapture%}
  {% assign collection = collections[handle_collection] %}
  {%- if handle_collection and collection.handle != blank -%}
- {% assign products = collection.products %}
+ {% assign products = collection.products | where: "available" %}
  {% else %}
- {% assign products = collections.all.products %}
+ {% assign products = collections.all.products | where: "available" %}
  {% assign collection = collections.all%}
  {%- endif -%}
  {% assign is_collection = true %}
@@ -494,9 +494,9 @@
  {%- capture handle_collection -%}outdoor-sale-autumn{% endcapture%}
  {% assign collection = collections[handle_collection] %}
  {%- if handle_collection and collection.handle != blank -%}
- {% assign products = collection.products %}
+ {% assign products = collection.products | where: "available" %}
  {% else %}
- {% assign products = collections.all.products %}
+ {% assign products = collections.all.products | where: "available" %}
  {% assign collection = collections.all%}
  {%- endif -%}
  {% assign is_collection = true %}
@@ -946,9 +946,9 @@
  {%- capture handle_collection -%}outdoor-sale-winter{% endcapture%}
  {% assign collection = collections[handle_collection] %}
  {%- if handle_collection and collection.handle != blank -%}
- {% assign products = collection.products %}
+ {% assign products = collection.products | where: "available" %}
  {% else %}
- {% assign products = collections.all.products %}
+ {% assign products = collections.all.products | where: "available" %}
  {% assign collection = collections.all%}
  {%- endif -%}
  {% assign is_collection = true %}
