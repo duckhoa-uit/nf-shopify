@@ -2,17 +2,17 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-08-13 18:18:37
+ At 2026-08-14 04:39:19
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
  {% if ecom_root_url != '/'%}
  {% assign ecom_root_url = routes.root_url | append: '/' %}
  {% endif %}
- <link rel="stylesheet" media="print" onload="this.media='all'" id="ecom-vendors-modal_css" href="https://cdn.ecomposer.app/vendors/css/ecom_modal.css" /><link rel="stylesheet" media="print" onload="this.media='all'" id="ecom-vendors-slider_css" href="https://cdn.ecomposer.app/vendors/css/ecom-swiper@11.css" /><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" onload="this.media='all'" id="ecom-vendors-modal_css" href="https://cdn.ecomposer.app/vendors/css/ecom_modal.css" /><link rel="stylesheet" media="all" onload="this.media='all'" id="ecom-vendors-slider_css" href="https://cdn.ecomposer.app/vendors/css/ecom-swiper@11.css" /><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript><script type="text/javascript" id="ecom-vendors-modal_js" src="https://cdn.ecomposer.app/vendors/js/ecom_modal_new.js" ></script><script type="text/javascript" id="ecom-vendors-shopify_option_selection_js" src="https://cdn.ecomposer.app/vendors/js/ecomposer_option_selection.js" ></script><script type="text/javascript" id="ecom-vendors-countdown_js" src="https://cdn.ecomposer.app/vendors/js/ecom-countdown.js?ver=2.0" ></script><script type="text/javascript" id="ecom-vendors-slider_js" src="https://cdn.ecomposer.app/vendors/js/ecom-swiper@11.0.5.js" ></script>
+ <link rel="stylesheet" media="print" onload="this.media='all'" id="ecom-vendors-slider_css" href="https://cdn.ecomposer.app/vendors/css/ecom-swiper@11.css" /><link rel="stylesheet" media="print" onload="this.media='all'" id="ecom-vendors-modal_css" href="https://cdn.ecomposer.app/vendors/css/ecom_modal.css" /><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" onload="this.media='all'" id="ecom-vendors-slider_css" href="https://cdn.ecomposer.app/vendors/css/ecom-swiper@11.css" /><link rel="stylesheet" media="all" onload="this.media='all'" id="ecom-vendors-modal_css" href="https://cdn.ecomposer.app/vendors/css/ecom_modal.css" /><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript><script type="text/javascript" id="ecom-vendors-shopify_option_selection_js" src="https://cdn.ecomposer.app/vendors/js/ecomposer_option_selection.js" ></script><script type="text/javascript" id="ecom-vendors-countdown_js" src="https://cdn.ecomposer.app/vendors/js/ecom-countdown.js?ver=2.0" ></script><script type="text/javascript" id="ecom-vendors-slider_js" src="https://cdn.ecomposer.app/vendors/js/ecom-swiper@11.0.5.js" ></script><script type="text/javascript" id="ecom-vendors-modal_js" src="https://cdn.ecomposer.app/vendors/js/ecom_modal_new.js" ></script>
 {%- assign headless = true -%}{%- render "ecom_theme_helper" -%}{%capture section_id %}ecom-preview-page-page{% endcapture%}{% if section and section_id == section.id and headless == true %}
 {{ content_for_header }}
-{% render 'ecom_header', ECOM_THEME: true %}{% endif %}<link href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=DM+Sans:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/>
+{% render 'ecom_header', ECOM_THEME: true %}{% endif %}<link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic&display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=DM+Sans:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Tenor+Sans:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/>
 {{'ecom-preview-template-page.css' | asset_url | stylesheet_tag }}
 <script src="{{'ecom-preview-template-page.js' | asset_url }}" defer="defer"></script>
 <script type="text/javascript" class="ecom-page-info">
@@ -20,26 +20,8 @@
  window.EComposer.TEMPLATE_ID="preview-template-page";
  window.EComposer.PAGE = {"title":"Outdoor Sale","type":"page","slug":"ecom-preview-page","plan_id":4,"template_id":"preview-template-page"};
  </script>
-<div class="ecom-builder" id="ecom-preview-page"><div class="ecom-sections" data-section-id="{{section.id}}">
- {% comment %}
- // Reactive
- * this.data.settings.collection
- {% endcomment %}
- {% liquid
- if request.page_type != 'collection' or collection == blank
- assign selected_collection = 'mens-shoes'
- if selected_collection == blank or selected_collection == '' or collections[selected_collection] == blank
- assign collection = collections.all
- else
- assign collection = collections[selected_collection]
- if collection.id == blank
- assign collection = collections.all
- endif
- endif
- endif
- %}
- <section class="ecom-row ecom-core ecom-section ecom-dqw43ghsq1" data-id="ecom-dqw43ghsq1" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first ecom-yksrhhzssvg"><div class="core__column--wrapper" id="ecom-yksrhhzssvg"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-animation ecom-block ecom-core core__block elmspace ecom-jm8lkxu2li"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-dqw43ghsq1" deep="1"><h3 class="ecom__heading ecom-db">OUR SHOP</h3></div></div> <div class="ecom-animation ecom-block ecom-core core__block elmspace ecom-pwpwjt2r35o" ec-delay="500"><div class="ecom-element ecom-collection ecom-collection__title" section_id="ecom-dqw43ghsq1" deep="1"><div class="ecom-element ecom-collection ecom-collection__title-wrapper"><div class="ecom-element ecom-collection ecom-collection__title-container"><h2 class="ecom-collection__title--headline ecom__heading">{{collection.title}}</h2></div></div></div></div> <div class="ecom-animation ecom-block ecom-core core__block elmspace ecom-evxdk1dr7bf" ec-delay="700"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-dqw43ghsq1" deep="1"><div class="text-content ecom-html has-drop-cap-view-framed">Trending now. The hottest new sneaker releases from <u>Jordan</u>, <u>Nike</u>, <u>New Balance</u>, and more.<div></div></div></div></div> </div></div></div></div> <div class="ecom-column ecom-core core__column--last ecom-73t8d0jmjdx"><div class="core__column--wrapper" id="ecom-73t8d0jmjdx"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-animation ecom-block ecom-core core__block elmspace ecom-aopckd0xwfs" ec-delay="500"><div class="ecom-element ecom-base-image" section_id="ecom-dqw43ghsq1" deep="1"><figure><div class="ecom-container-image ecom-image-align"><div class="ecom-image-content-position ecom-image-default ecom-base-image-container-overlay" style=""><picture class="ecom-image-picture"><img class="" loading="lazy" fetchpriority="low" src="https://cdn.shopify.com/s/files/1/0726/1221/7115/files/ecom-no-replace-qdYyppZ0STimg-bn-ss.png?v=1730348990" alt="ecom-no-replace-qdYyppZ0STimg-bn-ss" width="437" height="486"></picture></div></div></figure></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-koc3f15uyx9" data-id="ecom-koc3f15uyx9" style="z-index: inherit;"><div class="core__row--columns core__row--full"><div class="ecom-column ecom-core core__column--first core__column--last ecom-ixbum6un3k"><div class="core__column--wrapper" id="ecom-ixbum6un3k"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-animation ecom-block ecom-core core__block ecom-width-mb ecom-wx2btbk7vw" ec-delay="400"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-koc3f15uyx9" deep="1"><h3 class="ecom__heading ecom-db"><b>Outdoorový výpredaj</b></h3></div></div> <div class="ecom-animation ecom-block ecom-core core__block ecom-la1k4no50c" ec-delay="600"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-koc3f15uyx9" deep="1"><h3 class="ecom__heading ecom-db"><div>2026</div></h3></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-7bggfpfoh7v" data-id="ecom-7bggfpfoh7v" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-v29tqrpg9g"><div class="core__column--wrapper" id="ecom-v29tqrpg9g"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-h96jss5ym5n"><div class="ecom-row ecom-core core__block ecom-pkuz3zw7vk" data-id="ecom-pkuz3zw7vk" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-65p3h76elf3"><div class="core__column--wrapper" id="ecom-65p3h76elf3"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-animation ecom-block ecom-core core__block ecom-width-mb ecom-2znkrd61rg6" ec-delay="600"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-7bggfpfoh7v" deep="2"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="{{ecom_root_url}}collections/sale"><span class="ecom__element--button-icon-text ecom-html">NAKUPUJ VŠETKO</span><span class="ecom-button-icon ecom__element--button-icon"></span></a></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-xea4urvphyd"><div class="ecom-core ecom-group core__block ecom-cdrr8ng58zv"> <div class="core__group--wrapper tabs__wrapper ecom__element ecom__tabs tabs__wrapper--horizontal" data-r="" style=""><div class="tabs__navs-wrapper ecom-flex tabs__navs--horizontal"><div class="tabs__navs"><div class="tabs__navs--items"><div class="ecom-items tabs__nav ecom-item-active" data-target="" data-target-id="#ecom-23nooia6d9h"><div class="tabs_nav--content_right"><div class="tabs_nav--content"><h3 class="tabs_nav--text ecom-items--text ecom-html">Leto</h3></div><div class="tabs_nav--sub-text"></div></div></div><div class="ecom-items tabs__nav" data-target="" data-target-id="#ecom-9rvynzzvrym"><div class="tabs_nav--content_right"><div class="tabs_nav--content"><h3 class="tabs_nav--text ecom-items--text ecom-html">Jeseň</h3></div><div class="tabs_nav--sub-text"></div></div></div><div class="ecom-items tabs__nav" data-target="" data-target-id="#ecom-bth4sxele8"><div class="tabs_nav--content_right"><div class="tabs_nav--content"><h3 class="tabs_nav--text ecom-items--text ecom-html">Zima</h3></div><div class="tabs_nav--sub-text"></div></div></div></div></div></div><div class="core__group--items"><div id="ecom-23nooia6d9h" class="core__group--item tab__item ecom-item-active ecom-item-group-init" data-id="ecom-23nooia6d9h" style=""><div class="core__group--body tabs__body"><div class="core__blocks"><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-animation ecom-block ecom-core core__block ecom-lyr0r7w4bv" ecom-scrolling-animation="[{&quot;css&quot;:&quot;translateX&quot;,&quot;value&quot;:[]}]" ec-delay="600"><div class="ecom-element ecom-collection ecom-collection__product" section_id="ecom-7bggfpfoh7v" deep="2"><div class="ecom-collection__product-wrapper"><div class="ecom-collection__product-container ecom-collection__product-container_featured"><div class="ecom-collection__product-main ecom-collection_product_template_featured" data-week="[%-W] week%!W" data-day="[%-d] day%!D" data-hour="[%-H] hr%!H" data-minute="[%-M] min%!M" data-second="[%-S] sec%!S" data-sale="-{{sale}}%" data-review-platform="{%- assign review_platform = shop.metafields.ecomposer.app_review.value -%}{{-review_platform-}}" data-countdown-shows="day,hour,minute,second" data-translate="true">
- {%- capture badge_tags -%}Hot{%- endcapture -%}
+<div class="ecom-builder" id="ecom-preview-page"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ecom-row ecom-core ecom-section ecom-d77jjjutikt" data-id="ecom-d77jjjutikt" style="z-index: inherit;"><div class="core__row--columns core__row--full"><div class="ecom-column ecom-core core__column--first core__column--last ecom-674arms9f3"><div class="core__column--wrapper" id="ecom-674arms9f3"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-6j50swyk2n7"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-d77jjjutikt" deep="1"><div class="text-content ecom-html has-drop-cap-view-framed">Zrodení v Karpatoch</div></div></div> <div class="ecom-block ecom-core core__block ecom-width-mb elmspace ecom-anxuuaim0i9"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-d77jjjutikt" deep="1"><h2 class="ecom__heading ecom-db"><b bis_size="{&quot;x&quot;:261,&quot;y&quot;:312,&quot;w&quot;:917,&quot;h&quot;:165,&quot;abs_x&quot;:341,&quot;abs_y&quot;:488}">Outdoorový výpredaj</b></h2></div></div> <div class="ecom-block ecom-core core__block ecom-ezlsshcpx8v"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-d77jjjutikt" deep="1"><h3 class="ecom__heading ecom-db"><div>2026</div></h3></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-6879cuwfedn"><div class="ecom-row ecom-core core__block ecom-8m1x32wbuov" data-id="ecom-8m1x32wbuov" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first ecom-z0ooe97eme"><div class="core__column--wrapper" id="ecom-z0ooe97eme"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-width-desktop elmspace ecom-1ee8x7uxc7p"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-d77jjjutikt" deep="2"><div class="text-content ecom-html has-drop-cap-view-framed">Letná a jesenná trekingová výbava za skvelé ceny. Zásoby sú limitované, nakupuj, kým je čas!<br bis_size="{&quot;x&quot;:752,&quot;y&quot;:694,&quot;w&quot;:0,&quot;h&quot;:19,&quot;abs_x&quot;:832,&quot;abs_y&quot;:870}"></div></div></div> </div></div></div></div> <div class="ecom-column ecom-core core__column--last ecom-animation ecom-wragniw8d7" ec-delay="700"><div class="core__column--wrapper" id="ecom-wragniw8d7"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-vhofcp8xqx"><div class="ecom-row ecom-core core__block ecom-wvvbm0i54qc" data-id="ecom-wvvbm0i54qc" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-xr46tu8ocma"><div class="core__column--wrapper" id="ecom-xr46tu8ocma"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-9j937wm04ek"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-d77jjjutikt" deep="3"><h6 class="ecom__heading ecom-db">Zľavy až</h6></div></div> <div class="ecom-block ecom-core core__block ecom-nxiw445fxtd"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-d77jjjutikt" deep="3"><h6 class="ecom__heading ecom-db">60%</h6></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-mxbdye5q6d" data-id="ecom-mxbdye5q6d" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-sk97md22hed"><div class="core__column--wrapper" id="ecom-sk97md22hed"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-wtky5ilu71b"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-mxbdye5q6d" deep="1"><h1 class="ecom__heading ecom-db">LETNÉ DOBRODRUŽSTVO</h1></div></div> <div class="ecom-block ecom-core core__block ecom-width-desktop ecom-gekj653m39r"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-mxbdye5q6d" deep="1"><div class="text-content ecom-html has-drop-cap-view-framed">Vychutnaj si leto naplno v prémiovom outdoorovom oblečení. Teraz za špeciálne letné ceny.</div></div></div> <div class="ecom-block ecom-core core__block ecom-kdzebjppkxl"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-mxbdye5q6d" deep="1"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="https://northfinder.sk/collections/outdoor-sale-summer"><span class="ecom__element--button-icon-text ecom-html">Zobraziť kolekciu</span><span class="ecom-button-icon ecom__element--button-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M335 408.1C330.3 404.3 328 398.2 328 392s2.344-12.28 7.031-16.97L430.1 280H24C10.75 280 0 269.2 0 255.1C0 242.7 10.75 232 24 232h406.1l-95.03-95.03c-9.375-9.375-9.375-24.56 0-33.94s24.56-9.375 33.94 0l136 136c9.375 9.375 9.375 24.56 0 33.94l-136 136C359.6 418.3 344.4 418.3 335 408.1z"></path></svg></span></a></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-7kxkj1lm3ew" data-id="ecom-7kxkj1lm3ew" style="z-index: inherit;"><div class="core__row--columns core__row--full"><div class="ecom-column ecom-core core__column--first core__column--last ecom-rwfa5glbtlk"><div class="core__column--wrapper" id="ecom-rwfa5glbtlk"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-67hyvqs1xa4" ecom-scrolling-animation="[{&quot;css&quot;:&quot;translateX&quot;,&quot;value&quot;:[]}]"><div class="ecom-element ecom-collection ecom-collection__product" section_id="ecom-7kxkj1lm3ew" deep="1"><div class="ecom-collection__product-wrapper"><div class="ecom-collection__product-container ecom-collection__product-container_featured"><div class="ecom-collection__product-main ecom-swiper-container ecom-collection_product_template_featured" data-week="[%-W] week%!W" data-day="[%-D] day%!D" data-hour="[%-H] hr%!H" data-minute="[%-M] min%!M" data-second="[%-S] sec%!S" data-sale="- {{ percentage }}" data-review-platform="{%- assign review_platform = shop.metafields.ecomposer.app_review.value -%}{{-review_platform-}}" data-countdown-shows="day,hour,minute,second" data-translate="true">
+ {%- capture badge_tags -%}Hot,Best Selling,Trending Item{%- endcapture -%}
  {%- liquid
  assign colors = shop.metafields.ecomposer.colors
  assign badge_tags = badge_tags | strip | split: ','
@@ -49,7 +31,7 @@
  -%}
  
  
- {%- capture limit-%}24{% endcapture %}
+ {%- capture limit-%}4{% endcapture %}
  {%- if limit == blank -%}
  {% assign limit = 12 %}
  {% else %}
@@ -59,9 +41,9 @@
  {%- capture handle_collection -%}outdoor-sale-summer{% endcapture%}
  {% assign collection = collections[handle_collection] %}
  {%- if handle_collection and collection.handle != blank -%}
- {% assign products = collection.products | where: "available" %}
+ {% assign products = collection.products %}
  {% else %}
- {% assign products = collections.all.products | where: "available" %}
+ {% assign products = collections.all.products %}
  {% assign collection = collections.all%}
  {%- endif -%}
  {% assign is_collection = true %}
@@ -75,17 +57,17 @@
  {%- endif -%}
  {% endif %}
  {% capture quickshop_layout%}full{% endcapture %}
- {% capture product_style%}vertical{% endcapture%}
+ {% capture product_style%}absolute{% endcapture%}
  {%- assign view_more_only = undefined -%}
- {% capture product_layout %}grid{% endcapture %}
+ {% capture product_layout %}slider{% endcapture %}
  {% assign check_min = 0%}
  {% if products and products.size > check_min and products != blank %}
- <div class="
- ecom-collection__product--wrapper-items ecom-collection-product__layout-grid
+ <div class="ecom-swiper-wrapper
+ ecom-collection__product--wrapper-items ecom-collection-product__layout-slider
  "
  data-grid-column="4"
  data-grid-column-tablet="3"
- data-grid-column-mobile="2"
+ data-grid-column-mobile="1"
  
  
  >
@@ -182,7 +164,7 @@
  {%- if product.variants.first.inventory_management and product.variants.first.inventory_quantity <= 0 and product.variants.first.inventory_policy == 'continue' -%}
  Pre order
  {%-else-%}
- Pridaj do košíka
+ Kúpiť teraz
  {%- endif -%}
  </span>
  </a>
@@ -212,10 +194,10 @@
  </div>
  </div>
  {% endcapture %}
- <div class="ecom-collection__product-item " data-product-handle="{{product.handle}}" data-style="{{product_style}}"{% unless product.has_only_default_variant %} ec-variant-init{% endunless %}>
+ <div class="ecom-collection__product-item ecom-swiper-slide" data-product-handle="{{product.handle}}" data-style="{{product_style}}"{% unless product.has_only_default_variant %} ec-variant-init{% endunless %}>
  <div
  class="ecom-collection__product-item--wrapper {% if product_style == 'horizontal'%} ecom-d-flex {% else %} ecom-flex-column {% endif %}">
- <div class="ecom-collection__product-media-wrapper ecom-enable-hover--mobile {% if product_style == 'horizontal'%} ecom-d-flex{% endif %} "
+ <div class="ecom-collection__product-media-wrapper {% if product_style == 'horizontal'%} ecom-d-flex{% endif %} "
  >
  {%- if enable_hook -%}
  {% capture the_ecom_hook %}
@@ -236,9 +218,9 @@
  -%}
  <div class="ecom-collection__product-media--container">
  <div
- class="ecom-child-element ecom-collection__product-media ecom-collection__product-media--adapt
- {% if product.media[1] != nil %}ecom-collection__product-media--hover-effect{% endif %}"
- style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+ class="ecom-child-element ecom-collection__product-media ecom-collection__product-media--portrait
+ "
+ 
  
  >
  <img srcset="
@@ -256,30 +238,13 @@
  height="{{ product.featured_media.height }}"
  />
  
- {%- if product.media[1] != nil -%}
- <img srcset="
- {%- if product.media[1].width >= 533 -%}{{ product.media[1] | image_url: width: 533 }} 533w,{%- endif -%}
- {%- if product.media[1].width >= 720 -%}{{ product.media[1] | image_url: width: 720 }} 720w,{%- endif -%}
- {%- if product.media[1].width >= 940 -%}{{ product.media[1] | image_url: width: 940 }} 940w,{%- endif -%}
- {%- if product.media[1].width >= 1066 -%}{{ product.media[1] | image_url: width: 1066 }} 1066w,{%- endif -%}
- {{ product.media[1] | image_url }} {{ product.media[1].width }}w""
- src="{{ product.media[1] | image_url: width: 533 }}"
- sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
- alt="{{ product.media[1].alt | escape }}"
- loading='lazy'
- class="ecom-collection__product-secondary-media"
- width="{{ product.media[1].width }}"
- height="{{ product.media[1].height }}"
- />
- {%- endif -%}
- 
  </div>
  </div>
  {% else %}
  <div class="ecom-collection__product-media--container">
- <div class="ecom-child-element ecom-collection__product-media ecom-collection__product-media--adapt"
+ <div class="ecom-child-element ecom-collection__product-media ecom-collection__product-media--portrait"
  
- style="padding-bottom: 85%;"
+ 
  >
  {{ 'product-1' | placeholder_svg_tag: 'ecom-colection__product-svg-placeholder' }}
  </div>
@@ -289,25 +254,26 @@
  <div class="ecom-collection__product-badge">
  
  
+ <span class="ecom-collection__product-badge--sold-out" aria-hidden="true" style="{%- if product.available == true -%}display: none; {%- endif -%}">
+ Sold
+ </span>
+ <span class="ecom-collection__product-badge--sale" aria-hidden="true" style="{%- unless product.compare_at_price > product.price and product.available -%}display: none;{%- endunless -%}">
+ Outdoor Sale
+ </span>
  
- {%- if product.has_only_default_variant -%}
- {%- if product.compare_at_price != null and product.compare_at_price > product.price -%}
- {%- assign sale = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
- <span class="ecom-collection__product-price--bage-sale">
- -{{sale}}%
+ {% if badge_tags %}
+ {% for badge in badge_tags %}
+ {% for original_tag in product.tags %}
+ {% assign tag = original_tag | replace: ' ', ' ' %}
+ {% if tag == badge %}
+ <span class="ecom-collection__product-badge--custom ecom-collection__product-badge--{{ badge | handleize}}" aria-hidden="true">
+ {{ badge }}
  </span>
- {%- endif -%}
- {%- else -%}
- {%- if product.selected_or_first_available_variant.compare_at_price != null and product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
- {%- assign sale = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | times: 100.0 | divided_by: product.selected_or_first_available_variant.compare_at_price | round -%}
- {%else%}
- {%- assign sale = null %}
- {%- endif -%}
- <span class="ecom-collection__product-price--bage-sale" style="{% unless sale %}display:none{% endunless %}">
- -{{sale}}%
- </span>
- {%- endif -%}
- {%- assign sale = null -%}
+ {% endif %}
+ {% endfor %}
+ {%- assign bad = badge | strip -%}
+ {% endfor %}
+ {% endif %}
  
  </div>
  </a>
@@ -358,10 +324,10 @@
  
  
  {% assign showPriceWhenNotLogin = true %}
- {% if undefined and customer == blank%}
+ {% if false and customer == blank%}
  {% assign showPriceWhenNotLogin = false %}
  {% endif %}
- {% if showPriceWhenNotLogin == false and undefined %}
+ {% if showPriceWhenNotLogin == false and false %}
  {% assign showOnLive = true %}
  {% else %}
  {% assign showOnLive = false %}
@@ -369,7 +335,7 @@
  {% assign showPreview = false %}
  {% if showOnLive or showPreview %}
  <div class="ecom-collection__product-login-to-see">
- undefined
+ Login to see price
  </div>
  {% endif %}
  {% if true and showPriceWhenNotLogin %}
@@ -386,7 +352,7 @@
  {%- comment -%}
  <span class="ecom-collection__product-price--bage-sale">
  {% assign sale = product.compare_at_price_max | minus: product.price | times: 100 | divided_by: product.compare_at_price_max | times: 100 | money %}
- -{{sale}}%
+ - {{ percentage }}
  </span>
  {%- endcomment -%}
  </div>
@@ -444,7 +410,24 @@
  {% if product_style == 'horizontal' or product_style == 'vertical' or product_layout == 'list' %}
  {{product_actions}}
  {% endif %}
+ {%- assign countdown_to = product.metafields.ecomposer.countdown -%}
+ {% if product.available and countdown_to %}
+ <div class="ecom-collection__product-countdown ecom-child-element" >
+ <div class="ecom-collection__product-countdown-wrapper" >
+ <div class="ecom-collection__product-countdown-wrapper--title"> </div>
+ <div class="ecom-product-single__countdown-container" >
+ {%- assign countdown_from = product.metafields.ecomposer.countdown_from -%}
+ <div
+ data-product-id="{{product.id}}"
+ class="ecom-collection__product-countdown-time ecom-collection__product-countdown-time--metafields"
+ data-ecom-countdown-from="{{ countdown_from }}"
+ data-ecom-countdown="{{countdown_to}}"
+ ></div>
+ </div>
  
+ </div>
+ </div>
+ {% endif %}
  
  </div>
  </div>
@@ -461,7 +444,7 @@
  {% endfor %}
  </div>
  {% else %}
- <div class="ecom-collection__product--wrapper-items ecom-collection__product--no-item ecom-collection-product__layout-grid" >
+ <div class="ecom-collection__product--wrapper-items ecom-collection__product--no-item ecom-collection-product__layout-slider" >
  <div class="ecom-collection__product-item" >
  There are no product yet!
  </div>
@@ -472,8 +455,8 @@
  
  {% assign collection = tmp_collection %}
  {% assign product = tmp_product %}
- </div></div></div></div></div> <div class="ecom-animation ecom-block ecom-core core__block ecom-width-mb ecom-oehp87lfzih" ec-delay="600"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-7bggfpfoh7v" deep="2"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="{{ecom_root_url}}collections/outdoor-sale-summer"><span class="ecom__element--button-icon-text ecom-html">Zobraziť celú kolekciu Leto</span><span class="ecom-button-icon ecom__element--button-icon"></span></a></div></div> </div></div></div></div></div><div id="ecom-9rvynzzvrym" class="core__group--item tab__item" data-id="ecom-9rvynzzvrym" style=""><div class="core__group--body tabs__body"><div class="core__blocks"><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-animation ecom-block ecom-core core__block ecom-a6ae65eihv" ecom-scrolling-animation="[{&quot;css&quot;:&quot;translateX&quot;,&quot;value&quot;:[]}]" ec-delay="600"><div class="ecom-element ecom-collection ecom-collection__product" section_id="ecom-7bggfpfoh7v" deep="2"><div class="ecom-collection__product-wrapper"><div class="ecom-collection__product-container ecom-collection__product-container_featured"><div class="ecom-collection__product-main ecom-collection_product_template_featured" data-week="[%-W] week%!W" data-day="[%-d] day%!D" data-hour="[%-H] hr%!H" data-minute="[%-M] min%!M" data-second="[%-S] sec%!S" data-sale="-{{sale}}%" data-review-platform="{%- assign review_platform = shop.metafields.ecomposer.app_review.value -%}{{-review_platform-}}" data-countdown-shows="day,hour,minute,second" data-translate="true">
- {%- capture badge_tags -%}Hot{%- endcapture -%}
+ </div><div class="ecom-swiper-navigation-position"><button class="ecom-swiper-button ecom-swiper-button-prev" style="--ecom-position: absolute; --ecom-position__tablet: absolute; --ecom-position__mobile: absolute;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" fill="currentColor"><path d="M192 448c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l137.4 137.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448z"></path></svg></button><button class="ecom-swiper-button ecom-swiper-button-next" style="--ecom-position: absolute; --ecom-position__tablet: absolute; --ecom-position__mobile: absolute;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" fill="currentColor"><path d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg></button></div><div class="ecom-swiper-pagination-position ecom-swiper-pagination" style="display: none;"></div></div></div></div></div> <div class="ecom-block ecom-core core__block ecom-5w74k6s1fls"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-7kxkj1lm3ew" deep="1"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="https://northfinder.sk/collections/outdoor-sale-summer"><span class="ecom__element--button-icon-text ecom-html">Zobraziť kolekciu</span><span class="ecom-button-icon ecom__element--button-icon"><svg width="35" height="16" viewBox="0 0 35 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 7C0.947715 7 0.5 7.44772 0.5 8C0.5 8.55228 0.947715 9 1.5 9L1.5 7ZM34.2071 8.7071C34.5976 8.31658 34.5976 7.68341 34.2071 7.29289L27.8431 0.92893C27.4526 0.538406 26.8195 0.538406 26.4289 0.92893C26.0384 1.31945 26.0384 1.95262 26.4289 2.34314L32.0858 8L26.4289 13.6569C26.0384 14.0474 26.0384 14.6805 26.4289 15.0711C26.8195 15.4616 27.4526 15.4616 27.8431 15.0711L34.2071 8.7071ZM1.5 9L33.5 9L33.5 7L1.5 7L1.5 9Z"></path></svg></span></a></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-4st5rmoph9s" data-id="ecom-4st5rmoph9s" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-onsglckfd3"><div class="core__column--wrapper" id="ecom-onsglckfd3"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-9iv6hkmzpae"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-4st5rmoph9s" deep="1"><h1 class="ecom__heading ecom-db">JESENNÉ DOBRODRUŽSTVO</h1></div></div> <div class="ecom-block ecom-core core__block ecom-width-desktop ecom-oxg4uom2tdh"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-4st5rmoph9s" deep="1"><div class="text-content ecom-html has-drop-cap-view-framed">Priprav sa na jesenné výlety v prémiovom oblečení. Teraz za špeciálne ceny.</div></div></div> <div class="ecom-block ecom-core core__block ecom-qcx7m50d6o"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-4st5rmoph9s" deep="1"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="https://northfinder.sk/collections/outdoor-sale-autumn"><span class="ecom__element--button-icon-text ecom-html">Zobraziť kolekciu</span><span class="ecom-button-icon ecom__element--button-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M335 408.1C330.3 404.3 328 398.2 328 392s2.344-12.28 7.031-16.97L430.1 280H24C10.75 280 0 269.2 0 255.1C0 242.7 10.75 232 24 232h406.1l-95.03-95.03c-9.375-9.375-9.375-24.56 0-33.94s24.56-9.375 33.94 0l136 136c9.375 9.375 9.375 24.56 0 33.94l-136 136C359.6 418.3 344.4 418.3 335 408.1z"></path></svg></span></a></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-s8gn73kat1i" data-id="ecom-s8gn73kat1i" style="z-index: inherit;"><div class="core__row--columns core__row--full"><div class="ecom-column ecom-core core__column--first core__column--last ecom-cu6lu58r279"><div class="core__column--wrapper" id="ecom-cu6lu58r279"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-er2hcxdfmur" ecom-scrolling-animation="[{&quot;css&quot;:&quot;translateX&quot;,&quot;value&quot;:[]}]"><div class="ecom-element ecom-collection ecom-collection__product" section_id="ecom-s8gn73kat1i" deep="1"><div class="ecom-collection__product-wrapper"><div class="ecom-collection__product-container ecom-collection__product-container_featured"><div class="ecom-collection__product-main ecom-swiper-container ecom-collection_product_template_featured" data-week="[%-W] week%!W" data-day="[%-D] day%!D" data-hour="[%-H] hr%!H" data-minute="[%-M] min%!M" data-second="[%-S] sec%!S" data-sale="- {{ percentage }}" data-review-platform="{%- assign review_platform = shop.metafields.ecomposer.app_review.value -%}{{-review_platform-}}" data-countdown-shows="day,hour,minute,second" data-translate="true">
+ {%- capture badge_tags -%}Hot,Best Selling,Trending Item{%- endcapture -%}
  {%- liquid
  assign colors = shop.metafields.ecomposer.colors
  assign badge_tags = badge_tags | strip | split: ','
@@ -483,7 +466,7 @@
  -%}
  
  
- {%- capture limit-%}24{% endcapture %}
+ {%- capture limit-%}4{% endcapture %}
  {%- if limit == blank -%}
  {% assign limit = 12 %}
  {% else %}
@@ -493,9 +476,9 @@
  {%- capture handle_collection -%}outdoor-sale-autumn{% endcapture%}
  {% assign collection = collections[handle_collection] %}
  {%- if handle_collection and collection.handle != blank -%}
- {% assign products = collection.products | where: "available" %}
+ {% assign products = collection.products %}
  {% else %}
- {% assign products = collections.all.products | where: "available" %}
+ {% assign products = collections.all.products %}
  {% assign collection = collections.all%}
  {%- endif -%}
  {% assign is_collection = true %}
@@ -509,17 +492,17 @@
  {%- endif -%}
  {% endif %}
  {% capture quickshop_layout%}full{% endcapture %}
- {% capture product_style%}vertical{% endcapture%}
+ {% capture product_style%}absolute{% endcapture%}
  {%- assign view_more_only = undefined -%}
- {% capture product_layout %}grid{% endcapture %}
+ {% capture product_layout %}slider{% endcapture %}
  {% assign check_min = 0%}
  {% if products and products.size > check_min and products != blank %}
- <div class="
- ecom-collection__product--wrapper-items ecom-collection-product__layout-grid
+ <div class="ecom-swiper-wrapper
+ ecom-collection__product--wrapper-items ecom-collection-product__layout-slider
  "
  data-grid-column="4"
  data-grid-column-tablet="3"
- data-grid-column-mobile="2"
+ data-grid-column-mobile="1"
  
  
  >
@@ -566,7 +549,7 @@
  title="{{ product.title | escape }}">
  
  <span class="ecom-collection__product-view-more-text">
- View More
+ Zobraziť viac
  </span>
  </a>
  
@@ -594,7 +577,7 @@
  title="{{ product.title | escape }}">
  
  <span class="ecom-collection__product-view-more-text">
- View More
+ Zobraziť viac
  </span>
  </a>
  </div>
@@ -616,7 +599,7 @@
  {%- if product.variants.first.inventory_management and product.variants.first.inventory_quantity <= 0 and product.variants.first.inventory_policy == 'continue' -%}
  Pre order
  {%-else-%}
- Pridaj do košíka
+ Kúpiť teraz
  {%- endif -%}
  </span>
  </a>
@@ -629,7 +612,7 @@
  ecom-child-element" title="{{ product.title | escape }}" target="" >
  
  <span class="ecom-collection__product-view-more-text">
- View More
+ Zobraziť viac
  </span>
  </a>
  
@@ -646,10 +629,10 @@
  </div>
  </div>
  {% endcapture %}
- <div class="ecom-collection__product-item " data-product-handle="{{product.handle}}" data-style="{{product_style}}"{% unless product.has_only_default_variant %} ec-variant-init{% endunless %}>
+ <div class="ecom-collection__product-item ecom-swiper-slide" data-product-handle="{{product.handle}}" data-style="{{product_style}}"{% unless product.has_only_default_variant %} ec-variant-init{% endunless %}>
  <div
  class="ecom-collection__product-item--wrapper {% if product_style == 'horizontal'%} ecom-d-flex {% else %} ecom-flex-column {% endif %}">
- <div class="ecom-collection__product-media-wrapper ecom-enable-hover--mobile {% if product_style == 'horizontal'%} ecom-d-flex{% endif %} "
+ <div class="ecom-collection__product-media-wrapper {% if product_style == 'horizontal'%} ecom-d-flex{% endif %} "
  >
  {%- if enable_hook -%}
  {% capture the_ecom_hook %}
@@ -671,7 +654,7 @@
  <div class="ecom-collection__product-media--container">
  <div
  class="ecom-child-element ecom-collection__product-media ecom-collection__product-media--adapt
- {% if product.media[1] != nil %}ecom-collection__product-media--hover-effect{% endif %}"
+ "
  style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
  
  >
@@ -690,23 +673,6 @@
  height="{{ product.featured_media.height }}"
  />
  
- {%- if product.media[1] != nil -%}
- <img srcset="
- {%- if product.media[1].width >= 533 -%}{{ product.media[1] | image_url: width: 533 }} 533w,{%- endif -%}
- {%- if product.media[1].width >= 720 -%}{{ product.media[1] | image_url: width: 720 }} 720w,{%- endif -%}
- {%- if product.media[1].width >= 940 -%}{{ product.media[1] | image_url: width: 940 }} 940w,{%- endif -%}
- {%- if product.media[1].width >= 1066 -%}{{ product.media[1] | image_url: width: 1066 }} 1066w,{%- endif -%}
- {{ product.media[1] | image_url }} {{ product.media[1].width }}w""
- src="{{ product.media[1] | image_url: width: 533 }}"
- sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
- alt="{{ product.media[1].alt | escape }}"
- loading='lazy'
- class="ecom-collection__product-secondary-media"
- width="{{ product.media[1].width }}"
- height="{{ product.media[1].height }}"
- />
- {%- endif -%}
- 
  </div>
  </div>
  {% else %}
@@ -720,30 +686,9 @@
  </div>
  {% endif %}
  
- <div class="ecom-collection__product-badge">
  
  
  
- {%- if product.has_only_default_variant -%}
- {%- if product.compare_at_price != null and product.compare_at_price > product.price -%}
- {%- assign sale = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
- <span class="ecom-collection__product-price--bage-sale">
- -{{sale}}%
- </span>
- {%- endif -%}
- {%- else -%}
- {%- if product.selected_or_first_available_variant.compare_at_price != null and product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
- {%- assign sale = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | times: 100.0 | divided_by: product.selected_or_first_available_variant.compare_at_price | round -%}
- {%else%}
- {%- assign sale = null %}
- {%- endif -%}
- <span class="ecom-collection__product-price--bage-sale" style="{% unless sale %}display:none{% endunless %}">
- -{{sale}}%
- </span>
- {%- endif -%}
- {%- assign sale = null -%}
- 
- </div>
  </a>
  
  <div class="ecom-collection__product-group-button-action " style="justify-content: start">
@@ -792,10 +737,10 @@
  
  
  {% assign showPriceWhenNotLogin = true %}
- {% if undefined and customer == blank%}
+ {% if false and customer == blank%}
  {% assign showPriceWhenNotLogin = false %}
  {% endif %}
- {% if showPriceWhenNotLogin == false and undefined %}
+ {% if showPriceWhenNotLogin == false and false %}
  {% assign showOnLive = true %}
  {% else %}
  {% assign showOnLive = false %}
@@ -803,7 +748,7 @@
  {% assign showPreview = false %}
  {% if showOnLive or showPreview %}
  <div class="ecom-collection__product-login-to-see">
- undefined
+ Login to see price
  </div>
  {% endif %}
  {% if true and showPriceWhenNotLogin %}
@@ -820,7 +765,7 @@
  {%- comment -%}
  <span class="ecom-collection__product-price--bage-sale">
  {% assign sale = product.compare_at_price_max | minus: product.price | times: 100 | divided_by: product.compare_at_price_max | times: 100 | money %}
- -{{sale}}%
+ - {{ percentage }}
  </span>
  {%- endcomment -%}
  </div>
@@ -878,7 +823,24 @@
  {% if product_style == 'horizontal' or product_style == 'vertical' or product_layout == 'list' %}
  {{product_actions}}
  {% endif %}
+ {%- assign countdown_to = product.metafields.ecomposer.countdown -%}
+ {% if product.available and countdown_to %}
+ <div class="ecom-collection__product-countdown ecom-child-element" >
+ <div class="ecom-collection__product-countdown-wrapper" >
+ <div class="ecom-collection__product-countdown-wrapper--title"> </div>
+ <div class="ecom-product-single__countdown-container" >
+ {%- assign countdown_from = product.metafields.ecomposer.countdown_from -%}
+ <div
+ data-product-id="{{product.id}}"
+ class="ecom-collection__product-countdown-time ecom-collection__product-countdown-time--metafields"
+ data-ecom-countdown-from="{{ countdown_from }}"
+ data-ecom-countdown="{{countdown_to}}"
+ ></div>
+ </div>
  
+ </div>
+ </div>
+ {% endif %}
  
  </div>
  </div>
@@ -895,7 +857,7 @@
  {% endfor %}
  </div>
  {% else %}
- <div class="ecom-collection__product--wrapper-items ecom-collection__product--no-item ecom-collection-product__layout-grid" >
+ <div class="ecom-collection__product--wrapper-items ecom-collection__product--no-item ecom-collection-product__layout-slider" >
  <div class="ecom-collection__product-item" >
  There are no product yet!
  </div>
@@ -906,8 +868,8 @@
  
  {% assign collection = tmp_collection %}
  {% assign product = tmp_product %}
- </div></div></div></div></div> <div class="ecom-animation ecom-block ecom-core core__block ecom-width-mb ecom-ai8mak3es48" ec-delay="600"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-7bggfpfoh7v" deep="2"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="{{ecom_root_url}}collections/outdoor-sale-autumn"><span class="ecom__element--button-icon-text ecom-html">Zobraziť celú kolekciu Jeseň</span><span class="ecom-button-icon ecom__element--button-icon"></span></a></div></div> </div></div></div></div></div><div id="ecom-bth4sxele8" class="core__group--item tab__item" data-id="ecom-bth4sxele8" style=""><div class="core__group--body tabs__body"><div class="core__blocks"><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-animation ecom-block ecom-core core__block ecom-moegwjddk" ecom-scrolling-animation="[{&quot;css&quot;:&quot;translateX&quot;,&quot;value&quot;:[]}]" ec-delay="600"><div class="ecom-element ecom-collection ecom-collection__product" section_id="ecom-7bggfpfoh7v" deep="2"><div class="ecom-collection__product-wrapper"><div class="ecom-collection__product-container ecom-collection__product-container_featured"><div class="ecom-collection__product-main ecom-collection_product_template_featured" data-week="[%-W] week%!W" data-day="[%-d] day%!D" data-hour="[%-H] hr%!H" data-minute="[%-M] min%!M" data-second="[%-S] sec%!S" data-sale="-{{sale}}%" data-review-platform="{%- assign review_platform = shop.metafields.ecomposer.app_review.value -%}{{-review_platform-}}" data-countdown-shows="day,hour,minute,second" data-translate="true">
- {%- capture badge_tags -%}Hot{%- endcapture -%}
+ </div><div class="ecom-swiper-navigation-position"><button class="ecom-swiper-button ecom-swiper-button-prev" style="--ecom-position: absolute; --ecom-position__tablet: absolute; --ecom-position__mobile: absolute;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" fill="currentColor"><path d="M192 448c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l137.4 137.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448z"></path></svg></button><button class="ecom-swiper-button ecom-swiper-button-next" style="--ecom-position: absolute; --ecom-position__tablet: absolute; --ecom-position__mobile: absolute;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" fill="currentColor"><path d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg></button></div><div class="ecom-swiper-pagination-position ecom-swiper-pagination" style="display: none;"></div></div></div></div></div> <div class="ecom-block ecom-core core__block ecom-j4nab2loka"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-s8gn73kat1i" deep="1"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="https://northfinder.sk/collections/outdoor-sale-autumn"><span class="ecom__element--button-icon-text ecom-html">Zobraziť kolekciu</span><span class="ecom-button-icon ecom__element--button-icon"><svg width="35" height="16" viewBox="0 0 35 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 7C0.947715 7 0.5 7.44772 0.5 8C0.5 8.55228 0.947715 9 1.5 9L1.5 7ZM34.2071 8.7071C34.5976 8.31658 34.5976 7.68341 34.2071 7.29289L27.8431 0.92893C27.4526 0.538406 26.8195 0.538406 26.4289 0.92893C26.0384 1.31945 26.0384 1.95262 26.4289 2.34314L32.0858 8L26.4289 13.6569C26.0384 14.0474 26.0384 14.6805 26.4289 15.0711C26.8195 15.4616 27.4526 15.4616 27.8431 15.0711L34.2071 8.7071ZM1.5 9L33.5 9L33.5 7L1.5 7L1.5 9Z"></path></svg></span></a></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-307lfbt9cvh" data-id="ecom-307lfbt9cvh" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-sqepa7baq6"><div class="core__column--wrapper" id="ecom-sqepa7baq6"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-wxtsrdiq2kd"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-307lfbt9cvh" deep="1"><h1 class="ecom__heading ecom-db">ZIMNÉ DOBRODRUŽSTVO</h1></div></div> <div class="ecom-block ecom-core core__block ecom-width-desktop ecom-txxxlynr3h"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-307lfbt9cvh" deep="1"><div class="text-content ecom-html has-drop-cap-view-framed">Zdolaj zasnežené svahy v prémiovom oblečení. Teraz za špeciálne ceny.</div></div></div> <div class="ecom-block ecom-core core__block ecom-was03uuxkuq"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-307lfbt9cvh" deep="1"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="https://northfinder.sk/collections/outdoor-sale-winter"><span class="ecom__element--button-icon-text ecom-html">Zobraziť kolekciu</span><span class="ecom-button-icon ecom__element--button-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M335 408.1C330.3 404.3 328 398.2 328 392s2.344-12.28 7.031-16.97L430.1 280H24C10.75 280 0 269.2 0 255.1C0 242.7 10.75 232 24 232h406.1l-95.03-95.03c-9.375-9.375-9.375-24.56 0-33.94s24.56-9.375 33.94 0l136 136c9.375 9.375 9.375 24.56 0 33.94l-136 136C359.6 418.3 344.4 418.3 335 408.1z"></path></svg></span></a></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-ogo6isl6y3t" data-id="ecom-ogo6isl6y3t" style="z-index: inherit;"><div class="core__row--columns core__row--full"><div class="ecom-column ecom-core core__column--first core__column--last ecom-edwzpd145sm"><div class="core__column--wrapper" id="ecom-edwzpd145sm"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-cntza7cbnkv" ecom-scrolling-animation="[{&quot;css&quot;:&quot;translateX&quot;,&quot;value&quot;:[]}]"><div class="ecom-element ecom-collection ecom-collection__product" section_id="ecom-ogo6isl6y3t" deep="1"><div class="ecom-collection__product-wrapper"><div class="ecom-collection__product-container ecom-collection__product-container_featured"><div class="ecom-collection__product-main ecom-swiper-container ecom-collection_product_template_featured" data-week="[%-W] week%!W" data-day="[%-D] day%!D" data-hour="[%-H] hr%!H" data-minute="[%-M] min%!M" data-second="[%-S] sec%!S" data-sale="- {{ percentage }}" data-review-platform="{%- assign review_platform = shop.metafields.ecomposer.app_review.value -%}{{-review_platform-}}" data-countdown-shows="day,hour,minute,second" data-translate="true">
+ {%- capture badge_tags -%}Hot,Best Selling,Trending Item{%- endcapture -%}
  {%- liquid
  assign colors = shop.metafields.ecomposer.colors
  assign badge_tags = badge_tags | strip | split: ','
@@ -917,7 +879,7 @@
  -%}
  
  
- {%- capture limit-%}24{% endcapture %}
+ {%- capture limit-%}4{% endcapture %}
  {%- if limit == blank -%}
  {% assign limit = 12 %}
  {% else %}
@@ -927,9 +889,9 @@
  {%- capture handle_collection -%}outdoor-sale-winter{% endcapture%}
  {% assign collection = collections[handle_collection] %}
  {%- if handle_collection and collection.handle != blank -%}
- {% assign products = collection.products | where: "available" %}
+ {% assign products = collection.products %}
  {% else %}
- {% assign products = collections.all.products | where: "available" %}
+ {% assign products = collections.all.products %}
  {% assign collection = collections.all%}
  {%- endif -%}
  {% assign is_collection = true %}
@@ -943,17 +905,17 @@
  {%- endif -%}
  {% endif %}
  {% capture quickshop_layout%}full{% endcapture %}
- {% capture product_style%}vertical{% endcapture%}
+ {% capture product_style%}absolute{% endcapture%}
  {%- assign view_more_only = undefined -%}
- {% capture product_layout %}grid{% endcapture %}
+ {% capture product_layout %}slider{% endcapture %}
  {% assign check_min = 0%}
  {% if products and products.size > check_min and products != blank %}
- <div class="
- ecom-collection__product--wrapper-items ecom-collection-product__layout-grid
+ <div class="ecom-swiper-wrapper
+ ecom-collection__product--wrapper-items ecom-collection-product__layout-slider
  "
  data-grid-column="4"
  data-grid-column-tablet="3"
- data-grid-column-mobile="2"
+ data-grid-column-mobile="1"
  
  
  >
@@ -1000,7 +962,7 @@
  title="{{ product.title | escape }}">
  
  <span class="ecom-collection__product-view-more-text">
- View More
+ Zobraziť viac
  </span>
  </a>
  
@@ -1028,7 +990,7 @@
  title="{{ product.title | escape }}">
  
  <span class="ecom-collection__product-view-more-text">
- View More
+ Zobraziť viac
  </span>
  </a>
  </div>
@@ -1050,7 +1012,7 @@
  {%- if product.variants.first.inventory_management and product.variants.first.inventory_quantity <= 0 and product.variants.first.inventory_policy == 'continue' -%}
  Pre order
  {%-else-%}
- Pridaj do košíka
+ Kúpiť teraz
  {%- endif -%}
  </span>
  </a>
@@ -1063,7 +1025,7 @@
  ecom-child-element" title="{{ product.title | escape }}" target="" >
  
  <span class="ecom-collection__product-view-more-text">
- View More
+ Zobraziť viac
  </span>
  </a>
  
@@ -1080,10 +1042,10 @@
  </div>
  </div>
  {% endcapture %}
- <div class="ecom-collection__product-item " data-product-handle="{{product.handle}}" data-style="{{product_style}}"{% unless product.has_only_default_variant %} ec-variant-init{% endunless %}>
+ <div class="ecom-collection__product-item ecom-swiper-slide" data-product-handle="{{product.handle}}" data-style="{{product_style}}"{% unless product.has_only_default_variant %} ec-variant-init{% endunless %}>
  <div
  class="ecom-collection__product-item--wrapper {% if product_style == 'horizontal'%} ecom-d-flex {% else %} ecom-flex-column {% endif %}">
- <div class="ecom-collection__product-media-wrapper ecom-enable-hover--mobile {% if product_style == 'horizontal'%} ecom-d-flex{% endif %} "
+ <div class="ecom-collection__product-media-wrapper {% if product_style == 'horizontal'%} ecom-d-flex{% endif %} "
  >
  {%- if enable_hook -%}
  {% capture the_ecom_hook %}
@@ -1105,7 +1067,7 @@
  <div class="ecom-collection__product-media--container">
  <div
  class="ecom-child-element ecom-collection__product-media ecom-collection__product-media--adapt
- {% if product.media[1] != nil %}ecom-collection__product-media--hover-effect{% endif %}"
+ "
  style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
  
  >
@@ -1124,23 +1086,6 @@
  height="{{ product.featured_media.height }}"
  />
  
- {%- if product.media[1] != nil -%}
- <img srcset="
- {%- if product.media[1].width >= 533 -%}{{ product.media[1] | image_url: width: 533 }} 533w,{%- endif -%}
- {%- if product.media[1].width >= 720 -%}{{ product.media[1] | image_url: width: 720 }} 720w,{%- endif -%}
- {%- if product.media[1].width >= 940 -%}{{ product.media[1] | image_url: width: 940 }} 940w,{%- endif -%}
- {%- if product.media[1].width >= 1066 -%}{{ product.media[1] | image_url: width: 1066 }} 1066w,{%- endif -%}
- {{ product.media[1] | image_url }} {{ product.media[1].width }}w""
- src="{{ product.media[1] | image_url: width: 533 }}"
- sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
- alt="{{ product.media[1].alt | escape }}"
- loading='lazy'
- class="ecom-collection__product-secondary-media"
- width="{{ product.media[1].width }}"
- height="{{ product.media[1].height }}"
- />
- {%- endif -%}
- 
  </div>
  </div>
  {% else %}
@@ -1154,30 +1099,9 @@
  </div>
  {% endif %}
  
- <div class="ecom-collection__product-badge">
  
  
  
- {%- if product.has_only_default_variant -%}
- {%- if product.compare_at_price != null and product.compare_at_price > product.price -%}
- {%- assign sale = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
- <span class="ecom-collection__product-price--bage-sale">
- -{{sale}}%
- </span>
- {%- endif -%}
- {%- else -%}
- {%- if product.selected_or_first_available_variant.compare_at_price != null and product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
- {%- assign sale = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price | times: 100.0 | divided_by: product.selected_or_first_available_variant.compare_at_price | round -%}
- {%else%}
- {%- assign sale = null %}
- {%- endif -%}
- <span class="ecom-collection__product-price--bage-sale" style="{% unless sale %}display:none{% endunless %}">
- -{{sale}}%
- </span>
- {%- endif -%}
- {%- assign sale = null -%}
- 
- </div>
  </a>
  
  <div class="ecom-collection__product-group-button-action " style="justify-content: start">
@@ -1226,10 +1150,10 @@
  
  
  {% assign showPriceWhenNotLogin = true %}
- {% if undefined and customer == blank%}
+ {% if false and customer == blank%}
  {% assign showPriceWhenNotLogin = false %}
  {% endif %}
- {% if showPriceWhenNotLogin == false and undefined %}
+ {% if showPriceWhenNotLogin == false and false %}
  {% assign showOnLive = true %}
  {% else %}
  {% assign showOnLive = false %}
@@ -1237,7 +1161,7 @@
  {% assign showPreview = false %}
  {% if showOnLive or showPreview %}
  <div class="ecom-collection__product-login-to-see">
- undefined
+ Login to see price
  </div>
  {% endif %}
  {% if true and showPriceWhenNotLogin %}
@@ -1254,7 +1178,7 @@
  {%- comment -%}
  <span class="ecom-collection__product-price--bage-sale">
  {% assign sale = product.compare_at_price_max | minus: product.price | times: 100 | divided_by: product.compare_at_price_max | times: 100 | money %}
- -{{sale}}%
+ - {{ percentage }}
  </span>
  {%- endcomment -%}
  </div>
@@ -1312,7 +1236,24 @@
  {% if product_style == 'horizontal' or product_style == 'vertical' or product_layout == 'list' %}
  {{product_actions}}
  {% endif %}
+ {%- assign countdown_to = product.metafields.ecomposer.countdown -%}
+ {% if product.available and countdown_to %}
+ <div class="ecom-collection__product-countdown ecom-child-element" >
+ <div class="ecom-collection__product-countdown-wrapper" >
+ <div class="ecom-collection__product-countdown-wrapper--title"> </div>
+ <div class="ecom-product-single__countdown-container" >
+ {%- assign countdown_from = product.metafields.ecomposer.countdown_from -%}
+ <div
+ data-product-id="{{product.id}}"
+ class="ecom-collection__product-countdown-time ecom-collection__product-countdown-time--metafields"
+ data-ecom-countdown-from="{{ countdown_from }}"
+ data-ecom-countdown="{{countdown_to}}"
+ ></div>
+ </div>
  
+ </div>
+ </div>
+ {% endif %}
  
  </div>
  </div>
@@ -1329,7 +1270,7 @@
  {% endfor %}
  </div>
  {% else %}
- <div class="ecom-collection__product--wrapper-items ecom-collection__product--no-item ecom-collection-product__layout-grid" >
+ <div class="ecom-collection__product--wrapper-items ecom-collection__product--no-item ecom-collection-product__layout-slider" >
  <div class="ecom-collection__product-item" >
  There are no product yet!
  </div>
@@ -1340,7 +1281,7 @@
  
  {% assign collection = tmp_collection %}
  {% assign product = tmp_product %}
- </div></div></div></div></div> <div class="ecom-animation ecom-block ecom-core core__block ecom-width-mb ecom-crfnni4c3ql" ec-delay="600"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-7bggfpfoh7v" deep="2"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="{{ecom_root_url}}collections/outdoor-sale-winter"><span class="ecom__element--button-icon-text ecom-html">Zobraziť celú kolekciu Zima</span><span class="ecom-button-icon ecom__element--button-icon"></span></a></div></div> </div></div></div></div></div></div></div> </div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-3ikla90tphc" data-id="ecom-3ikla90tphc" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-f8ab0i9magj"><div class="core__column--wrapper" id="ecom-f8ab0i9magj"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-aesgbusgyf"><div class="ecom-row ecom-core core__block ecom-cckezcimmch" data-id="ecom-cckezcimmch" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first ecom-l43riotdtm8"><div class="core__column--wrapper" id="ecom-l43riotdtm8"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-animation ecom-block ecom-core core__block ecom-width-mb ecom-qewspv872to" ec-delay="800"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-3ikla90tphc" deep="2"><h3 class="ecom__heading ecom-db">VIP ceny</h3></div></div> <div class="ecom-animation ecom-block ecom-core core__block ecom-width-desktop ecom-exaqx5wjt2g" ec-delay="700"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-3ikla90tphc" deep="2"><div class="text-content ecom-html has-drop-cap-view-framed"><div>Získaj prístup k exkluzívnym VIP cenám. Tvoja zľava sa uplatní automaticky po prihlásení.</div></div></div></div> <div class="ecom-animation ecom-block ecom-core core__block ecom-4giss1rut99" ec-delay="700"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-3ikla90tphc" deep="2"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="https://northfinder.com/en/login"><span class="ecom__element--button-icon-text ecom-html">Prihlásiť sa</span><span class="ecom-button-icon ecom__element--button-icon"></span></a></div></div> </div></div></div></div> <div class="ecom-column ecom-core core__column--last ecom-9vpms76htwp"><div class="core__column--wrapper" id="ecom-9vpms76htwp"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-animation ecom-block ecom-core core__block elmspace ecom-w61iphpu89" ec-delay="500"><div class="ecom-element ecom-base-image" section_id="ecom-3ikla90tphc" deep="2"><figure><div class="ecom-container-image ecom-image-align"><div class="ecom-image-content-position ecom-image-default ecom-base-image-container-overlay" style=""><div class="ecom-base-image ecom-overlay"></div><picture class="ecom-image-picture"><img class="" loading="lazy" fetchpriority="high" src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/ce6887acd595f08affb94c4695586543.png?v=1786015847" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/ce6887acd595f08affb94c4695586543.png?v=1786015847 1800w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/ce6887acd595f08affb94c4695586543.png?v=1786015847&amp;width=600&amp;crop=center 600w" sizes="(max-width: 600px) 600px, 1800px" alt="ce6887acd595f08affb94c4695586543" width="1800" height="2700"></picture></div></div></figure></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
+ </div><div class="ecom-swiper-navigation-position"><button class="ecom-swiper-button ecom-swiper-button-prev" style="--ecom-position: absolute; --ecom-position__tablet: absolute; --ecom-position__mobile: absolute;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" fill="currentColor"><path d="M192 448c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l137.4 137.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448z"></path></svg></button><button class="ecom-swiper-button ecom-swiper-button-next" style="--ecom-position: absolute; --ecom-position__tablet: absolute; --ecom-position__mobile: absolute;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" fill="currentColor"><path d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg></button></div><div class="ecom-swiper-pagination-position ecom-swiper-pagination" style="display: none;"></div></div></div></div></div> <div class="ecom-block ecom-core core__block ecom-nlwiui7rt8g"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-ogo6isl6y3t" deep="1"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="https://northfinder.sk/collections/outdoor-sale-winter"><span class="ecom__element--button-icon-text ecom-html">Zobraziť kolekciu</span><span class="ecom-button-icon ecom__element--button-icon"><svg width="35" height="16" viewBox="0 0 35 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 7C0.947715 7 0.5 7.44772 0.5 8C0.5 8.55228 0.947715 9 1.5 9L1.5 7ZM34.2071 8.7071C34.5976 8.31658 34.5976 7.68341 34.2071 7.29289L27.8431 0.92893C27.4526 0.538406 26.8195 0.538406 26.4289 0.92893C26.0384 1.31945 26.0384 1.95262 26.4289 2.34314L32.0858 8L26.4289 13.6569C26.0384 14.0474 26.0384 14.6805 26.4289 15.0711C26.8195 15.4616 27.4526 15.4616 27.8431 15.0711L34.2071 8.7071ZM1.5 9L33.5 9L33.5 7L1.5 7L1.5 9Z"></path></svg></span></a></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-ayk0rcogh4l" data-id="ecom-ayk0rcogh4l" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-vqjzghf0hcb"><div class="core__column--wrapper" id="ecom-vqjzghf0hcb"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-otxttsf71ni"><div class="ecom-row ecom-core core__block ecom-cckezcimmch" data-id="ecom-cckezcimmch" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first ecom-jp7ktjcck9"><div class="core__column--wrapper" id="ecom-jp7ktjcck9"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-width-mb ecom-bfbwr3hm1hi"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-ayk0rcogh4l" deep="2"><h3 class="ecom__heading ecom-db">VIP ceny</h3></div></div> <div class="ecom-block ecom-core core__block ecom-width-desktop ecom-81f2ggwpeu"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-ayk0rcogh4l" deep="2"><div class="text-content ecom-html has-drop-cap-view-framed"><div>Získaj prístup k exkluzívnym VIP cenám. Tvoja zľava sa uplatní automaticky po prihlásení.</div></div></div></div> <div class="ecom-block ecom-core core__block ecom-umidkr9obhd"><div class="ecom__element ecom-element-button ecom-button-default" section_id="ecom-ayk0rcogh4l" deep="2"><a class="ecom__element--button ecom-flex ecom-fl_center ecom-al_center" href="https://shopify.com/authentication/100928389452/login?analytics_trace_id=d53d107b-4fa6-49e6-b716-0a42a18db80a&amp;client_id=5e2304e2-6e66-4527-adf9-9feab7809927&amp;locale=sk&amp;redirect_uri=%2Fauthentication%2F100928389452%2Foauth%2Fauthorize%3F_cs%3D%26analytics_trace_id%3Dd53d107b-4fa6-49e6-b716-0a42a18db80a%26buyer_flags%3DeyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzcG9ydGZpbmRlci1pbnRlcm5hdGlvbmFsLm15c2hvcGlmeS5jb20iLCJmbGFncyI6W10sImV4cCI6MTc4NjczMTIwNiwibmJmIjoxNzg2MTI2NDA2fQ.p06TGa1drPar6UCNMSuHsknpr0ddHBirAA_ybYd8lqs%26client_id%3D5e2304e2-6e66-4527-adf9-9feab7809927%26locale%3Dsk%26nonce%3D0f1b52b0-8bfa-43f6-ab5d-30de5eedc5b5%26redirect_uri%3Dhttps%253A%252F%252Fnorthfinder.sk%252Fcustomer_authentication%252Fcallback%26response_type%3Dcode%26scope%3Dopenid%2Bemail%2Bcustomer-account-api%26state%3DhWNFO9M2WduXhPyz8JZCRwSB&amp;ui_hint=full"><span class="ecom__element--button-icon-text ecom-html">Prihlásiť sa</span><span class="ecom-button-icon ecom__element--button-icon"></span></a></div></div> </div></div></div></div> <div class="ecom-column ecom-core core__column--last ecom-7mlxr5ls55"><div class="core__column--wrapper" id="ecom-7mlxr5ls55"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-c4eimr1dquc"><div class="ecom-element ecom-base-image" section_id="ecom-ayk0rcogh4l" deep="2"><figure><div class="ecom-container-image ecom-image-align"><div class="ecom-image-content-position ecom-image-default ecom-base-image-container-overlay" style=""><div class="ecom-base-image ecom-overlay"></div><picture class="ecom-image-picture"><source media="(max-width: 767px)" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/look-book-__2025-11-21-10-26-29.webp?v=1786613653"><img class="" loading="lazy" fetchpriority="high" src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/ce6887acd595f08affb94c4695586543.png?v=1786015847" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/ce6887acd595f08affb94c4695586543.png?v=1786015847 1000w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/ce6887acd595f08affb94c4695586543.png?v=1786015847&amp;width=600&amp;crop=center 600w" sizes="(max-width: 600px) 600px, 1000px" alt="ce6887acd595f08affb94c4695586543" width="1000" height="1500"></picture></div></div></figure></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
 </div></div>
 {% schema %}
 {
