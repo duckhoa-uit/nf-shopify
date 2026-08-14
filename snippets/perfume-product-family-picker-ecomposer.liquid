@@ -1,10 +1,10 @@
 {% comment %}
   EComposer placement adapter for the perfume product-family picker.
 
-  EComposer owns real in-product variant options such as Color. Perfume volume
-  is represented by sibling products, so a singleton size option is hidden from
-  EComposer's generated presentation while its only value remains part of the
-  product's variant data.
+  EComposer owns the underlying product form, variant data, and add-to-cart
+  runtime. Perfume volume is represented by sibling products, so the generated
+  Color presentation and singleton Size presentation are hidden for perfume
+  family products while their values remain in the variant data.
 
   Accepts:
   - product: {Object} Current product.
@@ -24,10 +24,18 @@
 
   assign ecomposer_size_option_handle = blank
   assign ecomposer_size_option_index = blank
+  assign ecomposer_color_option_handle = blank
+  assign ecomposer_color_option_index = blank
   assign picker_instance_id = instance_id | default: 'EComposerPerfumeFamilyPicker'
 
   if family_products != blank
     for option in product.options_with_values
+      assign option_handle = option.name | handleize
+      if option_handle == 'color' or option_handle == 'colour'
+        assign ecomposer_color_option_handle = option_handle
+        assign ecomposer_color_option_index = option.position | minus: 1
+      endif
+
       capture is_size_option
         render 'is-size-option', option: option, product: product
       endcapture
@@ -36,9 +44,16 @@
       if is_size_option == 'true' and option.values.size == 1
         assign ecomposer_size_option_handle = option.name | handleize
         assign ecomposer_size_option_index = option.position | minus: 1
-        break
       endif
     endfor
+
+    if ecomposer_color_option_handle == blank
+      assign color_option = product.options_by_name.Color
+      if color_option != blank
+        assign ecomposer_color_option_handle = color_option.name | handleize
+        assign ecomposer_color_option_index = color_option.position | minus: 1
+      endif
+    endif
 
     if ecomposer_size_option_handle == blank
       assign size_option = product.options_by_name.Size
@@ -51,6 +66,16 @@
 -%}
 
 {{ 'perfume-product-family-picker.css' | asset_url | stylesheet_tag }}
+
+{%- if ecomposer_color_option_handle != blank -%}
+  <style data-perfume-ecomposer-color-ownership>
+    .ecom-product-single__variant-picker .ecom-product-single__picker-option-{{ ecomposer_color_option_handle }},
+    .ecom-product-single__variant-picker .selector-wrapper:has(.single-option-selector[data-option-index="{{ ecomposer_color_option_index }}"]) {
+      /* Preserve EComposer's variant runtime while hiding the perfume PDP Color presentation. */
+      display: none !important;
+    }
+  </style>
+{%- endif -%}
 
 {%- if ecomposer_size_option_handle != blank -%}
   <style data-perfume-ecomposer-size-ownership>

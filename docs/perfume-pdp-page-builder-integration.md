@@ -15,7 +15,7 @@ Volume options are detected with the theme's locale-independent size-option help
 
 ## EComposer
 
-Add an EComposer **Code** element at the desired position in the Product Template. Render the EComposer-specific adapter:
+Add an EComposer **Code** element in the Product Template immediately after EComposer's native product variant picker and before quantity/add-to-cart controls. Render the EComposer-specific adapter:
 
 ```liquid
 {% render 'perfume-product-family-picker-ecomposer', product: product, instance_id: 'EComposerPerfumeFamilyPicker' %}
@@ -23,9 +23,9 @@ Add an EComposer **Code** element at the desired position in the Product Templat
 
 Do not paste the component implementation or duplicate CSS into EComposer. Do not edit generated `ecom-*.liquid`, `ecom-*.css`, or `ecom-*.js` files directly.
 
-EComposer remains responsible for product media, price, real in-product variant options such as Color, quantity, and add-to-cart. Perfume volume is represented by sibling products, so the adapter hides only EComposer's generated singleton size control when the current product belongs to a perfume family. The singleton size value remains in the product's variant data for form submission. The custom component performs normal navigation to sibling product URLs and must not bridge EComposer events to the theme product runtime.
+EComposer remains responsible for product media, price, the underlying variant form and variant JSON, quantity, and add-to-cart. Perfume volume is represented by sibling products, so the adapter hides EComposer's generated Color presentation and singleton Size presentation when the current product belongs to a perfume family. The Color and Size values remain in the product's variant data and selected variant control for form submission. The custom component performs normal navigation to sibling product URLs and must not bridge EComposer events to the theme product runtime.
 
-This ownership boundary prevents the EComposer native `Size` control from appearing beside the custom `5ML / 50ML / 150ML / ...` sibling-product picker while preserving real variant selection such as Color.
+This ownership boundary keeps the visible perfume PDP contract consistent with the native template: the custom `5ML / 50ML / 150ML / ...` sibling-product picker is the only visible volume control, while EComposer's variant runtime remains intact but its Color and singleton Size presentations are hidden.
 
 If multiple EComposer templates need the adapter, it can be saved as an EComposer Global Block while the canonical implementation remains in this repository.
 
@@ -33,10 +33,11 @@ If multiple EComposer templates need the adapter, it can be saved as an ECompose
 
 For any builder that supports Shopify Liquid, use the same adapter contract:
 
-1. Use a builder-specific adapter when the builder renders a duplicate singleton volume option.
+1. Use a builder-specific adapter when the builder renders variant presentations that the perfume PDP contract intentionally hides.
 2. Load `perfume-product-family-picker.css`.
 3. Render `perfume-product-family-picker` with the current `product` and a unique `instance_id`.
-4. Keep normal sibling-product links as the functional behavior.
+4. Place the adapter directly after the builder's native variant picker and before quantity/add-to-cart controls.
+5. Keep normal sibling-product links as the functional behavior.
 
 If a builder does not support Shopify Liquid, use its supported app/embed integration or a hybrid Shopify template. Do not copy the business logic into builder-generated code or couple the component to generated product-form selectors.
 
@@ -45,8 +46,10 @@ If a builder does not support Shopify Liquid, use its supported app/embed integr
 - The published builder page resolves the current `product` object and perfume group metafield.
 - The current volume uses `aria-current="page"`.
 - Available volumes are normal links and unavailable volumes expose `aria-disabled="true"`.
-- Real in-product variants such as Color remain selectable in the builder's native picker.
-- No duplicate singleton volume/Size control is visible beside the family picker.
+- EComposer's underlying selected variant control and variant JSON remain present for add-to-cart.
+- No generated Color presentation is visible on the perfume PDP.
+- No duplicate singleton volume/Size presentation is visible beside the family picker.
+- The family picker Code element is directly after the native variant picker and before quantity/add-to-cart controls.
 - Every sibling product uses the intended product template.
 - Navigation loads the correct media, price, availability, and add-to-cart state for the destination product.
 - Browser Back and Forward work normally.
