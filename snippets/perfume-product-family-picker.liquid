@@ -1,0 +1,103 @@
+{% comment %}
+  Renders builder-neutral cross-product volume navigation for perfume products.
+
+  Accepts:
+  - product: {Object} Current product.
+  - instance_id: {String} Unique component instance identifier.
+  - shopify_attributes: {String} Optional Theme Editor attributes.
+
+  Usage:
+  {% render 'perfume-product-family-picker', product: product, instance_id: section.id %}
+{% endcomment %}
+
+{%- liquid
+  assign perfume_group = product.metafields.custom.parfum_group.value
+  assign family_products = perfume_group.products.value
+
+  if family_products == blank
+    assign family_products = product.metafields.custom.product_in_group.value
+  endif
+
+  assign picker_instance_id = instance_id | default: product.id | handleize
+  assign picker_label_id = 'PerfumeProductFamilyPickerLabel-' | append: picker_instance_id
+-%}
+
+{%- if family_products != blank -%}
+  <div class="perfume-product-family-picker" {{ shopify_attributes }}>
+    <div
+      class="perfume-product-family-picker__group"
+      role="group"
+      aria-labelledby="{{ picker_label_id }}"
+    >
+      <div id="{{ picker_label_id }}" class="perfume-product-family-picker__label">
+        {{- 'products.product.size_label' | t -}}
+      </div>
+
+      <div class="perfume-product-family-picker__options">
+        {%- assign rendered_size_keys = '' -%}
+        {%- for family_product in family_products -%}
+          {%- liquid
+            assign size_label = ''
+            for option in family_product.options_with_values
+              capture is_size_option
+                render 'is-size-option', option: option, product: family_product
+              endcapture
+              assign is_size_option = is_size_option | strip
+              if is_size_option == 'true'
+                assign size_label = option.values | first
+                break
+              endif
+            endfor
+
+            if size_label == blank
+              assign size_option = family_product.options_by_name.Size
+              if size_option != blank
+                assign size_label = size_option.values | first
+              endif
+            endif
+
+            if size_label == blank and family_product.metafields.custom.size.value != blank
+              assign size_metaobject = family_product.metafields.custom.size.value | first
+              assign size_label = size_metaobject.value.value
+            endif
+
+            assign size_key = size_label | strip | downcase
+            assign size_token = '|' | append: size_key | append: '|'
+            assign is_current = false
+            if family_product.id == product.id
+              assign is_current = true
+            endif
+          -%}
+
+          {%- if size_label != blank -%}
+            {%- unless rendered_size_keys contains size_token -%}
+              {%- assign rendered_size_keys = rendered_size_keys | append: size_token -%}
+              {%- if is_current -%}
+                <span
+                  class="perfume-product-family-picker__option perfume-product-family-picker__option--current"
+                  aria-current="page"
+                >
+                  {{- size_label | escape -}}
+                </span>
+              {%- elsif family_product.available -%}
+                <a
+                  class="perfume-product-family-picker__option perfume-product-family-picker__option--link"
+                  href="{{ family_product.url | escape }}"
+                >
+                  {{- size_label | escape -}}
+                </a>
+              {%- else -%}
+                <span
+                  class="perfume-product-family-picker__option perfume-product-family-picker__option--unavailable"
+                  aria-disabled="true"
+                >
+                  {{- size_label | escape -}}
+                </span>
+              {%- endif -%}
+            {%- endunless -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

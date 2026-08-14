@@ -1,0 +1,59 @@
+.perfume-product-family-picker {
+  --perfume-family-picker-border-radius: var(--variant-pills-radius, 3px);
+  --perfume-family-picker-border-width: var(--variant-pills-border-width, 1px);
+  --perfume-family-picker-duration: var(--duration-short, 100ms);
+  --perfume-family-picker-gap: 0.5rem;
+  --perfume-family-picker-label-spacing: 0.75rem;
+  --perfume-family-picker-option-height: 2.5rem;
+  --perfume-family-picker-option-padding: 0.75rem;
+  --perfume-family-picker-spacing: 0.75rem;
+  margin-block-start: var(--perfume-family-picker-spacing);
+}
+
+.perfume-product-family-picker__label {
+  margin-block-end: var(--perfume-family-picker-label-spacing);
+  color: inherit;
+  font-size: 0.875rem;
+  line-height: 1rem;
+}
+
+.perfume-product-family-picker__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--perfume-family-picker-gap);
+}
+
+.perfume-product-family-picker__option {
+  border: var(--perfume-family-picker-border-width) solid color-mix(in srgb, currentColor 15%, transparent);
+  border-radius: var(--perfume-family-picker-border-radius);
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--perfume-family-picker-option-height);
+  padding-inline: var(--perfume-family-picker-option-padding);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  text-decoration: none;
+  transition: border-color var(--perfume-family-picker-duration) ease;
+}
+
+.perfume-product-family-picker__option--link:hover {
+  border-color: currentColor;
+}
+
+.perfume-product-family-picker__option--link:focus-visible {
+  outline: 0.2rem solid color-mix(in srgb, currentColor 55%, transparent);
+  outline-offset: 0.2rem;
+}
+
+.perfume-product-family-picker__option--current {
+  border-color: currentColor;
+  font-weight: 500;
+}
+
+.perfume-product-family-picker__option--unavailable {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
