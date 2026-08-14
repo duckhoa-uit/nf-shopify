@@ -1,0 +1,1528 @@
+{% assign key = canonical_url | split: 'key=' | last | split: '&' | first | replace: '%3a', ':' %}
+{% assign type = canonical_url | split: 'type=' | last | split: '&' | first %}
+{%- assign SETTINGS = shop.metafields.ecomposer['ajax-cart'].value -%}
+{% liquid 
+    # style button
+    assign typo_button = SETTINGS.typo_button
+    assign typo_button__tablet = SETTINGS.typo_button__tablet
+    assign typo_button__mobile = SETTINGS.typo_button__mobile
+    assign width = SETTINGS.width
+    assign width__tablet = SETTINGS.width__tablet
+    assign width__mobile = SETTINGS.width__mobile
+    assign border_radius = SETTINGS.border_radius
+    assign button_padding = SETTINGS.spacing.padding
+    assign button_padding__tablet = SETTINGS.spacing__tablet.padding
+    assign button_padding__mobile = SETTINGS.spacing__mobile.padding
+    assign button_margin = SETTINGS.spacing.margin
+    assign button_margin__tablet = SETTINGS.spacing__tablet.margin
+    assign button_margin__mobile = SETTINGS.spacing__mobile.margin
+
+    # border
+    assign buttonBorder_style = SETTINGS.buttonBorder.border-style
+    assign buttonBorder_color = SETTINGS.buttonBorder.border-color
+    assign buttonBorder_width_l = SETTINGS.buttonBorder.border-width.left
+    assign buttonBorder_width_t = SETTINGS.buttonBorder.border-width.top
+    assign buttonBorder_width_r = SETTINGS.buttonBorder.border-width.right
+    assign buttonBorder_width_b = SETTINGS.buttonBorder.border-width.bottom
+
+    # font 
+   
+    assign custom_font_css = SETTINGS.custom_font_css
+    
+    # custom code
+    
+    assign use_custom_code = SETTINGS.use_custom_code
+    assign custom_code = SETTINGS.custom_code
+
+%}
+{% style %}
+  {%- if google_font_css.size > 0 -%}
+    {%- for css in google_font_css -%}
+      {{ css }}
+    {%- endfor -%}
+  {%- endif -%} 
+
+  {%- if custom_font_css.size > 0 -%}
+    {%- for css in custom_font_css -%}
+      {{ css }}
+    {%- endfor -%}
+  {%- endif -%}
+  .ecom-popup.ecom-ajax-cart {
+    display: block;
+    position: relative;
+    width: 90vw; 
+    max-width: 950px;
+    margin: auto;
+    background: #FFFFFF;
+    -webkit-box-shadow: 0 4px 15px rgb(0 0 0 / 10%), 0 4px 2px rgb(255 255 255 / 6%);
+    box-shadow: 0 4px 15px rgb(0 0 0 / 10%), 0 4px 2px rgb(255 255 255 / 6%);
+    border-radius: 8px;
+    padding-inline: 40px;
+    padding-bottom: 27px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    max-height: 95vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  .ecom-ajax-cart::-webkit-scrollbar {
+    width: 1px;
+  }
+
+  form.ecom-ajax-cart-contents {
+    display: -ms-grid;
+    display: grid;
+    -ms-flex-line-pack: center;
+    align-content: center;
+  }
+
+  .ecom-ajax-cart-header {
+    padding: 15px 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ecom-ajax-cart-header > h3 {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 32px;
+    color: #000;
+    margin: 0;
+  }
+
+  .ecom-ajax-cart-status{
+    border-block: 1px solid #EBEBEB;
+    padding-block: 17px 24px;
+  }
+  .ecom-ajax-cart-status h4{
+    color: #000;
+    margin-bottom: 0;
+    font-size: 20px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .ecom-ajax-cart-status h4 svg{
+    margin-right: 10px
+  }
+
+  .ecom-ajax-cart-status p{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    color: #545454;
+    margin:0;
+  }
+  .ecom-ajax-cart-status p b{
+    color: #000;
+    font-weight: 600;
+  }
+
+  .ecom-ajax-cart-body {
+    max-height: 320px;
+    overflow-y: auto;
+    overflow-x: auto;
+    padding-right: 2px;
+  }
+  .ecom-ajax-cart-items {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+  }
+  .ecom-ajax-cart-total {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 24px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .ecom-ajax-cart-line-item {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 1fr 30px 1fr;
+    grid-template-columns: auto 1fr;
+    gap: 30px;
+    border-bottom: 1px solid #e3e3e3;
+    padding-block: 15px;
+  }
+
+  .ecom-ajax-cart-line-item-gr {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 100px 20px 1fr;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+  }
+
+  .ecom-ajax-cart-line-item-gr-two {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: 2fr 1fr 86px 1fr;
+    grid-template-columns: 2fr 1fr 86px 1fr;
+    gap: 20px;
+  } 
+
+  .ecom-ajax-cart-line-item-dl {
+    font-size: 12px;
+  }
+
+  .ecom-ajax-cart-line-item-product-option {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    color: #545454;
+  }
+
+  .ecom-ajax-cart-line-item-product-option dt {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    opacity: 0.7;
+  }
+
+  .ecom-ajax-cart-line-item-product-option dd {
+    margin-left: 5px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  button.ecom-ajax-cart-line-item-quantity-button {
+    max-width: 100%;
+    padding: 10px 8px;
+    height: 100%;
+    background: unset;
+    border: 0;
+    color: #000;
+    display: -ms-grid;
+    display: grid;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .ecom-ajax-cart-line-item-quantity-wrapper {
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border: 0px solid #BABFC3;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: #F5F5F5;
+  }
+
+  span.ecom-ajax-cart-visually-hidden {
+    display: none;
+  }
+
+  .ecom-ajax-cart-line-item-quantity {
+    display: -ms-grid;
+    display: grid;
+    -ms-flex-line-pack: center;
+    align-content: center;
+  }
+
+  .ecom-ajax-cart.ecom-popup .ecom-ajax-cart-line-item-quantity-input {
+    min-width: 0;
+    overflow: hidden;
+    padding: 0;
+    display: -ms-grid;
+    display: grid;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 30px;
+  }
+
+  .ecom-ajax-cart-line-item-quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .ecom-ajax-cart-line-item-quantity-input:focus-visible {
+    outline: unset;
+    outline-offset: unset;
+    -webkit-box-shadow: unset;
+    box-shadow: unset;
+  }
+
+  .ecom-ajax-cart-line-item-price-wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  .ecom-ajax-cart-line-item-price {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #000;
+  }
+  .ecom-ajax-cart-line-item-visually-hidden {
+    display: none;
+  }
+  .ecom-ajax-cart-line-item-unit-price {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #000;
+  }
+  .ecom-ajax-cart-line-item-cart-item-totals .ecom-ajax-cart-line-item-price {
+    font-weight: 600;
+  }
+  .ecom-ajax-cart-line-item-details {
+    display: -ms-grid;
+    display: grid;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    justify-items: start;
+    grid-auto-flow: row;
+    gap: 5px;
+  }
+
+  .ecom-ajax-cart-line-item-title {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #000;
+    text-decoration: none;
+  }
+
+  .ecom-ajax-cart-line-item-details > *:empty {
+    display: none;
+  }
+
+  .ecom-ajax-cart-line-item-button-remove {
+    color: #000000;
+  }
+
+  .ecom-ajax-cart-line-item-remove {
+    display: -ms-grid;
+    display: grid;
+    -ms-flex-line-pack: start;
+    align-content: start;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: start;
+  }
+
+  .ecom-ajax-cart-line-item-cart-item-totals {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .ecom-ajax-cart-line-item-media {
+    max-width: 100px;
+  }
+
+  .ecom-ajax-cart-line-item-details > * {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ecom-ajax-cart-footer-informations {
+    width: 100%;
+  }
+
+  .ecom-ajax-cart-totals__subtotal {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    color: #111827;
+    margin-right: 5px;
+  }
+
+  .ecom-ajax-cart-totals__subtotal-value {
+    margin: 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    color: #000;
+  }
+  .ecom-ajax-cart-totals__decs{
+    margin: 0 0 20px;
+    font-size: 14px;
+    color: #545454;
+  }
+  .ecom-ajax-cart-actions__footer {
+    display: flex;
+    justify-content: space-around;
+    gap: 16px;
+  }
+  .ecom-ajax-cart-tax-note {
+    margin-top: 12px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #374151;
+    display: block;
+  }
+
+  .ecom-ajax-cart-view-details {
+    display: block;
+    width: 100%;
+  }
+
+  .ecom-ajax-cart-view-details-button {
+    margin-top: 24px;
+    display: block;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    color: var(--ecom-global-colors-primary);
+    padding: 12px 24px;
+    background: #FFFFFF;
+    border: 2px solid var(--ecom-global-colors-primary);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 100%;
+    text-decoration: none;
+  }
+  .ecom-ajax-cart-button {
+    display: inline-block;
+    text-decoration: none;
+    width: 100%;
+    border: 1px solid #000;
+    padding: 15px 30px;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    background: var(--ecom-global-colors-primary);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    {% if typo_button %}
+      {{ typo_button }}
+    {% endif %}
+    {% if button_padding %}
+        {% if button_padding.top %}
+            padding-top: {{ button_padding.top }};
+        {% endif %}
+        {% if button_padding.right %}
+            padding-right: {{ button_padding.right }};
+        {% endif %}
+        {% if button_padding.bottom %}
+            padding-bottom: {{ button_padding.bottom }};
+        {% endif %}
+        {% if button_padding.left %}
+            padding-left: {{ button_padding.left }};
+        {% endif %}
+    {% endif %}
+    {% if button_margin %}
+        {% if button_margin.top %}
+            margin-top: {{ button_margin.top }};
+        {% endif %}
+        {% if button_margin.right %}
+            margin-right: {{ button_margin.right }};
+        {% endif %}
+        {% if button_margin.bottom %}
+            margin-bottom: {{ button_margin.bottom }};
+        {% endif %}
+        {% if button_margin.left %}
+            margin-left: {{ button_margin.left }};
+        {% endif %}
+    {% endif %}
+    {% if border_radius %}
+        border-top-left-radius: {{ border_radius.top }};
+        border-top-right-radius: {{ border_radius.right }};
+        border-bottom-right-radius: {{ border_radius.bottom }};
+        border-bottom-left-radius: {{ border_radius.left }};
+    {% endif %}
+    {% if buttonBorder_style %}
+        border-style: {{ buttonBorder_style }};
+    {% endif %}
+    {% if buttonBorder_color %}
+        border-color: {{ buttonBorder_color }};
+    {% endif %}
+    {% if buttonBorder_width_l %}
+        border-left-width: {{ buttonBorder_width_l }};
+    {% endif %}
+    {% if buttonBorder_width_t %}
+        border-top-width: {{ buttonBorder_width_t }};
+    {% endif %}
+    {% if buttonBorder_width_r %}
+        border-right-width: {{ buttonBorder_width_r }};
+    {% endif %}
+    {% if buttonBorder_width_b %}
+        border-bottom-width: {{ buttonBorder_width_b }};
+    {% endif %}
+  }
+  .ecom-ajax-cart-button:hover {
+    border: 1px solid #000;
+  }
+  .ecom-ajax-cart-button-wrap {
+    flex: 1 1 {{ width | default: '250px' }};
+    text-align: center;
+  }
+  .ecom-ajax-cart-continue-shopping-button {
+    background: #000;
+    color: var(--continue-color);
+  }
+  .ecom-ajax-cart-checkout-button {
+    background: #000;
+    color: var(--checkout-color);
+  }
+  .ecom-ajax-cart-viewcart-button {
+    background: #000;
+    color: var(--viewcart-color);
+    cursor: pointer;
+  }
+  .ecom-ajax-cart-continue-shopping-button:hover {
+      cursor: pointer;
+      background: rgba(0 0 0 /.8);
+      color: var(--continue-color-hover);
+  }
+  .ecom-ajax-cart-checkout-button:hover {
+      cursor: pointer;
+      background: rgba(0 0 0 /.8);
+      color: var(--checkout-color-hover);
+  }
+  .ecom-ajax-cart-viewcart-button:hover {
+    background: rgba(0 0 0 /.8);
+    color: var(--viewcart-color-hover);
+  }
+
+  .ecom-ajax-cart-actions {
+    display: -ms-grid;
+    display: grid;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: start;
+    justify-items: start;
+    width: 100%;
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .ecom-ajax-cart-footer {
+    display: -ms-grid;
+    display: grid;
+    grid-auto-flow: row;
+    padding-top: 32px;
+    gap: 22px;
+  }
+
+  .ecom-ajax-cart-close-button {
+    width: fit-content;
+    border-radius: 50%;
+    background: unset;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+  .ecom-ajax-cart-close-button:hover {
+    background: transparent;
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+  .ecom-ajax-cart-text-area {
+    min-height: 130px;
+    border: 1px solid #e3e3e3;
+    font-size: 13px;
+    outline: 0;
+    padding: 15px;
+    color: #999;
+    border-radius: 0;
+  }
+  .ecom-ajax-cart-text-area:focus {
+    border-color: var(--ecom-global-colors-primary);
+  }
+  .ecom-ajax-cart-text-area:focus-visible {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline-offset: none;
+  }
+  .ecom-line-item-blink.ecom-ajax-cart-line-item {
+    border: 1px solid var(--ecom-global-colors-primary);
+    -webkit-animation: ecomBlink 1s;
+    animation: ecomBlink 1s;
+    -webkit-animation-iteration-count: 3;
+    animation-iteration-count: 3;
+  }
+
+  .ecom-ajax-cart-note-field {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ecom-ajax-cart-line-item-remove.ecom-remove-tablet {
+    display: none;
+    top: -2px;
+    right: 5px;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+  }
+  .ecom-remove-tablet svg {
+    width: 18px;
+    height: 18px;
+  }
+  .ecom-ajax-cart-trust-seal img {
+    max-width: 100%;
+  }
+  .terms-error {
+    font-size: 14px;
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    margin: 0;
+  }
+  .terms-error svg {
+    width: 15px;
+    height: 15px;
+  }
+  .terms-dn {
+    display: none;
+  }
+  @media screen and (max-width: 1024px) {
+    .ecom-ajax-cart-button {
+        {% if width__tablet %}
+            max-width: {{ width__tablet }};
+        {% endif %}
+        {% if typo_button__tablet %}
+            {{ typo_button__tablet }}
+        {% endif %}
+        {% if button_padding__tablet %}
+            {% if button_padding__tablet.top %}
+                padding-top: {{ button_padding__tablet.top }};
+            {% endif %}
+            {% if button_padding__tablet.right %}
+                padding-right: {{ button_padding__tablet.right }};
+            {% endif %}
+            {% if button_padding__tablet.bottom %}
+                padding-bottom: {{ button_padding__tablet.bottom }};
+            {% endif %}
+            {% if button_padding__tablet.left %}
+                padding-left: {{ button_padding__tablet.left }};
+            {% endif %}
+        {% endif %}
+        {% if button_margin__tablet %}
+            {% if button_margin__tablet.top %}
+                margin-top: {{ button_margin__tablet.top }};
+            {% endif %}
+            {% if button_margin__tablet.right %}
+                margin-right: {{ button_margin__tablet.right }};
+            {% endif %}
+            {% if button_margin__tablet.bottom %}
+                margin-bottom: {{ button_margin__tablet.bottom }};
+            {% endif %}
+            {% if button_margin__tablet.left %}
+                margin-left: {{ button_margin__tablet.left }};
+            {% endif %}
+        {% endif %}
+    }
+    .ecom-ajax-cart-items .ecom-ajax-cart-line-item {
+      border-bottom: 1px solid rgba(0 0 0 /.1);
+      display: flex !important;
+      position: relative;
+      padding-top: 15px;
+      gap: 10px;
+    }
+    .ecom-ajax-cart-line-item-gr {
+      border-bottom: 1px dotted rgba(0 0 0 /.1);
+      display: block;
+    }
+    .ecom-ajax-cart-line-item-media {
+      align-items: start;
+    }
+    .ecom-ajax-cart-line-item-details {
+      border-bottom: 1px dotted rgba(0 0 0 /.1);
+      position: relative;
+      display: block;
+      padding-bottom: 5px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .ecom-ajax-cart-line-item-gr-two {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+    .ecom-ajax-cart-line-item-cart-item-totals {
+      margin-left: auto;
+    }
+    .ecom-ajax-cart-line-item-gr-two >*:not(:last-child) {
+      /* width: 100%;
+      border-bottom: 1px dotted rgba(0 0 0 /.1); */
+    }
+    .ecom-ajax-cart-line-item-prices {
+      width: 50%;
+    }
+    .ecom-ajax-cart-line-item-price-wrapper, .ecom-ajax-cart-line-item-quantity {
+      justify-content: flex-start;
+      padding-bottom: 10px;
+    }
+    .ecom-ajax-cart-line-item-quantity-wrapper {
+      max-width: 100px;
+    }
+    .ecom-ajax-cart-line-item-remove.ecom-remove-desktop {
+      display: none;
+    }
+    .ecom-ajax-cart-line-item-remove.ecom-remove-tablet {
+      display: flex;
+    }
+    .ecom-ajax-cart-line-item-button-remove {
+      background: unset;
+      padding: 0;
+    }
+    .ecom-ajax-cart-line-item-media img {
+      max-width: 80px;
+    }
+  }
+  .ecom-ajax-cart-icon-discount {
+    width: 16px;
+    margin-right: 5px;
+  }
+  .ecom-ajax-cart-line-item-price_sale {
+    color: #ff0303;
+  }
+  .ecom-ajax-cart-note__heading {
+    margin-bottom: 10px;
+    font-weight: 300;
+    font-size: 14px;
+  }
+  .ecom-ajax-cart-line-item.ecom-item-loading {
+    pointer-events: none;
+  }
+  .ecom-ajax-cart-line-item.ecom-item-loading::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -9px;
+    margin-left: -9px;
+    opacity: 0;
+    -webkit-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    transition: opacity 0.2s;
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-left-color: #fff;
+    border-radius: 50%;
+    vertical-align: middle;
+    border-left-color: currentColor;
+    opacity: 1;
+    -webkit-animation: 450ms linear infinite ecom-spin;
+    animation: 450ms linear infinite ecom-spin;
+  }
+  .ecom-ajax-cart-line-item.ecom-item-loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.8);
+  }
+  /* width */
+  .ecom-ajax-cart-body::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+    border-radius: 5px;
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  .ecom-ajax-cart-body::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+
+  }
+
+  /* Handle on hover */
+  .ecom-ajax-cart-body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  @-webkit-keyframes ecomBlink {
+    50% {
+      border-color: #fff;
+    }
+  }
+
+  @keyframes ecomBlink {
+    50% {
+      border-color: #fff;
+    }
+  }
+  .ecom-ajax-cart-actions__footer-end{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .ecom-ajax-cart-actions__footer-end .ecom-ajax-cart-actions__footer-end-icon{
+    display: flex;
+  }
+  .ecom-ajax-cart-actions__footer-end .ecom-ajax-cart-actions__footer-label{
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+  }
+  .ecom-ajax-cart-totals__terms{
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .ecom-ajax-cart-totals__terms input {
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid #D1D5DB;
+    margin: 0;
+    margin-right: 8px;
+    padding: 0;
+  }
+  .ecom-ajax-cart-totals__terms input:checked {
+    border-color: transparent;
+    background-color: #059669;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+  }
+  .ecom-ajax-cart-totals__terms a{
+    color: #000;
+    text-decoration: underline;
+  }
+  .ecom-ajax-cart-actions__footer-payment-logos{
+    display: flex;
+    margin-left: 25px;
+  }
+  .cart-item__svg {
+    width: 75px;
+    border: 1px solid #D1D5DB;
+  }
+  .ecom-ajax-cart-actions__footer-guard {
+    display: flex;
+  }
+  @media screen and (max-width: 767px) {
+    .ecom-ajax-cart-body {
+      overflow: auto;
+    }
+    .ecom-ajax-cart-line-item-gr {
+      grid-template-columns: 100px 120px;
+    }
+    .ecom-ajax-cart-button {
+        {% if width__mobile %}
+            max-width: {{ width__mobile }};
+        {% endif %}
+        {% if typo_button__mobile %}
+            {{ typo_button__mobile }}
+        {% endif %} 
+        {% if button_padding__mobile %}
+            {% if button_padding__mobile.top %}
+                padding-top: {{ button_padding__mobile.top }};
+            {% endif %}
+            {% if button_padding__mobile.right %}
+                padding-right: {{ button_padding__mobile.right }};
+            {% endif %}
+            {% if button_padding__mobile.bottom %}
+                padding-bottom: {{ button_padding__mobile.bottom }};
+            {% endif %}
+            {% if button_padding__mobile.left %}
+                padding-left: {{ button_padding__mobile.left }};
+            {% endif %}
+        {% endif %}
+        {% if button_margin__mobile %}
+            {% if button_margin__mobile.top %}
+                margin-top: {{ button_margin__mobile.top }};
+            {% endif %}
+            {% if button_margin__mobile.right %}
+                margin-right: {{ button_margin__mobile.right }};
+            {% endif %}
+            {% if button_margin__mobile.bottom %}
+                margin-bottom: {{ button_margin__mobile.bottom }};
+            {% endif %}
+            {% if button_margin__mobile.left %}
+                margin-left: {{ button_margin__mobile.left }};
+            {% endif %}
+        {% endif %}
+    }
+    .ecom-ajax-cart-actions__footer {
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .ecom-ajax-cart-line-item-gr-two {
+      flex-direction: column;
+      align-items: start;
+    }
+    .ecom-ajax-cart-line-item-cart-item-totals {
+      margin-left: unset;
+    }
+    form.ecom-ajax-cart-contents {
+      display: block;
+    }
+    .ecom-ajax-cart-footer {
+      /* display: block; */
+    }
+    .ecom-ajax-cart-totals__terms {
+      margin-bottom: 10px;
+    }
+    .ecom-ajax-cart-actions__footer-end {
+      flex-direction: column;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .ecom-ajax-cart-actions__footer-payment-logos {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+    .ecom-ajax-cart-line-item-gr-two {
+      gap: 0; 
+    }
+    .ecom-ajax-cart-items .ecom-ajax-cart-line-item {
+      padding-top: 15px;
+    }
+    .ecom-ajax-cart-button-wrap {
+      flex: none;
+      width: {{ width | default: '250px' }};
+    }
+  }
+  @media only screen and (max-width: 480px) {
+    .ecom-ajax-cart {
+      max-width: 95%;
+      padding-inline: 20px;
+    }
+    .ecom-ajax-cart-body {
+      position: static;
+      overflow: auto;
+      max-height: 240px;
+    }
+    .ecom-ajax-cart-continue-shopping-button {
+      width: 100%;
+    }
+    .ecom-ajax-cart-agree-term label {
+      display: block;
+    }
+    .ecom-ajax-cart-line-item-gr {
+      gap: 0;
+    }
+    /*.ecom-ajax-cart-line-item-gr-two {
+      gap: 20px;
+    }*/
+    .ecom-ajax-cart-line-item-media img {
+      max-width: 65px;
+    }
+    .ecom-ajax-cart-line-item-remove.ecom-remove-tablet {
+      right: 0px;
+    }
+    .ecom-ajax-cart-line-item-details {
+      padding-right: 15px;
+    }
+  }
+  .ecom-ajax-cart__payment-method-item {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .ecom-ajax-cart-no-item {
+    font-size: 20px;
+    margin-block: 15px;
+  }
+{% endstyle %}
+<div class="ecom-ajax-cart ecom-popup">
+  <div clas="ecom-ajax-cart-wrapper">
+    <div class="ecom-ajax-cart-container">
+      <form
+        action="{{ routes.cart_url }}"
+        class="ecom-ajax-cart-contents"
+        method="post">
+        <div class="ecom-ajax-cart-header">
+          <h3>{{ 'sections.ecom-ajax-cart.title' | t }}</h3>
+          <button
+            type="button"
+            class="ecom-ajax-cart-close-button"
+            data-ecom-action="close">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 1.4L14.6 0L8 6.6L1.4 0L0 1.4L6.6 8L0 14.6L1.4 16L8 9.4L14.6 16L16 14.6L9.4 8L16 1.4Z" fill="black"/>
+            </svg>
+          </button>
+        </div>
+        <!-- ecom-ajax-cart-header -->
+        <div class="ecom-ajax-cart-status ecom-tc">
+          <h4>
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+              <path d="M10.0938 0C4.57975 0 0.09375 4.486 0.09375 10C0.09375 15.514 4.57975 20 10.0938 20C15.6078 20 20.0938 15.514 20.0938 10C20.0938 4.486 15.6078 0 10.0938 0ZM10.0938 18.1818C5.58223 18.1818 1.91193 14.5115 1.91193 10C1.91193 5.48855 5.58223 1.81818 10.0938 1.81818C14.6053 1.81818 18.2756 5.48855 18.2756 10C18.2756 14.5115 14.6052 18.1818 10.0938 18.1818Z" fill="#48A311"/>
+              <path d="M13.8436 6.46449L8.7009 11.6071L6.34393 9.25006C5.98896 8.89509 5.41333 8.89503 5.0583 9.25C4.70327 9.60503 4.70327 10.1806 5.0583 10.5356L8.05805 13.5355C8.22853 13.706 8.45974 13.8018 8.70084 13.8018H8.7009C8.94199 13.8018 9.1732 13.706 9.34369 13.5356L15.1292 7.75018C15.4842 7.39515 15.4842 6.81958 15.1292 6.46455C14.7742 6.10952 14.1986 6.10945 13.8436 6.46449Z" fill="#48A311"/>
+            </svg>
+            {{ 'sections.ecom-ajax-cart.successfully_added_to_your_cart' | t }}
+          </h4>
+          <p>{{ 'sections.ecom-ajax-cart.there_are_item' | t: cart_count: cart.item_count }}</p>
+        </div>
+        <div class="ecom-ajax-cart-body">
+          <div class="ecom-ajax-cart-items">
+            {% if cart.item_count > 0 %}
+              {%- for line_item in cart.items -%}
+                <div
+                  class="ecom-ajax-cart-line-item ecom-pr"
+                  data-id="{{ line_item.id }}"
+                  data-key="{{ line_item.key }}">
+                  <div class="ecom-ajax-cart-line-item-media ecom-flex ecom-al_center">
+                      {% if line_item.image %}
+                        <img
+                          class="cart-item__image"
+                          src="{{ line_item.image | img_url: '100x' }}"
+                          alt="{{ line_item.image.alt | escape }}"
+                          loading="lazy"
+                          width="75"
+                          height="{{ 75 | divided_by: line_item.image.aspect_ratio | ceil }}">
+                      {% else %}
+                        {{ 'product-1' | placeholder_svg_tag: 'cart-item__svg' }}
+                      {% endif %}
+                    </div>
+                  <div class="ecom-ajax-cart-line-item-gr-two">
+                    <div class="ecom-ajax-cart-line-item-details">
+                      <a href="{{ line_item.url }}" class="ecom-ajax-cart-line-item-title">{{ line_item.product.title | escape }}</a>
+                      {%- if line_item.product.has_only_default_variant == false or line_item.properties.size != 0 or line_item.selling_plan_allocation != nil -%}
+                        <dl class="ecom-ajax-cart-line-item-dl">
+                          {%- if line_item.product.has_only_default_variant == false -%}
+                            {%- for option in line_item.options_with_values -%}
+                              {{ option.value }} {% unless forloop.last %} &nbsp;/&nbsp; {% endunless %}
+                            {%- endfor -%}
+                          {%- endif -%}
+                          {%- for property in line_item.properties -%}
+                            {%- assign property_first_char = property.first | slice: 0 -%}
+                            {%- if property.last != blank -%}
+                              <div class="ecom-ajax-cart-line-item-product-option">
+                                <dt>{{ property.first }}:
+                                </dt>
+                                <dd>
+                                  {%- if property.last contains '/uploads/' -%}
+                                    <a href="{{ property.last }}" target="_blank">
+                                      {{ property.last | split: '/' | last }}
+                                    </a>
+                                  {%- else -%}
+                                    {{ property.last }}
+                                  {%- endif -%}
+                                </dd>
+                              </div>
+                            {%- endif -%}
+                          {%- endfor -%}
+                        </dl>
+                        <p class="ecom-ajax-cart-line-item-product-option">{{ line_item.selling_plan_allocation.selling_plan.name }}</p>
+                      {%- endif -%}
+                      <ul
+                        class="ecom-ajax-cart-line-item-discounts ecom-ajax-cart-line-item-list-unstyled"
+                        role="list"
+                        aria-label="Discounts">
+                        {%- for discount in line_item.discounts -%}
+                          <li class="ecom-discounts__discount ecom-flex ecom-al_center">
+                            <svg
+                              aria-hidden="true"
+                              focusable="false"
+                              role="presentation"
+                              class="ecom-ajax-cart-icon ecom-ajax-cart-icon-discount"
+                              viewBox="0 0 12 12">
+                              <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M7 0h3a2 2 0 012 2v3a1 1 0 01-.3.7l-6 6a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4l6-6A1 1 0 017 0zm2 2a1 1 0 102 0 1 1 0 00-2 0z"
+                                fill="currentColor" />
+                            </svg>
+                            {{ discount.title }}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                      <div class="ecom-ajax-cart-line-item-remove ecom-remove-tablet">
+                        <a
+                          data-id="{{ line_item.id }}"
+                          href="{{ line_item.url_to_remove }}"
+                          data-key="{{ line_item.key }}"
+                          class="ecom-ajax-cart-line-item-button ecom-ajax-cart-line-item-button-remove"
+                          data-index="{{ line_item.index | plus: 1 }}"
+                          aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}">
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.00391 0C3.13794 0 0.00390625 3.13403 0.00390625 7C0.00390625 10.8662 3.13794 14 7.00391 14C10.8701 14 14.0039 10.8662 14.0039 7C14.0039 3.13403 10.8701 0 7.00391 0ZM7.00391 13.1388C3.62663 13.1388 0.878906 10.3773 0.878906 6.99997C0.878906 3.62269 3.62663 0.874973 7.00391 0.874973C10.3812 0.874973 13.1289 3.6227 13.1289 6.99997C13.1289 10.3772 10.3812 13.1388 7.00391 13.1388ZM9.47863 4.52528C9.30778 4.35444 9.03084 4.35444 8.86 4.52528L7.00391 6.38138L5.14781 4.52528C4.97697 4.35444 4.70003 4.35444 4.52897 4.52528C4.35813 4.69613 4.35813 4.97306 4.52897 5.14391L6.38506 7L4.52897 8.85609C4.35813 9.02672 4.35813 9.30411 4.52897 9.47473C4.69981 9.64558 4.97675 9.64558 5.14781 9.47473L7.00391 7.61864L8.86 9.47473C9.03084 9.64558 9.30778 9.64558 9.47863 9.47473C9.64947 9.30411 9.64947 9.02672 9.47863 8.85609L7.62253 7L9.47863 5.14391C9.64969 4.97284 9.64969 4.69591 9.47863 4.52528Z" fill="currentColor"/>
+                          </svg>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="ecom-ajax-cart-line-item-prices ecom-flex ecom-al_center ecom-fl_center">
+                      <div class="ecom-ajax-cart-line-item-price-wrapper">
+                        {%- if line_item.original_price != line_item.final_price -%}
+                          <dl class="ecom-ajax-cart-line-item-discounted-prices">
+                            <dd>
+                              <s class="ecom-ajax-cart-line-item-old-price ecom-price ecom-price--end">
+                                {{ line_item.original_price | money }}
+                              </s>
+                            </dd>
+                            <dd class="ecom-ajax-cart-line-item-price ecom-ajax-cart-line-item-price_sale">
+                              {{ line_item.final_price | money }}
+                            </dd>
+                          </dl>
+                          {%- if line_item.variant.available and line_item.unit_price_measurement -%}
+                            <div class="ecom-ajax-cart-line-item-unit-price">
+                              <span class="ecom-ajax-cart-line-item-visually-hidden">
+                                {{ 'sections.ecom-ajax-cart.price.unit_price' | t }}
+                              </span>
+                              ({{ line_item.variant.unit_price | money }}/
+                              {%- if line_item.variant.unit_price_measurement.reference_value != 1 -%}
+                                {{- line_item.variant.unit_price_measurement.reference_value -}}
+                              {%- endif -%}
+                              {{ line_item.variant.unit_price_measurement.reference_unit }})
+                            </div>
+                          {%- endif -%}
+                        {%- else -%}
+                          <span class="ecom-ajax-cart-line-item-price">
+                            {{ line_item.original_price | money }}
+                          </span>
+                          {%- if line_item.variant.available and line_item.unit_price_measurement -%}
+                            <div class="ecom-ajax-cart-line-item-unit-price">
+                                <span class="ecom-ajax-cart-line-item-visually-hidden">
+                                  {{ 'sections.ecom-ajax-cart.price.unit_price' | t }}
+                                </span>
+                                ({{ line_item.variant.unit_price | money }}/
+                                {%- if line_item.variant.unit_price_measurement.reference_value != 1 -%}
+                                  {{- line_item.variant.unit_price_measurement.reference_value -}}
+                                {%- endif -%}
+                                {{ line_item.variant.unit_price_measurement.reference_unit }})
+                            </div>
+                          {%- endif -%}
+                        {%- endif -%}
+                      </div>
+                    </div>
+                    <div class="ecom-ajax-cart-line-item-quantity">
+                      <div class="ecom-ajax-cart-line-item-quantity-wrapper">
+                        <button
+                          class="ecom-ajax-cart-line-item-quantity-button"
+                          name="minus"
+                          type="button">
+                          <svg width="10" height="1" viewBox="0 0 10 1" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.01758 1H5.16044H3.87472H0.0175781V1.50201e-05H3.87472L5.16044 0L9.01758 1.50201e-05V1Z" fill="black"/>
+                          </svg>
+                        </button>
+                        <input
+                          class="ecom-ajax-cart-line-item-quantity-input"
+                          type="number"
+                          name="updates[]"
+                          data-key="{{ line_item.key }}"
+                          value="{{ line_item.quantity }}"
+                          min="0"
+                          aria-label="{{ 'sections.ecom-ajax-cart.quantity.input_label' | t: product: line_item.product.title | escape }}"
+                          id="ecom-Quantity-{{ line_item.index | plus: 1 }}"
+                          data-index="{{ line_item.index | plus: 1 }}">
+                        <button
+                          class="ecom-ajax-cart-line-item-quantity-button"
+                          name="plus"
+                          type="button">
+                          <svg width="10" height="9" viewBox="0 0 10 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.01758 5.14286H5.16044V9H3.87472V5.14286H0.0175781V3.85714H3.87472V0H5.16044V3.85714H9.01758V5.14286Z" fill="black"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="ecom-ajax-cart-line-item-cart-item-totals ecom-flex ecom-al_center">
+                      <div class="ecom-ajax-cart-line-item-price-wrapper">
+                        {%- if line_item.original_line_price != line_item.final_line_price -%}
+                          <dl class="ecom-ajax-cart-line-item-discounted-prices">
+                            <dd class="ecom-ajax-cart-line-item-price">
+                              {{ line_item.final_line_price | money }}
+                            </dd>
+                          </dl>
+                        {%- else -%}
+                          <span class="ecom-ajax-cart-line-item-price">
+                            {{ line_item.original_line_price | money }}
+                          </span>
+                        {%- endif -%}
+                      </div>
+                      <div class="ecom-ajax-cart-line-item-remove ecom-remove-desktop">
+                        <a
+                          data-id="{{ line_item.id }}"
+                          href="{{ line_item.url_to_remove }}"
+                          data-key="{{ line_item.key }}"
+                          class="ecom-ajax-cart-line-item-button ecom-ajax-cart-line-item-button-remove"
+                          data-index="{{ line_item.index | plus: 1 }}"
+                          aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}">
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.00391 0C3.13794 0 0.00390625 3.13403 0.00390625 7C0.00390625 10.8662 3.13794 14 7.00391 14C10.8701 14 14.0039 10.8662 14.0039 7C14.0039 3.13403 10.8701 0 7.00391 0ZM7.00391 13.1388C3.62663 13.1388 0.878906 10.3773 0.878906 6.99997C0.878906 3.62269 3.62663 0.874973 7.00391 0.874973C10.3812 0.874973 13.1289 3.6227 13.1289 6.99997C13.1289 10.3772 10.3812 13.1388 7.00391 13.1388ZM9.47863 4.52528C9.30778 4.35444 9.03084 4.35444 8.86 4.52528L7.00391 6.38138L5.14781 4.52528C4.97697 4.35444 4.70003 4.35444 4.52897 4.52528C4.35813 4.69613 4.35813 4.97306 4.52897 5.14391L6.38506 7L4.52897 8.85609C4.35813 9.02672 4.35813 9.30411 4.52897 9.47473C4.69981 9.64558 4.97675 9.64558 5.14781 9.47473L7.00391 7.61864L8.86 9.47473C9.03084 9.64558 9.30778 9.64558 9.47863 9.47473C9.64947 9.30411 9.64947 9.02672 9.47863 8.85609L7.62253 7L9.47863 5.14391C9.64969 4.97284 9.64969 4.69591 9.47863 4.52528Z" fill="currentColor"/>
+                          </svg>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            {% else %}
+              <div class="ecom-ajax-cart-no-item">
+                {{ 'sections.ecom-ajax-cart.empty' | t }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <!-- ecom-ajax-cart-body -->
+        <div class="ecom-ajax-cart-footer">
+          <div class="ecom-ajax-cart-footer-informations">
+            {%if cart != empty%}
+            <div class="ecom-ajax-cart-js-contents">
+              <div class="ecom-ajax-cart-totals">
+                {%- if cart.cart_level_discount_applications.size > 0 -%}
+                  <div>
+                    <ul
+                      class="discounts list-unstyled"
+                      role="list"
+                      aria-label="{{ 'sections.ecom-ajax-cart.discount' | t }}">
+                      {%- for discount in cart.cart_level_discount_applications -%}
+                        <li class="discounts__discount discounts__discount--end">
+                          <svg
+                            aria-hidden="true"
+                            focusable="false"
+                            role="presentation"
+                            class="ecom-ajax-cart-icon ecom-ajax-cart-icon-discount"
+                            viewBox="0 0 12 12">
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M7 0h3a2 2 0 012 2v3a1 1 0 01-.3.7l-6 6a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4l6-6A1 1 0 017 0zm2 2a1 1 0 102 0 1 1 0 00-2 0z"
+                              fill="currentColor" />
+                          </svg>
+                          {{ discount.title }} (-{{ discount.total_allocated_amount | money }})
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
+                <p class="ecom-ajax-cart-totals__subtotal-value">{{ 'sections.ecom-ajax-cart.subtotal' | t }}: <b class="ecom-ajax-cart-totals__subtotal">{{ cart.total_price | money }}</b></p>
+                <p class="ecom-ajax-cart-totals__decs">{{ 'sections.ecom-ajax-cart.taxes_and_shipping_at_checkout' | t }}</p>
+                {% for button in SETTINGS.button_list %}
+                  {% case button.type %}
+                    {% when 'checkout' %}
+                      {% if button.settings.use_terms %} 
+                        <label for="terms" class="ecom-ajax-cart-totals__terms"> 
+                          <input type="checkbox" name="terms" id="terms">
+                          {{ 'sections.ecom-ajax-cart.i_agree_with' | t }}&nbsp; <b><a href="{{ button.settings.terms_url.href }}" target="{{ button.settings.terms_url.target }}">{{ 'sections.ecom-ajax-cart.terms_conditions' | t }}</a></b>
+                        </label>
+                      {% endif %}
+                      {% break %}
+                  {% endcase %}
+                {% endfor %}
+                <p class="terms-error terms-dn">
+                  <svg aria-hidden="true" focusable="false" viewBox="0 0 13 13">
+                    <circle cx="6.5" cy="6.50049" r="5.5" stroke="white" stroke-width="2"></circle>
+                    <circle cx="6.5" cy="6.5" r="5.5" fill="#EB001B" stroke="#EB001B" stroke-width="0.7"></circle>
+                    <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white"></path>
+                    <path d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z" fill="white" stroke="#EB001B" stroke-width="0.7">
+                    </path>
+                  </svg>
+                  {{ 'sections.ecom-ajax-cart.please_accept_terms_and_conditions' | t }}</p>
+              </div>
+
+              {%- comment -%}
+              <small class="ecom-ajax-cart-tax-note"> {%- if cart.taxes_included and shop.shipping_policy.body != blank -%} {{ 'sections.ecom-ajax-cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }} {%- elsif cart.taxes_included -%} {{ 'sections.ecom-ajax-cart.taxes_included_but_shipping_at_checkout' | t }} {%- elsif shop.shipping_policy.body != blank -%} {{ 'sections.ecom-ajax-cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }} {%- else -%} {{ 'sections.ecom-ajax-cart.taxes_and_shipping_at_checkout' | t }} {%- endif -%} </small>
+              {%- endcomment -%}
+            </div>
+            {%endif%}
+            {% comment %}
+            {%- if additional_checkout_buttons -%}
+              <div class="ecom-ajax-cart-dynamic-checkout-buttons ecom-ajax-cart-additional-checkout-buttons">
+                {{ content_for_additional_checkout_buttons }}
+              </div>
+            {%- endif -%}
+            {% endcomment %}
+          </div>
+          {% comment %}
+          <div class="ecom-ajax-cart-continue-shopping-full">
+          <div class="ecom-ajax-cart-view-details">
+          <a href="{{routes.cart_url }}" class="ecom-ajax-cart-view-details-button" data-ecom-action="close">{{ 'sections.ecom-ajax-cart.view_cart' | t }}</a>
+          </div>
+
+          </div>
+          {% endcomment %}
+          {%- if SETTINGS.note and cart != empty -%}
+            <div class="ecom-ajax-cart-actions__note ecom-flex ecom-column">
+              <h3 class="ecom-ajax-cart-note__heading">{{ 'sections.ecom-ajax-cart.note' | t }}</h3>
+              <textarea
+                class="ecom-ajax-cart-text-area ecom-ajax-cart-field-input"
+                rows="3"
+                name="note"
+                id="ecom-ajax-cart-note">{{ cart.note }}</textarea>
+            </div>
+          {%- endif -%}
+          {% if use_custom_code and custom_code%}
+            {{custom_code}}
+          {% endif %}
+          <div class="ecom-ajax-cart-actions__footer">
+            {% for button in SETTINGS.button_list %}
+
+              {% assign settings = button.settings %}
+              {% case button.type %}
+                {% when 'continue' %}
+                  {% liquid
+                        assign continue_color = settings.continue_color
+                        assign continue_color_hover = settings.continue_color_hover
+                        assign continue_background = settings.continue_background_type_color.native
+                        assign continue_background_hover = settings.continue_background_type_color_hover.native
+                %}
+                  <div class="ecom-ajax-cart-button-wrap">
+                    {%- if SETTINGS.note -%}
+                      <div class="ecom-ajax-cart-note-field"></div>
+                    {%- endif -%}
+                    <button class="ecom-ajax-cart-button ecom-ajax-cart-continue-shopping-button" data-ecom-action="close">
+                      {% if settings.continue_label %}
+                        {{ settings.continue_label }}
+                      {% else %} 
+                        {{ 'sections.ecom-ajax-cart.continue_shopping' | t }}
+                      {% endif %}
+                    </button>
+                  </div>
+            
+                {% when 'viewcart' %}
+                  {% liquid
+                        assign viewcart_color = settings.viewcart_color
+                        assign viewcart_color_hover = settings.viewcart_color_hover
+                        assign viewcart_background = settings.viewcart_background_type_color.native
+                        assign viewcart_background_hover = settings.viewcart_background_type_color_hover.native
+                %}
+                  <div class="ecom-ajax-cart-button-wrap">
+                    <button class="ecom-ajax-cart-button ecom-ajax-cart-viewcart-button" {% if cart.item_count != 0 %} onClick="window.location.href='{{ routes.cart_url }}';" {% else %}style="cursor: not-allowed"{% endif %}>
+                        {% if settings.viewcart_label %}
+                          {{ settings.viewcart_label }}
+                        {% else %}
+                          {{ 'sections.ecom-ajax-cart.viewcart_shopping' | t }}
+                        {% endif %}
+                    </button>
+                  </div>
+            
+                {% when 'checkout' %}
+                  {% liquid
+                        assign checkout_color = settings.checkout_color
+                        assign checkout_color_hover = settings.checkout_color_hover
+                        assign checkout_background = settings.checkout_background_type_color.native
+                        assign checkout_background_hover = settings.checkout_background_type_color_hover.native
+                  %}
+                  {% if cart != empty %}
+                    <div class="ecom-ajax-cart-button-wrap">
+                      <button
+                        class="ecom-ajax-cart-button ecom-ajax-cart-checkout-button"
+                        name="checkout" 
+                        {% if cart == empty %}
+                        disabled
+                        {% endif %}>
+                        {% if settings.checkout_label %}
+                          {{ settings.checkout_label }}
+                        {% else %}
+                          {{ 'sections.ecom-ajax-cart.checkout' | t }}
+                        {% endif %}
+                      </button>
+                    </div>
+                  {%endif%}
+              {% endcase %}
+            {% endfor %}
+          </div>
+            <div class="ecom-ajax-cart-actions__footer-end">
+              {%if SETTINGS.image_type != 'none'%}
+                <div class="ecom-ajax-cart-actions__footer-guard">
+                  <span class="ecom-ajax-cart-actions__footer-end-icon">
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10.5 0.614258L2.625 3.47813V10.4055C2.62689 11.7575 2.94764 13.0901 3.56122 14.2949C4.17479 15.4997 5.06388 16.5428 6.15628 17.3394L10.5 20.4986L14.8437 17.3394C15.9361 16.5428 16.8252 15.4997 17.4388 14.2949C18.0524 13.0901 18.3731 11.7575 18.375 10.4055V3.47813L10.5 0.614258ZM17.0625 10.4055C17.0607 11.5506 16.789 12.6791 16.2694 13.6994C15.7498 14.7198 14.9969 15.6033 14.072 16.2783L10.5 18.8764L6.92803 16.2783C6.00306 15.6033 5.25023 14.7198 4.73064 13.6994C4.21104 12.6791 3.93931 11.5506 3.9375 10.4055V4.39688L10.5 2.01076L17.0625 4.39688V10.4055Z" fill="black"/>
+                      <path d="M7.68184 8.88757L6.75391 9.81551L9.67881 12.7404L14.2443 8.17489L13.3164 7.24695L9.67881 10.8845L7.68184 8.88757Z" fill="black"/>
+                    </svg>              
+                  </span>
+                  <span class="ecom-ajax-cart-actions__footer-label">
+                    {{ 'sections.ecom-ajax-cart.guarantee_safe_checkout' | t }}
+                  </span>
+                </div>
+              {%endif%}
+              <div class="ecom-ajax-cart-actions__footer-payment-logos">
+                {%if SETTINGS.image_type == 'payment'%}
+                  <ul class="ecom-ajax-cart__payment-method-item">
+                    {%- for type in shop.enabled_payment_types -%}
+                      <li class="ecom-ajax-cart__payment-method-item">
+                      {{ type | payment_type_svg_tag: class: 'ecom-ajax-cart__payment-method-svg' }}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%elsif SETTINGS.image_type == 'none'%}
+                {%else%}
+                  {%- if SETTINGS.image.value -%}
+                    <img
+                        src="{{SETTINGS.image.value}}"
+                        alt="{{SETTINGS.image.name}}"
+                        {%- if SETTINGS.image_size -%}width="{{SETTINGS.image_size}}"{%- endif -%} />
+                  {%- endif -%}
+                {%endif%}
+              </div>
+              </div>
+        </div>
+        <!-- ecom-ajax-cart-footer -->
+      </form>
+    </div>
+    <!-- ecom-ajax-cart-container -->
+  </div>
+  <!-- ecom-ajax-cart-wrapper -->
+  <style>
+    :root {
+      --continue-color: {{ continue_color | default: '#fff' }};
+      --continue-color-hover: {{ continue_color_hover | default: continue_color | default: '#fff' }};
+      
+      --viewcart-color: {{ viewcart_color | default: '#fff' }};
+      --viewcart-color-hover: {{ viewcart_color_hover | default: viewcart_color | default: '#fff' }};
+      
+      --checkout-color: {{ checkout_color | default: '#fff' }};
+      --checkout-color-hover: {{ checkout_color_hover | default: checkout_color | default: '#fff' }};
+    }
+    .ecom-ajax-cart-continue-shopping-button {
+      {{ continue_background }};
+    }
+    .ecom-ajax-cart-continue-shopping-button:hover {
+      {{ continue_background_hover }};
+    }
+    .ecom-ajax-cart-viewcart-button {
+      {{ viewcart_background }};
+    }
+    .ecom-ajax-cart-viewcart-button:hover {
+      {{ viewcart_background_hover }};
+    }
+    .ecom-ajax-cart-checkout-button {
+      {{ checkout_background }};
+    }
+    .ecom-ajax-cart-checkout-button:hover {
+      {{ checkout_background_hover }};
+    }
+  </style>
+</div>
+
+{% schema %}
+  {
+    "name": "EComposer Ajax cart",
+    "settings": [
+      {
+        "type": "header",
+        "content": "The section generated by [EComposer](https://www.ecomposer.io).",
+        "info": "EComposer provides tons of pre-built Layouts and Blocks/Sections and focus on the simplicity for content editing, to help the merchants easy to build a nice store with drag, sorting and edit content only. "
+      }
+    ],
+    "locales": {
+      "en": {
+        "quantity": {
+          "label": "Quantity",
+          "input_label": "Quantity for   {{ product }}",
+          "increase": "Increase quantity for   {{ product }}",
+          "decrease": "Decrease quantity for   {{ product }}"
+        }, 
+        "title": "Your cart",
+        "caption": "Cart items",
+        "remove_title": "Remove   {{ title }}",
+        "subtotal": "Subtotal",
+        "new_subtotal": "New subtotal",
+        "note": "Order note",
+        "checkout": "Checkout",
+        "empty": "Your cart is empty",
+        "term": "I agree with the terms and conditions",
+        "cart_error": "There was an error while updating your cart. Please try again.",
+        "cart_quantity_error_html": "You can only add [quantity] of this item to your cart.",
+        "taxes_and_shipping_policy_at_checkout_html": "Taxes and <a href=\"  {{ link }}\">shipping</a> calculated at checkout",
+        "taxes_included_but_shipping_at_checkout": "Tax included and shipping calculated at checkout",
+        "taxes_included_and_shipping_policy_html": "Tax included. <a href=\"  {{ link }}\">Shipping</a> calculated at checkout.",
+        "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout",
+        "unit_price_separator": "per",
+        "view_cart": "View cart",
+        "headings": {
+          "product": "Product",
+          "price": "Price",
+          "total": "Total",
+          "quantity": "Quantity"
+        },
+        "update": "Update",
+        "price": {
+          "from_price_html": "From   {{ price }}",
+          "regular_price": "Regular price",
+          "sale_price": "Sale price",
+          "unit_price": "Unit price"
+        },
+        "continue_shopping": "Continue shopping",
+        "viewcart_shopping": "View cart",
+        "message": {
+          "one":"{{ count }}item in your cart",
+          "other":"{{ count }}items in your cart"
+        },
+        "successfully_added_to_your_cart": "Successfully added to your cart.",
+        "i_agree_with": "I agree with",
+        "terms_conditions": "Terms & Conditions",
+        "please_accept_terms_and_conditions": "Please accept terms and conditions",
+        "guarantee_safe_checkout": "Guarantee Safe Checkout",
+        "there_are_item": "There are {{ cart_count }} item(s)"
+      }
+    }
+  }
+{% endschema %}
