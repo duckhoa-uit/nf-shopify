@@ -40,11 +40,17 @@ describe("perfume product-family picker", () => {
     expect(source).toContain("instance_id | default: product.id | handleize");
   });
 
-  test("uses an EComposer adapter to hide Color and singleton family Size presentation", () => {
+  test("uses an EComposer adapter to hide Color by default and singleton family Size presentation", () => {
     const adapter = readProjectFile("snippets/perfume-product-family-picker-ecomposer.liquid");
 
-    expect(adapter).toContain("option_handle == 'color' or option_handle == 'colour'");
-    expect(adapter).toContain("ecomposer_color_option_handle = option_handle");
+    expect(adapter).toContain("show_color: {Boolean}");
+    expect(adapter).toContain("show_color: true");
+    expect(adapter).toContain("assign hide_ecomposer_color = true");
+    expect(adapter).toContain("if show_color == true");
+    expect(adapter).toContain("assign hide_ecomposer_color = false");
+    expect(adapter).toContain("render 'is-color-option', option: option, product: product");
+    expect(adapter).toContain("if is_color_option == 'true'");
+    expect(adapter).toContain("ecomposer_color_option_handle = option.name | handleize");
     expect(adapter).toContain("ecomposer_color_option_index = option.position | minus: 1");
     expect(adapter).toContain("assign color_option = product.options_by_name.Color");
     expect(adapter).toContain("render 'is-size-option', option: option, product: product");
@@ -61,6 +67,7 @@ describe("perfume product-family picker", () => {
     expect(adapter).toContain(
       '.selector-wrapper:has(.single-option-selector[data-option-index="{{ ecomposer_color_option_index }}"])',
     );
+    expect(adapter).toContain("if hide_ecomposer_color and ecomposer_color_option_handle != blank");
     expect(adapter).toContain("data-perfume-ecomposer-color-ownership");
     expect(adapter).toContain("display: none !important");
     expect(adapter).toContain("render 'perfume-product-family-picker'");
