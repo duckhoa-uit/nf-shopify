@@ -2,18 +2,20 @@
 
 ## Overview
 
-This document outlines the comprehensive performance optimizations implemented for the Northfinder Shopify theme to achieve lightning-fast loading speeds, improved SEO, and enhanced accessibility.
+This document records the performance techniques implemented for the Northfinder Shopify theme, together with the measurements needed to verify their effect.
 
 ## 🚀 Performance Optimizations Implemented
 
 ### 1. Critical CSS Strategy
 
 **File**: `assets/critical.css`
+
 - Contains above-the-fold styles for immediate rendering
-- Inlined directly in HTML head using `{{ 'critical.css' | asset_url | asset_content }}`
-- Reduces render-blocking CSS by ~80%
+- Loaded as an external stylesheet in the document head
+- Keeps the critical-style source separate from the layout markup
 
 **Benefits**:
+
 - Faster First Contentful Paint (FCP)
 - Improved perceived performance
 - Better Core Web Vitals scores
@@ -21,23 +23,32 @@ This document outlines the comprehensive performance optimizations implemented f
 ### 2. Async CSS Loading
 
 **Implementation**:
+
 ```liquid
-<link rel="preload" href="{{ 'application.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link
+  rel="preload"
+  href="{{ 'application.css' | asset_url }}"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+>
 <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 ```
 
 **Benefits**:
+
 - Non-blocking CSS loading
 - Progressive enhancement
 - Fallback support with `<noscript>`
 
 ### 3. Conditional Resource Loading
 
-**Phone Input Libraries** (285KB total):
+**Phone Input Libraries**:
+
 - Only loaded on customer pages (register, account, addresses)
-- Reduces bundle size by ~60% for most visitors
+- Compare non-customer and customer page resource bytes when measuring the effect
 
 **JavaScript Optimization**:
+
 - Moved non-critical scripts to end of body
 - Conditional loading based on page type
 - Deferred loading for all scripts
@@ -45,12 +56,14 @@ This document outlines the comprehensive performance optimizations implemented f
 ### 4. Resource Hints & Preloading
 
 **DNS & Connection Optimization**:
+
 ```html
-<link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
-<link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com">
+<link rel="preconnect" href="https://cdn.shopify.com" crossorigin />
+<link rel="dns-prefetch" href="https://monorail-edge.shopifysvc.com" />
 ```
 
 **Critical Image Preloading**:
+
 - Hero images on homepage
 - Product featured images
 - Conditional based on page type
@@ -62,6 +75,7 @@ This document outlines the comprehensive performance optimizations implemented f
 **File**: `snippets/structured-data.liquid`
 
 **Schemas Implemented**:
+
 - Organization
 - WebSite with SearchAction
 - Product with offers and ratings
@@ -72,6 +86,7 @@ This document outlines the comprehensive performance optimizations implemented f
 ### 2. Enhanced Meta Tags
 
 **Improvements**:
+
 - Fixed HTTPS URLs for og:image
 - Added og:image:alt for accessibility
 - Product-specific meta tags
@@ -80,15 +95,17 @@ This document outlines the comprehensive performance optimizations implemented f
 ## ♿ Accessibility Improvements
 
 ### 1. Enhanced Focus States
+
 - Proper focus indicators in critical CSS
 - Keyboard navigation support
 - Screen reader compatibility
 
 ### 2. Meta Tag Enhancements
+
 ```html
-<meta name="color-scheme" content="light">
-<meta name="format-detection" content="telephone=no">
-<meta name="theme-color" content="{{ settings.colors_accent_1 }}">
+<meta name="color-scheme" content="light" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="theme-color" content="{{ settings.colors_accent_1 }}" />
 ```
 
 ## 📊 Performance Monitoring
@@ -98,17 +115,20 @@ This document outlines the comprehensive performance optimizations implemented f
 **File**: `assets/performance-monitor.js`
 
 **Metrics Tracked**:
+
 - First Contentful Paint (FCP)
 - Largest Contentful Paint (LCP)
 - First Input Delay (FID)
 - Cumulative Layout Shift (CLS)
 
 ### 2. Resource Performance
+
 - CSS/JS loading times
 - Resource count monitoring
 - Network connection data
 
 ### 3. Analytics Integration
+
 - Google Analytics events
 - Shopify Analytics tracking
 - Development console logging
@@ -118,6 +138,7 @@ This document outlines the comprehensive performance optimizations implemented f
 ### Critical CSS Content
 
 The critical CSS includes:
+
 - CSS variables and root styles
 - Base layout and typography
 - Essential utility classes
@@ -128,49 +149,45 @@ The critical CSS includes:
 ### JavaScript Loading Strategy
 
 **Head Scripts** (Critical):
+
 - `constants.js` - Essential constants
 - `pubsub.js` - Event system
 - `global.js` - Core functionality
 
 **Body Scripts** (Non-critical):
+
 - `details-disclosure.js`
 - `details-modal.js`
 - `search-form.js`
 - `checkbox-handler.js`
 
 **Conditional Scripts**:
+
 - Phone input libraries (customer pages only)
 - hyperhtml.min.js (non-product pages)
 - Performance monitor (production only)
 
-## 📈 Expected Performance Gains
+## 📈 Measurement Targets
 
-### Bundle Size Reduction
-- **JavaScript**: 60% reduction for most pages
-- **CSS**: 80% reduction in render-blocking styles
+Performance claims must be evaluated against a recorded baseline from the same URL, device class, network profile, and browser version. The targets below are deliberately baseline-relative rather than fixed score promises:
 
-### Core Web Vitals Improvements
-- **FCP**: 20-30% faster
-- **LCP**: 15-25% improvement
-- **CLS**: Better layout stability
-- **FID**: Reduced input delay
-
-### SEO Benefits
-- Better search engine understanding
-- Improved social media sharing
-- Enhanced rich snippets
-- Better mobile performance scores
+- No regression in p75 LCP, INP, or CLS versus the baseline
+- Fewer render-blocking stylesheet requests and fewer blocking bytes than the baseline
+- Equal or lower total JavaScript and stylesheet transfer bytes than the baseline
+- Any Lighthouse score change is reported with the baseline score, run conditions, and variance
 
 ## 🔧 Maintenance & Monitoring
 
 ### Performance Monitoring
+
 1. Check browser console for performance data (development mode)
 2. Monitor Google Analytics for Core Web Vitals
 3. Use Shopify's Web Performance Dashboard
 4. Regular Lighthouse audits
 
 ### Best Practices
-1. Keep critical CSS under 14KB
+
+1. Record critical CSS and blocking-resource sizes before changing loading behavior
 2. Monitor bundle sizes when adding new features
 3. Test conditional loading on different page types
 4. Validate structured data regularly
@@ -178,11 +195,13 @@ The critical CSS includes:
 ### Troubleshooting
 
 **Common Issues**:
+
 1. **FOUC (Flash of Unstyled Content)**: Ensure critical CSS covers all above-the-fold elements
 2. **Slow Loading**: Check if conditional loading is working properly
 3. **SEO Issues**: Validate structured data with Google's Rich Results Test
 
 **Debug Tools**:
+
 - Browser DevTools Performance tab
 - Lighthouse audits
 - Google PageSpeed Insights
@@ -191,18 +210,21 @@ The critical CSS includes:
 ## 🚦 Testing Checklist
 
 ### Performance Testing
-- [ ] Lighthouse audit scores (aim for 90+ performance)
+
+- [ ] Lighthouse audit with a comparable recorded baseline
 - [ ] Core Web Vitals in field data
-- [ ] Resource loading waterfall
-- [ ] Bundle size analysis
+- [ ] Resource loading waterfall compared with the baseline
+- [ ] Bundle size analysis compared with the baseline
 
 ### SEO Testing
+
 - [ ] Google Rich Results Test
 - [ ] Meta tag validation
 - [ ] Social media preview testing
 - [ ] Search console monitoring
 
 ### Accessibility Testing
+
 - [ ] Keyboard navigation
 - [ ] Screen reader compatibility
 - [ ] Color contrast validation

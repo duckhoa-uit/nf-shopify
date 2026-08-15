@@ -117,7 +117,7 @@ Complex product measurement and recommendation engine located in:
 - **Design tokens** defined as CSS custom properties
 - **Component token mappings** for consistent theming
 - **Responsive design** with mobile-first approach
-- **Performance optimizations** with critical CSS inlining
+- **Performance optimizations** with a critical CSS asset loaded in the document head
 
 ## Testing
 
