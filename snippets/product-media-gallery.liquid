@@ -555,6 +555,13 @@
     assign active_color_data_attr = active_color_value
   endif
 
+  # Keep the server-rendered candidate stable through hydration. The runtime
+  # receives this ID and uses it as the initial item in the same sequence.
+  assign initial_media = first_variant.featured_media | default: product.featured_media | default: product.media.first
+  assign initial_image = initial_media.preview_image | default: initial_media
+  assign initial_media_id = initial_media.id | default: ''
+  assign initial_media_ratio = initial_image.aspect_ratio | default: 1
+
   # Initialize media string with all media URLs
   assign all_media = ''
   for media in product.media
@@ -579,10 +586,11 @@
   data-desktop-layout="{{ section.settings.gallery_layout }}"
   data-active-color="{{ active_color_data_attr }}"
   data-section-id="{{ section.id }}"
+  data-initial-media-id="{{ initial_media_id }}"
   class="relative"
 >
   <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
-  <div class="swiper product-swiper loading-media md:hidden" data-gallery-mobile>
+  <div class="swiper product-swiper md:hidden" data-gallery-mobile>
     <a class="skip-to-content-link button visually-hidden quick-add-hidden" href="#ProductInfo-{{ section.id }}">
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>
@@ -596,9 +604,46 @@
       data-active-color="{{ active_color_data_attr }}"
       aria-live="polite"
     >
-      {%- if product.media.size == 0 -%}
+      {%- if initial_image != blank -%}
+        <div
+          class="swiper-slide product__media-item is-active"
+          data-gallery-item
+          data-gallery-media-id="{{ initial_media_id }}"
+          data-media-id="{{ initial_media_id }}"
+          data-media-type="{{ initial_media.media_type | default: 'image' }}"
+        >
+          <div
+            class="product__media media relative h-0 w-full"
+            style="--ratio: {{ initial_media_ratio }}; --preview-ratio: {{ initial_media_ratio }}; aspect-ratio: {{ initial_media_ratio }};"
+          >
+            <div class="absolute inset-0 h-full w-full">
+              <img
+                src="{{ initial_image | image_url: width: 800 }}"
+                srcset="
+                  {{ initial_image | image_url: width: 360 }} 360w,
+                  {{ initial_image | image_url: width: 540 }} 540w,
+                  {{ initial_image | image_url: width: 720 }} 720w,
+                  {{ initial_image | image_url: width: 900 }} 900w,
+                  {{ initial_image | image_url: width: 1080 }} 1080w,
+                  {{ initial_image | image_url: width: 1296 }} 1296w,
+                  {{ initial_image | image_url: width: 1512 }} 1512w,
+                  {{ initial_image | image_url: width: 1800 }} 1800w
+                "
+                sizes="(min-width: 990px) 66vw, 100vw"
+                alt="{{ initial_image.alt | default: product.title | escape }}"
+                width="{{ initial_image.width | default: 800 }}"
+                height="{{ initial_image.height | default: 800 }}"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+                class="media-item product-lightbox-img h-full w-full object-cover"
+              >
+            </div>
+          </div>
+        </div>
+      {%- else -%}
         {%- comment -%} Fallback placeholder for mobile when no media and JS fails {%- endcomment -%}
-        <div class="swiper-slide product__media-item is-active scroll-trigger animate--fade-in">
+        <div class="swiper-slide product__media-item is-active" data-gallery-item data-gallery-media-id="placeholder">
           <div
             class="product__media media relative h-0 w-full"
             style="--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;"
@@ -613,15 +658,62 @@
     <div class="swiper-pagination"></div>
   </div>
 
-  <div id="desktop-gallery" data-gallery-grid class="loading-media relative hidden grid-cols-2 gap-4 md:grid">
-    {%- comment -%} Desktop gallery content will be rendered entirely by JavaScript {%- endcomment -%}
-    {%- comment -%} This eliminates server-side vs client-side sorting conflicts {%- endcomment -%}
-    <div id="desktop-gallery-loading" class="col-span-2 flex items-center justify-center py-8">
-      <div class="text-center">
-        <div class="mb-2 inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900"></div>
-        <p class="text-sm text-gray-600">Loading gallery...</p>
+  <div id="desktop-gallery" data-gallery-grid class="relative hidden grid-cols-2 gap-4 md:grid">
+    {%- if initial_image != blank -%}
+      <div
+        class="swiper-slide product__media-item is-active"
+        data-gallery-item
+        data-gallery-media-id="{{ initial_media_id }}"
+        data-media-id="{{ initial_media_id }}"
+        data-media-type="{{ initial_media.media_type | default: 'image' }}"
+      >
+        <div
+          class="product__media media relative h-0 w-full"
+          style="--ratio: {{ initial_media_ratio }}; --preview-ratio: {{ initial_media_ratio }}; aspect-ratio: {{ initial_media_ratio }};"
+        >
+          <div class="absolute inset-0 h-full w-full">
+            <img
+              src="{{ initial_image | image_url: width: 800 }}"
+              srcset="
+                {{ initial_image | image_url: width: 360 }} 360w,
+                {{ initial_image | image_url: width: 540 }} 540w,
+                {{ initial_image | image_url: width: 720 }} 720w,
+                {{ initial_image | image_url: width: 900 }} 900w,
+                {{ initial_image | image_url: width: 1080 }} 1080w,
+                {{ initial_image | image_url: width: 1296 }} 1296w,
+                {{ initial_image | image_url: width: 1512 }} 1512w,
+                {{ initial_image | image_url: width: 1800 }} 1800w
+              "
+              sizes="(min-width: 990px) 66vw, 100vw"
+              alt="{{ initial_image.alt | default: product.title | escape }}"
+              width="{{ initial_image.width | default: 800 }}"
+              height="{{ initial_image.height | default: 800 }}"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="media-item product-lightbox-img h-full w-full object-cover"
+            >
+          </div>
+        </div>
       </div>
-    </div>
+    {%- else -%}
+      <div
+        class="swiper-slide product__media-item is-active"
+        data-gallery-item
+        data-gallery-media-id="placeholder"
+        data-media-id="placeholder"
+        data-media-type="placeholder"
+      >
+        <div
+          class="product__media media relative h-0 w-full"
+          style="--ratio: 1; --preview-ratio: 1; aspect-ratio: 1; padding-bottom: 100%;"
+        >
+          <div class="absolute inset-0 flex h-full w-full items-center justify-center bg-gray-100">
+            {{ 'product-apparel-2' | placeholder_svg_tag: 'h-full w-full max-h-[60%] max-w-[60%] text-gray-400' }}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
   </div>
 
   <!-- See More/Less Button -->
@@ -639,6 +731,7 @@
     {
       "colorOptionIndex": {{ color_option_index }},
       "colorValueToReferenceId": {{ color_value_to_ref_json }},
+      "productTitle": {{ product.title | json }},
       "moreImagesText": {{ 'sections.main_product.more_images' | t | json }},
       "lessImagesText": {{ 'sections.main_product.less_images' | t | json }}
     }

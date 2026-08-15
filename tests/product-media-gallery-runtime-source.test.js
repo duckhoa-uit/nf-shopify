@@ -6,6 +6,7 @@ const readProjectFile = (path) => readFileSync(fileURLToPath(new URL(`../${path}
 
 describe("product media gallery runtime", () => {
   const runtime = readProjectFile("assets/product-media-gallery-runtime.js");
+  const sequence = readProjectFile("assets/product-media-gallery-sequence.js");
   const mediaGallery = readProjectFile("assets/media-gallery.js");
   const snippet = readProjectFile("snippets/product-media-gallery.liquid");
 
@@ -17,6 +18,11 @@ describe("product media gallery runtime", () => {
     expect(runtime).toContain("class ProductMediaGalleryController");
     expect(runtime).toContain("const controllers = new Map()");
     expect(runtime).toContain("this.root.querySelector");
+    expect(runtime).toContain("resolveProductMediaSequence");
+    expect(runtime).not.toContain("cloneNode");
+    expect(runtime).not.toContain("replaceChildren");
+    expect(runtime).toContain("preserveFirstImage");
+    expect(runtime).toContain("mediaItem.dataset.galleryHydrated");
   });
 
   test("uses the canonical variant pub/sub event exactly once per gallery", () => {
@@ -48,5 +54,35 @@ describe("product media gallery runtime", () => {
     expect(mediaGallery).toContain('this.querySelector(`[data-media-id="${mediaId}"]`)');
     expect(mediaGallery).toContain('this.querySelectorAll("[data-media-id]")');
     expect(mediaGallery).not.toContain('document.querySelector(`[data-media-id="${mediaId}"]`)');
+  });
+
+  test("shares one deterministic sequence contract between SSR and hydration", () => {
+    expect(sequence).toContain("export function resolveProductMediaSequence");
+    expect(sequence).toContain("filterMediaByColor");
+    expect(sequence).toContain("sortImagesByDisplayRules");
+    expect(sequence).toContain("hidden: index >= visibleCount");
+    expect(snippet).toContain("data-initial-media-id");
+    expect(snippet).toContain('loading="eager"');
+    expect(snippet).toContain('fetchpriority="high"');
+    expect(snippet).toContain("srcset=");
+    expect(snippet).toContain('sizes="(min-width: 990px) 66vw, 100vw"');
+  });
+
+  test("keeps the meaningful SSR fallback visible and aligns the image preload", () => {
+    expect(snippet).toContain("data-gallery-item");
+    expect(snippet).not.toContain("Loading gallery...");
+    expect(snippet).not.toContain('class="swiper product-swiper loading-media');
+    const alignedPreload =
+      "product.selected_or_first_available_variant.featured_media.preview_image | default: product.selected_or_first_available_variant.featured_image | default: product.featured_image | image_url: width: 800";
+    expect(readProjectFile("layout/theme.liquid")).toContain(alignedPreload);
+    expect(readProjectFile("layout/theme.pagefly.liquid")).toContain(alignedPreload);
+  });
+
+  test("does not use global gallery selectors or state", () => {
+    expect(runtime).not.toContain("document.querySelector(");
+    expect(runtime).not.toContain("window.slidesToCreate");
+    expect(runtime).not.toContain("window.productSwiper");
+    expect(runtime).not.toContain("window.isGalleryExpanded");
+    expect(runtime).not.toContain("window.ProductMediaGalleryController");
   });
 });
