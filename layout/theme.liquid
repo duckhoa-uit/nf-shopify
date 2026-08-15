@@ -583,7 +583,6 @@
     {%- comment -%} Performance monitoring - Load in production only {%- endcomment -%}
     {%- unless Shopify.designMode -%}
       <script src="{{ 'performance-monitor.js' | asset_url }}" defer="defer"></script>
-      <script src="{{ 'cache-optimization.js' | asset_url }}" defer="defer"></script>
     {%- endunless -%}
 
     {% comment %} Wishlist by Code Black Belt integration {% endcomment %}
