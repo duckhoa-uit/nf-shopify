@@ -63,6 +63,73 @@
 
     {% render 'meta-tags' %}
 
+    {%- comment -%} Inline tiny render-blocking CSS to remove two external requests {%- endcomment -%}
+    <style>
+      .list-menu--right {
+        right: 0;
+      }
+      .list-menu--disclosure {
+        position: absolute;
+        min-width: 100%;
+        width: 20rem;
+        border: 1px solid rgba(var(--color-base-foreground), 0.2);
+      }
+      .list-menu--disclosure:focus {
+        outline: none;
+      }
+      .list-menu__item--active {
+        text-decoration: underline;
+        text-underline-offset: 0.3rem;
+      }
+      .list-menu__item--active:hover {
+        text-decoration-thickness: 0.2rem;
+      }
+      .list-menu--disclosure.localization-selector {
+        max-height: 18rem;
+        overflow: auto;
+        width: 10rem;
+        padding: 0.5rem;
+      }
+      .breadcrumb-container {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      .breadcrumb {
+        font-size: 0.75rem;
+      }
+      .breadcrumb__list {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .breadcrumb__item {
+        display: flex;
+        align-items: center;
+      }
+      .breadcrumb__back-button {
+        display: flex;
+        align-items: center;
+      }
+      .breadcrumb__divider {
+        color: var(--color-foreground-30);
+        margin: 0 1rem;
+      }
+      .breadcrumb__link {
+        color: var(--color-gray-700);
+        text-decoration: underline;
+      }
+      .breadcrumb__link:hover {
+        color: var(--color-black);
+        text-decoration: none;
+      }
+      .breadcrumb__divider {
+        margin: 0 0.5rem;
+        color: var(--color-gray-600);
+      }
+    </style>
+
     {%- comment -%} Critical JavaScript - Only essential scripts in head {%- endcomment -%}
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
