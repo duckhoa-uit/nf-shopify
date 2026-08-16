@@ -590,7 +590,11 @@
   class="relative"
 >
   <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
-  <div class="swiper product-swiper md:hidden" data-gallery-mobile>
+  <div
+    class="swiper product-swiper md:hidden"
+    data-gallery-mobile
+    style="--gallery-initial-ratio: {{ initial_media_ratio }};"
+  >
     <a class="skip-to-content-link button visually-hidden quick-add-hidden" href="#ProductInfo-{{ section.id }}">
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>

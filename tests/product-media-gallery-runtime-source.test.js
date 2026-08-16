@@ -85,4 +85,11 @@ describe("product media gallery runtime", () => {
     expect(runtime).not.toContain("window.isGalleryExpanded");
     expect(runtime).not.toContain("window.ProductMediaGalleryController");
   });
+
+  test("reserves a stable mobile gallery height from the initial media ratio", () => {
+    const galleryCss = readProjectFile("assets/product-media-gallery.css");
+    expect(snippet).toContain("--gallery-initial-ratio: {{ initial_media_ratio }}");
+    expect(galleryCss).toContain(".product-swiper[data-gallery-mobile] .swiper-wrapper");
+    expect(galleryCss).toContain("aspect-ratio: var(--gallery-initial-ratio, 1)");
+  });
 });
