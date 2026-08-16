@@ -46,14 +46,20 @@
         {%- render 'icon-accordion', icon: block.settings.icon_1 -%}
       {%- else -%}
         <img
-          src="{{ block.settings.image_1 | image_url }}"
+          src="{{ block.settings.image_1 | image_url: width: 48 }}"
+          srcset="
+            {{ block.settings.image_1 | image_url: width: 32 }} 32w,
+            {{ block.settings.image_1 | image_url: width: 48 }} 48w,
+            {{ block.settings.image_1 | image_url: width: 64 }} 64w
+          "
+          sizes="(max-width: 749px) 32px, 48px"
           {% if block.settings.image_1.alt != blank %}
             alt="{{ block.settings.image_1.alt | escape }}"
           {% else %}
             role="presentation"
           {% endif %}
-          height="auto"
-          width="auto"
+          height="48"
+          width="48"
           loading="lazy"
         >
       {%- endif -%}
@@ -68,14 +74,20 @@
         {% render 'icon-accordion', icon: block.settings.icon_2 -%}
       {%- else -%}
         <img
-          src="{{ block.settings.image_2 | image_url }}"
+          src="{{ block.settings.image_2 | image_url: width: 48 }}"
+          srcset="
+            {{ block.settings.image_2 | image_url: width: 32 }} 32w,
+            {{ block.settings.image_2 | image_url: width: 48 }} 48w,
+            {{ block.settings.image_2 | image_url: width: 64 }} 64w
+          "
+          sizes="(max-width: 749px) 32px, 48px"
           {% if block.settings.image_2.alt != blank %}
             alt="{{ block.settings.image_2.alt | escape }}"
           {% else %}
             role="presentation"
           {% endif %}
-          height="auto"
-          width="auto"
+          height="48"
+          width="48"
           loading="lazy"
         >
       {%- endif -%}
@@ -90,14 +102,20 @@
         {% render 'icon-accordion', icon: block.settings.icon_3 -%}
       {%- else -%}
         <img
-          src="{{ block.settings.image_3 | image_url }}"
+          src="{{ block.settings.image_3 | image_url: width: 48 }}"
+          srcset="
+            {{ block.settings.image_3 | image_url: width: 32 }} 32w,
+            {{ block.settings.image_3 | image_url: width: 48 }} 48w,
+            {{ block.settings.image_3 | image_url: width: 64 }} 64w
+          "
+          sizes="(max-width: 749px) 32px, 48px"
           {% if block.settings.image_3.alt != blank %}
             alt="{{ block.settings.image_3.alt | escape }}"
           {% else %}
             role="presentation"
           {% endif %}
-          height="auto"
-          width="auto"
+          height="48"
+          width="48"
           loading="lazy"
         >
       {%- endif -%}

@@ -1,9 +1,11 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
-{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
-{{ 'swiper.css' | asset_url | stylesheet_tag }}
 
-<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+{%- unless template.name == 'product' -%}
+  {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+  {{ 'swiper.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+{%- endunless -%}
 <script src="{{ 'product-card-hover.js' | asset_url }}" defer></script>
 
 {%- liquid
@@ -73,8 +75,13 @@
     width: 40%;
   }
   @keyframes recently-viewed-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.55; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
   }
 
   /* Fade-in for fetched cards */
@@ -99,7 +106,7 @@
   data-current-product-id="{% if product %}{{ product.id }}{% endif %}"
   hidden
 >
-  <h2 class="product-recommendations__heading font-archivo-expanded text-base lg:text-2xl font-semibold text-[#0f0f0f] mb-7">
+  <h2 class="product-recommendations__heading font-archivo-expanded mb-7 text-base font-semibold text-[#0f0f0f] lg:text-2xl">
     {{ heading_text | escape }}
   </h2>
 
@@ -127,6 +134,7 @@
   </div>
 </div>
 
+{% # prettier-ignore %}
 <script>
 (function () {
   'use strict';
