@@ -59,4 +59,17 @@ describe("canonical product badge rendering", () => {
     expect(source).toContain("--product-badge-border-color");
     expect(source).toContain("--product-badge-text-color");
   });
+
+  test("refreshes PDP discounts after deferred pubsub initialization with lifecycle cleanup", () => {
+    const badge = readProjectFile("snippets/discount-badge.liquid");
+    const runtime = readProjectFile("assets/automatic-discount-badge.js");
+
+    expect(badge).toContain("<automatic-discount-badge");
+    expect(badge).toContain("automatic-discount-badge.js");
+    expect(badge).not.toContain("subscribe(PUB_SUB_EVENTS");
+    expect(runtime).toMatch(/typeof subscribe !== ["']function["']/);
+    expect(runtime).toContain("subscribe(PUB_SUB_EVENTS.variantChange");
+    expect(runtime).toContain("disconnectedCallback()");
+    expect(runtime).toContain("this.variantChangeUnsubscriber?.()");
+  });
 });

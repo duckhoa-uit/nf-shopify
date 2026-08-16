@@ -50,9 +50,10 @@
   endif
 -%}
 
-<div
+<automatic-discount-badge
   {% if refresh_on_variant_change %}
     id="AutomaticDiscountBadge-{{ section.id }}"
+    data-section-id="{{ section.id }}"
   {% endif %}
   class="contents"
 >
@@ -74,22 +75,8 @@
       {%- endif -%}
     </div>
   {%- endif -%}
-</div>
+</automatic-discount-badge>
 
 {% if refresh_on_variant_change %}
-  <script>
-    (() => {
-      const badgeContainer = document.getElementById('AutomaticDiscountBadge-{{ section.id }}');
-
-      if (!badgeContainer || badgeContainer.dataset.variantRefreshBound) return;
-
-      badgeContainer.dataset.variantRefreshBound = 'true';
-      subscribe(PUB_SUB_EVENTS.variantChange, (event) => {
-        if (event.data.sectionId !== '{{ section.id }}') return;
-
-        const source = event.data.html?.getElementById('AutomaticDiscountBadge-{{ section.id }}');
-        if (source) badgeContainer.innerHTML = source.innerHTML;
-      });
-    })();
-  </script>
+  <script src="{{ 'automatic-discount-badge.js' | asset_url }}" defer="defer"></script>
 {% endif %}
