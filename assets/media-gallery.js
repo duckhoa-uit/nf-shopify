@@ -1,4 +1,4 @@
-if (!customElements.get('media-gallery')) {
+if (!customElements.get("media-gallery")) {
   customElements.define(
     "media-gallery",
     class MediaGallery extends HTMLElement {
@@ -20,10 +20,10 @@ if (!customElements.get('media-gallery')) {
       }
 
       setActiveMedia(mediaId, prepend) {
-        const activeMedia = document.querySelector(`[data-media-id="${mediaId}"]`);
+        const activeMedia = this.querySelector(`[data-media-id="${mediaId}"]`);
         if (!activeMedia) return;
 
-        document.querySelectorAll("[data-media-id]").forEach((element) => {
+        this.querySelectorAll("[data-media-id]").forEach((element) => {
           element.classList.remove("is-active");
         });
         activeMedia.classList.add("is-active");

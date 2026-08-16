@@ -27,346 +27,334 @@
   }
 </style>
 
-<script src="{{ 'product-media-gallery-init.js' | asset_url }}" defer></script>
+<script src="{{ 'product-media-gallery-runtime.js' | asset_url }}" defer></script>
 
 {%- comment -%} Inline styles removed - now in product-media-gallery.css {%- endcomment -%}
-{%- comment -%}<style>
-  .loading-media {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .loading-media.loaded {
-    opacity: 1;
-  }
-  #gallery-toggle-btn {
-    padding: 12px 24px;
-    background-color: #ffffff;
-    color: #0f0f0f;
-    border: none;
-    border-radius: 3px;
-    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: var(--font-body-family);
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 1.14;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-  }
-  #gallery-toggle-btn:hover {
-    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px);
-  }
-  #gallery-toggle-container {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    position: absolute;
-    z-index: 2;
-    right: 1rem;
-    bottom: 1rem;
-  }
-  #gallery-toggle-container.visible {
-    opacity: 1;
-  }
-  /* Custom close button with icon for Fancybox v5 */
-  .f-button.is-close {
-    background-color: #f0f0f0;
-    border-radius: 50%;
-    width: 3.75rem;
-    height: 3.75rem;
-    transition: background-color 0.2s ease;
-    position: relative;
-  }
-
-  .f-button.is-close:hover {
-    background-color: #e0e0e0;
-  }
-
-  .f-button.is-close svg {
-    display: none;
-  }
-
-  .f-button.is-close::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 1.25rem;
-    height: 1.25rem;
-    background-image: url('{{ 'icon-close.svg' | asset_url }}');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  /* Custom navigation buttons for Fancybox v5 */
-  .f-button.is-prev svg,
-  .f-button.is-next svg {
-    display: none;
-  }
-
-  .f-button.is-prev,
-  .f-button.is-next {
-    width: 56px;
-    height: 56px;
-    border-radius: 28px;
-    background-color: white;
-    opacity: 1;
-    transition: opacity 0.2s ease;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 20;
-  }
-
-  /* Position buttons relative to fancybox__content with higher specificity */
-  .is-horizontal .f-carousel__nav .f-button.is-prev,
-  .is-horizontal .fancybox__nav .f-button.is-prev,
-  .f-button.is-prev {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: var(--f-button-prev-pos) !important; /* Use !important to override default styles */
-  }
-
-  .is-horizontal .f-carousel__nav .f-button.is-next,
-  .is-horizontal .fancybox__nav .f-button.is-next,
-  .f-button.is-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: var(--f-button-next-pos) !important; /* Use !important to override default styles */
-  }
-
-  /* Set default values for the CSS variables */
-  :root {
-    --f-button-prev-pos: -60px; /* 60px gap on desktop */
-    --f-button-next-pos: -60px; /* 60px gap on desktop */
-  }
-
-  /* Responsive gaps for tablet and mobile */
-  @media screen and (max-width: 990px) and (min-width: 768px) {
-    :root {
-      --f-button-prev-pos: -40px; /* 40px gap on tablet */
-      --f-button-next-pos: -40px; /* 40px gap on tablet */
+{%- comment -%}
+  <style>
+    .loading-media {
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-  }
-
-  @media screen and (max-width: 767px) {
-    :root {
-      --f-button-prev-pos: -20px; /* 20px gap on mobile */
-      --f-button-next-pos: -20px; /* 20px gap on mobile */
+    .loading-media.loaded {
+      opacity: 1;
     }
-  }
+    #gallery-toggle-btn {
+      padding: 12px 24px;
+      background-color: #ffffff;
+      color: #0f0f0f;
+      border: none;
+      border-radius: 3px;
+      box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-body-family);
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1.14;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    #gallery-toggle-btn:hover {
+      box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1px);
+    }
+    #gallery-toggle-container {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      position: absolute;
+      z-index: 2;
+      right: 1rem;
+      bottom: 1rem;
+    }
+    #gallery-toggle-container.visible {
+      opacity: 1;
+    }
+    /* Custom close button with icon for Fancybox v5 */
+    .f-button.is-close {
+      background-color: #f0f0f0;
+      border-radius: 50%;
+      width: 3.75rem;
+      height: 3.75rem;
+      transition: background-color 0.2s ease;
+      position: relative;
+    }
 
-  /* Hide navigation buttons on tablet and mobile */
-  @media screen and (max-width: 990px) {
-    .f-button.is-prev,
-    .f-button.is-next {
+    .f-button.is-close:hover {
+      background-color: #e0e0e0;
+    }
+
+    .f-button.is-close svg {
       display: none;
     }
-  }
 
-  .f-button.is-prev:hover,
-  .f-button.is-next:hover {
-    opacity: 0.9;
-  }
-
-  .f-button.is-prev::before,
-  .f-button.is-next::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 16px;
-    height: 24px;
-    stroke: #0f0f0f;
-    stroke-width: 2px;
-    stroke-linecap: round;
-  }
-
-  .f-button.is-next::before {
-    transform: translate(-50%, -50%);
-    background-image: url("data:image/svg+xml,%3Csvg width='16' height='24' viewBox='0 0 16 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 24L10 12L2 0' stroke='%230F0F0F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  .f-button.is-prev::before {
-    transform: translate(-50%, -50%);
-    background-image: url("data:image/svg+xml,%3Csvg width='16' height='24' viewBox='0 0 16 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14 24L6 12L14 0' stroke='%230F0F0F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-  /* Custom toolbar for Fancybox */
-  .custom-fancybox-toolbar {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    display: flex;
-    gap: 10px;
-    z-index: 40;
-    background-color: rgba(128, 128, 128, 0.7);
-    border-radius: 4px;
-    padding: 8px 12px;
-  }
-
-  .custom-fancybox-toolbar button {
-    width: 24px;
-    height: 24px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
-  }
-
-  .custom-fancybox-toolbar button:hover {
-    opacity: 1;
-  }
-
-  .custom-fancybox-toolbar button svg {
-    width: 20px;
-    height: 20px;
-    fill: white;
-  }
-
-  .custom-fancybox-toolbar button.active {
-    opacity: 1;
-  }
-
-  /* Hide default close button and caption */
-  .f-button.is-close {
-    display: none !important;
-  }
-
-  /* Hide Fancybox caption */
-  .fancybox__caption {
-    display: none !important;
-  }
-
-  /* Video styling */
-  .video-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .video-container video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none; /* Prevent any interaction with the video */
-    -webkit-user-select: none; /* Prevent selection */
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  /* Hide all video controls completely */
-  .video-container video::-webkit-media-controls,
-  .video-container video::-webkit-media-controls-enclosure,
-  .video-container video::-webkit-media-controls-panel,
-  .video-container video::-webkit-media-controls-overlay-play-button,
-  .video-container video::-webkit-media-controls-play-button,
-  .video-container video::-webkit-media-controls-timeline,
-  .video-container video::-webkit-media-controls-current-time-display,
-  .video-container video::-webkit-media-controls-time-remaining-display,
-  .video-container video::-webkit-media-controls-mute-button,
-  .video-container video::-webkit-media-controls-toggle-closed-captions-button,
-  .video-container video::-webkit-media-controls-volume-slider,
-  .video-container video::-webkit-media-controls-fullscreen-button {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  /* Footer transition for smooth show/hide */
-  .fancybox__footer {
-    transition: transform 0.3s ease, opacity 0.3s ease, margin-bottom 0.3s ease;
-    transform-origin: bottom;
-  }
-
-  .fancybox__footer.is-hidden {
-    transform: scaleY(0);
-    opacity: 0;
-    margin-bottom: -100px;
-    pointer-events: none;
-  }
-
-  /* Custom thumbnail sizes */
-  .f-thumbs__slide {
-    width: 60px !important;
-    height: 60px !important;
-    border: none !important; /* Remove default border */
-    position: relative; /* For positioning the bottom border */
-  }
-
-  .f-thumbs__slide__button {
-    width: 60px !important;
-    height: 60px !important;
-  }
-
-  /* Remove default active state styling */
-  .f-thumbs__slide.is-nav-selected {
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  /* Override Fancybox's default active thumbnail styling */
-  .is-classic .is-nav-selected .f-thumbs__slide__button::after {
-    content: '' !important;
-    position: absolute !important;
-    top: auto !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    height: 2px !important;
-    border: none !important;
-    border-radius: 0 !important;
-    background-color: #ec0009 !important;
-    z-index: 10 !important;
-    animation: none !important;
-  }
-
-  /* Tablet and mobile thumbnail sizes */
-  @media screen and (max-width: 990px) {
-    .f-thumbs__slide,
-    .f-thumbs__slide__button {
-      width: 48px !important;
-      height: 48px !important;
+    .f-button.is-close::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1.25rem;
+      height: 1.25rem;
+      background-image: url('{{ 'icon-close.svg' | asset_url }}');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
-  }
-</style>{%- endcomment -%}
+
+    /* Custom navigation buttons for Fancybox v5 */
+    .f-button.is-prev svg,
+    .f-button.is-next svg {
+      display: none;
+    }
+
+    .f-button.is-prev,
+    .f-button.is-next {
+      width: 56px;
+      height: 56px;
+      border-radius: 28px;
+      background-color: white;
+      opacity: 1;
+      transition: opacity 0.2s ease;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+    }
+
+    /* Position buttons relative to fancybox__content with higher specificity */
+    .is-horizontal .f-carousel__nav .f-button.is-prev,
+    .is-horizontal .fancybox__nav .f-button.is-prev,
+    .f-button.is-prev {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: var(--f-button-prev-pos) !important; /* Use !important to override default styles */
+    }
+
+    .is-horizontal .f-carousel__nav .f-button.is-next,
+    .is-horizontal .fancybox__nav .f-button.is-next,
+    .f-button.is-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: var(--f-button-next-pos) !important; /* Use !important to override default styles */
+    }
+
+    /* Set default values for the CSS variables */
+    :root {
+      --f-button-prev-pos: -60px; /* 60px gap on desktop */
+      --f-button-next-pos: -60px; /* 60px gap on desktop */
+    }
+
+    /* Responsive gaps for tablet and mobile */
+    @media screen and (max-width: 990px) and (min-width: 768px) {
+      :root {
+        --f-button-prev-pos: -40px; /* 40px gap on tablet */
+        --f-button-next-pos: -40px; /* 40px gap on tablet */
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      :root {
+        --f-button-prev-pos: -20px; /* 20px gap on mobile */
+        --f-button-next-pos: -20px; /* 20px gap on mobile */
+      }
+    }
+
+    /* Hide navigation buttons on tablet and mobile */
+    @media screen and (max-width: 990px) {
+      .f-button.is-prev,
+      .f-button.is-next {
+        display: none;
+      }
+    }
+
+    .f-button.is-prev:hover,
+    .f-button.is-next:hover {
+      opacity: 0.9;
+    }
+
+    .f-button.is-prev::before,
+    .f-button.is-next::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 24px;
+      stroke: #0f0f0f;
+      stroke-width: 2px;
+      stroke-linecap: round;
+    }
+
+    .f-button.is-next::before {
+      transform: translate(-50%, -50%);
+      background-image: url("data:image/svg+xml,%3Csvg width='16' height='24' viewBox='0 0 16 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 24L10 12L2 0' stroke='%230F0F0F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .f-button.is-prev::before {
+      transform: translate(-50%, -50%);
+      background-image: url("data:image/svg+xml,%3Csvg width='16' height='24' viewBox='0 0 16 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14 24L6 12L14 0' stroke='%230F0F0F' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* Custom toolbar for Fancybox */
+    .custom-fancybox-toolbar {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      display: flex;
+      gap: 10px;
+      z-index: 40;
+      background-color: rgba(128, 128, 128, 0.7);
+      border-radius: 4px;
+      padding: 8px 12px;
+    }
+
+    .custom-fancybox-toolbar button {
+      width: 24px;
+      height: 24px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+
+    .custom-fancybox-toolbar button:hover {
+      opacity: 1;
+    }
+
+    .custom-fancybox-toolbar button svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+
+    .custom-fancybox-toolbar button.active {
+      opacity: 1;
+    }
+
+    /* Hide default close button and caption */
+    .f-button.is-close {
+      display: none !important;
+    }
+
+    /* Hide Fancybox caption */
+    .fancybox__caption {
+      display: none !important;
+    }
+
+    /* Video styling */
+    .video-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none; /* Prevent any interaction with the video */
+      -webkit-user-select: none; /* Prevent selection */
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* Hide all video controls completely */
+    .video-container video::-webkit-media-controls,
+    .video-container video::-webkit-media-controls-enclosure,
+    .video-container video::-webkit-media-controls-panel,
+    .video-container video::-webkit-media-controls-overlay-play-button,
+    .video-container video::-webkit-media-controls-play-button,
+    .video-container video::-webkit-media-controls-timeline,
+    .video-container video::-webkit-media-controls-current-time-display,
+    .video-container video::-webkit-media-controls-time-remaining-display,
+    .video-container video::-webkit-media-controls-mute-button,
+    .video-container video::-webkit-media-controls-toggle-closed-captions-button,
+    .video-container video::-webkit-media-controls-volume-slider,
+    .video-container video::-webkit-media-controls-fullscreen-button {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* Footer transition for smooth show/hide */
+    .fancybox__footer {
+      transition: transform 0.3s ease, opacity 0.3s ease, margin-bottom 0.3s ease;
+      transform-origin: bottom;
+    }
+
+    .fancybox__footer.is-hidden {
+      transform: scaleY(0);
+      opacity: 0;
+      margin-bottom: -100px;
+      pointer-events: none;
+    }
+
+    /* Custom thumbnail sizes */
+    .f-thumbs__slide {
+      width: 60px !important;
+      height: 60px !important;
+      border: none !important; /* Remove default border */
+      position: relative; /* For positioning the bottom border */
+    }
+
+    .f-thumbs__slide__button {
+      width: 60px !important;
+      height: 60px !important;
+    }
+
+    /* Remove default active state styling */
+    .f-thumbs__slide.is-nav-selected {
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Override Fancybox's default active thumbnail styling */
+    .is-classic .is-nav-selected .f-thumbs__slide__button::after {
+      content: '' !important;
+      position: absolute !important;
+      top: auto !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      height: 2px !important;
+      border: none !important;
+      border-radius: 0 !important;
+      background-color: #ec0009 !important;
+      z-index: 10 !important;
+      animation: none !important;
+    }
+
+    /* Tablet and mobile thumbnail sizes */
+    @media screen and (max-width: 990px) {
+      .f-thumbs__slide,
+      .f-thumbs__slide__button {
+        width: 48px !important;
+        height: 48px !important;
+      }
+    }
+  </style>
+{%- endcomment -%}
 
 {%- comment -%} Swiper loaded globally in theme.liquid {%- endcomment -%}
 {%- comment -%} Load Fancybox only on product pages {%- endcomment -%}
 {%- if template.name == 'product' -%}
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" defer></script>
 {%- endif -%}
-<script type="module">
-  import {
-    parseImageUrl,
-    sortImagesByDisplayRules,
-    getNormalizedColorKey,
-    mapReferenceIdToColorInUrl,
-    filterMediaByColor,
-  } from "{{ 'product-utils.module.js' | asset_url }}";
-  window.parseImageUrl = parseImageUrl;
-  window.sortImagesByDisplayRules = sortImagesByDisplayRules;
-  window.getNormalizedColorKey = getNormalizedColorKey;
-  window.mapReferenceIdToColorInUrl = mapReferenceIdToColorInUrl;
-  window.filterMediaByColor = filterMediaByColor;
-</script>
 
 {%- liquid
   # Get currently selected or first available variant
@@ -590,15 +578,17 @@
   aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
   data-desktop-layout="{{ section.settings.gallery_layout }}"
   data-active-color="{{ active_color_data_attr }}"
+  data-section-id="{{ section.id }}"
   class="relative"
 >
   <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
-  <div class="swiper product-swiper md:hidden loading-media">
+  <div class="swiper product-swiper loading-media md:hidden" data-gallery-mobile>
     <a class="skip-to-content-link button visually-hidden quick-add-hidden" href="#ProductInfo-{{ section.id }}">
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>
     <div
       id="Slider-Gallery-{{ section.id }}"
+      data-gallery-slider
       class="swiper-wrapper product__media-list contains-media"
       role="list"
       data-media-count="{{ product.media.size }}"
@@ -610,10 +600,10 @@
         {%- comment -%} Fallback placeholder for mobile when no media and JS fails {%- endcomment -%}
         <div class="swiper-slide product__media-item is-active scroll-trigger animate--fade-in">
           <div
-            class="product__media media relative w-full h-0"
+            class="product__media media relative h-0 w-full"
             style="--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;"
           >
-            <div class="absolute inset-0 w-full h-full bg-gray-100 flex items-center justify-center">
+            <div class="absolute inset-0 flex h-full w-full items-center justify-center bg-gray-100">
               {{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}
             </div>
           </div>
@@ -623,1500 +613,34 @@
     <div class="swiper-pagination"></div>
   </div>
 
-  <div id="desktop-gallery" class="hidden md:grid grid-cols-2 gap-4 loading-media relative">
+  <div id="desktop-gallery" data-gallery-grid class="loading-media relative hidden grid-cols-2 gap-4 md:grid">
     {%- comment -%} Desktop gallery content will be rendered entirely by JavaScript {%- endcomment -%}
     {%- comment -%} This eliminates server-side vs client-side sorting conflicts {%- endcomment -%}
     <div id="desktop-gallery-loading" class="col-span-2 flex items-center justify-center py-8">
       <div class="text-center">
-        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mb-2"></div>
+        <div class="mb-2 inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900"></div>
         <p class="text-sm text-gray-600">Loading gallery...</p>
       </div>
     </div>
   </div>
 
   <!-- See More/Less Button -->
-  <div id="gallery-toggle-container" class="hidden md:flex justify-end">
-    <button id="gallery-toggle-btn">{{ 'sections.main_product.more_images' | t }}</button>
+  <div id="gallery-toggle-container" data-gallery-toggle-container class="hidden justify-end md:flex">
+    <button id="gallery-toggle-btn" data-gallery-toggle>{{ 'sections.main_product.more_images' | t }}</button>
   </div>
 
-  <script>
-    // Use GALLERY_CONFIG from product-media-gallery-init.js or define fallback
-    const GALLERY_CONFIG = window.GALLERY_CONFIG || {
-      visibleCount: 6,
-      debounceMs: 300,
-      videoRetryDelays: [100, 300, 800],
-      mobileBreakpoint: 768,
-      tabletBreakpoint: 990,
-      minColorPartLength: 3,
-      swiperAutoplayInterval: 3000,
-      initRetryDelay: 50,
-      initMaxRetryDelay: 100
-    };
-
-    // Translation variables
-    const moreImagesText = {{ 'sections.main_product.more_images' | t | json }};
-    const lessImagesText = {{ 'sections.main_product.less_images' | t | json }};
-
-    // Language-agnostic color option index (0-based, -1 if not found)
-    const colorOptionIndex = {{ color_option_index }};
-
-    // Locale-safe map of un-localized option values -> reference_id
-    // Built server-side from metaobject system.handle so it never depends on
-    // the storefront language. Used by handleColorChange to keep filtering
-    // consistent across all locales (e.g. /sl/, /de/, /en/).
-    const colorOptionValueToReferenceId = {{ color_value_to_ref_json }};
-
-    function resolveActiveColor(rawValue) {
-      if (rawValue === null || rawValue === undefined || rawValue === '') return '';
-
-      // Already a reference_id (numeric)? Pass through.
-      const asNumber = parseInt(rawValue, 10);
-      if (!isNaN(asNumber) && asNumber.toString() === rawValue.toString().trim()) {
-        return asNumber.toString();
-      }
-
-      // Normalize the option value to match handle format (lowercase, dashes).
-      const normalized = rawValue.toString()
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '-')
-        .replace(/'/g, '')
-        .replace(/\./g, '')
-        .replace(/,/g, '')
-        .replace(/\/+/g, '-')
-        .replace(/-+$/g, '');
-
-      const refId = colorOptionValueToReferenceId[normalized];
-      if (refId !== undefined && refId !== null) return refId.toString();
-
-      return normalized;
+  <script type="application/json" data-gallery-media>
+    {{ product.media | json }}
+  </script>
+  <script type="application/json" data-gallery-colors>
+    {% if product.metafields.custom.color.value %}{{ product.metafields.custom.color.value | json }}{% else %}null{% endif %}
+  </script>
+  <script type="application/json" data-gallery-options>
+    {
+      "colorOptionIndex": {{ color_option_index }},
+      "colorValueToReferenceId": {{ color_value_to_ref_json }},
+      "moreImagesText": {{ 'sections.main_product.more_images' | t | json }},
+      "lessImagesText": {{ 'sections.main_product.less_images' | t | json }}
     }
-
-    // Function to create media item element
-    function createMediaItem(url, index) {
-      const allMedia = {{ product.media | json }};
-      let mediaObject = null;
-
-      // Find matching media object by comparing filenames
-      const urlFilename = url.split('/').pop().split('?')[0].toLowerCase();
-
-      for (const media of allMedia) {
-        // For video media type, compare with preview image
-        let mediaSrc, mediaFilename;
-        if (media.media_type === 'video') {
-          mediaSrc = media.preview_image.src;
-        } else {
-          mediaSrc = media.src;
-        }
-
-        mediaFilename = mediaSrc.split('/').pop().split('?')[0].toLowerCase();
-
-        // Check for exact filename match only (prevent cross-matching like M_1 with M_12)
-        if (urlFilename === mediaFilename) {
-          mediaObject = media;
-          break;
-        }
-      }
-
-      // Create container div
-      const div = document.createElement('div');
-      div.className = `swiper-slide product__media-item${index === 0 ? ' is-active' : ''} scroll-trigger animate--fade-in`;
-
-      // Set attributes based on whether we found a media object or not
-      const mediaId = mediaObject ? mediaObject.id : `generated-${index}`;
-      div.id = `Slide-{{ section.id }}-${mediaId}`;
-      div.setAttribute('data-media-id', `{{ section.id }}-${mediaId}`);
-
-      // Store media object reference for lightbox
-      if (mediaObject) {
-        div.setAttribute('data-media-object', JSON.stringify({
-          id: mediaObject.id,
-          position: mediaObject.position || index,
-          media_type: mediaObject.media_type || 'image'
-        }));
-      }
-
-      if (mediaObject && mediaObject.media_type !== 'image') {
-        div.classList.add('product__media-item--full');
-      }
-
-      // Create media wrapper
-      const wrapper = document.createElement('div');
-      wrapper.className = 'product__media media relative w-full h-0';
-      wrapper.style.cssText = '--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;';
-
-      // Create image container
-      const imageContainer = document.createElement('div');
-      imageContainer.className = 'absolute inset-0 w-full h-full';
-
-      // Handle different media types
-      if (mediaObject && mediaObject.media_type === 'video') {
-        // Create a container for the video
-        const videoContainer = document.createElement('div');
-        videoContainer.className = 'video-container relative w-full h-full cursor-pointer';
-        videoContainer.setAttribute('role', 'button');
-        videoContainer.setAttribute('tabindex', '0');
-        videoContainer.setAttribute('aria-label', mediaObject.alt || 'Play product video');
-
-        // Create the video element
-        const video = document.createElement('video');
-        video.className = 'w-full h-full object-cover';
-        video.playsInline = true;
-        video.muted = true;
-        video.loop = true;
-        video.autoplay = true;
-        video.controls = false; // Hide controls completely
-        video.setAttribute('playsinline', '');
-        video.setAttribute('muted', '');
-        video.setAttribute('loop', '');
-        video.setAttribute('autoplay', '');
-        video.setAttribute('disablePictureInPicture', '');
-        video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
-        video.setAttribute('webkit-playsinline', '');
-        video.disablePictureInPicture = true;
-
-        // Add poster (preview image)
-        if (mediaObject.preview_image) {
-          video.poster = mediaObject.preview_image.src;
-        }
-
-        // Add video sources
-        if (mediaObject.sources) {
-          mediaObject.sources.forEach(source => {
-            const sourceElement = document.createElement('source');
-            sourceElement.src = source.url;
-            sourceElement.type = source.mime_type;
-            video.appendChild(sourceElement);
-          });
-        }
-
-        // Fallback image in case video doesn't load
-        const img = document.createElement('img');
-        img.src = mediaObject.preview_image.src;
-        img.alt = mediaObject.alt || mediaObject.preview_image.alt || 'Product video preview';
-        img.className = 'absolute inset-0 w-full h-full object-cover';
-        img.style.display = 'none'; // Hide by default
-
-        // If video fails to load, show the image
-        video.addEventListener('error', () => {
-          video.style.display = 'none';
-          img.style.display = 'block';
-        });
-
-        // Assemble the elements
-        videoContainer.appendChild(video);
-        videoContainer.appendChild(img);
-        imageContainer.appendChild(videoContainer);
-
-        // Stash sources/poster on the container so the lightbox can read them
-        // without needing access to the original mediaObject closure.
-        const videoSources = (mediaObject.sources || []).map(source => ({
-          url: source.url,
-          mime_type: source.mime_type,
-        }));
-        videoContainer.dataset.videoSources = JSON.stringify(videoSources);
-        if (mediaObject.preview_image && mediaObject.preview_image.src) {
-          videoContainer.dataset.videoPoster = mediaObject.preview_image.src;
-        }
-
-        // Open the 9:16 video lightbox when the cropped 1:1 preview is clicked.
-        const openVideoLightboxHandler = (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          openProductVideoLightbox(videoSources, videoContainer.dataset.videoPoster);
-        };
-        videoContainer.addEventListener('click', openVideoLightboxHandler);
-        videoContainer.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            openVideoLightboxHandler(e);
-          }
-        });
-      } else {
-        // Check if this is a placeholder
-        if (url === 'placeholder' || url.includes('placeholder_svg_tag') || (!mediaObject && url.includes('placeholder'))) {
-          // Create placeholder container
-          const placeholderDiv = document.createElement('div');
-          placeholderDiv.className = 'w-full h-full bg-gray-100 flex items-center justify-center';
-
-          // Create SVG placeholder
-          const svgContainer = document.createElement('div');
-          svgContainer.className = 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%] flex items-center justify-center';
-          svgContainer.innerHTML = `{{ 'product-apparel-2' | placeholder_svg_tag: '' }}`;
-
-          placeholderDiv.appendChild(svgContainer);
-          imageContainer.appendChild(placeholderDiv);
-        } else {
-          // For images, create a standard image element
-          const img = document.createElement('img');
-          img.src = mediaObject ? mediaObject.src : url;
-          img.alt = mediaObject ? (mediaObject.alt || 'Product image') : 'Product image';
-          img.id = `ProductMedia-{{ section.id }}-${mediaId}`;
-          img.className = 'media-item w-full h-full object-cover product-lightbox-img';
-          img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
-
-          // Add click handler for lightbox
-          img.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Pass the index in the filtered and sorted images
-            openProductLightbox(index);
-          });
-
-          if (mediaObject) {
-            img.width = mediaObject.width;
-            img.height = mediaObject.height;
-          }
-
-          // Assemble the elements
-          imageContainer.appendChild(img);
-        }
-      }
-
-      wrapper.appendChild(imageContainer);
-      div.appendChild(wrapper);
-
-      return div;
-    }
-
-    // Wrap in a function to ensure proper execution
-    function initProductGallery() {
-      // DOM elements
-      const gallery = document.querySelector('#MediaGallery-{{ section.id }}');
-      const sliderWrapper = document.querySelector('#Slider-Gallery-{{ section.id }}');
-      const grid = document.querySelector('#desktop-gallery');
-      const mobileGallery = document.querySelector('.product-swiper');
-      const loadingIndicator = document.querySelector('#desktop-gallery-loading');
-
-      // Check if elements exist and parseImageUrl is available
-      if (!gallery || !sliderWrapper || !grid || !mobileGallery) {
-        setTimeout(initProductGallery, 100);
-        return;
-      }
-
-      // Ensure parseImageUrl is available
-      if (typeof window.parseImageUrl !== 'function') {
-        setTimeout(initProductGallery, 50);
-        return;
-      }
-
-      // Get color mappings from product metafields if available
-      const colorMappings = {% if product.metafields.custom.color.value %}{{ product.metafields.custom.color.value | json }}{% else %}null{% endif %};
-
-      // Hide galleries until content is ready
-      mobileGallery.classList.remove('loaded');
-      grid.classList.remove('loaded');
-
-      // Get the initial active color
-      const activeColor = gallery.dataset.activeColor;
-
-      // Create global reference for slidesToCreate
-      window.slidesToCreate = [];
-
-      // Debounce timer for color changes to prevent race conditions
-      let processMediaTimeout = null;
-
-      // Debounced version of processMedia to prevent race conditions on rapid color changes
-      function debouncedProcessMedia() {
-        // Clear any pending processMedia call
-        if (processMediaTimeout) {
-          clearTimeout(processMediaTimeout);
-        }
-
-        // Schedule a new processMedia call after debounce delay
-        processMediaTimeout = setTimeout(() => {
-          processMediaInternal();
-          processMediaTimeout = null;
-        }, GALLERY_CONFIG.debounceMs);
-      }
-
-      // Process and filter media based on active color
-      function processMedia() {
-        debouncedProcessMedia();
-      }
-
-      // Internal implementation of processMedia
-      function processMediaInternal() {
-        if (!window.parseImageUrl || !window.filterMediaByColor) {
-          setTimeout(processMedia, GALLERY_CONFIG.initRetryDelay);
-          return;
-        }
-
-        // Get all media objects
-        const allMedia = {{ product.media | json }};
-
-        // Extract URLs, handling videos specially
-        const allMediaUrls = allMedia.map(media => {
-          // For videos, use the preview image URL instead of trying to parse the video URL
-          if (media.media_type === 'video' && media.preview_image) {
-            return media.preview_image.src;
-          }
-          return media.src;
-        });
-
-        // Use the shared filterMediaByColor utility
-        let urlsToUse = window.filterMediaByColor(allMediaUrls, gallery.dataset.activeColor, colorMappings);
-
-        // Get all product media to ensure we include videos regardless of color filtering
-        const productMedia = {{ product.media | json }};
-        const videoMedia = productMedia.filter(media => media.media_type === 'video');
-
-        // Enhanced video handling for both normal filtering and fallback scenarios
-        if (videoMedia.length > 0 && urlsToUse.length > 0) {
-          // Create video preview image URLs for comparison
-          const videoPreviewUrls = videoMedia.map(video =>
-            video.preview_image ? video.preview_image.src : null
-          ).filter(url => url !== null);
-
-          // Check if any video preview URLs are already in our filtered list
-          const hasVideoInFiltered = videoPreviewUrls.some(videoUrl =>
-            urlsToUse.includes(videoUrl)
-          );
-
-          // If videos are not already in the filtered list, add them
-          if (!hasVideoInFiltered) {
-            // Add video preview images to the filtered URLs
-            urlsToUse = [...urlsToUse, ...videoPreviewUrls];
-          }
-        }
-
-        // Sort and update gallery, passing color mappings to the sort function
-        // The function now returns objects with url and hidden properties
-        let sortedImages = window.sortImagesByDisplayRules(urlsToUse, colorMappings);
-
-        // Custom logic to move videos to the 2nd position
-        if (videoMedia.length > 0) {
-          // Create a new array to hold the reordered images
-          const reorderedImages = [];
-
-          // Find video items in the sorted list
-          const videoItems = [];
-          const nonVideoItems = [];
-
-          sortedImages.forEach(item => {
-            // Check if this item is a video by matching its URL with video preview images
-            const isVideo = videoMedia.some(video => {
-              // For videos, compare with preview image URL
-              return video.preview_image &&
-                     (item.url === video.preview_image.src ||
-                      item.url.includes(video.preview_image.src.split('?')[0]));
-            });
-
-            if (isVideo) {
-              videoItems.push(item);
-            } else {
-              nonVideoItems.push(item);
-            }
-          });
-
-          // If we have both video and non-video items
-          if (videoItems.length > 0 && nonVideoItems.length > 0) {
-            // Create a new array to hold the reordered images
-            let reorderedImages = [];
-
-            // Add the first item (usually the main product image)
-            reorderedImages.push(nonVideoItems[0]);
-
-            // Add video items at position 2
-            reorderedImages.push(...videoItems);
-
-            // Add the rest of the non-video items, skipping the first one we already added
-            reorderedImages.push(...nonVideoItems.slice(1));
-
-            // Replace the sorted images with our reordered list
-            sortedImages = reorderedImages;
-          }
-        }
-
-        // Ensure all items have the hidden property set based on their index
-        // This applies to all cases: with videos, without videos, etc.
-        // Items up to visibleCount are visible (hidden: false), rest are hidden (hidden: true)
-        sortedImages.forEach((item, index) => {
-          if (index < GALLERY_CONFIG.visibleCount) {
-            item.hidden = false;
-          } else {
-            item.hidden = true;
-          }
-        });
-
-        updateGallery(sortedImages);
-      } // End of processMediaInternal
-
-      // Update gallery with the given URLs or image objects
-      function updateGallery(images) {
-        // Clear existing content
-        sliderWrapper.innerHTML = '';
-        grid.innerHTML = '';
-
-        // Hide loading indicator
-        if (loadingIndicator) {
-          loadingIndicator.style.display = 'none';
-        }
-
-        // Get all media for reference (needed to check for videos)
-        const allMedia = {{ product.media | json }};
-
-        // Ensure we have at least some images to display
-        if (images.length === 0) {
-          if (allMedia.length > 0) {
-            // Get all media URLs for sorting
-            const allMediaUrls = allMedia.map(media => {
-              // For videos, use the preview image URL
-              return media.media_type === 'video' && media.preview_image ?
-                media.preview_image.src : media.src;
-            });
-
-            // Sort all media according to display rules and take first 2
-            const colorMappings = {% if product.metafields.custom.color.value %}{{ product.metafields.custom.color.value | json }}{% else %}null{% endif %};
-            const sortedFallbackImages = window.sortImagesByDisplayRules(allMediaUrls, colorMappings);
-            const fallbackUrls = sortedFallbackImages.slice(0, 2);
-
-
-            // Convert back to the expected format with media metadata
-            images = fallbackUrls.map((item, index) => {
-              const url = typeof item === 'string' ? item : item.url;
-
-              // Find the corresponding media object
-              const mediaObject = allMedia.find(media => {
-                const mediaSrc = media.media_type === 'video' && media.preview_image ?
-                  media.preview_image.src : media.src;
-                return mediaSrc === url;
-              });
-
-              return {
-                url: url,
-                mediaId: mediaObject ? mediaObject.id : `fallback-${index}`,
-                mediaType: mediaObject ? mediaObject.media_type : 'image',
-                hidden: false
-              };
-            });
-
-
-          } else {
-            // Product has no media at all - create placeholder
-            images = [{
-              url: 'placeholder',
-              mediaId: 'placeholder',
-              mediaType: 'placeholder',
-              hidden: false
-            }];
-
-            // Show placeholder in desktop gallery at 1st grid position
-            const placeholderDiv = document.createElement('div');
-            placeholderDiv.className = 'product__media-item scroll-trigger animate--fade-in';
-            placeholderDiv.innerHTML = `
-              <div class="product__media media relative w-full h-0" style="--ratio: 1.0; --preview-ratio: 1.0; padding-bottom: 100%;">
-                <div class="absolute inset-0 w-full h-full bg-gray-100 flex items-center justify-center">
-                  {{ 'product-apparel-2' | placeholder_svg_tag: 'w-full h-full text-gray-400 max-w-[60%] max-h-[60%]' }}
-                </div>
-              </div>
-            `;
-            grid.appendChild(placeholderDiv);
-
-            // Show galleries immediately since we have placeholder
-            requestAnimationFrame(() => {
-              mobileGallery.classList.add('loaded');
-              grid.classList.add('loaded');
-            });
-
-            return; // Exit early for placeholder case
-          }
-        }
-
-        // Normalize the images array to ensure all items have url and hidden properties
-        const normalizedImages = images.map(item => {
-          if (typeof item === 'string') {
-            // Handle legacy format (just URL strings)
-            return { url: item, hidden: false };
-          }
-          return item; // Already in the correct format
-        });
-
-        // Create at least 2 slides for proper pagination
-        window.slidesToCreate = normalizedImages.length === 1 ?
-          [normalizedImages[0], normalizedImages[0]] : normalizedImages;
-
-        // Create all items but only show first 6
-        window.isGalleryExpanded = window.isGalleryExpanded || false;
-        const toggleBtn = document.getElementById('gallery-toggle-btn');
-        const toggleContainer = document.getElementById('gallery-toggle-container');
-
-        // Set button text based on current expanded state
-        if (toggleBtn) {
-          toggleBtn.textContent = window.isGalleryExpanded ? lessImagesText : moreImagesText;
-        }
-
-        if (window.slidesToCreate.length > 0) {
-          window.slidesToCreate.forEach((imageObj, index) => {
-            const mediaItem = createMediaItem(imageObj.url, index);
-            if (mediaItem) {
-              // Add to mobile slider - all images are visible in the slider
-              // Clone the media item for mobile slider
-              const mobileMediaItem = mediaItem.cloneNode(true);
-
-              // Ensure video autoplay attributes are preserved in cloned element
-              const clonedVideo = mobileMediaItem.querySelector('video');
-              if (clonedVideo) {
-                clonedVideo.setAttribute('autoplay', '');
-                clonedVideo.autoplay = true;
-              }
-
-              // cloneNode does not copy event listeners, so wire the video
-              // lightbox click handler on the cloned container using sources
-              // we stashed on the dataset.
-              const clonedVideoContainer = mobileMediaItem.querySelector('.video-container');
-              if (clonedVideoContainer) {
-                const clonedSourcesAttr = clonedVideoContainer.dataset.videoSources;
-                const clonedPoster = clonedVideoContainer.dataset.videoPoster || '';
-                let clonedSources = [];
-                try {
-                  clonedSources = clonedSourcesAttr ? JSON.parse(clonedSourcesAttr) : [];
-                } catch (err) {
-                  clonedSources = [];
-                }
-
-                const clonedHandler = (e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  openProductVideoLightbox(clonedSources, clonedPoster);
-                };
-                clonedVideoContainer.addEventListener('click', clonedHandler);
-                clonedVideoContainer.addEventListener('keydown', function(e) {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    clonedHandler(e);
-                  }
-                });
-              }
-
-              sliderWrapper.appendChild(mobileMediaItem);
-
-              // Add to desktop grid with visibility control
-              if (index === 0 || imageObj.url !== window.slidesToCreate[0].url) {
-                // Apply hidden class based on the hidden property from sorting
-                if (imageObj.hidden && !window.isGalleryExpanded) {
-                  mediaItem.classList.add('hidden');
-                }
-
-                // Mark expandable items for toggle functionality
-                if (imageObj.hidden) {
-                  mediaItem.classList.add('expandable-item');
-                }
-
-                grid.appendChild(mediaItem);
-              }
-            }
-          });
-
-          // Only show toggle button if we have hidden images (more than the visible count)
-          const hiddenItemsCount = window.slidesToCreate.filter(item => item.hidden).length;
-
-          if (hiddenItemsCount > 0) {
-            toggleContainer.classList.remove('hidden');
-
-            // Replace button with clone to remove any existing event listeners
-            const newBtn = toggleBtn.cloneNode(true);
-            toggleBtn.parentNode.replaceChild(newBtn, toggleBtn);
-
-            // Set up toggle button functionality
-            newBtn.addEventListener('click', function() {
-              window.isGalleryExpanded = !window.isGalleryExpanded;
-              const expandableItems = grid.querySelectorAll('.expandable-item');
-
-              expandableItems.forEach(item => {
-                if (window.isGalleryExpanded) {
-                  item.classList.remove('hidden');
-                } else {
-                  item.classList.add('hidden');
-                }
-              });
-
-              // Update button text
-              newBtn.textContent = window.isGalleryExpanded ? lessImagesText : moreImagesText;
-            });
-          } else {
-            toggleContainer.classList.add('hidden');
-          }
-        }
-
-        // Ensure pagination container exists
-        let paginationContainer = document.querySelector('.product-swiper .swiper-pagination');
-        if (!paginationContainer) {
-          paginationContainer = document.createElement('div');
-          paginationContainer.className = 'swiper-pagination';
-          paginationContainer.style.display = 'flex';
-          mobileGallery.appendChild(paginationContainer);
-        }
-
-        // Initialize Swiper
-        initSwiper();
-
-        // Add event listeners to mobile gallery images
-        document.querySelectorAll('.product-swiper .swiper-slide img').forEach((img, index) => {
-          img.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Use the index in the filtered and sorted images
-            openProductLightbox(index);
-          });
-          img.style.cursor = 'pointer';
-        });
-
-        // Show galleries
-        requestAnimationFrame(() => {
-          mobileGallery.classList.add('loaded');
-          grid.classList.add('loaded');
-
-          // Ensure videos autoplay after gallery update
-          // This is necessary because browser autoplay policies may prevent autoplay
-          // after DOM manipulation during color changes
-          const allVideos = document.querySelectorAll('.product__media video');
-
-          allVideos.forEach((video, index) => {
-            // Set autoplay attributes if not already set
-            if (!video.hasAttribute('autoplay')) {
-              video.setAttribute('autoplay', '');
-              video.autoplay = true;
-            }
-
-            // Function to attempt playing the video
-            const attemptPlay = () => {
-              const playPromise = video.play();
-              if (playPromise !== undefined) {
-                playPromise
-                  .then(() => {
-                    // Video playing successfully
-                  })
-                  .catch(error => {
-                    // Autoplay was prevented, which is expected in some cases
-                    // The video will still have the autoplay attribute for when user interacts
-                  });
-              }
-            };
-
-            // Wait for video to be ready before playing
-            if (video.readyState >= 2) {
-              // Video is ready to play
-              attemptPlay();
-            } else {
-              // Video is not ready yet, wait for canplay event
-              const onCanPlay = () => {
-                attemptPlay();
-                video.removeEventListener('canplay', onCanPlay);
-              };
-
-              video.addEventListener('canplay', onCanPlay);
-
-              // Timeout fallback in case canplay never fires
-              setTimeout(() => {
-                attemptPlay();
-                video.removeEventListener('canplay', onCanPlay);
-              }, 2000);
-            }
-          });
-
-          // Show toggle button container if needed
-          if (toggleContainer && window.slidesToCreate.length > GALLERY_CONFIG.visibleCount) {
-            toggleContainer.classList.add('visible');
-            // Only show on medium screens and up (desktop)
-            if (window.innerWidth < GALLERY_CONFIG.mobileBreakpoint) {
-              toggleContainer.classList.add('hidden');
-              toggleContainer.classList.remove('visible');
-            }
-          }
-
-          // Additional autoplay trigger with retry mechanism
-          // This handles cases where pauseAllMedia() or other code pauses videos
-
-          // Helper function to safely play a video
-          const safePlay = (video, index, retryNum) => {
-            if (video.readyState >= 2) {
-              const playPromise = video.play();
-              if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                  // Autoplay prevented, expected in some cases
-                });
-              }
-            }
-          };
-
-          // Retry autoplay after a short delay (in case pauseAllMedia is called)
-          setTimeout(() => {
-            const retryVideos = document.querySelectorAll('.product__media video');
-            retryVideos.forEach((video, index) => {
-              if (video.paused && video.hasAttribute('autoplay')) {
-                safePlay(video, index, 1);
-              }
-            });
-          }, 100);
-
-          // Second retry after longer delay
-          setTimeout(() => {
-            const retryVideos = document.querySelectorAll('.product__media video');
-            retryVideos.forEach((video, index) => {
-              if (video.paused && video.hasAttribute('autoplay')) {
-                safePlay(video, index, 2);
-              }
-            });
-          }, 300);
-
-          // Third retry after even longer delay (for slow connections)
-          setTimeout(() => {
-            const retryVideos = document.querySelectorAll('.product__media video');
-            retryVideos.forEach((video, index) => {
-              if (video.paused && video.hasAttribute('autoplay')) {
-                safePlay(video, index, 3);
-              }
-            });
-          }, 800);
-        });
-      }
-
-      // Initialize Swiper separately to ensure it only runs when ready
-      function initSwiper() {
-        // Only initialize if Swiper is loaded and DOM is ready
-        if (typeof Swiper !== 'undefined') {
-          // Destroy previous instance if it exists
-          if (window.productSwiper) {
-            window.productSwiper.destroy();
-          }
-
-          // Create new Swiper instance
-          window.productSwiper = new Swiper('.product-swiper', {
-            slidesPerView: 1,
-            spaceBetween: 0,
-            a11y: {%- render 'swiper-a11y' -%},
-            pagination: {
-              el: '.swiper-pagination',
-              type: 'bullets',
-              clickable: true,
-              renderBullet: function (index, className) {
-                return '<span class="' + className + '"></span>';
-              },
-              // Force pagination visibility even with one slide
-              dynamicBullets: false,
-              dynamicMainBullets: 1
-            },
-            // Show pagination even for a single slide
-            watchOverflow: false,
-            on: {
-              init: function () {
-                // Force pagination container to be visible
-                const pagination = document.querySelector('.swiper-pagination');
-                if (pagination) {
-                  pagination.style.display = 'flex';
-                  // Remove lock class if it exists
-                  pagination.classList.remove('swiper-pagination-lock');
-                }
-              },
-              slideChange: function() {
-                // Also ensure pagination stays visible after slide change
-                const pagination = document.querySelector('.swiper-pagination');
-                if (pagination) {
-                  pagination.style.display = 'flex';
-                  pagination.classList.remove('swiper-pagination-lock');
-                }
-              }
-            }
-          });
-        } else {
-          // If Swiper isn't loaded yet, wait for it
-          document.querySelector('script[src*="swiper-bundle.min.js"]')?.addEventListener('load', function() {
-            initSwiper();
-          });
-        }
-      }
-
-      // Handle color change
-      function handleColorChange(newColor) {
-        if (newColor === null || newColor === undefined || newColor === '') return;
-
-        // Resolve the option value (which may be a localized name, an
-        // untranslated handle, or a numeric reference_id) to a reference_id
-        // whenever possible. This keeps gallery filtering correct on every
-        // storefront locale because reference_ids match image filenames
-        // exactly while localized color names do not.
-        const colorForMatching = resolveActiveColor(newColor);
-
-        // If the active color isn't the same as before, update the gallery
-        if (colorForMatching !== gallery.dataset.activeColor) {
-          gallery.dataset.activeColor = colorForMatching;
-
-          // Preserve the expanded state when color changes
-          // Don't reset window.isGalleryExpanded - keep the user's preference
-          const toggleBtn = document.getElementById('gallery-toggle-btn');
-          if (toggleBtn) {
-            // Update button text based on current expanded state
-            toggleBtn.textContent = window.isGalleryExpanded ? lessImagesText : moreImagesText;
-          }
-
-          // Hide toggle container until new content loads
-          const toggleContainer = document.getElementById('gallery-toggle-container');
-          if (toggleContainer) {
-            toggleContainer.classList.remove('visible');
-          }
-
-          processMedia();
-        }
-      }
-
-      // Set up event listeners
-      function setupEventListeners() {
-        // Listen for radio button changes (use data-option-type for language-agnostic detection)
-        document.querySelectorAll('[data-option-type="color"] input[type="radio"]')
-          .forEach(radio => {
-            radio.addEventListener('change', e => {
-              const newColor = e.target.value;
-              handleColorChange(newColor);
-            });
-          });
-
-        // Listen for variant select changes
-        document.querySelectorAll('[data-option-type="color"] select')
-          .forEach(select => {
-            select.addEventListener('change', e => {
-              const newColor = e.target.value;
-              handleColorChange(newColor);
-            });
-          });
-
-        // Listen for Shopify's variant change event
-        document.addEventListener('variant:changed', function(event) {
-          if (event.detail.variant) {
-            // Extract color from variant using pre-computed index
-            const colorPosition = colorOptionIndex;
-
-            let newColor = '';
-            if (colorPosition >= 0 && event.detail.variant.options) {
-              newColor = event.detail.variant.options[colorPosition];
-            } else if (event.detail.variant.title) {
-              newColor = event.detail.variant.title.split('/')[0].trim();
-            }
-
-            if (newColor) {
-              handleColorChange(newColor);
-            }
-          }
-        });
-
-        // Listen for URL changes for variant updates
-        let currentUrl = window.location.href;
-        setInterval(() => {
-          if (currentUrl !== window.location.href) {
-            currentUrl = window.location.href;
-            const variantId = new URLSearchParams(window.location.search).get('variant');
-
-            if (variantId) {
-              const variants = {{ product.variants | json }};
-              const variant = variants.find(v => v.id.toString() === variantId);
-
-              if (variant) {
-                // Extract color from variant using pre-computed index
-                const colorPosition = colorOptionIndex;
-
-                let color = colorPosition >= 0 && variant.options ? variant.options[colorPosition] : '';
-                if (!color && variant.title) {
-                  color = variant.title.split('/')[0].trim();
-                }
-
-                if (color) {
-                  handleColorChange(color);
-                }
-              }
-            }
-          }
-        }, 300);
-      }
-
-      // Start processing media and set up listeners
-      processMedia();
-      setupEventListeners();
-
-      // Add resize event listener to hide button on mobile
-      window.addEventListener('resize', function() {
-        const toggleContainer = document.getElementById('gallery-toggle-container');
-        if (toggleContainer) {
-          if (window.innerWidth < GALLERY_CONFIG.mobileBreakpoint) {
-            toggleContainer.classList.add('hidden');
-            toggleContainer.classList.remove('visible');
-          } else if (window.slidesToCreate && window.slidesToCreate.length > GALLERY_CONFIG.visibleCount) {
-            toggleContainer.classList.remove('hidden');
-            toggleContainer.classList.add('visible');
-          }
-        }
-      });
-
-      // Directly hook into Shopify's variant change mechanism
-      const originalOnVariantChange = window.onVariantChange;
-      window.onVariantChange = function(variant) {
-        if (variant) {
-          // Extract color from variant using pre-computed index
-          const colorPosition = colorOptionIndex;
-
-          let newColor = '';
-          if (colorPosition >= 0 && variant.options) {
-            newColor = variant.options[colorPosition];
-          } else if (variant.title) {
-            newColor = variant.title.split('/')[0].trim();
-          }
-
-          if (newColor) {
-            handleColorChange(newColor);
-          }
-        }
-
-        // Call the original handler if it exists
-        if (typeof originalOnVariantChange === 'function') {
-          originalOnVariantChange(variant);
-        }
-      };
-    }
-
-    // Function to open the lightbox with filtered and sorted images
-    function openProductLightbox(startIndex) {
-      // Get the gallery element
-      const gallery = document.querySelector('#MediaGallery-{{ section.id }}');
-      if (!gallery) {
-        return;
-      }
-
-      // Get all media and color mappings
-      const allMedia = {{ product.media | json }};
-      const colorMappings = {% if product.metafields.custom.color.value %}{{ product.metafields.custom.color.value | json }}{% else %}null{% endif %};
-      const activeColor = gallery.dataset.activeColor;
-
-      // Ensure Fancybox is loaded
-      if (!allMedia || !window.Fancybox) {
-        return;
-      }
-
-      try {
-        // Close any existing Fancybox instances to prevent duplication
-        if (typeof Fancybox.close === 'function') {
-          Fancybox.close();
-        }
-
-        // Get all media URLs - use original src values without transformation
-        const allMediaUrls = allMedia.map(media => media.src);
-
-        // Filter URLs by active color - using the same logic as the main gallery
-        let urlsToUse = allMediaUrls;
-        let exactMatches = [];
-        let partialMatches = [];
-
-        if (activeColor && colorMappings) {
-          // First try to get normalized color key - this converts reference_id to color name if needed
-          const normalizedColorKey = window.getNormalizedColorKey(activeColor, colorMappings);
-
-          // Check each URL for matches using the active color
-          allMediaUrls.forEach(url => {
-            // Use parseImageUrl with colorMappings to properly handle reference_ids
-            const parsed = window.parseImageUrl(url, colorMappings);
-            const parsedColor = parsed.color.toLowerCase().trim();
-            const activeColorNormalized = normalizedColorKey.toLowerCase().trim();
-
-            // Collect exact and partial matches
-            if (parsedColor === activeColorNormalized) {
-              exactMatches.push(url);
-            } else if (parsedColor.includes(activeColorNormalized) || activeColorNormalized.includes(parsedColor)) {
-              partialMatches.push(url);
-            }
-
-            // If we didn't find a match but we have reference_id and colorMappings, try direct reference_id matching
-            if (exactMatches.length === 0 && partialMatches.length === 0 && parsed.reference_id && colorMappings) {
-              // Check if the active color is actually a reference_id
-              const activeRefId = parseInt(activeColor, 10);
-
-              if (!isNaN(activeRefId) && parsed.reference_id === activeRefId) {
-                exactMatches.push(url);
-              }
-            }
-          });
-
-          // Prioritize exact matches, fall back to partial matches
-          if (exactMatches.length > 0) {
-            urlsToUse = exactMatches;
-          } else if (partialMatches.length > 0) {
-            urlsToUse = partialMatches;
-          }
-
-          // If no matches found, try more flexible matching (just try parts of the color name)
-          if (urlsToUse.length === 0 && normalizedColorKey.includes('-')) {
-            const colorParts = normalizedColorKey.split('-');
-
-            for (const part of colorParts) {
-              if (part.length < 3) {
-                continue; // Skip very short parts
-              }
-
-              const flexibleMatches = allMediaUrls.filter(url => {
-                const parsed = window.parseImageUrl(url, colorMappings);
-                const isMatch = parsed.color.toLowerCase().includes(part.toLowerCase());
-                return isMatch;
-              });
-
-              if (flexibleMatches.length > 0) {
-                urlsToUse = flexibleMatches;
-                break;
-              }
-            }
-          }
-        }
-
-        // For lightbox, we don't need to include videos
-        // This is different from the gallery grid where we want videos to be included
-
-        // Get the current images from the gallery instead of sorting again
-        // This ensures the Fancybox shows images in the exact same order as the gallery
-        // including our custom ordering with videos at position 2
-        const galleryImages = [];
-
-        // Get all visible images from the desktop gallery
-        const desktopGallery = document.querySelector('#desktop-gallery');
-        if (desktopGallery) {
-          const imageElements = desktopGallery.querySelectorAll('img.product-lightbox-img');
-          imageElements.forEach(img => {
-            // Try to get the media ID from the parent element
-            const mediaItem = img.closest('.product__media-item');
-            let mediaId = null;
-            let mediaType = 'image';
-
-            if (mediaItem) {
-              // Extract media ID from data-media-id attribute
-              const mediaIdAttr = mediaItem.getAttribute('data-media-id');
-              if (mediaIdAttr) {
-                // Format is "section-id-media-id", so we extract just the media ID
-                const parts = mediaIdAttr.split('-');
-                if (parts.length > 1) {
-                  mediaId = parts[parts.length - 1];
-                }
-              }
-
-              // If we couldn't get it from data-media-id, try data-media-object
-              if (!mediaId) {
-                try {
-                  const mediaObjectStr = mediaItem.getAttribute('data-media-object');
-                  if (mediaObjectStr) {
-                    const mediaObject = JSON.parse(mediaObjectStr);
-                    mediaId = mediaObject.id;
-                    mediaType = mediaObject.media_type || 'image';
-                  }
-                } catch (e) {
-                  // Error parsing media object data
-                }
-              }
-            }
-
-            // Skip videos for lightbox
-            if (mediaType === 'video') {
-              return;
-            }
-
-            galleryImages.push({
-              url: img.src,
-              mediaId: mediaId,
-              hidden: mediaItem ? mediaItem.classList.contains('hidden') : false
-            });
-          });
-        }
-
-        // If desktop gallery is not available, try mobile gallery
-        if (galleryImages.length === 0) {
-          const mobileGallery = document.querySelector('.product-swiper');
-          if (mobileGallery) {
-            const imageElements = mobileGallery.querySelectorAll('.swiper-slide img');
-            imageElements.forEach(img => {
-              // Try to get the media ID from the parent element
-              const mediaItem = img.closest('.product__media-item');
-              let mediaId = null;
-              let mediaType = 'image';
-
-              if (mediaItem) {
-                // Extract media ID from data-media-id attribute
-                const mediaIdAttr = mediaItem.getAttribute('data-media-id');
-                if (mediaIdAttr) {
-                  // Format is "section-id-media-id", so we extract just the media ID
-                  const parts = mediaIdAttr.split('-');
-                  if (parts.length > 1) {
-                    mediaId = parts[parts.length - 1];
-                  }
-                }
-
-                // If we couldn't get it from data-media-id, try data-media-object
-                if (!mediaId) {
-                  try {
-                    const mediaObjectStr = mediaItem.getAttribute('data-media-object');
-                    if (mediaObjectStr) {
-                      const mediaObject = JSON.parse(mediaObjectStr);
-                      mediaId = mediaObject.id;
-                      mediaType = mediaObject.media_type || 'image';
-                    }
-                  } catch (e) {
-                    // Error parsing media object data
-                  }
-                }
-              }
-
-              // Skip videos for lightbox
-              if (mediaType === 'video') {
-                return;
-              }
-
-              galleryImages.push({
-                url: img.src,
-                mediaId: mediaId,
-                hidden: false // Mobile gallery doesn't have hidden images
-              });
-            });
-          }
-        }
-
-        // If we couldn't get images from the gallery, fall back to sorting
-        const sortedImages = galleryImages.length > 0 ?
-          galleryImages :
-          window.sortImagesByDisplayRules(urlsToUse, colorMappings);
-
-        // Create array of items for Fancybox from the sorted images
-        // Use all images, not just visible ones, but filter out videos
-        const items = sortedImages.map((img, idx) => {
-          // Try to find the corresponding media object to determine media type
-          const mediaItem = document.querySelector(`[data-media-id="${gallery.id}-${img.mediaId}"]`);
-          let mediaObject = null;
-
-          if (mediaItem) {
-            try {
-              const mediaObjectStr = mediaItem.getAttribute('data-media-object');
-              if (mediaObjectStr) {
-                mediaObject = JSON.parse(mediaObjectStr);
-              }
-            } catch (e) {
-              // Error parsing media object data
-            }
-          }
-
-          // If we couldn't get the media object from DOM, try to find it in allMedia
-          if (!mediaObject) {
-            for (const media of allMedia) {
-              // Skip videos entirely for lightbox
-              if (media.media_type === 'video') continue;
-
-              if (media.src === img.url) {
-                mediaObject = {
-                  id: media.id,
-                  media_type: 'image', // Force image type for lightbox
-                  position: media.position
-                };
-                break;
-              }
-            }
-          }
-
-          // For lightbox, always use image type
-          return {
-            src: img.url,
-            type: 'image',
-            caption: '' // We don't have alt text for the sorted images
-          };
-        }).filter(item => item !== null);
-
-        // Make sure we're using the correct startIndex
-        // If no startIndex is provided, default to 0
-        const adjustedStartIndex = (startIndex !== undefined && startIndex !== null)
-          ? Math.min(Math.max(0, startIndex), items.length - 1)
-          : 0;
-
-        // Open Fancybox with a configuration for v5
-        Fancybox.show(items, {
-          startIndex: Math.min(adjustedStartIndex, items.length - 1),
-          dragToClose: false,
-          closeButton: false,
-          Toolbar: false,
-          Thumbs: {
-            type: "classic"
-          },
-          Carousel: {
-            transition: "fade",
-            friction: 0
-          },
-          Images: {
-            zoom: false,
-            click: null
-          },
-          Caption: false,
-          on: {
-            ready: (fancybox) => {
-              // Create custom toolbar
-              const container = document.querySelector('.fancybox__container');
-              if (!container) return;
-
-              // Position navigation buttons relative to content
-              const positionNavButtons = () => {
-                // Get the content element and navigation buttons
-                const content = document.querySelector('.fancybox__content');
-                const prevButton = document.querySelector('.f-button.is-prev');
-                const nextButton = document.querySelector('.f-button.is-next');
-
-                if (content && prevButton && nextButton) {
-                  // Get content width
-                  const contentWidth = content.offsetWidth;
-                  const contentRect = content.getBoundingClientRect();
-
-                  // Calculate button positions based on screen size
-                  let gap;
-                  if (window.innerWidth <= 767) {
-                    // Mobile: 20px gap
-                    gap = 20;
-                  } else if (window.innerWidth <= 990) {
-                    // Tablet: 40px gap
-                    gap = 40;
-                  } else {
-                    // Desktop: 60px gap
-                    gap = 60;
-                  }
-
-                  // Set button positions directly
-                  prevButton.style.position = 'absolute';
-                  nextButton.style.position = 'absolute';
-                  prevButton.style.top = '50%';
-                  nextButton.style.top = '50%';
-                  prevButton.style.transform = 'translateY(-50%)';
-                  nextButton.style.transform = 'translateY(-50%)';
-
-                  // Position buttons relative to content
-                  prevButton.style.left = `${contentRect.left - gap}px`;
-                  nextButton.style.right = `${window.innerWidth - contentRect.right - gap}px`;
-
-                  // Hide buttons on mobile/tablet
-                  if (window.innerWidth <= 990) {
-                    prevButton.style.display = 'none';
-                    nextButton.style.display = 'none';
-                  } else {
-                    prevButton.style.display = 'block';
-                    nextButton.style.display = 'block';
-                  }
-                }
-              };
-
-              // Position buttons initially and on resize
-              // Wait for Fancybox to fully initialize
-              setTimeout(positionNavButtons, 100);
-              window.addEventListener('resize', positionNavButtons);
-
-              // Also position buttons when Fancybox changes slides
-              fancybox.on('change', positionNavButtons);
-
-              // Clean up event listener on close
-              fancybox.on('destroy', () => {
-                window.removeEventListener('resize', positionNavButtons);
-              });
-
-              // Create toolbar container
-              const toolbar = document.createElement('div');
-              toolbar.className = 'custom-fancybox-toolbar';
-
-              // Share button
-              const shareBtn = document.createElement('button');
-              shareBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z"></path></svg>`;
-              shareBtn.title = 'Share';
-              shareBtn.addEventListener('click', () => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: document.title,
-                    url: window.location.href
-                  }).catch(() => {
-                    // Share failed
-                  });
-                } else {
-                  // Fallback for browsers that don't support Web Share API
-                  const url = window.location.href;
-                  navigator.clipboard.writeText(url).then(() => {
-                    alert('Link copied to clipboard!');
-                  }).catch(() => {
-                    // Clipboard copy failed
-                  });
-                }
-              });
-
-              // Autoplay button
-              const autoplayBtn = document.createElement('button');
-              autoplayBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M8,5.14V19.14L19,12.14L8,5.14Z"></path></svg>`; // Play icon
-              autoplayBtn.title = 'Auto Play';
-              let autoplayInterval;
-              autoplayBtn.addEventListener('click', () => {
-                if (autoplayInterval) {
-                  // Stop autoplay and show play icon
-                  clearInterval(autoplayInterval);
-                  autoplayInterval = null;
-                  autoplayBtn.classList.remove('active');
-                  autoplayBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M8,5.14V19.14L19,12.14L8,5.14Z"></path></svg>`; // Play icon
-                  autoplayBtn.title = 'Auto Play';
-                } else {
-                  // Start autoplay and show pause icon
-                  autoplayBtn.classList.add('active');
-                  autoplayBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M6,19H10V5H6V19M14,5V19H18V5H14Z"></path></svg>`; // Pause icon
-                  autoplayBtn.title = 'Pause';
-                  autoplayInterval = setInterval(() => {
-                    fancybox.next();
-                  }, 3000);
-                }
-              });
-
-              // Fullscreen button
-              const fullscreenBtn = document.createElement('button');
-              fullscreenBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M5,5H10V7H7V10H5V5M14,5H19V10H17V7H14V5M17,14H19V19H14V17H17V14M10,17V19H5V14H7V17H10Z"></path></svg>`;
-              fullscreenBtn.title = 'Fullscreen';
-              fullscreenBtn.addEventListener('click', () => {
-                if (!document.fullscreenElement) {
-                  container.requestFullscreen().catch(() => {
-                    // Fullscreen request failed
-                  });
-                  fullscreenBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M14,14H19V16H16V19H14V14M5,14H10V19H8V16H5V14M8,5H10V10H5V8H8V5M19,8V10H14V5H16V8H19Z"></path></svg>`;
-                } else {
-                  document.exitFullscreen();
-                  fullscreenBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M5,5H10V7H7V10H5V5M14,5H19V10H17V7H14V5M17,14H19V19H14V17H17V14M10,17V19H5V14H7V17H10Z"></path></svg>`;
-                }
-              });
-
-              // Toggle footer button
-              const footerBtn = document.createElement('button');
-              footerBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M4,5H20V7H4V5M4,9H20V11H4V9M4,13H20V15H4V13M4,17H20V19H4V17Z"></path></svg>`;
-              footerBtn.title = 'Toggle Footer';
-              let footerVisible = true;
-
-              footerBtn.addEventListener('click', () => {
-                const footer = container.querySelector('.fancybox__footer');
-                if (!footer) return;
-
-                footerVisible = !footerVisible;
-
-                if (footerVisible) {
-                  // Show footer using CSS transitions
-                  footer.classList.remove('is-hidden');
-                  footerBtn.classList.add('active');
-                } else {
-                  // Hide footer using CSS transitions
-                  footer.classList.add('is-hidden');
-                  footerBtn.classList.remove('active');
-                }
-              });
-
-              // Close button
-              const closeBtn = document.createElement('button');
-              closeBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>`;
-              closeBtn.title = 'Close';
-              closeBtn.addEventListener('click', () => {
-                Fancybox.close();
-              });
-
-              // Add all buttons to toolbar
-              toolbar.appendChild(shareBtn);
-              toolbar.appendChild(autoplayBtn);
-              toolbar.appendChild(fullscreenBtn);
-              toolbar.appendChild(footerBtn);
-              toolbar.appendChild(closeBtn);
-
-              // Add toolbar to container
-              container.appendChild(toolbar);
-
-              // Clean up on close
-              fancybox.on('destroy', () => {
-                if (autoplayInterval) {
-                  clearInterval(autoplayInterval);
-                }
-              });
-            }
-          }
-
-        });
-      } catch (error) {
-        // Error opening lightbox
-      }
-    }
-
-    // Open Fancybox showing the product video in its native 9:16 portrait
-    // aspect ratio. The gallery preview is cropped 1:1 via object-fit, but the
-    // lightbox should always render the source video uncropped.
-    function openProductVideoLightbox(sources, poster) {
-      if (!window.Fancybox || !sources || sources.length === 0) {
-        return;
-      }
-
-      try {
-        if (typeof Fancybox.close === 'function') {
-          Fancybox.close();
-        }
-
-        const sourceTags = sources
-          .filter(source => source && source.url)
-          .map(source => `<source src="${source.url}"${source.mime_type ? ` type="${source.mime_type}"` : ''}>`)
-          .join('');
-
-        const posterAttr = poster ? ` poster="${poster}"` : '';
-
-        const html = `
-          <div class="product-video-lightbox">
-            <button
-              type="button"
-              class="product-video-lightbox__close"
-              aria-label="Close"
-              data-fancybox-close
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path>
-              </svg>
-            </button>
-            <video
-              class="product-video-lightbox__player"
-              controls
-              autoplay
-              playsinline
-              webkit-playsinline
-              preload="metadata"
-              controlslist="nodownload nofullscreen noremoteplayback noplaybackrate"
-              disablepictureinpicture
-              disableremoteplayback
-              x-webkit-airplay="deny"
-              ${posterAttr}
-            >
-              ${sourceTags}
-            </video>
-          </div>
-        `;
-
-        Fancybox.show(
-          [
-            {
-              src: html,
-              type: 'html',
-            },
-          ],
-          {
-            dragToClose: false,
-            closeButton: false,
-            Toolbar: false,
-            Thumbs: false,
-            Carousel: false,
-            Caption: false,
-            on: {
-              ready: () => {
-                const closeBtn = document.querySelector('.fancybox__container .product-video-lightbox__close');
-                if (closeBtn) {
-                  closeBtn.addEventListener('click', () => Fancybox.close());
-                }
-              },
-            },
-          }
-        );
-      } catch (error) {
-        // Error opening video lightbox
-      }
-    }
-
-    // Run initialization when DOM and product-utils.js are ready
-    function waitForDependencies() {
-      if (document.readyState === 'loading' || typeof window.parseImageUrl !== 'function') {
-        setTimeout(waitForDependencies, 50);
-      } else {
-        initProductGallery();
-      }
-    }
-
-    waitForDependencies();
   </script>
 </media-gallery>
