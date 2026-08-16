@@ -3,9 +3,7 @@
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
 
 {%- unless template.name == 'product' -%}
-  {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
   {{ 'swiper.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
 {%- endunless -%}
 
 {% if section.settings.image_shape == 'blob' %}

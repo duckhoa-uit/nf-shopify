@@ -33,15 +33,11 @@ describe("issue 66 source cleanup contracts", () => {
     const theme = readProjectFile("layout/theme.liquid");
     const related = readProjectFile("sections/related-products.liquid");
     const recent = readProjectFile("sections/recent-products.liquid");
-    const localAssetBlock = /unless template\.name == 'product'[\s\S]*?endunless/;
 
     expect(theme).toContain("{%- if template.name == 'product' or needs_swiper -%}");
     for (const source of [related, recent]) {
-      expect(source).toMatch(localAssetBlock);
-      expect(source).toContain("swiper-bundle.min.css");
       expect(source).toContain("swiper.css");
-      expect(source).toContain("swiper-bundle.min.js");
-      expect(source.match(/swiper-bundle\.min\.js/g)).toHaveLength(2);
+      expect(source).not.toContain("<script src=\"{{ 'swiper-bundle.min.js' | asset_url }}\"");
     }
   });
 

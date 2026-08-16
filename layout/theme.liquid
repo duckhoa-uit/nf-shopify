@@ -591,7 +591,11 @@
     {%- comment -%} Swiper - Load only when needed {%- endcomment -%}
     {%- assign needs_swiper = false -%}
     {%- for section in content_for_layout.sections -%}
-      {%- if section.type == 'blog-posts-slider' or section.type == 'featured-blog' -%}
+      {%- if section.type == 'blog-posts-slider'
+        or section.type == 'featured-blog'
+        or section.type == 'related-products'
+        or section.type == 'recent-products'
+      -%}
         {%- assign needs_swiper = true -%}
         {%- break -%}
       {%- endif -%}
