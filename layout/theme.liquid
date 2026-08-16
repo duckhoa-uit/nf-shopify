@@ -542,13 +542,13 @@
 
     {%- comment -%} Load dependencies before predictive-search.js to avoid dependency issues {%- endcomment -%}
     {%- if settings.predictive_search_enabled -%}
-      <script src="https://unpkg.com/@popperjs/core@2" defer="defer"></script>
+      <script src="{{ 'popper.min.js' | asset_url }}" defer="defer"></script>
       <script src="{{ 'hyperhtml.min.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {%- comment -%} Popup System Dependencies - Load Popper.js for all popups {%- endcomment -%}
     {%- unless settings.predictive_search_enabled -%}
-      <script src="https://unpkg.com/@popperjs/core@2" defer="defer"></script>
+      <script src="{{ 'popper.min.js' | asset_url }}" defer="defer"></script>
     {%- endunless -%}
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 

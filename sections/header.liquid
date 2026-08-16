@@ -86,7 +86,7 @@
 {%- endstyle -%}
 
 {%- comment -%} Load Popper.js for cart hover popup {%- endcomment -%}
-<script src="https://unpkg.com/@popperjs/core@2" defer="defer"></script>
+<script src="{{ 'popper.min.js' | asset_url }}" defer="defer"></script>
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'menu-dropdown.js' | asset_url }}" defer="defer"></script>
@@ -104,49 +104,49 @@
   class="header-wrapper color-{{ section.settings.color_scheme }} gradient"
 >
   {%- liquid
-  assign market_social_facebook_link = settings.social_facebook_link
-  if localization.market.handle != blank and settings.market_social_facebook_link != blank
-    assign market_social_facebook_link = settings.market_social_facebook_link
-  endif
-  assign market_social_instagram_link = settings.social_instagram_link
-  if localization.market.handle != blank and settings.market_social_instagram_link != blank
-    assign market_social_instagram_link = settings.market_social_instagram_link
-  endif
-  assign market_social_youtube_link = settings.social_youtube_link
-  if localization.market.handle != blank and settings.market_social_youtube_link != blank
-    assign market_social_youtube_link = settings.market_social_youtube_link
-  endif
-  assign market_social_tiktok_link = settings.social_tiktok_link
-  if localization.market.handle != blank and settings.market_social_tiktok_link != blank
-    assign market_social_tiktok_link = settings.market_social_tiktok_link
-  endif
-  assign market_social_twitter_link = settings.social_twitter_link
-  if localization.market.handle != blank and settings.market_social_twitter_link != blank
-    assign market_social_twitter_link = settings.market_social_twitter_link
-  endif
-  assign market_social_pinterest_link = settings.social_pinterest_link
-  if localization.market.handle != blank and settings.market_social_pinterest_link != blank
-    assign market_social_pinterest_link = settings.market_social_pinterest_link
-  endif
-  assign market_social_snapchat_link = settings.social_snapchat_link
-  if localization.market.handle != blank and settings.market_social_snapchat_link != blank
-    assign market_social_snapchat_link = settings.market_social_snapchat_link
-  endif
-  assign market_social_tumblr_link = settings.social_tumblr_link
-  if localization.market.handle != blank and settings.market_social_tumblr_link != blank
-    assign market_social_tumblr_link = settings.market_social_tumblr_link
-  endif
-  assign market_social_vimeo_link = settings.social_vimeo_link
-  if localization.market.handle != blank and settings.market_social_vimeo_link != blank
-    assign market_social_vimeo_link = settings.market_social_vimeo_link
-  endif
+    assign market_social_facebook_link = settings.social_facebook_link
+    if localization.market.handle != blank and settings.market_social_facebook_link != blank
+      assign market_social_facebook_link = settings.market_social_facebook_link
+    endif
+    assign market_social_instagram_link = settings.social_instagram_link
+    if localization.market.handle != blank and settings.market_social_instagram_link != blank
+      assign market_social_instagram_link = settings.market_social_instagram_link
+    endif
+    assign market_social_youtube_link = settings.social_youtube_link
+    if localization.market.handle != blank and settings.market_social_youtube_link != blank
+      assign market_social_youtube_link = settings.market_social_youtube_link
+    endif
+    assign market_social_tiktok_link = settings.social_tiktok_link
+    if localization.market.handle != blank and settings.market_social_tiktok_link != blank
+      assign market_social_tiktok_link = settings.market_social_tiktok_link
+    endif
+    assign market_social_twitter_link = settings.social_twitter_link
+    if localization.market.handle != blank and settings.market_social_twitter_link != blank
+      assign market_social_twitter_link = settings.market_social_twitter_link
+    endif
+    assign market_social_pinterest_link = settings.social_pinterest_link
+    if localization.market.handle != blank and settings.market_social_pinterest_link != blank
+      assign market_social_pinterest_link = settings.market_social_pinterest_link
+    endif
+    assign market_social_snapchat_link = settings.social_snapchat_link
+    if localization.market.handle != blank and settings.market_social_snapchat_link != blank
+      assign market_social_snapchat_link = settings.market_social_snapchat_link
+    endif
+    assign market_social_tumblr_link = settings.social_tumblr_link
+    if localization.market.handle != blank and settings.market_social_tumblr_link != blank
+      assign market_social_tumblr_link = settings.market_social_tumblr_link
+    endif
+    assign market_social_vimeo_link = settings.social_vimeo_link
+    if localization.market.handle != blank and settings.market_social_vimeo_link != blank
+      assign market_social_vimeo_link = settings.market_social_vimeo_link
+    endif
     assign social_links = false
 
     if market_social_twitter_link != blank or market_social_facebook_link != blank or market_social_pinterest_link != blank or market_social_instagram_link != blank or market_social_youtube_link != blank or market_social_vimeo_link != blank or market_social_tiktok_link != blank or market_social_tumblr_link != blank or market_social_snapchat_link != blank
       assign social_links = true
     endif
   -%}
-  <header class="header header--dropdown py-0 min-h-[3.125rem] lg:min-h-[3.25rem] page-width{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}">
+  <header class="header header--dropdown min-h-[3.125rem] py-0 lg:min-h-[3.25rem] page-width{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}">
     {%- liquid
       if section.settings.menu != blank
         render 'header-drawer'
@@ -214,7 +214,7 @@
       -%}
       <a
         href="{{ bon_loyalty_href }}"
-        class="header__icon link px-3 focus-inset"
+        class="header__icon link focus-inset px-3"
         aria-label="{{ 'customer.account.loyalty_bonus' | t }}"
       >
         <span class="svg-wrapper [&_svg]:size-[1.625rem]">{{ 'icon-currency.svg' | inline_asset_content }}</span>
@@ -230,7 +230,7 @@
       {%- if shop.customer_accounts_enabled -%}
         <a
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.storefront_login_url }}{%- endif -%}"
-          class="header__icon px-3 header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
+          class="header__icon header__icon--account link px-3 focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
           rel="nofollow"
           id="user-menu-trigger"
         >
