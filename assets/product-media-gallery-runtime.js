@@ -35,8 +35,6 @@
     options: parseJson(root.querySelector("[data-gallery-options]"), {}),
   });
 
-  const mediaFilename = (url) => url.split("/").pop().split("?")[0].toLowerCase();
-
   class ProductMediaGalleryController {
     constructor(root) {
       this.root = root;
@@ -48,6 +46,8 @@
       this.processMediaTimeout = null;
       this.isDestroyed = false;
       this.isExpanded = false;
+      this.sequence = [];
+      this.hasHydrated = false;
 
       this.handleDocumentChange = this.handleDocumentChange.bind(this);
       this.handleVariantChange = this.handleVariantChange.bind(this);
@@ -114,7 +114,7 @@
 
     handleDocumentChange(event) {
       const colorControl = event.target.closest?.('[data-option-type="color"]');
-      if (!colorControl || !document.documentElement.contains(colorControl)) return;
+      if (!colorControl || !this.root.contains(colorControl)) return;
 
       const value = event.target.value;
       if (value) this.handleColorChange(value);
@@ -163,138 +163,165 @@
       if (this.isDestroyed) return;
 
       if (this.processMediaTimeout) clearTimeout(this.processMediaTimeout);
-      this.processMediaTimeout = setTimeout(() => {
+      const timer = setTimeout(() => {
         this.processMediaTimeout = null;
+        this.timers.delete(timer);
         this.render();
       }, CONFIG.debounceMs);
-      this.timers.add(this.processMediaTimeout);
+      this.processMediaTimeout = timer;
+      this.timers.add(timer);
     }
 
     render() {
       if (this.isDestroyed) return;
 
-      const mediaUrls = this.data.allMedia.map((media) =>
-        media.media_type === "video" && media.preview_image ? media.preview_image.src : media.src,
-      );
-      const videos = this.data.allMedia.filter((media) => media.media_type === "video");
-      let filteredUrls =
-        typeof window.filterMediaByColor === "function"
-          ? window.filterMediaByColor(mediaUrls, this.root.dataset.activeColor, this.data.colorMappings)
-          : mediaUrls;
-
-      const videoPreviewUrls = videos.map((video) => video.preview_image?.src).filter(Boolean);
-      filteredUrls = [...new Set([...filteredUrls, ...videoPreviewUrls])];
-
-      let images =
-        typeof window.sortImagesByDisplayRules === "function"
-          ? window.sortImagesByDisplayRules(filteredUrls, this.data.colorMappings)
-          : filteredUrls.map((url) => ({ url, hidden: false }));
-      images = this.reorderVideos(images, videos);
-      images.forEach((image, index) => {
-        image.hidden = index >= CONFIG.visibleCount;
+      this.loadSequenceResolver().then((resolveProductMediaSequence) => {
+        if (this.isDestroyed) return;
+        const initialMediaId = this.hasHydrated ? null : this.root.dataset.initialMediaId;
+        this.sequence = resolveProductMediaSequence({
+          media: this.data.allMedia,
+          activeColor: this.root.dataset.activeColor,
+          colorMappings: this.data.colorMappings,
+          initialMediaId,
+          visibleCount: CONFIG.visibleCount,
+        });
+        this.renderImages(this.sequence);
+        this.hasHydrated = true;
       });
-
-      if (!images.length) {
-        images = this.fallbackImages();
-      }
-
-      this.renderImages(images);
     }
 
-    reorderVideos(images, videos) {
-      if (!videos.length) return images;
-
-      const videoItems = images.filter((item) =>
-        videos.some((video) => {
-          const preview = video.preview_image?.src;
-          return preview && (item.url === preview || item.url.includes(preview.split("?")[0]));
-        }),
-      );
-      const imageItems = images.filter((item) => !videoItems.includes(item));
-      if (!videoItems.length || !imageItems.length) return images;
-
-      return [imageItems[0], ...videoItems, ...imageItems.slice(1)];
+    async loadSequenceResolver() {
+      const module = await import("./product-media-gallery-sequence.js");
+      return module.resolveProductMediaSequence;
     }
 
-    fallbackImages() {
-      const fallback = this.data.allMedia
-        .map((media) => (media.media_type === "video" && media.preview_image ? media.preview_image.src : media.src))
-        .filter(Boolean)
-        .slice(0, 2);
-
-      return fallback.length
-        ? fallback.map((url) => ({ url, hidden: false }))
-        : [{ url: "placeholder", hidden: false }];
-    }
-
-    renderImages(images) {
+    renderImages(sequence) {
       this.destroySwiper();
-      this.sliderWrapper.replaceChildren();
-      this.grid.replaceChildren();
-
-      const normalizedImages = images.length === 1 ? [images[0], images[0]] : images;
-      const firstUrl = normalizedImages[0]?.url;
-
-      for (const [index, image] of normalizedImages.entries()) {
-        const mediaItem = this.createMediaItem(image.url, index);
-        if (!mediaItem) continue;
-
-        this.sliderWrapper.appendChild(mediaItem.cloneNode(true));
-
-        if (index === 0 || image.url !== firstUrl) {
-          if (image.hidden && !this.isExpanded) mediaItem.classList.add("hidden");
-          if (image.hidden) mediaItem.classList.add("expandable-item");
-          this.grid.appendChild(mediaItem);
-        }
+      if (!sequence.length) {
+        this.mobileGallery.classList.add("loaded");
+        this.grid.classList.add("loaded");
+        return;
       }
 
-      this.updateToggle(normalizedImages);
+      this.reconcileContainer(this.sliderWrapper, sequence, true);
+      this.reconcileContainer(this.grid, sequence, false);
+      this.updateToggle(sequence);
       this.initializeSwiper();
       this.mobileGallery.classList.add("loaded");
       this.grid.classList.add("loaded");
       this.ensureVideosAutoplay();
     }
 
-    createMediaItem(url, index) {
-      const mediaObject = this.data.allMedia.find((media) => {
-        const source = media.media_type === "video" ? media.preview_image?.src : media.src;
-        return source && mediaFilename(url) === mediaFilename(source);
-      });
-      const mediaId = mediaObject?.id || `generated-${index}`;
-      const item = document.createElement("div");
-      item.className = `swiper-slide product__media-item${index === 0 ? " is-active" : ""}`;
-      item.id = `Slide-${this.sectionId}-${mediaId}`;
-      item.dataset.mediaId = `${this.sectionId}-${mediaId}`;
-      item.dataset.mediaType = mediaObject?.media_type || "image";
+    reconcileContainer(container, sequence, isMobile) {
+      container.querySelector("#desktop-gallery-loading")?.remove();
+      const existingItems = [...container.children].filter((child) => child.matches?.("[data-gallery-item]"));
+      const existingById = new Map(existingItems.map((item) => [item.dataset.galleryMediaId, item]));
+      const retained = new Set();
+      const fragment = document.createDocumentFragment();
+
+      for (const [index, item] of sequence.entries()) {
+        const mediaId = String(item.mediaId || `generated-${index}`);
+        let mediaItem = existingById.get(mediaId);
+        if (!mediaItem) mediaItem = this.createMediaItem(item, index);
+        if (!mediaItem) continue;
+
+        const preserveFirstImage =
+          index === 0 &&
+          !mediaItem.dataset.galleryHydrated &&
+          mediaItem.dataset.galleryMediaId === mediaId &&
+          item.mediaType === "image";
+        this.updateMediaItem(mediaItem, item, index, isMobile, preserveFirstImage);
+        mediaItem.dataset.galleryHydrated = "true";
+        retained.add(mediaItem);
+        fragment.appendChild(mediaItem);
+      }
+
+      for (const existingItem of existingItems) {
+        if (!retained.has(existingItem)) existingItem.remove();
+      }
+      container.appendChild(fragment);
+    }
+
+    createMediaItem(sequenceItem, index) {
+      const mediaId = sequenceItem.mediaId || `generated-${index}`;
+      const mediaItem = document.createElement("div");
+      mediaItem.className = "swiper-slide product__media-item";
+      mediaItem.dataset.galleryItem = "true";
 
       const wrapper = document.createElement("div");
       wrapper.className = "product__media media relative w-full h-0";
-      wrapper.style.cssText = "--ratio: 1; --preview-ratio: 1; padding-bottom: 100%;";
+      wrapper.style.cssText = "--ratio: 1; --preview-ratio: 1; aspect-ratio: 1; padding-bottom: 100%;";
       const content = document.createElement("div");
       content.className = "absolute inset-0 w-full h-full";
 
-      if (mediaObject?.media_type === "video") {
-        content.appendChild(this.createVideo(mediaObject));
-      } else if (url === "placeholder") {
-        content.appendChild(this.createPlaceholder());
-      } else {
-        const image = document.createElement("img");
-        image.src = mediaObject?.src || url;
-        image.alt = mediaObject?.alt || "Product image";
-        image.className = "media-item w-full h-full object-cover product-lightbox-img";
-        image.loading = index === 0 ? "eager" : "lazy";
-        if (mediaObject?.width) image.width = mediaObject.width;
-        if (mediaObject?.height) image.height = mediaObject.height;
-        image.addEventListener("click", (event) => {
-          event.preventDefault();
-          this.openLightbox(index);
-        });
-        content.appendChild(image);
+      wrapper.appendChild(content);
+      mediaItem.appendChild(wrapper);
+      this.updateMediaItem(mediaItem, sequenceItem, index, true);
+      return mediaItem;
+    }
+
+    updateMediaItem(item, sequenceItem, index, isMobile, preserveFirstImage = false) {
+      const media = sequenceItem.media;
+      const mediaId = String(sequenceItem.mediaId || `generated-${index}`);
+      item.id = `Slide-${this.sectionId}-${isMobile ? "mobile" : "desktop"}-${mediaId}`;
+      item.dataset.mediaId = mediaId;
+      item.dataset.galleryMediaId = mediaId;
+      item.dataset.mediaType = sequenceItem.mediaType || "image";
+      item.classList.toggle("is-active", index === 0);
+      item.classList.toggle("hidden", Boolean(sequenceItem.hidden && !this.isExpanded && !isMobile));
+      item.classList.toggle("expandable-item", Boolean(sequenceItem.hidden && !isMobile));
+
+      const wrapper = item.querySelector(".product__media") || item.firstElementChild;
+      const content = wrapper?.firstElementChild;
+      if (!wrapper || !content) return;
+      const image = media?.media_type === "image" ? media : media?.preview_image;
+      const ratio = image?.width && image?.height ? image.width / image.height : 1;
+      wrapper.style.cssText = `--ratio: ${ratio}; --preview-ratio: ${ratio}; aspect-ratio: ${ratio}; padding-bottom: ${100 / ratio}%;`;
+
+      if (media?.media_type === "video") {
+        if (!content.querySelector("video")) {
+          this.setContent(content, this.createVideo(media));
+        }
+        return;
       }
 
-      wrapper.appendChild(content);
-      item.appendChild(wrapper);
-      return item;
+      if (media?.media_type === "model") {
+        this.setContent(content, this.createModel(media));
+        return;
+      }
+
+      if (media?.media_type === "external_video") {
+        this.setContent(content, this.createExternalVideo(media));
+        return;
+      }
+
+      if (!image?.src) {
+        this.setContent(content, this.createPlaceholder());
+        return;
+      }
+
+      let imageElement = content.querySelector("img");
+      if (!imageElement) {
+        imageElement = document.createElement("img");
+        this.setContent(content, imageElement);
+      }
+      if (!preserveFirstImage) imageElement.src = image.src;
+      imageElement.alt = image.alt || this.data.options.productTitle || "Product image";
+      imageElement.className = "media-item w-full h-full object-cover product-lightbox-img";
+      imageElement.loading = index === 0 ? "eager" : "lazy";
+      imageElement.decoding = "async";
+      if (index === 0) imageElement.fetchPriority = "high";
+      if (image.width) imageElement.width = image.width;
+      if (image.height) imageElement.height = image.height;
+      imageElement.onclick = (event) => {
+        event.preventDefault();
+        this.openLightbox(index);
+      };
+    }
+
+    setContent(container, content) {
+      while (container.firstChild) container.removeChild(container.firstChild);
+      container.appendChild(content);
     }
 
     createPlaceholder() {
@@ -302,6 +329,30 @@
       placeholder.className = "w-full h-full bg-gray-100 flex items-center justify-center";
       placeholder.innerHTML = '<span aria-hidden="true"></span>';
       return placeholder;
+    }
+
+    createModel(media) {
+      const model = document.createElement("model-viewer");
+      model.className = "w-full h-full";
+      model.setAttribute("alt", media.alt || this.data.options.productTitle || "Product model");
+      if (media.sources?.[0]?.url) model.setAttribute("src", media.sources[0].url);
+      if (media.preview_image?.src) model.setAttribute("poster", media.preview_image.src);
+      return model;
+    }
+
+    createExternalVideo(media) {
+      const frame = document.createElement("div");
+      frame.className = "external-video-container relative w-full h-full";
+      const image = media.preview_image;
+      if (image?.src) {
+        const poster = document.createElement("img");
+        poster.src = image.src;
+        poster.alt = media.alt || this.data.options.productTitle || "Product video";
+        poster.className = "w-full h-full object-cover";
+        poster.loading = "lazy";
+        frame.appendChild(poster);
+      }
+      return frame;
     }
 
     createVideo(media) {
@@ -495,25 +546,8 @@
     observer.observe(document.body, { childList: true, subtree: true });
   };
 
-  const loadUtilities = async () => {
-    if (
-      typeof window.parseImageUrl === "function" &&
-      typeof window.filterMediaByColor === "function" &&
-      typeof window.sortImagesByDisplayRules === "function"
-    ) {
-      return;
-    }
-
-    const utils = await import("./product-utils.module.js");
-    window.parseImageUrl = utils.parseImageUrl;
-    window.sortImagesByDisplayRules = utils.sortImagesByDisplayRules;
-    window.filterMediaByColor = utils.filterMediaByColor;
-  };
-
   const bootstrap = () => {
-    loadUtilities()
-      .catch(() => {})
-      .finally(initialize);
+    initialize();
   };
 
   if (document.readyState === "loading") {
@@ -521,6 +555,4 @@
   } else {
     bootstrap();
   }
-
-  window.ProductMediaGalleryController = ProductMediaGalleryController;
 })();

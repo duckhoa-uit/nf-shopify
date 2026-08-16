@@ -42,7 +42,11 @@
         {%- endif -%}
       {%- endfor -%}
     {%- elsif template.name == 'product' and product.featured_image -%}
-      <link rel="preload" as="image" href="{{ product.featured_image | image_url: width: 800 }}">
+      <link
+        rel="preload"
+        as="image"
+        href="{{ product.selected_or_first_available_variant.featured_media.preview_image | default: product.selected_or_first_available_variant.featured_image | default: product.featured_image | image_url: width: 800 }}"
+      >
     {%- endif -%}
 
     <title>
