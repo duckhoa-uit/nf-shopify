@@ -15,9 +15,6 @@
 {{ 'swiper.css' | asset_url | stylesheet_tag }}
 {{ 'product-media-gallery.css' | asset_url | stylesheet_tag }}
 {%- comment -%} Swiper CSS loaded globally in theme.liquid {%- endcomment -%}
-{%- if template.name == 'product' -%}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
-{%- endif -%}
 {{ 'lightbox.css' | asset_url | stylesheet_tag }}
 
 {%- comment -%} Set CSS variable for icon-close.svg used by Fancybox {%- endcomment -%}
@@ -351,10 +348,10 @@
 {%- endcomment -%}
 
 {%- comment -%} Swiper loaded globally in theme.liquid {%- endcomment -%}
-{%- comment -%} Load Fancybox only on product pages {%- endcomment -%}
-{%- if template.name == 'product' -%}
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" defer></script>
-{%- endif -%}
+{%- comment -%}
+  Fancybox is lazy-loaded by product-media-gallery-runtime.js on first
+  lightbox open instead of at page load, to keep it off the critical path.
+{%- endcomment -%}
 
 {%- liquid
   # Get currently selected or first available variant
