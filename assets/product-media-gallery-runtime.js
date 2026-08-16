@@ -305,7 +305,11 @@
         imageElement = document.createElement("img");
         this.setContent(content, imageElement);
       }
-      if (!preserveFirstImage) imageElement.src = image.src;
+      if (!preserveFirstImage) {
+        imageElement.src = this.buildImageUrl(image.src, 800);
+        imageElement.srcset = this.buildImageSrcset(image.src);
+        imageElement.sizes = "(min-width: 990px) 66vw, 100vw";
+      }
       imageElement.alt = image.alt || this.data.options.productTitle || "Product image";
       imageElement.className = "media-item w-full h-full object-cover product-lightbox-img";
       imageElement.loading = index === 0 ? "eager" : "lazy";
@@ -317,6 +321,18 @@
         event.preventDefault();
         this.openLightbox(index);
       };
+    }
+
+    buildImageUrl(src, width) {
+      if (!src) return src;
+      const separator = src.includes("?") ? "&" : "?";
+      return `${src}${separator}width=${width}`;
+    }
+
+    buildImageSrcset(src) {
+      if (!src) return "";
+      const widths = [360, 540, 720, 900, 1080, 1296, 1512, 1800];
+      return widths.map((width) => `${this.buildImageUrl(src, width)} ${width}w`).join(", ");
     }
 
     setContent(container, content) {

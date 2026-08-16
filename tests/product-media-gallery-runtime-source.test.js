@@ -92,4 +92,11 @@ describe("product media gallery runtime", () => {
     expect(galleryCss).toContain(".product-swiper[data-gallery-mobile] .swiper-wrapper");
     expect(galleryCss).toContain("aspect-ratio: var(--gallery-initial-ratio, 1)");
   });
+
+  test("serves responsive srcset for JS-rendered gallery images", () => {
+    expect(runtime).toContain("buildImageSrcset");
+    expect(runtime).toContain("imageElement.srcset = this.buildImageSrcset(image.src)");
+    expect(runtime).toContain('imageElement.sizes = "(min-width: 990px) 66vw, 100vw"');
+    expect(runtime).not.toContain("if (!preserveFirstImage) imageElement.src = image.src;");
+  });
 });
