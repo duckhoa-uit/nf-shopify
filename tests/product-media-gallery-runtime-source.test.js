@@ -92,4 +92,26 @@ describe("product media gallery runtime", () => {
     expect(galleryCss).toContain(".product-swiper[data-gallery-mobile] .swiper-wrapper");
     expect(galleryCss).toContain("aspect-ratio: var(--gallery-initial-ratio, 1)");
   });
+
+  test("serves responsive srcset for JS-rendered gallery images", () => {
+    expect(runtime).toContain("buildImageSrcset");
+    expect(runtime).toContain("imageElement.srcset = this.buildImageSrcset(image.src)");
+    expect(runtime).toContain('imageElement.sizes = "(min-width: 990px) 66vw, 100vw"');
+    expect(runtime).not.toContain("if (!preserveFirstImage) imageElement.src = image.src;");
+  });
+
+  test("lazy-loads Fancybox on first lightbox open instead of page load", () => {
+    expect(runtime).toContain("loadFancybox()");
+    expect(runtime).toContain("let fancyboxPromise = null");
+    expect(runtime).toContain("if (fancyboxPromise) return fancyboxPromise;");
+    expect(runtime).toContain("fancyboxPromise = new Promise");
+    expect(runtime).not.toContain("this._fancyboxPromise");
+    expect(runtime).toContain("fancybox.umd.js");
+    expect(snippet).not.toContain(
+      '<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" defer></script>',
+    );
+    expect(snippet).not.toContain(
+      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">',
+    );
+  });
 });

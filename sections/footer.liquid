@@ -1,7 +1,6 @@
 {% comment %}theme-check-disable UndefinedObject{% endcomment %}
 {{ 'section-footer.css' | asset_url | stylesheet_tag }}
 {{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
-{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
 {{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
 {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
 {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
@@ -133,49 +132,48 @@
   .footer__localization .disclosure .localization-form__select .icon-caret {
     right: 0.75rem;
   }
-
 {%- endstyle -%}
 
 <footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding border-0">
   {%- liquid
-  assign market_social_facebook_link = settings.social_facebook_link
-  if localization.market.handle != blank and settings.market_social_facebook_link != blank
-    assign market_social_facebook_link = settings.market_social_facebook_link
-  endif
-  assign market_social_instagram_link = settings.social_instagram_link
-  if localization.market.handle != blank and settings.market_social_instagram_link != blank
-    assign market_social_instagram_link = settings.market_social_instagram_link
-  endif
-  assign market_social_youtube_link = settings.social_youtube_link
-  if localization.market.handle != blank and settings.market_social_youtube_link != blank
-    assign market_social_youtube_link = settings.market_social_youtube_link
-  endif
-  assign market_social_tiktok_link = settings.social_tiktok_link
-  if localization.market.handle != blank and settings.market_social_tiktok_link != blank
-    assign market_social_tiktok_link = settings.market_social_tiktok_link
-  endif
-  assign market_social_twitter_link = settings.social_twitter_link
-  if localization.market.handle != blank and settings.market_social_twitter_link != blank
-    assign market_social_twitter_link = settings.market_social_twitter_link
-  endif
-  assign market_social_pinterest_link = settings.social_pinterest_link
-  if localization.market.handle != blank and settings.market_social_pinterest_link != blank
-    assign market_social_pinterest_link = settings.market_social_pinterest_link
-  endif
-  assign market_social_snapchat_link = settings.social_snapchat_link
-  if localization.market.handle != blank and settings.market_social_snapchat_link != blank
-    assign market_social_snapchat_link = settings.market_social_snapchat_link
-  endif
-  assign market_social_tumblr_link = settings.social_tumblr_link
-  if localization.market.handle != blank and settings.market_social_tumblr_link != blank
-    assign market_social_tumblr_link = settings.market_social_tumblr_link
-  endif
-  assign market_social_vimeo_link = settings.social_vimeo_link
-  if localization.market.handle != blank and settings.market_social_vimeo_link != blank
-    assign market_social_vimeo_link = settings.market_social_vimeo_link
-  endif
-  assign contact_phone = 'templates.contact.info.phone' | t
-  assign contact_email = 'templates.contact.info.email' | t
+    assign market_social_facebook_link = settings.social_facebook_link
+    if localization.market.handle != blank and settings.market_social_facebook_link != blank
+      assign market_social_facebook_link = settings.market_social_facebook_link
+    endif
+    assign market_social_instagram_link = settings.social_instagram_link
+    if localization.market.handle != blank and settings.market_social_instagram_link != blank
+      assign market_social_instagram_link = settings.market_social_instagram_link
+    endif
+    assign market_social_youtube_link = settings.social_youtube_link
+    if localization.market.handle != blank and settings.market_social_youtube_link != blank
+      assign market_social_youtube_link = settings.market_social_youtube_link
+    endif
+    assign market_social_tiktok_link = settings.social_tiktok_link
+    if localization.market.handle != blank and settings.market_social_tiktok_link != blank
+      assign market_social_tiktok_link = settings.market_social_tiktok_link
+    endif
+    assign market_social_twitter_link = settings.social_twitter_link
+    if localization.market.handle != blank and settings.market_social_twitter_link != blank
+      assign market_social_twitter_link = settings.market_social_twitter_link
+    endif
+    assign market_social_pinterest_link = settings.social_pinterest_link
+    if localization.market.handle != blank and settings.market_social_pinterest_link != blank
+      assign market_social_pinterest_link = settings.market_social_pinterest_link
+    endif
+    assign market_social_snapchat_link = settings.social_snapchat_link
+    if localization.market.handle != blank and settings.market_social_snapchat_link != blank
+      assign market_social_snapchat_link = settings.market_social_snapchat_link
+    endif
+    assign market_social_tumblr_link = settings.social_tumblr_link
+    if localization.market.handle != blank and settings.market_social_tumblr_link != blank
+      assign market_social_tumblr_link = settings.market_social_tumblr_link
+    endif
+    assign market_social_vimeo_link = settings.social_vimeo_link
+    if localization.market.handle != blank and settings.market_social_vimeo_link != blank
+      assign market_social_vimeo_link = settings.market_social_vimeo_link
+    endif
+    assign contact_phone = 'templates.contact.info.phone' | t
+    assign contact_email = 'templates.contact.info.email' | t
     assign has_social_icons = true
     if market_social_facebook_link == blank and market_social_instagram_link == blank and market_social_youtube_link == blank and market_social_tiktok_link == blank and market_social_twitter_link == blank and market_social_pinterest_link == blank and market_social_snapchat_link == blank and market_social_tumblr_link == blank and market_social_vimeo_link == blank
       assign has_social_icons = false
@@ -208,7 +206,7 @@
             endif
           -%}
           <div
-            class="footer__blocks-wrapper grid gap-[0.625rem] grid-cols-1 md:grid-cols-2 lg:grid-cols-4  {{ footer_grid_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            class="footer__blocks-wrapper grid grid-cols-1 gap-[0.625rem] md:grid-cols-2 lg:grid-cols-4  {{ footer_grid_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
             {% if settings.animations_reveal_on_scroll %}
               data-cascade
             {% endif %}
@@ -226,13 +224,13 @@
                   {%- if block.type == 'link_list' -%}
                     <!-- Desktop Menu (Always visible on desktop) -->
                     <div class="desktop-menu">
-                      <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
+                      <h2 class="footer-block__heading inline-richtext mb-3 text-sm leading-[1.125rem] font-bold text-[#0F0F0F] uppercase">
                         {{- block.settings.heading -}}
                       </h2>
                       {%- if block.settings.menu != blank -%}
                         <ul class="footer-block__details-content list-unstyled">
                           {%- for link in block.settings.menu.links -%}
-                            <li class="my-1.5 leading-7 text-left">
+                            <li class="my-1.5 text-left leading-7">
                               <a
                                 href="{{ link.url }}"
                                 class="text-gray-850 hover:text-accent text-sm leading-[1.125rem] transition-colors"
@@ -249,8 +247,8 @@
                     <div class="mobile-menu">
                       <details>
                         <summary>
-                          <div class="footer-block__heading-wrapper flex justify-between items-center">
-                            <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
+                          <div class="footer-block__heading-wrapper flex items-center justify-between">
+                            <h2 class="footer-block__heading inline-richtext mb-3 text-sm leading-[1.125rem] font-bold text-[#0F0F0F] uppercase">
                               {{- block.settings.heading -}}
                             </h2>
                             <span class="">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
@@ -259,7 +257,7 @@
                         {%- if block.settings.menu != blank -%}
                           <ul class="footer-block__details-content list-unstyled">
                             {%- for link in block.settings.menu.links -%}
-                              <li class="my-1.5 leading-7 text-left">
+                              <li class="my-1.5 text-left leading-7">
                                 <a
                                   href="{{ link.url }}"
                                   class="text-gray-850 hover:text-accent text-sm leading-[1.125rem] transition-colors"
@@ -273,7 +271,7 @@
                       </details>
                     </div>
                   {%- else -%}
-                    <h2 class="footer-block__heading inline-richtext mb-3 text-[#0F0F0F] text-sm font-bold leading-[1.125rem] uppercase">
+                    <h2 class="footer-block__heading inline-richtext mb-3 text-sm leading-[1.125rem] font-bold text-[#0F0F0F] uppercase">
                       {{- block.settings.heading -}}
                     </h2>
                   {%- endif -%}
@@ -317,7 +315,7 @@
                           <div class="rte">{{ settings.brand_description }}</div>
                         {%- endif -%}
                       {% endcomment %}
-                      <div class="flex flex-col w-full gap-y-3 [&_a]:flex [&_a]:items-center [&_a]:gap-2 [&_a]:text-gray-850 [&_a]:text-sm [&_a]:hover:text-accent [&_a]:transition-colors">
+                      <div class="[&_a]:text-gray-850 [&_a]:hover:text-accent flex w-full flex-col gap-y-3 [&_a]:flex [&_a]:items-center [&_a]:gap-2 [&_a]:text-sm [&_a]:transition-colors">
                         {%- if contact_phone != blank -%}
                           <a href="tel:{{ contact_phone | remove: ' ' | escape }}" class="flex_address">
                             <span class="svg-wrapper size-4">{{ 'icon-telephone.svg' | inline_asset_content }}</span>
@@ -419,31 +417,31 @@
     {% endif %}
   >
     <div class="footer__content-bottom-wrapper page-width  w-full lg:max-w-[75rem]">
-      <div class="flex flex-col md:flex-row items-center justify-between min-h-[3.75rem] w-full">
+      <div class="flex min-h-[3.75rem] w-full flex-col items-center justify-between md:flex-row">
         {%- assign current_year = 'now' | date: '%Y' -%}
-        <span class="text-sm text-gray-850 leading-[1.125rem]">
+        <span class="text-gray-850 text-sm leading-[1.125rem]">
           {{ 'footer.copyright' | t: year: current_year }}
         </span>
-        <div class="md:border-l border-[#E0E0E0] h-[1.8125rem] pl-2">
-          <ul class="ml-2 flex *:inline-block gap-4 ">
+        <div class="h-[1.8125rem] border-[#E0E0E0] pl-2 md:border-l">
+          <ul class="ml-2 flex gap-4 *:inline-block ">
             <li>
-              <span class="svg-wrapper w-[2.625rem] h-[1.875rem]">
+              <span class="svg-wrapper h-[1.875rem] w-[2.625rem]">
                 {{- 'icon-mastercard.svg' | inline_asset_content -}}
               </span>
             </li>
             <li>
-              <span class="svg-wrapper w-[2.625rem] h-[1.875rem]">{{ 'icon-visa.svg' | inline_asset_content }}</span>
+              <span class="svg-wrapper h-[1.875rem] w-[2.625rem]">{{ 'icon-visa.svg' | inline_asset_content }}</span>
             </li>
             <li>
-              <span class="svg-wrapper w-[2.625rem] h-[1.875rem]">{{ 'icon-paypal.svg' | inline_asset_content }}</span>
+              <span class="svg-wrapper h-[1.875rem] w-[2.625rem]">{{ 'icon-paypal.svg' | inline_asset_content }}</span>
             </li>
             <li>
-              <span class="svg-wrapper w-[2.625rem] h-[1.875rem]">
+              <span class="svg-wrapper h-[1.875rem] w-[2.625rem]">
                 {{- 'icon-google-pay.svg' | inline_asset_content -}}
               </span>
             </li>
             <li>
-              <span class="svg-wrapper w-[2.625rem] h-[1.875rem]">
+              <span class="svg-wrapper h-[1.875rem] w-[2.625rem]">
                 {{- 'icon-apple-pay.svg' | inline_asset_content -}}
               </span>
             </li>

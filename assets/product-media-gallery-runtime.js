@@ -35,6 +35,10 @@
     options: parseJson(root.querySelector("[data-gallery-options]"), {}),
   });
 
+  // Shared Fancybox loader shared across all gallery instances on the page, so a
+  // single <script>/<link> is injected the first time any lightbox opens.
+  let fancyboxPromise = null;
+
   class ProductMediaGalleryController {
     constructor(root) {
       this.root = root;
@@ -305,7 +309,11 @@
         imageElement = document.createElement("img");
         this.setContent(content, imageElement);
       }
-      if (!preserveFirstImage) imageElement.src = image.src;
+      if (!preserveFirstImage) {
+        imageElement.src = this.buildImageUrl(image.src, 800);
+        imageElement.srcset = this.buildImageSrcset(image.src);
+        imageElement.sizes = "(min-width: 990px) 66vw, 100vw";
+      }
       imageElement.alt = image.alt || this.data.options.productTitle || "Product image";
       imageElement.className = "media-item w-full h-full object-cover product-lightbox-img";
       imageElement.loading = index === 0 ? "eager" : "lazy";
@@ -317,6 +325,18 @@
         event.preventDefault();
         this.openLightbox(index);
       };
+    }
+
+    buildImageUrl(src, width) {
+      if (!src) return src;
+      const separator = src.includes("?") ? "&" : "?";
+      return `${src}${separator}width=${width}`;
+    }
+
+    buildImageSrcset(src) {
+      if (!src) return "";
+      const widths = [360, 540, 720, 900, 1080, 1296, 1512, 1800];
+      return widths.map((width) => `${this.buildImageUrl(src, width)} ${width}w`).join(", ");
     }
 
     setContent(container, content) {
@@ -452,45 +472,72 @@
     }
 
     openLightbox(startIndex) {
-      if (!window.Fancybox) return;
+      this.loadFancybox().then(() => {
+        if (this.isDestroyed || !window.Fancybox) return;
 
-      const items = [...this.grid.querySelectorAll("img.product-lightbox-img")].map((image) => ({
-        src: image.currentSrc || image.src,
-        type: "image",
-        caption: image.alt || "",
-      }));
-      if (!items.length) return;
+        const items = [...this.grid.querySelectorAll("img.product-lightbox-img")].map((image) => ({
+          src: image.currentSrc || image.src,
+          type: "image",
+          caption: image.alt || "",
+        }));
+        if (!items.length) return;
 
-      window.Fancybox.show(items, {
-        startIndex: Math.min(startIndex, items.length - 1),
-        dragToClose: false,
-        Thumbs: { type: "classic" },
-        Caption: false,
+        window.Fancybox.show(items, {
+          startIndex: Math.min(startIndex, items.length - 1),
+          dragToClose: false,
+          Thumbs: { type: "classic" },
+          Caption: false,
+        });
       });
     }
 
     openVideoLightbox(sources, poster) {
-      if (!window.Fancybox || !sources.length) return;
+      if (!sources.length) return;
 
-      const sourceTags = sources
-        .filter((source) => source?.url)
-        .map((source) => `<source src="${source.url}" type="${source.mime_type || ""}">`)
-        .join("");
-      const posterAttribute = poster ? ` poster="${poster}"` : "";
+      this.loadFancybox().then(() => {
+        if (this.isDestroyed || !window.Fancybox) return;
 
-      window.Fancybox.show(
-        [
+        const sourceTags = sources
+          .filter((source) => source?.url)
+          .map((source) => `<source src="${source.url}" type="${source.mime_type || ""}">`)
+          .join("");
+        const posterAttribute = poster ? ` poster="${poster}"` : "";
+
+        window.Fancybox.show(
+          [
+            {
+              src: `<video controls autoplay playsinline${posterAttribute}>${sourceTags}</video>`,
+              type: "html",
+            },
+          ],
           {
-            src: `<video controls autoplay playsinline${posterAttribute}>${sourceTags}</video>`,
-            type: "html",
+            dragToClose: false,
+            Toolbar: false,
+            Caption: false,
           },
-        ],
-        {
-          dragToClose: false,
-          Toolbar: false,
-          Caption: false,
-        },
-      );
+        );
+      });
+    }
+
+    loadFancybox() {
+      if (window.Fancybox) return Promise.resolve();
+      if (fancyboxPromise) return fancyboxPromise;
+
+      fancyboxPromise = new Promise((resolve) => {
+        const css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css";
+        document.head.appendChild(css);
+
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js";
+        script.async = true;
+        script.onload = () => resolve();
+        script.onerror = () => resolve();
+        document.head.appendChild(script);
+      });
+
+      return fancyboxPromise;
     }
 
     handleResize() {

@@ -1,5 +1,3 @@
-{{ 'component-breadcrumb.css' | asset_url | stylesheet_tag }}
-
 <div class="breadcrumb-container page-width">
   <nav class="breadcrumb" role="navigation" aria-label="breadcrumbs">
     <ol class="breadcrumb__list">
@@ -7,7 +5,7 @@
         <a
           href="javascript:history.back()"
           aria-label="{{ 'general.breadcrumbs.back' | t }}"
-          class="breadcrumb__link text-[#0F0F0F] flex items-center gap-2"
+          class="breadcrumb__link flex items-center gap-2 text-[#0F0F0F]"
         >
           <span class="svg-wrapper size-3 rotate-180">{{ 'icon-arrow.svg' | inline_asset_content }}</span>
           <span>{{ 'general.breadcrumbs.back' | t }}</span>
@@ -28,13 +26,13 @@
         {% endcomment %}
 
         {% if product.collections.size > 0 %}
-          {% assign collections_to_display = "" %}
+          {% assign collections_to_display = '' %}
           {% assign most_specific_collection = product.collections.first %}
 
           {% comment %} First pass - find collections with most specific titles {% endcomment %}
           {% for collection in product.collections %}
-            {% if collection.title contains "-" or collection.title contains ":" %}
-              {% assign collections_to_display = collections_to_display | append: collection.id | append: "," %}
+            {% if collection.title contains '-' or collection.title contains ':' %}
+              {% assign collections_to_display = collections_to_display | append: collection.id | append: ',' %}
             {% endif %}
 
             {% comment %} Find the most specific collection by title length/complexity {% endcomment %}
@@ -44,12 +42,12 @@
           {% endfor %}
 
           {% comment %} Second pass - if no structured titles, use the most specific one {% endcomment %}
-          {% if collections_to_display == "" and most_specific_collection %}
+          {% if collections_to_display == '' and most_specific_collection %}
             {% assign collections_to_display = most_specific_collection.id %}
           {% endif %}
 
-          {% if collections_to_display != "" %}
-            {% assign collection_ids = collections_to_display | split: "," %}
+          {% if collections_to_display != '' %}
+            {% assign collection_ids = collections_to_display | split: ',' %}
 
             {% for collection_id in collection_ids %}
               {% if collection_id != blank %}
@@ -236,7 +234,6 @@
 {
   "name": "Breadcrumb",
   "settings": [
-
     {
       "type": "select",
       "id": "divider_style",
