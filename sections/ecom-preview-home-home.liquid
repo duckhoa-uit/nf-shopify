@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-06-15 09:50:25
+ At 2026-08-17 12:14:24
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -12,7 +12,7 @@
  <link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript>
 {%- assign headless = true -%}{%- render "ecom_theme_helper" -%}{%capture section_id %}ecom-preview-home-home{% endcapture%}{% if section and section_id == section.id and headless == true %}
 {{ content_for_header }}
-{% render 'ecom_header', ECOM_THEME: true %}{% endif %}
+{% render 'ecom_header', ECOM_THEME: true %}{% endif %}<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/>
 {{'ecom-preview-template-home.css' | asset_url | stylesheet_tag }}
 <script src="{{'ecom-preview-template-home.js' | asset_url }}" defer="defer"></script>
 <script type="text/javascript" class="ecom-page-info">
