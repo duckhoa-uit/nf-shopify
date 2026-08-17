@@ -20,6 +20,19 @@
   opacity: 1;
 }
 
+/*
+ * Reserve a stable height for the mobile gallery wrapper from the initial
+ * media aspect ratio. The runtime hydrates slides (destroy + re-init Swiper),
+ * which can momentarily collapse the wrapper and push the product info column
+ * down (CLS ~0.26, race condition). Locking the wrapper aspect-ratio keeps its
+ * box stable through hydration without any visual change.
+ */
+@media screen and (max-width: 989px) {
+  .product-swiper[data-gallery-mobile] .swiper-wrapper {
+    aspect-ratio: var(--gallery-initial-ratio, 1);
+  }
+}
+
 #gallery-toggle-btn {
   padding: 12px 24px;
   background-color: #ffffff;
@@ -74,7 +87,7 @@
 }
 
 .f-button.is-close::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -162,7 +175,7 @@
 
 .f-button.is-prev::before,
 .f-button.is-next::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -327,7 +340,10 @@
 
 /* Footer transition for smooth show/hide */
 .fancybox__footer {
-  transition: transform 0.3s ease, opacity 0.3s ease, margin-bottom 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease,
+    margin-bottom 0.3s ease;
   transform-origin: bottom;
 }
 
@@ -359,7 +375,7 @@
 
 /* Override Fancybox's default active thumbnail styling */
 .is-classic .is-nav-selected .f-thumbs__slide__button::after {
-  content: '' !important;
+  content: "" !important;
   position: absolute !important;
   top: auto !important;
   left: 0 !important;
