@@ -1,0 +1,198 @@
+{% comment %}
+  EComposer-safe perfume field adapter.
+
+  Parses live product metafields (not parfum.*) and either:
+  - outputs one named field (`output`)
+  - or renders a named block (`block`)
+
+  Usage:
+  {% render 'perfume-ecomposer-mapped-fields', product: product, output: 'buybox' %}
+  {% render 'perfume-ecomposer-mapped-fields', product: product, block: 'ticks' %}
+{% endcomment %}
+
+{%- liquid
+  assign perfume_family_name = ''
+  assign perfume_family_code = ''
+  assign perfume_ingredients = ''
+  assign perfume_activities_labels = ''
+  assign perfume_characteristics = ''
+  assign perfume_buybox_text = ''
+  assign perfume_story_image = blank
+  assign perfume_story_video = blank
+  assign perfume_catalog_code = ''
+  assign family_products = blank
+
+  assign perfume_group = product.metafields.custom.parfum_group.value
+  if perfume_group != blank
+    assign perfume_family_name = perfume_group.name
+    assign perfume_family_code = perfume_group.family_code
+    assign family_products = perfume_group.products.value
+  endif
+
+  if family_products == blank
+    assign family_products = product.metafields.custom.product_in_group.value
+  endif
+
+  assign perfume_catalog_code = product.metafields.custom.catalog_code
+  if perfume_catalog_code == blank
+    assign perfume_catalog_code = product.metafields.custom.reference_code
+  endif
+
+  assign short_description = product.metafields.custom.short_description
+  if short_description.value != blank
+    assign short_description = short_description.value
+  endif
+  assign short_description = short_description | strip_html | strip
+
+  if short_description != blank
+    assign desc_upcase = short_description | upcase
+
+    assign after_ingredients = ''
+    if desc_upcase contains 'INGREDIENTS'
+      assign after_ingredients = short_description | split: 'INGREDIENTS' | last
+    elsif desc_upcase contains 'COMPOSITION'
+      if short_description contains 'COMPOSITION'
+        assign after_ingredients = short_description | split: 'COMPOSITION' | last
+      else
+        assign after_ingredients = short_description | split: 'Composition' | last
+      endif
+    endif
+
+    if after_ingredients != blank
+      assign perfume_ingredients = after_ingredients
+      if after_ingredients contains 'SUITABLE FOR ACTIVITIES'
+        assign perfume_ingredients = after_ingredients | split: 'SUITABLE FOR ACTIVITIES' | first
+      elsif after_ingredients contains 'FRAGRANCE CHARACTERISTICS'
+        assign perfume_ingredients = after_ingredients | split: 'FRAGRANCE CHARACTERISTICS' | first
+      endif
+      assign perfume_ingredients = perfume_ingredients | strip | remove_first: ':' | strip
+    endif
+
+    if desc_upcase contains 'SUITABLE FOR ACTIVITIES'
+      assign after_activities = short_description | split: 'SUITABLE FOR ACTIVITIES' | last
+      if after_activities contains 'FRAGRANCE CHARACTERISTICS'
+        assign perfume_activities_labels = after_activities | split: 'FRAGRANCE CHARACTERISTICS' | first
+      else
+        assign perfume_activities_labels = after_activities
+      endif
+      assign perfume_activities_labels = perfume_activities_labels | strip | remove_first: ':' | strip
+    endif
+
+    if desc_upcase contains 'FRAGRANCE CHARACTERISTICS'
+      assign perfume_characteristics = short_description | split: 'FRAGRANCE CHARACTERISTICS' | last
+      assign perfume_characteristics = perfume_characteristics | strip | remove_first: ':' | strip
+    endif
+  endif
+
+  if perfume_activities_labels == blank
+    assign activities_field = product.metafields.custom_features.activities.value
+    if activities_field != blank
+      assign activity_labels = ''
+      if activities_field.first != blank or activities_field.size > 0
+        for activity in activities_field
+          assign activity_label = activity.label | default: activity.name | default: activity.title | default: activity
+          if activity_label != blank
+            if activity_labels == ''
+              assign activity_labels = activity_label
+            else
+              assign activity_labels = activity_labels | append: ', ' | append: activity_label
+            endif
+          endif
+        endfor
+      endif
+      if activity_labels != blank
+        assign perfume_activities_labels = activity_labels | strip
+      endif
+    endif
+  endif
+
+  if perfume_characteristics != blank
+    assign perfume_buybox_text = perfume_characteristics
+  elsif perfume_family_name != blank
+    assign perfume_buybox_text = perfume_family_name
+  endif
+
+  assign perfume_story_image = product.featured_image
+  for media in product.media
+    if media.media_type == 'video'
+      assign perfume_story_video = media
+      break
+    endif
+  endfor
+
+  assign requested = output | default: field | default: block
+-%}
+
+{%- case requested -%}
+  {%- when 'family_name', 'perfume_family_name' -%}
+    {{- perfume_family_name | escape -}}
+  {%- when 'ingredients', 'perfume_ingredients' -%}
+    {{- perfume_ingredients | escape -}}
+  {%- when 'activities', 'perfume_activities_labels' -%}
+    {{- perfume_activities_labels | escape -}}
+  {%- when 'characteristics', 'perfume_characteristics' -%}
+    {{- perfume_characteristics | escape -}}
+  {%- when 'buybox', 'perfume_buybox_text' -%}
+    {{- perfume_buybox_text | escape -}}
+  {%- when 'catalog', 'catalog_code', 'perfume_catalog_code' -%}
+    {{- perfume_catalog_code | escape -}}
+  {%- when 'composition' -%}
+    {%- if perfume_ingredients != blank -%}
+      <p>{{ perfume_ingredients | escape }}</p>
+    {%- endif -%}
+    {%- if perfume_characteristics != blank -%}
+      <p>{{ perfume_characteristics | escape }}</p>
+    {%- endif -%}
+  {%- when 'warnings' -%}
+    <div class="perfume-ecomposer-warnings">
+      <p><strong>{{ 'products.product.warnings.title' | t }}</strong></p>
+      <ul>
+        <li>{{ 'sections.parfum_instructions.warnings.washing_machine' | t }}</li>
+        <li>{{ 'sections.parfum_instructions.warnings.children' | t }}</li>
+        <li>{{ 'sections.parfum_instructions.warnings.contact' | t }}</li>
+        <li>{{ 'sections.parfum_instructions.warnings.irritation' | t }}</li>
+        <li>{{ 'sections.parfum_instructions.warnings.disposal' | t }}</li>
+      </ul>
+    </div>
+  {%- when 'about_title' -%}
+    {{- 'products.product.about_perfumes.title' | t -}}
+  {%- when 'about_body' -%}
+    {%- assign about_body = 'products.product.about_perfumes.body' | t -%}
+    {%- if about_body == 'products.product.about_perfumes.body' -%}
+      {{- 'size_guide.parfum-features.settings.description.default' | t -}}
+    {%- else -%}
+      {{- about_body -}}
+    {%- endif -%}
+  {%- when 'related_heading' -%}
+    {{- 'products.product.related_products' | t -}}
+  {%- when 'story_image', 'perfume_story_image' -%}
+    {%- if perfume_story_image != blank -%}
+      {{ perfume_story_image | image_url: width: 1600 | image_tag: loading: 'lazy', alt: product.title }}
+    {%- endif -%}
+  {%- when 'story_video', 'perfume_story_video' -%}
+    {%- if perfume_story_video != blank -%}
+      {{ perfume_story_video | video_tag: image_size: 'master', class: 'perfume-ecomposer-story-video', autoplay: true, muted: true, loop: true, controls: false }}
+    {%- endif -%}
+  {%- when 'ticks' -%}
+    <ul class="perfume-ecomposer-ticks">
+      {%- if perfume_ingredients != blank -%}
+        <li>{{ perfume_ingredients | escape }}</li>
+      {%- endif -%}
+      {%- if perfume_activities_labels != blank -%}
+        <li>{{ perfume_activities_labels | escape }}</li>
+      {%- endif -%}
+      {%- if perfume_characteristics != blank -%}
+        <li>{{ perfume_characteristics | escape }}</li>
+      {%- endif -%}
+      {%- if perfume_catalog_code != blank -%}
+        <li>{{ perfume_catalog_code | escape }}</li>
+      {%- endif -%}
+    </ul>
+  {%- when 'story' -%}
+    {%- if perfume_characteristics != blank -%}
+      <p>{{ perfume_characteristics | escape }}</p>
+    {%- endif -%}
+    {%- if perfume_ingredients != blank -%}
+      <p>{{ perfume_ingredients | escape }}</p>
+    {%- endif -%}
+{%- endcase -%}
