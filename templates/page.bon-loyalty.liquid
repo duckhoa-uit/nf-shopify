@@ -20,7 +20,8 @@
 {%- endcase -%}
 <style>
 a#nfmig{box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:12px;
-  min-height:48px;padding:10px 20px;background:#0f0f0f;border-bottom:2px solid #e3350e;
+  min-height:48px;padding:10px 20px;background:#0f0f0f;
+  border-bottom:1px solid rgba(255,255,255,.14);
   color:#fff !important;text-decoration:none !important;
   font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;line-height:1.4;
   letter-spacing:.01em;text-align:center;
@@ -28,11 +29,11 @@ a#nfmig{box-sizing:border-box;display:flex;align-items:center;justify-content:ce
 a#nfmig .nfmig-t{text-decoration:underline;text-decoration-color:transparent;
   text-decoration-thickness:2px;text-underline-offset:4px;
   transition:text-decoration-color .22s ease}
-a#nfmig .nfmig-a{flex:0 0 auto;color:#e3350e;font-size:16px;
-  transition:transform .22s ease,color .22s ease}
-a#nfmig:hover,a#nfmig:focus-visible{background:#1f1f1f;color:#fff !important}
-a#nfmig:hover .nfmig-t,a#nfmig:focus-visible .nfmig-t{text-decoration-color:#e3350e}
-a#nfmig:hover .nfmig-a{transform:translateX(5px);color:#fff}
+a#nfmig .nfmig-a{flex:0 0 auto;color:#fff;font-size:16px;
+  transition:transform .22s ease}
+a#nfmig:hover,a#nfmig:focus-visible{background:#262626;color:#fff !important}
+a#nfmig:hover .nfmig-t,a#nfmig:focus-visible .nfmig-t{text-decoration-color:#fff}
+a#nfmig:hover .nfmig-a{transform:translateX(5px)}
 a#nfmig:focus-visible{outline:2px solid #fff;outline-offset:-5px}
 @media(min-width:768px){a#nfmig{min-height:52px;font-size:15px}}
 @media(prefers-reduced-motion:reduce){
