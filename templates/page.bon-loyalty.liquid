@@ -6,68 +6,39 @@
 <script> var bonLoyaltyPageInfo = {{ bon_loyalty_page_info | json }}; </script>
 <script> var bonShopInfo = {{ bon_shop_info | json }}; </script>
 
-{%- comment -%} ─── NORTHFINDER: odkaz na informacie k migracii ─── zacatok {%- endcomment -%}
+{%- comment -%} ─── NORTHFINDER: notice bar — informacie k migracii ─── zacatok {%- endcomment -%}
 {%- assign nfmig_loc = request.locale.iso_code | slice: 0, 2 | downcase -%}
 {%- assign nfmig_base = routes.root_url | remove_last: '/' -%}
 {%- assign nfmig_href = nfmig_base | append: '/pages/new-loyalty-program' -%}
 {%- case nfmig_loc -%}
-  {%- when 'sk' -%}
-    {%- assign nfmig_h = 'Informácie k migrácii vernostného systému' -%}
-    {%- assign nfmig_p = 'Prešli sme z pôvodného systému na NF Flowline Loyalty™. Tvoj cashback sme previedli automaticky — pozri, čo to pre teba znamená.' -%}
-    {%- assign nfmig_b = 'Zobraziť informácie' -%}
-  {%- when 'de' -%}
-    {%- assign nfmig_h = 'Informationen zur Migration des Treueprogramms' -%}
-    {%- assign nfmig_p = 'Wir sind vom früheren System auf NF Flowline Loyalty™ umgestiegen. Dein Cashback haben wir automatisch übertragen — sieh nach, was das für dich bedeutet.' -%}
-    {%- assign nfmig_b = 'Informationen ansehen' -%}
-  {%- when 'hr' -%}
-    {%- assign nfmig_h = 'Informacije o migraciji programa vjernosti' -%}
-    {%- assign nfmig_p = 'S prethodnog sustava prešli smo na NF Flowline Loyalty™. Tvoj cashback prenijeli smo automatski — pogledaj što to znači za tebe.' -%}
-    {%- assign nfmig_b = 'Pogledaj informacije' -%}
-  {%- when 'sl' -%}
-    {%- assign nfmig_h = 'Informacije o migraciji programa zvestobe' -%}
-    {%- assign nfmig_p = 'S prejšnjega sistema smo prešli na NF Flowline Loyalty™. Tvoj cashback smo prenesli samodejno — poglej, kaj to pomeni za tebe.' -%}
-    {%- assign nfmig_b = 'Poglej informacije' -%}
-  {%- when 'bg' -%}
-    {%- assign nfmig_h = 'Информация за миграцията на програмата за лоялност' -%}
-    {%- assign nfmig_p = 'Преминахме от предишната система към NF Flowline Loyalty™. Прехвърлихме cashback-а ти автоматично — виж какво означава това за теб.' -%}
-    {%- assign nfmig_b = 'Виж информацията' -%}
-  {%- else -%}
-    {%- assign nfmig_h = 'Loyalty Program Migration Information' -%}
-    {%- assign nfmig_p = 'We have moved from our previous system to NF Flowline Loyalty™. Your cashback was transferred automatically — see what it means for you.' -%}
-    {%- assign nfmig_b = 'View the details' -%}
+  {%- when 'sk' -%}{%- assign nfmig_t = 'Informácie k migrácii vernostného systému' -%}
+  {%- when 'de' -%}{%- assign nfmig_t = 'Informationen zur Migration des Treueprogramms' -%}
+  {%- when 'hr' -%}{%- assign nfmig_t = 'Informacije o migraciji programa vjernosti' -%}
+  {%- when 'sl' -%}{%- assign nfmig_t = 'Informacije o migraciji programa zvestobe' -%}
+  {%- when 'bg' -%}{%- assign nfmig_t = 'Информация за миграцията на програмата за лоялност' -%}
+  {%- else -%}{%- assign nfmig_t = 'Loyalty Program Migration Information' -%}
 {%- endcase -%}
 <style>
-#nfmig{background:#161616;padding:28px 20px}
-#nfmig *{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif}
-#nfmig .nfmig-in{max-width:1200px;margin:0 auto;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.10);border-left:4px solid #e3350e;border-radius:4px;
-  padding:22px 20px;display:flex;flex-direction:column;gap:14px}
-#nfmig .nfmig-h{font-size:18px;font-weight:700;line-height:1.25;color:#fff}
-#nfmig .nfmig-p{font-size:14px;line-height:1.65;color:rgba(255,255,255,.72);max-width:70ch}
-#nfmig .nfmig-b{display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  align-self:flex-start;min-height:48px;padding:14px 28px;background:#c72d0c;color:#fff!important;
-  font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
-  border-radius:4px;transition:background .2s ease}
-#nfmig .nfmig-b:hover{background:#ad270a}
-#nfmig .nfmig-b:focus-visible{outline:2px solid #fff;outline-offset:3px}
-@media(min-width:768px){
-  #nfmig{padding:36px 64px}
-  #nfmig .nfmig-in{padding:28px 32px;display:grid;grid-template-columns:1fr auto;
-    column-gap:48px;row-gap:10px;align-items:center}
-  #nfmig .nfmig-h{font-size:20px;grid-column:1}
-  #nfmig .nfmig-p{grid-column:1}
-  #nfmig .nfmig-b{grid-column:2;grid-row:1 / span 2;align-self:center}
+a#nfmig{box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:10px;
+  min-height:48px;padding:10px 20px;background:#c72d0c;
+  color:#fff !important;text-decoration:none !important;
+  font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;line-height:1.4;
+  letter-spacing:.01em;text-align:center;transition:background .2s ease}
+a#nfmig:hover,a#nfmig:focus{background:#ad270a;color:#fff !important}
+a#nfmig:focus-visible{outline:2px solid #fff;outline-offset:-5px}
+a#nfmig .nfmig-a{flex:0 0 auto;transition:transform .2s ease}
+a#nfmig:hover .nfmig-a{transform:translateX(4px)}
+@media(min-width:768px){a#nfmig{min-height:52px;font-size:15px}}
+@media(prefers-reduced-motion:reduce){
+  a#nfmig,a#nfmig .nfmig-a{transition:none}
+  a#nfmig:hover .nfmig-a{transform:none}
 }
-@media(prefers-reduced-motion:reduce){#nfmig .nfmig-b{transition:none}}
 </style>
-<div id="nfmig">
-  <div class="nfmig-in">
-    <p class="nfmig-h">{{ nfmig_h }}</p>
-    <p class="nfmig-p">{{ nfmig_p }}</p>
-    <a class="nfmig-b" href="{{ nfmig_href }}"><span>{{ nfmig_b }}</span><span aria-hidden="true">&rarr;</span></a>
-  </div>
-</div>
-{%- comment -%} ─── NORTHFINDER: odkaz na informacie k migracii ─── koniec {%- endcomment -%}
+<a id="nfmig" href="{{ nfmig_href }}">
+  <span>{{ nfmig_t }}</span>
+  <span class="nfmig-a" aria-hidden="true">&rarr;</span>
+</a>
+{%- comment -%} ─── NORTHFINDER: notice bar — informacie k migracii ─── koniec {%- endcomment -%}
 
 <div class='shopify-section bon-loyalty-page'>
     {{ page.content }}
