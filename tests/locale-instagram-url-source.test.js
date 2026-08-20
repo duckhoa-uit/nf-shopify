@@ -5,16 +5,13 @@ import { describe, expect, test } from "vitest";
 const readProjectFile = (path) => readFileSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), "utf8");
 
 describe("locale-aware Instagram links", () => {
-  test("maps regional locales and falls back to the global setting", () => {
+  test("resolves a merchant setting dynamically and falls back globally", () => {
     const source = readProjectFile("snippets/locale-instagram-url.liquid");
 
     expect(source).toContain("assign instagram_url = settings.social_instagram_link");
-    expect(source).toContain("case request.locale.iso_code");
-    expect(source).toContain("northfinder.sk");
-    expect(source).toContain("northfinder.bg");
-    expect(source).toContain("northfinder.de");
-    expect(source).toContain("northfinder.si");
-    expect(source).toContain("northfinder_hr");
+    expect(source).toContain("append: request.locale.iso_code");
+    expect(source).toContain("settings[locale_setting_id]");
+    expect(source).not.toContain("instagram.com/");
   });
 
   test("uses the shared resolver on every social and metadata surface", () => {
@@ -32,9 +29,25 @@ describe("locale-aware Instagram links", () => {
     }
   });
 
-  test("removes the obsolete market-specific Instagram setting", () => {
-    const schema = readProjectFile("config/settings_schema.json");
+  test("exposes every regional URL to merchants and removes the obsolete setting", () => {
+    const schemaSource = readProjectFile("config/settings_schema.json");
+    const schema = JSON.parse(schemaSource);
+    const socialSettings = schema.find((category) => category.name === "t:settings_schema.social-media.name").settings;
+    const settingsById = Object.fromEntries(
+      socialSettings.filter(({ id }) => id).map((setting) => [setting.id, setting]),
+    );
+    const regionalDefaults = {
+      social_instagram_sk_link: "https://www.instagram.com/northfinder.sk/",
+      social_instagram_bg_link: "https://www.instagram.com/northfinder.bg/",
+      social_instagram_de_link: "https://www.instagram.com/northfinder.de/",
+      social_instagram_sl_link: "https://www.instagram.com/northfinder.si/",
+      social_instagram_hr_link: "https://www.instagram.com/northfinder_hr/",
+    };
 
-    expect(schema).not.toContain('"id": "market_social_instagram_link"');
+    expect(schemaSource).not.toContain('"id": "market_social_instagram_link"');
+
+    for (const [settingId, defaultUrl] of Object.entries(regionalDefaults)) {
+      expect(settingsById[settingId]?.default).toBe(defaultUrl);
+    }
   });
 });

@@ -1,8 +1,8 @@
 {% doc %}
   Resolves the Instagram profile for the active storefront locale.
 
-  Locale-specific profiles override the global theme setting. Unmapped locales
-  fall back to `settings.social_instagram_link`.
+  A merchant-managed locale setting overrides the global Instagram setting.
+  Locales without an override fall back to `settings.social_instagram_link`.
 
   @example
   {% capture instagram_url %}
@@ -12,19 +12,12 @@
 
 {%- liquid
   assign instagram_url = settings.social_instagram_link
+  assign locale_setting_id = 'social_instagram_' | append: request.locale.iso_code | append: '_link'
+  assign locale_instagram_url = settings[locale_setting_id]
 
-  case request.locale.iso_code
-    when 'sk'
-      assign instagram_url = 'https://www.instagram.com/northfinder.sk/'
-    when 'bg'
-      assign instagram_url = 'https://www.instagram.com/northfinder.bg/'
-    when 'de'
-      assign instagram_url = 'https://www.instagram.com/northfinder.de/'
-    when 'sl'
-      assign instagram_url = 'https://www.instagram.com/northfinder.si/'
-    when 'hr'
-      assign instagram_url = 'https://www.instagram.com/northfinder_hr/'
-  endcase
+  if locale_instagram_url != blank
+    assign instagram_url = locale_instagram_url
+  endif
 
   echo instagram_url
 -%}
