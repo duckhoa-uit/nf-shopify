@@ -1,0 +1,30 @@
+{% doc %}
+  Resolves the Instagram profile for the active storefront locale.
+
+  Locale-specific profiles override the global theme setting. Unmapped locales
+  fall back to `settings.social_instagram_link`.
+
+  @example
+  {% capture instagram_url %}
+      {% render 'locale-instagram-url' %}
+    {% endcapture %}
+{% enddoc %}
+
+{%- liquid
+  assign instagram_url = settings.social_instagram_link
+
+  case request.locale.iso_code
+    when 'sk'
+      assign instagram_url = 'https://www.instagram.com/northfinder.sk/'
+    when 'bg'
+      assign instagram_url = 'https://www.instagram.com/northfinder.bg/'
+    when 'de'
+      assign instagram_url = 'https://www.instagram.com/northfinder.de/'
+    when 'sl'
+      assign instagram_url = 'https://www.instagram.com/northfinder.si/'
+    when 'hr'
+      assign instagram_url = 'https://www.instagram.com/northfinder_hr/'
+  endcase
+
+  echo instagram_url
+-%}
