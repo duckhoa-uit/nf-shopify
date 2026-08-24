@@ -1,4 +1,4 @@
-import { filterMediaByColor, sortImagesByDisplayRules } from "./product-utils.module.js";
+import { filterMediaByColor, parseImageUrl, sortImagesByDisplayRules } from "./product-utils.module.js";
 
 const VISIBLE_MEDIA_COUNT = 6;
 
@@ -106,7 +106,12 @@ export function resolveProductMediaSequence({
   if (initialMediaId !== null && initialMediaId !== undefined && sequence.length > 1) {
     const initialIndex = sequence.findIndex((item) => String(item.mediaId) === String(initialMediaId));
     if (initialIndex > 0) {
-      sequence = [sequence[initialIndex], ...sequence.slice(0, initialIndex), ...sequence.slice(initialIndex + 1)];
+      const parsed = parseImageUrl(sequence[initialIndex].source);
+      const isBackType = parsed.image_type === "back_variant" || parsed.image_type === "back_main";
+
+      if (!isBackType) {
+        sequence = [sequence[initialIndex], ...sequence.slice(0, initialIndex), ...sequence.slice(initialIndex + 1)];
+      }
     }
   }
 
