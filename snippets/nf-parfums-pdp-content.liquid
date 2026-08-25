@@ -58,6 +58,17 @@
 #nfp{background:#ffffff;color:#082835}
 </style>
 
+<style>
+/* Hide the theme's Inspiration Banner on perfume pages only.
+   This snippet renders exclusively for the perfumes collection, so #nfp exists
+   nowhere else and the rule can never touch another product.
+   It targets the section sitting immediately after this one. If you reorder
+   sections in the theme editor, swap this for the exact id, e.g.
+   #shopify-section-inspiration_banner_XXXX{display:none} */
+.shopify-section:has(#nfp) + .shopify-section{display:none}
+</style>
+
+
 {%- comment -%} section 2 {%- endcomment -%}
 <div id="nfp" style="background:#e7f1f8;color:#082835">
 <style>
