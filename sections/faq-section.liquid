@@ -115,29 +115,106 @@
     </div>
 
     <div class="faq-section__content">
-      {%- for block in section.blocks -%}
-        <div class="accordion" {{ block.shopify_attributes }}>
-          <details
-            id="Details-{{ block.id }}-{{ section.id }}"
-            {% if section.settings.open_first_item and forloop.first %}
-            open
-            {% endif %}>
-            <summary id="Summary-{{ block.id }}-{{ section.id }}">
-              <h3 class="accordion__title inline-richtext">
-                {{ block.settings.question }}
-              </h3>
-              {{- 'icon-caret.svg' | inline_asset_content -}}
-            </summary>
-            <div
-              class="accordion__content rte"
-              id="FAQAccordion-{{ block.id }}-{{ section.id }}"
-              role="region"
-              aria-labelledby="Summary-{{ block.id }}-{{ section.id }}">
-              {{ block.settings.answer }}
+      {%- liquid
+        assign featured_faqs = section.settings.faq_entries
+        assign use_faq_picker = false
+        if featured_faqs != blank
+          assign use_faq_picker = true
+        endif
+        assign faq_catalog_count = shop.metaobjects.faq_item.values_count | default: 0
+        assign use_faq_catalog = false
+        if use_faq_picker == false and faq_catalog_count > 0
+          assign use_faq_catalog = true
+        endif
+        assign faq_limit = section.settings.max_items | default: 4
+        assign rendered_faqs = 0
+      -%}
+      {%- if use_faq_picker -%}
+        {%- for faq in featured_faqs -%}
+          {%- assign faq_id = faq.system.handle | default: faq.system.id -%}
+          <div class="accordion">
+            <details
+              id="Details-{{ faq_id }}-{{ section.id }}"
+              {% if section.settings.open_first_item and forloop.first %}
+                open
+              {% endif %}
+            >
+              <summary id="Summary-{{ faq_id }}-{{ section.id }}">
+                <h3 class="accordion__title inline-richtext">
+                  {{ faq.question.value }}
+                </h3>
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </summary>
+              <div
+                class="accordion__content rte"
+                id="FAQAccordion-{{ faq_id }}-{{ section.id }}"
+                role="region"
+                aria-labelledby="Summary-{{ faq_id }}-{{ section.id }}"
+              >
+                {{ faq.answer | metafield_tag }}
+              </div>
+            </details>
+          </div>
+        {%- endfor -%}
+      {%- elsif use_faq_catalog -%}
+        {%- for i in (1..faq_limit) -%}
+          {%- assign faq_handle = 'faq-' | append: i -%}
+          {%- assign faq = shop.metaobjects.faq_item[faq_handle] -%}
+          {%- if faq != blank -%}
+            {%- assign rendered_faqs = rendered_faqs | plus: 1 -%}
+            {%- assign faq_id = faq.system.handle | default: faq.system.id -%}
+            <div class="accordion">
+              <details
+                id="Details-{{ faq_id }}-{{ section.id }}"
+                {% if section.settings.open_first_item and rendered_faqs == 1 %}
+                  open
+                {% endif %}
+              >
+                <summary id="Summary-{{ faq_id }}-{{ section.id }}">
+                  <h3 class="accordion__title inline-richtext">
+                    {{ faq.question.value }}
+                  </h3>
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </summary>
+                <div
+                  class="accordion__content rte"
+                  id="FAQAccordion-{{ faq_id }}-{{ section.id }}"
+                  role="region"
+                  aria-labelledby="Summary-{{ faq_id }}-{{ section.id }}"
+                >
+                  {{ faq.answer | metafield_tag }}
+                </div>
+              </details>
             </div>
-          </details>
-        </div>
-      {%- endfor -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          <div class="accordion" {{ block.shopify_attributes }}>
+            <details
+              id="Details-{{ block.id }}-{{ section.id }}"
+              {% if section.settings.open_first_item and forloop.first %}
+                open
+              {% endif %}
+            >
+              <summary id="Summary-{{ block.id }}-{{ section.id }}">
+                <h3 class="accordion__title inline-richtext">
+                  {{ block.settings.question }}
+                </h3>
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </summary>
+              <div
+                class="accordion__content rte"
+                id="FAQAccordion-{{ block.id }}-{{ section.id }}"
+                role="region"
+                aria-labelledby="Summary-{{ block.id }}-{{ section.id }}"
+              >
+                {{ block.settings.answer }}
+              </div>
+            </details>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
     </div>
   </div>
 </div>
@@ -151,6 +228,24 @@
       "groups": ["header", "footer"]
     },
     "settings": [
+      {
+        "type": "metaobject_list",
+        "id": "faq_entries",
+        "label": "FAQ items",
+        "metaobject_type": "faq_item",
+        "limit": 50,
+        "info": "Pick items from Content → Metaobjects → FAQ item. Leave empty to show the first items by Position."
+      },
+      {
+        "type": "range",
+        "id": "max_items",
+        "min": 1,
+        "max": 12,
+        "step": 1,
+        "default": 4,
+        "label": "Items if none selected",
+        "info": "Used only when the FAQ items picker is empty."
+      },
       {
         "type": "text",
         "id": "heading",
