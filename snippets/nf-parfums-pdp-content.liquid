@@ -62,10 +62,12 @@
 /* Hide the theme's Inspiration Banner on perfume pages only.
    This snippet renders exclusively for the perfumes collection, so #nfp exists
    nowhere else and the rule can never touch another product.
-   It targets the section sitting immediately after this one. If you reorder
-   sections in the theme editor, swap this for the exact id, e.g.
-   #shopify-section-inspiration_banner_XXXX{display:none} */
-.shopify-section:has(#nfp) + .shopify-section{display:none}
+   Hides the theme's Inspiration Banner and the theme's own FAQ section, so the
+   page does not show two FAQ blocks. Matched on the section key suffix and
+   scoped to .shopify-section, so neither section order nor the changing
+   template-- prefix matters, and no inner accordion ids are caught. */
+.shopify-section[id$="__inspiration_banner"],
+.shopify-section[id$="__faq_section_Hnngqe"]{display:none}
 </style>
 
 
@@ -304,9 +306,9 @@
       p4:'Bez parabénov',
       s4ey:'Prečo milujeme každú fľašu',
       s4h:'S každým parfumom na pranie pestujeme zmenu.',
-      s4p1:'Veríme, že dobre urobený produkt dokáže viac než navoňať oblečenie &mdash; dokáže premeniť každodennú rutinu na moment radosti, starostlivosti a všímavosti.',
-      s4p2:'Od vegánskych receptúr netestovaných na zvieratách až po zodpovedné obaly je tento parfum na pranie malá, ale vedomá voľba &mdash; každý deň.',
-      s4q:'Naše vône nie sú len dlhotrvajúce &mdash; sú vyjadrením toho, ako sa chceme cítiť a žiť.',
+      s4p1:'Veríme, že dobre urobený produkt dokáže viac než navoňať oblečenie — dokáže premeniť každodennú rutinu na moment radosti, starostlivosti a všímavosti.',
+      s4p2:'Od vegánskych receptúr netestovaných na zvieratách až po zodpovedné obaly je tento parfum na pranie malá, ale vedomá voľba — každý deň.',
+      s4q:'Naše vône nie sú len dlhotrvajúce — sú vyjadrením toho, ako sa chceme cítiť a žiť.',
       s5h:'Ako ho používať',
       t1:'Flašu dobre pretras',
       x1:'Pred každým použitím flašu dobre pretras, aby sa naplno aktivovala koncentrácia parfumu.',
@@ -370,9 +372,9 @@
       p4:'Ohne Parabene',
       s4ey:'Warum wir jede Flasche lieben',
       s4h:'Mit jedem Wäscheparfum lassen wir Veränderung wachsen.',
-      s4p1:'Wir glauben, dass ein gut gemachtes Produkt mehr kann, als Kleidung zu beduften &mdash; es kann eine tägliche Routine in einen Moment aus Freude, Fürsorge und Achtsamkeit verwandeln.',
-      s4p2:'Von veganen, tierversuchsfreien Formeln bis zu verantwortungsvollen Verpackungen ist dieses Wäscheparfum eine kleine, aber bewusste Entscheidung &mdash; jeden Tag.',
-      s4q:'Unsere Düfte halten nicht nur lange &mdash; sie sind eine Aussage darüber, wie wir uns fühlen und leben wollen.',
+      s4p1:'Wir glauben, dass ein gut gemachtes Produkt mehr kann, als Kleidung zu beduften — es kann eine tägliche Routine in einen Moment aus Freude, Fürsorge und Achtsamkeit verwandeln.',
+      s4p2:'Von veganen, tierversuchsfreien Formeln bis zu verantwortungsvollen Verpackungen ist dieses Wäscheparfum eine kleine, aber bewusste Entscheidung — jeden Tag.',
+      s4q:'Unsere Düfte halten nicht nur lange — sie sind eine Aussage darüber, wie wir uns fühlen und leben wollen.',
       s5h:'So wird es angewendet',
       t1:'Flasche gut schütteln',
       x1:'Schüttle die Flasche vor jedem Gebrauch gut, damit sich die volle Duftkonzentration entfaltet.',
@@ -436,9 +438,9 @@
       p4:'Bez parabena',
       s4ey:'Zašto volimo svaku bočicu',
       s4h:'Sa svakim parfemom za rublje uzgajamo promjenu.',
-      s4p1:'Vjerujemo da dobro napravljen proizvod može više od parfumiranja odjeće &mdash; može svakodnevnu rutinu pretvoriti u trenutak radosti, brige i svjesnosti.',
-      s4p2:'Od veganskih formula neispitivanih na životinjama do odgovorne ambalaže, ovaj parfem za rublje mali je, ali svjestan odabir &mdash; svaki dan.',
-      s4q:'Naši mirisi nisu samo dugotrajni &mdash; oni su izjava o tome kako se želimo osjećati i živjeti.',
+      s4p1:'Vjerujemo da dobro napravljen proizvod može više od parfumiranja odjeće — može svakodnevnu rutinu pretvoriti u trenutak radosti, brige i svjesnosti.',
+      s4p2:'Od veganskih formula neispitivanih na životinjama do odgovorne ambalaže, ovaj parfem za rublje mali je, ali svjestan odabir — svaki dan.',
+      s4q:'Naši mirisi nisu samo dugotrajni — oni su izjava o tome kako se želimo osjećati i živjeti.',
       s5h:'Kako se koristi',
       t1:'Dobro protresi bočicu',
       x1:'Prije svake upotrebe dobro protresi bočicu kako bi se aktivirala puna koncentracija parfema.',
@@ -502,9 +504,9 @@
       p4:'Brez parabenov',
       s4ey:'Zakaj ljubimo vsako stekleničko',
       s4h:'Z vsakim parfumom za perilo gojimo spremembo.',
-      s4p1:'Verjamemo, da dobro narejen izdelek zmore več kot le odišaviti oblačila &mdash; vsakdanjo rutino lahko spremeni v trenutek veselja, skrbi in pozornosti.',
-      s4p2:'Od veganskih formul, ki niso testirane na živalih, do odgovorne embalaže je ta parfum za perilo majhna, a zavestna izbira &mdash; vsak dan.',
-      s4q:'Naši vonji niso le dolgotrajni &mdash; so izjava o tem, kako se želimo počutiti in živeti.',
+      s4p1:'Verjamemo, da dobro narejen izdelek zmore več kot le odišaviti oblačila — vsakdanjo rutino lahko spremeni v trenutek veselja, skrbi in pozornosti.',
+      s4p2:'Od veganskih formul, ki niso testirane na živalih, do odgovorne embalaže je ta parfum za perilo majhna, a zavestna izbira — vsak dan.',
+      s4q:'Naši vonji niso le dolgotrajni — so izjava o tem, kako se želimo počutiti in živeti.',
       s5h:'Kako se uporablja',
       t1:'Stekleničko dobro pretresi',
       x1:'Pred vsako uporabo stekleničko dobro pretresi, da se aktivira polna koncentracija parfuma.',
@@ -568,9 +570,9 @@
       p4:'Без парабени',
       s4ey:'Защо обичаме всяка бутилка',
       s4h:'С всеки парфюм за пране отглеждаме промяна.',
-      s4p1:'Вярваме, че добре направеният продукт може повече от това да ароматизира дрехите &mdash; може да превърне ежедневния навик в момент на радост, грижа и внимание.',
-      s4p2:'От вегански формули, нетествани върху животни, до отговорни опаковки, този парфюм за пране е малък, но осъзнат избор &mdash; всеки ден.',
-      s4q:'Нашите аромати не са само дълготрайни &mdash; те са изявление за това как искаме да се чувстваме и да живеем.',
+      s4p1:'Вярваме, че добре направеният продукт може повече от това да ароматизира дрехите — може да превърне ежедневния навик в момент на радост, грижа и внимание.',
+      s4p2:'От вегански формули, нетествани върху животни, до отговорни опаковки, този парфюм за пране е малък, но осъзнат избор — всеки ден.',
+      s4q:'Нашите аромати не са само дълготрайни — те са изявление за това как искаме да се чувстваме и да живеем.',
       s5h:'Как се използва',
       t1:'Разклати бутилката добре',
       x1:'Преди всяка употреба разклати бутилката добре, за да се активира пълната концентрация на парфюма.',
