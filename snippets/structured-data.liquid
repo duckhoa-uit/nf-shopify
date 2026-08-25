@@ -10,10 +10,10 @@
   if localization.market.handle != blank and settings.market_social_facebook_link != blank
     assign market_social_facebook_link = settings.market_social_facebook_link
   endif
-  assign market_social_instagram_link = settings.social_instagram_link
-  if localization.market.handle != blank and settings.market_social_instagram_link != blank
-    assign market_social_instagram_link = settings.market_social_instagram_link
-  endif
+  capture market_social_instagram_link
+    render 'locale-instagram-url'
+  endcapture
+  assign market_social_instagram_link = market_social_instagram_link | strip
   assign market_social_youtube_link = settings.social_youtube_link
   if localization.market.handle != blank and settings.market_social_youtube_link != blank
     assign market_social_youtube_link = settings.market_social_youtube_link

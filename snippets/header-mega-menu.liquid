@@ -112,7 +112,7 @@
                       {%- for childlink in link.links -%}
                         {%- if childlink.url == link.url -%}{%- continue -%}{%- endif -%}
                         <li class="mega-menu__col">
-                          {%- if childlink.links == blank and childlink.url != blank -%}
+                          {%- if childlink.url != blank -%}
                             <a
                               id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                               href="{{ childlink.url }}"

@@ -1,0 +1,23 @@
+{% doc %}
+  Resolves the Instagram profile for the active storefront locale.
+
+  A merchant-managed locale setting overrides the global Instagram setting.
+  Locales without an override fall back to `settings.social_instagram_link`.
+
+  @example
+  {% capture instagram_url %}
+      {% render 'locale-instagram-url' %}
+    {% endcapture %}
+{% enddoc %}
+
+{%- liquid
+  assign instagram_url = settings.social_instagram_link
+  assign locale_setting_id = 'social_instagram_' | append: request.locale.iso_code | append: '_link'
+  assign locale_instagram_url = settings[locale_setting_id]
+
+  if locale_instagram_url != blank
+    assign instagram_url = locale_instagram_url
+  endif
+
+  echo instagram_url
+-%}
