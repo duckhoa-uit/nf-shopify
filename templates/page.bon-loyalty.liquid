@@ -1,11 +1,53 @@
 {% liquid
-      assign bon_loyalty_page_info = shop.metafields.bonLoyaltyPageInfo.bonLoyaltyPageInfo
-      assign bon_shop_info = shop.metafields.bonShopInfo.bonShopInfo
-  %}
-  {{ 'bon-loyalty-page.css' | asset_url | stylesheet_tag }}
-  <script> var bonLoyaltyPageInfo = {{ bon_loyalty_page_info | json }}; </script>
-  <script> var bonShopInfo = {{ bon_shop_info | json }}; </script>
-  <div class='shopify-section bon-loyalty-page'>
-      {{ page.content }}
-      <script id='script-bon-loyalty-page' src='https://d31wum4217462x.cloudfront.net/loyalty_page/js/app.js' defer></script>
-  </div>
+    assign bon_loyalty_page_info = shop.metafields.bonLoyaltyPageInfo.bonLoyaltyPageInfo
+    assign bon_shop_info = shop.metafields.bonShopInfo.bonShopInfo
+%}
+{{ 'bon-loyalty-page.css' | asset_url | stylesheet_tag }}
+<script> var bonLoyaltyPageInfo = {{ bon_loyalty_page_info | json }}; </script>
+<script> var bonShopInfo = {{ bon_shop_info | json }}; </script>
+
+{%- comment -%} ─── NORTHFINDER: notice bar — informacie k migracii ─── zacatok {%- endcomment -%}
+{%- assign nfmig_loc = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign nfmig_base = routes.root_url | remove_last: '/' -%}
+{%- assign nfmig_href = nfmig_base | append: '/pages/new-loyalty-program' -%}
+{%- case nfmig_loc -%}
+  {%- when 'sk' -%}{%- assign nfmig_t = 'Informácie k migrácii vernostného systému' -%}
+  {%- when 'de' -%}{%- assign nfmig_t = 'Informationen zur Migration des Treueprogramms' -%}
+  {%- when 'hr' -%}{%- assign nfmig_t = 'Informacije o migraciji programa vjernosti' -%}
+  {%- when 'sl' -%}{%- assign nfmig_t = 'Informacije o migraciji programa zvestobe' -%}
+  {%- when 'bg' -%}{%- assign nfmig_t = 'Информация за миграцията на програмата за лоялност' -%}
+  {%- else -%}{%- assign nfmig_t = 'Loyalty Program Migration Information' -%}
+{%- endcase -%}
+<style>
+a#nfmig{box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:12px;
+  min-height:48px;padding:10px 20px;background:#0f0f0f;
+  border-bottom:1px solid rgba(255,255,255,.14);
+  color:#fff !important;text-decoration:none !important;
+  font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;line-height:1.4;
+  letter-spacing:.01em;text-align:center;
+  transition:background .22s ease}
+a#nfmig .nfmig-t{text-decoration:underline;text-decoration-color:transparent;
+  text-decoration-thickness:2px;text-underline-offset:4px;
+  transition:text-decoration-color .22s ease}
+a#nfmig .nfmig-a{flex:0 0 auto;color:#fff;font-size:16px;
+  transition:transform .22s ease}
+a#nfmig:hover,a#nfmig:focus-visible{background:#262626;color:#fff !important}
+a#nfmig:hover .nfmig-t,a#nfmig:focus-visible .nfmig-t{text-decoration-color:#fff}
+a#nfmig:hover .nfmig-a{transform:translateX(5px)}
+a#nfmig:focus-visible{outline:2px solid #fff;outline-offset:-5px}
+@media(min-width:768px){a#nfmig{min-height:52px;font-size:15px}}
+@media(prefers-reduced-motion:reduce){
+  a#nfmig,a#nfmig .nfmig-t,a#nfmig .nfmig-a{transition:none}
+  a#nfmig:hover .nfmig-a{transform:none}
+}
+</style>
+<a id="nfmig" href="{{ nfmig_href }}">
+  <span class="nfmig-t">{{ nfmig_t }}</span>
+  <span class="nfmig-a" aria-hidden="true">&rarr;</span>
+</a>
+{%- comment -%} ─── NORTHFINDER: notice bar — informacie k migracii ─── koniec {%- endcomment -%}
+
+<div class='shopify-section bon-loyalty-page'>
+    {{ page.content }}
+    <script id='script-bon-loyalty-page' src='https://d31wum4217462x.cloudfront.net/loyalty_page/js/app.js' defer></script>
+</div>

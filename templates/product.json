@@ -64,10 +64,6 @@
             "show_gift_card_recipient": true
           }
         },
-        "selleasy_lb_upsell_widget_bl_YzLAk4": {
-          "type": "shopify://apps/selleasy/blocks/lb-upsell-widget-bl/790c1a03-a71f-4bc1-9869-00dad526d3c2",
-          "settings": {}
-        },
         "collapsible_tab_kcxtdY": {
           "type": "collapsible_tab",
           "settings": {
@@ -108,7 +104,6 @@
         "quantity_selector",
         "delivery_info_Umw3rj",
         "buy_buttons",
-        "selleasy_lb_upsell_widget_bl_YzLAk4",
         "collapsible_tab_kcxtdY",
         "collapsible_tab_nHUNAC",
         "collapsible_tab_nXA8Hf",
@@ -119,42 +114,6 @@
         "image_zoom": "none",
         "padding_top": 36,
         "padding_bottom": 12
-      }
-    },
-    "17869490205445001a": {
-      "type": "apps",
-      "blocks": {
-        "selleasy_lb_upsell_widget_pac_QWWbjY": {
-          "type": "shopify://apps/selleasy/blocks/lb-upsell-widget-pac/790c1a03-a71f-4bc1-9869-00dad526d3c2",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "selleasy_lb_upsell_widget_pac_QWWbjY"
-      ],
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "1749667846874ab065": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
-      }
-    },
-    "1786949840b86652db": {
-      "type": "apps",
-      "blocks": {
-        "selleasy_lb_upsell_widget_bl_EyKq6Y": {
-          "type": "shopify://apps/selleasy/blocks/lb-upsell-widget-bl/790c1a03-a71f-4bc1-9869-00dad526d3c2",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "selleasy_lb_upsell_widget_bl_EyKq6Y"
-      ],
-      "settings": {
-        "include_margins": true
       }
     },
     "inspiration_banner": {
@@ -228,7 +187,7 @@
       "settings": {
         "heading": "FAQs",
         "open_first_item": false,
-        "view_all_link": "shopify://pages/faq",
+        "view_all_link": "shopify://pages/faq-old",
         "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
@@ -249,16 +208,14 @@
         "padding_bottom": 52
       }
     },
-    "1776222715ca2bf809": {
-      "type": "apps",
+    "custom_liquid_WkGebq": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
       "settings": {
-        "include_margins": true
-      }
-    },
-    "1776231376bd999a84": {
-      "type": "apps",
-      "settings": {
-        "include_margins": true
+        "custom_liquid": "{% render 'nf-parfums-pdp-content' %}",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
       }
     }
   },
@@ -266,15 +223,11 @@
     "info_box",
     "breadcrumb_xxkgrk",
     "main",
-    "17869490205445001a",
-    "1749667846874ab065",
-    "1786949840b86652db",
+    "custom_liquid_WkGebq",
     "inspiration_banner",
     "related-products",
     "recent-products",
     "faq_section_Hnngqe",
-    "newsletter_section",
-    "1776222715ca2bf809",
-    "1776231376bd999a84"
+    "newsletter_section"
   ]
 }

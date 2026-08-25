@@ -1,0 +1,640 @@
+{%- comment -%}
+  NF PARFUMS - PDP content block (marquee / moment / mission / how-to-use / FAQ)
+
+  The product card is deliberately NOT here. It stays the theme's own
+  `main-product` section, so the page looks and behaves exactly like every other
+  product on the store.
+
+  This block renders ONLY for products in the collections listed in
+  nf_collections below. On every other product it outputs nothing at all - not
+  even the font link - so one product template serves the whole catalogue.
+
+  Install:
+    1. Admin -> Online store -> Themes -> ... -> Edit code
+    2. Snippets -> Add a new snippet -> name it  nf-parfums-pdp-content
+    3. Paste this whole file, set nf_collections below, Save
+    4. Theme editor -> Products -> product template -> Add section
+       -> Custom Liquid -> paste:   {% render 'nf-parfums-pdp-content' %}
+    5. Drag it below the product card ("main"), above Related products
+
+  Handle confirmed from the store: shop.northfinder.com/collections/perfumes
+  Add more, comma separated, if other markets use separate collections.
+
+  English lives in the HTML. sk / de / hr / sl / bg are swapped at runtime from
+  Shopify.locale by the script at the end - no Translate & Adapt needed.
+
+  Nothing is hidden behind JavaScript: if the script never runs, every section is
+  still painted and readable.
+{%- endcomment -%}
+
+{%- comment -%} ---- WHERE THIS SHOWS - edit these two lines only ---- {%- endcomment -%}
+{%- assign nf_collections = 'perfumes' -%}
+{%- assign nf_tag = 'nf-parfums' -%}
+
+{%- assign nf_show = false -%}
+{%- if product != blank -%}
+  {%- assign nf_wanted = nf_collections | split: ',' -%}
+  {%- for nf_c in product.collections -%}
+    {%- for nf_w in nf_wanted -%}
+      {%- assign nf_h = nf_w | strip -%}
+      {%- if nf_h != blank and nf_c.handle == nf_h -%}{%- assign nf_show = true -%}{%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- if nf_tag != blank and product.tags contains nf_tag -%}
+    {%- assign nf_show = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if nf_show -%}
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+#nfp,#nfp *,#nfp *::before,#nfp *::after{box-sizing:border-box;margin:0;padding:0;
+  font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+#nfp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfp img{display:block;max-width:100%}
+#nfp a,#nfp a:visited,#nfp a:hover,#nfp a:active{text-decoration:none;color:inherit}
+#nfp .nfp-w{max-width:1440px;margin:0 auto}
+#nfp{background:#ffffff;color:#082835}
+</style>
+
+<style>
+/* Hide the theme's Inspiration Banner on perfume pages only.
+   This snippet renders exclusively for the perfumes collection, so #nfp exists
+   nowhere else and the rule can never touch another product.
+   Hides the theme's Inspiration Banner and the theme's own FAQ section, so the
+   page does not show two FAQ blocks. Matched on the section key suffix and
+   scoped to .shopify-section, so neither section order nor the changing
+   template-- prefix matters, and no inner accordion ids are caught. */
+.shopify-section[id$="__inspiration_banner"],
+.shopify-section[id$="__faq_section_Hnngqe"]{display:none}
+</style>
+
+
+{%- comment -%} section 2 {%- endcomment -%}
+<div id="nfp" style="background:#e7f1f8;color:#082835">
+<style>
+/* ── S2 · trust marquee ── */
+#nfp .nfp-s2{overflow:hidden;padding:16px 0;background:#e7f1f8}
+#nfp .nfp-mq{display:flex;width:max-content;animation:nfp-slide 32s linear infinite}
+#nfp .nfp-mq-g{display:flex;gap:74px;padding-right:74px;white-space:nowrap}
+#nfp .nfp-mq-g span,#nfp .nfp-mq-g span *{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-mq-g span{font-size:18px;
+  font-weight:700;color:#082835;line-height:1.3;letter-spacing:.01em}
+@keyframes nfp-slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){#nfp .nfp-mq{animation:none}}
+@media(max-width:767px){#nfp .nfp-mq-g{gap:44px;padding-right:44px}
+  #nfp .nfp-mq-g span{font-size:15px}}
+</style>
+<section class="nfp-s2" aria-hidden="true">
+  <div class="nfp-mq"><div class="nfp-mq-g"><span class="nfp-m1">Eco-friendly</span><span class="nfp-m2">Dermatologically tested</span><span class="nfp-m3">Developed for the outdoors</span><span class="nfp-m1b">Eco-friendly</span><span class="nfp-m2b">Dermatologically tested</span><span class="nfp-m3b">Developed for the outdoors</span></div><div class="nfp-mq-g"><span class="nfp-m1">Eco-friendly</span><span class="nfp-m2">Dermatologically tested</span><span class="nfp-m3">Developed for the outdoors</span><span class="nfp-m1b">Eco-friendly</span><span class="nfp-m2b">Dermatologically tested</span><span class="nfp-m3b">Developed for the outdoors</span></div></div>
+</section>
+</div>
+
+{%- comment -%} section 3 {%- endcomment -%}
+<div id="nfp" style="background:#ffffff;color:#082835">
+<style>
+/* ── S3 · "give yourself the moment" + attribute chips ── */
+#nfp .nfp-s3{padding:64px 20px 10px;text-align:center}
+#nfp .nfp-s3 .nfp-w{max-width:960px}
+#nfp .nfp-sub,#nfp .nfp-sub *{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-sub{font-size:13px;
+  font-weight:700;color:#082835;margin-bottom:14px;font-style:normal;text-transform:uppercase;letter-spacing:.08em}
+#nfp .nfp-big,#nfp .nfp-big span{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-big{font-size:36px;
+  font-weight:700;line-height:1.2;color:#082835;max-width:730px;margin:0 auto;letter-spacing:-.01em}
+#nfp .nfp-circ{position:relative;display:inline-block;font-style:normal;padding:0 6px;font-weight:700}
+#nfp .nfp-circ svg{position:absolute;left:-16px;top:-7px;width:calc(100% + 32px);
+  height:calc(100% + 14px);overflow:visible;pointer-events:none}
+/* Nothing is hidden behind JS. The EComposer builder canvas does not execute
+   section scripts, so an opacity:0 + .is-in reveal leaves the section blank in
+   the editor. Homepage 1.9.1 and Flowline Loyalty use no opacity:0 at all -
+   same rule here: drawn and visible from the first paint. */
+#nfp .nfp-circ svg path{fill:none;stroke:#f4bfba;stroke-width:3;stroke-linecap:round}
+#nfp .nfp-pills{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;
+  gap:16px;margin-top:34px}
+#nfp .nfp-pills li{display:inline-flex;align-items:center;gap:9px;border:1px solid #dfe4e6;
+  border-radius:4px;padding:11px 22px;font-size:14px;font-weight:500;color:#082835}
+@media(max-width:767px){#nfp .nfp-big{font-size:24px}
+  #nfp .nfp-pills{gap:10px}#nfp .nfp-pills li{padding:9px 16px;font-size:13px}}
+</style>
+<section class="nfp-s3">
+  <div class="nfp-w nfp-rv">
+    <p class="nfp-sub nfp-s3sub">Let the fragrance set your mood, day after day.</p>
+    <h2 class="nfp-big"><span class="nfp-s3h1">Give yourself the</span> <span class="nfp-circ"><span class="nfp-s3hw">moment</span><svg viewBox="0 0 300 70" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M22 34C22 17 84 7 152 8c70 1 126 10 126 25 0 16-62 27-134 26C74 58 20 49 20 33c0-13 44-23 108-25"/></svg></span><span class="nfp-s3h2"> you deserve.</span></h2>
+    <ul class="nfp-pills">
+      <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#082835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="nfp-p1">Suitable for all fabric types</span></li>
+      <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#082835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="nfp-p2">Lasts up to 14 days</span></li>
+      <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#082835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="nfp-p3">Intense scent</span></li>
+      <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#082835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="nfp-p4">Paraben-free</span></li>
+    </ul>
+  </div>
+</section>
+</div>
+
+{%- comment -%} section 4 {%- endcomment -%}
+<div id="nfp" style="background:#ffffff;color:#082835">
+<style>
+/* ── S4 · brand mission, image + text ── */
+#nfp .nfp-s4{padding:52px 24px 0}
+#nfp .nfp-s4 .nfp-in{display:grid;grid-template-columns:minmax(0,700px) minmax(0,1fr);
+  gap:110px;align-items:center}
+#nfp .nfp-s4 img{border-radius:4px;width:100%;height:auto}
+#nfp .nfp-ey{display:block;font-style:normal;
+  font-size:13px;color:#082835;opacity:.75;margin-bottom:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+#nfp .nfp-s4 .nfp-h2,#nfp .nfp-s4 .nfp-h2 *,#nfp .nfp-ey{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-s4 .nfp-h2{font-size:32px;
+  font-weight:700;line-height:1.2;color:#082835;margin-bottom:22px;letter-spacing:-.01em}
+#nfp .nfp-s4 .nfp-b{font-size:16px;font-weight:500;line-height:1.6;color:#3f5a66;
+  max-width:70ch;margin-bottom:4px}
+#nfp .nfp-quote{font-size:16px;font-style:normal;line-height:1.6;color:#3f5a66;
+  max-width:70ch;margin-top:22px;font-weight:700}
+@media(max-width:1239px){#nfp .nfp-s4 .nfp-in{grid-template-columns:1fr;gap:44px}}
+@media(max-width:767px){#nfp .nfp-s4{padding:40px 20px 0}
+  #nfp .nfp-s4 .nfp-h2{font-size:24px}}
+</style>
+<section class="nfp-s4">
+  <div class="nfp-w nfp-in nfp-rv">
+    <img src="https://cdn.shopify.com/s/files/1/0952/4786/0043/files/Daily.png" alt="" loading="lazy" width="1000" height="1000">
+    <div class="nfp-tx">
+      <span class="nfp-ey nfp-s4ey">Why we love every bottle</span>
+      <h2 class="nfp-h2 nfp-s4h">We nurture change with every laundry perfume.</h2>
+      <p class="nfp-b nfp-s4p1">We believe a well-made product can do more than scent your clothes &mdash; it can turn a daily routine into a moment of joy, care and awareness.</p>
+      <p class="nfp-b nfp-s4p2">From vegan, cruelty-free formulas to responsible packaging, this laundry perfume is a small but deliberate choice, every single day.</p>
+      <p class="nfp-quote nfp-s4q">Our scents are not just long-lasting &mdash; they are a statement about how we want to feel and live.</p>
+    </div>
+  </div>
+</section>
+</div>
+
+{%- comment -%} section 5 {%- endcomment -%}
+<div id="nfp" style="background:#ffffff;color:#082835">
+<style>
+/* ── S5 · how to use, 4 steps ── */
+#nfp .nfp-s5{padding:86px 24px 20px;background:#ffffff}
+#nfp .nfp-s5 .nfp-h2,#nfp .nfp-s5 .nfp-h2 *,#nfp .nfp-step-t,#nfp .nfp-step-t *{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-s5 .nfp-h2{font-size:28px;
+  font-weight:700;color:#082835;text-align:center;margin-bottom:52px;letter-spacing:-.01em}
+#nfp .nfp-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center}
+#nfp .nfp-step-n{font-size:44px;font-weight:700;line-height:1;color:#111111;
+  letter-spacing:-.02em}
+#nfp .nfp-step-t{font-size:18px;
+  font-weight:700;color:#082835;margin:20px 0 12px}
+#nfp .nfp-step-p{font-size:14px;font-weight:500;line-height:1.7;color:#3f5a66}
+#nfp .nfp-step-p em{font-style:normal;font-weight:700}
+#nfp .nfp-step-p strong{font-weight:700;color:#082835}
+@media(max-width:979px){#nfp .nfp-steps{grid-template-columns:repeat(2,1fr);gap:44px 30px}
+  #nfp .nfp-s5{padding:56px 20px 20px}}
+@media(max-width:600px){#nfp .nfp-steps{grid-template-columns:1fr}
+  #nfp .nfp-s5 .nfp-h2{font-size:22px;margin-bottom:36px}}
+</style>
+<section class="nfp-s5">
+  <div class="nfp-w nfp-rv">
+    <h2 class="nfp-h2 nfp-s5h">How to use it</h2>
+    <div class="nfp-steps">
+      <div class="nfp-step"><div class="nfp-step-n">1</div><p class="nfp-step-t nfp-t1">Shake the bottle well</p><p class="nfp-step-p nfp-x1">To activate the full fragrance concentration, shake the bottle well before every use.</p></div>
+      <div class="nfp-step"><div class="nfp-step-n">2</div><p class="nfp-step-t nfp-t2">Use the right dose</p><p class="nfp-step-p nfp-x2">Pour <strong>5 ml</strong> (about a teaspoon) into the fabric-softener compartment of your washing machine. <em>Never apply directly to fabric.</em></p></div>
+      <div class="nfp-step"><div class="nfp-step-n">3</div><p class="nfp-step-t nfp-t3">Wash as usual</p><p class="nfp-step-p nfp-x3">Use your normal detergent. Do not add fabric softener &mdash; the laundry perfume replaces it.</p></div>
+      <div class="nfp-step"><div class="nfp-step-n">4</div><p class="nfp-step-t nfp-t4">Enjoy the freshness</p><p class="nfp-step-p nfp-x4">Once dry, your clothes stay fragrant for <strong>up to 14 days</strong>. More than a scent &mdash; an experience.</p></div>
+    </div>
+  </div>
+</section>
+</div>
+
+{%- comment -%} section 6 {%- endcomment -%}
+<div id="nfp" style="background:#ffffff;color:#082835">
+<style>
+/* ── S6 · FAQ ── */
+#nfp .nfp-s6{padding:86px 20px 40px;background:#ffffff}
+#nfp .nfp-s6 .nfp-w{max-width:1050px}
+#nfp .nfp-s6 .nfp-h2,#nfp .nfp-s6 .nfp-h2 *,#nfp .nfp-fq summary,#nfp .nfp-fq summary *{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-s6 .nfp-h2{font-size:28px;
+  font-weight:700;color:#082835;text-align:center;margin-bottom:44px;letter-spacing:-.01em}
+#nfp .nfp-fq details{border-bottom:1px solid #e6eaec}
+#nfp .nfp-fq summary{list-style:none;cursor:pointer;position:relative;
+  padding:20px 44px 20px 0;font-size:17px;font-weight:700;color:#082835;line-height:1.3}
+#nfp .nfp-fq summary::-webkit-details-marker{display:none}
+#nfp .nfp-fq summary::after,#nfp .nfp-fq summary::before{content:"";position:absolute;
+  right:4px;top:50%;background:#082835;transition:transform .25s ease,opacity .25s ease}
+#nfp .nfp-fq summary::after{width:15px;height:1.3px;margin-top:-.65px}
+#nfp .nfp-fq summary::before{width:1.3px;height:15px;right:10.85px;margin-top:-7.5px}
+#nfp .nfp-fq details[open] summary::before{transform:rotate(90deg);opacity:0}
+#nfp .nfp-fq details[open] summary{border-bottom:1px solid #e6eaec}
+#nfp .nfp-fqp{padding:18px 0 22px;font-size:14.5px;font-weight:500;line-height:1.75;
+  color:#3f5a66;max-width:75ch}
+#nfp .nfp-fqp strong{font-weight:700;color:#082835}
+@media(max-width:767px){#nfp .nfp-s6{padding:56px 20px 30px}
+  #nfp .nfp-s6 .nfp-h2{font-size:22px}#nfp .nfp-fq summary{font-size:15px}}
+</style>
+<section class="nfp-s6">
+  <div class="nfp-w nfp-rv">
+    <h2 class="nfp-h2 nfp-s6h">Frequently asked questions</h2>
+    <div class="nfp-fq">
+      <details open><summary class="nfp-q1">How do I use the laundry perfume?</summary><div class="nfp-fqp nfp-w1">Add the laundry perfume straight into the fabric-softener compartment of your washing machine. The recommended dose is <strong>5 ml per 4&ndash;5 kg load</strong>. It works with any detergent, but do not combine it with fabric softener &mdash; that would dilute the fragrance.</div></details>
+      <details><summary class="nfp-q2">How long does the scent last on clothes?</summary><div class="nfp-fqp nfp-w2">Our laundry perfumes are formulated to last <strong>up to 14 days</strong>, depending on the fabric, the drying method and the amount used. Base notes such as amber, sandalwood and cedar help the scent hold over time.</div></details>
+      <details><summary class="nfp-q3">Is it safe for sensitive skin or children&rsquo;s clothes?</summary><div class="nfp-fqp nfp-w3">Yes. All our formulas are dermatologically tested and free from parabens, dyes and major allergens. They are suitable for baby clothes, bed linen and textiles in direct contact with sensitive skin.</div></details>
+      <details><summary class="nfp-q4">Is the laundry perfume vegan and cruelty-free?</summary><div class="nfp-fqp nfp-w4">Yes. All our laundry perfumes are <strong>100% vegan and never tested on animals</strong>. We use no animal-derived ingredients, and our manufacturing follows ethical and sustainable standards.</div></details>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  /* ── 1. animacie: scroll-reveal + kresleny kruh ── */
+  var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function reveal(){
+    var els=document.querySelectorAll('#nfp .nfp-rv, #nfp .nfp-circ');
+    if(mq.matches||!('IntersectionObserver' in window)){
+      els.forEach(function(e){e.classList.add('is-in');});return;
+    }
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target);}
+      });
+    },{threshold:.18,rootMargin:'0px 0px -8% 0px'});
+    els.forEach(function(e){io.observe(e);});
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',reveal);}
+  else{reveal();}
+
+  /* ── 2. preklady ── */
+  var locale=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
+  if(locale.indexOf('-')>0)locale=locale.split('-')[0];
+  locale=locale.toLowerCase();
+  if(locale==='at')locale='de';
+  var T={
+    sk:{
+      u1:'0 parabénov',
+      u2:'100 % intenzívna vôňa',
+      u3:'14 dní vône',
+      d1:'Doprava zdarma pri objednávke nad 249 RON',
+      d2:'14 dní na vrátenie zdarma',
+      alerth:'Parfum na pranie, ktorý vydrží až 14 dní.',
+      alertp:'Zmeň každé pranie na malý luxus. Vyskúšaj to.',
+      a1h:'Popis',
+      a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Parfum na pranie s drevitými tónmi',
+      a1p2:'Adventure Mist 50 ml je parfum na textílie vytvorený pre tých, ktorí oceňujú sviežosť a vytríbenosť. Spája energiu citrusových tónov s kvetinovou jemnosťou a drevitou hĺbkou do vyváženej a sofistikovanej vône. Na oblečení vydrží dlho a po každom praní zachováva pocit čistoty a sviežosti.',
+      n1t:'Vrchné tóny',
+      n1v:'Bergamot, mandarínka, citrusy, korenie',
+      n2t:'Srdcové tóny',
+      n2v:'Jazmín, levanduľa, heliotrop, broskyňa, pelargónia',
+      n3t:'Základné tóny',
+      n3v:'Santalové drevo, céder, oud, vetiver, vanilka, tonkové bôby, ambra',
+      n4t:'Vôňový profil',
+      n4v:'Drevitý, citrusový',
+      n5t:'Charakter',
+      n5v:'Teplý a upokojujúci &mdash; ideálny na objavovanie prírody, kempovanie a turistiku',
+      n6t:'Atribúty',
+      n6v:'Outdoor, teplý, upokojujúci, unisex, inšpirovaný prírodou, drevitý, citrusový',
+      a2h:'Zloženie',
+      a2p1:'&lt; 5 % parfum (fragrance)<br>Denaturované rozpúšťadlo<br>Demineralizovaná voda',
+      a3h:'Zhoda výrobku',
+      a3p1:'<strong>Informácie o bezpečnosti výrobku:</strong> Obal neprehltnite. Uchovávajte mimo dosahu detí &mdash; hrozí nebezpečenstvo zadusenia.',
+      a4h:'Bezpečnostné upozornenia',
+      a4p1:'Uchovávajte mimo dosahu detí. PRI KONTAKTE S KOŽOU: Umyte veľkým množstvom vody a mydla. Ak sa objaví podráždenie kože alebo vyrážky: vyhľadajte lekársku pomoc. Zneškodnite obsah a nádobu v súlade s miestnymi predpismi. Ak je potrebná lekárska pomoc, majte k dispozícii obal alebo etiketu výrobku.',
+      payh:'Platba a bezpečnosť',
+      payp:'Tvoje platobné údaje sú spracované bezpečne. Neuchovávame údaje o tvojej karte a nemáme prístup k tvojim bankovým informáciám.',
+      m1:'Ekologické',
+      m2:'Dermatologicky testované',
+      m3:'Vyvinuté pre outdoor',
+      s3sub:'Nechaj vôňu určovať tvoju náladu, deň za dňom.',
+      s3h1:'Dopraj si',
+      s3hw:'moment',
+      s3h2:', ktorý si zaslúžiš.',
+      p1:'Vhodné na všetky typy textílií',
+      p2:'Vydrží až 14 dní',
+      p3:'Intenzívna vôňa',
+      p4:'Bez parabénov',
+      s4ey:'Prečo milujeme každú fľašu',
+      s4h:'S každým parfumom na pranie pestujeme zmenu.',
+      s4p1:'Veríme, že dobre urobený produkt dokáže viac než navoňať oblečenie — dokáže premeniť každodennú rutinu na moment radosti, starostlivosti a všímavosti.',
+      s4p2:'Od vegánskych receptúr netestovaných na zvieratách až po zodpovedné obaly je tento parfum na pranie malá, ale vedomá voľba — každý deň.',
+      s4q:'Naše vône nie sú len dlhotrvajúce — sú vyjadrením toho, ako sa chceme cítiť a žiť.',
+      s5h:'Ako ho používať',
+      t1:'Flašu dobre pretras',
+      x1:'Pred každým použitím flašu dobre pretras, aby sa naplno aktivovala koncentrácia parfumu.',
+      t2:'Dávkuj správne',
+      x2:'Nalej 5 ml (približne čajovú lyžičku) do priehradky na aviváž v pračke. <em>Nikdy neaplikuj priamo na textíliu.</em>',
+      t3:'Per ako obvykle',
+      x3:'Použi svoj bežný prací prostriedok. Nepridávaj aviváž &mdash; parfum na pranie ju nahradzuje.',
+      t4:'Vychutnaj si sviežosť',
+      x4:'Po uschnutí zostane oblečenie navoňané <em>až 14 dní</em>. Viac než vôňa &mdash; zážitok.',
+      s6h:'Časté otázky',
+      q1:'Ako sa parfum na pranie používa?',
+      w1:'Parfum na pranie pridaj priamo do priehradky na aviváž v pračke. Odporúčaná dávka je <strong>5 ml na 4&ndash;5 kg prania</strong>. Funguje s akýmkoľvek pracím prostriedkom, ale nekombinuj ho s avivážou &mdash; zriedila by vôňu.',
+      q2:'Ako dlho vôňa na oblečení vydrží?',
+      w2:'Naše parfumy na pranie sú vyvinuté tak, aby vydržali <strong>až 14 dní</strong> &mdash; podľa typu textílie, spôsobu sušenia a použitého množstva. Základné tóny ako ambra, santalové drevo a céder pomáhajú vôni držať v čase.',
+      q3:'Je vhodný na citlivú pokožku a detské oblečenie?',
+      w3:'Áno. Všetky naše receptúry sú dermatologicky testované a bez parabénov, farbív a hlavných alergénov. Sú vhodné na detské oblečenie, posteľné prádlo aj textílie v priamom kontakte s citlivou pokožkou.',
+      q4:'Je parfum na pranie vegánsky a bez testovania na zvieratách?',
+      w4:'Áno. Všetky naše parfumy na pranie sú <strong>100 % vegánske a nikdy netestované na zvieratách</strong>. Nepoužívame zložky živočíšneho pôvodu a výroba spĺňa etické a udržateľné štandardy.'
+    },
+    de:{
+      u1:'0 Parabene',
+      u2:'100 % intensiver Duft',
+      u3:'14 Tage Duft',
+      d1:'Kostenloser Versand ab 249 RON',
+      d2:'14 Tage kostenlose Rückgabe',
+      alerth:'Wäscheparfum, das bis zu 14 Tage hält.',
+      alertp:'Mach aus jeder Wäsche einen kleinen Luxus. Jetzt testen.',
+      a1h:'Beschreibung',
+      a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Wäscheparfum mit holzigen Noten',
+      a1p2:'Adventure Mist 50 ml ist ein Textilduft für alle, die Frische und Raffinesse schätzen. Er verbindet die Energie zitrischer Noten mit floraler Zartheit und holziger Tiefe zu einem ausgewogenen und eleganten Aroma. Er hält lange auf der Kleidung und bewahrt nach jeder Wäsche das Gefühl von Sauberkeit und Frische.',
+      n1t:'Kopfnoten',
+      n1v:'Bergamotte, Mandarine, Zitrus, Pfeffer',
+      n2t:'Herznoten',
+      n2v:'Jasmin, Lavendel, Heliotrop, Pfirsich, Geranie',
+      n3t:'Basisnoten',
+      n3v:'Sandelholz, Zeder, Oud, Vetiver, Vanille, Tonkabohne, Amber',
+      n4t:'Duftprofil',
+      n4v:'Holzig, zitrisch',
+      n5t:'Charakter',
+      n5v:'Warm und entspannend &mdash; ideal für Naturerkundungen, Camping und Wandern',
+      n6t:'Attribute',
+      n6v:'Outdoor, warm, entspannend, unisex, von der Natur inspiriert, holzig, zitrisch',
+      a2h:'Inhaltsstoffe',
+      a2p1:'&lt; 5 % Parfum (fragrance)<br>Denaturiertes Lösungsmittel<br>Demineralisiertes Wasser',
+      a3h:'Produktkonformität',
+      a3p1:'<strong>Informationen zur Produktsicherheit:</strong> Verpackung nicht verschlucken. Darf nicht in die Hände von Kindern gelangen &mdash; Erstickungsgefahr.',
+      a4h:'Sicherheitshinweise',
+      a4p1:'Darf nicht in die Hände von Kindern gelangen. BEI BERÜHRUNG MIT DER HAUT: Mit viel Wasser und Seife waschen. Bei Hautreizung oder -ausschlag: Ärztlichen Rat einholen. Inhalt und Behälter gemäß den örtlichen Vorschriften entsorgen. Ist ärztlicher Rat erforderlich, Verpackung oder Kennzeichnungsetikett bereithalten.',
+      payh:'Zahlung und Sicherheit',
+      payp:'Deine Zahlungsdaten werden sicher verarbeitet. Wir speichern deine Kartendaten nicht und haben keinen Zugriff auf deine Bankinformationen.',
+      m1:'Umweltfreundlich',
+      m2:'Dermatologisch getestet',
+      m3:'Für draußen entwickelt',
+      s3sub:'Lass den Duft deine Stimmung bestimmen, Tag für Tag.',
+      s3h1:'Schenk dir den',
+      s3hw:'Moment',
+      s3h2:', den du verdienst.',
+      p1:'Für alle Gewebearten geeignet',
+      p2:'Hält bis zu 14 Tage',
+      p3:'Intensiver Duft',
+      p4:'Ohne Parabene',
+      s4ey:'Warum wir jede Flasche lieben',
+      s4h:'Mit jedem Wäscheparfum lassen wir Veränderung wachsen.',
+      s4p1:'Wir glauben, dass ein gut gemachtes Produkt mehr kann, als Kleidung zu beduften — es kann eine tägliche Routine in einen Moment aus Freude, Fürsorge und Achtsamkeit verwandeln.',
+      s4p2:'Von veganen, tierversuchsfreien Formeln bis zu verantwortungsvollen Verpackungen ist dieses Wäscheparfum eine kleine, aber bewusste Entscheidung — jeden Tag.',
+      s4q:'Unsere Düfte halten nicht nur lange — sie sind eine Aussage darüber, wie wir uns fühlen und leben wollen.',
+      s5h:'So wird es angewendet',
+      t1:'Flasche gut schütteln',
+      x1:'Schüttle die Flasche vor jedem Gebrauch gut, damit sich die volle Duftkonzentration entfaltet.',
+      t2:'Richtig dosieren',
+      x2:'Gib 5 ml (etwa einen Teelöffel) in die Weichspülerkammer der Waschmaschine. <em>Niemals direkt auf das Gewebe auftragen.</em>',
+      t3:'Wasche wie gewohnt',
+      x3:'Verwende dein normales Waschmittel. Gib keinen Weichspüler dazu &mdash; das Wäscheparfum ersetzt ihn.',
+      t4:'Genieß die Frische',
+      x4:'Nach dem Trocknen bleibt die Wäsche <em>bis zu 14 Tage</em> lang duftend. Mehr als ein Duft &mdash; ein Erlebnis.',
+      s6h:'Häufige Fragen',
+      q1:'Wie wird das Wäscheparfum angewendet?',
+      w1:'Gib das Wäscheparfum direkt in die Weichspülerkammer deiner Waschmaschine. Die empfohlene Dosis beträgt <strong>5 ml auf 4&ndash;5 kg Wäsche</strong>. Es funktioniert mit jedem Waschmittel, sollte aber nicht mit Weichspüler kombiniert werden &mdash; das würde den Duft verdünnen.',
+      q2:'Wie lange hält der Duft auf der Kleidung?',
+      w2:'Unsere Wäscheparfums sind auf <strong>bis zu 14 Tage</strong> ausgelegt &mdash; je nach Gewebe, Trocknungsart und verwendeter Menge. Basisnoten wie Amber, Sandelholz und Zeder helfen dem Duft, über die Zeit zu halten.',
+      q3:'Ist es für empfindliche Haut und Kinderkleidung geeignet?',
+      w3:'Ja. Alle unsere Formeln sind dermatologisch getestet und frei von Parabenen, Farbstoffen und wesentlichen Allergenen. Sie eignen sich für Babykleidung, Bettwäsche und Textilien in direktem Kontakt mit empfindlicher Haut.',
+      q4:'Ist das Wäscheparfum vegan und tierversuchsfrei?',
+      w4:'Ja. Alle unsere Wäscheparfums sind <strong>100 % vegan und niemals an Tieren getestet</strong>. Wir verwenden keine Inhaltsstoffe tierischen Ursprungs, und die Herstellung folgt ethischen und nachhaltigen Standards.'
+    },
+    hr:{
+      u1:'0 parabena',
+      u2:'100 % intenzivan miris',
+      u3:'14 dana mirisa',
+      d1:'Besplatna dostava za narudžbe iznad 249 RON',
+      d2:'14 dana besplatnog povrata',
+      alerth:'Parfem za rublje koji traje do 14 dana.',
+      alertp:'Pretvori svako pranje u mali luksuz. Isprobaj sada.',
+      a1h:'Opis',
+      a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Parfem za rublje s drvenastim notama',
+      a1p2:'Adventure Mist 50 ml parfem je za tkanine stvoren za one koji cijene svježinu i profinjenost. Spaja energiju citrusnih nota s cvjetnom nježnošću i drvenastom dubinom u uravnotežen i sofisticiran miris. Dugo se zadržava na odjeći i nakon svakog pranja čuva osjećaj čistoće i svježine.',
+      n1t:'Gornje note',
+      n1v:'Bergamot, mandarina, citrusi, papar',
+      n2t:'Srednje note',
+      n2v:'Jasmin, lavanda, heliotrop, breskva, geranij',
+      n3t:'Bazne note',
+      n3v:'Sandalovina, cedar, oud, vetiver, vanilija, tonka bob, ambra',
+      n4t:'Profil mirisa',
+      n4v:'Drvenast, citrusni',
+      n5t:'Karakter',
+      n5v:'Topao i opuštajući &mdash; idealan za istraživanje prirode, kampiranje i planinarenje',
+      n6t:'Atributi',
+      n6v:'Outdoor, topao, opuštajući, uniseks, nadahnut prirodom, drvenast, citrusni',
+      a2h:'Sastav',
+      a2p1:'&lt; 5 % parfem (fragrance)<br>Denaturirano otapalo<br>Demineralizirana voda',
+      a3h:'Sukladnost proizvoda',
+      a3p1:'<strong>Informacije o sigurnosti proizvoda:</strong> Ne gutati ambalažu. Čuvati izvan dohvata djece &mdash; opasnost od gušenja.',
+      a4h:'Sigurnosne upute',
+      a4p1:'Čuvati izvan dohvata djece. U SLUČAJU DODIRA S KOŽOM: oprati s puno vode i sapuna. U slučaju pojave iritacije ili osipa na koži: zatražiti savjet liječnika. Odložiti sadržaj i spremnik u skladu s lokalnim propisima. Ako je potrebna medicinska pomoć, pokazati spremnik ili etiketu.',
+      payh:'Plaćanje i sigurnost',
+      payp:'Tvoji podaci o plaćanju obrađuju se sigurno. Ne pohranjujemo podatke tvoje kartice i nemamo pristup tvojim bankovnim informacijama.',
+      m1:'Ekološki',
+      m2:'Dermatološki testirano',
+      m3:'Razvijeno za outdoor',
+      s3sub:'Neka miris određuje tvoje raspoloženje, dan za danom.',
+      s3h1:'Pokloni si',
+      s3hw:'trenutak',
+      s3h2:' koji zaslužuješ.',
+      p1:'Prikladno za sve vrste tkanina',
+      p2:'Traje do 14 dana',
+      p3:'Intenzivan miris',
+      p4:'Bez parabena',
+      s4ey:'Zašto volimo svaku bočicu',
+      s4h:'Sa svakim parfemom za rublje uzgajamo promjenu.',
+      s4p1:'Vjerujemo da dobro napravljen proizvod može više od parfumiranja odjeće — može svakodnevnu rutinu pretvoriti u trenutak radosti, brige i svjesnosti.',
+      s4p2:'Od veganskih formula neispitivanih na životinjama do odgovorne ambalaže, ovaj parfem za rublje mali je, ali svjestan odabir — svaki dan.',
+      s4q:'Naši mirisi nisu samo dugotrajni — oni su izjava o tome kako se želimo osjećati i živjeti.',
+      s5h:'Kako se koristi',
+      t1:'Dobro protresi bočicu',
+      x1:'Prije svake upotrebe dobro protresi bočicu kako bi se aktivirala puna koncentracija parfema.',
+      t2:'Doziraj ispravno',
+      x2:'Ulij 5 ml (približno jednu čajnu žličicu) u pregradu za omekšivač u perilici. <em>Nikada ne nanosi izravno na tkaninu.</em>',
+      t3:'Peri kao i obično',
+      x3:'Koristi svoj uobičajeni deterdžent. Ne dodavaj omekšivač &mdash; parfem za rublje ga zamjenjuje.',
+      t4:'Uživaj u svježini',
+      x4:'Nakon sušenja odjeća ostaje mirisna <em>do 14 dana</em>. Više od mirisa &mdash; iskustvo.',
+      s6h:'Često postavljana pitanja',
+      q1:'Kako se koristi parfem za rublje?',
+      w1:'Parfem za rublje dodaj izravno u pregradu za omekšivač u perilici. Preporučena doza je <strong>5 ml na 4&ndash;5 kg rublja</strong>. Radi s bilo kojim deterdžentom, ali ne kombiniraj ga s omekšivačem &mdash; to bi razrijedilo miris.',
+      q2:'Koliko dugo miris traje na odjeći?',
+      w2:'Naši parfemi za rublje formulirani su da traju <strong>do 14 dana</strong> &mdash; ovisno o vrsti tkanine, načinu sušenja i količini. Bazne note poput ambre, sandalovine i cedra pomažu mirisu da se održi tijekom vremena.',
+      q3:'Je li siguran za osjetljivu kožu i dječju odjeću?',
+      w3:'Da. Sve naše formule dermatološki su testirane i bez parabena, bojila i glavnih alergena. Prikladne su za dječju odjeću, posteljinu i tekstil u izravnom dodiru s osjetljivom kožom.',
+      q4:'Je li parfem za rublje veganski i bez testiranja na životinjama?',
+      w4:'Da. Svi naši parfemi za rublje su <strong>100 % veganski i nikada testirani na životinjama</strong>. Ne koristimo sastojke životinjskog podrijetla, a proizvodnja slijedi etičke i održive standarde.'
+    },
+    sl:{
+      u1:'0 parabenov',
+      u2:'100 % intenziven vonj',
+      u3:'14 dni vonja',
+      d1:'Brezplačna dostava pri naročilu nad 249 RON',
+      d2:'14 dni brezplačnega vračila',
+      alerth:'Parfum za perilo, ki zdrži do 14 dni.',
+      alertp:'Spremeni vsako pranje v majhen luksuz. Preizkusi zdaj.',
+      a1h:'Opis',
+      a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Parfum za perilo z lesnimi notami',
+      a1p2:'Adventure Mist 50 ml je parfum za tekstil, ustvarjen za tiste, ki cenijo svežino in prefinjenost. Združuje energijo citrusnih not s cvetlično nežnostjo in lesno globino v uravnotežen in prefinjen vonj. Na oblačilih se zadrži dolgo in po vsakem pranju ohranja občutek čistoče in svežine.',
+      n1t:'Vrhnje note',
+      n1v:'Bergamotka, mandarina, citrusi, poper',
+      n2t:'Srčne note',
+      n2v:'Jasmin, sivka, heliotrop, breskev, geranija',
+      n3t:'Bazne note',
+      n3v:'Sandalovina, cedra, oud, vetiver, vanilija, tonkin bob, ambra',
+      n4t:'Profil vonja',
+      n4v:'Lesni, citrusni',
+      n5t:'Značaj',
+      n5v:'Topel in sproščujoč &mdash; idealen za raziskovanje narave, kampiranje in pohodništvo',
+      n6t:'Lastnosti',
+      n6v:'Outdoor, topel, sproščujoč, uniseks, navdihnjen z naravo, lesni, citrusni',
+      a2h:'Sestava',
+      a2p1:'&lt; 5 % parfum (fragrance)<br>Denaturirano topilo<br>Demineralizirana voda',
+      a3h:'Skladnost izdelka',
+      a3p1:'<strong>Informacije o varnosti izdelka:</strong> Embalaže ne zaužijte. Hraniti zunaj dosega otrok &mdash; nevarnost zadušitve.',
+      a4h:'Varnostna opozorila',
+      a4p1:'Hraniti zunaj dosega otrok. PRI STIKU S KOŽO: umiti z veliko vode in mila. Če nastopi draženje kože ali se pojavi izpuščaj: poiščite zdravniško pomoč. Odstraniti vsebino in posodo v skladu z lokalnimi predpisi. Če je potreben zdravniški nasvet, mora biti na voljo posoda ali etiketa izdelka.',
+      payh:'Plačilo in varnost',
+      payp:'Tvoji plačilni podatki so obdelani varno. Podatkov o tvoji kartici ne shranjujemo in nimamo dostopa do tvojih bančnih informacij.',
+      m1:'Okolju prijazno',
+      m2:'Dermatološko testirano',
+      m3:'Razvito za outdoor',
+      s3sub:'Naj vonj določa tvoje razpoloženje, dan za dnem.',
+      s3h1:'Privošči si',
+      s3hw:'trenutek',
+      s3h2:', ki si ga zaslužiš.',
+      p1:'Primerno za vse vrste tkanin',
+      p2:'Zdrži do 14 dni',
+      p3:'Intenziven vonj',
+      p4:'Brez parabenov',
+      s4ey:'Zakaj ljubimo vsako stekleničko',
+      s4h:'Z vsakim parfumom za perilo gojimo spremembo.',
+      s4p1:'Verjamemo, da dobro narejen izdelek zmore več kot le odišaviti oblačila — vsakdanjo rutino lahko spremeni v trenutek veselja, skrbi in pozornosti.',
+      s4p2:'Od veganskih formul, ki niso testirane na živalih, do odgovorne embalaže je ta parfum za perilo majhna, a zavestna izbira — vsak dan.',
+      s4q:'Naši vonji niso le dolgotrajni — so izjava o tem, kako se želimo počutiti in živeti.',
+      s5h:'Kako se uporablja',
+      t1:'Stekleničko dobro pretresi',
+      x1:'Pred vsako uporabo stekleničko dobro pretresi, da se aktivira polna koncentracija parfuma.',
+      t2:'Pravilno odmeri',
+      x2:'Nalij 5 ml (približno čajno žličko) v predelek za mehčalec v pralnem stroju. <em>Nikoli ne nanašaj neposredno na tkanino.</em>',
+      t3:'Peri kot običajno',
+      x3:'Uporabi svoj običajni pralni prašek. Ne dodajaj mehčalca &mdash; parfum za perilo ga nadomesti.',
+      t4:'Uživaj v svežini',
+      x4:'Po sušenju oblačila ostanejo odišavljena <em>do 14 dni</em>. Več kot vonj &mdash; izkušnja.',
+      s6h:'Pogosta vprašanja',
+      q1:'Kako se uporablja parfum za perilo?',
+      w1:'Parfum za perilo dodaj neposredno v predelek za mehčalec v pralnem stroju. Priporočen odmerek je <strong>5 ml na 4&ndash;5 kg perila</strong>. Deluje z vsakim pralnim praškom, vendar ga ne kombiniraj z mehčalcem &mdash; ta bi vonj razredčil.',
+      q2:'Kako dolgo vonj ostane na oblačilih?',
+      w2:'Naši parfumi za perilo so zasnovani, da zdržijo <strong>do 14 dni</strong> &mdash; odvisno od vrste tkanine, načina sušenja in uporabljene količine. Bazne note kot ambra, sandalovina in cedra pomagajo vonju, da se ohrani.',
+      q3:'Je primeren za občutljivo kožo in otroška oblačila?',
+      w3:'Da. Vse naše formule so dermatološko testirane in brez parabenov, barvil ter glavnih alergenov. Primerne so za otroška oblačila, posteljnino in tekstil v neposrednem stiku z občutljivo kožo.',
+      q4:'Je parfum za perilo veganski in brez testiranja na živalih?',
+      w4:'Da. Vsi naši parfumi za perilo so <strong>100 % veganski in nikoli testirani na živalih</strong>. Ne uporabljamo sestavin živalskega izvora, proizvodnja pa sledi etičnim in trajnostnim standardom.'
+    },
+    bg:{
+      u1:'0 парабени',
+      u2:'100 % интензивен аромат',
+      u3:'14 дни аромат',
+      d1:'Безплатна доставка при поръчка над 249 RON',
+      d2:'14 дни безплатно връщане',
+      alerth:'Парфюм за пране, който издържа до 14 дни.',
+      alertp:'Превърни всяко пране в малък лукс. Изпробвай сега.',
+      a1h:'Описание',
+      a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Парфюм за пране с дървесни нотки',
+      a1p2:'Adventure Mist 50 ml е парфюм за текстил, създаден за онези, които ценят свежестта и изтънчеността. Съчетава енергията на цитрусовите нотки с флорална нежност и дървесна дълбочина в балансиран и изискан аромат. Задържа се дълго върху дрехите и след всяко пране запазва усещането за чистота и свежест.',
+      n1t:'Връхни нотки',
+      n1v:'Бергамот, мандарина, цитруси, пипер',
+      n2t:'Средни нотки',
+      n2v:'Жасмин, лавандула, хелиотроп, праскова, здравец',
+      n3t:'Базови нотки',
+      n3v:'Сандалово дърво, кедър, уд, ветивер, ванилия, тонка, амбра',
+      n4t:'Ароматен профил',
+      n4v:'Дървесен, цитрусов',
+      n5t:'Характер',
+      n5v:'Топъл и релаксиращ &mdash; идеален за изследване на природата, къмпинг и туризъм',
+      n6t:'Характеристики',
+      n6v:'Outdoor, топъл, релаксиращ, унисекс, вдъхновен от природата, дървесен, цитрусов',
+      a2h:'Състав',
+      a2p1:'&lt; 5 % парфюм (fragrance)<br>Денатуриран разтворител<br>Деминерализирана вода',
+      a3h:'Съответствие на продукта',
+      a3p1:'<strong>Информация за безопасността на продукта:</strong> Не поглъщайте опаковката. Да се съхранява извън обсега на деца &mdash; опасност от задушаване.',
+      a4h:'Указания за безопасност',
+      a4p1:'Да се съхранява извън обсега на деца. ПРИ КОНТАКТ С КОЖАТА: измийте обилно с вода и сапун. При поява на кожно дразнене или обрив: потърсете медицински съвет. Съдържанието и съдът да се изхвърлят в съответствие с местните разпоредби. При необходимост от медицинска помощ носете опаковката или етикета.',
+      payh:'Плащане и сигурност',
+      payp:'Твоите платежни данни се обработват сигурно. Не съхраняваме данните на картата ти и нямаме достъп до банковата ти информация.',
+      m1:'Екологично',
+      m2:'Дерматологично тествано',
+      m3:'Разработено за outdoor',
+      s3sub:'Нека ароматът определя настроението ти, ден след ден.',
+      s3h1:'Подари си',
+      s3hw:'момента',
+      s3h2:', който заслужаваш.',
+      p1:'Подходящ за всички видове тъкани',
+      p2:'Издържа до 14 дни',
+      p3:'Интензивен аромат',
+      p4:'Без парабени',
+      s4ey:'Защо обичаме всяка бутилка',
+      s4h:'С всеки парфюм за пране отглеждаме промяна.',
+      s4p1:'Вярваме, че добре направеният продукт може повече от това да ароматизира дрехите — може да превърне ежедневния навик в момент на радост, грижа и внимание.',
+      s4p2:'От вегански формули, нетествани върху животни, до отговорни опаковки, този парфюм за пране е малък, но осъзнат избор — всеки ден.',
+      s4q:'Нашите аромати не са само дълготрайни — те са изявление за това как искаме да се чувстваме и да живеем.',
+      s5h:'Как се използва',
+      t1:'Разклати бутилката добре',
+      x1:'Преди всяка употреба разклати бутилката добре, за да се активира пълната концентрация на парфюма.',
+      t2:'Дозирай правилно',
+      x2:'Налей 5 ml (около една чаена лъжичка) в отделението за омекотител на пералнята. <em>Никога не прилагай директно върху тъканта.</em>',
+      t3:'Пери както обикновено',
+      x3:'Използвай обичайния си перилен препарат. Не добавяй омекотител &mdash; парфюмът за пране го замества.',
+      t4:'Наслади се на свежестта',
+      x4:'След изсушаване дрехите остават ароматни <em>до 14 дни</em>. Повече от аромат &mdash; преживяване.',
+      s6h:'Често задавани въпроси',
+      q1:'Как се използва парфюмът за пране?',
+      w1:'Добави парфюма за пране директно в отделението за омекотител на пералнята. Препоръчителната доза е <strong>5 ml на 4&ndash;5 kg пране</strong>. Работи с всеки перилен препарат, но не го комбинирай с омекотител &mdash; това би разредило аромата.',
+      q2:'Колко дълго ароматът остава върху дрехите?',
+      w2:'Нашите парфюми за пране са създадени да издържат <strong>до 14 дни</strong> &mdash; в зависимост от вида на тъканта, начина на сушене и използваното количество. Базови нотки като амбра, сандалово дърво и кедър помагат на аромата да се задържи.',
+      q3:'Безопасен ли е за чувствителна кожа и детски дрехи?',
+      w3:'Да. Всички наши формули са дерматологично тествани и без парабени, оцветители и основни алергени. Подходящи са за детски дрехи, спално бельо и текстил в директен контакт с чувствителна кожа.',
+      q4:'Веган ли е парфюмът за пране и без тестове върху животни?',
+      w4:'Да. Всички наши парфюми за пране са <strong>100 % вегански и никога не са тествани върху животни</strong>. Не използваме съставки от животински произход, а производството следва етични и устойчиви стандарди.'
+    }
+  };
+  var t=T[locale];
+  if(!t)return;
+  function txt(s,v){var e=document.querySelector(s);if(e)e.textContent=v;}
+  function ih(s,v){var e=document.querySelector(s);if(e)e.innerHTML=v;}
+  function ihs(s,v){document.querySelectorAll(s).forEach(function(e){e.innerHTML=v;});}
+  /* S1 */
+  txt('.nfp-u1',t.u1);txt('.nfp-u2',t.u2);txt('.nfp-u3',t.u3);
+  txt('.nfp-d1',t.d1);txt('.nfp-d2',t.d2);
+  txt('.nfp-alert-h',t.alerth);txt('.nfp-alert-p',t.alertp);
+  txt('.nfp-a1h',t.a1h);ih('.nfp-a1p1',t.a1p1);txt('.nfp-a1p2',t.a1p2);
+  txt('.nfp-n1t',t.n1t);ih('.nfp-n1v',t.n1v);
+  txt('.nfp-n2t',t.n2t);ih('.nfp-n2v',t.n2v);
+  txt('.nfp-n3t',t.n3t);ih('.nfp-n3v',t.n3v);
+  txt('.nfp-n4t',t.n4t);ih('.nfp-n4v',t.n4v);
+  txt('.nfp-n5t',t.n5t);ih('.nfp-n5v',t.n5v);
+  txt('.nfp-n6t',t.n6t);ih('.nfp-n6v',t.n6v);
+  txt('.nfp-a2h',t.a2h);ih('.nfp-a2p1',t.a2p1);
+  txt('.nfp-a3h',t.a3h);ih('.nfp-a3p1',t.a3p1);
+  txt('.nfp-a4h',t.a4h);txt('.nfp-a4p1',t.a4p1);
+  txt('.nfp-payh',t.payh);txt('.nfp-payp',t.payp);
+  /* S2 — beziaci pas, kazdy text 2x */
+  ihs('.nfp-m1,.nfp-m1b',t.m1);ihs('.nfp-m2,.nfp-m2b',t.m2);ihs('.nfp-m3,.nfp-m3b',t.m3);
+  /* S3 */
+  txt('.nfp-s3sub',t.s3sub);txt('.nfp-s3h1',t.s3h1);txt('.nfp-s3hw',t.s3hw);txt('.nfp-s3h2',t.s3h2);
+  txt('.nfp-p1',t.p1);txt('.nfp-p2',t.p2);txt('.nfp-p3',t.p3);txt('.nfp-p4',t.p4);
+  /* S4 */
+  txt('.nfp-s4ey',t.s4ey);txt('.nfp-s4h',t.s4h);
+  txt('.nfp-s4p1',t.s4p1);txt('.nfp-s4p2',t.s4p2);txt('.nfp-s4q',t.s4q);
+  /* S5 */
+  txt('.nfp-s5h',t.s5h);
+  txt('.nfp-t1',t.t1);ih('.nfp-x1',t.x1);
+  txt('.nfp-t2',t.t2);ih('.nfp-x2',t.x2);
+  txt('.nfp-t3',t.t3);ih('.nfp-x3',t.x3);
+  txt('.nfp-t4',t.t4);ih('.nfp-x4',t.x4);
+  /* S6 */
+  txt('.nfp-s6h',t.s6h);
+  txt('.nfp-q1',t.q1);ih('.nfp-w1',t.w1);
+  txt('.nfp-q2',t.q2);ih('.nfp-w2',t.w2);
+  txt('.nfp-q3',t.q3);ih('.nfp-w3',t.w3);
+  txt('.nfp-q4',t.q4);ih('.nfp-w4',t.w4);
+})();
+</script>
+</div>
+
+{%- endif -%}

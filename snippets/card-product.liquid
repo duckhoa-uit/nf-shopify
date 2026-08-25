@@ -21,135 +21,161 @@
 
       {%- if card_product.media.size > 0 -%}
         {%- liquid
-          # ============================================================
-          # OPTIMIZATION: Single pass media indexing
-          # Instead of multiple loops over media, we do ONE pass to collect:
-          # - model_image_simple: -M without sequence
-          # - model_images_sequenced: -M_N with sequences (stored as string for sorting)
-          # - main_image: exact -H image type for hover
-          # - fallback images by type: H, B, BV, D
-          # ============================================================
-
+          # Canonical front-first order, color-aware:
+          # variant featured (unless B/BV) → H → M → M_N → D_N → BV → B
           assign model_image = null
           assign main_image = null
-          assign model_image_simple = null
-          assign best_sequenced_model = null
-          assign best_sequence_num = 999
-          assign alt_sequenced_model = null
-          assign alt_sequence_num = 999
-          assign fallback_h = null
-          assign fallback_b = null
-          assign fallback_bv = null
-          assign fallback_d = null
+          assign hero_media = null
+          assign model_media = null
+          assign model_sequence_media = null
+          assign detail_media = null
+          assign back_variant_media = null
+          assign back_media = null
+          assign lowest_model_sequence = 999
+          assign lowest_detail_sequence = 999
+          assign card_variant = card_product.selected_or_first_available_variant
+          assign reference_id = ''
 
-          for media in card_product.media
-            assign media_src = media.src | default: ''
-            assign parsed_url = media_src | split: '/' | last | split: '?' | first
-            assign filename_without_extension = parsed_url | split: '.' | first
-            assign filename_parts = filename_without_extension | split: '-'
-            assign image_type_token = filename_parts | last
-            assign image_type_parts = image_type_token | split: '_'
-            assign image_type = image_type_parts.first
-            assign image_sequence = 0
-            if image_type_parts.size > 1
-              assign image_sequence = image_type_parts[1] | plus: 0
+          if card_variant.featured_image
+            assign featured_filename = card_variant.featured_image.src | default: '' | split: '/' | last | split: '?' | first
+            assign featured_is_back = false
+            if featured_filename contains '-BV.' or featured_filename contains '-BV_'
+              assign featured_is_back = true
+            elsif featured_filename contains '-B.' or featured_filename contains '-B_'
+              assign featured_is_back = true
             endif
-
-            # Match the final image-type token so product codes such as MI and BU
-            # are not mistaken for model and back images.
-            if image_type == 'H'
-              if main_image == null
-                assign main_image = media
-              endif
-            endif
-
-            # Check for model images
-            if image_type == 'M'
-              if image_sequence > 0
-                if image_sequence < best_sequence_num
-                  # Track for primary model (lowest sequence)
-                  assign best_sequence_num = image_sequence
-                  assign best_sequenced_model = media
-                endif
-              else
-                # Simple model image (no sequence) - highest priority
-                if model_image_simple == null
-                  assign model_image_simple = media
-                endif
-              endif
-            endif
-
-            # Collect fallback images by type (first match only)
-            if fallback_h == null and image_type == 'H'
-              assign fallback_h = media
-            endif
-            if fallback_b == null and image_type == 'B'
-              assign fallback_b = media
-            endif
-            if fallback_bv == null and image_type == 'BV'
-              assign fallback_bv = media
-            endif
-            if fallback_d == null and image_type == 'D'
-              assign fallback_d = media
-            endif
-          endfor
-
-          # Resolve model_image with priority: simple -M > sequenced -M_N > fallbacks > featured
-          if model_image_simple
-            assign model_image = model_image_simple
-          elsif best_sequenced_model
-            assign model_image = best_sequenced_model
-          elsif fallback_h
-            assign model_image = fallback_h
-          elsif fallback_b
-            assign model_image = fallback_b
-          elsif fallback_bv
-            assign model_image = fallback_bv
-          elsif fallback_d
-            assign model_image = fallback_d
-          else
-            assign model_image = card_product.featured_media
+            unless featured_is_back
+              assign model_image = card_variant.featured_image
+            endunless
           endif
 
-          # Find alternative model for hover if no -H image found
-          unless main_image
-            # Look for a different sequenced model image
-            if best_sequenced_model and model_image_simple
-              # If we used simple model, use sequenced as alternative
-              assign main_image = best_sequenced_model
-            else
-              # Find next lowest sequence model image different from current
-              for media in card_product.media
-                assign media_src = media.src | default: ''
-                assign parsed_url = media_src | split: '/' | last | split: '?' | first
-                assign filename_without_extension = parsed_url | split: '.' | first
-                assign filename_parts = filename_without_extension | split: '-'
-                assign image_type_token = filename_parts | last
-                assign image_type_parts = image_type_token | split: '_'
-                assign image_type = image_type_parts.first
-                assign image_sequence = 0
-                if image_type_parts.size > 1
-                  assign image_sequence = image_type_parts[1] | plus: 0
-                endif
-                if image_type == 'M' and image_sequence > 0 and media.id != model_image.id
-                  if image_sequence < alt_sequence_num
-                    assign alt_sequence_num = image_sequence
-                    assign alt_sequenced_model = media
-                  endif
-                endif
-              endfor
-
-              if alt_sequenced_model
-                assign main_image = alt_sequenced_model
-              else
-                assign main_image = model_image
+          if card_variant.sku != blank
+            assign sku_parts = card_variant.sku | split: '-'
+            assign reference_index = sku_parts.size | minus: 2
+            if reference_index >= 0
+              assign sku_reference_id = sku_parts[reference_index] | strip
+              assign sku_reference_number = sku_reference_id | plus: 0
+              if sku_reference_number > 0
+                assign reference_id = sku_reference_id
               endif
             endif
-          endunless
+          endif
 
-          # Check if we have a real hover image
+          if reference_id == '' and card_product.metafields.custom.color.value != blank
+            assign variant_color_value = card_variant.option1 | default: '' | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
+            for color_item in card_product.metafields.custom.color.value
+              assign handle_root = color_item.system.handle | split: '-' | first | downcase
+              if color_item.name == variant_color_value or handle_root == variant_color_value
+                assign reference_id = color_item.reference_id
+                break
+              endif
+            endfor
+          endif
+
+          if reference_id != ''
+            assign reference_token = '-' | append: reference_id | append: '-'
+            for media in card_product.media
+              assign media_src = media.src | default: ''
+              assign filename = media_src | split: '/' | last | split: '?' | first
+              if filename contains reference_token
+                assign type_token = filename | split: reference_token | last | split: '.' | first
+                assign type_parts = type_token | split: '_'
+                assign type_name = type_parts.first
+                assign type_sequence = 0
+                if type_parts.size > 1
+                  assign type_sequence = type_parts[1] | plus: 0
+                endif
+
+                if type_name == 'H' and hero_media == null
+                  assign hero_media = media
+                elsif type_name == 'M'
+                  if type_sequence > 0
+                    if type_sequence < lowest_model_sequence
+                      assign lowest_model_sequence = type_sequence
+                      assign model_sequence_media = media
+                    endif
+                  elsif model_media == null
+                    assign model_media = media
+                  endif
+                elsif type_name == 'D' and type_sequence > 0
+                  if type_sequence < lowest_detail_sequence
+                    assign lowest_detail_sequence = type_sequence
+                    assign detail_media = media
+                  endif
+                elsif type_name == 'BV' and back_variant_media == null
+                  assign back_variant_media = media
+                elsif type_name == 'B' and back_media == null
+                  assign back_media = media
+                endif
+              endif
+            endfor
+          endif
+
+          if model_image == null
+            assign model_image = hero_media | default: model_media | default: model_sequence_media | default: detail_media | default: back_variant_media | default: back_media
+          endif
+
+          assign main_image = model_media | default: model_sequence_media
+          if main_image == null
+            if hero_media != blank and model_image != blank and hero_media.id != model_image.id
+              assign main_image = hero_media
+            else
+              assign main_image = detail_media
+            endif
+          elsif model_image != blank and main_image.id == model_image.id
+            if hero_media != blank and hero_media.id != model_image.id
+              assign main_image = hero_media
+            else
+              assign main_image = detail_media
+            endif
+          endif
+
+          if model_image == null
+            assign fallback_h = null
+            assign fallback_m = null
+            assign fallback_m_seq = null
+            assign fallback_m_seq_num = 999
+            assign fallback_d = null
+            assign fallback_bv = null
+            assign fallback_b = null
+            for media in card_product.media
+              assign filename = media.src | default: '' | split: '/' | last | split: '?' | first
+              if filename contains '-H.' or filename contains '-H_'
+                if fallback_h == null
+                  assign fallback_h = media
+                endif
+              elsif filename contains '-M.'
+                if fallback_m == null
+                  assign fallback_m = media
+                endif
+              elsif filename contains '-M_'
+                assign seq_part = filename | split: '-M_' | last | split: '.' | first | split: '_' | first | plus: 0
+                if seq_part > 0 and seq_part < fallback_m_seq_num
+                  assign fallback_m_seq_num = seq_part
+                  assign fallback_m_seq = media
+                endif
+              elsif filename contains '-D_'
+                if fallback_d == null
+                  assign fallback_d = media
+                endif
+              elsif filename contains '-BV.' or filename contains '-BV_'
+                if fallback_bv == null
+                  assign fallback_bv = media
+                endif
+              elsif filename contains '-B.' or filename contains '-B_'
+                if fallback_b == null
+                  assign fallback_b = media
+                endif
+              endif
+            endfor
+            assign model_image = fallback_h | default: fallback_m | default: fallback_m_seq | default: fallback_d | default: fallback_bv | default: fallback_b | default: card_product.featured_media
+            if main_image == null
+              assign main_image = fallback_m | default: fallback_m_seq | default: fallback_h
+            endif
+          endif
+
           assign has_real_main_image = false
-          if main_image and main_image.id != model_image.id
+          if main_image and model_image and main_image.id != model_image.id
             assign has_real_main_image = true
           endif
         -%}

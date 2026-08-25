@@ -1,0 +1,1210 @@
+{% comment %}
+ EComposer (https://ecomposer.io)
+ You SHOULD NOT modify source code in this page because
+ It is automatically generated from EComposer
+ At 2026-08-25 08:36:21
+ {% endcomment %} 
+ 
+ {% assign ecom_root_url = routes.root_url %}
+ {% if ecom_root_url != '/'%}
+ {% assign ecom_root_url = routes.root_url | append: '/' %}
+ {% endif %}
+ {% assign translation = metaobjects['app--6509291--ecom_translation']['app--6509291--ecom-translation-d9sqkfvi'].data.value %}
+ <link rel="stylesheet" media="print" onload="this.media='all'" id="ecom-vendors-simple_slider_css" href="https://cdn.ecomposer.app/vendors/css/ec_splide.min.css?ver=3.0" /><link rel="stylesheet" media="print" onload="this.media='all'" id="ecom-vendors-modal_css" href="https://cdn.ecomposer.app/vendors/css/ecom_modal.css" /><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" onload="this.media='all'" id="ecom-vendors-simple_slider_css" href="https://cdn.ecomposer.app/vendors/css/ec_splide.min.css?ver=3.0" /><link rel="stylesheet" media="all" onload="this.media='all'" id="ecom-vendors-modal_css" href="https://cdn.ecomposer.app/vendors/css/ecom_modal.css" /><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript><script type="text/javascript" id="ecom-vendors-simple_slider_js" src="https://cdn.ecomposer.app/vendors/js/ec-splide.min.js?ver=3.0" ></script><script type="text/javascript" id="ecom-vendors-modal_js" src="https://cdn.ecomposer.app/vendors/js/ecom_modal_new.js" ></script><script type="text/javascript" id="ecom-vendors-zoom_js" src="https://cdn.ecomposer.app/vendors/js/ecom_zoom.js" ></script><script type="text/javascript" id="ecom-vendors-light_galerry" src="https://cdn.ecomposer.app/vendors/js/ecom-light-galerry.js" ></script>
+{%capture section_id %}ecom-6a8bf61ed53c80c7480d5252-product{% endcapture%}{% if section and section_id == section.id and headless == true %}
+{{ content_for_header }}
+{% render 'ecom_header', ECOM_THEME: true %}{% endif %}
+{{'ecom-6a8bf61ed53c80c7480d5252.css' | asset_url | stylesheet_tag }}
+<script src="{{'ecom-6a8bf61ed53c80c7480d5252.js' | asset_url }}" defer="defer"></script>
+<script type="text/javascript" class="ecom-page-info">
+ window.EComposer = window.EComposer || {};
+ window.EComposer.TEMPLATE_ID="6a8bf61ed53c80c7480d5252";
+ window.EComposer.TEMPLATE = {"title":"perfume","type":"product","slug":"ecom-6a8bf61ed53c80c7480d5252","plan_id":4,"template_id":"6a8bf61ed53c80c7480d5252"};
+ </script>
+<div class="ecom-builder" id="ecom-6a8bf61ed53c80c7480d5252"><div class="ecom-sections" data-section-id="{{section.id}}">
+ {% comment %}
+ // Reactive
+ * this.data.settings.product
+ {% endcomment %}
+ {% liquid
+ unless recommendations.performed
+ if request.page_type != 'product' or product == blank
+ assign selected_product = 'lp-10012sp-laundry-perfume-active-fresh-50ml'
+ if selected_product == blank or selected_product == '' or all_products[selected_product] == blank
+ assign product = collections['all'].products.first
+ else
+ assign product = all_products[selected_product]
+ if product.id == blank
+ assign product = collections['all'].products.last
+ endif
+ endif
+ endif
+ endunless
+ %}
+ {%- if product != blank -%}
+ {%- capture ec_form_id -%}product_form_{{ product.id }}_ecom-5j8cuw4qp4w{%- endcapture -%}
+ {%- form 'product', product, id: ec_form_id, class: "ecom-product-form ecom-product-form--single ecom-click", product_id: product.id, data-product_id: product.id,data-product-id: product.id, data-handle: product.handle-%}
+ <section class="ecom-row ecom-core ecom-section ecom-5j8cuw4qp4w" data-id="ecom-5j8cuw4qp4w" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first ecom-5etpc8tn42"><div class="core__column--wrapper" id="ecom-5etpc8tn42"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-78p86twv3am"><div class="ecom-row ecom-core core__block ecom-x55uge9ekeg" data-id="ecom-x55uge9ekeg" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first ecom-3cbyw95i1pw"><div class="core__column--wrapper" id="ecom-3cbyw95i1pw"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-zyfenvayjke" ec-delay="500"><div class="ecom-element ecom-product-single ecom-product-single__media" section_id="ecom-5j8cuw4qp4w" deep="2"><div class="ecom-product-single__media-wrapper "><div class="ecom-product-single__media-container ecom-product-single__media--grid_default ecom-product-single__media--horizontal ecom-product-single__media-tablet--horizontal ecom-product-single__media-mobile--horizontal"><div class="ecom-product-single__media--featured" data-priority="featured">
+ {% comment %}
+ Reactivity
+ *this.data.settings.image_action
+ *this.data.settings.enable_zoom
+ {% endcomment %}
+ 
+ {%- liquid
+ if product.has_only_default_variant
+ assign target = product
+ else
+ assign target = product.selected_or_first_available_variant
+ endif
+ -%}
+ 
+ 
+ <div class="ecom-product-single__zoom-icon-wrapper ecom-pa ecom-flex ecom-zoom-position__bottomright">
+ <div class="ecom-product-single__zoom-icon ecom-flex">
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor"><path d="M 4 4 L 4 13 L 6 13 L 6 7.4375 L 14.5625 16 L 6 24.5625 L 6 19 L 4 19 L 4 28 L 13 28 L 13 26 L 7.4375 26 L 16 17.4375 L 24.5625 26 L 19 26 L 19 28 L 28 28 L 28 19 L 26 19 L 26 24.5625 L 17.4375 16 L 26 7.4375 L 26 13 L 28 13 L 28 4 L 19 4 L 19 6 L 24.5625 6 L 16 14.5625 L 7.4375 6 L 13 6 L 13 4 Z"></path></svg>
+ </div>
+ </div>
+ 
+ 
+ {% assign img_padding = 2 | times: 1 %}
+ {% assign img_padding__tablet = 1 | times: 1 %}
+ {% assign img_padding__mobile = 1 | times: 1 %}
+ <div class="ecom-swiper-wrapper ecom-product-single__media--images ecom-swiper-wrapper ecom-product-single__media--images-grid ecom-flex fl_wrap{% if product.images.size == 1 %} ecom-product-single__only{% endif %}">
+ {% assign use_limit = true %}
+ {% assign limit_images = 4 %}
+ {% for image in product.images %}
+ {%if use_limit and forloop.index > limit_images%}{% break %}{% endif %}
+ {% assign loading = "lazy" %}
+ {% assign fetchpriority = 'auto'%}
+ {% if forloop.index < 3 %}
+ {% assign fetchpriority = 'high'%}
+ {% assign loading = "eager" %}
+ {% endif %}
+ {% assign img_ration = 1 | divided_by: image.aspect_ratio | times: 100 %}
+ <div
+ class="ec_splide__slide ecom-product-single__media--image ecom-splide-slide ecom-flex ecom-image-align-center ecom-image-align---tablet ecom-image-align---mobile ecom-col-lg-6" data-index="{{forloop.index0}}" data-variant_id="{{ image.variants | map:'id' | join: ',' }}" style="--img_padding: {{ img_ration | divided_by: img_padding }}%;--img_padding__tablet: {{ img_ration | divided_by: img_padding__tablet }}%;--img_padding__mobile: {{ img_ration | divided_by: img_padding__mobile }}%"
+ >
+ 
+ 
+ {%- assign img_master = image | image_url: width: 2048 -%}
+ {{ image | image_url: width: 1946 | image_tag:
+ sizes: sizes,
+ widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946',
+ class: 'ecom-image-default'
+ ,ecom-modal-source:img_master , ecom-modal:'image'
+ ,loading: loading
+ ,fetchpriority: fetchpriority
+ ,alt: image.alt | escape
+ }}
+ 
+ 
+ </div>
+ {% endfor %}
+ {%- for media in product.media -%}
+ {% assign media_ration = 1 | divided_by: media.aspect_ratio | times: 100 %}
+ {% case media.media_type %}
+ {% when 'image' %}
+ {% continue %}
+ {% when 'external_video'%}
+ <div class="ec_splide__slide ecom-product-single__media--image ecom-splide-slide ecom-flex ecom-image-align-center ecom-image-align---tablet ecom-image-align---mobile ecom-col-lg-6 ecom-product-single__media---external-video ecom-product-single__media--full" data-position="{{media.position}}" style="padding-top: 56%;" ecom-modal='iframe'>
+ {{ media | external_video_tag: image_size:'master' }}
+ </div>
+ {% when 'video' %}
+ {% assign videoUrl = '' %}
+ {% for source in media.sources %}
+ {% if source.format == "mp4" %}
+ {% assign videoUrl = source.url %}
+ {% break %}
+ {% endif %}
+ {% endfor %}
+ <div data-stopdrag="true" class="ec_splide__slide ecom-product-single__media--image ecom-splide-slide ecom-flex ecom-image-align-center ecom-image-align---tablet ecom-image-align---mobile ecom-col-lg-6 ecom-product-single__media--video ecom-product-single__media--full ecom-swiper-no-swiping" data-position="{{media.position}}" style="--img_padding: {{ media_ration | divided_by: img_padding }}%;--img_padding__tablet: {{ media_ration | divided_by: img_padding__tablet }}%;--img_padding__mobile: {{ media_ration | divided_by: img_padding__mobile }}%" ecom-modal-source="{{videoUrl}}" ecom-modal='video'>
+ {{ media | video_tag: image_size:'master', class: 'ecom-media-video', controls: false, autoplay: true, muted: undefined,loop: undefined }}
+ <button class="ecom-product-single__media--play-control"
+ type="button"
+ >
+ <span class="ecom-product-single__media--play-control-wrapper">
+ <span class="visually-hidden">Play video</span>
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><defs><style>.fa-secondary{opacity:.4}</style></defs><path class="fa-primary" d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z"></path></svg>
+ </span>
+ </button>
+ </div>
+ {% when 'model' %}
+ <div class="ec_splide__slide ecom-product-single__media--image ecom-splide-slide ecom-flex ecom-image-align-center ecom-image-align---tablet ecom-image-align---mobile ecom-col-lg-6 ecom-swiper-no-swiping ecom-product-single__media--model ecom-product-single__media--full" data-stopdrag="true" data-position="{{media.position}}">
+ <div class="ecom-product-single__media--model-wrapper">
+ {{ media | model_viewer_tag: image_size:'master', reveal: 'interaction', toggleable: true, data-model-id: media.id }}
+ </div>
+ </div>
+ {% else %}
+ <div data-media-type="{{media.media_type}}" class="ec_splide__slide ecom-product-single__media--image ecom-splide-slide ecom-flex ecom-image-align-center ecom-image-align---tablet ecom-image-align---mobile ecom-col-lg-6 ecom-swiper-no-swiping ecom-product-single__media--full" data-position="{{media.position}}">
+ <div class="ecom-product-single__media" style="--img_padding: {{ media_ration | divided_by: img_padding }}%;--img_padding__tablet: {{ media_ration | divided_by: img_padding__tablet }}%;--img_padding__mobile: {{ media_ration | divided_by: img_padding__mobile }}%;">
+ {{ media | media_tag: image_size:'master', class: 'ecom-product-single__media--item' }}
+ </div>
+ </div>
+ {% endcase %}
+ {%- endfor -%}
+ </div>
+ </div></div></div><div class="ecom-hidden-content">
+ <script type="application/json" id="Product-model-{{ product.id }}">
+ {{ product.media | where: 'media_type', 'model' | json }}
+ </script>
+ </div></div></div> </div></div></div></div> <div class="ecom-column ecom-core core__column--last ecom-w32t9ys9mol"><div class="core__column--wrapper" id="ecom-w32t9ys9mol"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-35kgssbekb7"><div class="ecom-element ecom-product-single ecom-product-single__title" section_id="ecom-5j8cuw4qp4w" deep="2"><div class="ecom-product-single__title-wrapper"><div class="ecom-product-single__title-container"><h1 class="ecom-product__heading" href="{{ product.url }}" title="{{ product.title }}">{{ product.title }}</h1></div></div></div></div> <div class="ecom-block ecom-core core__block ecom-iwbr1l9zxpk"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-5j8cuw4qp4w" deep="2">{%- assign custom_catalog_code = product.metafields.custom.catalog_code.value-%}{%- assign custom_reference_code = product.metafields.custom.reference_code.value-%}<div class="text-content ecom-html has-drop-cap-view-framed">{{ translation.ecom-5j8cuw4qp4w.ecom-iwbr1l9zxpk.textcontent | replace: '((custom_catalog_code))',custom_catalog_code | replace: '((custom_reference_code))',custom_reference_code }}</div></div></div> <div class="ecom-block ecom-core core__block ecom-io1nlymdbcc" ec-delay="600"><div class="ecom-element ecom-product-single ecom-product-single__price" section_id="ecom-5j8cuw4qp4w" deep="2"><div class="ecom-product-single__price-wrapper"><div class="ecom-product-single__price-container"><div class="ecom-product-single__price-container-grid"><div class="ecom-product-single ecom-product-single__price--prices">
+ 
+ {%- liquid
+ if product.has_only_default_variant
+ assign target = product
+ else
+ assign target = product.selected_or_first_available_variant
+ endif
+ -%}
+ <div class="ecom-product-single__price--sale {% if target.compare_at_price == nil or target.compare_at_price <= target.price %} ecom-product-single__price-normal {% endif %}" data-price="{{target.price}}">
+ {%- if settings.currency_code_enabled -%}
+ {{target.price | money_with_currency}}
+ {%- else -%}
+ {{target.price| money }}
+ {%- endif -%}
+ </div>
+ 
+ 
+ <div class="ecom-product-single__price--regular" {%- if target.compare_at_price == nil or target.compare_at_price <= target.price -%} style="display:none" {% endif %}>
+ {%- if settings.currency_code_enabled -%}
+ {{target.compare_at_price | money_with_currency}}
+ {%- else -%}
+ {{target.compare_at_price | money }}
+ {%- endif -%}
+ </div>
+ 
+ {%- capture taxes_text -%}{{ translation.ecom-5j8cuw4qp4w.ecom-io1nlymdbcc.include_taxes }}{%- endcapture -%}
+ 
+ {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+ {% if taxes_text %}
+ <div class="ec-product__tax caption rte">
+ {%- if shop.taxes_included -%}
+ {{ translation.ecom-5j8cuw4qp4w.ecom-io1nlymdbcc.include_taxes }}
+ {%- endif -%}
+ {%- if shop.shipping_policy.body != blank -%}
+ {{ translation.ecom-5j8cuw4qp4w.ecom-io1nlymdbcc.shipping_policy | replace: '((link))',shop.shipping_policy.url }}
+ {%- endif -%}
+ </div>
+ {%- endif -%}
+ {%- endif -%}
+ 
+ </div><div class="ecom-product-single__price--badges-wrapper">
+ 
+ <div class="ecom-product-single__price--badges">
+ {%- assign savings = target.compare_at_price | minus: target.price | times: 100.0 | divided_by: target.compare_at_price | round -%}
+ 
+ <span class="ecom-product-single__price--badges-sale" data-have-sale="{%- unless target.compare_at_price == nil or target.compare_at_price <= target.price or target.available != true -%}true{%endunless%}" data-text=" {{ translation.ecom-5j8cuw4qp4w.ecom-io1nlymdbcc.product_single_sale_text }}" data-sale="{{savings}}" data-type="percent" style="{%- unless target.compare_at_price == nil or target.compare_at_price <= target.price or target.available != true -%} display: none;{% endunless %}">
+ {{ translation.ecom-5j8cuw4qp4w.ecom-io1nlymdbcc.product_single_sale_text }}
+ </span>
+ <span class="ecom-product-single__price--badges-sold-out" {% if target.available %} style="display:none" {% endif %}>
+ {{ translation.ecom-5j8cuw4qp4w.ecom-io1nlymdbcc.product_single_sold_text }}
+ </span>
+ </div>
+ </div></div><div class="ecom-product-single-afterpay">
+ 
+ </div></div></div></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-2qd0les53cs"><div class="ecom-row ecom-core core__block ecom-nzt7sov2kkn" data-id="ecom-nzt7sov2kkn" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-vo0fddz3tc"><div class="core__column--wrapper" id="ecom-vo0fddz3tc"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-ptd2x2u6hki"><div class="ecom__element element__heading ecom-element ecom-html ecom-type-deffault" section_id="ecom-5j8cuw4qp4w" deep="3"><h3 class="ecom__heading ecom-db">{{ translation.ecom-5j8cuw4qp4w.ecom-ptd2x2u6hki.headingtext }}</h3></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-idbqm3kd3r"><div class="ecom-row ecom-core core__block ecom-dsn28837649" data-id="ecom-dsn28837649" style="z-index: inherit;"><div class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-ljsrwmj4duh"><div class="core__column--wrapper" id="ecom-ljsrwmj4duh"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block ecom-8gfk68c1tq9"><div class="ecom-element ecom-product-single ecom-product-single__variant-picker" section_id="ecom-5j8cuw4qp4w" deep="4"><div class="ecom-product-single__variant-picker-wrapper ecom_not_hide_dropdown_arrow"><div class="ecom-product-single__variant-picker-container {% if product.has_only_default_variant%} ecom-product-single__variant-picker--only-default{% endif%} " data-picker-type="image" data-ecom-placeholder="">
+ {%- liquid
+ assign ecom_has_variant_picker = true
+ assign tag_name = 'script'
+ assign variant_selected = product.selected_or_first_available_variant
+ assign checkIsHighVariant = false
+ if product.variants_count > 250
+ assign checkIsHighVariant = true
+ endif
+ -%}
+ {% if checkIsHighVariant %}
+ <div data-high-variant-product="{{ checkIsHighVariant }}"></div>
+ <{{tag_name}} type="application/json" data-selected-variant>
+ {
+ "id": {{ variant_selected.id | json }},
+ "title": {{ variant_selected.title | json }},
+ "price": {{ variant_selected.price | json }},
+ "available": {{ variant_selected.available | json }},
+ "compare_at_price": {{ variant_selected.compare_at_price | json }},
+ "featured_image": {{ variant_selected.featured_image | json }},
+ "featured_media": {{ variant_selected.featured_media | json }},
+ "sku": {{ variant_selected.sku | json }},
+ "barcode": {{ variant_selected.barcode | json }},
+ "options": {{ variant_selected.options | json }},
+ "option1": {{ variant_selected.option1 | json }},
+ "option2": {{ variant_selected.option2 | json }},
+ "option3": {{ variant_selected.option3 | json }},
+ "inventory_management": {{ variant_selected.inventory_management | json }},
+ "inventory_policy": {{ variant_selected.inventory_policy | json }},
+ "inventory_quantity": {{ variant_selected.inventory_quantity | json }},
+ "requires_selling_plan": {{ variant_selected.requires_selling_plan | json }},
+ "selling_plan_allocations": {{ variant_selected.selling_plan_allocations | json }},
+ "quantity_rule": {
+ "min": {{ variant_selected.quantity_rule.min | json }},
+ "max": {{ variant_selected.quantity_rule.max | json }},
+ "increment": {{ variant_selected.quantity_rule.increment | json }}
+ },
+ "unit_price": {{ variant_selected.unit_price | json }},
+ "unit_price_measurement": {{ variant_selected.unit_price_measurement | json }}
+ }
+ </{{tag_name}}>
+ {% endif %}
+ <div class="ecom-product-single__variant-picker--main">
+ {%- capture swatch_option_temp -%}{{ translation.ecom-5j8cuw4qp4w.ecom-8gfk68c1tq9.product_option_swatch }}{%- endcapture-%}
+ {%- assign swatch_option_temp = swatch_option_temp | split: ',' -%}
+ {% assign swatch_option = "" %}
+ {% for item in swatch_option_temp %}
+ {% assign normalizedItem = item | strip %}
+ {% assign swatch_option = swatch_option | append: normalizedItem %}
+ {% unless forloop.last %}
+ {% assign swatch_option = swatch_option | append: ',' %}
+ {% endunless %}
+ {% endfor %}
+ {%- assign swatch_option = swatch_option | split: ',' -%}
+ {% unless product.has_only_default_variant %}
+ {%- for option in product.options_with_values -%}
+ {%- if swatch_option contains option.name -%}
+ {% assign option_index = option.position | minus: 1 %}
+ <div class="ecom-product-single__picker-main ecom-product-single__picker-option-{{option.name | handleize }}">
+ <span class="ecom-product-single__picker-main-label ecom-product-single__picker--option-label" data-option-index="{{option_index}}">
+ <span class="ecom-product-variant--option-label-text">{{ option.name }}</span>
+ </span>
+ <ul class="ecom-product-single__picker-images-list">
+ {%- for option_value in option.values -%}
+ {%- assign option_variant = option_value.variant -%}
+ <li data-option-index="{{ option_index }}"
+ class="ecom-image-default ecom-product-single__swatch-item ecom-product-single__picker-images-item {% if option_value.selected %}ecom-image-active{% endif %} "
+ data-value="{{ option_value | escape }}"
+ data-option-value-id="{{ option_value.id }}"
+ data-product-url="{{ option_value.product_url }}">
+ <img src="{{ option_variant.featured_image | default: product.featured_image | image_url: width: 360 , crop: 'center' }}" alt="{{ option_value }}" />
+ </li>
+ {%- endfor -%}
+ </ul>
+ </div>
+ {% continue %}
+ {%-endif-%}
+ {% assign option_index = option.position | minus: 1 %}
+ <div class="ecom-product-single__picker-option-{{option.name | handleize }}">
+ <span class="ecom-product-single__picker-dropdown-label ecom-product-single__picker--option-label" data-option-index="{{option_index}}">
+ <span class="ecom-product-variant--option-label-text">{{option.name}}</span>
+ </span>
+ 
+ <select class="ecom-product-single__swatch-select ecom-product-single__picker-dropdown-list" data-option-index="{{ option_index }}" aria-label="Variants">
+ {% for option_value in option.values %}
+ <option value="{{option_value | escape }}"
+ {% if option_value.selected %}selected="selected"{% endif %}
+ {% unless option_value.available %}disabled{% endunless %}
+ data-option-value-id="{{ option_value.id }}"
+ data-product-url="{{ option_value.product_url }}">
+ {{option_value}}
+ </option>
+ {% endfor %}
+ </select>
+ 
+ </div>
+ {%- endfor -%}
+ {% endunless %}
+ </div><div class="ecom-product-single__variant-picker--options">
+ {%- if product.variants_count > 250 -%}
+ <input type="hidden" name="id" value="{{ variant_selected.id }}"
+ data-product-id="{{product.id}}"
+ data-json-product="product-json-{{product.id}}-ecom-8gfk68c1tq9"
+ id="ecom-variant-selector-{{product.id}}-ecom-8gfk68c1tq9"
+ ec-variants={{ product.variants_count }}
+ >
+ {%- else -%}
+ <select name="id"
+ class="ecom-product-single-select-id {% if product.has_only_default_variant %} ecom-product-single__picker-default-variant {% endif %}"
+ data-product-id="{{product.id}}"
+ data-json-product="product-json-{{product.id}}-ecom-8gfk68c1tq9"
+ id="ecom-variant-selector-{{product.id}}-ecom-8gfk68c1tq9"
+ >
+ {% unless product.has_only_default_variant %}
+ 
+ {% endunless %}
+ {% for variant in product.variants %}
+ <option value="{{variant.id}}"
+ {% if variant_selected.id == variant.id %}selected="selected"{% endif %}>
+ {{variant.title}}
+ </option>
+ {% endfor %}
+ </select>
+ {%- endif -%}
+ {% unless product.has_only_default_variant %}
+ {%- for option in product.options_with_values -%}
+ {% assign option_index = option.position | minus: 1 %}
+ <div class="selector-wrapper">
+ <label for="ecom-variant-selector-{{product.id}}-ecom-8gfk68c1tq9-option-{{option_index}}"><span class="ecom-product-variant--option-label-text">{{option.name}}</span></label>
+ <select class="single-option-selector"
+ id="ecom-variant-selector-{{product.id}}-ecom-8gfk68c1tq9-option-{{option_index}}"
+ data-option-index="{{option_index}}">
+ {% for option_value in option.values %}
+ <option value="{{option_value | escape}}"
+ {% if option_value.selected %}selected="selected"{% endif %}
+ 
+ data-option-value-id="{{option_value.id}}"
+ data-product-url="{{option_value.product_url}}">
+ {{option_value}}
+ </option>
+ {% endfor %}
+ </select>
+ </div>
+ {%- endfor -%}
+ {% endunless %}
+ </div><div class="ecom-product-single__variant-picker--json">
+ <script type="application/json" id="product-json-{{product.id}}-ecom-8gfk68c1tq9">
+ {%- render "ecom_product_json", product: product, checkIsHighVariant: checkIsHighVariant -%}
+ </script>
+ </div></div></div></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> <div class="ecom-block ecom-core core__block elmspace ecom-573r7dif39p"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-5j8cuw4qp4w" deep="3">{% render 'perfume-product-family-picker-ecomposer',
+ product: product,
+ instance_id: 'EComposerPerfumeFamilyPicker'
+%}</div></div> <div class="ecom-block ecom-core core__block elmspace ecom-1vm5plzebb"><div class="ecom-element ecom-product-single ecom-product-single__add-to-cart" section_id="ecom-5j8cuw4qp4w" deep="3"><div class="ecom-product-single__add-to-cart-wrapper"><div class="ecom-product-single__add-to-cart-container"><div class="ecom-product-single__add-to-cart-buttons"><div class="ecom-product-single__add-to-cart-buttons-wrapper"><button type="submit" class="ecom-product-single__add-to-cart--submit ecom-flex animated" data-text-add-cart="{{ translation.ecom-5j8cuw4qp4w.ecom-1vm5plzebb.add_to_cart }}" data-text-pre-order="{{ translation.ecom-5j8cuw4qp4w.ecom-1vm5plzebb.pre_order }}" data-text-unavailable="{{ translation.ecom-5j8cuw4qp4w.ecom-1vm5plzebb.product_unavailable }}" data-text-outstock="{{ translation.ecom-5j8cuw4qp4w.ecom-1vm5plzebb.out_stock }}" data-text-added-cart="{{ translation.ecom-5j8cuw4qp4w.ecom-1vm5plzebb.added_cart_text }}" data-message-added-cart="{{ translation.ecom-5j8cuw4qp4w.ecom-1vm5plzebb.added_cart_message }}" data-href="#" data-target="" data-action="popup" data-variant-id="{{product.first_available_variant.id}}" name="add"><span class="ecom-add-to-cart-text">{{ translation.ecom-5j8cuw4qp4w.ecom-1vm5plzebb.add_to_cart }}</span><span class="ecom__element--button-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" fill="currentColor"><path d="M423.3 440.7c0 25.3-20.3 45.6-45.6 45.6s-45.8-20.3-45.8-45.6 20.6-45.8 45.8-45.8c25.4 0 45.6 20.5 45.6 45.8zm-253.9-45.8c-25.3 0-45.6 20.6-45.6 45.8s20.3 45.6 45.6 45.6 45.8-20.3 45.8-45.6-20.5-45.8-45.8-45.8zm291.7-270C158.9 124.9 81.9 112.1 0 25.7c34.4 51.7 53.3 148.9 373.1 144.2 333.3-5 130 86.1 70.8 188.9 186.7-166.7 319.4-233.9 17.2-233.9z"></path></svg></span></button></div></div></div></div></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-yekqvntnat"><div class="ecom-element ecom-base-image" section_id="ecom-5j8cuw4qp4w" deep="3"><figure><div class="ecom-container-image ecom-image-align"><div class="ecom-image-content-position ecom-image-default ecom-base-image-container-overlay" style=""><picture class="ecom-image-picture"><img class="" loading="lazy" fetchpriority="low" src="https://cdn.shopify.com/s/files/1/0623/8303/0317/files/ecom-no-replace-Lazn7IJufMFrame_155.png?v=1727418644" alt="ecom-no-replace-Lazn7IJufMFrame_155"></picture></div></div></figure></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> <div class="ecom-block ecom-core core__block elmspace ecom-j5o0lsff4ns"><div class="ecom-core ecom-group core__block ecom-jxv2glhh25"> <div class="core__group--wrapper ecom-accordion__wrapper ecom-flex ecom-column ecom-w__full ecom__element ecom__accordion" data-r="" style=""><div class="core__group--items"><div id="ecom-in7tyw9y05" class="core__group--item ecom-accordion__item ecom-item-active ecom-item-group-init" data-id="ecom-in7tyw9y05" style=""><div class="ecom-accordion__title ecom-flex ecom-w__full ecom-al_center ecom-items ecom-item-active" data-target="#undefined" data-target-id="#ecom-in7tyw9y05"><div class="ecom-accordion_nav--icon ecom-items--icon" style="order: 1;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M288 224H480C497.7 224 512 238.3 512 256C512 273.7 497.7 288 480 288H288V480C288 497.7 273.7 512 255.1 512C238.3 512 223.1 497.7 223.1 480V288H32C14.33 288 0 273.7 0 256C0 238.3 14.33 224 32 224H223.1V32C223.1 14.33 238.3 0 255.1 0C273.7 0 288 14.33 288 32V224z"></path></svg></div><div class="ecom-accordion_nav--icon ecom-items--icon ecom-items-icon-active" style="order: 1;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M400 288h-352c-17.69 0-32-14.32-32-32.01s14.31-31.99 32-31.99h352c17.69 0 32 14.3 32 31.99S417.7 288 400 288z"></path></svg></div><div class="ecom-accordion_wrapper-info ecom-flex ecom-al_center"><span class="ecom-items--icon ecom-accordion_icon-title" data-image="false"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M15.2709 5.10002L11.9709 1.80002C11.7863 1.61161 11.5347 1.50378 11.2709 1.50002H10.0709C9.93213 1.49908 9.79466 1.52705 9.66726 1.58214C9.53986 1.63724 9.42532 1.71825 9.33094 1.82002L9.29094 1.86002C8.59094 2.56002 7.43093 2.56002 6.73094 1.86002L6.68093 1.82002C6.5877 1.71949 6.47478 1.6392 6.3492 1.58415C6.22361 1.5291 6.08805 1.50046 5.95093 1.50002H4.76094C4.62695 1.49924 4.49416 1.52539 4.37048 1.57693C4.24679 1.62846 4.13473 1.70433 4.04094 1.80002L0.740935 5.10002C0.557708 5.28695 0.455078 5.53827 0.455078 5.80002C0.455078 6.06178 0.557708 6.31309 0.740935 6.50002L2.40094 8.16002C2.57947 8.33846 2.81887 8.44278 3.07112 8.45206C3.32336 8.46133 3.56978 8.37487 3.76094 8.21002V13.5C3.76094 13.7652 3.86629 14.0196 4.05383 14.2071C4.24136 14.3947 4.49572 14.5 4.76094 14.5H11.2609C11.5262 14.5 11.7805 14.3947 11.968 14.2071C12.1556 14.0196 12.2609 13.7652 12.2609 13.5V8.22002C12.4527 8.3807 12.6977 8.46366 12.9476 8.45256C13.1975 8.44145 13.4342 8.33707 13.6109 8.16002L15.2709 6.51002C15.3647 6.41706 15.4391 6.30646 15.4898 6.1846C15.5406 6.06274 15.5667 5.93203 15.5667 5.80002C15.5667 5.66801 15.5406 5.53731 15.4898 5.41545C15.4391 5.29359 15.3647 5.18299 15.2709 5.09002V5.10002ZM12.9009 7.45002L11.2609 5.80002V13.49H4.76094V5.80002L3.11094 7.46002L1.45094 5.80002L4.75094 2.50002L4.76094 2.51002V2.50002H5.95093L6.02094 2.57002C6.28198 2.83186 6.59213 3.03962 6.93361 3.18137C7.2751 3.32312 7.6412 3.39609 8.01094 3.39609C8.38067 3.39609 8.74677 3.32312 9.08826 3.18137C9.42974 3.03962 9.73989 2.83186 10.0009 2.57002L10.0609 2.50002H11.2609L14.5609 5.80002L12.9009 7.46002V7.45002Z" fill="black"></path></svg></span><h3 class="ecom-accordion__title-text ecom-items--text ecom-html">{{ translation.ecom-5j8cuw4qp4w.ecom-jxv2glhh25.item_title_0 }}</h3></div></div><div class="core__group--body ecom-accordion__body"><div class="ec-flex-wp ecom-flex"><div class="core__blocks"><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-aq5l53itsj5"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-5j8cuw4qp4w" deep="2">{%- assign product_description = product.description-%}<div class="text-content ecom-html has-drop-cap-view-framed">{{ translation.ecom-5j8cuw4qp4w.ecom-aq5l53itsj5.textcontent | replace: '((product_description))',product_description }}</div></div></div> </div></div></div></div></div></div><div id="ecom-osh4jq4cokr" class="core__group--item ecom-accordion__item" data-id="ecom-osh4jq4cokr" style=""><div class="ecom-accordion__title ecom-flex ecom-w__full ecom-al_center ecom-items" data-target="#undefined" data-target-id="#ecom-osh4jq4cokr"><div class="ecom-accordion_nav--icon ecom-items--icon" style="order: 1;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M288 224H480C497.7 224 512 238.3 512 256C512 273.7 497.7 288 480 288H288V480C288 497.7 273.7 512 255.1 512C238.3 512 223.1 497.7 223.1 480V288H32C14.33 288 0 273.7 0 256C0 238.3 14.33 224 32 224H223.1V32C223.1 14.33 238.3 0 255.1 0C273.7 0 288 14.33 288 32V224z"></path></svg></div><div class="ecom-accordion_nav--icon ecom-items--icon ecom-items-icon-active" style="order: 1;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M400 288h-352c-17.69 0-32-14.32-32-32.01s14.31-31.99 32-31.99h352c17.69 0 32 14.3 32 31.99S417.7 288 400 288z"></path></svg></div><div class="ecom-accordion_wrapper-info ecom-flex ecom-al_center"><span class="ecom-items--icon ecom-accordion_icon-title" data-image="false"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8 1.5C7.54037 1.5 7.08525 1.59053 6.66061 1.76642C6.23597 1.94231 5.85013 2.20012 5.52513 2.52513C5.20012 2.85013 4.94231 3.23597 4.76642 3.66061C4.59053 4.08525 4.5 4.54037 4.5 5C4.5 5.45963 4.59053 5.91475 4.76642 6.33939C4.94231 6.76403 5.20012 7.14987 5.52513 7.47487C5.85013 7.79988 6.23597 8.05769 6.66061 8.23358C7.08525 8.40947 7.54037 8.5 8 8.5C8.92826 8.5 9.8185 8.13125 10.4749 7.47487C11.1313 6.8185 11.5 5.92826 11.5 5C11.5 4.07174 11.1313 3.1815 10.4749 2.52513C9.8185 1.86875 8.92826 1.5 8 1.5ZM5.5 5C5.5 4.33696 5.76339 3.70107 6.23223 3.23223C6.70107 2.76339 7.33696 2.5 8 2.5C8.66304 2.5 9.29893 2.76339 9.76777 3.23223C10.2366 3.70107 10.5 4.33696 10.5 5C10.5 5.66304 10.2366 6.29893 9.76777 6.76777C9.29893 7.23661 8.66304 7.5 8 7.5C7.33696 7.5 6.70107 7.23661 6.23223 6.76777C5.76339 6.29893 5.5 5.66304 5.5 5ZM8 9.5C6.13 9.5 4.48 9.67 3.3 10.48C2.09 11.33 1.5 12.78 1.5 15V15.5H14.5V15C14.5 12.78 13.91 11.33 12.7 10.48C11.52 9.67 9.87 9.5 8 9.5ZM12.12 11.3C12.89 11.84 13.41 12.76 13.49 14.5H2.5C2.58 12.76 3.1 11.84 3.87 11.3C4.76 10.69 6.11 10.5 7.99 10.5C9.87 10.5 11.22 10.69 12.11 11.3H12.12Z" fill="black"></path></svg></span><h3 class="ecom-accordion__title-text ecom-items--text ecom-html">{{ translation.ecom-5j8cuw4qp4w.ecom-jxv2glhh25.item_title_1 }}</h3></div></div><div class="core__group--body ecom-accordion__body"><div class="ec-flex-wp ecom-flex"><div class="core__blocks"><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-tu0t0olzc2"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-5j8cuw4qp4w" deep="2"><div class="text-content ecom-html has-drop-cap-view-framed">{{ translation.ecom-5j8cuw4qp4w.ecom-tu0t0olzc2.textcontent }}</div></div></div> </div></div></div></div></div></div><div id="ecom-ue3nejlf3h" class="core__group--item ecom-accordion__item" data-id="ecom-ue3nejlf3h" style=""><div class="ecom-accordion__title ecom-flex ecom-w__full ecom-al_center ecom-items" data-target="#undefined" data-target-id="#ecom-ue3nejlf3h"><div class="ecom-accordion_nav--icon ecom-items--icon" style="order: 1;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M288 224H480C497.7 224 512 238.3 512 256C512 273.7 497.7 288 480 288H288V480C288 497.7 273.7 512 255.1 512C238.3 512 223.1 497.7 223.1 480V288H32C14.33 288 0 273.7 0 256C0 238.3 14.33 224 32 224H223.1V32C223.1 14.33 238.3 0 255.1 0C273.7 0 288 14.33 288 32V224z"></path></svg></div><div class="ecom-accordion_nav--icon ecom-items--icon ecom-items-icon-active" style="order: 1;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M400 288h-352c-17.69 0-32-14.32-32-32.01s14.31-31.99 32-31.99h352c17.69 0 32 14.3 32 31.99S417.7 288 400 288z"></path></svg></div><div class="ecom-accordion_wrapper-info ecom-flex ecom-al_center"><span class="ecom-items--icon ecom-accordion_icon-title" data-image="false"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M15.1201 4.50999C14.9915 4.47992 14.8562 4.50195 14.7438 4.57127C14.6314 4.6406 14.551 4.75158 14.5201 4.87999L14.0901 6.59999L14.0501 6.61999L14.0201 6.62999L13.9901 6.64999L13.9601 6.66999L13.9301 6.67999L13.9001 6.69999L13.8701 6.71999L13.8401 6.72999L13.8201 6.73999L13.7901 6.75999L13.7601 6.76999L13.7301 6.77999L13.7101 6.78999L13.6801 6.79999L13.6501 6.80999L13.6301 6.81999L13.6001 6.82999L13.5801 6.83999L13.5601 6.84999H13.5301L13.5101 6.85999H13.4901L13.4601 6.86999H13.4401L13.4201 6.87999H13.4001L13.3701 6.88999H13.0701L13.0501 6.87999H13.0301L13.0001 6.85999H12.9701L12.9501 6.83999H12.9301L12.9001 6.82999L12.8801 6.81999L12.8501 6.80999L12.8301 6.79999L12.8001 6.78999L12.7701 6.77999L12.7501 6.75999H12.7201L12.6901 6.73999L12.6601 6.71999L12.6301 6.70999L12.6101 6.68999L12.5801 6.67999L12.5501 6.65999L12.5201 6.64999L12.4901 6.62999L12.4601 6.60999H12.4401L12.4101 6.58999L12.3801 6.56999L12.3501 6.55999L12.3201 6.53999L12.2201 6.47999L12.1201 6.41999L12.0901 6.39999L12.0501 6.37999L12.0201 6.35999L11.9801 6.33999L11.9501 6.30999L11.9101 6.28999L11.8801 6.26999L11.8401 6.24999L11.8001 6.22999L11.7701 6.20999L11.7301 6.18999L11.6901 6.16999L11.6601 6.15999L11.6201 6.13999L11.5801 6.11999L11.5401 6.09999L11.5001 6.08999L11.4601 6.06999L11.4201 6.04999L11.3801 6.03999L11.3401 6.01999L11.3001 6.00999L11.2601 5.98999L11.2201 5.97999L11.1701 5.96999L11.1301 5.95999L11.0901 5.94999L11.0401 5.93999L11.0001 5.92999L10.9601 5.91999H10.9101L10.8701 5.90999L10.8201 5.89999H10.6801L10.6401 5.88999H10.4601L10.4201 5.89999H10.3701L10.3301 5.90999L10.2801 5.91999L10.2401 5.92999L10.1901 5.93999L10.1501 5.94999L10.1101 5.95999L10.0601 5.96999L10.0201 5.98999L10.0001 5.99999L9.96012 6.01999L9.92012 6.02999L9.88012 6.04999L9.83012 6.05999L9.79012 6.07999L9.75012 6.09999L9.71012 6.10999L9.68012 6.12999L9.64012 6.14999L9.60012 6.16999L9.56012 6.18999L9.52012 6.20999L9.49012 6.22999L9.45012 6.24999L9.41012 6.26999L9.38012 6.28999L9.34012 6.30999L9.31012 6.32999L9.27012 6.34999L9.24012 6.36999L9.20012 6.38999L8.97012 6.52999L8.94012 6.54999L8.90012 6.56999L8.87012 6.58999L8.84012 6.60999L8.81012 6.61999L8.78012 6.63999L8.75012 6.65999L8.72012 6.66999L8.69012 6.68999L8.66012 6.69999L8.63012 6.71999L8.61012 6.72999L8.58012 6.74999L8.55012 6.75999L8.52012 6.76999L8.50012 6.77999L8.47012 6.78999L8.44012 6.79999L8.42012 6.80999L8.39012 6.81999L8.37012 6.82999L8.34012 6.83999H8.32012L8.29012 6.84999L8.27012 6.85999H8.25012L8.23012 6.86999H8.18012L8.16012 6.87999H7.86012L7.84012 6.86999H7.80012L7.78012 6.85999L7.75012 6.84999H7.73012L7.71012 6.82999H7.68012L7.66012 6.81999L7.63012 6.80999L7.61012 6.79999L7.58012 6.78999L7.55012 6.77999L7.53012 6.75999H7.50012L7.47012 6.73999L7.44012 6.71999L7.41012 6.70999L7.38012 6.68999L7.35012 6.67999L7.33012 6.65999L7.30012 6.64999L7.27012 6.62999L7.23012 6.60999L7.20012 6.58999L7.17012 6.57999L7.14012 6.55999L7.11012 6.53999L7.08012 6.51999L6.88012 6.39999L6.84012 6.37999L6.81012 6.35999L6.77012 6.33999L6.74012 6.31999L6.70012 6.29999L6.67012 6.27999L6.63012 6.25999L6.59012 6.23999L6.56012 6.21999L6.52012 6.19999L6.48012 6.17999L6.45012 6.15999L6.41012 6.13999L6.37012 6.11999L6.33012 6.10999L6.29012 6.08999L6.25012 6.06999L6.21012 6.04999L6.17012 6.03999L6.13012 6.01999L6.09012 6.00999L6.05012 5.99999H6.00012L5.95012 5.97999L5.91012 5.96999L5.87012 5.95999L5.82012 5.94999L5.78012 5.93999L5.74012 5.92999H5.70012L5.66012 5.91999L5.61012 5.90999H5.48012L5.43012 5.89999H5.25012L5.21012 5.90999H5.16012L5.12012 5.91999L5.07012 5.92999L5.03012 5.93999H4.98012L4.94012 5.95999L4.90012 5.96999L4.85012 5.97999L4.81012 5.99999L4.77012 6.00999L4.73012 6.01999L4.69012 6.03999L4.65012 6.04999L4.61012 6.06999L4.57012 6.08999L4.53012 6.10999L4.49012 6.11999L4.45012 6.13999L4.41012 6.15999L4.37012 6.17999L4.33012 6.19999L4.29012 6.21999L4.26012 6.23999L4.22012 6.25999L4.18012 6.27999L4.15012 6.29999L4.11012 6.31999L4.08012 6.33999L4.04012 6.35999L4.01012 6.37999L3.97012 6.39999L3.94012 6.41999L3.74012 6.53999L3.71012 6.55999L3.67012 6.57999L3.64012 6.59999L3.61012 6.61999L3.58012 6.62999L3.55012 6.64999L3.52012 6.66999L3.49012 6.67999L3.46012 6.69999L3.43012 6.70999L3.40012 6.72999L3.38012 6.73999L3.35012 6.74999L3.32012 6.76999L3.29012 6.77999L3.27012 6.78999L3.24012 6.79999L3.21012 6.80999L3.19012 6.81999L3.16012 6.82999L3.14012 6.83999L3.11012 6.84999H3.10012L3.07012 6.85999L3.05012 6.86999H3.03012L3.00012 6.87999H2.95012L2.93012 6.88999H2.63012L2.60012 6.87999H2.58012L2.56012 6.86999L2.53012 6.85999H2.51012L2.49012 6.83999H2.46012L2.44012 6.82999L2.41012 6.81999L2.38012 6.80999L2.36012 6.79999L2.33012 6.78999L2.31012 6.76999H2.28012L2.25012 6.74999L2.22012 6.72999L2.19012 6.71999L2.16012 6.70999L2.13012 6.68999L2.11012 6.66999L2.08012 6.65999L2.05012 6.63999L2.02012 6.61999L1.98012 6.60999L1.95012 6.58999L1.92012 6.56999L1.91012 6.55999L1.49012 4.87999C1.45424 4.75582 1.37166 4.65036 1.25971 4.58575C1.14777 4.52113 1.01515 4.50238 0.889677 4.53343C0.764205 4.56447 0.655631 4.6429 0.586729 4.75226C0.517828 4.86162 0.493954 4.99341 0.520116 5.11999L2.52012 13.12C2.5467 13.2276 2.60828 13.3233 2.69516 13.392C2.78204 13.4608 2.88931 13.4988 3.00012 13.5H13.0001C13.1109 13.4988 13.2182 13.4608 13.3051 13.392C13.392 13.3233 13.4535 13.2276 13.4801 13.12L15.4801 5.11999C15.5105 4.99277 15.4899 4.85869 15.4226 4.74653C15.3553 4.63436 15.2467 4.55304 15.1201 4.51999V4.50999ZM12.6101 12.5H3.39012L2.22012 7.79999L2.26012 7.81999L2.30012 7.82999L2.34012 7.83999L2.39012 7.84999L2.43012 7.85999L2.47012 7.86999H2.52012L2.56012 7.87999L2.61012 7.88999H2.74012L2.79012 7.89999H2.97012L3.00012 7.87999H3.05012L3.09012 7.86999H3.14012L3.18012 7.84999H3.22012L3.27012 7.82999L3.31012 7.81999L3.36012 7.80999L3.40012 7.79999L3.44012 7.77999L3.48012 7.76999L3.52012 7.74999L3.56012 7.73999L3.61012 7.71999L3.65012 7.69999L3.69012 7.68999L3.72012 7.66999L3.76012 7.64999L3.80012 7.62999L3.84012 7.60999L3.88012 7.58999L3.92012 7.56999L3.95012 7.54999L3.99012 7.52999L4.03012 7.50999L4.06012 7.48999L4.10012 7.46999L4.13012 7.44999L4.17012 7.42999L4.20012 7.40999L4.24012 7.38999L4.47012 7.24999L4.50012 7.22999L4.54012 7.20999L4.57012 7.19999L4.60012 7.17999L4.63012 7.15999L4.66012 7.13999L4.69012 7.11999L4.72012 7.10999L4.75012 7.08999L4.78012 7.07999L4.81012 7.05999L4.83012 7.04999L4.86012 7.03999L4.89012 7.01999L4.92012 7.00999L4.94012 6.99999L4.97012 6.98999L5.00012 6.97999L5.02012 6.96999L5.05012 6.95999L5.07012 6.94999L5.10012 6.93999H5.12012L5.14012 6.92999H5.17012L5.19012 6.91999L5.22012 6.90999H5.26012L5.28012 6.89999H5.58012L5.61012 6.90999H5.63012L5.65012 6.91999H5.68012L5.70012 6.93999H5.72012L5.75012 6.94999L5.78012 6.95999L5.80012 6.96999L5.83012 6.97999L5.85012 6.98999L5.88012 6.99999L5.91012 7.01999H5.93012L5.96012 7.03999L5.99012 7.04999L6.02012 7.06999L6.05012 7.07999L6.08012 7.09999L6.11012 7.10999L6.14012 7.12999L6.17012 7.14999L6.20012 7.16999L6.23012 7.17999L6.26012 7.19999L6.29012 7.21999L6.32012 7.23999L6.36012 7.25999L6.56012 7.37999L6.59012 7.39999L6.62012 7.41999L6.66012 7.43999L6.69012 7.45999L6.73012 7.47999L6.76012 7.49999L6.80012 7.51999L6.83012 7.53999L6.87012 7.55999L6.91012 7.57999L6.95012 7.59999L6.98012 7.61999L7.02012 7.63999L7.06012 7.64999L7.10012 7.66999L7.14012 7.68999L7.18012 7.70999L7.22012 7.71999L7.26012 7.73999L7.30012 7.75999L7.34012 7.76999L7.38012 7.77999L7.42012 7.79999L7.47012 7.80999L7.51012 7.81999L7.55012 7.82999L7.59012 7.83999L7.64012 7.84999L7.68012 7.85999H7.73012L7.77012 7.86999H7.82012L7.86012 7.87999H7.95012L8.00012 7.88999H8.18012L8.22012 7.87999H8.27012L8.31012 7.86999L8.36012 7.85999H8.40012L8.44012 7.83999H8.49012L8.53012 7.81999L8.57012 7.80999L8.62012 7.79999L8.66012 7.77999L8.70012 7.76999L8.74012 7.74999L8.78012 7.73999L8.82012 7.71999L8.86012 7.69999L8.90012 7.68999L8.94012 7.66999L8.98012 7.64999L9.02012 7.62999L9.06012 7.60999L9.10012 7.58999L9.14012 7.56999L9.17012 7.54999L9.21012 7.53999L9.25012 7.51999L9.28012 7.48999L9.32012 7.46999L9.35012 7.44999L9.39012 7.42999L9.42012 7.40999L9.46012 7.38999L9.49012 7.36999L9.53012 7.34999L9.66012 7.26999L9.69012 7.24999L9.72012 7.22999L9.76012 7.21999L9.79012 7.19999L9.82012 7.17999L9.85012 7.15999L9.88012 7.13999L9.91012 7.12999L9.94012 7.10999L9.97012 7.08999L10.0001 7.07999L10.0301 7.05999L10.0601 7.04999L10.0801 7.03999L10.1101 7.01999H10.1401L10.1601 6.99999L10.1901 6.98999L10.2101 6.97999L10.2401 6.96999L10.2601 6.95999L10.2901 6.94999H10.3101L10.3401 6.92999H10.3901L10.4101 6.91999H10.4401L10.4601 6.90999H10.4801L10.5001 6.89999H10.8001L10.8201 6.90999H10.8501L10.8701 6.91999H10.8901L10.9201 6.93999H10.9401L10.9601 6.94999L10.9901 6.95999L11.0101 6.96999L11.0401 6.97999L11.0701 6.98999L11.0901 6.99999L11.1201 7.00999L11.1501 7.02999L11.1701 7.03999L11.2001 7.04999L11.2301 7.06999L11.2601 7.07999L11.2901 7.09999L11.3201 7.10999L11.3401 7.12999L11.3701 7.14999L11.4001 7.15999L11.4401 7.17999L11.4701 7.19999H11.4801L11.5101 7.21999L11.5401 7.23999L11.5701 7.25999L11.6701 7.31999L11.7101 7.33999L11.7701 7.37999L11.8101 7.39999L11.8401 7.41999L11.8801 7.43999L11.9101 7.45999L11.9501 7.47999L11.9801 7.49999L12.0201 7.51999L12.0501 7.53999L12.0901 7.55999L12.1301 7.57999L12.1601 7.59999L12.2001 7.61999L12.2401 7.63999L12.2801 7.65999L12.3201 7.67999L12.3501 7.68999L12.3901 7.70999L12.4301 7.72999L12.4801 7.73999L12.5201 7.75999L12.5601 7.76999L12.6001 7.78999L12.6401 7.79999L12.6801 7.80999L12.7301 7.82999H12.7701L12.8101 7.84999H12.8501L12.9001 7.85999L12.9401 7.86999H13.0301L13.0801 7.87999H13.1701L13.2201 7.88999H13.4001L13.4401 7.87999H13.4901L13.5301 7.86999H13.5801L13.6201 7.84999H13.6601L13.7101 7.83999L13.7501 7.81999H13.7701L12.6001 12.49L12.6101 12.5Z" fill="black"></path></svg></span><h3 class="ecom-accordion__title-text ecom-items--text ecom-html">{{ translation.ecom-5j8cuw4qp4w.ecom-jxv2glhh25.item_title_2 }}</h3></div></div><div class="core__group--body ecom-accordion__body"><div class="ec-flex-wp ecom-flex"><div class="core__blocks"><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-6wcfnrhdz9x"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-5j8cuw4qp4w" deep="2"><div class="text-content ecom-html has-drop-cap-view-framed">{{ translation.ecom-5j8cuw4qp4w.ecom-6wcfnrhdz9x.textcontent }}</div></div></div> </div></div></div></div></div></div><div id="ecom-yzze772xsf" class="core__group--item ecom-accordion__item" data-id="ecom-yzze772xsf" style=""><div class="ecom-accordion__title ecom-flex ecom-w__full ecom-al_center ecom-items" data-target="#undefined" data-target-id="#ecom-yzze772xsf"><div class="ecom-accordion_nav--icon ecom-items--icon" style="order: 1;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor"><path d="M288 224H480C497.7 224 512 238.3 512 256C512 273.7 497.7 288 480 288H288V480C288 497.7 273.7 512 255.1 512C238.3 512 223.1 497.7 223.1 480V288H32C14.33 288 0 273.7 0 256C0 238.3 14.33 224 32 224H223.1V32C223.1 14.33 238.3 0 255.1 0C273.7 0 288 14.33 288 32V224z"></path></svg></div><div class="ecom-accordion_nav--icon ecom-items--icon ecom-items-icon-active" style="order: 1;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M400 288h-352c-17.69 0-32-14.32-32-32.01s14.31-31.99 32-31.99h352c17.69 0 32 14.3 32 31.99S417.7 288 400 288z"></path></svg></div><div class="ecom-accordion_wrapper-info ecom-flex ecom-al_center"><span class="ecom-items--icon ecom-accordion_icon-title" data-image="false"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M15.64 6.92L9.5 5.12V4C9.5 3.86739 9.44732 3.74021 9.35355 3.64645C9.25979 3.55268 9.13261 3.5 9 3.5H1C0.867392 3.5 0.740215 3.55268 0.646447 3.64645C0.552678 3.74021 0.5 3.86739 0.5 4V12.5C0.5 12.78 0.72 13 1 13H2.27C2.38863 13.4479 2.65204 13.8439 3.01921 14.1265C3.38637 14.4091 3.83668 14.5623 4.3 14.5623C4.76332 14.5623 5.21363 14.4091 5.58079 14.1265C5.94796 13.8439 6.21137 13.4479 6.33 13H10.27C10.3886 13.4479 10.652 13.8439 11.0192 14.1265C11.3864 14.4091 11.8367 14.5623 12.3 14.5623C12.7633 14.5623 13.2136 14.4091 13.5808 14.1265C13.948 13.8439 14.2114 13.4479 14.33 13H15.5C15.6326 13 15.7598 12.9473 15.8536 12.8536C15.9473 12.7598 16 12.6326 16 12.5V7.4C16 7.29182 15.9649 7.18655 15.9 7.1C15.8351 7.01345 15.7439 6.95029 15.64 6.92ZM4.3 13.6C4.00826 13.6 3.72847 13.4841 3.52218 13.2778C3.31589 13.0715 3.2 12.7917 3.2 12.5C3.2 12.2083 3.31589 11.9285 3.52218 11.7222C3.72847 11.5159 4.00826 11.4 4.3 11.4C4.59174 11.4 4.87153 11.5159 5.07782 11.7222C5.28411 11.9285 5.4 12.2083 5.4 12.5C5.4 12.7917 5.28411 13.0715 5.07782 13.2778C4.87153 13.4841 4.59174 13.6 4.3 13.6ZM6.33 12C6.21137 11.5521 5.94796 11.1561 5.58079 10.8735C5.21363 10.5909 4.76332 10.4377 4.3 10.4377C3.83668 10.4377 3.38637 10.5909 3.01921 10.8735C2.65204 11.1561 2.38863 11.5521 2.27 12H1.5V4.5H8.5V12H6.33ZM12.3 13.6C12.0083 13.6 11.7285 13.4841 11.5222 13.2778C11.3159 13.0715 11.2 12.7917 11.2 12.5C11.2 12.2083 11.3159 11.9285 11.5222 11.7222C11.7285 11.5159 12.0083 11.4 12.3 11.4C12.5917 11.4 12.8715 11.5159 13.0778 11.7222C13.2841 11.9285 13.4 12.2083 13.4 12.5C13.4 12.7917 13.2841 13.0715 13.0778 13.2778C12.8715 13.4841 12.5917 13.6 12.3 13.6ZM15 12H14.33C14.2114 11.5521 13.948 11.1561 13.5808 10.8735C13.2136 10.5909 12.7633 10.4377 12.3 10.4377C11.8367 10.4377 11.3864 10.5909 11.0192 10.8735C10.652 11.1561 10.3886 11.5521 10.27 12H9.5V6.17L15 7.77V12Z" fill="black"></path></svg></span><h3 class="ecom-accordion__title-text ecom-items--text ecom-html">{{ translation.ecom-5j8cuw4qp4w.ecom-jxv2glhh25.item_title_3 }}</h3></div></div><div class="core__group--body ecom-accordion__body"><div class="ec-flex-wp ecom-flex"><div class="core__blocks"><div class="core__blocks"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-mzk0fvan4qi"><div class="ecom__element ecom-element element__text ecom-type-deffault" section_id="ecom-5j8cuw4qp4w" deep="2"><div class="text-content ecom-html has-drop-cap-view-framed">{{ translation.ecom-5j8cuw4qp4w.ecom-mzk0fvan4qi.textcontent }}</div></div></div> </div></div></div></div></div></div></div></div> </div></div> <div class="ecom-block ecom-core core__block ecom-gpykgh97fwa"><div class="ecom-element ecom__element ecom-placeholder-extension" section_id="ecom-5j8cuw4qp4w" deep="2"></div></div> </div></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> </div></div></div></div> <div class="ecom-column ecom-core core__column--last ecom-nqkpfff9cdo"><div class="core__column--wrapper" id="ecom-nqkpfff9cdo"><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div><div class="core__blocks"></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
+ {% unless ecom_has_variant_picker %}
+ <input type="hidden" name="id" value="{{product.selected_or_first_available_variant.id}}" />
+ <script type="application/json" id="product-json-{{product.id}}-ecom-5j8cuw4qp4w">
+ {% if product.variants_count > 250 %}
+ {% assign checkIsHighVariant = true %}
+ {% endif %}
+ {%- render "ecom_product_json", product: product, checkIsHighVariant: checkIsHighVariant-%}
+ </script>
+ {% endunless %}
+ {%- endform -%}
+ {% assign ecom_has_variant_picker = false %}
+ {%- endif -%}
+ <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-h7v4v1jal9j"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-hopcc011ck"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-h7v4v1jal9j" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfp,#nfp *,#nfp *::before,#nfp *::after{box-sizing:border-box;margin:0;padding:0;
+ font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+ -webkit-font-smoothing:antialiased}
+#nfp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfp img{display:block;max-width:100%}
+#nfp a,#nfp a:visited,#nfp a:hover,#nfp a:active{text-decoration:none;color:inherit}
+#nfp .nfp-w{max-width:1440px;margin:0 auto}
+#nfp{background:#ffffff;color:#082835}
+</style>
+</head>
+<body>
+<div id="nfp" style="background:#e7f1f8;color:#082835">
+<style>
+/* ── S2 · trust marquee ── */
+#nfp .nfp-s2{overflow:hidden;padding:16px 0;background:#e7f1f8}
+#nfp .nfp-mq{display:flex;width:max-content;animation:nfp-slide 32s linear infinite}
+#nfp .nfp-mq-g{display:flex;gap:74px;padding-right:74px;white-space:nowrap}
+#nfp .nfp-mq-g span,#nfp .nfp-mq-g span *{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-mq-g span{font-size:18px;
+ font-weight:700;color:#082835;line-height:1.3;letter-spacing:.01em}
+@keyframes nfp-slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){#nfp .nfp-mq{animation:none}}
+@media(max-width:767px){#nfp .nfp-mq-g{gap:44px;padding-right:44px}
+ #nfp .nfp-mq-g span{font-size:15px}}
+</style>
+<section class="nfp-s2" aria-hidden="true">
+ <div class="nfp-mq"><div class="nfp-mq-g"><span class="nfp-m1">Eco-friendly</span><span class="nfp-m2">Dermatologically tested</span><span class="nfp-m3">Developed for the outdoors</span><span class="nfp-m1b">Eco-friendly</span><span class="nfp-m2b">Dermatologically tested</span><span class="nfp-m3b">Developed for the outdoors</span></div><div class="nfp-mq-g"><span class="nfp-m1">Eco-friendly</span><span class="nfp-m2">Dermatologically tested</span><span class="nfp-m3">Developed for the outdoors</span><span class="nfp-m1b">Eco-friendly</span><span class="nfp-m2b">Dermatologically tested</span><span class="nfp-m3b">Developed for the outdoors</span></div></div>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-2khwjtdtxhv"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-d6idesjlcd9"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-2khwjtdtxhv" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfp,#nfp *,#nfp *::before,#nfp *::after{box-sizing:border-box;margin:0;padding:0;
+ font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+ -webkit-font-smoothing:antialiased}
+#nfp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfp img{display:block;max-width:100%}
+#nfp a,#nfp a:visited,#nfp a:hover,#nfp a:active{text-decoration:none;color:inherit}
+#nfp .nfp-w{max-width:1440px;margin:0 auto}
+#nfp{background:#ffffff;color:#082835}
+</style>
+</head>
+<body>
+<div id="nfp" style="background:#ffffff;color:#082835">
+<style>
+/* ── S3 · "give yourself the moment" + attribute chips ── */
+#nfp .nfp-s3{padding:64px 20px 10px;text-align:center}
+#nfp .nfp-s3 .nfp-w{max-width:960px}
+#nfp .nfp-sub,#nfp .nfp-sub *{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-sub{font-size:13px;
+ font-weight:700;color:#082835;margin-bottom:14px;font-style:normal;text-transform:uppercase;letter-spacing:.08em}
+#nfp .nfp-big,#nfp .nfp-big span{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-big{font-size:36px;
+ font-weight:700;line-height:1.2;color:#082835;max-width:730px;margin:0 auto;letter-spacing:-.01em}
+#nfp .nfp-circ{position:relative;display:inline-block;font-style:normal;padding:0 6px;font-weight:700}
+#nfp .nfp-circ svg{position:absolute;left:-16px;top:-7px;width:calc(100% + 32px);
+ height:calc(100% + 14px);overflow:visible;pointer-events:none}
+/* Nothing is hidden behind JS. The EComposer builder canvas does not execute
+ section scripts, so an opacity:0 + .is-in reveal leaves the section blank in
+ the editor. Homepage 1.9.1 and Flowline Loyalty use no opacity:0 at all -
+ same rule here: drawn and visible from the first paint. */
+#nfp .nfp-circ svg path{fill:none;stroke:#f4bfba;stroke-width:3;stroke-linecap:round}
+#nfp .nfp-pills{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;
+ gap:16px;margin-top:34px}
+#nfp .nfp-pills li{display:inline-flex;align-items:center;gap:9px;border:1px solid #dfe4e6;
+ border-radius:4px;padding:11px 22px;font-size:14px;font-weight:500;color:#082835}
+@media(max-width:767px){#nfp .nfp-big{font-size:24px}
+ #nfp .nfp-pills{gap:10px}#nfp .nfp-pills li{padding:9px 16px;font-size:13px}}
+</style>
+<section class="nfp-s3">
+ <div class="nfp-w nfp-rv">
+ <p class="nfp-sub nfp-s3sub">Let the fragrance set your mood, day after day.</p>
+ <h2 class="nfp-big"><span class="nfp-s3h1">Give yourself the</span> <span class="nfp-circ"><span class="nfp-s3hw">moment</span><svg viewBox="0 0 300 70" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M22 34C22 17 84 7 152 8c70 1 126 10 126 25 0 16-62 27-134 26C74 58 20 49 20 33c0-13 44-23 108-25"/></svg></span><span class="nfp-s3h2"> you deserve.</span></h2>
+ <ul class="nfp-pills">
+ <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#082835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="nfp-p1">Suitable for all fabric types</span></li>
+ <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#082835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="nfp-p2">Lasts up to 14 days</span></li>
+ <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#082835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="nfp-p3">Intense scent</span></li>
+ <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#082835" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="nfp-p4">Paraben-free</span></li>
+ </ul>
+ </div>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-0f7nixlk5xsc"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-lxvoww3u5e"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-0f7nixlk5xsc" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfp,#nfp *,#nfp *::before,#nfp *::after{box-sizing:border-box;margin:0;padding:0;
+ font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+ -webkit-font-smoothing:antialiased}
+#nfp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfp img{display:block;max-width:100%}
+#nfp a,#nfp a:visited,#nfp a:hover,#nfp a:active{text-decoration:none;color:inherit}
+#nfp .nfp-w{max-width:1440px;margin:0 auto}
+#nfp{background:#ffffff;color:#082835}
+</style>
+</head>
+<body>
+<div id="nfp" style="background:#ffffff;color:#082835">
+<style>
+/* ── S4 · brand mission, image + text ── */
+#nfp .nfp-s4{padding:52px 24px 0}
+#nfp .nfp-s4 .nfp-in{display:grid;grid-template-columns:minmax(0,700px) minmax(0,1fr);
+ gap:110px;align-items:center}
+#nfp .nfp-s4 img{border-radius:4px;width:100%;height:auto}
+#nfp .nfp-ey{display:block;font-style:normal;
+ font-size:13px;color:#082835;opacity:.75;margin-bottom:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+#nfp .nfp-s4 .nfp-h2,#nfp .nfp-s4 .nfp-h2 *,#nfp .nfp-ey{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-s4 .nfp-h2{font-size:32px;
+ font-weight:700;line-height:1.2;color:#082835;margin-bottom:22px;letter-spacing:-.01em}
+#nfp .nfp-s4 .nfp-b{font-size:16px;font-weight:500;line-height:1.6;color:#3f5a66;
+ max-width:70ch;margin-bottom:4px}
+#nfp .nfp-quote{font-size:16px;font-style:normal;line-height:1.6;color:#3f5a66;
+ max-width:70ch;margin-top:22px;font-weight:700}
+@media(max-width:1239px){#nfp .nfp-s4 .nfp-in{grid-template-columns:1fr;gap:44px}}
+@media(max-width:767px){#nfp .nfp-s4{padding:40px 20px 0}
+ #nfp .nfp-s4 .nfp-h2{font-size:24px}}
+</style>
+<section class="nfp-s4">
+ <div class="nfp-w nfp-in nfp-rv">
+ <img src="https://cdn.shopify.com/s/files/1/0952/4786/0043/files/Daily.png" alt="" loading="lazy" width="1000" height="1000">
+ <div class="nfp-tx">
+ <span class="nfp-ey nfp-s4ey">Why we love every bottle</span>
+ <h2 class="nfp-h2 nfp-s4h">We nurture change with every laundry perfume.</h2>
+ <p class="nfp-b nfp-s4p1">We believe a well-made product can do more than scent your clothes &mdash; it can turn a daily routine into a moment of joy, care and awareness.</p>
+ <p class="nfp-b nfp-s4p2">From vegan, cruelty-free formulas to responsible packaging, this laundry perfume is a small but deliberate choice, every single day.</p>
+ <p class="nfp-quote nfp-s4q">Our scents are not just long-lasting &mdash; they are a statement about how we want to feel and live.</p>
+ </div>
+ </div>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-6l4htevevu4"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-39a6uxi184z"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-6l4htevevu4" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfp,#nfp *,#nfp *::before,#nfp *::after{box-sizing:border-box;margin:0;padding:0;
+ font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+ -webkit-font-smoothing:antialiased}
+#nfp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfp img{display:block;max-width:100%}
+#nfp a,#nfp a:visited,#nfp a:hover,#nfp a:active{text-decoration:none;color:inherit}
+#nfp .nfp-w{max-width:1440px;margin:0 auto}
+#nfp{background:#ffffff;color:#082835}
+</style>
+</head>
+<body>
+<div id="nfp" style="background:#ffffff;color:#082835">
+<style>
+/* ── S5 · how to use, 4 steps ── */
+#nfp .nfp-s5{padding:86px 24px 20px;background:#ffffff}
+#nfp .nfp-s5 .nfp-h2,#nfp .nfp-s5 .nfp-h2 *,#nfp .nfp-step-t,#nfp .nfp-step-t *{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-s5 .nfp-h2{font-size:28px;
+ font-weight:700;color:#082835;text-align:center;margin-bottom:52px;letter-spacing:-.01em}
+#nfp .nfp-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center}
+#nfp .nfp-step-n{font-size:44px;font-weight:700;line-height:1;color:#111111;
+ letter-spacing:-.02em}
+#nfp .nfp-step-t{font-size:18px;
+ font-weight:700;color:#082835;margin:20px 0 12px}
+#nfp .nfp-step-p{font-size:14px;font-weight:500;line-height:1.7;color:#3f5a66}
+#nfp .nfp-step-p em{font-style:normal;font-weight:700}
+#nfp .nfp-step-p strong{font-weight:700;color:#082835}
+@media(max-width:979px){#nfp .nfp-steps{grid-template-columns:repeat(2,1fr);gap:44px 30px}
+ #nfp .nfp-s5{padding:56px 20px 20px}}
+@media(max-width:600px){#nfp .nfp-steps{grid-template-columns:1fr}
+ #nfp .nfp-s5 .nfp-h2{font-size:22px;margin-bottom:36px}}
+</style>
+<section class="nfp-s5">
+ <div class="nfp-w nfp-rv">
+ <h2 class="nfp-h2 nfp-s5h">How to use it</h2>
+ <div class="nfp-steps">
+ <div class="nfp-step"><div class="nfp-step-n">1</div><p class="nfp-step-t nfp-t1">Shake the bottle well</p><p class="nfp-step-p nfp-x1">To activate the full fragrance concentration, shake the bottle well before every use.</p></div>
+ <div class="nfp-step"><div class="nfp-step-n">2</div><p class="nfp-step-t nfp-t2">Use the right dose</p><p class="nfp-step-p nfp-x2">Pour <strong>5 ml</strong> (about a teaspoon) into the fabric-softener compartment of your washing machine. <em>Never apply directly to fabric.</em></p></div>
+ <div class="nfp-step"><div class="nfp-step-n">3</div><p class="nfp-step-t nfp-t3">Wash as usual</p><p class="nfp-step-p nfp-x3">Use your normal detergent. Do not add fabric softener &mdash; the laundry perfume replaces it.</p></div>
+ <div class="nfp-step"><div class="nfp-step-n">4</div><p class="nfp-step-t nfp-t4">Enjoy the freshness</p><p class="nfp-step-p nfp-x4">Once dry, your clothes stay fragrant for <strong>up to 14 days</strong>. More than a scent &mdash; an experience.</p></div>
+ </div>
+ </div>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
+ {% comment %}
+ // Reactive
+ * this.data.settings.product
+ {% endcomment %}
+ {% liquid
+ unless recommendations.performed
+ if request.page_type != 'product' or product == blank
+ assign selected_product = ''
+ if selected_product == blank or selected_product == '' or all_products[selected_product] == blank
+ assign product = collections['all'].products.first
+ else
+ assign product = all_products[selected_product]
+ if product.id == blank
+ assign product = collections['all'].products.last
+ endif
+ endif
+ endif
+ endunless
+ %}
+ {%- if product != blank -%}
+ {%- capture ec_form_id -%}product_form_{{ product.id }}_ecom-vv3uxldmdqa{%- endcapture -%}
+ {%- form 'product', product, id: ec_form_id, class: "ecom-product-form ecom-product-form--single ecom-click", product_id: product.id, data-product_id: product.id,data-product-id: product.id, data-handle: product.handle-%}
+ <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-vv3uxldmdqa"><div class="ecom-inner"><div class="ecom-block ecom-core core__block elmspace ecom-nsp6uk461ll"><div class="ecom-element ecom-product-single ecom-product-single__review" section_id="ecom-vv3uxldmdqa" deep="2"><div class="ecom-product-single__review-wrapper" data-review-platform="{%- assign review_platform = shop.metafields.ecomposer.app_review.value -%}{{review_platform}}"><div class="ecom-product-single__review-container">
+ {%- if review_platform and review_platform != 'none' -%}
+ {%- if EComBuilderMode == true -%}
+ <div class="ecom-theme-app-extensions-skeleton">
+ <div class="ecom-app-extension-info">
+ <span class="ecom-theme-app-extension-icon">
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M416 176C416 78.8 322.9 0 208 0S0 78.8 0 176c0 41.48 17.07 79.54 45.44 109.6c-15.17 32.34-38.65 58.07-38.95 58.38c-6.514 6.836-8.309 16.91-4.568 25.67C5.754 378.4 14.26 384 23.66 384c54.19 0 97.76-20.73 125.9-39.17C168.1 349.4 187.7 352 208 352C322.9 352 416 273.2 416 176zM208 320c-16.96 0-34.04-2.098-50.75-6.232L143.7 310.4L132 318.1c-20.43 13.38-51.58 28.99-89.85 32.97c9.377-12.11 22.3-30.63 32.24-51.82l9.242-19.71L68.72 263.7C44.7 238.2 32 207.9 32 176C32 96.6 110.1 32 208 32S384 96.6 384 176S305 320 208 320zM606.4 435.4C627.6 407.1 640 372.9 640 336C640 238.8 554 160 448 160c-.3145 0-.6191 .041-.9336 .043C447.5 165.3 448 170.6 448 176c0 5.43-.4668 10.76-.9414 16.09C447.4 192.1 447.7 192 448 192c88.22 0 160 64.6 160 144c0 28.69-9.424 56.45-27.25 80.26l-13.08 17.47l11.49 18.55c6.568 10.61 13.18 19.74 18.61 26.74c-18.26-1.91-36.45-6.625-54.3-14.09l-12.69-5.305l-12.58 5.557C495.9 475 472.3 480 448 480c-75.05 0-137.7-46.91-154.9-109.7c-10.1 3.336-20.5 6.132-31.2 8.271C282.7 455.1 357.1 512 448 512c29.82 0 57.94-6.414 83.12-17.54C555 504.5 583.7 512 616.3 512c9.398 0 17.91-5.57 21.73-14.32c3.74-8.758 1.945-18.84-4.568-25.67C633.3 471.8 619.6 456.8 606.4 435.4z"/></svg>
+ </span>
+ <div class="ecom-theme-app-extension-content">
+ <span class="ecom-theme-app-extension-title">{{review_platform | replace: '_', ' ' | replace: '-', ' ' | capitalize}}</span>
+ <div class="ecom-placeholder-on-builder-mode" data-ecom-placeholder="The review element will display when published to Online store"></div>
+ </div>
+ </div>
+ </div>
+ {%- else -%}
+ {%- case review_platform -%}
+ {%- when 'none' -%}
+ <div class="ecom-theme-app-extensions-skeleton">
+ <p>Please select the integrated review app platform in settings</p>
+ </div>
+ {%- when 'ali-reviews' -%}
+ <div class="alireviews-review-box"></div>
+ {%- when 'opinew-reviews' -%}
+ <div style="clear:both;"></div><div id="opinew-reviews-product-page-code" class="opw-widget-wrapper-default">
+ <span id="opinew-plugin" data-server-address="https://api.opinew.com"
+ data-opw-prodreviews="{{ product.metafields.opinew_metafields['product_plugin'] }}"
+ data-opinew-shop-id="{{ shop.id }}" data-shop-url="{{shop.domain}}"
+ data-platform-product-id="{{product.id}}">
+ <span id="opinew_product_plugin_app"></span>
+ </span>
+ </div>
+ {%- when 'judgeme' -%}
+ <div style='clear:both'></div>
+ <div id='judgeme_product_reviews' class='jdgm-widget jdgm-review-widget' data-id='{{ product.id }}'>
+ {{ product.metafields.judgeme.widget }}
+ </div>
+ {%- when 'product-reviews-addon' -%}
+ <div id="stamped-main-widget"
+ data-widget-style="standard"
+ data-product-id="{{ product.id }}"
+ data-name="{{ product.title | escape }}"
+ data-url="{{ shop.url }}{{ product.url }}"
+ data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}"
+ data-description="{{ product.description | escape }}"
+ data-product-sku="{{product.handle}}"
+ data-widget-language="{{ language }}">
+ </div>
+ {%- when 'areviews-aliexpress'-%}
+ <div class="page-full">{%- render 'aliexpress_reviews', product: product-%}</div>
+ {%- when 'loox'-%}
+ <div id="looxReviews" data-product-id="{{product.id}}" >{{- product.metafields.loox.reviews -}}</div>
+ {% when 'ryviu'%}
+ <div class="lt-block-reviews">
+ <ryviu-widget product_id="{{product.id}}" handle="{{product.handle}}" title_product="{{product.title}}" image_product="{{ product.featured_image.src | image_url: width: 100 }}"></ryviu-widget>
+ </div>
+ {%- when 'yotpo-social-reviews' -%}
+ <div class="yotpo yotpo-main-widget" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}" data-description="{{ product.description | escape }}"></div>
+ {%- when 'aliexpress-reviews-importer'-%}
+ <div id="shopbooster-ali" product-id="{{ product.id }}" ></div>
+ {%- when 'rivyo-product-review'-%}
+ <div id="wc_review_section" class="wc_review_main_content" data-url="{{ shop.url }}" data-handle="{{ product.handle }}" data-product_id="{{ product.id }}" data-limit="0"></div>
+ {%-when 'growave' -%}
+ {% capture the_snippet_reviews %}{% render 'socialshopwave-widget-recommends' with 1, product: product %}{% endcapture %}
+ {% unless the_snippet_reviews contains 'Liquid error' %}
+ {{ the_snippet_reviews }}
+ {% endunless %}
+ {%- when 'smart-aliexpress-reviews'-%}
+ {% render "reviews-importer" product: product%}
+ {%- when 'vital-reviews'-%}
+ <div id="bundle-product_reviews"></div>
+ {%- when 'photo-reviews' -%}
+ <div style="clear:both;"></div>
+ <div id="opinew-reviews-product-page-code" class="">
+ <span id="opinew-plugin" data-server-address="https://www.opinew.com" data-opw-prodreviews="{{ product.metafields.opinew_metafields['product_plugin'] }}" data-opinew-shop-id="{{ shop.id }}" data-shop-url="{{shop.domain}}" data-platform-product-id="{{product.id}}">
+ <span id="opinew_product_plugin_app"></span>
+ </span>
+ </div>
+ {%- when 'product-reviews' -%}
+ <div id="shopify-product-reviews" data-id="{{product.id}}">{{- product.metafields.spr.reviews -}}</div>
+ {%- when 'lai-reviews' -%}
+ {%- if EComBuilderMode -%}
+ <div class="ecom-placeholder-on-builder-mode" data-ecom-placeholder="Lai review form will display when published to Online store"></div>
+ {%- endif -%}
+ {% assign smaTemplatePageBuilderCurrent = template | split: '.' | first %}
+ {% if smaTemplatePageBuilderCurrent != 'product' %}
+ <div class="scm-container custom" style="display: none;">
+ <div id="scm-reviews-importer" class="scm-reviews-importer">
+ <iframe id="scm-reviews-importer-iframe" width="100%"></iframe>
+ </div>
+ </div>
+ {% endif %}
+ {% assign random_number = "now" | date: "%N" | modulo: 1000 | plus: 0 %}<script>var sectionConfig= (typeof sectionConfig == "undefined" || sectionConfig == null) ? {} : sectionConfig;var scmCustomData= (typeof scmCustomData == "undefined" || scmCustomData == null) ? {} : scmCustomData;var scmCustomDataWigetAll= (typeof scmCustomDataWigetAll == "undefined" || scmCustomDataWigetAll == null) ? [] : scmCustomDataWigetAll; scmCustomDataWigetAll['{{ random_number }}'] ={"id_iframe" : "{{ random_number }}","productId" : "{{ product.id }}","typePage" : 'productPage',"sectionConfig" : JSON.stringify(sectionConfig),"scmCustomData" : JSON.stringify(scmCustomData),'dataProduct' : []};sectionConfig= null;scmCustomData= null;scmCustomDataWigetAll['{{ random_number }}'].dataProduct['product']= {{ product | json }};{% for metafieldValue in product.metafields.scm_review_importer %}scmCustomDataWigetAll['{{ random_number }}'].dataProduct['{{ metafieldValue[0] }}']= `{{ metafieldValue[1] | json }}`;{% endfor %}</script>
+ <div class="scm-container" style="display: none;">
+ <div class="scm-reviews-importer" data-product-id= {{ product.id }}>
+ <iframe class="scm-reviews-importer-iframe" width="100%" title="Sma reviews section Product page" data-idIframe="{{ random_number }}"></iframe>
+ </div>
+ </div>
+ {%- when 'rivyo' -%}
+ <div id="wc_review_section" class="wc_review_main_content" data-url="{{ shop.url }}" data-handle="{{ product.handle }}" data-product_id="{{ product.id }}" data-limit="0"></div>
+ {%- when 'sealapps-product-review' -%}
+ <div class="custom-vstar-review-widget" style="width:100%"></div>
+ {%- when 'klaviyo-reviews' -%}
+ <div id="klaviyo-reviews-all" data-id="{{product.id}}"></div>
+ {%- when 'air-reviews' -%}
+ <div class="AirReviews-Widget AirReviews-Widget--Block"></div>
+ {%- when 'ait-product-reviews' -%}
+ <div id="aio-product-detial-reviews" class="page-width" attr-value="{{ product.id }}"></div>
+ {%- when 'trustify-reviews' -%}
+ <div class="trustify-review-box"></div>
+ {% else %}
+ <div class="ecom-theme-app-extensions-skeleton">
+ <p>The reivew platform not supported</p>
+ </div>
+ {%-endcase-%}
+ {%- endif -%}
+ {%- else -%}
+ <div class="ecom-theme-app-extensions-skeleton">
+ <p>Please select the integrated review app platform in settings</p>
+ </div>
+ {%- endif -%}
+ </div></div></div></div> <div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-ckbvi675rm"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-vv3uxldmdqa" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfp,#nfp *,#nfp *::before,#nfp *::after{box-sizing:border-box;margin:0;padding:0;
+ font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+ -webkit-font-smoothing:antialiased}
+#nfp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfp img{display:block;max-width:100%}
+#nfp a,#nfp a:visited,#nfp a:hover,#nfp a:active{text-decoration:none;color:inherit}
+#nfp .nfp-w{max-width:1440px;margin:0 auto}
+#nfp{background:#ffffff;color:#082835}
+</style>
+</head>
+<body>
+<div id="nfp" style="background:#ffffff;color:#082835">
+<style>
+/* ── S6 · FAQ ── */
+#nfp .nfp-s6{padding:86px 20px 40px;background:#ffffff}
+#nfp .nfp-s6 .nfp-w{max-width:1050px}
+#nfp .nfp-s6 .nfp-h2,#nfp .nfp-s6 .nfp-h2 *,#nfp .nfp-fq summary,#nfp .nfp-fq summary *{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}
+#nfp .nfp-s6 .nfp-h2{font-size:28px;
+ font-weight:700;color:#082835;text-align:center;margin-bottom:44px;letter-spacing:-.01em}
+#nfp .nfp-fq details{border-bottom:1px solid #e6eaec}
+#nfp .nfp-fq summary{list-style:none;cursor:pointer;position:relative;
+ padding:20px 44px 20px 0;font-size:17px;font-weight:700;color:#082835;line-height:1.3}
+#nfp .nfp-fq summary::-webkit-details-marker{display:none}
+#nfp .nfp-fq summary::after,#nfp .nfp-fq summary::before{content:"";position:absolute;
+ right:4px;top:50%;background:#082835;transition:transform .25s ease,opacity .25s ease}
+#nfp .nfp-fq summary::after{width:15px;height:1.3px;margin-top:-.65px}
+#nfp .nfp-fq summary::before{width:1.3px;height:15px;right:10.85px;margin-top:-7.5px}
+#nfp .nfp-fq details[open] summary::before{transform:rotate(90deg);opacity:0}
+#nfp .nfp-fq details[open] summary{border-bottom:1px solid #e6eaec}
+#nfp .nfp-fqp{padding:18px 0 22px;font-size:14.5px;font-weight:500;line-height:1.75;
+ color:#3f5a66;max-width:75ch}
+#nfp .nfp-fqp strong{font-weight:700;color:#082835}
+@media(max-width:767px){#nfp .nfp-s6{padding:56px 20px 30px}
+ #nfp .nfp-s6 .nfp-h2{font-size:22px}#nfp .nfp-fq summary{font-size:15px}}
+</style>
+<section class="nfp-s6">
+ <div class="nfp-w nfp-rv">
+ <h2 class="nfp-h2 nfp-s6h">Frequently asked questions</h2>
+ <div class="nfp-fq">
+ <details open><summary class="nfp-q1">How do I use the laundry perfume?</summary><div class="nfp-fqp nfp-w1">Add the laundry perfume straight into the fabric-softener compartment of your washing machine. The recommended dose is <strong>5 ml per 4&ndash;5 kg load</strong>. It works with any detergent, but do not combine it with fabric softener &mdash; that would dilute the fragrance.</div></details>
+ <details><summary class="nfp-q2">How long does the scent last on clothes?</summary><div class="nfp-fqp nfp-w2">Our laundry perfumes are formulated to last <strong>up to 14 days</strong>, depending on the fabric, the drying method and the amount used. Base notes such as amber, sandalwood and cedar help the scent hold over time.</div></details>
+ <details><summary class="nfp-q3">Is it safe for sensitive skin or children&rsquo;s clothes?</summary><div class="nfp-fqp nfp-w3">Yes. All our formulas are dermatologically tested and free from parabens, dyes and major allergens. They are suitable for baby clothes, bed linen and textiles in direct contact with sensitive skin.</div></details>
+ <details><summary class="nfp-q4">Is the laundry perfume vegan and cruelty-free?</summary><div class="nfp-fqp nfp-w4">Yes. All our laundry perfumes are <strong>100% vegan and never tested on animals</strong>. We use no animal-derived ingredients, and our manufacturing follows ethical and sustainable standards.</div></details>
+ </div>
+ </div>
+</section>
+<script>
+(function(){
+ /* ── 1. animacie: scroll-reveal + kresleny kruh ── */
+ var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+ function reveal(){
+ var els=document.querySelectorAll('#nfp .nfp-rv, #nfp .nfp-circ');
+ if(mq.matches||!('IntersectionObserver' in window)){
+ els.forEach(function(e){e.classList.add('is-in');});return;
+ }
+ var io=new IntersectionObserver(function(en){
+ en.forEach(function(e){
+ if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target);}
+ });
+ },{threshold:.18,rootMargin:'0px 0px -8% 0px'});
+ els.forEach(function(e){io.observe(e);});
+ }
+ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',reveal);}
+ else{reveal();}
+ /* ── 2. preklady ── */
+ var locale=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
+ if(locale.indexOf('-')>0)locale=locale.split('-')[0];
+ locale=locale.toLowerCase();
+ if(locale==='at')locale='de';
+ var T={
+ sk:{
+ u1:'0 parabénov',
+ u2:'100 % intenzívna vôňa',
+ u3:'14 dní vône',
+ d1:'Doprava zdarma pri objednávke nad 249 RON',
+ d2:'14 dní na vrátenie zdarma',
+ alerth:'Parfum na pranie, ktorý vydrží až 14 dní.',
+ alertp:'Zmeň každé pranie na malý luxus. Vyskúšaj to.',
+ a1h:'Popis',
+ a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Parfum na pranie s drevitými tónmi',
+ a1p2:'Adventure Mist 50 ml je parfum na textílie vytvorený pre tých, ktorí oceňujú sviežosť a vytríbenosť. Spája energiu citrusových tónov s kvetinovou jemnosťou a drevitou hĺbkou do vyváženej a sofistikovanej vône. Na oblečení vydrží dlho a po každom praní zachováva pocit čistoty a sviežosti.',
+ n1t:'Vrchné tóny',
+ n1v:'Bergamot, mandarínka, citrusy, korenie',
+ n2t:'Srdcové tóny',
+ n2v:'Jazmín, levanduľa, heliotrop, broskyňa, pelargónia',
+ n3t:'Základné tóny',
+ n3v:'Santalové drevo, céder, oud, vetiver, vanilka, tonkové bôby, ambra',
+ n4t:'Vôňový profil',
+ n4v:'Drevitý, citrusový',
+ n5t:'Charakter',
+ n5v:'Teplý a upokojujúci &mdash; ideálny na objavovanie prírody, kempovanie a turistiku',
+ n6t:'Atribúty',
+ n6v:'Outdoor, teplý, upokojujúci, unisex, inšpirovaný prírodou, drevitý, citrusový',
+ a2h:'Zloženie',
+ a2p1:'&lt; 5 % parfum (fragrance)<br>Denaturované rozpúšťadlo<br>Demineralizovaná voda',
+ a3h:'Zhoda výrobku',
+ a3p1:'<strong>Informácie o bezpečnosti výrobku:</strong> Obal neprehltnite. Uchovávajte mimo dosahu detí &mdash; hrozí nebezpečenstvo zadusenia.',
+ a4h:'Bezpečnostné upozornenia',
+ a4p1:'Uchovávajte mimo dosahu detí. PRI KONTAKTE S KOŽOU: Umyte veľkým množstvom vody a mydla. Ak sa objaví podráždenie kože alebo vyrážky: vyhľadajte lekársku pomoc. Zneškodnite obsah a nádobu v súlade s miestnymi predpismi. Ak je potrebná lekárska pomoc, majte k dispozícii obal alebo etiketu výrobku.',
+ payh:'Platba a bezpečnosť',
+ payp:'Tvoje platobné údaje sú spracované bezpečne. Neuchovávame údaje o tvojej karte a nemáme prístup k tvojim bankovým informáciám.',
+ m1:'Ekologické',
+ m2:'Dermatologicky testované',
+ m3:'Vyvinuté pre outdoor',
+ s3sub:'Nechaj vôňu určovať tvoju náladu, deň za dňom.',
+ s3h1:'Dopraj si',
+ s3hw:'moment',
+ s3h2:', ktorý si zaslúžiš.',
+ p1:'Vhodné na všetky typy textílií',
+ p2:'Vydrží až 14 dní',
+ p3:'Intenzívna vôňa',
+ p4:'Bez parabénov',
+ s4ey:'Prečo milujeme každú fľašu',
+ s4h:'S každým parfumom na pranie pestujeme zmenu.',
+ s4p1:'Veríme, že dobre urobený produkt dokáže viac než navoňať oblečenie &mdash; dokáže premeniť každodennú rutinu na moment radosti, starostlivosti a všímavosti.',
+ s4p2:'Od vegánskych receptúr netestovaných na zvieratách až po zodpovedné obaly je tento parfum na pranie malá, ale vedomá voľba &mdash; každý deň.',
+ s4q:'Naše vône nie sú len dlhotrvajúce &mdash; sú vyjadrením toho, ako sa chceme cítiť a žiť.',
+ s5h:'Ako ho používať',
+ t1:'Flašu dobre pretras',
+ x1:'Pred každým použitím flašu dobre pretras, aby sa naplno aktivovala koncentrácia parfumu.',
+ t2:'Dávkuj správne',
+ x2:'Nalej 5 ml (približne čajovú lyžičku) do priehradky na aviváž v pračke. <em>Nikdy neaplikuj priamo na textíliu.</em>',
+ t3:'Per ako obvykle',
+ x3:'Použi svoj bežný prací prostriedok. Nepridávaj aviváž &mdash; parfum na pranie ju nahradzuje.',
+ t4:'Vychutnaj si sviežosť',
+ x4:'Po uschnutí zostane oblečenie navoňané <em>až 14 dní</em>. Viac než vôňa &mdash; zážitok.',
+ s6h:'Časté otázky',
+ q1:'Ako sa parfum na pranie používa?',
+ w1:'Parfum na pranie pridaj priamo do priehradky na aviváž v pračke. Odporúčaná dávka je <strong>5 ml na 4&ndash;5 kg prania</strong>. Funguje s akýmkoľvek pracím prostriedkom, ale nekombinuj ho s avivážou &mdash; zriedila by vôňu.',
+ q2:'Ako dlho vôňa na oblečení vydrží?',
+ w2:'Naše parfumy na pranie sú vyvinuté tak, aby vydržali <strong>až 14 dní</strong> &mdash; podľa typu textílie, spôsobu sušenia a použitého množstva. Základné tóny ako ambra, santalové drevo a céder pomáhajú vôni držať v čase.',
+ q3:'Je vhodný na citlivú pokožku a detské oblečenie?',
+ w3:'Áno. Všetky naše receptúry sú dermatologicky testované a bez parabénov, farbív a hlavných alergénov. Sú vhodné na detské oblečenie, posteľné prádlo aj textílie v priamom kontakte s citlivou pokožkou.',
+ q4:'Je parfum na pranie vegánsky a bez testovania na zvieratách?',
+ w4:'Áno. Všetky naše parfumy na pranie sú <strong>100 % vegánske a nikdy netestované na zvieratách</strong>. Nepoužívame zložky živočíšneho pôvodu a výroba spĺňa etické a udržateľné štandardy.'
+ },
+ de:{
+ u1:'0 Parabene',
+ u2:'100 % intensiver Duft',
+ u3:'14 Tage Duft',
+ d1:'Kostenloser Versand ab 249 RON',
+ d2:'14 Tage kostenlose Rückgabe',
+ alerth:'Wäscheparfum, das bis zu 14 Tage hält.',
+ alertp:'Mach aus jeder Wäsche einen kleinen Luxus. Jetzt testen.',
+ a1h:'Beschreibung',
+ a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Wäscheparfum mit holzigen Noten',
+ a1p2:'Adventure Mist 50 ml ist ein Textilduft für alle, die Frische und Raffinesse schätzen. Er verbindet die Energie zitrischer Noten mit floraler Zartheit und holziger Tiefe zu einem ausgewogenen und eleganten Aroma. Er hält lange auf der Kleidung und bewahrt nach jeder Wäsche das Gefühl von Sauberkeit und Frische.',
+ n1t:'Kopfnoten',
+ n1v:'Bergamotte, Mandarine, Zitrus, Pfeffer',
+ n2t:'Herznoten',
+ n2v:'Jasmin, Lavendel, Heliotrop, Pfirsich, Geranie',
+ n3t:'Basisnoten',
+ n3v:'Sandelholz, Zeder, Oud, Vetiver, Vanille, Tonkabohne, Amber',
+ n4t:'Duftprofil',
+ n4v:'Holzig, zitrisch',
+ n5t:'Charakter',
+ n5v:'Warm und entspannend &mdash; ideal für Naturerkundungen, Camping und Wandern',
+ n6t:'Attribute',
+ n6v:'Outdoor, warm, entspannend, unisex, von der Natur inspiriert, holzig, zitrisch',
+ a2h:'Inhaltsstoffe',
+ a2p1:'&lt; 5 % Parfum (fragrance)<br>Denaturiertes Lösungsmittel<br>Demineralisiertes Wasser',
+ a3h:'Produktkonformität',
+ a3p1:'<strong>Informationen zur Produktsicherheit:</strong> Verpackung nicht verschlucken. Darf nicht in die Hände von Kindern gelangen &mdash; Erstickungsgefahr.',
+ a4h:'Sicherheitshinweise',
+ a4p1:'Darf nicht in die Hände von Kindern gelangen. BEI BERÜHRUNG MIT DER HAUT: Mit viel Wasser und Seife waschen. Bei Hautreizung oder -ausschlag: Ärztlichen Rat einholen. Inhalt und Behälter gemäß den örtlichen Vorschriften entsorgen. Ist ärztlicher Rat erforderlich, Verpackung oder Kennzeichnungsetikett bereithalten.',
+ payh:'Zahlung und Sicherheit',
+ payp:'Deine Zahlungsdaten werden sicher verarbeitet. Wir speichern deine Kartendaten nicht und haben keinen Zugriff auf deine Bankinformationen.',
+ m1:'Umweltfreundlich',
+ m2:'Dermatologisch getestet',
+ m3:'Für draußen entwickelt',
+ s3sub:'Lass den Duft deine Stimmung bestimmen, Tag für Tag.',
+ s3h1:'Schenk dir den',
+ s3hw:'Moment',
+ s3h2:', den du verdienst.',
+ p1:'Für alle Gewebearten geeignet',
+ p2:'Hält bis zu 14 Tage',
+ p3:'Intensiver Duft',
+ p4:'Ohne Parabene',
+ s4ey:'Warum wir jede Flasche lieben',
+ s4h:'Mit jedem Wäscheparfum lassen wir Veränderung wachsen.',
+ s4p1:'Wir glauben, dass ein gut gemachtes Produkt mehr kann, als Kleidung zu beduften &mdash; es kann eine tägliche Routine in einen Moment aus Freude, Fürsorge und Achtsamkeit verwandeln.',
+ s4p2:'Von veganen, tierversuchsfreien Formeln bis zu verantwortungsvollen Verpackungen ist dieses Wäscheparfum eine kleine, aber bewusste Entscheidung &mdash; jeden Tag.',
+ s4q:'Unsere Düfte halten nicht nur lange &mdash; sie sind eine Aussage darüber, wie wir uns fühlen und leben wollen.',
+ s5h:'So wird es angewendet',
+ t1:'Flasche gut schütteln',
+ x1:'Schüttle die Flasche vor jedem Gebrauch gut, damit sich die volle Duftkonzentration entfaltet.',
+ t2:'Richtig dosieren',
+ x2:'Gib 5 ml (etwa einen Teelöffel) in die Weichspülerkammer der Waschmaschine. <em>Niemals direkt auf das Gewebe auftragen.</em>',
+ t3:'Wasche wie gewohnt',
+ x3:'Verwende dein normales Waschmittel. Gib keinen Weichspüler dazu &mdash; das Wäscheparfum ersetzt ihn.',
+ t4:'Genieß die Frische',
+ x4:'Nach dem Trocknen bleibt die Wäsche <em>bis zu 14 Tage</em> lang duftend. Mehr als ein Duft &mdash; ein Erlebnis.',
+ s6h:'Häufige Fragen',
+ q1:'Wie wird das Wäscheparfum angewendet?',
+ w1:'Gib das Wäscheparfum direkt in die Weichspülerkammer deiner Waschmaschine. Die empfohlene Dosis beträgt <strong>5 ml auf 4&ndash;5 kg Wäsche</strong>. Es funktioniert mit jedem Waschmittel, sollte aber nicht mit Weichspüler kombiniert werden &mdash; das würde den Duft verdünnen.',
+ q2:'Wie lange hält der Duft auf der Kleidung?',
+ w2:'Unsere Wäscheparfums sind auf <strong>bis zu 14 Tage</strong> ausgelegt &mdash; je nach Gewebe, Trocknungsart und verwendeter Menge. Basisnoten wie Amber, Sandelholz und Zeder helfen dem Duft, über die Zeit zu halten.',
+ q3:'Ist es für empfindliche Haut und Kinderkleidung geeignet?',
+ w3:'Ja. Alle unsere Formeln sind dermatologisch getestet und frei von Parabenen, Farbstoffen und wesentlichen Allergenen. Sie eignen sich für Babykleidung, Bettwäsche und Textilien in direktem Kontakt mit empfindlicher Haut.',
+ q4:'Ist das Wäscheparfum vegan und tierversuchsfrei?',
+ w4:'Ja. Alle unsere Wäscheparfums sind <strong>100 % vegan und niemals an Tieren getestet</strong>. Wir verwenden keine Inhaltsstoffe tierischen Ursprungs, und die Herstellung folgt ethischen und nachhaltigen Standards.'
+ },
+ hr:{
+ u1:'0 parabena',
+ u2:'100 % intenzivan miris',
+ u3:'14 dana mirisa',
+ d1:'Besplatna dostava za narudžbe iznad 249 RON',
+ d2:'14 dana besplatnog povrata',
+ alerth:'Parfem za rublje koji traje do 14 dana.',
+ alertp:'Pretvori svako pranje u mali luksuz. Isprobaj sada.',
+ a1h:'Opis',
+ a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Parfem za rublje s drvenastim notama',
+ a1p2:'Adventure Mist 50 ml parfem je za tkanine stvoren za one koji cijene svježinu i profinjenost. Spaja energiju citrusnih nota s cvjetnom nježnošću i drvenastom dubinom u uravnotežen i sofisticiran miris. Dugo se zadržava na odjeći i nakon svakog pranja čuva osjećaj čistoće i svježine.',
+ n1t:'Gornje note',
+ n1v:'Bergamot, mandarina, citrusi, papar',
+ n2t:'Srednje note',
+ n2v:'Jasmin, lavanda, heliotrop, breskva, geranij',
+ n3t:'Bazne note',
+ n3v:'Sandalovina, cedar, oud, vetiver, vanilija, tonka bob, ambra',
+ n4t:'Profil mirisa',
+ n4v:'Drvenast, citrusni',
+ n5t:'Karakter',
+ n5v:'Topao i opuštajući &mdash; idealan za istraživanje prirode, kampiranje i planinarenje',
+ n6t:'Atributi',
+ n6v:'Outdoor, topao, opuštajući, uniseks, nadahnut prirodom, drvenast, citrusni',
+ a2h:'Sastav',
+ a2p1:'&lt; 5 % parfem (fragrance)<br>Denaturirano otapalo<br>Demineralizirana voda',
+ a3h:'Sukladnost proizvoda',
+ a3p1:'<strong>Informacije o sigurnosti proizvoda:</strong> Ne gutati ambalažu. Čuvati izvan dohvata djece &mdash; opasnost od gušenja.',
+ a4h:'Sigurnosne upute',
+ a4p1:'Čuvati izvan dohvata djece. U SLUČAJU DODIRA S KOŽOM: oprati s puno vode i sapuna. U slučaju pojave iritacije ili osipa na koži: zatražiti savjet liječnika. Odložiti sadržaj i spremnik u skladu s lokalnim propisima. Ako je potrebna medicinska pomoć, pokazati spremnik ili etiketu.',
+ payh:'Plaćanje i sigurnost',
+ payp:'Tvoji podaci o plaćanju obrađuju se sigurno. Ne pohranjujemo podatke tvoje kartice i nemamo pristup tvojim bankovnim informacijama.',
+ m1:'Ekološki',
+ m2:'Dermatološki testirano',
+ m3:'Razvijeno za outdoor',
+ s3sub:'Neka miris određuje tvoje raspoloženje, dan za danom.',
+ s3h1:'Pokloni si',
+ s3hw:'trenutak',
+ s3h2:' koji zaslužuješ.',
+ p1:'Prikladno za sve vrste tkanina',
+ p2:'Traje do 14 dana',
+ p3:'Intenzivan miris',
+ p4:'Bez parabena',
+ s4ey:'Zašto volimo svaku bočicu',
+ s4h:'Sa svakim parfemom za rublje uzgajamo promjenu.',
+ s4p1:'Vjerujemo da dobro napravljen proizvod može više od parfumiranja odjeće &mdash; može svakodnevnu rutinu pretvoriti u trenutak radosti, brige i svjesnosti.',
+ s4p2:'Od veganskih formula neispitivanih na životinjama do odgovorne ambalaže, ovaj parfem za rublje mali je, ali svjestan odabir &mdash; svaki dan.',
+ s4q:'Naši mirisi nisu samo dugotrajni &mdash; oni su izjava o tome kako se želimo osjećati i živjeti.',
+ s5h:'Kako se koristi',
+ t1:'Dobro protresi bočicu',
+ x1:'Prije svake upotrebe dobro protresi bočicu kako bi se aktivirala puna koncentracija parfema.',
+ t2:'Doziraj ispravno',
+ x2:'Ulij 5 ml (približno jednu čajnu žličicu) u pregradu za omekšivač u perilici. <em>Nikada ne nanosi izravno na tkaninu.</em>',
+ t3:'Peri kao i obično',
+ x3:'Koristi svoj uobičajeni deterdžent. Ne dodavaj omekšivač &mdash; parfem za rublje ga zamjenjuje.',
+ t4:'Uživaj u svježini',
+ x4:'Nakon sušenja odjeća ostaje mirisna <em>do 14 dana</em>. Više od mirisa &mdash; iskustvo.',
+ s6h:'Često postavljana pitanja',
+ q1:'Kako se koristi parfem za rublje?',
+ w1:'Parfem za rublje dodaj izravno u pregradu za omekšivač u perilici. Preporučena doza je <strong>5 ml na 4&ndash;5 kg rublja</strong>. Radi s bilo kojim deterdžentom, ali ne kombiniraj ga s omekšivačem &mdash; to bi razrijedilo miris.',
+ q2:'Koliko dugo miris traje na odjeći?',
+ w2:'Naši parfemi za rublje formulirani su da traju <strong>do 14 dana</strong> &mdash; ovisno o vrsti tkanine, načinu sušenja i količini. Bazne note poput ambre, sandalovine i cedra pomažu mirisu da se održi tijekom vremena.',
+ q3:'Je li siguran za osjetljivu kožu i dječju odjeću?',
+ w3:'Da. Sve naše formule dermatološki su testirane i bez parabena, bojila i glavnih alergena. Prikladne su za dječju odjeću, posteljinu i tekstil u izravnom dodiru s osjetljivom kožom.',
+ q4:'Je li parfem za rublje veganski i bez testiranja na životinjama?',
+ w4:'Da. Svi naši parfemi za rublje su <strong>100 % veganski i nikada testirani na životinjama</strong>. Ne koristimo sastojke životinjskog podrijetla, a proizvodnja slijedi etičke i održive standarde.'
+ },
+ sl:{
+ u1:'0 parabenov',
+ u2:'100 % intenziven vonj',
+ u3:'14 dni vonja',
+ d1:'Brezplačna dostava pri naročilu nad 249 RON',
+ d2:'14 dni brezplačnega vračila',
+ alerth:'Parfum za perilo, ki zdrži do 14 dni.',
+ alertp:'Spremeni vsako pranje v majhen luksuz. Preizkusi zdaj.',
+ a1h:'Opis',
+ a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Parfum za perilo z lesnimi notami',
+ a1p2:'Adventure Mist 50 ml je parfum za tekstil, ustvarjen za tiste, ki cenijo svežino in prefinjenost. Združuje energijo citrusnih not s cvetlično nežnostjo in lesno globino v uravnotežen in prefinjen vonj. Na oblačilih se zadrži dolgo in po vsakem pranju ohranja občutek čistoče in svežine.',
+ n1t:'Vrhnje note',
+ n1v:'Bergamotka, mandarina, citrusi, poper',
+ n2t:'Srčne note',
+ n2v:'Jasmin, sivka, heliotrop, breskev, geranija',
+ n3t:'Bazne note',
+ n3v:'Sandalovina, cedra, oud, vetiver, vanilija, tonkin bob, ambra',
+ n4t:'Profil vonja',
+ n4v:'Lesni, citrusni',
+ n5t:'Značaj',
+ n5v:'Topel in sproščujoč &mdash; idealen za raziskovanje narave, kampiranje in pohodništvo',
+ n6t:'Lastnosti',
+ n6v:'Outdoor, topel, sproščujoč, uniseks, navdihnjen z naravo, lesni, citrusni',
+ a2h:'Sestava',
+ a2p1:'&lt; 5 % parfum (fragrance)<br>Denaturirano topilo<br>Demineralizirana voda',
+ a3h:'Skladnost izdelka',
+ a3p1:'<strong>Informacije o varnosti izdelka:</strong> Embalaže ne zaužijte. Hraniti zunaj dosega otrok &mdash; nevarnost zadušitve.',
+ a4h:'Varnostna opozorila',
+ a4p1:'Hraniti zunaj dosega otrok. PRI STIKU S KOŽO: umiti z veliko vode in mila. Če nastopi draženje kože ali se pojavi izpuščaj: poiščite zdravniško pomoč. Odstraniti vsebino in posodo v skladu z lokalnimi predpisi. Če je potreben zdravniški nasvet, mora biti na voljo posoda ali etiketa izdelka.',
+ payh:'Plačilo in varnost',
+ payp:'Tvoji plačilni podatki so obdelani varno. Podatkov o tvoji kartici ne shranjujemo in nimamo dostopa do tvojih bančnih informacij.',
+ m1:'Okolju prijazno',
+ m2:'Dermatološko testirano',
+ m3:'Razvito za outdoor',
+ s3sub:'Naj vonj določa tvoje razpoloženje, dan za dnem.',
+ s3h1:'Privošči si',
+ s3hw:'trenutek',
+ s3h2:', ki si ga zaslužiš.',
+ p1:'Primerno za vse vrste tkanin',
+ p2:'Zdrži do 14 dni',
+ p3:'Intenziven vonj',
+ p4:'Brez parabenov',
+ s4ey:'Zakaj ljubimo vsako stekleničko',
+ s4h:'Z vsakim parfumom za perilo gojimo spremembo.',
+ s4p1:'Verjamemo, da dobro narejen izdelek zmore več kot le odišaviti oblačila &mdash; vsakdanjo rutino lahko spremeni v trenutek veselja, skrbi in pozornosti.',
+ s4p2:'Od veganskih formul, ki niso testirane na živalih, do odgovorne embalaže je ta parfum za perilo majhna, a zavestna izbira &mdash; vsak dan.',
+ s4q:'Naši vonji niso le dolgotrajni &mdash; so izjava o tem, kako se želimo počutiti in živeti.',
+ s5h:'Kako se uporablja',
+ t1:'Stekleničko dobro pretresi',
+ x1:'Pred vsako uporabo stekleničko dobro pretresi, da se aktivira polna koncentracija parfuma.',
+ t2:'Pravilno odmeri',
+ x2:'Nalij 5 ml (približno čajno žličko) v predelek za mehčalec v pralnem stroju. <em>Nikoli ne nanašaj neposredno na tkanino.</em>',
+ t3:'Peri kot običajno',
+ x3:'Uporabi svoj običajni pralni prašek. Ne dodajaj mehčalca &mdash; parfum za perilo ga nadomesti.',
+ t4:'Uživaj v svežini',
+ x4:'Po sušenju oblačila ostanejo odišavljena <em>do 14 dni</em>. Več kot vonj &mdash; izkušnja.',
+ s6h:'Pogosta vprašanja',
+ q1:'Kako se uporablja parfum za perilo?',
+ w1:'Parfum za perilo dodaj neposredno v predelek za mehčalec v pralnem stroju. Priporočen odmerek je <strong>5 ml na 4&ndash;5 kg perila</strong>. Deluje z vsakim pralnim praškom, vendar ga ne kombiniraj z mehčalcem &mdash; ta bi vonj razredčil.',
+ q2:'Kako dolgo vonj ostane na oblačilih?',
+ w2:'Naši parfumi za perilo so zasnovani, da zdržijo <strong>do 14 dni</strong> &mdash; odvisno od vrste tkanine, načina sušenja in uporabljene količine. Bazne note kot ambra, sandalovina in cedra pomagajo vonju, da se ohrani.',
+ q3:'Je primeren za občutljivo kožo in otroška oblačila?',
+ w3:'Da. Vse naše formule so dermatološko testirane in brez parabenov, barvil ter glavnih alergenov. Primerne so za otroška oblačila, posteljnino in tekstil v neposrednem stiku z občutljivo kožo.',
+ q4:'Je parfum za perilo veganski in brez testiranja na živalih?',
+ w4:'Da. Vsi naši parfumi za perilo so <strong>100 % veganski in nikoli testirani na živalih</strong>. Ne uporabljamo sestavin živalskega izvora, proizvodnja pa sledi etičnim in trajnostnim standardom.'
+ },
+ bg:{
+ u1:'0 парабени',
+ u2:'100 % интензивен аромат',
+ u3:'14 дни аромат',
+ d1:'Безплатна доставка при поръчка над 249 RON',
+ d2:'14 дни безплатно връщане',
+ alerth:'Парфюм за пране, който издържа до 14 дни.',
+ alertp:'Превърни всяко пране в малък лукс. Изпробвай сега.',
+ a1h:'Описание',
+ a1p1:'<strong>Adventure Mist &ndash; 50 ml</strong> | Парфюм за пране с дървесни нотки',
+ a1p2:'Adventure Mist 50 ml е парфюм за текстил, създаден за онези, които ценят свежестта и изтънчеността. Съчетава енергията на цитрусовите нотки с флорална нежност и дървесна дълбочина в балансиран и изискан аромат. Задържа се дълго върху дрехите и след всяко пране запазва усещането за чистота и свежест.',
+ n1t:'Връхни нотки',
+ n1v:'Бергамот, мандарина, цитруси, пипер',
+ n2t:'Средни нотки',
+ n2v:'Жасмин, лавандула, хелиотроп, праскова, здравец',
+ n3t:'Базови нотки',
+ n3v:'Сандалово дърво, кедър, уд, ветивер, ванилия, тонка, амбра',
+ n4t:'Ароматен профил',
+ n4v:'Дървесен, цитрусов',
+ n5t:'Характер',
+ n5v:'Топъл и релаксиращ &mdash; идеален за изследване на природата, къмпинг и туризъм',
+ n6t:'Характеристики',
+ n6v:'Outdoor, топъл, релаксиращ, унисекс, вдъхновен от природата, дървесен, цитрусов',
+ a2h:'Състав',
+ a2p1:'&lt; 5 % парфюм (fragrance)<br>Денатуриран разтворител<br>Деминерализирана вода',
+ a3h:'Съответствие на продукта',
+ a3p1:'<strong>Информация за безопасността на продукта:</strong> Не поглъщайте опаковката. Да се съхранява извън обсега на деца &mdash; опасност от задушаване.',
+ a4h:'Указания за безопасност',
+ a4p1:'Да се съхранява извън обсега на деца. ПРИ КОНТАКТ С КОЖАТА: измийте обилно с вода и сапун. При поява на кожно дразнене или обрив: потърсете медицински съвет. Съдържанието и съдът да се изхвърлят в съответствие с местните разпоредби. При необходимост от медицинска помощ носете опаковката или етикета.',
+ payh:'Плащане и сигурност',
+ payp:'Твоите платежни данни се обработват сигурно. Не съхраняваме данните на картата ти и нямаме достъп до банковата ти информация.',
+ m1:'Екологично',
+ m2:'Дерматологично тествано',
+ m3:'Разработено за outdoor',
+ s3sub:'Нека ароматът определя настроението ти, ден след ден.',
+ s3h1:'Подари си',
+ s3hw:'момента',
+ s3h2:', който заслужаваш.',
+ p1:'Подходящ за всички видове тъкани',
+ p2:'Издържа до 14 дни',
+ p3:'Интензивен аромат',
+ p4:'Без парабени',
+ s4ey:'Защо обичаме всяка бутилка',
+ s4h:'С всеки парфюм за пране отглеждаме промяна.',
+ s4p1:'Вярваме, че добре направеният продукт може повече от това да ароматизира дрехите &mdash; може да превърне ежедневния навик в момент на радост, грижа и внимание.',
+ s4p2:'От вегански формули, нетествани върху животни, до отговорни опаковки, този парфюм за пране е малък, но осъзнат избор &mdash; всеки ден.',
+ s4q:'Нашите аромати не са само дълготрайни &mdash; те са изявление за това как искаме да се чувстваме и да живеем.',
+ s5h:'Как се използва',
+ t1:'Разклати бутилката добре',
+ x1:'Преди всяка употреба разклати бутилката добре, за да се активира пълната концентрация на парфюма.',
+ t2:'Дозирай правилно',
+ x2:'Налей 5 ml (около една чаена лъжичка) в отделението за омекотител на пералнята. <em>Никога не прилагай директно върху тъканта.</em>',
+ t3:'Пери както обикновено',
+ x3:'Използвай обичайния си перилен препарат. Не добавяй омекотител &mdash; парфюмът за пране го замества.',
+ t4:'Наслади се на свежестта',
+ x4:'След изсушаване дрехите остават ароматни <em>до 14 дни</em>. Повече от аромат &mdash; преживяване.',
+ s6h:'Често задавани въпроси',
+ q1:'Как се използва парфюмът за пране?',
+ w1:'Добави парфюма за пране директно в отделението за омекотител на пералнята. Препоръчителната доза е <strong>5 ml на 4&ndash;5 kg пране</strong>. Работи с всеки перилен препарат, но не го комбинирай с омекотител &mdash; това би разредило аромата.',
+ q2:'Колко дълго ароматът остава върху дрехите?',
+ w2:'Нашите парфюми за пране са създадени да издържат <strong>до 14 дни</strong> &mdash; в зависимост от вида на тъканта, начина на сушене и използваното количество. Базови нотки като амбра, сандалово дърво и кедър помагат на аромата да се задържи.',
+ q3:'Безопасен ли е за чувствителна кожа и детски дрехи?',
+ w3:'Да. Всички наши формули са дерматологично тествани и без парабени, оцветители и основни алергени. Подходящи са за детски дрехи, спално бельо и текстил в директен контакт с чувствителна кожа.',
+ q4:'Веган ли е парфюмът за пране и без тестове върху животни?',
+ w4:'Да. Всички наши парфюми за пране са <strong>100 % вегански и никога не са тествани върху животни</strong>. Не използваме съставки от животински произход, а производството следва етични и устойчиви стандарди.'
+ }
+ };
+ var t=T[locale];
+ if(!t)return;
+ function txt(s,v){var e=document.querySelector(s);if(e)e.textContent=v;}
+ function ih(s,v){var e=document.querySelector(s);if(e)e.innerHTML=v;}
+ function ihs(s,v){document.querySelectorAll(s).forEach(function(e){e.innerHTML=v;});}
+ /* S1 */
+ txt('.nfp-u1',t.u1);txt('.nfp-u2',t.u2);txt('.nfp-u3',t.u3);
+ txt('.nfp-d1',t.d1);txt('.nfp-d2',t.d2);
+ txt('.nfp-alert-h',t.alerth);txt('.nfp-alert-p',t.alertp);
+ txt('.nfp-a1h',t.a1h);ih('.nfp-a1p1',t.a1p1);txt('.nfp-a1p2',t.a1p2);
+ txt('.nfp-n1t',t.n1t);ih('.nfp-n1v',t.n1v);
+ txt('.nfp-n2t',t.n2t);ih('.nfp-n2v',t.n2v);
+ txt('.nfp-n3t',t.n3t);ih('.nfp-n3v',t.n3v);
+ txt('.nfp-n4t',t.n4t);ih('.nfp-n4v',t.n4v);
+ txt('.nfp-n5t',t.n5t);ih('.nfp-n5v',t.n5v);
+ txt('.nfp-n6t',t.n6t);ih('.nfp-n6v',t.n6v);
+ txt('.nfp-a2h',t.a2h);ih('.nfp-a2p1',t.a2p1);
+ txt('.nfp-a3h',t.a3h);ih('.nfp-a3p1',t.a3p1);
+ txt('.nfp-a4h',t.a4h);txt('.nfp-a4p1',t.a4p1);
+ txt('.nfp-payh',t.payh);txt('.nfp-payp',t.payp);
+ /* S2 — beziaci pas, kazdy text 2x */
+ ihs('.nfp-m1,.nfp-m1b',t.m1);ihs('.nfp-m2,.nfp-m2b',t.m2);ihs('.nfp-m3,.nfp-m3b',t.m3);
+ /* S3 */
+ txt('.nfp-s3sub',t.s3sub);txt('.nfp-s3h1',t.s3h1);txt('.nfp-s3hw',t.s3hw);txt('.nfp-s3h2',t.s3h2);
+ txt('.nfp-p1',t.p1);txt('.nfp-p2',t.p2);txt('.nfp-p3',t.p3);txt('.nfp-p4',t.p4);
+ /* S4 */
+ txt('.nfp-s4ey',t.s4ey);txt('.nfp-s4h',t.s4h);
+ txt('.nfp-s4p1',t.s4p1);txt('.nfp-s4p2',t.s4p2);txt('.nfp-s4q',t.s4q);
+ /* S5 */
+ txt('.nfp-s5h',t.s5h);
+ txt('.nfp-t1',t.t1);ih('.nfp-x1',t.x1);
+ txt('.nfp-t2',t.t2);ih('.nfp-x2',t.x2);
+ txt('.nfp-t3',t.t3);ih('.nfp-x3',t.x3);
+ txt('.nfp-t4',t.t4);ih('.nfp-x4',t.x4);
+ /* S6 */
+ txt('.nfp-s6h',t.s6h);
+ txt('.nfp-q1',t.q1);ih('.nfp-w1',t.w1);
+ txt('.nfp-q2',t.q2);ih('.nfp-w2',t.w2);
+ txt('.nfp-q3',t.q3);ih('.nfp-w3',t.w3);
+ txt('.nfp-q4',t.q4);ih('.nfp-w4',t.w4);
+})();
+</script>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
+ {% unless ecom_has_variant_picker %}
+ <input type="hidden" name="id" value="{{product.selected_or_first_available_variant.id}}" />
+ <script type="application/json" id="product-json-{{product.id}}-ecom-vv3uxldmdqa">
+ {% if product.variants_count > 250 %}
+ {% assign checkIsHighVariant = true %}
+ {% endif %}
+ {%- render "ecom_product_json", product: product, checkIsHighVariant: checkIsHighVariant-%}
+ </script>
+ {% endunless %}
+ {%- endform -%}
+ {% assign ecom_has_variant_picker = false %}
+ {%- endif -%}
+ 
+</div></div>
+{% schema %}
+{
+ "name": "perfume",
+ "settings": [
+ {
+ "type": "header",
+ "content": "The section was generated by [Ecomposer](https:\/\/ecomposer.io).",
+ "info": "\n EComposer is a Visual Page Builder app on Shopify AppStore.\n It provides 100+ pre-built templates in library,\n so you can build unlimited pages that you can imagine with it.\n Please don't add Shopify sections to EComposer's page in the theme customize. If you do this, Shopify sections will be deleted when you republish your page in EComposer\n "
+ },
+ {
+ "type": "header",
+ "content": "[EDIT WITH EComposer APP \u2192](https:\/\/admin.shopify.com\/store\/sportfinder-international\/apps\/ecomposer?open_builder=1&page=product&id=6a8bf61ed53c80c7480d5252&utm_source=theme-customize)",
+ "info": "(*You must install the app to start editing this section [Learn more](https:\/\/help.ecomposer.io\/docs\/getting-started\/installation\/))"
+ }
+ ]
+}
+{% endschema %}

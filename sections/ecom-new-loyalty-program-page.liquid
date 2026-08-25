@@ -1,0 +1,978 @@
+{% comment %}
+ EComposer (https://ecomposer.io)
+ You SHOULD NOT modify source code in this page because
+ It is automatically generated from EComposer
+ At 2026-08-19 12:03:22
+ {% endcomment %} 
+ 
+ {% assign ecom_root_url = routes.root_url %}
+ {% if ecom_root_url != '/'%}
+ {% assign ecom_root_url = routes.root_url | append: '/' %}
+ {% endif %}
+ {% assign translation = metaobjects['app--6509291--ecom_translation']['app--6509291--ecom-translation-uwjcjywi'].data.value %}
+ <link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript>
+{%capture section_id %}ecom-new-loyalty-program-page{% endcapture%}{% if section and section_id == section.id and headless == true %}
+{{ content_for_header }}
+{% render 'ecom_header', ECOM_THEME: true %}{% endif %}
+{{'ecom-6a85965659f37bd38a0782f2.css' | asset_url | stylesheet_tag }}
+<script src="{{'ecom-6a85965659f37bd38a0782f2.js' | asset_url }}" defer="defer"></script>
+<script type="text/javascript" class="ecom-page-info">
+ window.EComposer = window.EComposer || {};
+ window.EComposer.TEMPLATE_ID="6a85965659f37bd38a0782f2";
+ window.EComposer.PAGE = {"title":"New loyalty program","type":"page","slug":"ecom-new-loyalty-program","plan_id":4,"template_id":"6a85965659f37bd38a0782f2"};
+ </script>
+<div class="ecom-builder" id="ecom-new-loyalty-program"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-0w9uix9jo8n"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-g6r7nhhw78q"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-0w9uix9jo8n" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfvp,#nfvp *,#nfvp *::before,#nfvp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfvp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfvp img{display:block;max-width:100%}
+#nfvp a,#nfvp a:visited,#nfvp a:hover,#nfvp a:active{text-decoration:none!important;color:inherit}
+#nfvp{background:#0a0a0a;color:#fff}
+</style>
+</head>
+<body>
+<div id="nfvp" style="background:#0a0a0a;color:#fff">
+<style>
+#nfvp ._v1 ._ey{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8f8f8f}
+#nfvp ._v1 ._h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#fff;margin-top:8px}
+#nfvp ._v1 ._red{color:#e3350e}
+#nfvp ._v1 ._lead{font-size:15px;line-height:1.65;color:rgba(255,255,255,.60);margin-top:16px;max-width:62ch}
+#nfvp ._v1 ._card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px}
+#nfvp ._v1 ._line{border-top:1px solid rgba(255,255,255,.10)}
+#nfvp ._v1 ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:17px 32px;background:#c72d0c;color:#fff!important;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;width:100%;min-height:48px;text-align:center;transition:background .2s ease,transform .25s ease}
+#nfvp ._v1 ._btn:hover{background:#ad270a;transform:translateX(6px)}
+#nfvp ._v1 ._btn:active{background:#ad270a}
+#nfvp ._v1 ._tlink{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;border-bottom:2px solid #e3350e;padding:4px 0 6px;min-height:24px;transition:transform .25s ease}
+#nfvp ._v1 ._tlink:hover{transform:translateX(6px)}
+#nfvp ._v1 ._ar{flex:0 0 auto}
+#nfvp ._v1 ._btn-t{display:inline}
+#nfvp ._v1 a:focus-visible,#nfvp ._v1 summary:focus-visible{outline:2px solid #ffffff;outline-offset:3px}
+@media(min-width:768px){
+ #nfvp ._v1 ._h2{font-size:44px}
+ #nfvp ._v1 ._lead{font-size:16px}
+ #nfvp ._v1 ._btn{width:auto;padding:18px 40px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfvp ._v1 ._h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){
+ #nfvp ._v1 ._btn,#nfvp ._v1 ._tlink{transition:none}
+ #nfvp ._v1 ._btn:hover,#nfvp ._v1 ._tlink:hover{transform:none}
+}
+#nfvp ._v1{padding:72px 24px 64px}
+#nfvp ._v1-in{display:flex;flex-direction:column;align-items:flex-start;gap:0}
+#nfvp ._v1-h1{font-size:40px;font-weight:800;line-height:1.02;letter-spacing:-.03em;color:#fff;margin-top:12px}
+#nfvp ._v1-note{margin-top:28px;padding:20px 18px;font-size:14px;line-height:1.6;color:rgba(255,255,255,.78);border-left:3px solid #e3350e;border-radius:0 10px 10px 0;max-width:64ch}
+#nfvp ._v1-btn{margin-top:28px}
+@media(min-width:768px){
+ #nfvp ._v1{padding:120px 64px 104px}
+ #nfvp ._v1-h1{font-size:clamp(44px,5vw,76px)}
+ #nfvp ._v1-note{padding:24px 24px;font-size:15px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfvp ._v1-h1{font-size:44px}}
+</style>
+<section class="_v1">
+ <div class="_v1-in">
+ <span class="_ey _v1-ey">Loyalty program</span>
+ <h1 class="_v1-h1">Your new loyalty program:<br><span class="_red">NF Flowline Loyalty™</span></h1>
+ <p class="_lead _v1-body">We&#39;ve changed the way we reward you. Our Cashback Bonus program has been replaced by the new NF Flowline Loyalty™ program, which gives you more ways to earn points and enjoy rewards.</p>
+ <div class="_v1-note">You haven&#39;t lost your cashback. We automatically transferred your balance to the new program, and it&#39;s waiting for you in your account.</div>
+ <a class="_btn _v1-btn" href="https://shop.northfinder.com/account/login"><span class="_btn-t">Log in</span><span class="_ar" aria-hidden="true">&rarr;</span></a>
+ </div>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-odpfumfb9p"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-krpg45e1hro"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-odpfumfb9p" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfvp,#nfvp *,#nfvp *::before,#nfvp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfvp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfvp img{display:block;max-width:100%}
+#nfvp a,#nfvp a:visited,#nfvp a:hover,#nfvp a:active{text-decoration:none!important;color:inherit}
+#nfvp{background:#ffffff;color:#0f0f0f}
+</style>
+</head>
+<body>
+<div id="nfvp" style="background:#ffffff;color:#0f0f0f">
+<style>
+#nfvp ._v2 ._ey{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6b6b6b}
+#nfvp ._v2 ._h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#0f0f0f;margin-top:8px}
+#nfvp ._v2 ._red{color:#e3350e}
+#nfvp ._v2 ._lead{font-size:15px;line-height:1.65;color:rgba(15,15,15,.60);margin-top:16px;max-width:62ch}
+#nfvp ._v2 ._card{background:#f7f7f7;border:1px solid rgba(15,15,15,.08);border-radius:10px}
+#nfvp ._v2 ._line{border-top:1px solid rgba(15,15,15,.10)}
+#nfvp ._v2 ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:17px 32px;background:#c72d0c;color:#fff!important;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;width:100%;min-height:48px;text-align:center;transition:background .2s ease,transform .25s ease}
+#nfvp ._v2 ._btn:hover{background:#ad270a;transform:translateX(6px)}
+#nfvp ._v2 ._btn:active{background:#ad270a}
+#nfvp ._v2 ._tlink{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0f0f0f;border-bottom:2px solid #e3350e;padding:4px 0 6px;min-height:24px;transition:transform .25s ease}
+#nfvp ._v2 ._tlink:hover{transform:translateX(6px)}
+#nfvp ._v2 ._ar{flex:0 0 auto}
+#nfvp ._v2 ._btn-t{display:inline}
+#nfvp ._v2 a:focus-visible,#nfvp ._v2 summary:focus-visible{outline:2px solid #2b3c48;outline-offset:3px}
+@media(min-width:768px){
+ #nfvp ._v2 ._h2{font-size:44px}
+ #nfvp ._v2 ._lead{font-size:16px}
+ #nfvp ._v2 ._btn{width:auto;padding:18px 40px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfvp ._v2 ._h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){
+ #nfvp ._v2 ._btn,#nfvp ._v2 ._tlink{transition:none}
+ #nfvp ._v2 ._btn:hover,#nfvp ._v2 ._tlink:hover{transform:none}
+}
+#nfvp ._v2{padding:56px 24px}
+#nfvp ._v2-in{display:flex;flex-direction:column;gap:36px}
+#nfvp ._v2-cta{margin-top:24px}
+#nfvp ._v2-conv{padding:24px 20px;text-align:left}
+#nfvp ._v2-conv-v{font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#e3350e}
+#nfvp ._v2-conv-l{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(15,15,15,.66);margin-top:10px}
+#nfvp ._v2-conv-e{font-size:14px;line-height:1.6;color:rgba(15,15,15,.60);margin-top:16px;padding-top:16px;border-top:1px solid rgba(15,15,15,.10)}
+#nfvp ._v2-facts{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:14px}
+#nfvp ._v2-facts li{position:relative;padding-left:20px;font-size:14px;line-height:1.6;color:rgba(15,15,15,.60)}
+#nfvp ._v2-facts li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;background:#e3350e}
+@media(min-width:768px){
+ #nfvp ._v2{padding:96px 64px}
+ #nfvp ._v2-in{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+ #nfvp ._v2-conv{padding:32px 28px}
+ #nfvp ._v2-conv-v{font-size:44px}
+ #nfvp ._v2-facts li{font-size:15px}
+}
+</style>
+<section class="_v2">
+ <div class="_v2-in">
+ <div class="_v2-l">
+ <span class="_ey _v2-ey">Cashback</span>
+ <h2 class="_h2 _v2-h2">What happened to<br><span class="_red">my cashback?</span></h2>
+ <p class="_lead _v2-body">Nothing disappeared. We closed the Cashback Bonus program on 31 March 2026 and automatically converted your balance into points in NF Flowline Loyalty™.</p>
+ <a class="_tlink _v2-cta" href="https://shop.northfinder.com/account/login"><span class="_btn-t">Log in</span><span class="_ar" aria-hidden="true">&rarr;</span></a>
+ </div>
+ <div class="_v2-r">
+ <div class="_card _v2-conv">
+ <div class="_v2-conv-v">1 &euro; = 100</div>
+ <div class="_v2-conv-l">cashback &rarr; points</div>
+ <div class="_v2-conv-e">If you had &euro;5 in cashback, you&#39;ll find 500 points in the new program.</div>
+ </div>
+ <ul class="_v2-facts">
+ <li class="_v2-f1">Your points are in your account under NF Flowline Loyalty™ as soon as you log in &mdash; balance, level and available rewards.</li>
+ <li class="_v2-f2">If you don&#39;t see your points, make sure you&#39;re logged in with the same email address you used for your purchases.</li>
+ </ul>
+ </div>
+ </div>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-8q3v2vhkyur"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-br3n8pj97j"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-8q3v2vhkyur" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfvp,#nfvp *,#nfvp *::before,#nfvp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfvp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfvp img{display:block;max-width:100%}
+#nfvp a,#nfvp a:visited,#nfvp a:hover,#nfvp a:active{text-decoration:none!important;color:inherit}
+#nfvp{background:#161616;color:#fff}
+</style>
+</head>
+<body>
+<div id="nfvp" style="background:#161616;color:#fff">
+<style>
+#nfvp ._v3 ._ey{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8f8f8f}
+#nfvp ._v3 ._h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#fff;margin-top:8px}
+#nfvp ._v3 ._red{color:#e3350e}
+#nfvp ._v3 ._lead{font-size:15px;line-height:1.65;color:rgba(255,255,255,.60);margin-top:16px;max-width:62ch}
+#nfvp ._v3 ._card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px}
+#nfvp ._v3 ._line{border-top:1px solid rgba(255,255,255,.10)}
+#nfvp ._v3 ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:17px 32px;background:#c72d0c;color:#fff!important;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;width:100%;min-height:48px;text-align:center;transition:background .2s ease,transform .25s ease}
+#nfvp ._v3 ._btn:hover{background:#ad270a;transform:translateX(6px)}
+#nfvp ._v3 ._btn:active{background:#ad270a}
+#nfvp ._v3 ._tlink{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;border-bottom:2px solid #e3350e;padding:4px 0 6px;min-height:24px;transition:transform .25s ease}
+#nfvp ._v3 ._tlink:hover{transform:translateX(6px)}
+#nfvp ._v3 ._ar{flex:0 0 auto}
+#nfvp ._v3 ._btn-t{display:inline}
+#nfvp ._v3 a:focus-visible,#nfvp ._v3 summary:focus-visible{outline:2px solid #ffffff;outline-offset:3px}
+@media(min-width:768px){
+ #nfvp ._v3 ._h2{font-size:44px}
+ #nfvp ._v3 ._lead{font-size:16px}
+ #nfvp ._v3 ._btn{width:auto;padding:18px 40px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfvp ._v3 ._h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){
+ #nfvp ._v3 ._btn,#nfvp ._v3 ._tlink{transition:none}
+ #nfvp ._v3 ._btn:hover,#nfvp ._v3 ._tlink:hover{transform:none}
+}
+#nfvp ._v3{background:#161616;padding:56px 24px}
+#nfvp ._v3-hdr{margin-bottom:32px}
+#nfvp ._v3-cards{display:flex;flex-direction:column;gap:12px}
+#nfvp ._v3-card{padding:24px 20px;display:flex;flex-direction:column;gap:0}
+#nfvp ._v3-name{font-size:13px;font-weight:800;letter-spacing:.20em;text-transform:uppercase;color:#fff}
+#nfvp ._v3-rate{display:flex;align-items:baseline;gap:10px;margin-top:16px;flex-wrap:wrap}
+#nfvp ._v3-pct{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#e3350e}
+#nfvp ._v3-rl{font-size:12px;line-height:1.4;color:rgba(255,255,255,.55);max-width:18ch}
+#nfvp ._v3-cond{font-size:13px;line-height:1.6;color:rgba(255,255,255,.60);margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.10)}
+#nfvp ._v3-bl{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:10px}
+#nfvp ._v3-bl li{position:relative;padding-left:20px;font-size:13px;line-height:1.55;color:rgba(255,255,255,.78)}
+#nfvp ._v3-bl li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px;background:#e3350e}
+#nfvp ._v3-mp{font-size:12px;line-height:1.6;color:rgba(255,255,255,.58);margin-top:24px;max-width:80ch}
+@media(min-width:768px){
+ #nfvp ._v3{padding:96px 64px}
+ #nfvp ._v3-hdr{margin-bottom:44px}
+ #nfvp ._v3-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+ #nfvp ._v3-card{padding:32px 28px}
+ #nfvp ._v3-pct{font-size:52px}
+ #nfvp ._v3-cond{font-size:14px}
+ #nfvp ._v3-bl li{font-size:14px}
+ #nfvp ._v3-mp{font-size:13px;margin-top:32px}
+}
+</style>
+<section class="_v3">
+ <div class="_v3-hdr">
+ <span class="_ey _v3-ey">Three levels</span>
+ <h2 class="_h2 _v3-h2">How you earn<br><span class="_red">points from now on</span></h2>
+ <p class="_lead _v3-intro">You earn points on your purchases and for activity in your account. The more you explore with us, the more rewards you unlock.</p>
+ </div>
+ <div class="_v3-cards">
+ <div class="_card _v3-card">
+ <div class="_v3-name">FLOW</div>
+ <div class="_v3-rate"><span class="_v3-pct">3&#8239;%</span><span class="_v3-rl">of your purchase value back in points</span></div>
+ <div class="_v3-cond _v3-c1">The starting level for everyone after registration or your first purchase.</div>
+ </div>
+ <div class="_card _v3-card">
+ <div class="_v3-name">PATH</div>
+ <div class="_v3-rate"><span class="_v3-pct">5&#8239;%</span><span class="_v3-rl">of your purchase value back in points</span></div>
+ <div class="_v3-cond _v3-c2">From &euro;125 in purchases within 365 days, or after at least 2 orders.</div>
+ <ul class="_v3-bl"><li class="_v3-b2a">Member Pricing &minus;8&#8239;% on selected products when logged in</li></ul>
+ </div>
+ <div class="_card _v3-card">
+ <div class="_v3-name">PEAK</div>
+ <div class="_v3-rate"><span class="_v3-pct">7&#8239;%</span><span class="_v3-rl">of your purchase value back in points</span></div>
+ <div class="_v3-cond _v3-c3">From &euro;300 in purchases within 365 days, or after at least 4 orders.</div>
+ <ul class="_v3-bl"><li class="_v3-b3a">Member Pricing &minus;12&#8239;% on selected products when logged in</li><li class="_v3-b3b">Free shipping to Austria, Bulgaria, Czechia, Germany, Croatia, Poland, Romania, Slovenia and Slovakia</li></ul>
+ </div>
+ </div>
+ <p class="_v3-mp">Member Pricing is a seasonal benefit that applies to selected products available at the time. The products included and the discount offered may change depending on the season and current offer.</p>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-mx98kza33c"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-yit7u0t7cb"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-mx98kza33c" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfvp,#nfvp *,#nfvp *::before,#nfvp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfvp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfvp img{display:block;max-width:100%}
+#nfvp a,#nfvp a:visited,#nfvp a:hover,#nfvp a:active{text-decoration:none!important;color:inherit}
+#nfvp{background:#ffffff;color:#0f0f0f}
+</style>
+</head>
+<body>
+<div id="nfvp" style="background:#ffffff;color:#0f0f0f">
+<style>
+#nfvp ._v4 ._ey{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6b6b6b}
+#nfvp ._v4 ._h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#0f0f0f;margin-top:8px}
+#nfvp ._v4 ._red{color:#e3350e}
+#nfvp ._v4 ._lead{font-size:15px;line-height:1.65;color:rgba(15,15,15,.60);margin-top:16px;max-width:62ch}
+#nfvp ._v4 ._card{background:#f7f7f7;border:1px solid rgba(15,15,15,.08);border-radius:10px}
+#nfvp ._v4 ._line{border-top:1px solid rgba(15,15,15,.10)}
+#nfvp ._v4 ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:17px 32px;background:#c72d0c;color:#fff!important;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;width:100%;min-height:48px;text-align:center;transition:background .2s ease,transform .25s ease}
+#nfvp ._v4 ._btn:hover{background:#ad270a;transform:translateX(6px)}
+#nfvp ._v4 ._btn:active{background:#ad270a}
+#nfvp ._v4 ._tlink{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0f0f0f;border-bottom:2px solid #e3350e;padding:4px 0 6px;min-height:24px;transition:transform .25s ease}
+#nfvp ._v4 ._tlink:hover{transform:translateX(6px)}
+#nfvp ._v4 ._ar{flex:0 0 auto}
+#nfvp ._v4 ._btn-t{display:inline}
+#nfvp ._v4 a:focus-visible,#nfvp ._v4 summary:focus-visible{outline:2px solid #2b3c48;outline-offset:3px}
+@media(min-width:768px){
+ #nfvp ._v4 ._h2{font-size:44px}
+ #nfvp ._v4 ._lead{font-size:16px}
+ #nfvp ._v4 ._btn{width:auto;padding:18px 40px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfvp ._v4 ._h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){
+ #nfvp ._v4 ._btn,#nfvp ._v4 ._tlink{transition:none}
+ #nfvp ._v4 ._btn:hover,#nfvp ._v4 ._tlink:hover{transform:none}
+}
+#nfvp ._v4{padding:56px 24px}
+#nfvp ._v4-cols{display:flex;flex-direction:column;gap:40px;margin-top:32px}
+#nfvp ._v4-ch{font-size:20px;font-weight:700;line-height:1.2;color:#0f0f0f}
+#nfvp ._v4-cl{font-size:14px;line-height:1.6;color:rgba(15,15,15,.60);margin-top:10px}
+#nfvp ._v4-steps{list-style:none;counter-reset:st;margin-top:20px;display:flex;flex-direction:column;gap:14px}
+#nfvp ._v4-steps li{counter-increment:st;position:relative;padding-left:38px;font-size:14px;line-height:1.6;color:#0f0f0f;min-height:26px}
+#nfvp ._v4-steps li::before{content:counter(st);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:4px;background:#c72d0c;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+#nfvp ._v4-note{font-size:13px;line-height:1.6;color:rgba(15,15,15,.64);margin-top:18px;padding-top:16px;border-top:1px solid rgba(15,15,15,.10)}
+#nfvp ._v4-note+._v4-note{margin-top:8px;padding-top:0;border-top:0}
+@media(min-width:768px){
+ #nfvp ._v4{padding:96px 64px}
+ #nfvp ._v4-cols{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:44px;align-items:start}
+ #nfvp ._v4-ch{font-size:24px}
+ #nfvp ._v4-steps li{font-size:15px}
+}
+</style>
+<section class="_v4">
+ <span class="_ey _v4-ey">How it works</span>
+ <div class="_v4-cols">
+ <div class="_v4-c">
+ <h2 class="_v4-ch _v4-c1h">How do I log in?</h2>
+ <p class="_v4-cl _v4-c1l">Simple and password-free. All you need is your email.</p>
+ <ol class="_v4-steps">
+ <li class="_v4-c1s1">Click the account icon or the Log in button.</li>
+ <li class="_v4-c1s2">Enter the email address you used for your purchases.</li>
+ <li class="_v4-c1s3">We&#39;ll send you a login link or a one-time code by email.</li>
+ <li class="_v4-c1s4">Confirm it and you&#39;re in &mdash; you&#39;ll see your points balance right away.</li>
+ </ol>
+ <p class="_v4-note _v4-c1n">If the email doesn&#39;t arrive within a few minutes, check your spam or junk folder.</p>
+ </div>
+ <div class="_v4-c">
+ <h2 class="_v4-ch _v4-c2h">How do I use my points?</h2>
+ <p class="_v4-cl _v4-c2l">Turn your points into a discount coupon and use it on your purchase.</p>
+ <ol class="_v4-steps">
+ <li class="_v4-c2s1">Log in and open the NF Flowline Loyalty™ section.</li>
+ <li class="_v4-c2s2">Choose a coupon from the rewards catalogue and exchange your points for it.</li>
+ <li class="_v4-c2s3">Enter the code in the discount code field when completing your order.</li>
+ </ol>
+ <p class="_v4-note _v4-c2n1">Each coupon is valid for 60 days from the moment you create it, so don&#39;t wait too long to use it.</p>
+ <p class="_v4-note _v4-c2n2">Coupons cannot be combined &mdash; you can use only one coupon per order.</p>
+ </div>
+ </div>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-uryows13rym"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-6gtw7qassfc"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-uryows13rym" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfvp,#nfvp *,#nfvp *::before,#nfvp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfvp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfvp img{display:block;max-width:100%}
+#nfvp a,#nfvp a:visited,#nfvp a:hover,#nfvp a:active{text-decoration:none!important;color:inherit}
+#nfvp{background:#0f0f0f;color:#fff}
+</style>
+</head>
+<body>
+<div id="nfvp" style="background:#0f0f0f;color:#fff">
+<style>
+#nfvp ._v5 ._ey{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8f8f8f}
+#nfvp ._v5 ._h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#fff;margin-top:8px}
+#nfvp ._v5 ._red{color:#e3350e}
+#nfvp ._v5 ._lead{font-size:15px;line-height:1.65;color:rgba(255,255,255,.60);margin-top:16px;max-width:62ch}
+#nfvp ._v5 ._card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px}
+#nfvp ._v5 ._line{border-top:1px solid rgba(255,255,255,.10)}
+#nfvp ._v5 ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:17px 32px;background:#c72d0c;color:#fff!important;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;width:100%;min-height:48px;text-align:center;transition:background .2s ease,transform .25s ease}
+#nfvp ._v5 ._btn:hover{background:#ad270a;transform:translateX(6px)}
+#nfvp ._v5 ._btn:active{background:#ad270a}
+#nfvp ._v5 ._tlink{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;border-bottom:2px solid #e3350e;padding:4px 0 6px;min-height:24px;transition:transform .25s ease}
+#nfvp ._v5 ._tlink:hover{transform:translateX(6px)}
+#nfvp ._v5 ._ar{flex:0 0 auto}
+#nfvp ._v5 ._btn-t{display:inline}
+#nfvp ._v5 a:focus-visible,#nfvp ._v5 summary:focus-visible{outline:2px solid #ffffff;outline-offset:3px}
+@media(min-width:768px){
+ #nfvp ._v5 ._h2{font-size:44px}
+ #nfvp ._v5 ._lead{font-size:16px}
+ #nfvp ._v5 ._btn{width:auto;padding:18px 40px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfvp ._v5 ._h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){
+ #nfvp ._v5 ._btn,#nfvp ._v5 ._tlink{transition:none}
+ #nfvp ._v5 ._btn:hover,#nfvp ._v5 ._tlink:hover{transform:none}
+}
+#nfvp ._v5{padding:56px 24px}
+#nfvp ._v5-in{display:flex;flex-direction:column;gap:32px}
+#nfvp ._v5-acts{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:0}
+#nfvp ._v5-acts li{position:relative;padding:14px 0 14px 30px;font-size:14px;line-height:1.5;color:rgba(255,255,255,.82);border-top:1px solid rgba(255,255,255,.10)}
+#nfvp ._v5-acts li:last-child{border-bottom:1px solid rgba(255,255,255,.10)}
+#nfvp ._v5-acts li::before{content:"+";position:absolute;left:0;top:13px;color:#e3350e;font-size:16px;font-weight:800;line-height:1.4}
+#nfvp ._v5-r{padding:24px 20px}
+#nfvp ._v5-vh{font-size:18px;font-weight:700;line-height:1.25;color:#fff}
+#nfvp ._v5-vb1,#nfvp ._v5-vb2{font-size:14px;line-height:1.65;color:rgba(255,255,255,.62);margin-top:14px}
+@media(min-width:768px){
+ #nfvp ._v5{padding:96px 64px}
+ #nfvp ._v5-in{display:grid;grid-template-columns:1.25fr 1fr;gap:72px;align-items:start}
+ #nfvp ._v5-acts li{font-size:15px;padding:16px 0 16px 30px}
+ #nfvp ._v5-r{padding:32px 28px}
+ #nfvp ._v5-vh{font-size:20px}
+ #nfvp ._v5-vb1,#nfvp ._v5-vb2{font-size:15px}
+}
+</style>
+<section class="_v5">
+ <div class="_v5-in">
+ <div class="_v5-l">
+ <span class="_ey _v5-ey">Even more points</span>
+ <h2 class="_h2 _v5-h2">Points for more<br><span class="_red">than purchases</span></h2>
+ <p class="_lead _v5-intro">You can also earn extra points for other activities.</p>
+ <ul class="_v5-acts">
+ <li class="_v5-a1">Registering and subscribing to our newsletter</li>
+ <li class="_v5-a2">Completing your profile</li>
+ <li class="_v5-a3">Leaving a product review</li>
+ <li class="_v5-a4">Referring a friend</li>
+ <li class="_v5-a5">A birthday bonus, if you&#39;ve added your date of birth to your profile</li>
+ </ul>
+ </div>
+ <div class="_card _v5-r">
+ <h3 class="_v5-vh">How long do my points last?</h3>
+ <p class="_v5-vb1">Your points stay valid as long as you&#39;re active. If you don&#39;t make a purchase or earn points in any other way for 6 months, they expire. Every new purchase or other activity extends their validity for another 6 months.</p>
+ <p class="_v5-vb2">If you haven&#39;t used your converted cashback yet, log in and turn your points into a reward as soon as possible.</p>
+ </div>
+ </div>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-x3jti3soini"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-63b5uhhh6zd"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-x3jti3soini" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfvp,#nfvp *,#nfvp *::before,#nfvp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfvp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfvp img{display:block;max-width:100%}
+#nfvp a,#nfvp a:visited,#nfvp a:hover,#nfvp a:active{text-decoration:none!important;color:inherit}
+#nfvp{background:#ffffff;color:#0f0f0f}
+</style>
+</head>
+<body>
+<div id="nfvp" style="background:#ffffff;color:#0f0f0f">
+<style>
+#nfvp ._v6 ._ey{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6b6b6b}
+#nfvp ._v6 ._h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#0f0f0f;margin-top:8px}
+#nfvp ._v6 ._red{color:#e3350e}
+#nfvp ._v6 ._lead{font-size:15px;line-height:1.65;color:rgba(15,15,15,.60);margin-top:16px;max-width:62ch}
+#nfvp ._v6 ._card{background:#f7f7f7;border:1px solid rgba(15,15,15,.08);border-radius:10px}
+#nfvp ._v6 ._line{border-top:1px solid rgba(15,15,15,.10)}
+#nfvp ._v6 ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:17px 32px;background:#c72d0c;color:#fff!important;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;width:100%;min-height:48px;text-align:center;transition:background .2s ease,transform .25s ease}
+#nfvp ._v6 ._btn:hover{background:#ad270a;transform:translateX(6px)}
+#nfvp ._v6 ._btn:active{background:#ad270a}
+#nfvp ._v6 ._tlink{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0f0f0f;border-bottom:2px solid #e3350e;padding:4px 0 6px;min-height:24px;transition:transform .25s ease}
+#nfvp ._v6 ._tlink:hover{transform:translateX(6px)}
+#nfvp ._v6 ._ar{flex:0 0 auto}
+#nfvp ._v6 ._btn-t{display:inline}
+#nfvp ._v6 a:focus-visible,#nfvp ._v6 summary:focus-visible{outline:2px solid #2b3c48;outline-offset:3px}
+@media(min-width:768px){
+ #nfvp ._v6 ._h2{font-size:44px}
+ #nfvp ._v6 ._lead{font-size:16px}
+ #nfvp ._v6 ._btn{width:auto;padding:18px 40px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfvp ._v6 ._h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){
+ #nfvp ._v6 ._btn,#nfvp ._v6 ._tlink{transition:none}
+ #nfvp ._v6 ._btn:hover,#nfvp ._v6 ._tlink:hover{transform:none}
+}
+#nfvp ._v6{padding:56px 24px}
+#nfvp ._v6-list{margin-top:32px;border-top:1px solid rgba(15,15,15,.12)}
+#nfvp ._v6-i{border-bottom:1px solid rgba(15,15,15,.12)}
+#nfvp ._v6-i summary{list-style:none;cursor:pointer;padding:20px 40px 20px 0;position:relative;font-size:15px;font-weight:700;line-height:1.4;color:#0f0f0f}
+#nfvp ._v6-i summary::-webkit-details-marker{display:none}
+#nfvp ._v6-i summary::after{content:"";position:absolute;right:6px;top:26px;width:11px;height:11px;border-right:2px solid #e3350e;border-bottom:2px solid #e3350e;transform:rotate(45deg);transition:transform .22s ease}
+#nfvp ._v6-i[open] summary::after{transform:rotate(-135deg)}
+#nfvp ._v6-i summary:focus-visible{outline:2px solid #0f0f0f;outline-offset:2px}
+#nfvp ._v6-ans{padding:0 0 22px;font-size:14px;line-height:1.7;color:rgba(15,15,15,.62);max-width:78ch}
+@media(min-width:768px){
+ #nfvp ._v6{padding:96px 64px}
+ #nfvp ._v6-list{margin-top:44px}
+ #nfvp ._v6-i summary{font-size:17px;padding:24px 48px 24px 0}
+ #nfvp ._v6-i summary::after{top:31px}
+ #nfvp ._v6-ans{font-size:15px;padding-bottom:26px}
+}
+</style>
+<section class="_v6">
+ <span class="_ey _v6-ey">FAQ</span>
+ <h2 class="_h2 _v6-h2">Frequently asked<br><span class="_red">questions</span></h2>
+ <div class="_v6-list">
+ <details class="_v6-i"><summary class="_v6-q1">Why can&#39;t I see my points?</summary><div class="_v6-ans _v6-a1">Check that you&#39;re logged in with the same email address you used for previous purchases. You&#39;ll find your points in the NF Flowline Loyalty™ section. If you still don&#39;t see them, get in touch with our customer service.</div></details>
+ <details class="_v6-i"><summary class="_v6-q2">Why didn&#39;t I receive points for my purchase?</summary><div class="_v6-ans _v6-a2">Newly earned points remain pending for approximately 20 days until the return period has passed. They are then activated automatically.</div></details>
+ <details class="_v6-i"><summary class="_v6-q3">Can I use more than one coupon per order?</summary><div class="_v6-ans _v6-a3">No. Coupons cannot be combined, and you can use only one discount coupon per order.</div></details>
+ <details class="_v6-i"><summary class="_v6-q4">Why doesn&#39;t my points balance look right?</summary><div class="_v6-ans _v6-a4">Make sure you&#39;re logged in with the correct email address and check whether it has been more than 6 months since your last activity in the program. Remember that some newly earned points may still be pending activation. If your balance still doesn&#39;t look right, contact our customer service.</div></details>
+ </div>
+</section>
+</div>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-6giwvc3yhcs"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-4vdf6bmct2a"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-6giwvc3yhcs" deep="2"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+#nfvp,#nfvp *,#nfvp *::before,#nfvp *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+#nfvp{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden}
+#nfvp img{display:block;max-width:100%}
+#nfvp a,#nfvp a:visited,#nfvp a:hover,#nfvp a:active{text-decoration:none!important;color:inherit}
+#nfvp{background:#ffffff;color:#0f0f0f}
+</style>
+</head>
+<body>
+<div id="nfvp" style="background:#ffffff;color:#0f0f0f">
+<style>
+#nfvp ._v7 ._ey{display:block;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6b6b6b}
+#nfvp ._v7 ._h2{font-size:28px;font-weight:700;line-height:1.08;letter-spacing:-.01em;color:#0f0f0f;margin-top:8px}
+#nfvp ._v7 ._red{color:#e3350e}
+#nfvp ._v7 ._lead{font-size:15px;line-height:1.65;color:rgba(15,15,15,.60);margin-top:16px;max-width:62ch}
+#nfvp ._v7 ._card{background:#f7f7f7;border:1px solid rgba(15,15,15,.08);border-radius:10px}
+#nfvp ._v7 ._line{border-top:1px solid rgba(15,15,15,.10)}
+#nfvp ._v7 ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:17px 32px;background:#c72d0c;color:#fff!important;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;width:100%;min-height:48px;text-align:center;transition:background .2s ease,transform .25s ease}
+#nfvp ._v7 ._btn:hover{background:#ad270a;transform:translateX(6px)}
+#nfvp ._v7 ._btn:active{background:#ad270a}
+#nfvp ._v7 ._tlink{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0f0f0f;border-bottom:2px solid #e3350e;padding:4px 0 6px;min-height:24px;transition:transform .25s ease}
+#nfvp ._v7 ._tlink:hover{transform:translateX(6px)}
+#nfvp ._v7 ._ar{flex:0 0 auto}
+#nfvp ._v7 ._btn-t{display:inline}
+#nfvp ._v7 a:focus-visible,#nfvp ._v7 summary:focus-visible{outline:2px solid #2b3c48;outline-offset:3px}
+@media(min-width:768px){
+ #nfvp ._v7 ._h2{font-size:44px}
+ #nfvp ._v7 ._lead{font-size:16px}
+ #nfvp ._v7 ._btn{width:auto;padding:18px 40px}
+}
+@media(min-width:768px) and (max-width:1023px){#nfvp ._v7 ._h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){
+ #nfvp ._v7 ._btn,#nfvp ._v7 ._tlink{transition:none}
+ #nfvp ._v7 ._btn:hover,#nfvp ._v7 ._tlink:hover{transform:none}
+}
+#nfvp ._v7{padding:0 24px 64px}
+#nfvp ._v7-in{padding:32px 24px;display:flex;flex-direction:column;gap:0}
+#nfvp ._v7-btn{margin-top:28px}
+@media(min-width:768px){
+ #nfvp ._v7{padding:0 64px 104px}
+ #nfvp ._v7-in{padding:56px 48px;display:grid;grid-template-columns:1.4fr 1fr;gap:56px;align-items:center}
+ #nfvp ._v7-btn{margin-top:0;justify-self:start}
+}
+@media(min-width:768px) and (max-width:1023px){#nfvp ._v7-in{grid-template-columns:1fr;gap:28px}}
+</style>
+<section class="_v7">
+ <div class="_card _v7-in">
+ <div class="_v7-l">
+ <span class="_ey _v7-ey">Support</span>
+ <h2 class="_h2 _v7-h2">Need <span class="_red">help?</span></h2>
+ <p class="_lead _v7-body">If you have questions about your cashback conversion, your points or logging in, we&#39;re here for you. Get in touch with our customer service and we&#39;ll be happy to help.</p>
+ </div>
+ <a class="_btn _v7-btn" data-nf-nofix href="https://shop.northfinder.com/pages/contact"><span class="_btn-t">Contact customer service</span><span class="_ar" aria-hidden="true">&rarr;</span></a>
+ </div>
+</section>
+</div>
+<script>
+(function(){
+ if(window.__nfvpFixedLinks)return; // pojistka proti dvojitemu spusteniu
+ window.__nfvpFixedLinks=1;
+ var BASE='https://shop.northfinder.com';
+ function nfFixLinks(){
+ var locale=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
+ if(locale.indexOf('-')>0)locale=locale.split('-')[0];
+ locale=locale.toLowerCase();
+ if(locale==='at')locale='de';
+ if(locale==='en')return;
+ document.querySelectorAll('a[href^="'+BASE+'"]:not([data-nf-nofix])').forEach(function(a){
+ var h=a.getAttribute('href');
+ if(!h)return;
+ if(locale==='sk'){a.setAttribute('href',h.replace(BASE,'https://northfinder.sk'));return;}
+ if(locale==='bg'){a.setAttribute('href',h.replace(BASE,'https://northfinder.bg'));return;}
+ var path=h.slice(BASE.length);
+ if(path.indexOf('/'+locale+'/')===0)return; // prefix uz je -> nepridavat druhy
+ a.setAttribute('href',BASE+'/'+locale+path);
+ });
+ }
+ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',nfFixLinks);}
+ else{nfFixLinks();}
+})();
+</script>
+<script>
+(function(){
+ var locale=(window.Shopify&&Shopify.locale)?Shopify.locale:'en';
+ if(locale.indexOf('-')>0)locale=locale.split('-')[0];
+ locale=locale.toLowerCase();
+ if(locale==='at')locale='de';
+ var T={
+ sk:{
+ v1_ey:'Vernostný program',
+ v1_h1a:'Nový vernostný program:',v1_h1b:'NF Flowline Loyalty™',
+ v1_body:'Zmenili sme spôsob, akým odmeňujeme. Program Cashback Bonus sme nahradili novým vernostným programom NF Flowline Loyalty™, ktorý ti dáva viac spôsobov, ako zbierať body a využívať odmeny.',
+ v1_note:'Tvoj cashback nie je stratený. Zostatok sme automaticky previedli do nového programu a čaká na teba v účte.',
+ v1_btn:'Prihlásiť sa',
+ v2_ey:'Cashback',v2_h2a:'Čo sa stalo',v2_h2b:'s mojím cashbackom?',
+ v2_body:'Nič nezmizlo. Program Cashback Bonus sme ukončili 31. 3. 2026 a tvoj zostatok sme automaticky premenili na body v NF Flowline Loyalty™.',
+ v2_cta:'Prihlásiť sa',v2_convl:'cashback → body',
+ v2_conve:'Pri 5 € cashbacku nájdeš v novom programe 500 bodov.',
+ v2_f1:'Body vidíš vo svojom účte v sekcii NF Flowline Loyalty™ hneď po prihlásení — zostatok, tvoju úroveň aj dostupné odmeny.',
+ v2_f2:'Ak body nevidíš, over si, že používaš rovnakú e-mailovú adresu ako pri nákupoch.',
+ v3_ey:'Tri úrovne',v3_h2a:'Ako odteraz',v3_h2b:'zbieraš body',
+ v3_intro:'Body ti pribúdajú za nákupy aj za aktivitu v účte. Čím viac s nami objavuješ, tým viac odmien odomkneš.',
+ v3_rl:'z hodnoty nákupu späť v bodoch',
+ v3_p1:'3 %',v3_p2:'5 %',v3_p3:'7 %',
+ v3_c1:'Základná úroveň pre každého po registrácii alebo prvom nákupe.',
+ v3_c2:'Od 125 € v nákupoch za 365 dní alebo po minimálne 2 objednávkach.',
+ v3_c3:'Od 300 € v nákupoch za 365 dní alebo po minimálne 4 objednávkach.',
+ v3_b2a:'Member Pricing −8 % na vybrané produkty po prihlásení',
+ v3_b3a:'Member Pricing −12 % na vybrané produkty po prihlásení',
+ v3_b3b:'Doprava zdarma do Rakúska, Bulharska, Česka, Nemecka, Chorvátska, Poľska, Rumunska, Slovinska a na Slovensko',
+ v3_mp:'Member Pricing je sezónny benefit a vzťahuje sa na aktuálne vybraný sortiment. Výber produktov a výška zľavy sa môžu meniť podľa sezóny a aktuálnej ponuky.',
+ v4_ey:'Ako to funguje',
+ v4_c1h:'Ako sa prihlásim?',v4_c1l:'Jednoducho a bez hesla. Stačí ti e-mail.',
+ v4_c1s1:'Klikni na ikonu účtu alebo na tlačidlo Prihlásiť sa.',
+ v4_c1s2:'Zadaj e-mail, ktorý používaš pri nákupoch.',
+ v4_c1s3:'Na e-mail ti príde prihlasovací odkaz alebo jednorazový kód.',
+ v4_c1s4:'Potvrď ho a si vnútri — hneď uvidíš svoj bodový zostatok.',
+ v4_c1n:'Ak ti e-mail nepríde do pár minút, pozri sa do priečinka spam alebo nevyžiadaná pošta.',
+ v4_c2h:'Ako využijem svoje body?',v4_c2l:'Body si premeníš na zľavový kupón, ktorý použiješ pri nákupe.',
+ v4_c2s1:'Prihlás sa a otvor sekciu NF Flowline Loyalty™.',
+ v4_c2s2:'V katalógu odmien si vyber kupón a vymeň zaň svoje body.',
+ v4_c2s3:'Kód zadaj pri dokončení objednávky do poľa pre zľavový kód.',
+ v4_c2n1:'Kupón platí 60 dní od vytvorenia, tak s ním zbytočne nečakaj.',
+ v4_c2n2:'Kombinácia kupónov nie je možná — v jednej objednávke môžeš využiť iba jeden kupón.',
+ v5_ey:'Ešte viac bodov',v5_h2a:'Body nielen',v5_h2b:'za nákupy',
+ v5_intro:'Extra body získaš aj za ďalšie aktivity:',
+ v5_a1:'Registráciu a prihlásenie na odber noviniek',v5_a2:'Vyplnenie profilu',v5_a3:'Recenziu produktu',v5_a4:'Odporúčanie kamarátovi',
+ v5_a5:'Narodeninový bonus, ak máš v profile uvedený dátum narodenia',
+ v5_vh:'Dokedy platia moje body?',
+ v5_vb1:'Platnosť bodov závisí od tvojej aktivity. Ak počas 6 mesiacov nič nekúpiš ani nezískaš body inak, expirujú. Každý ďalší nákup alebo aktivita ti platnosť predĺži o ďalších 6 mesiacov.',
+ v5_vb2:'Ak máš prevedený cashback ešte nevyužitý, prihlás sa a premeň body na odmenu čo najskôr.',
+ v6_ey:'FAQ',v6_h2a:'Časté',v6_h2b:'otázky',
+ v6_q1:'Prečo nevidím svoje body?',
+ v6_a1:'Skontroluj, že používaš rovnaký e-mail ako pri predchádzajúcich nákupoch. Body nájdeš v sekcii NF Flowline Loyalty™. Ak ich stále nevidíš, ozvi sa nášmu zákazníckemu servisu.',
+ v6_q2:'Prečo mi za nákup nepribudli body?',
+ v6_a2:'Novo získané body približne 20 dní čakajú, kým uplynie lehota na vrátenie tovaru, a potom sa aktivujú automaticky.',
+ v6_q3:'Môžem v jednej objednávke použiť viac kupónov?',
+ v6_a3:'Nie. Kombinácia kupónov nie je možná a v jednej objednávke môžeš využiť iba jeden zľavový kupón.',
+ v6_q4:'Prečo mi nesedí počet bodov?',
+ v6_a4:'Over si, že používaš správny e-mail a či neuplynulo 6 mesiacov od tvojej poslednej aktivity v programe. Nezabudni, že časť novo získaných bodov môže ešte čakať na aktiváciu. Ak to stále nesedí, kontaktuj zákaznícky servis.',
+ v7_ey:'Podpora',v7_h2a:'Potrebuješ',v7_h2b:'pomoc?',
+ v7_body:'Ak máš otázky k prevodu cashbacku, k bodom alebo k prihláseniu, sme tu pre teba. Ozvi sa nášmu zákazníckemu servisu a radi ti pomôžeme.',
+ v7_btn:'Kontaktovať zákaznícky servis'
+ },
+ de:{
+ v1_ey:'Treueprogramm',
+ v1_h1a:'Dein neues Treueprogramm:',v1_h1b:'NF Flowline Loyalty™',
+ v1_body:'Wir haben die Art geändert, wie wir dich belohnen. Das Cashback-Bonus-Programm haben wir durch das neue Treueprogramm NF Flowline Loyalty™ ersetzt, das dir mehr Wege gibt, Punkte zu sammeln und Prämien zu nutzen.',
+ v1_note:'Dein Cashback ist nicht verloren. Wir haben dein Guthaben automatisch in das neue Programm übertragen, und es wartet in deinem Konto auf dich.',
+ v1_btn:'Anmelden',
+ v2_ey:'Cashback',v2_h2a:'Was ist mit meinem',v2_h2b:'Cashback passiert?',
+ v2_body:'Nichts ist verschwunden. Wir haben das Cashback-Bonus-Programm am 31. März 2026 beendet und dein Guthaben automatisch in Punkte in NF Flowline Loyalty™ umgewandelt.',
+ v2_cta:'Anmelden',v2_convl:'Cashback → Punkte',
+ v2_conve:'Hattest du zum Beispiel 5 € Cashback, findest du im neuen Programm 500 Punkte.',
+ v2_f1:'Deine Punkte siehst du in deinem Konto im Bereich NF Flowline Loyalty™ direkt nach der Anmeldung — Guthaben, deine Stufe und verfügbare Prämien.',
+ v2_f2:'Wenn du deine Punkte nicht siehst, prüfe, ob du mit derselben E-Mail-Adresse angemeldet bist, die du bei deinen Einkäufen verwendet hast.',
+ v3_ey:'Drei Stufen',v3_h2a:'So sammelst du',v3_h2b:'ab jetzt Punkte',
+ v3_intro:'Punkte bekommst du für Einkäufe und für Aktivität in deinem Konto. Je mehr du mit uns entdeckst, desto mehr Prämien schaltest du frei.',
+ v3_rl:'des Einkaufswerts zurück in Punkten',
+ v3_p1:'3 %',v3_p2:'5 %',v3_p3:'7 %',
+ v3_c1:'Die Einstiegsstufe für alle nach der Registrierung oder dem ersten Einkauf.',
+ v3_c2:'Ab 125 € Einkaufswert innerhalb von 365 Tagen oder nach mindestens 2 Bestellungen.',
+ v3_c3:'Ab 300 € Einkaufswert innerhalb von 365 Tagen oder nach mindestens 4 Bestellungen.',
+ v3_b2a:'Member Pricing −8 % auf ausgewählte Produkte im angemeldeten Zustand',
+ v3_b3a:'Member Pricing −12 % auf ausgewählte Produkte im angemeldeten Zustand',
+ v3_b3b:'Kostenloser Versand nach Österreich, Bulgarien, Tschechien, Deutschland, Kroatien, Polen, Rumänien, Slowenien und in die Slowakei',
+ v3_mp:'Member Pricing ist ein saisonaler Vorteil und gilt für das jeweils ausgewählte Sortiment. Die Auswahl der Produkte und die Höhe des Rabatts können sich je nach Saison und aktuellem Angebot ändern.',
+ v4_ey:'So funktioniert es',
+ v4_c1h:'Wie melde ich mich an?',v4_c1l:'Einfach und ohne Passwort. Du brauchst nur deine E-Mail.',
+ v4_c1s1:'Klicke auf das Konto-Symbol oder auf die Schaltfläche Anmelden.',
+ v4_c1s2:'Gib die E-Mail-Adresse ein, die du bei deinen Einkäufen verwendet hast.',
+ v4_c1s3:'Du bekommst per E-Mail einen Anmeldelink oder einen Einmalcode.',
+ v4_c1s4:'Bestätige ihn und du bist drin — dein Punktestand ist sofort sichtbar.',
+ v4_c1n:'Wenn die E-Mail nicht innerhalb weniger Minuten ankommt, schau in den Spam- oder Junk-Ordner.',
+ v4_c2h:'Wie nutze ich meine Punkte?',v4_c2l:'Deine Punkte tauschst du in einen Rabattgutschein um, den du beim Einkauf einlöst.',
+ v4_c2s1:'Melde dich an und öffne den Bereich NF Flowline Loyalty™.',
+ v4_c2s2:'Wähle im Prämienkatalog einen Gutschein und tausche deine Punkte dafür ein.',
+ v4_c2s3:'Gib den Code beim Abschluss der Bestellung im Feld für den Rabattcode ein.',
+ v4_c2n1:'Jeder Gutschein ist 60 Tage ab Erstellung gültig, warte also nicht zu lange.',
+ v4_c2n2:'Gutscheine lassen sich nicht kombinieren — pro Bestellung nur ein Gutschein.',
+ v5_ey:'Noch mehr Punkte',v5_h2a:'Punkte für mehr',v5_h2b:'als Einkäufe',
+ v5_intro:'Extra Punkte bekommst du auch für weitere Aktivitäten:',
+ v5_a1:'Registrierung und Anmeldung zum Newsletter',v5_a2:'Vervollständigen deines Profils',v5_a3:'Eine Produktbewertung',v5_a4:'Empfehlung an einen Freund',
+ v5_a5:'Geburtstagsbonus, wenn du dein Geburtsdatum im Profil angegeben hast',
+ v5_vh:'Wie lange sind meine Punkte gültig?',
+ v5_vb1:'Deine Punkte bleiben gültig, solange du aktiv bist. Kaufst du 6 Monate nichts und sammelst auch anders keine Punkte, verfallen sie. Jeder weitere Einkauf oder jede Aktivität verlängert die Gültigkeit um weitere 6 Monate.',
+ v5_vb2:'Wenn du dein übertragenes Cashback noch nicht genutzt hast, melde dich an und wandle die Punkte möglichst bald in eine Prämie um.',
+ v6_ey:'FAQ',v6_h2a:'Häufige',v6_h2b:'Fragen',
+ v6_q1:'Warum sehe ich meine Punkte nicht?',
+ v6_a1:'Prüfe, ob du mit derselben E-Mail-Adresse angemeldet bist wie bei deinen früheren Einkäufen. Deine Punkte findest du im Bereich NF Flowline Loyalty™. Wenn du sie weiterhin nicht siehst, wende dich an unseren Kundenservice.',
+ v6_q2:'Warum habe ich für meinen Einkauf keine Punkte bekommen?',
+ v6_a2:'Neu gesammelte Punkte bleiben rund 20 Tage ausstehend, bis die Rückgabefrist abgelaufen ist. Danach werden sie automatisch aktiviert.',
+ v6_q3:'Kann ich pro Bestellung mehrere Gutscheine nutzen?',
+ v6_a3:'Nein. Gutscheine lassen sich nicht kombinieren, und pro Bestellung kannst du nur einen Rabattgutschein einlösen.',
+ v6_q4:'Warum stimmt mein Punktestand nicht?',
+ v6_a4:'Prüfe, ob du mit der richtigen E-Mail-Adresse angemeldet bist und ob seit deiner letzten Aktivität im Programm mehr als 6 Monate vergangen sind. Denk daran, dass ein Teil der neu gesammelten Punkte noch auf die Aktivierung warten kann. Stimmt der Stand weiterhin nicht, kontaktiere unseren Kundenservice.',
+ v7_ey:'Support',v7_h2a:'Brauchst du',v7_h2b:'Hilfe?',
+ v7_body:'Wenn du Fragen zur Umwandlung deines Cashbacks, zu deinen Punkten oder zur Anmeldung hast, sind wir für dich da. Wende dich an unseren Kundenservice, wir helfen dir gern.',
+ v7_btn:'Kundenservice kontaktieren'
+ },
+ hr:{
+ v1_ey:'Program vjernosti',
+ v1_h1a:'Tvoj novi program vjernosti:',v1_h1b:'NF Flowline Loyalty™',
+ v1_body:'Promijenili smo način na koji te nagrađujemo. Program Cashback Bonus zamijenili smo novim programom vjernosti NF Flowline Loyalty™, koji ti daje više načina da skupljaš bodove i koristiš nagrade.',
+ v1_note:'Tvoj cashback nije izgubljen. Tvoj saldo automatski smo prenijeli u novi program i čeka te na tvom računu.',
+ v1_btn:'Prijavi se',
+ v2_ey:'Cashback',v2_h2a:'Što se dogodilo',v2_h2b:'s mojim cashbackom?',
+ v2_body:'Ništa nije izgubljeno. Program Cashback Bonus zatvorili smo 31. 3. 2026. i tvoj saldo automatski pretvorili u bodove u NF Flowline Loyalty™.',
+ v2_cta:'Prijavi se',v2_convl:'cashback → bodovi',
+ v2_conve:'Uz 5 € cashbacka u novom programu naći ćeš 500 bodova.',
+ v2_f1:'Bodove vidiš na svom računu u sekciji NF Flowline Loyalty™ odmah nakon prijave — saldo, tvoju razinu i dostupne nagrade.',
+ v2_f2:'Ako ne vidiš bodove, provjeri koristiš li istu e-mail adresu kao pri kupnji.',
+ v3_ey:'Tri razine',v3_h2a:'Kako od sada',v3_h2b:'skupljaš bodove',
+ v3_intro:'Bodove dobivaš za kupnje i za aktivnost na računu. Što više s nama otkrivaš, više nagrada otključavaš.',
+ v3_rl:'vrijednosti kupnje natrag u bodovima',
+ v3_p1:'3 %',v3_p2:'5 %',v3_p3:'7 %',
+ v3_c1:'Osnovna razina za svakoga nakon registracije ili prve kupnje.',
+ v3_c2:'Od 125 € vrijednosti kupnji u 365 dana ili nakon najmanje 2 narudžbe.',
+ v3_c3:'Od 300 € vrijednosti kupnji u 365 dana ili nakon najmanje 4 narudžbe.',
+ v3_b2a:'Member Pricing −8 % na odabrane proizvode nakon prijave',
+ v3_b3a:'Member Pricing −12 % na odabrane proizvode nakon prijave',
+ v3_b3b:'Besplatna dostava u Austriju, Bugarsku, Češku, Njemačku, Hrvatsku, Poljsku, Rumuniju, Sloveniju i Slovačku',
+ v3_mp:'Member Pricing je sezonska pogodnost i odnosi se na trenutno odabrani asortiman. Odabir proizvoda i visina popusta mogu se mijenjati ovisno o sezoni i aktualnoj ponudi.',
+ v4_ey:'Kako to funkcionira',
+ v4_c1h:'Kako se prijavim?',v4_c1l:'Jednostavno i bez lozinke. Dovoljan je e-mail.',
+ v4_c1s1:'Klikni na ikonu računa ili na gumb Prijavi se.',
+ v4_c1s2:'Unesi e-mail adresu koju koristiš pri kupnji.',
+ v4_c1s3:'Na e-mail ti dolazi link za prijavu ili jednokratni kod.',
+ v4_c1s4:'Potvrdi ga i unutra si — odmah vidiš svoje stanje bodova.',
+ v4_c1n:'Ako e-mail ne dođe u nekoliko minuta, pogledaj u mapu spam ili neželjena pošta.',
+ v4_c2h:'Kako iskoristim svoje bodove?',v4_c2l:'Bodove pretvaraš u kupon za popust koji iskoristiš pri kupnji.',
+ v4_c2s1:'Prijavi se i otvori sekciju NF Flowline Loyalty™.',
+ v4_c2s2:'U katalogu nagrada odaberi kupon i zamijeni za njega svoje bodove.',
+ v4_c2s3:'Kod unesi pri završetku narudžbe u polje za kod popusta.',
+ v4_c2n1:'Kupon vrijedi 60 dana od izdavanja, pa ne čekaj predugo.',
+ v4_c2n2:'Kuponi se ne mogu kombinirati — u jednoj narudžbi samo jedan kupon.',
+ v5_ey:'Još više bodova',v5_h2a:'Bodovi ne samo',v5_h2b:'za kupnje',
+ v5_intro:'Dodatne bodove dobivaš i za druge aktivnosti:',
+ v5_a1:'Registraciju i prijavu na newsletter',v5_a2:'Ispunjavanje profila',v5_a3:'Recenziju proizvoda',v5_a4:'Preporuku prijatelju',
+ v5_a5:'Rođendanski bonus, ako je datum rođenja unesen u profil',
+ v5_vh:'Do kada vrijede moji bodovi?',
+ v5_vb1:'Valjanost bodova ovisi o tvojoj aktivnosti. Ako 6 mjeseci ništa ne kupiš niti drukčije dobiješ bodove, istječu. Svaka nova kupnja ili aktivnost produljuje valjanost za još 6 mjeseci.',
+ v5_vb2:'Ako je preneseni cashback još neiskorišten, prijavi se i pretvori bodove u nagradu što prije.',
+ v6_ey:'FAQ',v6_h2a:'Često',v6_h2b:'postavljana pitanja',
+ v6_q1:'Zašto ne vidim svoje bodove?',
+ v6_a1:'Provjeri koristiš li istu e-mail adresu kao pri prethodnim kupnjama. Bodove ćeš naći u sekciji NF Flowline Loyalty™. Ako ih i dalje ne vidiš, obrati se našoj službi za korisnike.',
+ v6_q2:'Zašto mi za kupnju nisu pristigli bodovi?',
+ v6_a2:'Novo skupljeni bodovi otprilike 20 dana čekaju da istekne rok za povrat robe, a zatim se aktiviraju automatski.',
+ v6_q3:'Mogu li u jednoj narudžbi iskoristiti više kupona?',
+ v6_a3:'Ne. Kuponi se ne mogu kombinirati i u jednoj narudžbi možeš iskoristiti samo jedan kupon za popust.',
+ v6_q4:'Zašto mi se broj bodova ne poklapa?',
+ v6_a4:'Provjeri koristiš li ispravnu e-mail adresu i je li prošlo više od 6 mjeseci od tvoje posljednje aktivnosti u programu. Ne zaboravi da dio novo skupljenih bodova još može čekati aktivaciju. Ako se i dalje ne poklapa, kontaktiraj službu za korisnike.',
+ v7_ey:'Podrška',v7_h2a:'Trebaš',v7_h2b:'pomoć?',
+ v7_body:'Ako imaš pitanja o prijenosu cashbacka, o bodovima ili o prijavi, tu smo za tebe. Obrati se našoj službi za korisnike i rado ćemo ti pomoći.',
+ v7_btn:'Kontaktiraj službu za korisnike'
+ },
+ sl:{
+ v1_ey:'Program zvestobe',
+ v1_h1a:'Tvoj novi program zvestobe:',v1_h1b:'NF Flowline Loyalty™',
+ v1_body:'Spremenili smo način, kako te nagrajujemo. Program Cashback Bonus smo nadomestili z novim programom zvestobe NF Flowline Loyalty™, ki ti daje več načinov za zbiranje točk in uporabo nagrad.',
+ v1_note:'Tvoj cashback ni izgubljen. Tvoje stanje smo samodejno prenesli v novi program in te čaka na tvojem računu.',
+ v1_btn:'Prijavi se',
+ v2_ey:'Cashback',v2_h2a:'Kaj se je zgodilo',v2_h2b:'z mojim cashbackom?',
+ v2_body:'Nič ni izginilo. Program Cashback Bonus smo zaključili 31. 3. 2026 in tvoje stanje samodejno pretvorili v točke v NF Flowline Loyalty™.',
+ v2_cta:'Prijavi se',v2_convl:'cashback → točke',
+ v2_conve:'Pri 5 € cashbacka te v novem programu čaka 500 točk.',
+ v2_f1:'Točke vidiš na svojem računu v razdelku NF Flowline Loyalty™ takoj po prijavi — stanje, tvojo raven in razpoložljive nagrade.',
+ v2_f2:'Če točk ne vidiš, preveri, ali uporabljaš isti e-poštni naslov kot pri nakupih.',
+ v3_ey:'Tri ravni',v3_h2a:'Kako od zdaj',v3_h2b:'zbiraš točke',
+ v3_intro:'Točke dobivaš za nakupe in za aktivnost na računu. Več kot z nami odkrivaš, več nagrad odkleneš.',
+ v3_rl:'vrednosti nakupa nazaj v točkah',
+ v3_p1:'3 %',v3_p2:'5 %',v3_p3:'7 %',
+ v3_c1:'Osnovna raven za vsakogar po registraciji ali prvem nakupu.',
+ v3_c2:'Od 125 € vrednosti nakupov v 365 dneh ali po vsaj 2 naročilih.',
+ v3_c3:'Od 300 € vrednosti nakupov v 365 dneh ali po vsaj 4 naročilih.',
+ v3_b2a:'Member Pricing −8 % na izbrane izdelke po prijavi',
+ v3_b3a:'Member Pricing −12 % na izbrane izdelke po prijavi',
+ v3_b3b:'Brezplačna dostava v Avstrijo, Bolgarijo, Češko, Nemčijo, Hrvaško, Poljsko, Romunijo, Slovenijo in na Slovaško',
+ v3_mp:'Member Pricing je sezonska ugodnost in velja za trenutno izbrani asortiment. Izbor izdelkov in višina popusta se lahko spreminjata glede na sezono in aktualno ponudbo.',
+ v4_ey:'Kako deluje',
+ v4_c1h:'Kako se prijavim?',v4_c1l:'Preprosto in brez gesla. Dovolj je e-pošta.',
+ v4_c1s1:'Klikni ikono računa ali gumb Prijavi se.',
+ v4_c1s2:'Vnesi e-poštni naslov, ki ga uporabljaš pri nakupih.',
+ v4_c1s3:'Na e-pošto ti pride povezava za prijavo ali enkratna koda.',
+ v4_c1s4:'Potrdi jo in si notri — takoj vidiš stanje svojih točk.',
+ v4_c1n:'Če e-pošta ne prispe v nekaj minutah, poglej v mapo vsiljena ali nezaželena pošta.',
+ v4_c2h:'Kako uporabim svoje točke?',v4_c2l:'Točke pretvoriš v kupon za popust, ki ga uporabiš pri nakupu.',
+ v4_c2s1:'Prijavi se in odpri razdelek NF Flowline Loyalty™.',
+ v4_c2s2:'V katalogu nagrad izberi kupon in zanj zamenjaj svoje točke.',
+ v4_c2s3:'Kodo vnesi pri zaključku naročila v polje za kodo popusta.',
+ v4_c2n1:'Kupon velja 60 dni od nastanka, zato ne čakaj predolgo.',
+ v4_c2n2:'Kuponov ni mogoče združevati — v enem naročilu samo en kupon.',
+ v5_ey:'Še več točk',v5_h2a:'Točke ne le',v5_h2b:'za nakupe',
+ v5_intro:'Dodatne točke dobiš tudi za druge aktivnosti:',
+ v5_a1:'Registracijo in prijavo na e-novice',v5_a2:'Izpolnitev profila',v5_a3:'Oceno izdelka',v5_a4:'Priporočilo prijatelju',
+ v5_a5:'Rojstnodnevni bonus, če imaš v profilu vpisan datum rojstva',
+ v5_vh:'Do kdaj veljajo moje točke?',
+ v5_vb1:'Veljavnost točk je odvisna od tvoje aktivnosti. Če 6 mesecev ničesar ne kupiš in točk ne pridobiš drugače, potečejo. Vsak nadaljnji nakup ali aktivnost podaljša veljavnost za nadaljnjih 6 mesecev.',
+ v5_vb2:'Če je preneseni cashback še neporabljen, se prijavi in točke čim prej pretvori v nagrado.',
+ v6_ey:'FAQ',v6_h2a:'Pogosta',v6_h2b:'vprašanja',
+ v6_q1:'Zakaj ne vidim svojih točk?',
+ v6_a1:'Preveri, ali uporabljaš isti e-poštni naslov kot pri prejšnjih nakupih. Točke najdeš v razdelku NF Flowline Loyalty™. Če jih še vedno ne vidiš, se obrni na našo podporo strankam.',
+ v6_q2:'Zakaj za nakup nisem dobil točk?',
+ v6_a2:'Novo pridobljene točke približno 20 dni čakajo, da poteče rok za vračilo blaga, nato se samodejno aktivirajo.',
+ v6_q3:'Ali lahko v enem naročilu uporabim več kuponov?',
+ v6_a3:'Ne. Kuponov ni mogoče združevati in v enem naročilu lahko uporabiš samo en kupon za popust.',
+ v6_q4:'Zakaj mi število točk ne ustreza?',
+ v6_a4:'Preveri, ali uporabljaš pravi e-poštni naslov in ali je od tvoje zadnje aktivnosti v programu minilo več kot 6 mesecev. Ne pozabi, da del novo pridobljenih točk morda še čaka na aktivacijo. Če še vedno ne ustreza, kontaktiraj podporo strankam.',
+ v7_ey:'Podpora',v7_h2a:'Potrebuješ',v7_h2b:'pomoč?',
+ v7_body:'Če imaš vprašanja o pretvorbi cashbacka, o točkah ali o prijavi, smo tu za tebe. Obrni se na našo podporo strankam in z veseljem ti pomagamo.',
+ v7_btn:'Kontaktiraj podporo strankam'
+ },
+ bg:{
+ v1_ey:'Програма за лоялност',
+ v1_h1a:'Твоята нова програма за лоялност:',v1_h1b:'NF Flowline Loyalty™',
+ v1_body:'Променихме начина, по който те награждаваме. Заменихме програмата Cashback Bonus с новата програма за лоялност NF Flowline Loyalty™, която ти дава повече начини да събираш точки и да използваш награди.',
+ v1_note:'Твоят cashback не е загубен. Прехвърлихме баланса ти автоматично в новата програма и той те чака в профила ти.',
+ v1_btn:'Влизане',
+ v2_ey:'Cashback',v2_h2a:'Какво се случи',v2_h2b:'с моя cashback?',
+ v2_body:'Нищо не е изчезнало. Закрихме програмата Cashback Bonus на 31.03.2026 г. и автоматично превърнахме баланса ти в точки в NF Flowline Loyalty™.',
+ v2_cta:'Влизане',v2_convl:'cashback → точки',
+ v2_conve:'При 5 € cashback в новата програма ще намериш 500 точки.',
+ v2_f1:'Точките виждаш в профила си в секция NF Flowline Loyalty™ веднага след влизане — баланс, твоето ниво и наличните награди.',
+ v2_f2:'Ако не виждаш точките, провери дали използваш същия имейл адрес като при покупките.',
+ v3_ey:'Три нива',v3_h2a:'Как отсега',v3_h2b:'събираш точки',
+ v3_intro:'Точки получаваш за покупки и за активност в профила. Колкото повече откриваш с нас, толкова повече награди отключваш.',
+ v3_rl:'от стойността на покупката обратно в точки',
+ v3_p1:'3 %',v3_p2:'5 %',v3_p3:'7 %',
+ v3_c1:'Основното ниво за всеки след регистрация или първа покупка.',
+ v3_c2:'От 125 € покупки за 365 дни или след поне 2 поръчки.',
+ v3_c3:'От 300 € покупки за 365 дни или след поне 4 поръчки.',
+ v3_b2a:'Member Pricing −8 % върху избрани продукти след вход в профила',
+ v3_b3a:'Member Pricing −12 % върху избрани продукти след вход в профила',
+ v3_b3b:'Безплатна доставка до Австрия, България, Чехия, Германия, Хърватия, Полша, Румъния, Словения и Словакия',
+ v3_mp:'Member Pricing е сезонно предимство и се отнася за текущо избрания асортимент. Изборът на продукти и размерът на отстъпката може да се променят според сезона и актуалната оферта.',
+ v4_ey:'Как работи',
+ v4_c1h:'Как влизам в профила си?',v4_c1l:'Лесно и без парола. Нужен ти е само имейл.',
+ v4_c1s1:'Натисни иконата на профила или бутона Влизане.',
+ v4_c1s2:'Въведи имейл адреса, който използваш при покупките.',
+ v4_c1s3:'На имейла ти идва линк за влизане или еднократен код.',
+ v4_c1s4:'Потвърди го и си вътре — веднага виждаш баланса си от точки.',
+ v4_c1n:'Ако имейлът не дойде в рамките на няколко минути, погледни в папката спам или нежелана поща.',
+ v4_c2h:'Как използвам своите точки?',v4_c2l:'Точките превръщаш в купон за отстъпка, който използваш при покупка.',
+ v4_c2s1:'Влез в профила си и отвори секция NF Flowline Loyalty™.',
+ v4_c2s2:'В каталога с награди избери купон и замени за него своите точки.',
+ v4_c2s3:'Въведи кода при завършване на поръчката в полето за код за отстъпка.',
+ v4_c2n1:'Всеки купон е валиден 60 дни от създаването си, така че не чакай излишно.',
+ v4_c2n2:'Купоните не могат да се комбинират — в една поръчка само един купон.',
+ v5_ey:'Още повече точки',v5_h2a:'Точки не само',v5_h2b:'за покупки',
+ v5_intro:'Допълнителни точки получаваш и за други активности:',
+ v5_a1:'Регистрация и абонамент за бюлетина',v5_a2:'Попълване на профила',v5_a3:'Отзив за продукт',v5_a4:'Препоръка на приятел',
+ v5_a5:'Бонус за рожден ден, ако датата ти на раждане е въведена в профила',
+ v5_vh:'Докога са валидни моите точки?',
+ v5_vb1:'Валидността на точките зависи от твоята активност. Ако в рамките на 6 месеца не купиш нищо и не получиш точки по друг начин, те изтичат. Всяка следваща покупка или активност удължава валидността с още 6 месеца.',
+ v5_vb2:'Ако прехвърленият cashback още не е използван, влез в профила си и превърни точките в награда възможно най-скоро.',
+ v6_ey:'FAQ',v6_h2a:'Често задавани',v6_h2b:'въпроси',
+ v6_q1:'Защо не виждам своите точки?',
+ v6_a1:'Провери дали използваш същия имейл адрес като при предишните покупки. Точките ще намериш в секция NF Flowline Loyalty™. Ако все още не ги виждаш, свържи се с нашето обслужване на клиенти.',
+ v6_q2:'Защо не получих точки за покупката си?',
+ v6_a2:'Новополучените точки изчакват около 20 дни, докато изтече срокът за връщане на стоката, след което се активират автоматично.',
+ v6_q3:'Мога ли да използвам повече от един купон в една поръчка?',
+ v6_a3:'Не. Купоните не могат да се комбинират и в една поръчка можеш да използваш само един купон за отстъпка.',
+ v6_q4:'Защо броят на точките ми не съвпада?',
+ v6_a4:'Провери дали използваш правилния имейл адрес и дали не са минали повече от 6 месеца от последната ти активност в програмата. Не забравяй, че част от новополучените точки може още да чака активация. Ако все още не съвпада, свържи се с обслужване на клиенти.',
+ v7_ey:'Поддръжка',v7_h2a:'Нуждаеш се',v7_h2b:'от помощ?',
+ v7_body:'Ако имаш въпроси за прехвърлянето на cashback, за точките или за влизането в профила, тук сме за теб. Свържи се с нашето обслужване на клиенти и с радост ще ти помогнем.',
+ v7_btn:'Свържи се с обслужване на клиенти'
+ }
+ };
+ var t=T[locale];
+ if(!t)return;
+ function txt(s,v){var e=document.querySelector(s);if(e)e.textContent=v;}
+ function txts(s,a){var es=document.querySelectorAll(s);a.forEach(function(v,i){if(es[i])es[i].textContent=v;});}
+ function ihtml(s,v){var e=document.querySelector(s);if(e)e.innerHTML=v;}
+ var RED='<span class="_red">';
+ // V1 hero
+ txt('._v1-ey',t.v1_ey);
+ ihtml('._v1-h1',t.v1_h1a+'<br>'+RED+t.v1_h1b+'</span>');
+ txt('._v1-body',t.v1_body);
+ txt('._v1-note',t.v1_note);
+ txt('._v1-btn ._btn-t',t.v1_btn);
+ // V2 cashback
+ txt('._v2-ey',t.v2_ey);
+ ihtml('._v2-h2',t.v2_h2a+'<br>'+RED+t.v2_h2b+'</span>');
+ txt('._v2-body',t.v2_body);
+ txt('._v2-cta ._btn-t',t.v2_cta);
+ txt('._v2-conv-l',t.v2_convl);
+ txt('._v2-conv-e',t.v2_conve);
+ txt('._v2-f1',t.v2_f1);
+ txt('._v2-f2',t.v2_f2);
+ // V3 urovne
+ txt('._v3-ey',t.v3_ey);
+ ihtml('._v3-h2',t.v3_h2a+'<br>'+RED+t.v3_h2b+'</span>');
+ txt('._v3-intro',t.v3_intro);
+ txts('._v3-pct',[t.v3_p1,t.v3_p2,t.v3_p3]);
+ txts('._v3-rl',[t.v3_rl,t.v3_rl,t.v3_rl]);
+ txt('._v3-c1',t.v3_c1);txt('._v3-c2',t.v3_c2);txt('._v3-c3',t.v3_c3);
+ txt('._v3-b2a',t.v3_b2a);txt('._v3-b3a',t.v3_b3a);txt('._v3-b3b',t.v3_b3b);
+ txt('._v3-mp',t.v3_mp);
+ // V4 ako to funguje
+ txt('._v4-ey',t.v4_ey);
+ txt('._v4-c1h',t.v4_c1h);txt('._v4-c1l',t.v4_c1l);
+ txt('._v4-c1s1',t.v4_c1s1);txt('._v4-c1s2',t.v4_c1s2);txt('._v4-c1s3',t.v4_c1s3);txt('._v4-c1s4',t.v4_c1s4);
+ txt('._v4-c1n',t.v4_c1n);
+ txt('._v4-c2h',t.v4_c2h);txt('._v4-c2l',t.v4_c2l);
+ txt('._v4-c2s1',t.v4_c2s1);txt('._v4-c2s2',t.v4_c2s2);txt('._v4-c2s3',t.v4_c2s3);
+ txt('._v4-c2n1',t.v4_c2n1);txt('._v4-c2n2',t.v4_c2n2);
+ // V5 extra body
+ txt('._v5-ey',t.v5_ey);
+ ihtml('._v5-h2',t.v5_h2a+'<br>'+RED+t.v5_h2b+'</span>');
+ txt('._v5-intro',t.v5_intro);
+ txt('._v5-a1',t.v5_a1);txt('._v5-a2',t.v5_a2);txt('._v5-a3',t.v5_a3);txt('._v5-a4',t.v5_a4);txt('._v5-a5',t.v5_a5);
+ txt('._v5-vh',t.v5_vh);txt('._v5-vb1',t.v5_vb1);txt('._v5-vb2',t.v5_vb2);
+ // V6 FAQ
+ txt('._v6-ey',t.v6_ey);
+ ihtml('._v6-h2',t.v6_h2a+'<br>'+RED+t.v6_h2b+'</span>');
+ txt('._v6-q1',t.v6_q1);txt('._v6-a1',t.v6_a1);
+ txt('._v6-q2',t.v6_q2);txt('._v6-a2',t.v6_a2);
+ txt('._v6-q3',t.v6_q3);txt('._v6-a3',t.v6_a3);
+ txt('._v6-q4',t.v6_q4);txt('._v6-a4',t.v6_a4);
+ // V7 pomoc
+ var CT={"sk": "https://northfinder.sk/pages/kontakt-4", "bg": "https://northfinder.bg/pages/kontakt-2", "de": "https://shop.northfinder.com/de/pages/kontakt-3", "hr": "https://shop.northfinder.com/hr/pages/kontakt-1", "sl": "https://shop.northfinder.com/sl/pages/kontakt"};
+ var cb=document.querySelector('._v7-btn');
+ if(cb&&CT[locale])cb.setAttribute('href',CT[locale]);
+ txt('._v7-ey',t.v7_ey);
+ ihtml('._v7-h2',t.v7_h2a+' '+RED+t.v7_h2b+'</span>');
+ txt('._v7-body',t.v7_body);
+ txt('._v7-btn ._btn-t',t.v7_btn);
+})();
+</script>
+</body>
+</html></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
+</div></div>
+{% schema %}
+{
+ "name": "New loyalty program",
+ "settings": [
+ {
+ "type": "header",
+ "content": "The section was generated by [Ecomposer](https:\/\/ecomposer.io).",
+ "info": "\n EComposer is a Visual Page Builder app on Shopify AppStore.\n It provides 100+ pre-built templates in library,\n so you can build unlimited pages that you can imagine with it.\n Please don't add Shopify sections to EComposer's page in the theme customize. If you do this, Shopify sections will be deleted when you republish your page in EComposer\n "
+ },
+ {
+ "type": "header",
+ "content": "[EDIT WITH EComposer APP \u2192](https:\/\/admin.shopify.com\/store\/sportfinder-international\/apps\/ecomposer?open_builder=1&page=page&id=6a85965659f37bd38a0782f2&utm_source=theme-customize)",
+ "info": "(*You must install the app to start editing this section [Learn more](https:\/\/help.ecomposer.io\/docs\/getting-started\/installation\/))"
+ }
+ ]
+}
+{% endschema %}

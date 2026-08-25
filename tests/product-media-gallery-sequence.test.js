@@ -86,6 +86,20 @@ describe("resolveProductMediaSequence", () => {
     expect(resolved.slice(1).map((item) => item.mediaId)).toEqual(["main", "video", "detail", "other-color"]);
   });
 
+  test("does not pin a back-type featured image ahead of the front-first sequence", () => {
+    const media = [
+      image("hero", "shirt--NF-TR-3549SKP-811-H.jpg"),
+      image("model", "shirt--NF-TR-3549SKP-811-M_1.jpg"),
+      image("back", "shirt--NF-TR-3549SKP-811-BV.jpg"),
+    ];
+    const resolved = resolveProductMediaSequence({
+      media,
+      initialMediaId: "back",
+    });
+
+    expect(resolved.map((item) => item.mediaId)).toEqual(["hero", "model", "back"]);
+  });
+
   test.each(["model", "external_video"])("retains non-image media objects: %s", (mediaType) => {
     const special =
       mediaType === "model"
