@@ -16,6 +16,14 @@ describe("merchant-authored navigation links", () => {
     expect(source).toContain("{{ grandchildlink.title | escape }}");
   });
 
+  test("desktop category headings stay links when they have child items", () => {
+    const source = readSnippet("header-mega-menu.liquid");
+
+    expect(source).not.toContain("childlink.links == blank and childlink.url != blank");
+    expect(source).toContain("if childlink.url != blank");
+    expect(source).toContain("mega-menu__heading mega-menu__heading--link");
+  });
+
   test("mobile renders authored links and only falls back to generated CTAs", () => {
     const source = readSnippet("menu-drawer-panel.liquid");
 
