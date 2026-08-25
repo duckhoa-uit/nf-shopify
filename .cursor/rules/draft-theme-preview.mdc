@@ -1,0 +1,12 @@
+---
+description: After an unpublished theme push, keep preview_theme_id on the custom domain when verifying with agent-browser.
+alwaysApply: true
+---
+# Draft theme preview URLs
+
+When pushing an unpublished draft and verifying with agent-browser:
+
+- Do not use `pnpm push:*` (`--allow-live`). Use `shopify theme push -e <env> --unpublished --theme "..." --json`.
+- After the `*.myshopify.com?preview_theme_id=` URL redirects to the primary domain, the param is stripped. Immediately re-open the redirected origin + path with `preview_theme_id` restored.
+- Repeat after every navigation. Confirm `Shopify.theme.id` matches the draft before measuring.
+- Full steps: `.cursor/references/draft-theme-agent-browser.md`.

@@ -45,6 +45,8 @@ pnpm settings:backup:all  # snapshot live settings_data.json from all 4 stores
 
 **Note:** `config/settings_data.json` is `ignore`d in `shopify.theme.toml` for every env, so `theme push` never overwrites merchant-managed app embed UUIDs / brand settings. Each store manages its own `settings_data.json` via Theme Editor. Repo holds snapshots in `config/backups/settings_data.<env>.json` (refresh manually).
 
+Unpublished drafts: `shopify theme push -e <env> --unpublished --theme "..." --json` — never `pnpm push:*`. After the myshopify preview URL redirects to the primary domain, restore `?preview_theme_id=` on that origin before agent-browser verify. See `.cursor/references/draft-theme-agent-browser.md`.
+
 ### Manual Commands
 
 ```bash
