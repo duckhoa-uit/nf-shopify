@@ -126,6 +126,38 @@
 /* #short_description{display:none!important} */
 </style>
 
+<script>
+/* ── Belt and braces for the block above ────────────────────────────────
+   The CSS rules did not win on the live page: the h2 hid, the grid did not
+   (computed display stayed "grid" even with !important). The grid lives
+   inside <product-info> in the main product section, and the theme sets its
+   display by a route a stylesheet rule cannot outrank.
+
+   An INLINE style with !important is the top of the cascade, so this wins.
+   Runs three times because <product-info> re-renders itself on variant
+   change, which would otherwise restore the block.
+
+   If you ever confirm the CSS alone is enough, delete this script - not the
+   other way round. Do not remove both.
+   ─────────────────────────────────────────────────────────────────────── */
+(function(){
+  var ids = ['description_and_parameters','description-parameters-grid'];
+  /* add 'short_description' to hide the buy-box copy of the same metafield */
+  function hide(){
+    ids.forEach(function(id){
+      var e = document.getElementById(id);
+      if (e) e.style.setProperty('display','none','important');
+    });
+  }
+  hide();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', hide);
+  }
+  setTimeout(hide, 800);
+  document.addEventListener('variant:change', hide);
+})();
+</script>
+
 
 {%- comment -%} section 2 {%- endcomment -%}
 <div id="nfp" style="background:#e7f1f8;color:#082835">
