@@ -148,6 +148,18 @@
       var e = document.getElementById(id);
       if (e) e.style.setProperty('display','none','important');
     });
+
+    /* Collapse the gap the hidden block leaves behind. display:none removes
+       the grid but not its container's own padding, which left ~200px of
+       white above the marquee. The container held only the h2 and the grid,
+       both now hidden, so zeroing it is safe. Verified on the live page
+       2026-08-18. If a future theme update puts other content in there,
+       this is the first line to drop. */
+    var g = document.getElementById('description-parameters-grid');
+    if (g && g.parentElement) {
+      g.parentElement.style.setProperty('padding','0','important');
+      g.parentElement.style.setProperty('margin','0','important');
+    }
   }
   hide();
   if (document.readyState === 'loading') {
