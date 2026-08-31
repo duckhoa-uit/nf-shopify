@@ -106,9 +106,24 @@
 
    These two ids are hardcoded in the theme template, so they are stable
    across template and theme-version changes. A little empty vertical padding
-   may remain where the block was - that is the safe trade. */
+   may remain where the block was - that is the safe trade.
+
+   !important is deliberate. Verified on the live page 2026-08-18: without it
+   the h2 hid but the grid did not (computed display stayed "grid"), so the
+   theme wins that one - either with its own !important or by setting display
+   inline from JS (the grid carries transition-all duration-300). !important
+   covers both. This is the legitimate use of it: overriding third-party
+   theme code we do not own. Do NOT copy this habit into #nfp rules. */
 #description_and_parameters,
-#description-parameters-grid{display:none}
+#description-parameters-grid{display:none!important}
+
+/* The same short_desc metafield renders a SECOND time inside the buy box,
+   under the "Bude sa vám páčiť" heading, and it is broken there too - the
+   list items open with two <br>, so bullets appear with nothing beside them.
+   Uncomment to hide that copy as well. Left off by default because it sits
+   in the buy box, and removing content from there is a sales decision, not
+   a cosmetic one. */
+/* #short_description{display:none!important} */
 </style>
 
 
