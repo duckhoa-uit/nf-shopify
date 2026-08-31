@@ -95,12 +95,18 @@
 .shopify-section[id$="__inspiration_banner"],
 .shopify-section[id$="__faq_section_Hnngqe"]{display:none}
 
-/* Removes the whole section including its own vertical padding. */
-.shopify-section:has(#description-parameters-grid){display:none}
+/* Target the two elements DIRECTLY. Do not reach for the parent section.
 
-/* Fallback for browsers without :has(). Deliberately a SEPARATE rule: a
-   browser that cannot parse :has() drops only the rule above, and these two
-   still apply - hiding the visible content, if not the empty padding. */
+   ⚠ Do NOT reintroduce  .shopify-section:has(#description-parameters-grid).
+   It was tried on 2026-08-18 and took the entire product card down with it -
+   gallery, title, price, add-to-cart, all gone. The reason: this theme puts
+   "Description and parameters" INSIDE the same .shopify-section as the
+   product card, not in a section of its own. Hiding the parent hides the
+   whole thing.
+
+   These two ids are hardcoded in the theme template, so they are stable
+   across template and theme-version changes. A little empty vertical padding
+   may remain where the block was - that is the safe trade. */
 #description_and_parameters,
 #description-parameters-grid{display:none}
 </style>
