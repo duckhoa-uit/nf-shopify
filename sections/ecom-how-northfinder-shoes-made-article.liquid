@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-09-01 12:07:58
+ At 2026-09-01 12:25:41
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -21,7 +21,7 @@
  window.EComposer.TEMPLATE_ID="6a968dc485c10c55ae0986ea";
  window.EComposer.TEMPLATE = {"title":"NF Article \u2014 How NORTHFINDER Shoes Are Made","type":"article","slug":"ecom-how-northfinder-shoes-made","plan_id":4,"template_id":"6a968dc485c10c55ae0986ea"};
  </script>
-<div class="ecom-builder" id="ecom-how-northfinder-shoes-made"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-ppxf0ux9o1e"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-b9dvwka8q9m"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-ppxf0ux9o1e" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<div class="ecom-builder" id="ecom-how-northfinder-shoes-made"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-4xjjdtnr09g"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-s2jfwwuegm"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-4xjjdtnr09g" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ── Section 1 · page runtime: progress bar, jump-to-section, sticky CTA, i18n
  Root is #nfshu — NO transform, so position:fixed children stay viewport-fixed. */
@@ -276,7 +276,7 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
  window.addEventListener('resize', onScroll, {passive:true});
  paint();
 })();
-</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-r9w81xcce2"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-7lbbkvlv104"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-r9w81xcce2" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-bnrit1muior"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-ot8h9kzkgce"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-bnrit1muior" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 #nfsh,#nfsh *,#nfsh *::before,#nfsh *::after{box-sizing:border-box}
 #nfsh[hidden],#nfsh [hidden]{display:none !important}
@@ -317,9 +317,32 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
 #nfsh .nfsh-btn--ghost{border:1px solid #b7b7b7;color:var(--ink)}
 #nfsh .nfsh-btn--ghost:hover{border-color:var(--ink);background:var(--soft)}
 #nfsh .nfsh-btn--wide{width:100%;height:48px;font-size:15.5px}
+/* product card — shared, because it is used both inline in the article and in
+ the closing grid, and the two sections carry separate copies of this prelude */
+#nfsh .s-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+/* .s-grid.s-grid--2, not .s-grid--2: this prelude is repeated in every section,
+ so a later section's copy of `#nfsh .s-grid` would otherwise win on source
+ order and force the inline pair back to four columns. Any future modifier on
+ a prelude class needs the same treatment. */
+#nfsh .s-grid.s-grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#nfsh .s-card a{display:block}
+#nfsh .s-card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--soft)}
+#nfsh .s-name{margin-top:14px !important;font-size:16.5px !important;
+ line-height:1.25 !important;font-weight:700;letter-spacing:.02em}
+#nfsh .s-sub{margin-top:4px !important;font-size:14px !important;
+ line-height:1.45 !important;color:var(--grey)}
+/* the price keeps its height while Shopify is asked for the real number, so
+ filling it in cannot shift the grid */
+#nfsh .s-price{margin-top:8px !important;font-size:15px !important;
+ line-height:1.4 !important;font-weight:600;min-height:1.4em}
+#nfsh .s-card a:hover .s-name{text-decoration:underline;text-underline-offset:4px;
+ text-decoration-thickness:1px}
 @media (max-width:1023px){
  #nfsh .nfsh-grid{padding:0 24px;grid-template-columns:minmax(0,1fr);column-gap:0}
  #nfsh .nfsh-col,#nfsh .nfsh-full{grid-column:1}
+ #nfsh .s-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}
+ #nfsh .s-name{font-size:15.5px !important}
+ #nfsh .s-sub{font-size:13px !important}
 }
 /* ── Section 2 · article header + lead image ─────────────────────────────── */
 #nfsh.nfsh-hero{padding:clamp(36px,4.4vw,60px) 0 0}
@@ -330,11 +353,15 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
 #nfsh .h-meta{margin-top:26px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
  font-size:var(--fs-s);line-height:1.4;color:var(--grey)}
 #nfsh .h-meta i{font-style:normal;color:var(--hair)}
-#nfsh .h-lead{margin-top:32px}
-#nfsh .h-lead img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--soft)}
+/* The lead used to run the full 1344 px at 3:2 — 896 px tall, a whole laptop
+ screen before a word of the article. It now starts at the headline's left edge
+ and runs to the right margin at 2:1, which is also close to the frames' own
+ 1.9 ratio, so almost nothing is cropped. */
+#nfsh .h-lead{grid-column:3 / -1;margin-top:32px}
+#nfsh .h-lead img{width:100%;aspect-ratio:2/1;object-fit:cover;background:var(--soft)}
 @media (max-width:1023px){
  #nfsh.nfsh-hero{padding-top:clamp(28px,7vw,44px)}
- #nfsh .h-lead{margin-top:26px}
+ #nfsh .h-lead{grid-column:1;margin-top:26px}
  #nfsh .h-lead img{aspect-ratio:4/3}
 }
 </style>
@@ -348,12 +375,12 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
  </header>
  </div>
  <div class="nfsh-grid">
- <figure class="nfsh-full h-lead">
- <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=780" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=520 520w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=780 780w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=1040 1040w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=1300 1300w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=1600 1600w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=1920 1920w" sizes="(min-width:1536px) 1344px, (min-width:1024px) calc(100vw - 96px), calc(100vw - 48px)" width="1200" height="800"
+ <figure class="h-lead">
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=780" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=520 520w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=780 780w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=1040 1040w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=1300 1300w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=1600 1600w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/1_photo_main.png?v=1788260386&amp;width=1920 1920w" sizes="(min-width:1024px) 76vw, calc(100vw - 48px)" width="1200" height="800"
  alt="Our designer sitting between a camp chair and a tent in the studio, a frame from the film about the collection" data-t-alt="alt_lead" loading="eager" decoding="async" fetchpriority="high">
  </figure>
  </div>
-</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-fdwuoodty7"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-v2babu7ccle"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-fdwuoodty7" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-zmsk8lkgnsi"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-9z7bdfs1v56"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-zmsk8lkgnsi" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 #nfsh,#nfsh *,#nfsh *::before,#nfsh *::after{box-sizing:border-box}
 #nfsh[hidden],#nfsh [hidden]{display:none !important}
@@ -394,9 +421,32 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
 #nfsh .nfsh-btn--ghost{border:1px solid #b7b7b7;color:var(--ink)}
 #nfsh .nfsh-btn--ghost:hover{border-color:var(--ink);background:var(--soft)}
 #nfsh .nfsh-btn--wide{width:100%;height:48px;font-size:15.5px}
+/* product card — shared, because it is used both inline in the article and in
+ the closing grid, and the two sections carry separate copies of this prelude */
+#nfsh .s-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+/* .s-grid.s-grid--2, not .s-grid--2: this prelude is repeated in every section,
+ so a later section's copy of `#nfsh .s-grid` would otherwise win on source
+ order and force the inline pair back to four columns. Any future modifier on
+ a prelude class needs the same treatment. */
+#nfsh .s-grid.s-grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#nfsh .s-card a{display:block}
+#nfsh .s-card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--soft)}
+#nfsh .s-name{margin-top:14px !important;font-size:16.5px !important;
+ line-height:1.25 !important;font-weight:700;letter-spacing:.02em}
+#nfsh .s-sub{margin-top:4px !important;font-size:14px !important;
+ line-height:1.45 !important;color:var(--grey)}
+/* the price keeps its height while Shopify is asked for the real number, so
+ filling it in cannot shift the grid */
+#nfsh .s-price{margin-top:8px !important;font-size:15px !important;
+ line-height:1.4 !important;font-weight:600;min-height:1.4em}
+#nfsh .s-card a:hover .s-name{text-decoration:underline;text-underline-offset:4px;
+ text-decoration-thickness:1px}
 @media (max-width:1023px){
  #nfsh .nfsh-grid{padding:0 24px;grid-template-columns:minmax(0,1fr);column-gap:0}
  #nfsh .nfsh-col,#nfsh .nfsh-full{grid-column:1}
+ #nfsh .s-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}
+ #nfsh .s-name{font-size:15.5px !important}
+ #nfsh .s-sub{font-size:13px !important}
 }
 /* ── Section 3 · article body ──────────────────────────────────────────────
  The whole story lives in ONE section so the sticky table of contents has the
@@ -445,44 +495,28 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
  a phone and keeps every subject (all of them are centre-framed). */
 #nfsh .a-fig{margin-top:34px}
 #nfsh .a-fig img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--soft)}
-/* the three Dolomites frames, where the text says the samples went to the Dolomites.
- Spans the full 10 columns so each frame is ~364 px rather than a 212 px stamp. */
-#nfsh .a-gal{grid-column:1 / -1;margin-top:34px;display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-#nfsh .a-gal img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--soft)}
+/* Landscapes at section breaks. Four near-identical mountain frames in one 2x2
+ block cancelled each other out and none of them got any attention; spread over
+ the article they mark the seams instead. They start at the text's left edge and
+ run into the right margin the prose leaves empty — the reading line never moves,
+ but the rhythm changes, which is what tells you a section ended. 2:1 because the
+ frames are 1.9 panoramas, so almost nothing is cropped and they stay low. */
+#nfsh .a-fig--wide{grid-column:1 / -1;margin-top:44px;margin-bottom:10px}
+#nfsh .a-fig--wide img{aspect-ratio:2/1}
 /* ---- shoppable pair card: women's + men's of the model the text just named ---- */
-#nfsh .a-prod{margin-top:28px;border:1px solid var(--line);padding:18px 18px 0;
+#nfsh .a-prod{margin-top:28px;border:1px solid var(--line);padding:18px;
  transition:border-color .15s ease,box-shadow .15s ease}
+#nfsh .a-prod .s-grid{margin-top:16px;gap:18px}
 #nfsh .a-prod:hover{border-color:#c9c9c9;box-shadow:0 2px 14px rgba(17,17,17,.05)}
 #nfsh .a-prod-kicker{display:inline-flex;align-items:center;gap:7px;font-size:11px !important;
  font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--grey);
  line-height:1 !important}
 #nfsh .a-prod-kicker::before{content:"";width:16px;height:1px;background:var(--grey)}
-#nfsh .a-prod-pair{margin-top:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
- gap:1px;background:var(--line)}
-#nfsh .a-prod-item{background:#fff;min-width:0}
-#nfsh .a-prod-item a{display:block;padding:2px 18px 20px 0}
-#nfsh .a-prod-item + .a-prod-item a{padding-left:18px;padding-right:0}
-#nfsh .a-prod-name{font-size:16.5px !important;line-height:1.25 !important;font-weight:700;
- letter-spacing:.02em}
-#nfsh .a-prod-sub{margin-top:4px;font-size:14px !important;line-height:1.45 !important;
- color:var(--grey)}
-#nfsh .a-prod-code{margin-top:8px;font-size:12px !important;line-height:1.45 !important;
- color:var(--grey)}
-#nfsh .a-prod-go{margin-top:14px;display:inline-flex;align-items:center;gap:7px;
- font-size:14px;font-weight:600;transition:gap .15s ease}
-#nfsh .a-prod-item a:hover .a-prod-name{text-decoration:underline;text-underline-offset:4px;
- text-decoration-thickness:1px}
-#nfsh .a-prod-item a:hover .a-prod-go{gap:11px}
-@media (max-width:639px){
- #nfsh .a-prod{padding:18px 18px 4px}
- #nfsh .a-prod-pair{grid-template-columns:minmax(0,1fr)}
- #nfsh .a-prod-item a,#nfsh .a-prod-item + .a-prod-item a{padding:16px 0}
-}
 @media (max-width:1023px){
  #nfsh .a-fig{margin-top:28px}
  #nfsh .a-fig img{aspect-ratio:4/3}
- #nfsh .a-gal{margin-top:28px;grid-template-columns:minmax(0,1fr);gap:10px}
+ #nfsh .a-fig--wide{margin-top:34px}
+ #nfsh .a-fig--wide img{aspect-ratio:4/3}
 }
 @media (prefers-reduced-motion:reduce){#nfsh .a-prod-go{transition:none}}
 @media (max-width:1023px){#nfsh .a-body h2{margin-top:40px;scroll-margin-top:120px}}
@@ -510,21 +544,23 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
  </figure>
  <aside class="a-prod" aria-label="NANDA / NANGA">
  <p class="a-prod-kicker"><span data-t="kicker">From this article</span></p>
- <ul class="a-prod-pair">
- <li class="a-prod-item">
+ <ul class="s-grid s-grid--2">
+ <li class="s-card" data-nfsh-h="damska-turisticka-obuv-vibram%C2%AE-megagrip-nanda">
  <a href="https://shop.northfinder.com/collections/equipment-shoes" data-t-href="url_nanda">
- <p class="a-prod-name">NANDA</p>
- <p class="a-prod-sub" data-t="w_hiking">Women’s hiking shoes · Vibram® Megagrip</p>
- <p class="a-prod-code"><span data-t="code_label">Product codes</span>: TO-2003OR / 108139</p>
- <span class="a-prod-go"><span data-t="btn_shop">Shop Now</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2003or-women-s-hiking-trendy-leather-shoes-nanda-NF-TO-2003OR-332-H.jpg?v=1770364393&amp;width=400" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2003or-women-s-hiking-trendy-leather-shoes-nanda-NF-TO-2003OR-332-H.jpg?v=1770364393&amp;width=300 300w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2003or-women-s-hiking-trendy-leather-shoes-nanda-NF-TO-2003OR-332-H.jpg?v=1770364393&amp;width=450 450w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2003or-women-s-hiking-trendy-leather-shoes-nanda-NF-TO-2003OR-332-H.jpg?v=1770364393&amp;width=600 600w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2003or-women-s-hiking-trendy-leather-shoes-nanda-NF-TO-2003OR-332-H.jpg?v=1770364393&amp;width=900 900w" sizes="(min-width:1024px) 325px, 45vw"
+ width="600" height="600" alt="NANDA — Women’s hiking shoes · Vibram® Megagrip" loading="lazy" decoding="async">
+ <p class="s-name">NANDA</p>
+ <p class="s-sub" data-t="w_hiking">Women’s hiking shoes · Vibram® Megagrip</p>
+ <p class="s-price" data-nfsh-price></p>
  </a>
  </li>
- <li class="a-prod-item">
+ <li class="s-card" data-nfsh-h="panske-turisticke-topanky-vibram%C2%AE-megagrip-nanga">
  <a href="https://shop.northfinder.com/collections/equipment-shoes" data-t-href="url_nanga">
- <p class="a-prod-name">NANGA</p>
- <p class="a-prod-sub" data-t="m_hiking">Men’s hiking shoes · Vibram® Megagrip</p>
- <p class="a-prod-code"><span data-t="code_label">Product codes</span>: TO-1006OR / 108140</p>
- <span class="a-prod-go"><span data-t="btn_shop">Shop Now</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1006or-men-s-hiking-trendy-leather-shoes-nanga-NF-TO-1006OR-363-BV.jpg?v=1770366019&amp;width=400" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1006or-men-s-hiking-trendy-leather-shoes-nanga-NF-TO-1006OR-363-BV.jpg?v=1770366019&amp;width=300 300w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1006or-men-s-hiking-trendy-leather-shoes-nanga-NF-TO-1006OR-363-BV.jpg?v=1770366019&amp;width=450 450w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1006or-men-s-hiking-trendy-leather-shoes-nanga-NF-TO-1006OR-363-BV.jpg?v=1770366019&amp;width=600 600w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1006or-men-s-hiking-trendy-leather-shoes-nanga-NF-TO-1006OR-363-BV.jpg?v=1770366019&amp;width=900 900w" sizes="(min-width:1024px) 325px, 45vw"
+ width="600" height="600" alt="NANGA — Men’s hiking shoes · Vibram® Megagrip" loading="lazy" decoding="async">
+ <p class="s-name">NANGA</p>
+ <p class="s-sub" data-t="m_hiking">Men’s hiking shoes · Vibram® Megagrip</p>
+ <p class="s-price" data-nfsh-price></p>
  </a>
  </li>
  </ul>
@@ -538,11 +574,19 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
  alt="A hand sketching a shoe on a tablet, the drawing laid over the frame" data-t-alt="alt_sketch" loading="lazy" decoding="async">
  </figure>
  <p data-t="s2p4">A sketch, however, is only where developing a shoe begins.</p>
+ <figure class="a-fig a-fig--wide">
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=780" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=520 520w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=780 780w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=1040 1040w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=1300 1300w" sizes="(min-width:1024px) 62vw, calc(100vw - 48px)" width="1200" height="800"
+ alt="A hiker on a narrow ridge with the jagged Dolomite peaks behind" data-t-alt="alt_dolo_a" loading="lazy" decoding="async">
+ </figure>
  <h2 id="nfsh-s3" data-nfsh-toc data-t="h2_3">A sample is not a finished shoe</h2>
  <p data-t="s3p1">Before a model makes it into the collection, practically everything can change — the construction of the tongue, the lacing, the materials and the outsole.</p>
  <p data-t="s3p2">With the barefoot models, for example, we compared two different outsoles. At first glance one had a more pronounced structure and tread pattern, so it might seem that this would be the one to grip better on the trail. Testing showed the opposite.</p>
  <p data-t="s3p3"><strong>Grip is not determined only by what you can see on the outsole.</strong> The composition of the rubber compound and how it behaves on a particular surface matter too. That is also why we use Vibram outsoles and work with different compounds depending on the type of footwear — for example Vibram Megagrip, with high grip even on wet rock, or XS Trek Evo, which suits classic hiking and longer trekking.</p>
  <p data-t="s3p4">The insole is a similarly inconspicuous detail. In our models we use Ortholite, which holds its shape even with long-term use. On a hike lasting several hours it is not only the headline technical parameters that decide. Comfort and foot fatigue also depend on how the shoe fits, how much it weighs and what happens inside it after kilometres of walking.</p>
+ <figure class="a-fig a-fig--wide">
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=780" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=520 520w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=780 780w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=1040 1040w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=1300 1300w" sizes="(min-width:1024px) 62vw, calc(100vw - 48px)" width="1200" height="800"
+ alt="A grassy summit ridge under a clouded sky" data-t-alt="alt_dolo_c" loading="lazy" decoding="async">
+ </figure>
  <h2 id="nfsh-s4" data-nfsh-toc data-t="h2_4">Testing means actually using the shoes</h2>
  <p data-t="s4p1">That is why samples do not stay in the office. With some of them we try the opposite — to wear them as close to the limit of what they can do as possible.</p>
  <p data-t="s4p2">The shoes were tested by our in-house team and by people for whom the mountains are a natural environment — high-altitude porters, mountain rescuers and testers who took them to the Tatras, the Alps, the Andes and Patagonia.</p>
@@ -553,36 +597,36 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
  <p data-t="s4p3">And they did not always confirm what we would have expected.</p>
  <p data-t="s4p4">Under a heavier load, for instance, it might seem obvious to reach for a high hiking boot. Yet when the mountain porters could choose a model to test, several of them preferred low approach or hiking shoes. An experienced hiker with a strong ankle may need something different from a shoe than someone who only heads into the mountains occasionally.</p>
  <p data-t="s4p5">That is also why, in our view, there is no single “best hiking boot”. There is a shoe that suits a particular person, terrain and use.</p>
+ <figure class="a-fig a-fig--wide">
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=780" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=520 520w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=780 780w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=1040 1040w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=1300 1300w" sizes="(min-width:1024px) 62vw, calc(100vw - 48px)" width="1200" height="800"
+ alt="Rock towers lit red at sunrise, seen from a steep gully" data-t-alt="alt_dolo_b" loading="lazy" decoding="async">
+ </figure>
  <h2 id="nfsh-s5" data-nfsh-toc data-t="h2_5">From multisport to barefoot hiking</h2>
  <p data-t="s5p1">Step by step, a collection came together for different ways of moving outdoors: the multisport Nanda and Nanga models, classic hiking footwear, approach shoes for more technical rocky terrain, lightweight models for travel and everyday outdoor wear, and the Danda and Dorje barefoot shoes.</p>
  <p data-t="s5p2">Barefoot was in fact the category our designer was sceptical about at first. Although she has worn barefoot footwear herself since 2012, for a long time she could not find a model in which she felt safe and stable enough in the mountains. So she took the first NORTHFINDER samples to the Dolomites — along with competitors’ barefoot shoes and classic hiking boots “just in case” in her backpack.</p>
- <div class="a-gal">
- <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=480" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=320 320w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=480 480w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=700 700w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature.png?v=1788260394&amp;width=900 900w" sizes="(min-width:1024px) 40vw, calc(100vw - 48px)" width="1200" height="800"
- alt="A hiker on a narrow ridge with the jagged Dolomite peaks behind" data-t-alt="alt_dolo_a" loading="lazy" decoding="async">
- <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=480" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=320 320w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=480 480w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=700 700w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-1.png?v=1788260389&amp;width=900 900w" sizes="(min-width:1024px) 40vw, calc(100vw - 48px)" width="1200" height="800"
- alt="Rock towers lit red at sunrise, seen from a steep gully" data-t-alt="alt_dolo_b" loading="lazy" decoding="async">
- <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=480" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=320 320w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=480 480w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=700 700w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-2.png?v=1788260384&amp;width=900 900w" sizes="(min-width:1024px) 40vw, calc(100vw - 48px)" width="1200" height="800"
- alt="A grassy summit ridge under a clouded sky" data-t-alt="alt_dolo_c" loading="lazy" decoding="async">
- <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=480" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=320 320w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=480 480w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=700 700w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=900 900w" sizes="(min-width:1024px) 40vw, calc(100vw - 48px)" width="1200" height="800"
+ <figure class="a-fig a-fig--wide">
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=780" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=520 520w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=780 780w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=1040 1040w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/just_nature-3.png?v=1788260391&amp;width=1300 1300w" sizes="(min-width:1024px) 62vw, calc(100vw - 48px)" width="1200" height="800"
  alt="The three towers of the Tre Cime in the Dolomites above a snowfield" data-t-alt="alt_coll" loading="lazy" decoding="async">
- </div>
+ </figure>
  <aside class="a-prod" aria-label="DANDA / DORJE">
  <p class="a-prod-kicker"><span data-t="kicker">From this article</span></p>
- <ul class="a-prod-pair">
- <li class="a-prod-item">
+ <ul class="s-grid s-grid--2">
+ <li class="s-card" data-nfsh-h="to-2011or-damske-barefoot-turisticke-nizke-topanky-vibram%C2%AE-danda">
  <a href="https://shop.northfinder.com/collections/equipment-shoes" data-t-href="url_danda">
- <p class="a-prod-name">DANDA</p>
- <p class="a-prod-sub" data-t="w_barefoot">Women’s Barefoot Hiking · Vibram® XS Trek Evo</p>
- <p class="a-prod-code"><span data-t="code_label">Product codes</span>: TO-2011OR / 108671</p>
- <span class="a-prod-go"><span data-t="btn_shop">Shop Now</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2011or-women-s-barefoot-hiking-low-cut-shoes-vibram-danda-NF-TO-2011OR-696-H.jpg?v=1784193473&amp;width=400" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2011or-women-s-barefoot-hiking-low-cut-shoes-vibram-danda-NF-TO-2011OR-696-H.jpg?v=1784193473&amp;width=300 300w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2011or-women-s-barefoot-hiking-low-cut-shoes-vibram-danda-NF-TO-2011OR-696-H.jpg?v=1784193473&amp;width=450 450w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2011or-women-s-barefoot-hiking-low-cut-shoes-vibram-danda-NF-TO-2011OR-696-H.jpg?v=1784193473&amp;width=600 600w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-2011or-women-s-barefoot-hiking-low-cut-shoes-vibram-danda-NF-TO-2011OR-696-H.jpg?v=1784193473&amp;width=900 900w" sizes="(min-width:1024px) 325px, 45vw"
+ width="600" height="600" alt="DANDA — Women’s Barefoot Hiking · Vibram® XS Trek Evo" loading="lazy" decoding="async">
+ <p class="s-name">DANDA</p>
+ <p class="s-sub" data-t="w_barefoot">Women’s Barefoot Hiking · Vibram® XS Trek Evo</p>
+ <p class="s-price" data-nfsh-price></p>
  </a>
  </li>
- <li class="a-prod-item">
+ <li class="s-card" data-nfsh-h="9081-pre-1015ale-panske-barefoot-turisticke-nizke-topanky-vibram-dorje">
  <a href="https://shop.northfinder.com/collections/equipment-shoes" data-t-href="url_dorje">
- <p class="a-prod-name">DORJE</p>
- <p class="a-prod-sub" data-t="m_barefoot">Men’s Barefoot Hiking · Vibram® XS Trek Evo</p>
- <p class="a-prod-code"><span data-t="code_label">Product codes</span>: TO-1015OR / 108669</p>
- <span class="a-prod-go"><span data-t="btn_shop">Shop Now</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1015or-men-s-barefoot-hiking-low-cut-shoes-vibram-dorje-NF-TO-1015OR-502-D_1.jpg?v=1777402613&amp;width=400" srcset="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1015or-men-s-barefoot-hiking-low-cut-shoes-vibram-dorje-NF-TO-1015OR-502-D_1.jpg?v=1777402613&amp;width=300 300w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1015or-men-s-barefoot-hiking-low-cut-shoes-vibram-dorje-NF-TO-1015OR-502-D_1.jpg?v=1777402613&amp;width=450 450w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1015or-men-s-barefoot-hiking-low-cut-shoes-vibram-dorje-NF-TO-1015OR-502-D_1.jpg?v=1777402613&amp;width=600 600w, https://cdn.shopify.com/s/files/1/1009/2838/9452/files/to-1015or-men-s-barefoot-hiking-low-cut-shoes-vibram-dorje-NF-TO-1015OR-502-D_1.jpg?v=1777402613&amp;width=900 900w" sizes="(min-width:1024px) 325px, 45vw"
+ width="600" height="600" alt="DORJE — Men’s Barefoot Hiking · Vibram® XS Trek Evo" loading="lazy" decoding="async">
+ <p class="s-name">DORJE</p>
+ <p class="s-sub" data-t="m_barefoot">Men’s Barefoot Hiking · Vibram® XS Trek Evo</p>
+ <p class="s-price" data-nfsh-price></p>
  </a>
  </li>
  </ul>
@@ -658,7 +702,7 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
  else boot();
  document.addEventListener('nfsh:i18n', buildToc);
 })();
-</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-cuiyvv92xcr"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-q081itzj48k"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-cuiyvv92xcr" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-iaabym2lqid"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-t3ld2fo6cde"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-iaabym2lqid" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 #nfsh,#nfsh *,#nfsh *::before,#nfsh *::after{box-sizing:border-box}
 #nfsh[hidden],#nfsh [hidden]{display:none !important}
@@ -699,9 +743,32 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
 #nfsh .nfsh-btn--ghost{border:1px solid #b7b7b7;color:var(--ink)}
 #nfsh .nfsh-btn--ghost:hover{border-color:var(--ink);background:var(--soft)}
 #nfsh .nfsh-btn--wide{width:100%;height:48px;font-size:15.5px}
+/* product card — shared, because it is used both inline in the article and in
+ the closing grid, and the two sections carry separate copies of this prelude */
+#nfsh .s-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+/* .s-grid.s-grid--2, not .s-grid--2: this prelude is repeated in every section,
+ so a later section's copy of `#nfsh .s-grid` would otherwise win on source
+ order and force the inline pair back to four columns. Any future modifier on
+ a prelude class needs the same treatment. */
+#nfsh .s-grid.s-grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#nfsh .s-card a{display:block}
+#nfsh .s-card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--soft)}
+#nfsh .s-name{margin-top:14px !important;font-size:16.5px !important;
+ line-height:1.25 !important;font-weight:700;letter-spacing:.02em}
+#nfsh .s-sub{margin-top:4px !important;font-size:14px !important;
+ line-height:1.45 !important;color:var(--grey)}
+/* the price keeps its height while Shopify is asked for the real number, so
+ filling it in cannot shift the grid */
+#nfsh .s-price{margin-top:8px !important;font-size:15px !important;
+ line-height:1.4 !important;font-weight:600;min-height:1.4em}
+#nfsh .s-card a:hover .s-name{text-decoration:underline;text-underline-offset:4px;
+ text-decoration-thickness:1px}
 @media (max-width:1023px){
  #nfsh .nfsh-grid{padding:0 24px;grid-template-columns:minmax(0,1fr);column-gap:0}
  #nfsh .nfsh-col,#nfsh .nfsh-full{grid-column:1}
+ #nfsh .s-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}
+ #nfsh .s-name{font-size:15.5px !important}
+ #nfsh .s-sub{font-size:13px !important}
 }
 /* ── Section 4 · what the interview answers + film ─────────────────────────
  The source article ends on four questions and a link to the interview, so the
@@ -847,7 +914,7 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
  else boot();
 })();
-</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-g1ecfioa7ci"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-r61ppjsh26p"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-g1ecfioa7ci" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-b6bijgqlbdw"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-9z05kyg23ee"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-b6bijgqlbdw" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 #nfsh,#nfsh *,#nfsh *::before,#nfsh *::after{box-sizing:border-box}
 #nfsh[hidden],#nfsh [hidden]{display:none !important}
@@ -888,9 +955,32 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
 #nfsh .nfsh-btn--ghost{border:1px solid #b7b7b7;color:var(--ink)}
 #nfsh .nfsh-btn--ghost:hover{border-color:var(--ink);background:var(--soft)}
 #nfsh .nfsh-btn--wide{width:100%;height:48px;font-size:15.5px}
+/* product card — shared, because it is used both inline in the article and in
+ the closing grid, and the two sections carry separate copies of this prelude */
+#nfsh .s-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+/* .s-grid.s-grid--2, not .s-grid--2: this prelude is repeated in every section,
+ so a later section's copy of `#nfsh .s-grid` would otherwise win on source
+ order and force the inline pair back to four columns. Any future modifier on
+ a prelude class needs the same treatment. */
+#nfsh .s-grid.s-grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#nfsh .s-card a{display:block}
+#nfsh .s-card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--soft)}
+#nfsh .s-name{margin-top:14px !important;font-size:16.5px !important;
+ line-height:1.25 !important;font-weight:700;letter-spacing:.02em}
+#nfsh .s-sub{margin-top:4px !important;font-size:14px !important;
+ line-height:1.45 !important;color:var(--grey)}
+/* the price keeps its height while Shopify is asked for the real number, so
+ filling it in cannot shift the grid */
+#nfsh .s-price{margin-top:8px !important;font-size:15px !important;
+ line-height:1.4 !important;font-weight:600;min-height:1.4em}
+#nfsh .s-card a:hover .s-name{text-decoration:underline;text-underline-offset:4px;
+ text-decoration-thickness:1px}
 @media (max-width:1023px){
  #nfsh .nfsh-grid{padding:0 24px;grid-template-columns:minmax(0,1fr);column-gap:0}
  #nfsh .nfsh-col,#nfsh .nfsh-full{grid-column:1}
+ #nfsh .s-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}
+ #nfsh .s-name{font-size:15.5px !important}
+ #nfsh .s-sub{font-size:13px !important}
 }
 /* ── Section 5 · the models from this article, then the whole collection ────
  A product grid, not a big landscape: at the end of the page the reader wants
@@ -909,7 +999,9 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
 #nfsh .s-price{margin-top:8px;font-size:15px;line-height:1.4;font-weight:600;min-height:1.4em}
 #nfsh .s-card a:hover .s-name{text-decoration:underline;text-underline-offset:4px;
  text-decoration-thickness:1px}
+/* left-aligned with the grid rather than floating under its middle */
 #nfsh .s-cta{margin-top:38px}
+#nfsh .s-cta .nfsh-btn{max-width:420px}
 @media (max-width:1023px){
  #nfsh .s-head h2{margin-bottom:18px}
  #nfsh .s-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}
@@ -965,7 +1057,7 @@ window.NFSH_T = {"bg":{"alt_boots":"Две мостри на обувки, ме�
  </ul>
  </div>
  <div class="nfsh-grid">
- <div class="nfsh-col s-cta">
+ <div class="nfsh-full s-cta">
  <a class="nfsh-btn nfsh-btn--dark nfsh-btn--wide"
  href="https://shop.northfinder.com/collections/equipment-shoes" data-t-href="col_url">
  <span data-t="cta_all">Shop All Footwear</span>
