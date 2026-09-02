@@ -1,0 +1,1285 @@
+{% comment %}
+ EComposer (https://ecomposer.io)
+ You SHOULD NOT modify source code in this page because
+ It is automatically generated from EComposer
+ At 2026-09-02 11:44:24
+ {% endcomment %} 
+ 
+ {% assign ecom_root_url = routes.root_url %}
+ {% if ecom_root_url != '/'%}
+ {% assign ecom_root_url = routes.root_url | append: '/' %}
+ {% endif %}
+ {% assign translation = metaobjects['app--6509291--ecom_translation']['app--6509291--ecom-translation-lccfcohu'].data.value %}
+ <link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript>
+{%capture section_id %}ecom-nf-story-blog{% endcapture%}{% if section and section_id == section.id and headless == true %}
+{{ content_for_header }}
+{% render 'ecom_header', ECOM_THEME: true %}{% endif %}
+{{'ecom-6a980c18857d78c79d0ab9f3.css' | asset_url | stylesheet_tag }}
+<script src="{{'ecom-6a980c18857d78c79d0ab9f3.js' | asset_url }}" defer="defer"></script>
+<script type="text/javascript" class="ecom-page-info">
+ window.EComposer = window.EComposer || {};
+ window.EComposer.TEMPLATE_ID="6a980c18857d78c79d0ab9f3";
+ window.EComposer.TEMPLATE = {"title":"NF Blog \u2014 universal article","type":"blog","slug":"ecom-nf-story","plan_id":4,"template_id":"6a980c18857d78c79d0ab9f3"};
+ </script>
+<div class="ecom-builder" id="ecom-nf-story"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-ibmnu2p2nt"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-jquw6yqnh3e"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-ibmnu2p2nt" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+{%- comment -%}
+ UI labels. Server-rendered per market from request.locale, so there is no JS
+ dictionary to keep in sync and the words are in the HTML for search engines.
+ Add a market by adding a `when` branch; anything unlisted falls through to English.
+{%- endcomment -%}
+{%- assign LOC = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign t_in = 'In this article' -%}
+{%- assign t_jump = 'Jump to section' -%}
+{%- assign t_read = 'min read' -%}
+{%- assign t_from = 'From this article' -%}
+{%- assign t_shop = 'Shop Now' -%}
+{%- assign t_watch = 'Watch the full video' -%}
+{%- assign t_rel = 'Related articles' -%}
+{%- assign t_top = 'Back to top' -%}
+{%- case LOC -%}
+{%- when 'sk' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Prejsť na sekciu' -%}
+ {%- assign t_read = 'min čítania' -%}{%- assign t_from = 'Z tohto článku' -%}
+ {%- assign t_shop = 'Zobraziť' -%}{%- assign t_watch = 'Pozrieť celé video' -%}
+ {%- assign t_rel = 'Súvisiace články' -%}{%- assign t_top = 'Nahor' -%}
+{%- when 'cs' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Přejít na sekci' -%}
+ {%- assign t_read = 'min čtení' -%}{%- assign t_from = 'Z tohoto článku' -%}
+ {%- assign t_shop = 'Zobrazit' -%}{%- assign t_watch = 'Přehrát celé video' -%}
+ {%- assign t_rel = 'Související příspěvky' -%}{%- assign t_top = 'Nahoru' -%}
+{%- when 'de' -%}
+ {%- assign t_in = 'In diesem Artikel' -%}{%- assign t_jump = 'Zum Abschnitt' -%}
+ {%- assign t_read = 'Min. Lesezeit' -%}{%- assign t_from = 'Aus diesem Artikel' -%}
+ {%- assign t_shop = 'Ansehen' -%}{%- assign t_watch = 'Ganzes Video ansehen' -%}
+ {%- assign t_rel = 'Verwandte Artikel' -%}{%- assign t_top = 'Nach oben' -%}
+{%- when 'hr' -%}
+ {%- assign t_in = 'U ovom članku' -%}{%- assign t_jump = 'Skoči na odjeljak' -%}
+ {%- assign t_read = 'min čitanja' -%}{%- assign t_from = 'Iz ovog članka' -%}
+ {%- assign t_shop = 'Pogledaj' -%}{%- assign t_watch = 'Pogledaj cijeli video' -%}
+ {%- assign t_rel = 'Povezani članci' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'sl' -%}
+ {%- assign t_in = 'V tem članku' -%}{%- assign t_jump = 'Skoči na razdelek' -%}
+ {%- assign t_read = 'min branja' -%}{%- assign t_from = 'Iz tega članka' -%}
+ {%- assign t_shop = 'Poglej' -%}{%- assign t_watch = 'Oglej si celoten video' -%}
+ {%- assign t_rel = 'Povezani članki' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'bg' -%}
+ {%- assign t_in = 'В тази статия' -%}{%- assign t_jump = 'Към раздел' -%}
+ {%- assign t_read = 'мин. четене' -%}{%- assign t_from = 'От тази статия' -%}
+ {%- assign t_shop = 'Виж' -%}{%- assign t_watch = 'Гледай цялото видео' -%}
+ {%- assign t_rel = 'Свързани статии' -%}{%- assign t_top = 'Нагоре' -%}
+{%- endcase -%}
+<style>
+/* ── Section 1 · page runtime: progress bar, jump-to-section, back to top.
+ Root is #nfau — no transform, so position:fixed children stay viewport-fixed.
+ Nothing here depends on the article, so it works on every post unchanged. */
+#nfau,#nfau *,#nfau *::before,#nfau *::after{box-sizing:border-box}
+#nfau{--ink:#111111;--grey:#707072;--line:#e5e5e5;--soft:#f5f5f5;
+ font-family:'Montserrat',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:500;color:var(--ink);-webkit-font-smoothing:antialiased}
+#nfau button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+#nfau ol{margin:0;padding:0;list-style:none}
+#nfau a{color:inherit;text-decoration:none}
+#nfau a:focus-visible,#nfau button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+#nfau .u-prog{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(17,17,17,.09);
+ z-index:9998;pointer-events:none;opacity:0;transition:opacity .2s ease}
+#nfau .u-prog.is-on{opacity:1}
+#nfau .u-prog i{display:block;height:100%;width:0;background:var(--ink);
+ transform-origin:0 50%;transition:width .08s linear}
+#nfau .u-jump{position:fixed;top:3px;left:0;right:0;z-index:9997;background:rgba(255,255,255,.94);
+ -webkit-backdrop-filter:saturate(180%) blur(12px);backdrop-filter:saturate(180%) blur(12px);
+ border-bottom:1px solid var(--line);transform:translateY(-110%);transition:transform .25s ease}
+#nfau .u-jump.is-on{transform:translateY(0)}
+#nfau .u-jump[hidden]{display:none}
+#nfau .u-jumpbtn{display:flex;align-items:center;justify-content:space-between;gap:12px;
+ width:100%;padding:13px 24px;font-size:14.5px;font-weight:600;letter-spacing:.01em}
+#nfau .u-jumpbtn svg{flex:0 0 auto;transition:transform .2s ease}
+#nfau .u-jump[data-open="1"] .u-jumpbtn svg{transform:rotate(180deg)}
+#nfau .u-jumplist{max-height:0;overflow:hidden;transition:max-height .28s ease}
+#nfau .u-jump[data-open="1"] .u-jumplist{max-height:62vh;overflow-y:auto}
+#nfau .u-jumplist ol{padding:2px 0 10px}
+#nfau .u-jumplist a{display:block;padding:12px 24px;font-size:14.5px;line-height:1.4;color:var(--grey)}
+#nfau .u-jumplist a[aria-current="true"]{color:var(--ink);font-weight:600;
+ box-shadow:inset 2px 0 0 var(--ink)}
+@media (min-width:1200px){#nfau .u-jump{display:none}}
+#nfau .u-top{position:fixed;right:28px;bottom:28px;z-index:9996;width:44px;height:44px;
+ border-radius:2px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;
+ justify-content:center;box-shadow:0 2px 10px rgba(17,17,17,.08);opacity:0;visibility:hidden;
+ transform:translateY(8px);transition:opacity .2s ease,transform .2s ease,visibility .2s}
+#nfau .u-top.is-on{opacity:1;visibility:visible;transform:translateY(0)}
+#nfau .u-top:hover{background:var(--soft)}
+@media (max-width:1023px){#nfau .u-top{display:none}}
+@media (prefers-reduced-motion:reduce){
+ #nfau .u-prog i,#nfau .u-jump,#nfau .u-jumplist,#nfau .u-top,#nfau .u-jumpbtn svg{transition:none}
+}
+</style>
+<div id="nfau">
+ <div class="u-prog" aria-hidden="true"><i></i></div>
+ <nav class="u-jump" id="nfau-jump" aria-label="{{ t_in | escape }}" hidden>
+ <button class="u-jumpbtn" type="button" aria-expanded="false" aria-controls="nfau-jumplist">
+ <span>{{ t_jump }}</span>
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+ <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+ </svg>
+ </button>
+ <div class="u-jumplist" id="nfau-jumplist"><ol data-nfa-jumptoc></ol></div>
+ </nav>
+ <button class="u-top" type="button" aria-label="{{ t_top | escape }}">
+ <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+ <path d="M12 19V6M6 12l6-6 6 6" stroke="currentColor" stroke-width="1.6"
+ stroke-linecap="round" stroke-linejoin="round"/>
+ </svg>
+ </button>
+</div>
+<script>
+(function(){
+ var root = document.getElementById('nfau');
+ if(!root || root.dataset.ready) return;
+ root.dataset.ready = '1';
+ /* EComposer sections can be transformed or clipped, which breaks position:fixed.
+ Move the runtime UI to the document root once and it is viewport-fixed for good. */
+ if(root.parentNode !== document.body) document.body.appendChild(root);
+ var prog = root.querySelector('.u-prog'), fill = root.querySelector('.u-prog i');
+ var jump = root.querySelector('.u-jump'), jbtn = root.querySelector('.u-jumpbtn');
+ var top = root.querySelector('.u-top');
+ jbtn.addEventListener('click', function(){
+ var open = jump.getAttribute('data-open') === '1';
+ jump.setAttribute('data-open', open ? '0' : '1');
+ jbtn.setAttribute('aria-expanded', open ? 'false' : 'true');
+ });
+ jump.addEventListener('click', function(e){
+ if(e.target.closest('a')){ jump.setAttribute('data-open','0'); jbtn.setAttribute('aria-expanded','false'); }
+ });
+ document.addEventListener('keydown', function(e){
+ if(e.key === 'Escape'){ jump.setAttribute('data-open','0'); jbtn.setAttribute('aria-expanded','false'); }
+ });
+ top.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+ /* progress is measured over the article body only, so it reads 100% at the end of
+ the text rather than somewhere inside the footer */
+ function track(){ return document.querySelector('#nfa.nfa-article'); }
+ var raf = 0;
+ function paint(){
+ raf = 0;
+ var t = track(), y = window.pageYOffset || document.documentElement.scrollTop, pct = 0, on = false;
+ if(t){
+ var box = t.getBoundingClientRect();
+ var start = box.top + y - window.innerHeight * 0.35;
+ var span = Math.max(1, t.offsetHeight - window.innerHeight * 0.35);
+ pct = Math.min(1, Math.max(0, (y - start) / span));
+ on = y > start;
+ }
+ prog.classList.toggle('is-on', on);
+ fill.style.width = (pct * 100).toFixed(2) + '%';
+ /* the bar only appears once there is a table of contents worth jumping around */
+ if(!jump.hasAttribute('hidden')) jump.classList.toggle('is-on', on && pct < 0.985);
+ top.classList.toggle('is-on', y > 900);
+ }
+ function onScroll(){ if(!raf) raf = requestAnimationFrame(paint); }
+ window.addEventListener('scroll', onScroll, {passive:true});
+ window.addEventListener('resize', onScroll, {passive:true});
+ paint();
+})();
+</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-7b1rv3dyfws"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-3ev7y86gzxl"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-7b1rv3dyfws" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+{%- comment -%}
+ UI labels. Server-rendered per market from request.locale, so there is no JS
+ dictionary to keep in sync and the words are in the HTML for search engines.
+ Add a market by adding a `when` branch; anything unlisted falls through to English.
+{%- endcomment -%}
+{%- assign LOC = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign t_in = 'In this article' -%}
+{%- assign t_jump = 'Jump to section' -%}
+{%- assign t_read = 'min read' -%}
+{%- assign t_from = 'From this article' -%}
+{%- assign t_shop = 'Shop Now' -%}
+{%- assign t_watch = 'Watch the full video' -%}
+{%- assign t_rel = 'Related articles' -%}
+{%- assign t_top = 'Back to top' -%}
+{%- case LOC -%}
+{%- when 'sk' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Prejsť na sekciu' -%}
+ {%- assign t_read = 'min čítania' -%}{%- assign t_from = 'Z tohto článku' -%}
+ {%- assign t_shop = 'Zobraziť' -%}{%- assign t_watch = 'Pozrieť celé video' -%}
+ {%- assign t_rel = 'Súvisiace články' -%}{%- assign t_top = 'Nahor' -%}
+{%- when 'cs' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Přejít na sekci' -%}
+ {%- assign t_read = 'min čtení' -%}{%- assign t_from = 'Z tohoto článku' -%}
+ {%- assign t_shop = 'Zobrazit' -%}{%- assign t_watch = 'Přehrát celé video' -%}
+ {%- assign t_rel = 'Související příspěvky' -%}{%- assign t_top = 'Nahoru' -%}
+{%- when 'de' -%}
+ {%- assign t_in = 'In diesem Artikel' -%}{%- assign t_jump = 'Zum Abschnitt' -%}
+ {%- assign t_read = 'Min. Lesezeit' -%}{%- assign t_from = 'Aus diesem Artikel' -%}
+ {%- assign t_shop = 'Ansehen' -%}{%- assign t_watch = 'Ganzes Video ansehen' -%}
+ {%- assign t_rel = 'Verwandte Artikel' -%}{%- assign t_top = 'Nach oben' -%}
+{%- when 'hr' -%}
+ {%- assign t_in = 'U ovom članku' -%}{%- assign t_jump = 'Skoči na odjeljak' -%}
+ {%- assign t_read = 'min čitanja' -%}{%- assign t_from = 'Iz ovog članka' -%}
+ {%- assign t_shop = 'Pogledaj' -%}{%- assign t_watch = 'Pogledaj cijeli video' -%}
+ {%- assign t_rel = 'Povezani članci' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'sl' -%}
+ {%- assign t_in = 'V tem članku' -%}{%- assign t_jump = 'Skoči na razdelek' -%}
+ {%- assign t_read = 'min branja' -%}{%- assign t_from = 'Iz tega članka' -%}
+ {%- assign t_shop = 'Poglej' -%}{%- assign t_watch = 'Oglej si celoten video' -%}
+ {%- assign t_rel = 'Povezani članki' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'bg' -%}
+ {%- assign t_in = 'В тази статия' -%}{%- assign t_jump = 'Към раздел' -%}
+ {%- assign t_read = 'мин. четене' -%}{%- assign t_from = 'От тази статия' -%}
+ {%- assign t_shop = 'Виж' -%}{%- assign t_watch = 'Гледай цялото видео' -%}
+ {%- assign t_rel = 'Свързани статии' -%}{%- assign t_top = 'Нагоре' -%}
+{%- endcase -%}
+{%- comment -%}
+ Reading time, measured from the article itself. 200 wpm, rounded to the nearest
+ minute (the +100 before dividing does the rounding, since Liquid floors), never
+ below 1. Same rule on every post, so it can never drift out of date.
+{%- endcomment -%}
+{%- assign nfa_words = article.content | strip_html | strip_newlines | split: ' ' | size -%}
+{%- assign nfa_mins = nfa_words | plus: 100 | divided_by: 200 -%}
+{%- if nfa_mins < 1 -%}{%- assign nfa_mins = 1 -%}{%- endif -%}
+<style>
+#nfa,#nfa *,#nfa *::before,#nfa *::after{box-sizing:border-box}
+#nfa{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;
+ --ink:#111111;--grey:#707072;--line:#e5e5e5;--soft:#f5f5f5;--hair:#dcdcdc;
+ /* the scale from the buying-guide template, unchanged: fluid, anchored at 1280 and 1920 */
+ --fs-body:clamp(15.5px,14px + .31vw,20px);--lh-body:1.6;
+ --fs-h1:clamp(27px,23px + .47vw,32px);--lh-h1:1.2;
+ --fs-h2:clamp(20px,16.5px + .39vw,24px);--lh-h2:1.25;
+ --fs-h3:clamp(17px,15px + .22vw,20px);
+ --fs-s:clamp(13.5px,11.5px + .23vw,16px);
+ --fs-q:clamp(16.5px,14px + .31vw,20px);
+ font-family:'Montserrat',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:500;color:var(--ink);background:#fff;
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#nfa h1,#nfa h2,#nfa h3,#nfa h4,#nfa p,#nfa ul,#nfa ol,#nfa li,#nfa figure,#nfa blockquote,
+#nfa table{margin:0;padding:0}
+#nfa a{color:inherit;text-decoration:none}
+#nfa img{display:block;max-width:100%;height:auto}
+#nfa button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+#nfa .nfa-grid{max-width:1440px;margin:0 auto;padding:0 48px;display:grid;
+ grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
+#nfa .nfa-col{grid-column:3 / span 6;min-width:0}
+#nfa .nfa-full{grid-column:1 / -1;min-width:0}
+#nfa .nfa-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+ clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#nfa a:focus-visible,#nfa button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+#nfa .nfa-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;
+ padding:0 22px;border-radius:2px;font-size:14.5px;font-weight:600;line-height:1;
+ transition:background .15s ease,border-color .15s ease;white-space:nowrap}
+#nfa .nfa-btn--dark{background:var(--ink);color:#fff}
+#nfa .nfa-btn--dark:hover{background:#000}
+#nfa .nfa-btn--dark:focus-visible{outline-color:#fff;outline-offset:-5px}
+#nfa .nfa-btn--wide{width:100%;height:48px;font-size:15.5px}
+@media (max-width:1023px){
+ #nfa .nfa-grid{padding:0 24px;grid-template-columns:minmax(0,1fr);column-gap:0}
+ #nfa .nfa-col,#nfa .nfa-full{grid-column:1}
+}
+/* ── film + product blocks ─────────────────────────────────────────────────
+ In the shared prelude on purpose: they are used BOTH by the shortcodes inside the
+ article body and by the metafield-driven section after it. Putting them in one
+ section's own stylesheet would let a later section's copy of this prelude win on
+ source order — that has bitten this project twice. */
+#nfa .nfa-film{position:relative;background:var(--soft);margin-top:34px}
+#nfa .nfa-film button.f-cover{display:block;width:100%;padding:0;position:relative;cursor:pointer}
+#nfa .nfa-film img{width:100%;aspect-ratio:16/9;object-fit:cover;margin:0}
+#nfa .nfa-film iframe{display:block;width:100%;aspect-ratio:16/9;border:0;margin:0}
+#nfa .nfa-film .f-play{position:absolute;inset:0;display:flex;align-items:center;
+ justify-content:center;pointer-events:none}
+#nfa .nfa-film .f-play > span{width:64px;height:64px;border-radius:2px;
+ background:rgba(17,17,17,.88);display:flex;align-items:center;justify-content:center;
+ transition:background .15s ease,transform .15s ease}
+#nfa .nfa-film button.f-cover:hover .f-play > span{background:#000;transform:scale(1.04)}
+#nfa .nfa-prod{margin-top:34px;border:1px solid var(--line);padding:18px}
+#nfa .nfa-prod .p-kicker{font-size:11px !important;font-weight:700;letter-spacing:.11em;
+ text-transform:uppercase;color:var(--grey);line-height:1 !important;
+ padding-bottom:13px;border-bottom:1px solid var(--line)}
+#nfa .p-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+#nfa .p-rows > li{padding:0}
+#nfa .p-rows > li::before{display:none}
+#nfa .p-rows > li + li{border-top:1px solid var(--line)}
+#nfa .p-rows a{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px;
+ align-items:center;padding:15px 0;text-decoration:none;font-weight:500}
+#nfa .p-rows img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--soft);margin:0}
+#nfa .p-top{display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+#nfa .p-name{font-size:16.5px !important;line-height:1.25 !important;font-weight:700;
+ letter-spacing:.02em;margin:0 !important}
+#nfa .p-price{font-size:15px !important;line-height:1.4 !important;font-weight:600;
+ margin:0 !important;white-space:nowrap}
+#nfa .p-go{margin-top:8px;display:inline-flex;align-items:center;gap:7px;font-size:14px;
+ font-weight:600;color:var(--grey);transition:color .15s ease}
+#nfa .p-go::after{content:"\2192"}
+#nfa .p-rows a:hover .p-name{text-decoration:underline;text-underline-offset:4px;
+ text-decoration-thickness:1px}
+#nfa .p-rows a:hover .p-go{color:var(--ink)}
+@media (max-width:1023px){
+ #nfa .nfa-prod{padding:16px}
+ #nfa .p-rows a{grid-template-columns:92px minmax(0,1fr);gap:14px;padding:14px 0}
+ #nfa .p-name{font-size:15.5px !important}
+}
+@media (prefers-reduced-motion:reduce){
+ #nfa .nfa-film .f-play > span,#nfa .p-go{transition:none}
+}
+/* ── Section 2 · article header + lead image ─────────────────────────────── */
+#nfa.nfa-hero{padding:clamp(36px,4.4vw,60px) 0 0}
+#nfa .h-eyebrow{font-size:var(--fs-s);line-height:1.4;color:var(--grey)}
+#nfa .h-h1{margin-top:14px;font-size:var(--fs-h1);line-height:var(--lh-h1);
+ font-weight:600;letter-spacing:-.012em}
+#nfa .h-excerpt{margin-top:20px;font-size:var(--fs-body);line-height:var(--lh-body)}
+#nfa .h-excerpt p{margin:0}
+#nfa .h-excerpt p + p{margin-top:16px}
+#nfa .h-meta{margin-top:26px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+ font-size:var(--fs-s);line-height:1.4;color:var(--grey)}
+#nfa .h-meta i{font-style:normal;color:var(--hair)}
+/* The lead keeps the image's own proportions — this template has to cope with any
+ photo an author uploads, and forcing a ratio would crop faces and product shots.
+ The height cap stops a portrait hero from filling the whole screen. */
+#nfa .h-lead{grid-column:3 / -1;margin-top:32px}
+#nfa .h-lead img{width:100%;max-height:70vh;object-fit:cover;background:var(--soft)}
+@media (max-width:1023px){
+ #nfa.nfa-hero{padding-top:clamp(28px,7vw,44px)}
+ #nfa .h-lead{grid-column:1;margin-top:26px}
+ #nfa .h-lead img{max-height:60vh}
+}
+</style>
+<section id="nfa" class="nfa-hero">
+ <div class="nfa-grid">
+ <header class="nfa-col">
+ {%- if article.blog.title != blank %}
+ <p class="h-eyebrow">{{ article.blog.title }}</p>
+ {%- endif %}
+ <h1 class="h-h1">{{ article.title }}</h1>
+ {%- if article.excerpt != blank %}
+ <div class="h-excerpt">{{ article.excerpt }}</div>
+ {%- endif %}
+ <p class="h-meta">
+ <span>{{ article.published_at | date: format: 'date' }}</span>
+ <i>&middot;</i><span>{{ nfa_mins }} {{ t_read }}</span>
+ </p>
+ </header>
+ </div>
+ {%- if article.image %}
+ <div class="nfa-grid">
+ <figure class="h-lead">
+ <img src="{{ article.image | image_url: width: 1600 }}"
+ srcset="{{ article.image | image_url: width: 520 }} 520w,
+ {{ article.image | image_url: width: 780 }} 780w,
+ {{ article.image | image_url: width: 1040 }} 1040w,
+ {{ article.image | image_url: width: 1300 }} 1300w,
+ {{ article.image | image_url: width: 1600 }} 1600w"
+ sizes="(min-width:1024px) 76vw, calc(100vw - 48px)"
+ width="{{ article.image.width }}" height="{{ article.image.height }}"
+ alt="{{ article.image.alt | default: article.title | escape }}"
+ loading="eager" fetchpriority="high" decoding="async">
+ </figure>
+ </div>
+ {%- endif %}
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-1lv3f808zld"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-6hz11qx8nvf"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-1lv3f808zld" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+{%- comment -%}
+ UI labels. Server-rendered per market from request.locale, so there is no JS
+ dictionary to keep in sync and the words are in the HTML for search engines.
+ Add a market by adding a `when` branch; anything unlisted falls through to English.
+{%- endcomment -%}
+{%- assign LOC = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign t_in = 'In this article' -%}
+{%- assign t_jump = 'Jump to section' -%}
+{%- assign t_read = 'min read' -%}
+{%- assign t_from = 'From this article' -%}
+{%- assign t_shop = 'Shop Now' -%}
+{%- assign t_watch = 'Watch the full video' -%}
+{%- assign t_rel = 'Related articles' -%}
+{%- assign t_top = 'Back to top' -%}
+{%- case LOC -%}
+{%- when 'sk' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Prejsť na sekciu' -%}
+ {%- assign t_read = 'min čítania' -%}{%- assign t_from = 'Z tohto článku' -%}
+ {%- assign t_shop = 'Zobraziť' -%}{%- assign t_watch = 'Pozrieť celé video' -%}
+ {%- assign t_rel = 'Súvisiace články' -%}{%- assign t_top = 'Nahor' -%}
+{%- when 'cs' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Přejít na sekci' -%}
+ {%- assign t_read = 'min čtení' -%}{%- assign t_from = 'Z tohoto článku' -%}
+ {%- assign t_shop = 'Zobrazit' -%}{%- assign t_watch = 'Přehrát celé video' -%}
+ {%- assign t_rel = 'Související příspěvky' -%}{%- assign t_top = 'Nahoru' -%}
+{%- when 'de' -%}
+ {%- assign t_in = 'In diesem Artikel' -%}{%- assign t_jump = 'Zum Abschnitt' -%}
+ {%- assign t_read = 'Min. Lesezeit' -%}{%- assign t_from = 'Aus diesem Artikel' -%}
+ {%- assign t_shop = 'Ansehen' -%}{%- assign t_watch = 'Ganzes Video ansehen' -%}
+ {%- assign t_rel = 'Verwandte Artikel' -%}{%- assign t_top = 'Nach oben' -%}
+{%- when 'hr' -%}
+ {%- assign t_in = 'U ovom članku' -%}{%- assign t_jump = 'Skoči na odjeljak' -%}
+ {%- assign t_read = 'min čitanja' -%}{%- assign t_from = 'Iz ovog članka' -%}
+ {%- assign t_shop = 'Pogledaj' -%}{%- assign t_watch = 'Pogledaj cijeli video' -%}
+ {%- assign t_rel = 'Povezani članci' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'sl' -%}
+ {%- assign t_in = 'V tem članku' -%}{%- assign t_jump = 'Skoči na razdelek' -%}
+ {%- assign t_read = 'min branja' -%}{%- assign t_from = 'Iz tega članka' -%}
+ {%- assign t_shop = 'Poglej' -%}{%- assign t_watch = 'Oglej si celoten video' -%}
+ {%- assign t_rel = 'Povezani članki' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'bg' -%}
+ {%- assign t_in = 'В тази статия' -%}{%- assign t_jump = 'Към раздел' -%}
+ {%- assign t_read = 'мин. четене' -%}{%- assign t_from = 'От тази статия' -%}
+ {%- assign t_shop = 'Виж' -%}{%- assign t_watch = 'Гледай цялото видео' -%}
+ {%- assign t_rel = 'Свързани статии' -%}{%- assign t_top = 'Нагоре' -%}
+{%- endcase -%}
+<style>
+#nfa,#nfa *,#nfa *::before,#nfa *::after{box-sizing:border-box}
+#nfa{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;
+ --ink:#111111;--grey:#707072;--line:#e5e5e5;--soft:#f5f5f5;--hair:#dcdcdc;
+ /* the scale from the buying-guide template, unchanged: fluid, anchored at 1280 and 1920 */
+ --fs-body:clamp(15.5px,14px + .31vw,20px);--lh-body:1.6;
+ --fs-h1:clamp(27px,23px + .47vw,32px);--lh-h1:1.2;
+ --fs-h2:clamp(20px,16.5px + .39vw,24px);--lh-h2:1.25;
+ --fs-h3:clamp(17px,15px + .22vw,20px);
+ --fs-s:clamp(13.5px,11.5px + .23vw,16px);
+ --fs-q:clamp(16.5px,14px + .31vw,20px);
+ font-family:'Montserrat',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:500;color:var(--ink);background:#fff;
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#nfa h1,#nfa h2,#nfa h3,#nfa h4,#nfa p,#nfa ul,#nfa ol,#nfa li,#nfa figure,#nfa blockquote,
+#nfa table{margin:0;padding:0}
+#nfa a{color:inherit;text-decoration:none}
+#nfa img{display:block;max-width:100%;height:auto}
+#nfa button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+#nfa .nfa-grid{max-width:1440px;margin:0 auto;padding:0 48px;display:grid;
+ grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
+#nfa .nfa-col{grid-column:3 / span 6;min-width:0}
+#nfa .nfa-full{grid-column:1 / -1;min-width:0}
+#nfa .nfa-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+ clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#nfa a:focus-visible,#nfa button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+#nfa .nfa-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;
+ padding:0 22px;border-radius:2px;font-size:14.5px;font-weight:600;line-height:1;
+ transition:background .15s ease,border-color .15s ease;white-space:nowrap}
+#nfa .nfa-btn--dark{background:var(--ink);color:#fff}
+#nfa .nfa-btn--dark:hover{background:#000}
+#nfa .nfa-btn--dark:focus-visible{outline-color:#fff;outline-offset:-5px}
+#nfa .nfa-btn--wide{width:100%;height:48px;font-size:15.5px}
+@media (max-width:1023px){
+ #nfa .nfa-grid{padding:0 24px;grid-template-columns:minmax(0,1fr);column-gap:0}
+ #nfa .nfa-col,#nfa .nfa-full{grid-column:1}
+}
+/* ── film + product blocks ─────────────────────────────────────────────────
+ In the shared prelude on purpose: they are used BOTH by the shortcodes inside the
+ article body and by the metafield-driven section after it. Putting them in one
+ section's own stylesheet would let a later section's copy of this prelude win on
+ source order — that has bitten this project twice. */
+#nfa .nfa-film{position:relative;background:var(--soft);margin-top:34px}
+#nfa .nfa-film button.f-cover{display:block;width:100%;padding:0;position:relative;cursor:pointer}
+#nfa .nfa-film img{width:100%;aspect-ratio:16/9;object-fit:cover;margin:0}
+#nfa .nfa-film iframe{display:block;width:100%;aspect-ratio:16/9;border:0;margin:0}
+#nfa .nfa-film .f-play{position:absolute;inset:0;display:flex;align-items:center;
+ justify-content:center;pointer-events:none}
+#nfa .nfa-film .f-play > span{width:64px;height:64px;border-radius:2px;
+ background:rgba(17,17,17,.88);display:flex;align-items:center;justify-content:center;
+ transition:background .15s ease,transform .15s ease}
+#nfa .nfa-film button.f-cover:hover .f-play > span{background:#000;transform:scale(1.04)}
+#nfa .nfa-prod{margin-top:34px;border:1px solid var(--line);padding:18px}
+#nfa .nfa-prod .p-kicker{font-size:11px !important;font-weight:700;letter-spacing:.11em;
+ text-transform:uppercase;color:var(--grey);line-height:1 !important;
+ padding-bottom:13px;border-bottom:1px solid var(--line)}
+#nfa .p-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+#nfa .p-rows > li{padding:0}
+#nfa .p-rows > li::before{display:none}
+#nfa .p-rows > li + li{border-top:1px solid var(--line)}
+#nfa .p-rows a{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px;
+ align-items:center;padding:15px 0;text-decoration:none;font-weight:500}
+#nfa .p-rows img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--soft);margin:0}
+#nfa .p-top{display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+#nfa .p-name{font-size:16.5px !important;line-height:1.25 !important;font-weight:700;
+ letter-spacing:.02em;margin:0 !important}
+#nfa .p-price{font-size:15px !important;line-height:1.4 !important;font-weight:600;
+ margin:0 !important;white-space:nowrap}
+#nfa .p-go{margin-top:8px;display:inline-flex;align-items:center;gap:7px;font-size:14px;
+ font-weight:600;color:var(--grey);transition:color .15s ease}
+#nfa .p-go::after{content:"\2192"}
+#nfa .p-rows a:hover .p-name{text-decoration:underline;text-underline-offset:4px;
+ text-decoration-thickness:1px}
+#nfa .p-rows a:hover .p-go{color:var(--ink)}
+@media (max-width:1023px){
+ #nfa .nfa-prod{padding:16px}
+ #nfa .p-rows a{grid-template-columns:92px minmax(0,1fr);gap:14px;padding:14px 0}
+ #nfa .p-name{font-size:15.5px !important}
+}
+@media (prefers-reduced-motion:reduce){
+ #nfa .nfa-film .f-play > span,#nfa .p-go{transition:none}
+}
+/* ── Section 3 · the article body ──────────────────────────────────────────
+ Everything here styles HTML written by an author in the Shopify editor, so the
+ rules have to survive whatever comes: any number of headings, images, lists,
+ tables, embedded videos. The one thing the layout insists on is the measure —
+ the prose stays in a 6-column column, and only media is allowed out of it. */
+#nfa.nfa-article{padding:clamp(40px,4.5vw,56px) 0 clamp(48px,5vw,72px)}
+/* the body repeats the page grid inside itself so media can reach the right margin
+ while the text keeps its 6-column measure and the sticky rail keeps its parent */
+#nfa .a-body{grid-column:3 / -1;min-width:0;display:grid;
+ grid-template-columns:repeat(10,minmax(0,1fr));column-gap:24px;row-gap:0}
+#nfa .a-body > *{grid-column:1 / span 6;min-width:0}
+@media (max-width:1023px){
+ #nfa .a-body{grid-template-columns:minmax(0,1fr);column-gap:0}
+ #nfa .a-body > *{grid-column:1}
+}
+@media (min-width:768px) and (max-width:1023px){#nfa .a-body{max-width:640px}}
+/* ---- prose ---- */
+#nfa .a-body p{font-size:var(--fs-body);line-height:var(--lh-body)}
+#nfa .a-body p + p{margin-top:24px}
+#nfa .a-body h2{margin-top:48px;font-size:var(--fs-h2);line-height:var(--lh-h2);
+ font-weight:600;letter-spacing:-.01em;scroll-margin-top:104px}
+#nfa .a-body h3{margin-top:36px;font-size:var(--fs-h3);line-height:1.3;font-weight:600;
+ scroll-margin-top:104px}
+#nfa .a-body h4{margin-top:28px;font-size:var(--fs-q);line-height:1.35;font-weight:600}
+#nfa .a-body h2 + p,#nfa .a-body h3 + p,#nfa .a-body h4 + p{margin-top:8px}
+#nfa .a-body strong,#nfa .a-body b{font-weight:700}
+#nfa .a-body em,#nfa .a-body i{font-style:italic}
+#nfa .a-body a{font-weight:600;text-decoration:underline;
+ text-decoration-thickness:1px;text-underline-offset:4px}
+#nfa .a-body a:hover{color:var(--grey)}
+/* ---- lists ---- */
+#nfa .a-body ul,#nfa .a-body ol{margin-top:16px;padding-left:0;list-style:none}
+#nfa .a-body li{position:relative;padding-left:36px;font-size:var(--fs-body);
+ line-height:var(--lh-body)}
+#nfa .a-body li + li{margin-top:6px}
+#nfa .a-body ul > li::before{content:"";position:absolute;left:2px;top:.72em;
+ width:5px;height:5px;background:var(--grey)}
+#nfa .a-body ol{counter-reset:nfa}
+#nfa .a-body ol > li{counter-increment:nfa}
+#nfa .a-body ol > li::before{content:counter(nfa) ".";position:absolute;left:0;top:0;
+ font-weight:600;color:var(--grey)}
+#nfa .a-body li ul,#nfa .a-body li ol{margin-top:6px}
+@media (max-width:1023px){#nfa .a-body li{padding-left:28px}}
+/* ---- media the author put in the body ----
+ The image keeps its own proportions: this template cannot know what was uploaded,
+ and forcing a ratio would crop faces and product cut-outs. Media is allowed out
+ to the right margin, which is what separates it from the prose. */
+#nfa .a-body img{width:100%;margin-top:34px;background:var(--soft)}
+/* two classes, so this beats the rule above whatever the file order: the film poster
+ and the product thumbs are not content images and must not inherit its margin */
+#nfa .a-body .nfa-film img,#nfa .a-body .p-rows img{margin-top:0}
+#nfa .a-body figure{margin-top:34px}
+#nfa .a-body figure img{margin-top:0}
+#nfa .a-body figcaption{margin-top:10px;font-size:var(--fs-s);line-height:1.45;
+ color:var(--grey)}
+/* a paragraph that holds nothing but an image is a figure in disguise */
+#nfa .a-body > p:has(> img:only-child),
+#nfa .a-body > figure,
+#nfa .a-body > img{grid-column:1 / -1}
+#nfa .a-body > p:has(> img:only-child){margin-top:0}
+#nfa .a-body > p:has(> img:only-child) img{max-height:78vh;object-fit:cover}
+/* embedded video, however the author pasted it */
+#nfa .a-body iframe{width:100%;aspect-ratio:16/9;height:auto;border:0;margin-top:34px}
+#nfa .a-body > iframe,#nfa .a-body > .nfa-embed{grid-column:1 / -1}
+/* tables — guides use them, and they must never widen the page */
+#nfa .a-body .nfa-tablewrap{grid-column:1 / -1;margin-top:34px;overflow-x:auto;
+ -webkit-overflow-scrolling:touch}
+#nfa .a-body table{border-collapse:collapse;width:100%;min-width:520px;font-size:15px}
+#nfa .a-body th,#nfa .a-body td{padding:12px 14px;border-bottom:1px solid var(--line);
+ text-align:left;vertical-align:top;line-height:1.45}
+#nfa .a-body th{font-weight:700;background:var(--soft);white-space:nowrap}
+#nfa .a-body blockquote{margin-top:34px;padding-left:22px;border-left:2px solid var(--ink);
+ font-size:var(--fs-q);line-height:1.45}
+#nfa .a-body hr{grid-column:1 / -1;margin:44px 0 0;border:0;border-top:1px solid var(--line)}
+/* a paragraph straight after media had margin-top:0, because `p + p` cannot match a
+ non-paragraph sibling */
+#nfa .a-body > p:has(> img:only-child) + p,
+#nfa .a-body > figure + p,
+#nfa .a-body .nfa-tablewrap + p,
+#nfa .a-body > iframe + p,
+#nfa .a-body > .nfa-embed + p{margin-top:34px}
+/* ---- sticky table of contents ---- */
+#nfa .a-rail{display:none}
+@media (min-width:1200px){
+ #nfa .a-rail{display:block;grid-column:1 / span 2;align-self:start;position:sticky;
+ top:96px;padding-right:16px}
+}
+#nfa .a-rail[hidden]{display:none}
+#nfa .a-rail-h{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+ color:var(--grey);margin-bottom:14px}
+#nfa .a-rail ol{border-left:1px solid var(--line);list-style:none;margin:0;padding:0}
+#nfa .a-rail a{display:block;padding:7px 0 7px 14px;margin-left:-1px;
+ border-left:2px solid transparent;font-size:13px;line-height:1.4;color:var(--grey);
+ transition:color .15s ease,border-color .15s ease}
+#nfa .a-rail a:hover{color:var(--ink)}
+#nfa .a-rail a[aria-current="true"]{color:var(--ink);font-weight:600;border-left-color:var(--ink)}
+</style>
+<section id="nfa" class="nfa-article">
+ <div class="nfa-grid">
+ {%- comment -%}
+ The rail is built by JS from the h2s the author wrote, and hides itself when
+ there are fewer than two — a contents list of one item is worse than none.
+ {%- endcomment -%}
+ <nav class="a-rail" aria-label="{{ t_in | escape }}" hidden>
+ <p class="a-rail-h">{{ t_in }}</p>
+ <ol data-nfa-rail></ol>
+ </nav>
+ <div class="a-body"
+ data-l-from="{{ t_from | escape }}"
+ data-l-shop="{{ t_shop | escape }}">
+ {{ article.content }}
+ </div>
+ </div>
+</section>
+<script>
+(function(){
+ if(window.__nfaBody) return;
+ window.__nfaBody = 1;
+ var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function body(){ return document.querySelector('#nfa .a-body'); }
+ /* ───────── 1 · make the editor's HTML safe to lay out ─────────
+ Authors paste whatever the rich-text editor gives them. Two things need help:
+ a table that would widen the page, and a bare YouTube URL on its own line. */
+ function normalise(b){
+ [].forEach.call(b.querySelectorAll('table'), function(t){
+ if(t.parentElement && t.parentElement.classList.contains('nfa-tablewrap')) return;
+ var w = document.createElement('div');
+ w.className = 'nfa-tablewrap';
+ t.parentNode.insertBefore(w, t); w.appendChild(t);
+ });
+ /* iframes the author pasted may sit inside a <p>; lift them so they can span */
+ [].forEach.call(b.querySelectorAll('p > iframe:only-child'), function(f){
+ var p = f.parentElement;
+ p.parentNode.insertBefore(f, p); p.remove();
+ });
+ }
+ /* ───────── 2 · shortcodes ─────────
+ The escape hatch for guides that need media or products several times inside the
+ text, which the rich-text editor cannot express:
+ [video: YOUTUBE_ID]
+ [products: handle-one, handle-two, handle-three]
+ Anything that is not one of these is left alone. */
+ var YT_RE = /^\s*\[video:\s*([\w-]{6,})\s*\]\s*$/i;
+ var PR_RE = /^\s*\[products:\s*([^\]]+)\]\s*$/i;
+ function ytBlock(id){
+ var wrap = document.createElement('div');
+ wrap.className = 'nfa-embed nfa-film';
+ wrap.setAttribute('data-nfa-yt', id);
+ wrap.innerHTML =
+ '<button class="f-cover" type="button">' +
+ '<img src="https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg" ' +
+ 'width="1280" height="720" alt="" loading="lazy" decoding="async">' +
+ '<span class="f-play"><span><svg width="22" height="22" viewBox="0 0 24 24" ' +
+ 'fill="#fff" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span></span>' +
+ '</button>';
+ wrap.querySelector('.f-cover').addEventListener('click', function(){ play(wrap, id); });
+ return wrap;
+ }
+ function play(box, id){
+ if(box.dataset.playing) return;
+ box.dataset.playing = '1';
+ var f = document.createElement('iframe');
+ f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1';
+ f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; ' +
+ 'picture-in-picture; web-share';
+ f.setAttribute('allowfullscreen',''); f.title = document.title;
+ box.innerHTML = ''; box.appendChild(f);
+ }
+ function money(cents){
+ var cur = (window.Shopify && Shopify.currency && Shopify.currency.active) || 'EUR';
+ var loc = (window.Shopify && Shopify.locale) || 'en';
+ try {
+ return new Intl.NumberFormat(loc, {style:'currency', currency:cur,
+ minimumFractionDigits:0, maximumFractionDigits:2}).format(cents/100);
+ } catch(e){ return (cents/100).toFixed(2) + ' ' + cur; }
+ }
+ function productBlock(handles, labels){
+ var box = document.createElement('aside');
+ box.className = 'nfa-embed nfa-prod';
+ box.innerHTML = '<p class="p-kicker">' + labels.from + '</p><ul class="p-rows"></ul>';
+ var list = box.querySelector('.p-rows');
+ handles.forEach(function(h){
+ h = h.trim(); if(!h) return;
+ /* no encodeURIComponent: a handle pasted from the address bar already carries
+ %C2%AE for the ® in Vibram®, and encoding it again gives %25C2%25AE -> 404.
+ Raw is safe either way — the browser encodes what still needs encoding. */
+ fetch('/products/' + h + '.js', {headers:{'Accept':'application/json'}})
+ .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+ .then(function(d){
+ var img = (d.featured_image || (d.images||[])[0] || '');
+ if(img && img.indexOf('//') === 0) img = 'https:' + img;
+ var thumb = img ? img.split('?')[0] + '?width=300&height=200&crop=center' : '';
+ var li = document.createElement('li');
+ li.innerHTML =
+ '<a href="{{ecom_root_url}}products/" + d.handle + '">' +
+ '<div class="p-media">' + (thumb ?
+ '<img src="' + thumb + '" width="300" height="200" alt="" loading="lazy">' : '') +
+ '</div>' +
+ '<div class="p-info"><div class="p-top">' +
+ '<p class="p-name">' + d.title + '</p>' +
+ '<p class="p-price">' + money(d.price) + '</p>' +
+ '</div><span class="p-go">' + labels.shop + '</span></div>' +
+ '</a>';
+ list.appendChild(li);
+ }).catch(function(){ /* a handle that no longer exists simply does not appear */ });
+ });
+ return box;
+ }
+ function shortcodes(b, labels){
+ [].forEach.call(b.querySelectorAll('p'), function(p){
+ var txt = p.textContent || '';
+ var m = YT_RE.exec(txt);
+ if(m){ p.parentNode.replaceChild(ytBlock(m[1]), p); return; }
+ m = PR_RE.exec(txt);
+ if(m){ p.parentNode.replaceChild(productBlock(m[1].split(','), labels), p); }
+ });
+ }
+ /* ───────── 3 · table of contents ─────────
+ Built from the h2s the author wrote. Ids are positional (nfa-sec-1, -2 …) rather
+ than slugified, so headings in any alphabet get a stable anchor and no two can
+ collide. With fewer than two headings there is nothing to navigate, so the rail
+ and the mobile bar stay hidden instead of showing a list of one. */
+ var heads = [], railLinks = [], jumpLinks = [];
+ function fill(list){
+ if(!list) return [];
+ list.innerHTML = '';
+ return heads.map(function(h){
+ var li = document.createElement('li'), a = document.createElement('a');
+ a.href = '#' + h.id; a.textContent = (h.textContent || '').trim();
+ li.appendChild(a); list.appendChild(li);
+ return a;
+ });
+ }
+ function buildToc(b){
+ heads = [].slice.call(b.querySelectorAll('h2'));
+ heads.forEach(function(h, i){ if(!h.id) h.id = 'nfa-sec-' + (i + 1); });
+ var rail = document.querySelector('#nfa .a-rail');
+ var bar = document.querySelector('#nfau .u-jump');
+ if(heads.length < 2){
+ if(rail) rail.hidden = true;
+ if(bar) bar.hidden = true;
+ return;
+ }
+ if(rail) rail.hidden = false;
+ if(bar) bar.hidden = false;
+ railLinks = fill(document.querySelector('#nfa [data-nfa-rail]'));
+ jumpLinks = fill(document.querySelector('#nfau [data-nfa-jumptoc]'));
+ spy();
+ }
+ function offset(){
+ var bar = document.querySelector('#nfau .u-jump');
+ var vis = bar && !bar.hidden && getComputedStyle(bar).display !== 'none'
+ && bar.classList.contains('is-on');
+ return vis ? 76 : 28;
+ }
+ document.addEventListener('click', function(e){
+ var a = e.target.closest('#nfa .a-rail a, #nfau .u-jumplist a');
+ if(!a) return;
+ var t = document.getElementById(a.getAttribute('href').slice(1));
+ if(!t) return;
+ e.preventDefault();
+ window.scrollTo({top: t.getBoundingClientRect().top + (window.pageYOffset||0) - offset(),
+ behavior: reduce ? 'auto' : 'smooth'});
+ if(history.replaceState) history.replaceState(null, '', '#' + t.id);
+ });
+ var raf = 0;
+ function spy(){
+ raf = 0;
+ var probe = window.innerHeight * 0.28, active = -1;
+ for(var i = 0; i < heads.length; i++){
+ if(heads[i].getBoundingClientRect().top <= probe) active = i; else break;
+ }
+ [railLinks, jumpLinks].forEach(function(set){
+ set.forEach(function(a, i){
+ if(i === active) a.setAttribute('aria-current','true');
+ else a.removeAttribute('aria-current');
+ });
+ });
+ }
+ window.addEventListener('scroll', function(){ if(!raf) raf = requestAnimationFrame(spy); },
+ {passive:true});
+ window.addEventListener('resize', function(){ if(!raf) raf = requestAnimationFrame(spy); },
+ {passive:true});
+ function boot(){
+ /* a live article has exactly one body; looping costs nothing and means a page
+ that somehow renders two of them still gets both normalised */
+ var all = document.querySelectorAll('#nfa .a-body');
+ if(!all.length) return;
+ [].forEach.call(all, function(b){
+ var labels = {from: b.getAttribute('data-l-from') || 'From this article',
+ shop: b.getAttribute('data-l-shop') || 'Shop Now'};
+ normalise(b);
+ shortcodes(b, labels);
+ });
+ buildToc(all[0]);
+ }
+ if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+ else boot();
+})();
+</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-cjo8bo1t378"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-w0ufeho2sy"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-cjo8bo1t378" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+{%- comment -%}
+ UI labels. Server-rendered per market from request.locale, so there is no JS
+ dictionary to keep in sync and the words are in the HTML for search engines.
+ Add a market by adding a `when` branch; anything unlisted falls through to English.
+{%- endcomment -%}
+{%- assign LOC = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign t_in = 'In this article' -%}
+{%- assign t_jump = 'Jump to section' -%}
+{%- assign t_read = 'min read' -%}
+{%- assign t_from = 'From this article' -%}
+{%- assign t_shop = 'Shop Now' -%}
+{%- assign t_watch = 'Watch the full video' -%}
+{%- assign t_rel = 'Related articles' -%}
+{%- assign t_top = 'Back to top' -%}
+{%- case LOC -%}
+{%- when 'sk' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Prejsť na sekciu' -%}
+ {%- assign t_read = 'min čítania' -%}{%- assign t_from = 'Z tohto článku' -%}
+ {%- assign t_shop = 'Zobraziť' -%}{%- assign t_watch = 'Pozrieť celé video' -%}
+ {%- assign t_rel = 'Súvisiace články' -%}{%- assign t_top = 'Nahor' -%}
+{%- when 'cs' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Přejít na sekci' -%}
+ {%- assign t_read = 'min čtení' -%}{%- assign t_from = 'Z tohoto článku' -%}
+ {%- assign t_shop = 'Zobrazit' -%}{%- assign t_watch = 'Přehrát celé video' -%}
+ {%- assign t_rel = 'Související příspěvky' -%}{%- assign t_top = 'Nahoru' -%}
+{%- when 'de' -%}
+ {%- assign t_in = 'In diesem Artikel' -%}{%- assign t_jump = 'Zum Abschnitt' -%}
+ {%- assign t_read = 'Min. Lesezeit' -%}{%- assign t_from = 'Aus diesem Artikel' -%}
+ {%- assign t_shop = 'Ansehen' -%}{%- assign t_watch = 'Ganzes Video ansehen' -%}
+ {%- assign t_rel = 'Verwandte Artikel' -%}{%- assign t_top = 'Nach oben' -%}
+{%- when 'hr' -%}
+ {%- assign t_in = 'U ovom članku' -%}{%- assign t_jump = 'Skoči na odjeljak' -%}
+ {%- assign t_read = 'min čitanja' -%}{%- assign t_from = 'Iz ovog članka' -%}
+ {%- assign t_shop = 'Pogledaj' -%}{%- assign t_watch = 'Pogledaj cijeli video' -%}
+ {%- assign t_rel = 'Povezani članci' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'sl' -%}
+ {%- assign t_in = 'V tem članku' -%}{%- assign t_jump = 'Skoči na razdelek' -%}
+ {%- assign t_read = 'min branja' -%}{%- assign t_from = 'Iz tega članka' -%}
+ {%- assign t_shop = 'Poglej' -%}{%- assign t_watch = 'Oglej si celoten video' -%}
+ {%- assign t_rel = 'Povezani članki' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'bg' -%}
+ {%- assign t_in = 'В тази статия' -%}{%- assign t_jump = 'Към раздел' -%}
+ {%- assign t_read = 'мин. четене' -%}{%- assign t_from = 'От тази статия' -%}
+ {%- assign t_shop = 'Виж' -%}{%- assign t_watch = 'Гледай цялото видео' -%}
+ {%- assign t_rel = 'Свързани статии' -%}{%- assign t_top = 'Нагоре' -%}
+{%- endcase -%}
+{%- comment -%}
+ Film and products, both optional and both from article metafields. If neither is
+ set the section outputs nothing at all — an article without them must not show an
+ empty box. Namespace is `custom`; the `default:` chain also tries `my_fields`, which
+ is the other namespace Shopify installs by default.
+ custom.video_url url or text — the film
+ custom.products list.product_reference — the exact models (best relevance)
+ custom.collection collection_reference — fallback: first 4 of a collection
+{%- endcomment -%}
+{%- assign nfa_video = article.metafields.custom.video_url.value
+ | default: article.metafields.my_fields.video_url.value -%}
+{%- assign yid = '' -%}
+{%- if nfa_video contains 'youtu.be/' -%}
+ {%- assign yid = nfa_video | split: 'youtu.be/' | last | split: '?' | first -%}
+{%- elsif nfa_video contains 'v=' -%}
+ {%- assign yid = nfa_video | split: 'v=' | last | split: '&' | first -%}
+{%- endif -%}
+{%- assign nfa_items = article.metafields.custom.products.value -%}
+{%- assign nfa_coll = article.metafields.custom.collection.value -%}
+{%- if nfa_items == blank and nfa_coll != blank -%}
+ {%- assign nfa_items = nfa_coll.products -%}
+{%- endif -%}
+{%- if yid != blank or nfa_items != blank -%}
+<style>
+#nfa,#nfa *,#nfa *::before,#nfa *::after{box-sizing:border-box}
+#nfa{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;
+ --ink:#111111;--grey:#707072;--line:#e5e5e5;--soft:#f5f5f5;--hair:#dcdcdc;
+ /* the scale from the buying-guide template, unchanged: fluid, anchored at 1280 and 1920 */
+ --fs-body:clamp(15.5px,14px + .31vw,20px);--lh-body:1.6;
+ --fs-h1:clamp(27px,23px + .47vw,32px);--lh-h1:1.2;
+ --fs-h2:clamp(20px,16.5px + .39vw,24px);--lh-h2:1.25;
+ --fs-h3:clamp(17px,15px + .22vw,20px);
+ --fs-s:clamp(13.5px,11.5px + .23vw,16px);
+ --fs-q:clamp(16.5px,14px + .31vw,20px);
+ font-family:'Montserrat',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:500;color:var(--ink);background:#fff;
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#nfa h1,#nfa h2,#nfa h3,#nfa h4,#nfa p,#nfa ul,#nfa ol,#nfa li,#nfa figure,#nfa blockquote,
+#nfa table{margin:0;padding:0}
+#nfa a{color:inherit;text-decoration:none}
+#nfa img{display:block;max-width:100%;height:auto}
+#nfa button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+#nfa .nfa-grid{max-width:1440px;margin:0 auto;padding:0 48px;display:grid;
+ grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
+#nfa .nfa-col{grid-column:3 / span 6;min-width:0}
+#nfa .nfa-full{grid-column:1 / -1;min-width:0}
+#nfa .nfa-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+ clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#nfa a:focus-visible,#nfa button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+#nfa .nfa-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;
+ padding:0 22px;border-radius:2px;font-size:14.5px;font-weight:600;line-height:1;
+ transition:background .15s ease,border-color .15s ease;white-space:nowrap}
+#nfa .nfa-btn--dark{background:var(--ink);color:#fff}
+#nfa .nfa-btn--dark:hover{background:#000}
+#nfa .nfa-btn--dark:focus-visible{outline-color:#fff;outline-offset:-5px}
+#nfa .nfa-btn--wide{width:100%;height:48px;font-size:15.5px}
+@media (max-width:1023px){
+ #nfa .nfa-grid{padding:0 24px;grid-template-columns:minmax(0,1fr);column-gap:0}
+ #nfa .nfa-col,#nfa .nfa-full{grid-column:1}
+}
+/* ── film + product blocks ─────────────────────────────────────────────────
+ In the shared prelude on purpose: they are used BOTH by the shortcodes inside the
+ article body and by the metafield-driven section after it. Putting them in one
+ section's own stylesheet would let a later section's copy of this prelude win on
+ source order — that has bitten this project twice. */
+#nfa .nfa-film{position:relative;background:var(--soft);margin-top:34px}
+#nfa .nfa-film button.f-cover{display:block;width:100%;padding:0;position:relative;cursor:pointer}
+#nfa .nfa-film img{width:100%;aspect-ratio:16/9;object-fit:cover;margin:0}
+#nfa .nfa-film iframe{display:block;width:100%;aspect-ratio:16/9;border:0;margin:0}
+#nfa .nfa-film .f-play{position:absolute;inset:0;display:flex;align-items:center;
+ justify-content:center;pointer-events:none}
+#nfa .nfa-film .f-play > span{width:64px;height:64px;border-radius:2px;
+ background:rgba(17,17,17,.88);display:flex;align-items:center;justify-content:center;
+ transition:background .15s ease,transform .15s ease}
+#nfa .nfa-film button.f-cover:hover .f-play > span{background:#000;transform:scale(1.04)}
+#nfa .nfa-prod{margin-top:34px;border:1px solid var(--line);padding:18px}
+#nfa .nfa-prod .p-kicker{font-size:11px !important;font-weight:700;letter-spacing:.11em;
+ text-transform:uppercase;color:var(--grey);line-height:1 !important;
+ padding-bottom:13px;border-bottom:1px solid var(--line)}
+#nfa .p-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+#nfa .p-rows > li{padding:0}
+#nfa .p-rows > li::before{display:none}
+#nfa .p-rows > li + li{border-top:1px solid var(--line)}
+#nfa .p-rows a{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px;
+ align-items:center;padding:15px 0;text-decoration:none;font-weight:500}
+#nfa .p-rows img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--soft);margin:0}
+#nfa .p-top{display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+#nfa .p-name{font-size:16.5px !important;line-height:1.25 !important;font-weight:700;
+ letter-spacing:.02em;margin:0 !important}
+#nfa .p-price{font-size:15px !important;line-height:1.4 !important;font-weight:600;
+ margin:0 !important;white-space:nowrap}
+#nfa .p-go{margin-top:8px;display:inline-flex;align-items:center;gap:7px;font-size:14px;
+ font-weight:600;color:var(--grey);transition:color .15s ease}
+#nfa .p-go::after{content:"\2192"}
+#nfa .p-rows a:hover .p-name{text-decoration:underline;text-underline-offset:4px;
+ text-decoration-thickness:1px}
+#nfa .p-rows a:hover .p-go{color:var(--ink)}
+@media (max-width:1023px){
+ #nfa .nfa-prod{padding:16px}
+ #nfa .p-rows a{grid-template-columns:92px minmax(0,1fr);gap:14px;padding:14px 0}
+ #nfa .p-name{font-size:15.5px !important}
+}
+@media (prefers-reduced-motion:reduce){
+ #nfa .nfa-film .f-play > span,#nfa .p-go{transition:none}
+}
+/* ── Section 4 · film and products from the article's metafields ─────────── */
+#nfa.nfa-extra{padding:clamp(8px,1.5vw,20px) 0 clamp(24px,3vw,36px)}
+#nfa.nfa-extra .nfa-film,#nfa.nfa-extra .nfa-prod{margin-top:26px}
+#nfa .x-cta{margin-top:20px}
+</style>
+<section id="nfa" class="nfa-extra">
+ <div class="nfa-grid">
+ <div class="nfa-col">
+ {%- if yid != blank %}
+ {%- comment -%}
+ Click-to-load: nothing is requested from YouTube until the visitor presses
+ play, so the page carries no third-party script or cookie on load.
+ {%- endcomment -%}
+ <div class="nfa-film" data-nfa-yt="{{ yid }}">
+ <button class="f-cover" type="button" aria-label="{{ t_watch | escape }}">
+ <img src="https://i.ytimg.com/vi/{{ yid }}/maxresdefault.jpg"
+ srcset="https://i.ytimg.com/vi/{{ yid }}/hqdefault.jpg 480w,
+ https://i.ytimg.com/vi/{{ yid }}/maxresdefault.jpg 1280w"
+ sizes="(min-width:1024px) 675px, calc(100vw - 48px)"
+ width="1280" height="720" alt="{{ t_watch | escape }}"
+ loading="lazy" decoding="async">
+ <span class="f-play"><span>
+ <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+ <path d="M8 5.5v13l11-6.5z"/>
+ </svg>
+ </span></span>
+ </button>
+ </div>
+ <div class="x-cta">
+ <a class="nfa-btn nfa-btn--dark nfa-btn--wide"
+ href="https://www.youtube.com/watch?v={{ yid }}" data-nfa-playlink>
+ <span>{{ t_watch }}</span>
+ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+ <path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.7"
+ stroke-linecap="round" stroke-linejoin="round"/>
+ </svg>
+ </a>
+ </div>
+ {%- endif %}
+ {%- if nfa_items != blank %}
+ <aside class="nfa-prod">
+ <p class="p-kicker">{{ t_from }}</p>
+ <ul class="p-rows">
+ {%- for p in nfa_items limit: 4 %}
+ <li>
+ <a href="{{ p.url }}">
+ <div class="p-media">
+ {%- if p.featured_image %}
+ <img src="{{ p.featured_image | image_url: width: 400, height: 267, crop: 'center' }}"
+ srcset="{{ p.featured_image | image_url: width: 300, height: 200, crop: 'center' }} 300w,
+ {{ p.featured_image | image_url: width: 450, height: 300, crop: 'center' }} 450w,
+ {{ p.featured_image | image_url: width: 600, height: 400, crop: 'center' }} 600w"
+ sizes="(min-width:1024px) 140px, 92px"
+ width="400" height="267"
+ alt="{{ p.featured_image.alt | default: p.title | escape }}"
+ loading="lazy" decoding="async">
+ {%- endif %}
+ </div>
+ <div class="p-info">
+ <div class="p-top">
+ <p class="p-name">{{ p.title }}</p>
+ <p class="p-price">{{ p.price | money }}</p>
+ </div>
+ <span class="p-go">{{ t_shop }}</span>
+ </div>
+ </a>
+ </li>
+ {%- endfor %}
+ </ul>
+ </aside>
+ {%- endif %}
+ </div>
+ </div>
+</section>
+<script>
+(function(){
+ if(window.__nfaFilm) return; window.__nfaFilm = 1;
+ function boot(){
+ var box = document.querySelector('#nfa.nfa-extra [data-nfa-yt]');
+ if(!box) return;
+ var id = box.getAttribute('data-nfa-yt');
+ function play(){
+ if(box.dataset.playing) return;
+ box.dataset.playing = '1';
+ var f = document.createElement('iframe');
+ f.src = 'https://www.youtube-nocookie.com/embed/' + id +
+ '?autoplay=1&rel=0&modestbranding=1';
+ f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; ' +
+ 'picture-in-picture; web-share';
+ f.setAttribute('allowfullscreen',''); f.title = document.title;
+ box.innerHTML = ''; box.appendChild(f);
+ }
+ var c = box.querySelector('.f-cover');
+ if(c) c.addEventListener('click', play);
+ /* the button plays inline but stays a real link, so middle-click still works
+ and it degrades to YouTube with JS off */
+ var l = document.querySelector('[data-nfa-playlink]');
+ if(l) l.addEventListener('click', function(e){
+ if(e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+ e.preventDefault();
+ box.scrollIntoView({block:'center', behavior:'smooth'});
+ play();
+ });
+ }
+ if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+ else boot();
+})();
+</script>
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-zx643pa061a"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-totvoheusk"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-zx643pa061a" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+{%- comment -%}
+ UI labels. Server-rendered per market from request.locale, so there is no JS
+ dictionary to keep in sync and the words are in the HTML for search engines.
+ Add a market by adding a `when` branch; anything unlisted falls through to English.
+{%- endcomment -%}
+{%- assign LOC = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign t_in = 'In this article' -%}
+{%- assign t_jump = 'Jump to section' -%}
+{%- assign t_read = 'min read' -%}
+{%- assign t_from = 'From this article' -%}
+{%- assign t_shop = 'Shop Now' -%}
+{%- assign t_watch = 'Watch the full video' -%}
+{%- assign t_rel = 'Related articles' -%}
+{%- assign t_top = 'Back to top' -%}
+{%- case LOC -%}
+{%- when 'sk' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Prejsť na sekciu' -%}
+ {%- assign t_read = 'min čítania' -%}{%- assign t_from = 'Z tohto článku' -%}
+ {%- assign t_shop = 'Zobraziť' -%}{%- assign t_watch = 'Pozrieť celé video' -%}
+ {%- assign t_rel = 'Súvisiace články' -%}{%- assign t_top = 'Nahor' -%}
+{%- when 'cs' -%}
+ {%- assign t_in = 'V tomto článku' -%}{%- assign t_jump = 'Přejít na sekci' -%}
+ {%- assign t_read = 'min čtení' -%}{%- assign t_from = 'Z tohoto článku' -%}
+ {%- assign t_shop = 'Zobrazit' -%}{%- assign t_watch = 'Přehrát celé video' -%}
+ {%- assign t_rel = 'Související příspěvky' -%}{%- assign t_top = 'Nahoru' -%}
+{%- when 'de' -%}
+ {%- assign t_in = 'In diesem Artikel' -%}{%- assign t_jump = 'Zum Abschnitt' -%}
+ {%- assign t_read = 'Min. Lesezeit' -%}{%- assign t_from = 'Aus diesem Artikel' -%}
+ {%- assign t_shop = 'Ansehen' -%}{%- assign t_watch = 'Ganzes Video ansehen' -%}
+ {%- assign t_rel = 'Verwandte Artikel' -%}{%- assign t_top = 'Nach oben' -%}
+{%- when 'hr' -%}
+ {%- assign t_in = 'U ovom članku' -%}{%- assign t_jump = 'Skoči na odjeljak' -%}
+ {%- assign t_read = 'min čitanja' -%}{%- assign t_from = 'Iz ovog članka' -%}
+ {%- assign t_shop = 'Pogledaj' -%}{%- assign t_watch = 'Pogledaj cijeli video' -%}
+ {%- assign t_rel = 'Povezani članci' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'sl' -%}
+ {%- assign t_in = 'V tem članku' -%}{%- assign t_jump = 'Skoči na razdelek' -%}
+ {%- assign t_read = 'min branja' -%}{%- assign t_from = 'Iz tega članka' -%}
+ {%- assign t_shop = 'Poglej' -%}{%- assign t_watch = 'Oglej si celoten video' -%}
+ {%- assign t_rel = 'Povezani članki' -%}{%- assign t_top = 'Na vrh' -%}
+{%- when 'bg' -%}
+ {%- assign t_in = 'В тази статия' -%}{%- assign t_jump = 'Към раздел' -%}
+ {%- assign t_read = 'мин. четене' -%}{%- assign t_from = 'От тази статия' -%}
+ {%- assign t_shop = 'Виж' -%}{%- assign t_watch = 'Гледай цялото видео' -%}
+ {%- assign t_rel = 'Свързани статии' -%}{%- assign t_top = 'Нагоре' -%}
+{%- endcase -%}
+{%- comment -%}
+ Related articles. The theme normally renders this, but `Apply for all blog post`
+ replaces the theme's article template — so the template has to bring its own.
+ Same blog, newest first, current article excluded, three shown.
+{%- endcomment -%}
+{%- assign nfa_rel = 0 -%}
+{%- for a in article.blog.articles limit: 4 -%}
+ {%- if a.id != article.id -%}{%- assign nfa_rel = nfa_rel | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+{%- if nfa_rel > 0 -%}
+<style>
+#nfa,#nfa *,#nfa *::before,#nfa *::after{box-sizing:border-box}
+#nfa{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;
+ --ink:#111111;--grey:#707072;--line:#e5e5e5;--soft:#f5f5f5;--hair:#dcdcdc;
+ /* the scale from the buying-guide template, unchanged: fluid, anchored at 1280 and 1920 */
+ --fs-body:clamp(15.5px,14px + .31vw,20px);--lh-body:1.6;
+ --fs-h1:clamp(27px,23px + .47vw,32px);--lh-h1:1.2;
+ --fs-h2:clamp(20px,16.5px + .39vw,24px);--lh-h2:1.25;
+ --fs-h3:clamp(17px,15px + .22vw,20px);
+ --fs-s:clamp(13.5px,11.5px + .23vw,16px);
+ --fs-q:clamp(16.5px,14px + .31vw,20px);
+ font-family:'Montserrat',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:500;color:var(--ink);background:#fff;
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#nfa h1,#nfa h2,#nfa h3,#nfa h4,#nfa p,#nfa ul,#nfa ol,#nfa li,#nfa figure,#nfa blockquote,
+#nfa table{margin:0;padding:0}
+#nfa a{color:inherit;text-decoration:none}
+#nfa img{display:block;max-width:100%;height:auto}
+#nfa button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+#nfa .nfa-grid{max-width:1440px;margin:0 auto;padding:0 48px;display:grid;
+ grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
+#nfa .nfa-col{grid-column:3 / span 6;min-width:0}
+#nfa .nfa-full{grid-column:1 / -1;min-width:0}
+#nfa .nfa-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+ clip:rect(0 0 0 0);white-space:nowrap;border:0}
+#nfa a:focus-visible,#nfa button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+#nfa .nfa-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;
+ padding:0 22px;border-radius:2px;font-size:14.5px;font-weight:600;line-height:1;
+ transition:background .15s ease,border-color .15s ease;white-space:nowrap}
+#nfa .nfa-btn--dark{background:var(--ink);color:#fff}
+#nfa .nfa-btn--dark:hover{background:#000}
+#nfa .nfa-btn--dark:focus-visible{outline-color:#fff;outline-offset:-5px}
+#nfa .nfa-btn--wide{width:100%;height:48px;font-size:15.5px}
+@media (max-width:1023px){
+ #nfa .nfa-grid{padding:0 24px;grid-template-columns:minmax(0,1fr);column-gap:0}
+ #nfa .nfa-col,#nfa .nfa-full{grid-column:1}
+}
+/* ── film + product blocks ─────────────────────────────────────────────────
+ In the shared prelude on purpose: they are used BOTH by the shortcodes inside the
+ article body and by the metafield-driven section after it. Putting them in one
+ section's own stylesheet would let a later section's copy of this prelude win on
+ source order — that has bitten this project twice. */
+#nfa .nfa-film{position:relative;background:var(--soft);margin-top:34px}
+#nfa .nfa-film button.f-cover{display:block;width:100%;padding:0;position:relative;cursor:pointer}
+#nfa .nfa-film img{width:100%;aspect-ratio:16/9;object-fit:cover;margin:0}
+#nfa .nfa-film iframe{display:block;width:100%;aspect-ratio:16/9;border:0;margin:0}
+#nfa .nfa-film .f-play{position:absolute;inset:0;display:flex;align-items:center;
+ justify-content:center;pointer-events:none}
+#nfa .nfa-film .f-play > span{width:64px;height:64px;border-radius:2px;
+ background:rgba(17,17,17,.88);display:flex;align-items:center;justify-content:center;
+ transition:background .15s ease,transform .15s ease}
+#nfa .nfa-film button.f-cover:hover .f-play > span{background:#000;transform:scale(1.04)}
+#nfa .nfa-prod{margin-top:34px;border:1px solid var(--line);padding:18px}
+#nfa .nfa-prod .p-kicker{font-size:11px !important;font-weight:700;letter-spacing:.11em;
+ text-transform:uppercase;color:var(--grey);line-height:1 !important;
+ padding-bottom:13px;border-bottom:1px solid var(--line)}
+#nfa .p-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+#nfa .p-rows > li{padding:0}
+#nfa .p-rows > li::before{display:none}
+#nfa .p-rows > li + li{border-top:1px solid var(--line)}
+#nfa .p-rows a{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px;
+ align-items:center;padding:15px 0;text-decoration:none;font-weight:500}
+#nfa .p-rows img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--soft);margin:0}
+#nfa .p-top{display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+#nfa .p-name{font-size:16.5px !important;line-height:1.25 !important;font-weight:700;
+ letter-spacing:.02em;margin:0 !important}
+#nfa .p-price{font-size:15px !important;line-height:1.4 !important;font-weight:600;
+ margin:0 !important;white-space:nowrap}
+#nfa .p-go{margin-top:8px;display:inline-flex;align-items:center;gap:7px;font-size:14px;
+ font-weight:600;color:var(--grey);transition:color .15s ease}
+#nfa .p-go::after{content:"\2192"}
+#nfa .p-rows a:hover .p-name{text-decoration:underline;text-underline-offset:4px;
+ text-decoration-thickness:1px}
+#nfa .p-rows a:hover .p-go{color:var(--ink)}
+@media (max-width:1023px){
+ #nfa .nfa-prod{padding:16px}
+ #nfa .p-rows a{grid-template-columns:92px minmax(0,1fr);gap:14px;padding:14px 0}
+ #nfa .p-name{font-size:15.5px !important}
+}
+@media (prefers-reduced-motion:reduce){
+ #nfa .nfa-film .f-play > span,#nfa .p-go{transition:none}
+}
+/* ── Section 5 · related articles ────────────────────────────────────────── */
+#nfa.nfa-related{padding:clamp(24px,3vw,36px) 0 clamp(48px,5vw,72px)}
+#nfa .r-head{margin-bottom:22px}
+#nfa .r-head h2{font-size:var(--fs-h2);line-height:var(--lh-h2);font-weight:600;
+ letter-spacing:-.01em}
+#nfa .r-grid{list-style:none;margin:0;padding:0;display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+#nfa .r-card a{display:block}
+#nfa .r-card img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--soft)}
+#nfa .r-ph{width:100%;aspect-ratio:3/2;background:var(--soft)}
+#nfa .r-cat{margin-top:16px;font-size:var(--fs-s);line-height:1.4;color:var(--grey)}
+#nfa .r-title{margin-top:4px;font-size:var(--fs-q);line-height:1.3;font-weight:600;
+ letter-spacing:-.01em}
+#nfa .r-card a:hover .r-title{text-decoration:underline;text-underline-offset:4px;
+ text-decoration-thickness:1px}
+@media (max-width:1023px){
+ #nfa .r-head{margin-bottom:0;padding-bottom:18px}
+ #nfa .r-grid{display:block;border-top:1px solid var(--line)}
+ #nfa .r-card{padding:22px 0}
+ #nfa .r-card a{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:18px;
+ align-items:start}
+ #nfa .r-card .r-media{grid-column:2;grid-row:1 / span 2}
+ #nfa .r-card img,#nfa .r-ph{aspect-ratio:1/1}
+ #nfa .r-cat{grid-column:1;grid-row:1;margin-top:0}
+ #nfa .r-title{grid-column:1;grid-row:2;margin-top:4px}
+}
+</style>
+<section id="nfa" class="nfa-related" aria-labelledby="nfa-rel-h">
+ <div class="nfa-grid">
+ <div class="nfa-full r-head">
+ <h2 id="nfa-rel-h">{{ t_rel }}</h2>
+ </div>
+ </div>
+ <div class="nfa-grid">
+ <ul class="nfa-full r-grid">
+ {%- assign shown = 0 -%}
+ {%- for a in article.blog.articles -%}
+ {%- if a.id == article.id -%}{%- continue -%}{%- endif -%}
+ {%- if shown >= 3 -%}{%- break -%}{%- endif -%}
+ {%- assign shown = shown | plus: 1 -%}
+ <li class="r-card">
+ <a href="{{ a.url }}">
+ <div class="r-media">
+ {%- if a.image %}
+ <img src="{{ a.image | image_url: width: 600 }}"
+ srcset="{{ a.image | image_url: width: 320 }} 320w,
+ {{ a.image | image_url: width: 480 }} 480w,
+ {{ a.image | image_url: width: 700 }} 700w"
+ sizes="(min-width:1024px) 30vw, 110px"
+ width="600" height="400"
+ alt="{{ a.image.alt | default: a.title | escape }}"
+ loading="lazy" decoding="async">
+ {%- else %}
+ <div class="r-ph"></div>
+ {%- endif %}
+ </div>
+ {%- if a.tags.size > 0 %}
+ <p class="r-cat">{{ a.tags | first | remove: 'cat:' | capitalize }}</p>
+ {%- else %}
+ <p class="r-cat">{{ a.published_at | date: format: 'date' }}</p>
+ {%- endif %}
+ <p class="r-title">{{ a.title }}</p>
+ </a>
+ </li>
+ {%- endfor -%}
+ </ul>
+ </div>
+</section>
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
+</div></div>
+{% schema %}
+{
+ "name": "NF Blog \u2014 universal artic",
+ "settings": [
+ {
+ "type": "header",
+ "content": "The section was generated by [Ecomposer](https:\/\/ecomposer.io).",
+ "info": "\n EComposer is a Visual Page Builder app on Shopify AppStore.\n It provides 100+ pre-built templates in library,\n so you can build unlimited pages that you can imagine with it.\n Please don't add Shopify sections to EComposer's page in the theme customize. If you do this, Shopify sections will be deleted when you republish your page in EComposer\n "
+ },
+ {
+ "type": "header",
+ "content": "[EDIT WITH EComposer APP \u2192](https:\/\/admin.shopify.com\/store\/sportfinder-international\/apps\/ecomposer?open_builder=1&page=blog&id=6a980c18857d78c79d0ab9f3&utm_source=theme-customize)",
+ "info": "(*You must install the app to start editing this section [Learn more](https:\/\/help.ecomposer.io\/docs\/getting-started\/installation\/))"
+ }
+ ]
+}
+{% endschema %}
