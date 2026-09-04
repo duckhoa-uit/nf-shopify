@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-09-04 12:48:07
+ At 2026-09-04 12:55:28
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -357,26 +357,31 @@
  instance_id: 'EComposerPerfumeFamilyPicker'
 %}
 <style>
- /* прибрати порожнечу від прихованого нативного пікера */
+ /* схлопнути прихований нативний пікер */
  .ecom-product-single__variant-picker-wrapper{
+ height: 0 !important;
+ overflow: hidden !important;
  margin: 0 !important;
  padding: 0 !important;
  }
- /* відступ між ціною і блоком розмірів — 24px за мануалом */
- .perfume-product-family-picker{
- margin-top: 24px !important;
+ /* обнулити відступи обгорток EComposer навколо пікера */
+ [class*="ecom"]:has(> .perfume-product-family-picker),
+ [class*="ecom"]:has(> * > .perfume-product-family-picker){
+ margin-top: 0 !important;
  padding-top: 0 !important;
  }
- /* відступ під написом «Veľkosť» */
+ /* єдиний відступ над блоком розмірів */
+ .perfume-product-family-picker{
+ margin-top: 16px !important;
+ padding-top: 0 !important;
+ }
  .perfume-product-family-picker__label{
  margin: 0 0 8px !important;
  }
- /* шрифт як на решті сайту */
  .perfume-product-family-picker,
  .perfume-product-family-picker *{
  font-family: var(--font-body-family, Archivo), sans-serif !important;
  }
- /* квадратні кути замість пігулок */
  .perfume-product-family-picker__options > *,
  .perfume-product-family-picker__options label,
  .perfume-product-family-picker__options a,
