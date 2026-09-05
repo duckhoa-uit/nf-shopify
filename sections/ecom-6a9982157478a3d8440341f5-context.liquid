@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-09-05 11:40:23
+ At 2026-09-05 11:46:10
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -60,12 +60,6 @@
  -%}
  
  
- <div class="ecom-product-single__zoom-icon-wrapper ecom-pa ecom-flex ecom-zoom-position__bottomright">
- <div class="ecom-product-single__zoom-icon ecom-flex">
- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor"><path d="M 4 4 L 4 13 L 6 13 L 6 7.4375 L 14.5625 16 L 6 24.5625 L 6 19 L 4 19 L 4 28 L 13 28 L 13 26 L 7.4375 26 L 16 17.4375 L 24.5625 26 L 19 26 L 19 28 L 28 28 L 28 19 L 26 19 L 26 24.5625 L 17.4375 16 L 26 7.4375 L 26 13 L 28 13 L 28 4 L 19 4 L 19 6 L 24.5625 6 L 16 14.5625 L 7.4375 6 L 13 6 L 13 4 Z"></path></svg>
- </div>
- </div>
- 
  
  {% assign img_padding = 2 | times: 1 %}
  {% assign img_padding__tablet = 1 | times: 1 %}
@@ -92,7 +86,7 @@
  sizes: sizes,
  widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946',
  class: 'ecom-image-default'
- ,ecom-modal-source:img_master , ecom-modal:'image'
+ 
  ,loading: loading
  ,fetchpriority: fetchpriority
  ,alt: image.alt | escape
@@ -107,7 +101,7 @@
  {% when 'image' %}
  {% continue %}
  {% when 'external_video'%}
- <div class="ec_splide__slide ecom-product-single__media--image ecom-splide-slide ecom-flex ecom-image-align-center ecom-image-align---tablet ecom-image-align---mobile ecom-col-lg-6 ecom-product-single__media---external-video ecom-product-single__media--full" data-position="{{media.position}}" style="padding-top: 56%;" ecom-modal='iframe'>
+ <div class="ec_splide__slide ecom-product-single__media--image ecom-splide-slide ecom-flex ecom-image-align-center ecom-image-align---tablet ecom-image-align---mobile ecom-col-lg-6 ecom-product-single__media---external-video ecom-product-single__media--full" data-position="{{media.position}}" style="padding-top: 56%;" >
  {{ media | external_video_tag: image_size:'master' }}
  </div>
  {% when 'video' %}
@@ -118,7 +112,7 @@
  {% break %}
  {% endif %}
  {% endfor %}
- <div data-stopdrag="true" class="ec_splide__slide ecom-product-single__media--image ecom-splide-slide ecom-flex ecom-image-align-center ecom-image-align---tablet ecom-image-align---mobile ecom-col-lg-6 ecom-product-single__media--video ecom-product-single__media--full ecom-swiper-no-swiping" data-position="{{media.position}}" style="--img_padding: {{ media_ration | divided_by: img_padding }}%;--img_padding__tablet: {{ media_ration | divided_by: img_padding__tablet }}%;--img_padding__mobile: {{ media_ration | divided_by: img_padding__mobile }}%" ecom-modal-source="{{videoUrl}}" ecom-modal='video'>
+ <div data-stopdrag="true" class="ec_splide__slide ecom-product-single__media--image ecom-splide-slide ecom-flex ecom-image-align-center ecom-image-align---tablet ecom-image-align---mobile ecom-col-lg-6 ecom-product-single__media--video ecom-product-single__media--full ecom-swiper-no-swiping" data-position="{{media.position}}" style="--img_padding: {{ media_ration | divided_by: img_padding }}%;--img_padding__tablet: {{ media_ration | divided_by: img_padding__tablet }}%;--img_padding__mobile: {{ media_ration | divided_by: img_padding__mobile }}%" >
  {{ media | video_tag: image_size:'master', class: 'ecom-media-video', controls: false, autoplay: true, muted: undefined,loop: undefined }}
  <button class="ecom-product-single__media--play-control"
  type="button"
