@@ -22,6 +22,14 @@ describe("merchant-authored navigation links", () => {
     expect(source).toContain("{{ grandchildlink.title | escape }}");
   });
 
+  test("desktop category headings stay links when they have child items", () => {
+    const source = readSnippet("header-mega-menu.liquid");
+
+    expect(source).not.toContain("childlink.links == blank and childlink.url != blank");
+    expect(source).toContain("if childlink.url != blank");
+    expect(source).toContain("mega-menu__heading mega-menu__heading--link");
+  });
+
   test("image-card titles wrap and share a subgrid row with images", () => {
     const css = readAsset("component-mega-menu.css");
     const titleBlock = css.match(/\.mega-menu__card-title\s*\{[^}]+\}/)?.[0];

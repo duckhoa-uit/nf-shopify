@@ -41,6 +41,39 @@ describe("issue 66 source cleanup contracts", () => {
     }
   });
 
+  test("keeps apparel PDP price and FAQ view-all on the body font token", () => {
+    const price = readProjectFile("assets/component-price.css");
+    const faq = readProjectFile("sections/faq-section.liquid");
+    const product = readProjectFile("assets/section-main-product.css");
+
+    expect(price).toMatch(/\.current-price\s*\{[^}]*font-family:\s*var\(--font-body-family\)/s);
+    expect(faq).toMatch(/\.faq-section \.view-all-link\s*\{[^}]*font-family:\s*var\(--font-body-family\)/s);
+    expect(product).toMatch(/\.northfinder-product-page\s*\{[^}]*font-family:\s*var\(--font-body-family\)/s);
+  });
+
+  test("does not reintroduce SemiExpanded or hardcoded Archivo on apparel PDP sources", () => {
+    const pdpSources = [
+      "assets/component-price.css",
+      "assets/section-main-product.css",
+      "sections/faq-section.liquid",
+      "sections/related-products.liquid",
+      "sections/recent-products.liquid",
+      "sections/newsletter.liquid",
+      "sections/size-guide-section.liquid",
+      "sections/main-product.liquid",
+      "snippets/automatic-discount-preview.liquid",
+      "snippets/size-fit-body-measurements.liquid",
+      "snippets/size-fit-product-measurements.liquid",
+      "templates/product.json",
+      "templates/product.northkit.json",
+    ];
+    const leak = /font-archivo-expanded|--font-archivo-expanded|Archivo SemiExpanded|font-\['Archivo'\]|font-family:\s*['"]Archivo['"]/;
+
+    for (const path of pdpSources) {
+      expect(readProjectFile(path), path).not.toMatch(leak);
+    }
+  });
+
   test("uses the theme Archivo variable in the Northkit template", () => {
     const source = readProjectFile("templates/product.northkit.json").replace(/^\s*\/\*[\s\S]*?\*\/\s*/, "");
     const template = JSON.parse(source);
@@ -48,7 +81,7 @@ describe("issue 66 source cleanup contracts", () => {
 
     expect(customLiquid).not.toContain("fonts.googleapis.com");
     expect(customLiquid).not.toContain("font-family: 'Archivo'");
-    expect(customLiquid.match(/font-family: var\(--font-archivo-expanded\);/g)).toHaveLength(2);
+    expect(customLiquid.match(/font-family: var\(--font-heading-family\);/g)).toHaveLength(2);
   });
 
   test("documents measurable baseline-relative performance targets", () => {

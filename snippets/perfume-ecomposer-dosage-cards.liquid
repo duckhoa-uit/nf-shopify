@@ -1,0 +1,45 @@
+{% comment %}
+  Renders perfume sibling-volume dosage cards for EComposer.
+
+  Uses custom.parfum_group.products, then custom.product_in_group.
+  Wash count is volume_ml / 5.
+
+  Usage:
+  {% render 'perfume-ecomposer-dosage-cards', product: product %}
+{% endcomment %}
+
+{%- liquid
+  assign perfume_group = product.metafields.custom.parfum_group.value
+  assign family_products = perfume_group.products.value
+  if family_products == blank
+    assign family_products = product.metafields.custom.product_in_group.value
+  endif
+-%}
+
+{%- if family_products != blank -%}
+  <div class="perfume-ecomposer-dosage-cards">
+    {%- assign rendered_size_keys = '' -%}
+    {%- for family_product in family_products -%}
+      {%- capture size_label -%}
+        {%- render 'perfume-size-label', product: family_product -%}
+      {%- endcapture -%}
+      {%- assign size_label = size_label | strip -%}
+      {%- assign size_key = size_label | downcase -%}
+      {%- assign size_token = '|' | append: size_key | append: '|' -%}
+
+      {%- if size_label != blank -%}
+        {%- unless rendered_size_keys contains size_token -%}
+          {%- assign rendered_size_keys = rendered_size_keys | append: size_token -%}
+          {%- assign ml_digits = size_label | downcase | replace: 'ml', '' | replace: ' ', '' | replace: ',', '.' -%}
+          {%- assign wash_count = ml_digits | divided_by: 5.0 | floor -%}
+          <div class="perfume-ecomposer-dosage-card">
+            <div class="perfume-ecomposer-dosage-card__volume">{{ size_label | escape }}</div>
+            {%- if wash_count > 0 -%}
+              <div class="perfume-ecomposer-dosage-card__washes">{{ wash_count }}</div>
+            {%- endif -%}
+          </div>
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

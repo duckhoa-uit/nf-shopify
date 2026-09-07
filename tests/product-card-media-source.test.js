@@ -5,14 +5,15 @@ import { describe, expect, test } from "vitest";
 const readProjectFile = (path) => readFileSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), "utf8");
 
 describe("product card media rendering", () => {
-  test("matches the final image type token instead of product-code substrings", () => {
+  test("picks the selected color front-first instead of a global model shot", () => {
     const source = readProjectFile("snippets/card-product.liquid");
 
-    expect(source).toContain("assign image_type_token = filename_parts | last");
-    expect(source).toContain("if image_type == 'M'");
-    expect(source).toContain("if image_type == 'H'");
+    expect(source).toContain("selected_or_first_available_variant");
+    expect(source).toContain("featured_is_back");
+    expect(source).toContain("hero_media | default: model_media | default: model_sequence_media");
+    expect(source).toContain("assign type_name = type_parts.first");
     expect(source).not.toContain("parsed_url contains '-M'");
-    expect(source).not.toContain("parsed_url contains '-B'");
+    expect(source).not.toContain("assign image_type_token = filename_parts | last");
   });
 
   test("adds a white background to native and EComposer product media wrappers", () => {

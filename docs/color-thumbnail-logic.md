@@ -152,8 +152,14 @@ When a color has no direct variant image and no same-reference media, `always` k
 
 ### 5. Product Cards
 **File**: `snippets/card-product.liquid`
-**Usage**: Color swatches on product listing pages
+**Usage**: Color swatches and the large card image on listing pages
 *Note: Uses custom logic instead of the utility for performance reasons*
+
+**Default card image** follows the same front-first, color-aware chain as swatches, scoped to `selected_or_first_available_variant`. Back type tokens (`-B` / `-BV`) are skipped when they are the variant featured image.
+
+**Hover is not required to be front.** Card hover swaps to the same color's model shot (`-M` or lowest `-M_N`). That file may be a photographic back (JIMEN / SUCHY `M_1`). Swatch hover still uses that color's `-H`.
+
+Media matching uses the exact `-<reference>-` token, so Shopify UUID suffixes such as `-M_1_<uuid>.jpg` still parse as type `M`. See `docs/product-card-media/evidence.md`.
 
 ## Example Scenario
 

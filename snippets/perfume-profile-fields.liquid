@@ -1,0 +1,128 @@
+{% comment %}
+  Parses live perfume profile fields from product metafields.
+
+  There is no product.metafields.parfum.* namespace. This snippet reads:
+
+  - product.metafields.custom.parfum_group (metaobject: name, family_code, products)
+  - fallback product.metafields.custom.product_in_group
+  - product.metafields.custom.short_description labeled text
+    (INGREDIENTS / COMPOSITION, SUITABLE FOR ACTIVITIES, FRAGRANCE CHARACTERISTICS)
+  - product.metafields.custom_features.activities
+  - product.metafields.custom.catalog_code / custom.reference_code
+  - product.featured_image / first product video
+
+  Accepts:
+  - product: {Object} Current product.
+
+  Exposes via include-style assign output when used through
+  perfume-ecomposer-mapped-fields (render-safe). Do not call this from
+  EComposer typed HTML. Use {% render 'perfume-ecomposer-mapped-fields' %}.
+{% endcomment %}
+
+{%- liquid
+  assign perfume_family_name = ''
+  assign perfume_family_code = ''
+  assign perfume_ingredients = ''
+  assign perfume_activities_labels = ''
+  assign perfume_characteristics = ''
+  assign perfume_buybox_text = ''
+  assign perfume_story_image = blank
+  assign perfume_story_video = blank
+  assign perfume_catalog_code = ''
+  assign family_products = blank
+
+  assign perfume_group = product.metafields.custom.parfum_group.value
+  if perfume_group != blank
+    assign perfume_family_name = perfume_group.name
+    assign perfume_family_code = perfume_group.family_code
+    assign family_products = perfume_group.products.value
+  endif
+
+  if family_products == blank
+    assign family_products = product.metafields.custom.product_in_group.value
+  endif
+
+  if perfume_family_name == blank and perfume_group.name != blank
+    assign perfume_family_name = perfume_group.name
+  endif
+
+  assign perfume_catalog_code = product.metafields.custom.catalog_code
+  if perfume_catalog_code == blank
+    assign perfume_catalog_code = product.metafields.custom.reference_code
+  endif
+
+  assign short_description = product.metafields.custom.short_description
+  if short_description.value != blank
+    assign short_description = short_description.value
+  endif
+  assign short_description = short_description | strip_html | strip
+
+  if short_description != blank
+    assign desc_upcase = short_description | upcase
+    assign ingredients_pos = desc_upcase | split: 'INGREDIENTS' | size
+    assign composition_pos = desc_upcase | split: 'COMPOSITION' | size
+    assign activities_pos = desc_upcase | split: 'SUITABLE FOR ACTIVITIES' | size
+    assign characteristics_pos = desc_upcase | split: 'FRAGRANCE CHARACTERISTICS' | size
+
+    assign after_ingredients = ''
+    if ingredients_pos > 1
+      assign after_ingredients = short_description | split: 'INGREDIENTS' | last
+    elsif composition_pos > 1
+      assign after_ingredients = short_description | split: 'COMPOSITION' | last
+      if after_ingredients == short_description
+        assign after_ingredients = short_description | split: 'Composition' | last
+      endif
+    endif
+
+    if after_ingredients != blank
+      assign perfume_ingredients = after_ingredients | split: 'SUITABLE FOR ACTIVITIES' | first
+      assign perfume_ingredients = perfume_ingredients | split: 'FRAGRANCE CHARACTERISTICS' | first
+      assign perfume_ingredients = perfume_ingredients | strip | remove_first: ':' | strip
+    endif
+
+    if activities_pos > 1
+      assign after_activities = short_description | split: 'SUITABLE FOR ACTIVITIES' | last
+      assign perfume_activities_labels = after_activities | split: 'FRAGRANCE CHARACTERISTICS' | first
+      assign perfume_activities_labels = perfume_activities_labels | strip | remove_first: ':' | strip
+    endif
+
+    if characteristics_pos > 1
+      assign perfume_characteristics = short_description | split: 'FRAGRANCE CHARACTERISTICS' | last
+      assign perfume_characteristics = perfume_characteristics | strip | remove_first: ':' | strip
+    endif
+  endif
+
+  if perfume_activities_labels == blank
+    assign activities_field = product.metafields.custom_features.activities.value
+    if activities_field != blank
+      assign activity_labels = ''
+      if activities_field.first != blank
+        for activity in activities_field
+          assign activity_label = activity.label | default: activity.name | default: activity
+          if activity_labels == ''
+            assign activity_labels = activity_label
+          else
+            assign activity_labels = activity_labels | append: ', ' | append: activity_label
+          endif
+        endfor
+      else
+        assign activity_labels = activities_field
+      endif
+      assign perfume_activities_labels = activity_labels | strip
+    endif
+  endif
+
+  if perfume_characteristics != blank
+    assign perfume_buybox_text = perfume_characteristics
+  elsif perfume_family_name != blank
+    assign perfume_buybox_text = perfume_family_name
+  endif
+
+  assign perfume_story_image = product.featured_image
+  for media in product.media
+    if media.media_type == 'video'
+      assign perfume_story_video = media
+      break
+    endif
+  endfor
+-%}

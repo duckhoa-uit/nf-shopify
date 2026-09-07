@@ -302,8 +302,16 @@ describe("sortImagesByDisplayRules", () => {
     // Check the order of URLs
     const sortedUrls = sortedImages.map(img => img.url);
 
-    // First position should be H.jpg (main)
     expect(sortedUrls[0]).toBe("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-H.jpg");
+    expect(sortedUrls.slice(0, 4)).toEqual([
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-H.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_1.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_2.jpg",
+      "ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_3.jpg",
+    ]);
+    expect(sortedUrls.indexOf("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-B.jpg")).toBeGreaterThan(
+      sortedUrls.indexOf("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_1.jpg"),
+    );
 
     // Check that the first image is not hidden
     expect(sortedImages[0].hidden).toBe(false);
@@ -313,6 +321,22 @@ describe("sortImagesByDisplayRules", () => {
     expect(sortedUrls).toContain("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-B.jpg");
     expect(sortedUrls).toContain("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-M_1.jpg");
     expect(sortedUrls).toContain("ishaan-men-039-s-ski-softshell-winter-pants--NF-no-5009snw-darkblue-D_1.jpg");
+  });
+
+  test("keeps back types after hero and model shots", () => {
+    const sortedUrls = sortImagesByDisplayRules([
+      "product--NF-TR-5053OR-464-BV.jpg",
+      "product--NF-TR-5053OR-464-M_1.jpg",
+      "product--NF-TR-5053OR-464-H.jpg",
+      "product--NF-TR-5053OR-464-M_2.jpg",
+    ]).map((img) => img.url);
+
+    expect(sortedUrls).toEqual([
+      "product--NF-TR-5053OR-464-H.jpg",
+      "product--NF-TR-5053OR-464-M_1.jpg",
+      "product--NF-TR-5053OR-464-M_2.jpg",
+      "product--NF-TR-5053OR-464-BV.jpg",
+    ]);
   });
 
   test("handles single image correctly - should not be hidden", () => {

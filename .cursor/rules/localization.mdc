@@ -65,3 +65,10 @@ alwaysApply: false
 - Use interpolation rather than appending strings together
 - Naming should be prioritize clarity over brevity
 - Escape variables whenever they aren't expected to output HTML: `{{ variable | escape }}`
+
+## Locale-routed storefront data
+
+- The international store uses `request.locale.iso_code` as the storefront identity for locale-specific data; `de`, `hr`, and `sl` can share the same Shopify country.
+- Keep non-text data such as regional social URLs out of translation files.
+- Store locale-specific values in merchant-editable theme settings, never hardcode them in a resolver snippet.
+- Resolve those settings in one shared snippet and fall back to the global theme setting for unmapped locales.
