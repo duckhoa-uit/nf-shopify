@@ -120,6 +120,10 @@
 }
 
 /* Image-card variant */
+.mega-menu__list--image {
+  --mega-menu-title-image-gap: 1.5rem; /* 24px title -> image (Figma) */
+}
+
 .mega-menu__card {
   display: flex;
   flex-direction: column;
@@ -132,13 +136,32 @@
   font-weight: 700;
   font-size: 1rem; /* 16px */
   line-height: 1.5; /* 24px */
-  /* Keep titles to a single line so every image in a row starts at the same
-     Y position (Figma: fixed 24px title height above each 200px image). */
-  min-height: 1.5em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: break-word;
   transition: color var(--duration-short) ease;
+}
+
+/* Subgrid keeps every title in one shared row and every image in the next,
+   so a wrapping name grows the whole title track instead of pushing only
+   that column's image down. Gate `span 2` — without subgrid it creates
+   empty tracks and breaks the single-row layout. */
+@supports (grid-template-rows: subgrid) {
+  .mega-menu__list--image {
+    row-gap: var(--mega-menu-title-image-gap);
+  }
+
+  .mega-menu__list--image .mega-menu__col,
+  .mega-menu__list--image .mega-menu__card {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 2;
+    gap: 0;
+  }
+}
+
+@supports not (grid-template-rows: subgrid) {
+  .mega-menu__card-title {
+    min-height: 3em;
+  }
 }
 
 .mega-menu__card:hover .mega-menu__card-title {
