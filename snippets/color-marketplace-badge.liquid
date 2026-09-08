@@ -1,0 +1,206 @@
+{% doc %}
+  Color marketplace filter badge
+
+  Renders a square color chip for `custom_features.color_marketplace` filter
+  values. Prefers a native Search & Discovery swatch, then a hex map aligned
+  with the legacy Prestashop PLP chips.
+
+  @param {string} label - Filter value label (required)
+  @param {object} [swatch] - Optional Shopify swatch drop
+
+  @example
+    {% render 'color-marketplace-badge', label: value.label, swatch: value.swatch %}
+{% enddoc %}
+
+{%- liquid
+  assign badge_label = label | default: '' | strip
+  assign color_key = badge_label | handleize | downcase
+  assign badge_hex = ''
+  assign badge_modifier = ''
+
+  if color_key == 'multicolor'
+    assign badge_hex = 'multicolor'
+    assign badge_modifier = 'color-marketplace-badge--multicolor'
+  endif
+
+  if badge_hex == blank
+    if swatch.image != blank or swatch.color != blank
+      assign badge_hex = 'swatch'
+    endif
+  endif
+
+  if badge_hex == blank
+    assign marketplace_entry = shop.metaobjects.color_marketplace[color_key]
+    assign marketplace_hex = marketplace_entry.hex_code.value | default: '' | strip
+    if marketplace_hex != blank
+      unless marketplace_hex contains '#'
+        assign marketplace_hex = '#' | append: marketplace_hex
+      endunless
+      assign badge_hex = marketplace_hex
+      assign light_keys = 'white,cream,beige,yellow,gold,lavender,lightblue,lightgreen,lime,mustard,peach,pink,sand,silver,skyblue' | split: ','
+      if light_keys contains color_key
+        assign badge_modifier = 'color-marketplace-badge--light'
+      endif
+    endif
+  endif
+
+  if badge_hex == blank
+    case color_key
+      when 'black'
+        assign badge_hex = '#000000'
+      when 'blue'
+        assign badge_hex = '#0000FF'
+      when 'brown'
+        assign badge_hex = '#A52A2A'
+      when 'cyan'
+        assign badge_hex = '#00FFFF'
+      when 'green'
+        assign badge_hex = '#008000'
+      when 'grey'
+        assign badge_hex = '#808080'
+      when 'orange'
+        assign badge_hex = '#FFA500'
+      when 'red'
+        assign badge_hex = '#FF0000'
+      when 'white'
+        assign badge_hex = '#FFFFFF'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'yellow'
+        assign badge_hex = '#FFFF00'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'beige'
+        assign badge_hex = '#F5F5DC'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'coral'
+        assign badge_hex = '#FF7F50'
+      when 'cream'
+        assign badge_hex = '#FFFDD0'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'darkgreen'
+        assign badge_hex = '#006400'
+      when 'darkred'
+        assign badge_hex = '#8B0000'
+      when 'denim'
+        assign badge_hex = '#1560BD'
+      when 'gold'
+        assign badge_hex = '#FFD700'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'graphite'
+        assign badge_hex = '#383838'
+      when 'gray'
+        assign badge_hex = '#BEBEBE'
+      when 'lavender'
+        assign badge_hex = '#E6E6FA'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'lightblue'
+        assign badge_hex = '#ADD8E6'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'lightbrown'
+        assign badge_hex = '#C4A484'
+      when 'lightgreen'
+        assign badge_hex = '#90EE90'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'lime'
+        assign badge_hex = '#32CD32'
+      when 'miro'
+        assign badge_hex = '#6B7C7D'
+      when 'multicolor'
+        assign badge_hex = 'multicolor'
+        assign badge_modifier = 'color-marketplace-badge--multicolor'
+      when 'mustard'
+        assign badge_hex = '#FFDB58'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'navy'
+        assign badge_hex = '#000080'
+      when 'olive'
+        assign badge_hex = '#808000'
+      when 'peach'
+        assign badge_hex = '#FFDAB9'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'pink'
+        assign badge_hex = '#FFC0CB'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'plum'
+        assign badge_hex = '#8E4585'
+      when 'purple'
+        assign badge_hex = '#800080'
+      when 'raspberry'
+        assign badge_hex = '#E30B5D'
+      when 'rose'
+        assign badge_hex = '#FF007F'
+      when 'sand'
+        assign badge_hex = '#C2B280'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'scarlet'
+        assign badge_hex = '#FF2400'
+      when 'silver'
+        assign badge_hex = '#C0C0C0'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'skyblue'
+        assign badge_hex = '#87CEEB'
+        assign badge_modifier = 'color-marketplace-badge--light'
+      when 'wine'
+        assign badge_hex = '#722F37'
+      else
+        assign badge_hex = '#9CA3AF'
+    endcase
+  endif
+-%}
+
+{%- if badge_hex == 'swatch' -%}
+  <span class="color-marketplace-badge color-marketplace-badge--swatch" aria-hidden="true">
+    {% render 'swatch', swatch: swatch, shape: 'square' %}
+  </span>
+{%- elsif badge_hex == 'multicolor' -%}
+  <span
+    class="color-marketplace-badge {{ badge_modifier }}"
+    aria-hidden="true"
+  ></span>
+{%- else -%}
+  <span
+    class="color-marketplace-badge {{ badge_modifier }}"
+    style="--color-marketplace-badge-fill: {{ badge_hex }};"
+    aria-hidden="true"
+  ></span>
+{%- endif -%}
+
+{% stylesheet %}
+  .color-marketplace-badge {
+    --color-marketplace-badge-size: 0.875rem;
+    --color-marketplace-badge-fill: transparent;
+
+    display: inline-block;
+    flex-shrink: 0;
+    width: var(--color-marketplace-badge-size);
+    height: var(--color-marketplace-badge-size);
+    border: 1px solid rgb(var(--color-foreground-rgb, 33 37 41) / 0.4);
+    border-radius: 2px;
+    background: var(--color-marketplace-badge-fill);
+  }
+
+  .color-marketplace-badge--light {
+    border-color: rgb(var(--color-foreground-rgb, 33 37 41) / 0.55);
+  }
+
+  .color-marketplace-badge--multicolor {
+    background: linear-gradient(
+      135deg,
+      #ff0000 0%,
+      #ffff00 25%,
+      #00ff00 50%,
+      #0000ff 75%,
+      #800080 100%
+    );
+  }
+
+  .color-marketplace-badge--swatch {
+    border: 0;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .color-marketplace-badge--swatch .swatch {
+    --swatch--size: var(--color-marketplace-badge-size);
+    --swatch-input--border-radius: 2px;
+  }
+{% endstylesheet %}
