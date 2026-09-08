@@ -97,7 +97,12 @@
                         {%- for active_value in filter.active_values -%}
                           <facet-remove>
                             <div class="active-filter-tag">
-                              <span>{{ active_value.label }}</span>
+                              <span class="inline-flex items-center gap-2">
+                                {%- if filter.param_name contains 'color_marketplace' -%}
+                                  {% render 'color-marketplace-badge', label: active_value.label, swatch: active_value.swatch %}
+                                {%- endif -%}
+                                {{ active_value.label }}
+                              </span>
                               <a
                                 href="{{ active_value.url_to_remove }}"
                                 class="active-filter-remove"
@@ -162,6 +167,10 @@
                   endif
 
                   assign presentation = filter.presentation | default: default_presentation
+                  assign is_color_marketplace = false
+                  if filter.param_name contains 'color_marketplace'
+                    assign is_color_marketplace = true
+                  endif
 
                   if presentation == 'image'
                     assign show_more_number = 12
@@ -242,7 +251,12 @@
 
                               {%- capture text_value -%}
                               <span class="facet-checkbox__text w-full flex items-center justify-between" aria-hidden="true">
-                                <div class="facet-checkbox__text-label text-[0.9375rem] text-foreground leading-[1.125rem] capitalize {% if value.active %} font-semibold{% endif %}">{{- value.label | escape }}</div>
+                                <div class="facet-checkbox__text-label flex items-center gap-2 text-[0.9375rem] text-foreground leading-[1.125rem] capitalize {% if value.active %} font-semibold{% endif %}">
+                                  {%- if is_color_marketplace -%}
+                                    {% render 'color-marketplace-badge', label: value.label, swatch: value.swatch %}
+                                  {%- endif -%}
+                                  {{- value.label | escape }}
+                                </div>
                                 <div class="text-[#656666] text-[0.9375rem] font-normal text-right leading-[1.125rem]">
                                 ({{- value.count -}})</div>
                               </span>
@@ -529,6 +543,10 @@
                   {% if filter.label != 'Sale' %}
                     {% liquid
                       assign presentation = filter.presentation | default: default_presentation
+                      assign is_color_marketplace = false
+                      if filter.param_name contains 'color_marketplace'
+                        assign is_color_marketplace = true
+                      endif
                       if presentation == 'image'
                         assign visual_layout_class = 'facets-layout facets-layout-grid facets-layout-grid--' | append: presentation
                       else
@@ -595,7 +613,12 @@
 
                                 {%- capture text_value -%}
                                 <span class="facet-checkbox__text w-full" aria-hidden="true">
-                                  <span class="facet-checkbox__text-label capitalize">{{- value.label | escape }}</span> ({{- value.count -}})
+                                  <span class="facet-checkbox__text-label inline-flex items-center gap-2 capitalize">
+                                    {%- if is_color_marketplace -%}
+                                      {% render 'color-marketplace-badge', label: value.label, swatch: value.swatch %}
+                                    {%- endif -%}
+                                    {{- value.label | escape }}
+                                  </span> ({{- value.count -}})
                                 </span>
                                 <span class="visually-hidden">
                                   {{- value.label | escape }} (
