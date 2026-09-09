@@ -1,0 +1,49 @@
+{% comment %}
+  Resolves a perfume volume label from a sibling/family product.
+
+  Accepts:
+  - product: {Object} Product whose volume label should be resolved.
+
+  Prints the size label (for example 50 ml). Used by dosage cards.
+{% endcomment %}
+
+{%- liquid
+  assign size_label = ''
+
+  if product != blank
+    for option in product.options_with_values
+      capture is_size_option
+        render 'is-size-option', option: option, product: product
+      endcapture
+      assign is_size_option = is_size_option | strip
+      if is_size_option == 'true'
+        assign size_label = option.values | first
+        break
+      endif
+    endfor
+
+    if size_label == blank
+      assign size_option = product.options_by_name.Size
+      if size_option != blank
+        assign size_label = size_option.values | first
+      endif
+    endif
+
+    if size_label == blank and product.metafields.custom.size.value != blank
+      assign size_metaobject = product.metafields.custom.size.value | first
+      assign size_label = size_metaobject.value.value
+    endif
+
+    if size_label == blank
+      assign title_parts = product.title | split: ' '
+      for part in title_parts
+        assign part_down = part | downcase
+        if part_down contains 'ml'
+          assign size_label = part
+          break
+        endif
+      endfor
+    endif
+  endif
+-%}
+{{- size_label | strip -}}

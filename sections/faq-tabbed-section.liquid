@@ -25,6 +25,11 @@
   if categories.size > 0 and default_category == blank
     assign default_category = categories.first.settings.category_id
   endif
+  assign faq_catalog_count = shop.metaobjects.faq_item.values_count | default: 0
+  assign use_faq_metaobjects = false
+  if faq_catalog_count > 0
+    assign use_faq_metaobjects = true
+  endif
 -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient bg-[#f7f7f7] h-full">
@@ -106,32 +111,60 @@
             {%- assign current_category_id = category.settings.category_id | strip | downcase -%}
             {%- assign matching_faqs = 0 -%}
 
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'faq_item' -%}
-                {%- assign block_category = block.settings.category | strip | downcase -%}
-                {%- if block_category == current_category_id -%}
+            {%- if use_faq_metaobjects -%}
+              {%- for faq in shop.metaobjects.faq_item.values -%}
+                {%- assign faq_category = faq.category.value | strip | downcase -%}
+                {%- if faq_category == current_category_id -%}
                   {%- assign matching_faqs = matching_faqs | plus: 1 -%}
-                  <div class="accordion" {{ block.shopify_attributes }}>
-                    <details id="Details-{{ block.id }}-{{ section.id }}">
-                      <summary id="Summary-{{ block.id }}-{{ section.id }}">
+                  {%- assign faq_id = faq.system.handle | default: faq.system.id -%}
+                  <div class="accordion">
+                    <details id="Details-{{ faq_id }}-{{ section.id }}">
+                      <summary id="Summary-{{ faq_id }}-{{ section.id }}">
                         <h3 class="accordion__title inline-richtext">
-                          {{ block.settings.question }}
+                          {{ faq.question.value }}
                         </h3>
                         {{- 'icon-caret.svg' | inline_asset_content -}}
                       </summary>
                       <div
                         class="accordion__content rte"
-                        id="FAQAccordion-{{ block.id }}-{{ section.id }}"
+                        id="FAQAccordion-{{ faq_id }}-{{ section.id }}"
                         role="region"
-                        aria-labelledby="Summary-{{ block.id }}-{{ section.id }}"
+                        aria-labelledby="Summary-{{ faq_id }}-{{ section.id }}"
                       >
-                        {{ block.settings.answer }}
+                        {{ faq.answer | metafield_tag }}
                       </div>
                     </details>
                   </div>
                 {%- endif -%}
-              {%- endif -%}
-            {%- endfor -%}
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'faq_item' -%}
+                  {%- assign block_category = block.settings.category | strip | downcase -%}
+                  {%- if block_category == current_category_id -%}
+                    {%- assign matching_faqs = matching_faqs | plus: 1 -%}
+                    <div class="accordion" {{ block.shopify_attributes }}>
+                      <details id="Details-{{ block.id }}-{{ section.id }}">
+                        <summary id="Summary-{{ block.id }}-{{ section.id }}">
+                          <h3 class="accordion__title inline-richtext">
+                            {{ block.settings.question }}
+                          </h3>
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </summary>
+                        <div
+                          class="accordion__content rte"
+                          id="FAQAccordion-{{ block.id }}-{{ section.id }}"
+                          role="region"
+                          aria-labelledby="Summary-{{ block.id }}-{{ section.id }}"
+                        >
+                          {{ block.settings.answer }}
+                        </div>
+                      </details>
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
 
             {%- if matching_faqs == 0 -%}
               <p class="faq-empty-message">{{ 'sections.faq.no_questions' | t }}</p>
@@ -363,12 +396,16 @@
     "groups": ["header", "footer"]
   },
   "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "default": "FAQ",
-      "label": "Heading"
-    },
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "FAQ",
+        "label": "Heading"
+      },
+      {
+        "type": "paragraph",
+        "content": "Questions come from Content → Metaobjects → FAQ item, grouped by the Category field. Category tabs below only control tab labels."
+      },
     {
       "type": "text",
       "id": "default_category",

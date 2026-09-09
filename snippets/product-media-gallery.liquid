@@ -552,9 +552,60 @@
     assign active_color_data_attr = active_color_value
   endif
 
-  # Keep the server-rendered candidate stable through hydration. The runtime
-  # receives this ID and uses it as the initial item in the same sequence.
-  assign initial_media = first_variant.featured_media | default: product.featured_media | default: product.media.first
+  # Front-first initial frame for the selected color. Do not start on B/BV
+  # just because Shopify featured media happens to be a back shot.
+  assign initial_media = null
+  assign initial_featured = first_variant.featured_media | default: first_variant.featured_image
+  if initial_featured
+    assign initial_featured_src = initial_featured.preview_image.src | default: initial_featured.src | default: ''
+    assign initial_featured_file = initial_featured_src | split: '/' | last | split: '?' | first
+    assign initial_featured_is_back = false
+    if initial_featured_file contains '-BV.' or initial_featured_file contains '-BV_'
+      assign initial_featured_is_back = true
+    elsif initial_featured_file contains '-B.' or initial_featured_file contains '-B_'
+      assign initial_featured_is_back = true
+    endif
+    unless initial_featured_is_back
+      assign initial_media = initial_featured
+    endunless
+  endif
+
+  if initial_media == null and active_color_reference_id != ''
+    assign gallery_reference_token = '-' | append: active_color_reference_id | append: '-'
+    assign gallery_hero_media = null
+    assign gallery_model_media = null
+    assign gallery_model_sequence_media = null
+    assign gallery_lowest_model_sequence = 999
+    for media in product.media
+      assign gallery_filename = media.src | default: '' | split: '/' | last | split: '?' | first
+      if gallery_filename contains gallery_reference_token
+        assign gallery_type_token = gallery_filename | split: gallery_reference_token | last | split: '.' | first
+        assign gallery_type_parts = gallery_type_token | split: '_'
+        assign gallery_type_name = gallery_type_parts.first
+        assign gallery_type_sequence = 0
+        if gallery_type_parts.size > 1
+          assign gallery_type_sequence = gallery_type_parts[1] | plus: 0
+        endif
+        if gallery_type_name == 'H' and gallery_hero_media == null
+          assign gallery_hero_media = media
+        elsif gallery_type_name == 'M'
+          if gallery_type_sequence > 0
+            if gallery_type_sequence < gallery_lowest_model_sequence
+              assign gallery_lowest_model_sequence = gallery_type_sequence
+              assign gallery_model_sequence_media = media
+            endif
+          elsif gallery_model_media == null
+            assign gallery_model_media = media
+          endif
+        endif
+      endif
+    endfor
+    assign initial_media = gallery_hero_media | default: gallery_model_media | default: gallery_model_sequence_media
+  endif
+
+  if initial_media == null
+    assign initial_media = first_variant.featured_media | default: product.featured_media | default: product.media.first
+  endif
   assign initial_image = initial_media.preview_image | default: initial_media
   assign initial_media_id = initial_media.id | default: ''
   assign initial_media_ratio = initial_image.aspect_ratio | default: 1

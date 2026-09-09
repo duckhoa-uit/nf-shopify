@@ -5,24 +5,24 @@ import { describe, expect, test } from "vitest";
 const readProjectFile = (path) => readFileSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), "utf8");
 
 describe("product card media rendering", () => {
-  test("matches the final image type token instead of product-code substrings", () => {
+  test("picks the selected color front-first instead of a global model shot", () => {
     const source = readProjectFile("snippets/card-product.liquid");
 
-    expect(source).toContain("assign image_type_token = filename_parts | last");
-    expect(source).toContain("if image_type == 'M'");
-    expect(source).toContain("if fallback_h == null and image_type == 'H'");
+    expect(source).toContain("selected_or_first_available_variant");
+    expect(source).toContain("featured_is_back");
+    expect(source).toContain("hero_media | default: model_media | default: model_sequence_media");
+    expect(source).toContain("assign type_name = type_parts.first");
     expect(source).not.toContain("parsed_url contains '-M'");
-    expect(source).not.toContain("parsed_url contains '-B'");
+    expect(source).not.toContain("assign image_type_token = filename_parts | last");
   });
 
   test("scopes card hover and deep-link to the thumbnail color reference", () => {
     const source = readProjectFile("snippets/card-product.liquid");
 
-    expect(source).toContain("assign reference_token = '-' | append: thumbnail_ref | append: '-'");
+    expect(source).toContain("assign reference_token = '-' | append: reference_id | append: '-'");
     expect(source).toContain("Never fall back to a different colorway");
-    expect(source).toContain("append: '?variant=' | append: thumbnail_variant.id");
-    expect(source).toContain("href=\"{{ card_url }}\"");
-    expect(source).not.toContain("if image_type == 'H'\n              if main_image == null");
+    expect(source).toContain("append: '?variant=' | append: card_variant.id");
+    expect(source).toContain('href="{{ card_url }}"');
   });
 
   test("adds a white background to native and EComposer product media wrappers", () => {

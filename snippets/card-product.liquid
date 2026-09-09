@@ -15,235 +15,178 @@
 {% endcomment %}
 
 {%- if card_product and card_product != empty -%}
+  {%- assign card_variant = card_product.selected_or_first_available_variant -%}
   {%- assign card_url = card_product.url -%}
-  {%- assign thumbnail_variant = null -%}
+  {%- if card_variant -%}
+    {%- if card_product.url contains '?' -%}
+      {%- assign card_url = card_product.url | append: '&variant=' | append: card_variant.id -%}
+    {%- else -%}
+      {%- assign card_url = card_product.url | append: '?variant=' | append: card_variant.id -%}
+    {%- endif -%}
+  {%- endif -%}
   <div class="card-wrapper h-full">
     <div class="relative flex h-full flex-col">
       {% render 'product-badge-row', product: card_product, context: 'card', promotion_limit: 2 %}
 
       {%- if card_product.media.size > 0 -%}
         {%- liquid
-          # Thumbnail: first -M (then H / B / BV / D / featured).
-          # Hover: another shot with the SAME color reference_id only.
-          # Never fall back to a different colorway.
-
+          # Canonical front-first order, color-aware:
+          # variant featured (unless B/BV) → H → M → M_N → D_N → BV → B
           assign model_image = null
           assign main_image = null
-          assign model_image_simple = null
-          assign best_sequenced_model = null
-          assign best_sequence_num = 999
-          assign fallback_h = null
-          assign fallback_b = null
-          assign fallback_bv = null
-          assign fallback_d = null
-          assign thumbnail_ref = ''
+          assign hero_media = null
+          assign model_media = null
+          assign model_sequence_media = null
+          assign detail_media = null
+          assign back_variant_media = null
+          assign back_media = null
+          assign lowest_model_sequence = 999
+          assign lowest_detail_sequence = 999
+          assign card_variant = card_product.selected_or_first_available_variant
+          assign reference_id = ''
 
-          for media in card_product.media
-            assign media_src = media.src | default: ''
-            assign parsed_url = media_src | split: '/' | last | split: '?' | first
-            assign filename_without_extension = parsed_url | split: '.' | first
-            assign filename_parts = filename_without_extension | split: '-'
-            assign image_type_token = filename_parts | last
-            assign image_type_parts = image_type_token | split: '_'
-            assign image_type = image_type_parts.first
-            assign image_sequence = 0
-            if image_type_parts.size > 1
-              assign image_sequence = image_type_parts[1] | plus: 0
+          if card_variant.featured_image
+            assign featured_filename = card_variant.featured_image.src | default: '' | split: '/' | last | split: '?' | first
+            assign featured_is_back = false
+            if featured_filename contains '-BV.' or featured_filename contains '-BV_'
+              assign featured_is_back = true
+            elsif featured_filename contains '-B.' or featured_filename contains '-B_'
+              assign featured_is_back = true
             endif
-
-            # Match the final image-type token so product codes such as MI and BU
-            # are not mistaken for model and back images.
-            if image_type == 'M'
-              if image_sequence > 0
-                if image_sequence < best_sequence_num
-                  assign best_sequence_num = image_sequence
-                  assign best_sequenced_model = media
-                endif
-              elsif model_image_simple == null
-                assign model_image_simple = media
-              endif
-            endif
-
-            if fallback_h == null and image_type == 'H'
-              assign fallback_h = media
-            endif
-            if fallback_b == null and image_type == 'B'
-              assign fallback_b = media
-            endif
-            if fallback_bv == null and image_type == 'BV'
-              assign fallback_bv = media
-            endif
-            if fallback_d == null and image_type == 'D'
-              assign fallback_d = media
-            endif
-          endfor
-
-          if model_image_simple
-            assign model_image = model_image_simple
-          elsif best_sequenced_model
-            assign model_image = best_sequenced_model
-          elsif fallback_h
-            assign model_image = fallback_h
-          elsif fallback_b
-            assign model_image = fallback_b
-          elsif fallback_bv
-            assign model_image = fallback_bv
-          elsif fallback_d
-            assign model_image = fallback_d
-          else
-            assign model_image = card_product.featured_media
+            unless featured_is_back
+              assign model_image = card_variant.featured_image
+            endunless
           endif
 
-          if model_image
-            assign thumb_filename = model_image.src | default: '' | split: '/' | last | split: '?' | first | split: '.' | first
-            assign thumb_parts = thumb_filename | split: '-'
-            if thumb_parts.size >= 2
-              assign thumb_ref_index = thumb_parts.size | minus: 2
-              assign thumb_ref_candidate = thumb_parts[thumb_ref_index] | strip
-              assign thumb_ref_number = thumb_ref_candidate | plus: 0
-              if thumb_ref_number > 0
-                assign thumbnail_ref = thumb_ref_candidate
+          if card_variant.sku != blank
+            assign sku_parts = card_variant.sku | split: '-'
+            assign reference_index = sku_parts.size | minus: 2
+            if reference_index >= 0
+              assign sku_reference_id = sku_parts[reference_index] | strip
+              assign sku_reference_number = sku_reference_id | plus: 0
+              if sku_reference_number > 0
+                assign reference_id = sku_reference_id
               endif
             endif
           endif
 
-          if thumbnail_ref != ''
-            assign reference_token = '-' | append: thumbnail_ref | append: '-'
-            assign hover_h = null
-            assign hover_m = null
-            assign hover_m_seq = 999
-            assign hover_d = null
-            assign hover_d_seq = 999
-            assign hover_bv = null
-            assign hover_b = null
-
-            for media in card_product.media
-              if model_image and media.id == model_image.id
-                continue
-              endif
-
-              assign filename = media.src | default: '' | split: '/' | last | split: '?' | first
-              unless filename contains reference_token
-                continue
-              endunless
-
-              assign type_token = filename | split: reference_token | last | split: '.' | first
-              assign type_parts = type_token | split: '_'
-              assign type_name = type_parts.first
-              assign type_sequence = 0
-              if type_parts.size > 1
-                assign type_sequence = type_parts[1] | plus: 0
-              endif
-
-              if type_name == 'H' and hover_h == null
-                assign hover_h = media
-              elsif type_name == 'M'
-                if type_sequence > 0
-                  if type_sequence < hover_m_seq
-                    assign hover_m_seq = type_sequence
-                    assign hover_m = media
-                  endif
-                elsif hover_m == null
-                  assign hover_m = media
-                endif
-              elsif type_name == 'D' and type_sequence > 0
-                if type_sequence < hover_d_seq
-                  assign hover_d_seq = type_sequence
-                  assign hover_d = media
-                endif
-              elsif type_name == 'BV' and hover_bv == null
-                assign hover_bv = media
-              elsif type_name == 'B' and hover_b == null
-                assign hover_b = media
-              endif
-            endfor
-
-            assign main_image = hover_h | default: hover_m | default: hover_d | default: hover_bv | default: hover_b | default: model_image
-          else
-            assign main_image = model_image
-          endif
-
-          if thumbnail_ref != ''
-            for variant in card_product.variants
-              assign sku_parts = variant.sku | default: '' | split: '-'
-              assign sku_ref_index = sku_parts.size | minus: 2
-              assign sku_ref = ''
-              if sku_ref_index >= 0
-                assign sku_ref = sku_parts[sku_ref_index] | strip
-              endif
-              if sku_ref == thumbnail_ref
-                if thumbnail_variant == null
-                  assign thumbnail_variant = variant
-                endif
-                if variant.available
-                  assign thumbnail_variant = variant
-                  break
-                endif
-              endif
-            endfor
-          endif
-
-          if thumbnail_variant
-            if card_product.url contains '?'
-              assign card_url = card_product.url | append: '&variant=' | append: thumbnail_variant.id
-            else
-              assign card_url = card_product.url | append: '?variant=' | append: thumbnail_variant.id
-            endif
-          endif
-
-          assign has_real_main_image = false
-          if main_image and main_image.id != model_image.id
-            assign has_real_main_image = true
-          endif
-        -%}
-
-        {%- if thumbnail_ref != blank and thumbnail_variant == null and card_product.metafields.custom.color.value != blank -%}
-          {%- liquid
-            assign matched_color_name = ''
+          if reference_id == '' and card_product.metafields.custom.color.value != blank
+            assign variant_color_value = card_variant.option1 | default: '' | downcase | strip | replace: ' ', '-' | replace: "'", '' | replace: '.', '' | replace: ',', ''
             for color_item in card_product.metafields.custom.color.value
-              assign color_ref = color_item.reference_id | append: ''
-              if color_ref == thumbnail_ref
-                assign matched_color_name = color_item.name | downcase | strip
+              assign handle_root = color_item.system.handle | split: '-' | first | downcase
+              if color_item.name == variant_color_value or handle_root == variant_color_value
+                assign reference_id = color_item.reference_id
                 break
               endif
             endfor
-          -%}
-          {%- if matched_color_name != blank -%}
-            {%- capture color_option_position -%}
-              {%- render 'get-color-option-position', product: card_product -%}
-            {%- endcapture -%}
-            {%- liquid
-              assign color_option_position = color_option_position | strip | plus: 0
-              for variant in card_product.variants
-                case color_option_position
-                  when 2
-                    assign variant_color = variant.option2
-                  when 3
-                    assign variant_color = variant.option3
-                  else
-                    assign variant_color = variant.option1
-                endcase
-                assign variant_color_norm = variant_color | downcase | strip
-                if variant_color_norm == matched_color_name
-                  if thumbnail_variant == null
-                    assign thumbnail_variant = variant
-                  endif
-                  if variant.available
-                    assign thumbnail_variant = variant
-                    break
-                  endif
+          endif
+
+          if reference_id != ''
+            assign reference_token = '-' | append: reference_id | append: '-'
+            for media in card_product.media
+              assign media_src = media.src | default: ''
+              assign filename = media_src | split: '/' | last | split: '?' | first
+              if filename contains reference_token
+                assign type_token = filename | split: reference_token | last | split: '.' | first
+                assign type_parts = type_token | split: '_'
+                assign type_name = type_parts.first
+                assign type_sequence = 0
+                if type_parts.size > 1
+                  assign type_sequence = type_parts[1] | plus: 0
                 endif
-              endfor
-              if thumbnail_variant
-                if card_product.url contains '?'
-                  assign card_url = card_product.url | append: '&variant=' | append: thumbnail_variant.id
-                else
-                  assign card_url = card_product.url | append: '?variant=' | append: thumbnail_variant.id
+
+                if type_name == 'H' and hero_media == null
+                  assign hero_media = media
+                elsif type_name == 'M'
+                  if type_sequence > 0
+                    if type_sequence < lowest_model_sequence
+                      assign lowest_model_sequence = type_sequence
+                      assign model_sequence_media = media
+                    endif
+                  elsif model_media == null
+                    assign model_media = media
+                  endif
+                elsif type_name == 'D' and type_sequence > 0
+                  if type_sequence < lowest_detail_sequence
+                    assign lowest_detail_sequence = type_sequence
+                    assign detail_media = media
+                  endif
+                elsif type_name == 'BV' and back_variant_media == null
+                  assign back_variant_media = media
+                elsif type_name == 'B' and back_media == null
+                  assign back_media = media
                 endif
               endif
-            -%}
-          {%- endif -%}
-        {%- endif -%}
+            endfor
+          endif
+
+          if model_image == null
+            assign model_image = hero_media | default: model_media | default: model_sequence_media | default: detail_media | default: back_variant_media | default: back_media
+          endif
+
+          assign main_image = model_media | default: model_sequence_media
+          if main_image == null
+            if hero_media != blank and model_image != blank and hero_media.id != model_image.id
+              assign main_image = hero_media
+            else
+              assign main_image = detail_media
+            endif
+          elsif model_image != blank and main_image.id == model_image.id
+            if hero_media != blank and hero_media.id != model_image.id
+              assign main_image = hero_media
+            else
+              assign main_image = detail_media
+            endif
+          endif
+
+          if model_image == null
+            assign fallback_h = null
+            assign fallback_m = null
+            assign fallback_m_seq = null
+            assign fallback_m_seq_num = 999
+            assign fallback_d = null
+            assign fallback_bv = null
+            assign fallback_b = null
+            for media in card_product.media
+              assign filename = media.src | default: '' | split: '/' | last | split: '?' | first
+              if filename contains '-H.' or filename contains '-H_'
+                if fallback_h == null
+                  assign fallback_h = media
+                endif
+              elsif filename contains '-M.'
+                if fallback_m == null
+                  assign fallback_m = media
+                endif
+              elsif filename contains '-M_'
+                assign seq_part = filename | split: '-M_' | last | split: '.' | first | split: '_' | first | plus: 0
+                if seq_part > 0 and seq_part < fallback_m_seq_num
+                  assign fallback_m_seq_num = seq_part
+                  assign fallback_m_seq = media
+                endif
+              elsif filename contains '-D_'
+                if fallback_d == null
+                  assign fallback_d = media
+                endif
+              elsif filename contains '-BV.' or filename contains '-BV_'
+                if fallback_bv == null
+                  assign fallback_bv = media
+                endif
+              elsif filename contains '-B.' or filename contains '-B_'
+                if fallback_b == null
+                  assign fallback_b = media
+                endif
+              endif
+            endfor
+            assign model_image = fallback_h | default: fallback_m | default: fallback_m_seq | default: fallback_d | default: fallback_bv | default: fallback_b | default: card_product.featured_media
+            # Never fall back to a different colorway for hover.
+            assign main_image = model_image
+          endif
+
+          assign has_real_main_image = false
+          if main_image and model_image and main_image.id != model_image.id
+            assign has_real_main_image = true
+          endif
+        -%}
 
         <div class="card-product-northfinder__media relative mb-3 overflow-hidden">
           <a
@@ -633,7 +576,7 @@
           <h3 class="text-base leading-[1.625rem] font-semibold text-[#0F0F0F]">{{ card_product.title | escape }}</h3>
         </a>
 
-        {%- assign display_variant = thumbnail_variant | default: card_product.selected_or_first_available_variant -%}
+        {%- assign display_variant = card_variant | default: card_product.selected_or_first_available_variant -%}
         {% render 'automatic-discount-preview', product: card_product, variant: display_variant, presentation: 'card' %}
       </div>
     </div>
@@ -678,7 +621,7 @@
         </a>
 
         <div class="mt-0.5 flex items-center gap-3">
-          <span class="font-archivo-expanded text-base leading-6 font-medium text-black">$29.99</span>
+          <span class="text-base leading-6 font-medium text-black">$29.99</span>
         </div>
       </div>
     </div>

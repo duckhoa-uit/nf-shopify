@@ -14,17 +14,28 @@ const SHOPIFY_UUID_SUFFIX_PATTERN = /_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-
 const parseCache = new Map();
 const MAX_CACHE_SIZE = 1000;
 
-// Priority lookup table - avoids function call overhead in sorting
-const PRIORITY_MAP = {
-  main: { no_seq: 1, with_seq: (seq) => 1 + seq * 0.1 },
-  back_variant: 2,
-  back_main: { fallback: 2, normal: 11 },
-  model: { seq_1: 3, seq_n: (seq) => 3 + seq },
-  video: 12,
-  details: { seq_1: 13, seq_n: (seq) => 13 + seq, no_seq: 20 },
-  other_model: 21,
-  default: 100
+// Front-first display order, shared by PDP gallery and product cards:
+// H → M → M_N → D_N → BV → B
+const displayPriority = (img) => {
+  switch (img.image_type) {
+    case "main":
+      return img.sequence ? 1 + img.sequence * 0.1 : 1;
+    case "model":
+      return img.sequence > 0 ? 2 + img.sequence : 2;
+    case "video":
+      return 12;
+    case "details":
+      return img.sequence > 0 ? 13 + img.sequence : 20;
+    case "back_variant":
+      return 30;
+    case "back_main":
+      return 31;
+    default:
+      return 100;
+  }
 };
+
+export { displayPriority };
 
 /**
  * Parses an image/video URL according to the nomenclature rules
@@ -290,33 +301,13 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
   // Sort each group according to the new display rules
   Object.keys(groupedImages).forEach((key) => {
     const group = groupedImages[key];
-    
-    // First, check if we have a BV (back variant) image in this group
-    let hasBV = false;
-    for (let i = 0; i < group.length; i++) {
-      if (group[i].image_type === "back_variant") { hasBV = true; break; }
-    }
 
     group.sort((a, b) => {
-      // Inline priority calculation to avoid function call overhead
-      let pa = a.image_type === "main" ? (a.sequence ? 1 + a.sequence * 0.1 : 1) :
-                a.image_type === "back_variant" ? 2 :
-                a.image_type === "back_main" ? (hasBV ? 11 : 2) :
-                a.image_type === "model" ? (a.sequence === 1 ? 3 : a.sequence > 1 ? 3 + a.sequence : 21) :
-                a.image_type === "video" ? 12 :
-                a.image_type === "details" ? (a.sequence === 1 ? 13 : a.sequence > 1 ? 13 + a.sequence : 20) : 100;
-      
-      let pb = b.image_type === "main" ? (b.sequence ? 1 + b.sequence * 0.1 : 1) :
-                b.image_type === "back_variant" ? 2 :
-                b.image_type === "back_main" ? (hasBV ? 11 : 2) :
-                b.image_type === "model" ? (b.sequence === 1 ? 3 : b.sequence > 1 ? 3 + b.sequence : 21) :
-                b.image_type === "video" ? 12 :
-                b.image_type === "details" ? (b.sequence === 1 ? 13 : b.sequence > 1 ? 13 + b.sequence : 20) : 100;
+      const pa = displayPriority(a);
+      const pb = displayPriority(b);
 
-      // If priorities differ, return immediately (avoids string comparison in most cases)
       if (pa !== pb) return pa - pb;
 
-      // Only do string comparison when priorities are equal
       return a.unique_id < b.unique_id ? -1 : a.unique_id > b.unique_id ? 1 : 0;
     });
 
@@ -407,7 +398,7 @@ export function sortImagesByDisplayRules(imageUrls, colorMappings = null) {
  * 2. Partial matches (includes)
  * 3. Reference ID matching
  * 4. Flexible matching (split by '-' for compound colors)
- * 5. Priority-based fallback (-H.jpg, -BV.jpg, -B.jpg)
+ * 5. Priority-based fallback (-H.jpg, then model, then back types)
  *
  * @param {Array<string>} allMediaUrls - List of all media URLs to filter
  * @param {string} activeColor - The active color to filter by
@@ -497,15 +488,23 @@ export function filterMediaByColor(allMediaUrls, activeColor, colorMappings) {
       fallbackCandidates.push(mainImages[0]);
     }
 
-    // Priority 2: Back variant (-BV.jpg) or back main (-B.jpg) as fallback
-    const backVariantImages = allMediaUrls.filter(url => {
-      const filename = url.split('/').pop().split('?')[0].toLowerCase();
-      return filename.includes('-bv.jpg') || filename.endsWith('-bv.jpg');
+    const modelImages = allMediaUrls.filter((url) => {
+      const filename = url.split("/").pop().split("?")[0];
+      return filename.includes("-M.") || filename.includes("-M_");
     });
 
-    const backMainImages = allMediaUrls.filter(url => {
-      const filename = url.split('/').pop().split('?')[0].toLowerCase();
-      return filename.includes('-b.jpg') || filename.endsWith('-b.jpg');
+    if (modelImages.length > 0) {
+      fallbackCandidates.push(modelImages[0]);
+    }
+
+    const backVariantImages = allMediaUrls.filter((url) => {
+      const filename = url.split("/").pop().split("?")[0].toLowerCase();
+      return filename.includes("-bv.") || filename.includes("-bv_");
+    });
+
+    const backMainImages = allMediaUrls.filter((url) => {
+      const filename = url.split("/").pop().split("?")[0].toLowerCase();
+      return (filename.includes("-b.") || filename.includes("-b_")) && !filename.includes("-bv.");
     });
 
     if (backVariantImages.length > 0) {

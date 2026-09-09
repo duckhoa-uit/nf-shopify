@@ -152,18 +152,18 @@ When a color has no direct variant image and no same-reference media, `always` k
 
 ### 5. Product Cards
 **File**: `snippets/card-product.liquid`
-**Usage**: Color swatches on product listing pages
+**Usage**: Color swatches and the large card image on listing pages
 *Note: Uses custom logic instead of the utility for performance reasons*
 
-Card hero/hover is scoped to the thumbnail filename `reference_id` (`-{ref}-`). Priority: same-ref `-H`, then another `-M`, then `-D` / `-BV` / `-B`. If no second same-ref shot exists, there is no hover — never another colorway. The card/title URL deep-links to the first available variant whose SKU (or `custom.color` reference) matches that thumbnail ref.
+**Default card image** follows the same front-first, color-aware chain as swatches, scoped to `selected_or_first_available_variant`. Back type tokens (`-B` / `-BV`) are skipped when they are the variant featured image.
 
-**Pitfall (draft QA, 2026-09-09):** some filenames use a numeric token that is not a color `reference_id` (example: `NF-NO-3269OR-82502-M_1.jpg` on NORTHKIT trousers). Hover still stays on that token (no cross-color swap). SKU / `custom.color` matching fails, so the card URL has no `?variant=` — that is expected, not a hover regression.
+**Hover stays on that same color `reference_id`.** Card hover swaps to the same color's model shot (`-M` or lowest `-M_N`). That file may be a photographic back (JIMEN / SUCHY `M_1`). If the unscoped media fallback has to pick a thumbnail, there is no hover — never another colorway. Swatch hover still uses that color's `-H`.
 
-**Draft theme QA** (`QA card hover color-ref`, id `205365412172` on intl): 0 cross-color hovers on dresses (6), mens jackets (24), womens jackets (24), mens trousers (24), footwear (23), all-clothing pages 1–2 (48). LUANA hover is `360-M_2` not `269`. Card click opens `Color: red` + `360-*` media. Intl `/search` redirects to homepage (predictive-only); collection PLPs are the regression surface.
+The card/title/`+N` URL deep-links to `selected_or_first_available_variant` so PDP color matches the thumbnail.
+
+Media matching uses the exact `-<reference>-` token, so Shopify UUID suffixes such as `-M_1_<uuid>.jpg` still parse as type `M`. See `docs/product-card-media/evidence.md`.
 
 The Color filter is still product-level `color_marketplace` (a family bucket, not `option.color`). Cards do not remap the thumbnail to the active filter family.
-
-This path is shared by every country storefront (international, CZ, RO, and any market locale on those themes). Locale-translated color labels do not change the bug: the card never reads the active Color filter.
 
 Live QA + Admin evidence (2026-09-09, `sportfinder-international.myshopify.com`):
 

@@ -8,12 +8,36 @@ const readSnippet = (name) =>
     "utf8",
   );
 
+const readAsset = (name) =>
+  readFileSync(
+    fileURLToPath(new URL(`../assets/${name}`, import.meta.url)),
+    "utf8",
+  );
+
 describe("merchant-authored navigation links", () => {
   test("desktop renders nested links even when they share the parent URL", () => {
     const source = readSnippet("header-mega-menu.liquid");
 
     expect(source).not.toContain("grandchildlink.url == childlink.url");
     expect(source).toContain("{{ grandchildlink.title | escape }}");
+  });
+
+  test("desktop category headings stay links when they have child items", () => {
+    const source = readSnippet("header-mega-menu.liquid");
+
+    expect(source).not.toContain("childlink.links == blank and childlink.url != blank");
+    expect(source).toContain("if childlink.url != blank");
+    expect(source).toContain("mega-menu__heading mega-menu__heading--link");
+  });
+
+  test("image-card titles wrap and share a subgrid row with images", () => {
+    const css = readAsset("component-mega-menu.css");
+    const titleBlock = css.match(/\.mega-menu__card-title\s*\{[^}]+\}/)?.[0];
+
+    expect(titleBlock).toBeTruthy();
+    expect(titleBlock).not.toMatch(/text-overflow:\s*ellipsis/);
+    expect(titleBlock).not.toMatch(/white-space:\s*nowrap/);
+    expect(css).toContain("grid-template-rows: subgrid");
   });
 
   test("mobile renders authored links and only falls back to generated CTAs", () => {

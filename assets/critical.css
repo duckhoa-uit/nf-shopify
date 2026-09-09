@@ -36,10 +36,14 @@ body {
   font-size: 0.875rem;
   letter-spacing: 0rem;
   line-height: calc(1 + 0.8 / var(--font-body-scale));
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Beats EComposer `body { font-family: Poppins }`. Inherit unless a role override. */
+html body {
   font-family: var(--font-body-family);
   font-style: var(--font-body-style);
   font-weight: var(--font-body-weight);
-  -webkit-font-smoothing: antialiased;
 }
 
 @media screen and (min-width: 750px) {

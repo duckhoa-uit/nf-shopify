@@ -151,8 +151,10 @@ pnpm push:all
 For a draft preview without replacing the live theme:
 
 ```bash
-shopify theme push -e <env> --unpublished --theme "QA <date>"
+shopify theme push -e <env> --unpublished --theme "QA <date>" --json
 ```
+
+Do not use `pnpm push:*` for drafts (`--allow-live`). After push, verify with agent-browser: the CLI preview host (`*.myshopify.com?preview_theme_id=`) redirects to the primary domain and drops the query param. Re-open the redirected origin + path with `preview_theme_id` restored, and re-apply it after every navigation. Confirm `Shopify.theme.id` before measuring. See [`.cursor/references/draft-theme-agent-browser.md`](.cursor/references/draft-theme-agent-browser.md).
 
 ### Backing up live settings_data.json
 
@@ -329,6 +331,7 @@ git commit -m "config(<env>): sync settings_data from live"
 - Confirm the market handle exists in the store's admin (Settings → Markets) and matches the file suffix exactly (`czech`, `romania`, `slovenia`, ...).
 - Confirm the locale you're testing is published on that store.
 - Real `request.host` is required to test cross-market language picker — use `shopify theme push -e <env> --unpublished` and preview the live URL with `?preview_theme_id=`.
+- **Issue: agent-browser landed on the live theme after draft preview** — primary-domain redirect strips `preview_theme_id`. Re-open `https://<redirected-origin><path>?preview_theme_id=<id>` and check `Shopify.theme.id`. Steps: [`.cursor/references/draft-theme-agent-browser.md`](.cursor/references/draft-theme-agent-browser.md).
 
 ## Support
 
