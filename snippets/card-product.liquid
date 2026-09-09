@@ -15,32 +15,28 @@
 {% endcomment %}
 
 {%- if card_product and card_product != empty -%}
+  {%- assign card_url = card_product.url -%}
+  {%- assign thumbnail_variant = null -%}
   <div class="card-wrapper h-full">
     <div class="relative flex h-full flex-col">
       {% render 'product-badge-row', product: card_product, context: 'card', promotion_limit: 2 %}
 
       {%- if card_product.media.size > 0 -%}
         {%- liquid
-          # ============================================================
-          # OPTIMIZATION: Single pass media indexing
-          # Instead of multiple loops over media, we do ONE pass to collect:
-          # - model_image_simple: -M without sequence
-          # - model_images_sequenced: -M_N with sequences (stored as string for sorting)
-          # - main_image: exact -H image type for hover
-          # - fallback images by type: H, B, BV, D
-          # ============================================================
+          # Thumbnail: first -M (then H / B / BV / D / featured).
+          # Hover: another shot with the SAME color reference_id only.
+          # Never fall back to a different colorway.
 
           assign model_image = null
           assign main_image = null
           assign model_image_simple = null
           assign best_sequenced_model = null
           assign best_sequence_num = 999
-          assign alt_sequenced_model = null
-          assign alt_sequence_num = 999
           assign fallback_h = null
           assign fallback_b = null
           assign fallback_bv = null
           assign fallback_d = null
+          assign thumbnail_ref = ''
 
           for media in card_product.media
             assign media_src = media.src | default: ''
@@ -57,29 +53,17 @@
 
             # Match the final image-type token so product codes such as MI and BU
             # are not mistaken for model and back images.
-            if image_type == 'H'
-              if main_image == null
-                assign main_image = media
-              endif
-            endif
-
-            # Check for model images
             if image_type == 'M'
               if image_sequence > 0
                 if image_sequence < best_sequence_num
-                  # Track for primary model (lowest sequence)
                   assign best_sequence_num = image_sequence
                   assign best_sequenced_model = media
                 endif
-              else
-                # Simple model image (no sequence) - highest priority
-                if model_image_simple == null
-                  assign model_image_simple = media
-                endif
+              elsif model_image_simple == null
+                assign model_image_simple = media
               endif
             endif
 
-            # Collect fallback images by type (first match only)
             if fallback_h == null and image_type == 'H'
               assign fallback_h = media
             endif
@@ -94,7 +78,6 @@
             endif
           endfor
 
-          # Resolve model_image with priority: simple -M > sequenced -M_N > fallbacks > featured
           if model_image_simple
             assign model_image = model_image_simple
           elsif best_sequenced_model
@@ -111,52 +94,160 @@
             assign model_image = card_product.featured_media
           endif
 
-          # Find alternative model for hover if no -H image found
-          unless main_image
-            # Look for a different sequenced model image
-            if best_sequenced_model and model_image_simple
-              # If we used simple model, use sequenced as alternative
-              assign main_image = best_sequenced_model
-            else
-              # Find next lowest sequence model image different from current
-              for media in card_product.media
-                assign media_src = media.src | default: ''
-                assign parsed_url = media_src | split: '/' | last | split: '?' | first
-                assign filename_without_extension = parsed_url | split: '.' | first
-                assign filename_parts = filename_without_extension | split: '-'
-                assign image_type_token = filename_parts | last
-                assign image_type_parts = image_type_token | split: '_'
-                assign image_type = image_type_parts.first
-                assign image_sequence = 0
-                if image_type_parts.size > 1
-                  assign image_sequence = image_type_parts[1] | plus: 0
-                endif
-                if image_type == 'M' and image_sequence > 0 and media.id != model_image.id
-                  if image_sequence < alt_sequence_num
-                    assign alt_sequence_num = image_sequence
-                    assign alt_sequenced_model = media
-                  endif
-                endif
-              endfor
-
-              if alt_sequenced_model
-                assign main_image = alt_sequenced_model
-              else
-                assign main_image = model_image
+          if model_image
+            assign thumb_filename = model_image.src | default: '' | split: '/' | last | split: '?' | first | split: '.' | first
+            assign thumb_parts = thumb_filename | split: '-'
+            if thumb_parts.size >= 2
+              assign thumb_ref_index = thumb_parts.size | minus: 2
+              assign thumb_ref_candidate = thumb_parts[thumb_ref_index] | strip
+              assign thumb_ref_number = thumb_ref_candidate | plus: 0
+              if thumb_ref_number > 0
+                assign thumbnail_ref = thumb_ref_candidate
               endif
             endif
-          endunless
+          endif
 
-          # Check if we have a real hover image
+          if thumbnail_ref != ''
+            assign reference_token = '-' | append: thumbnail_ref | append: '-'
+            assign hover_h = null
+            assign hover_m = null
+            assign hover_m_seq = 999
+            assign hover_d = null
+            assign hover_d_seq = 999
+            assign hover_bv = null
+            assign hover_b = null
+
+            for media in card_product.media
+              if model_image and media.id == model_image.id
+                continue
+              endif
+
+              assign filename = media.src | default: '' | split: '/' | last | split: '?' | first
+              unless filename contains reference_token
+                continue
+              endunless
+
+              assign type_token = filename | split: reference_token | last | split: '.' | first
+              assign type_parts = type_token | split: '_'
+              assign type_name = type_parts.first
+              assign type_sequence = 0
+              if type_parts.size > 1
+                assign type_sequence = type_parts[1] | plus: 0
+              endif
+
+              if type_name == 'H' and hover_h == null
+                assign hover_h = media
+              elsif type_name == 'M'
+                if type_sequence > 0
+                  if type_sequence < hover_m_seq
+                    assign hover_m_seq = type_sequence
+                    assign hover_m = media
+                  endif
+                elsif hover_m == null
+                  assign hover_m = media
+                endif
+              elsif type_name == 'D' and type_sequence > 0
+                if type_sequence < hover_d_seq
+                  assign hover_d_seq = type_sequence
+                  assign hover_d = media
+                endif
+              elsif type_name == 'BV' and hover_bv == null
+                assign hover_bv = media
+              elsif type_name == 'B' and hover_b == null
+                assign hover_b = media
+              endif
+            endfor
+
+            assign main_image = hover_h | default: hover_m | default: hover_d | default: hover_bv | default: hover_b | default: model_image
+          else
+            assign main_image = model_image
+          endif
+
+          if thumbnail_ref != ''
+            for variant in card_product.variants
+              assign sku_parts = variant.sku | default: '' | split: '-'
+              assign sku_ref_index = sku_parts.size | minus: 2
+              assign sku_ref = ''
+              if sku_ref_index >= 0
+                assign sku_ref = sku_parts[sku_ref_index] | strip
+              endif
+              if sku_ref == thumbnail_ref
+                if thumbnail_variant == null
+                  assign thumbnail_variant = variant
+                endif
+                if variant.available
+                  assign thumbnail_variant = variant
+                  break
+                endif
+              endif
+            endfor
+          endif
+
+          if thumbnail_variant
+            if card_product.url contains '?'
+              assign card_url = card_product.url | append: '&variant=' | append: thumbnail_variant.id
+            else
+              assign card_url = card_product.url | append: '?variant=' | append: thumbnail_variant.id
+            endif
+          endif
+
           assign has_real_main_image = false
           if main_image and main_image.id != model_image.id
             assign has_real_main_image = true
           endif
         -%}
 
+        {%- if thumbnail_ref != blank and thumbnail_variant == null and card_product.metafields.custom.color.value != blank -%}
+          {%- liquid
+            assign matched_color_name = ''
+            for color_item in card_product.metafields.custom.color.value
+              assign color_ref = color_item.reference_id | append: ''
+              if color_ref == thumbnail_ref
+                assign matched_color_name = color_item.name | downcase | strip
+                break
+              endif
+            endfor
+          -%}
+          {%- if matched_color_name != blank -%}
+            {%- capture color_option_position -%}
+              {%- render 'get-color-option-position', product: card_product -%}
+            {%- endcapture -%}
+            {%- liquid
+              assign color_option_position = color_option_position | strip | plus: 0
+              for variant in card_product.variants
+                case color_option_position
+                  when 2
+                    assign variant_color = variant.option2
+                  when 3
+                    assign variant_color = variant.option3
+                  else
+                    assign variant_color = variant.option1
+                endcase
+                assign variant_color_norm = variant_color | downcase | strip
+                if variant_color_norm == matched_color_name
+                  if thumbnail_variant == null
+                    assign thumbnail_variant = variant
+                  endif
+                  if variant.available
+                    assign thumbnail_variant = variant
+                    break
+                  endif
+                endif
+              endfor
+              if thumbnail_variant
+                if card_product.url contains '?'
+                  assign card_url = card_product.url | append: '&variant=' | append: thumbnail_variant.id
+                else
+                  assign card_url = card_product.url | append: '?variant=' | append: thumbnail_variant.id
+                endif
+              endif
+            -%}
+          {%- endif -%}
+        {%- endif -%}
+
         <div class="card-product-northfinder__media relative mb-3 overflow-hidden">
           <a
-            href="{{ card_product.url }}"
+            href="{{ card_url }}"
             class="card-product-northfinder__link"
             data-product-id="{{ card_product.id }}"
             data-section-id="{{ section_id }}"
@@ -188,7 +279,7 @@
         {%- comment -%} Product has no media - show placeholder with consistent dimensions {%- endcomment -%}
         <div class="card-product-northfinder__media relative mb-3 overflow-hidden">
           <a
-            href="{{ card_product.url }}"
+            href="{{ card_url }}"
             class="card-product-northfinder__link block"
             data-product-id="{{ card_product.id }}"
             data-section-id="{{ section_id }}"
@@ -528,7 +619,7 @@
 
           {%- if remaining_count > 0 -%}
             <a
-              href="{{ card_product.url }}"
+              href="{{ card_url }}"
               class="flex size-9 items-center justify-center rounded-full border border-[#E5E5E5] bg-white text-center font-medium text-[#4D4D4D] xl:size-[3.75rem]"
             >
               +{{ remaining_count }}
@@ -538,11 +629,11 @@
       {%- endif -%}
 
       <div class="flex flex-col gap-1 pt-3">
-        <a href="{{ card_product.url }}" class="card-product-northfinder__title-link">
+        <a href="{{ card_url }}" class="card-product-northfinder__title-link">
           <h3 class="text-base leading-[1.625rem] font-semibold text-[#0F0F0F]">{{ card_product.title | escape }}</h3>
         </a>
 
-        {%- assign display_variant = card_product.selected_or_first_available_variant -%}
+        {%- assign display_variant = thumbnail_variant | default: card_product.selected_or_first_available_variant -%}
         {% render 'automatic-discount-preview', product: card_product, variant: display_variant, presentation: 'card' %}
       </div>
     </div>

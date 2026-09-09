@@ -10,9 +10,19 @@ describe("product card media rendering", () => {
 
     expect(source).toContain("assign image_type_token = filename_parts | last");
     expect(source).toContain("if image_type == 'M'");
-    expect(source).toContain("if image_type == 'H'");
+    expect(source).toContain("if fallback_h == null and image_type == 'H'");
     expect(source).not.toContain("parsed_url contains '-M'");
     expect(source).not.toContain("parsed_url contains '-B'");
+  });
+
+  test("scopes card hover and deep-link to the thumbnail color reference", () => {
+    const source = readProjectFile("snippets/card-product.liquid");
+
+    expect(source).toContain("assign reference_token = '-' | append: thumbnail_ref | append: '-'");
+    expect(source).toContain("Never fall back to a different colorway");
+    expect(source).toContain("append: '?variant=' | append: thumbnail_variant.id");
+    expect(source).toContain("href=\"{{ card_url }}\"");
+    expect(source).not.toContain("if image_type == 'H'\n              if main_image == null");
   });
 
   test("adds a white background to native and EComposer product media wrappers", () => {
