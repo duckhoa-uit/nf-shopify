@@ -16,6 +16,15 @@ describe("product card media rendering", () => {
     expect(source).not.toContain("assign image_type_token = filename_parts | last");
   });
 
+  test("scopes card hover and deep-link to the thumbnail color reference", () => {
+    const source = readProjectFile("snippets/card-product.liquid");
+
+    expect(source).toContain("assign reference_token = '-' | append: reference_id | append: '-'");
+    expect(source).toContain("Never fall back to a different colorway");
+    expect(source).toContain("append: '?variant=' | append: card_variant.id");
+    expect(source).toContain('href="{{ card_url }}"');
+  });
+
   test("adds a white background to native and EComposer product media wrappers", () => {
     const snippet = readProjectFile("snippets/card-product.liquid");
     const sourceStyles = readProjectFile("assets/tailwind.css");

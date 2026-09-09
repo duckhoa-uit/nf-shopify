@@ -157,9 +157,30 @@ When a color has no direct variant image and no same-reference media, `always` k
 
 **Default card image** follows the same front-first, color-aware chain as swatches, scoped to `selected_or_first_available_variant`. Back type tokens (`-B` / `-BV`) are skipped when they are the variant featured image.
 
-**Hover is not required to be front.** Card hover swaps to the same color's model shot (`-M` or lowest `-M_N`). That file may be a photographic back (JIMEN / SUCHY `M_1`). Swatch hover still uses that color's `-H`.
+**Hover stays on that same color `reference_id`.** Card hover swaps to the same color's model shot (`-M` or lowest `-M_N`). That file may be a photographic back (JIMEN / SUCHY `M_1`). If the unscoped media fallback has to pick a thumbnail, there is no hover — never another colorway. Swatch hover still uses that color's `-H`.
+
+The card/title/`+N` URL deep-links to `selected_or_first_available_variant` so PDP color matches the thumbnail.
 
 Media matching uses the exact `-<reference>-` token, so Shopify UUID suffixes such as `-M_1_<uuid>.jpg` still parse as type `M`. See `docs/product-card-media/evidence.md`.
+
+The Color filter is still product-level `color_marketplace` (a family bucket, not `option.color`). Cards do not remap the thumbnail to the active filter family.
+
+Live QA + Admin evidence (2026-09-09, `sportfinder-international.myshopify.com`):
+
+`custom_features.color_marketplace` is a **family bucket**, not a 1:1 copy of `option.color`.
+
+| Source | What it stores | Example |
+|---|---|---|
+| `option.color` / `custom.color` | Actual colorway + `reference_id` | `fieryred` → `310`, `bluenights` → `464` |
+| `color_marketplace` | Coarse family (`name` + `hex` only, no `reference_id`) | `red`, `blue`, `pink` |
+
+Dress Admin rows:
+- LUANA: option `red, black` == marketplace `red, black` (exact). `custom.color` refs `360` / `269`.
+- RHEXA: option `fieryred` ≠ marketplace `red`.
+- KAYDENCE / JEANNINE: `bluenights`, `inkblue` roll up to marketplace `blue`.
+- ARRERA: option `blackmelange` is missing from marketplace.
+
+50-product sample: 10 exact name match, 31 family overlap, 9 disjoint. Do **not** map an active Color filter GID to `variant.option1` by string equality — `red` filter is a family, not the option value.
 
 ## Example Scenario
 

@@ -15,6 +15,15 @@
 {% endcomment %}
 
 {%- if card_product and card_product != empty -%}
+  {%- assign card_variant = card_product.selected_or_first_available_variant -%}
+  {%- assign card_url = card_product.url -%}
+  {%- if card_variant -%}
+    {%- if card_product.url contains '?' -%}
+      {%- assign card_url = card_product.url | append: '&variant=' | append: card_variant.id -%}
+    {%- else -%}
+      {%- assign card_url = card_product.url | append: '?variant=' | append: card_variant.id -%}
+    {%- endif -%}
+  {%- endif -%}
   <div class="card-wrapper h-full">
     <div class="relative flex h-full flex-col">
       {% render 'product-badge-row', product: card_product, context: 'card', promotion_limit: 2 %}
@@ -169,9 +178,8 @@
               endif
             endfor
             assign model_image = fallback_h | default: fallback_m | default: fallback_m_seq | default: fallback_d | default: fallback_bv | default: fallback_b | default: card_product.featured_media
-            if main_image == null
-              assign main_image = fallback_m | default: fallback_m_seq | default: fallback_h
-            endif
+            # Never fall back to a different colorway for hover.
+            assign main_image = model_image
           endif
 
           assign has_real_main_image = false
@@ -182,7 +190,7 @@
 
         <div class="card-product-northfinder__media relative mb-3 overflow-hidden">
           <a
-            href="{{ card_product.url }}"
+            href="{{ card_url }}"
             class="card-product-northfinder__link"
             data-product-id="{{ card_product.id }}"
             data-section-id="{{ section_id }}"
@@ -214,7 +222,7 @@
         {%- comment -%} Product has no media - show placeholder with consistent dimensions {%- endcomment -%}
         <div class="card-product-northfinder__media relative mb-3 overflow-hidden">
           <a
-            href="{{ card_product.url }}"
+            href="{{ card_url }}"
             class="card-product-northfinder__link block"
             data-product-id="{{ card_product.id }}"
             data-section-id="{{ section_id }}"
@@ -554,7 +562,7 @@
 
           {%- if remaining_count > 0 -%}
             <a
-              href="{{ card_product.url }}"
+              href="{{ card_url }}"
               class="flex size-9 items-center justify-center rounded-full border border-[#E5E5E5] bg-white text-center font-medium text-[#4D4D4D] xl:size-[3.75rem]"
             >
               +{{ remaining_count }}
@@ -564,11 +572,11 @@
       {%- endif -%}
 
       <div class="flex flex-col gap-1 pt-3">
-        <a href="{{ card_product.url }}" class="card-product-northfinder__title-link">
+        <a href="{{ card_url }}" class="card-product-northfinder__title-link">
           <h3 class="text-base leading-[1.625rem] font-semibold text-[#0F0F0F]">{{ card_product.title | escape }}</h3>
         </a>
 
-        {%- assign display_variant = card_product.selected_or_first_available_variant -%}
+        {%- assign display_variant = card_variant | default: card_product.selected_or_first_available_variant -%}
         {% render 'automatic-discount-preview', product: card_product, variant: display_variant, presentation: 'card' %}
       </div>
     </div>
