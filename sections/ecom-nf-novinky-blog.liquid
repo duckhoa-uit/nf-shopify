@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-09-13 15:07:36
+ At 2026-09-13 15:17:16
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -21,7 +21,7 @@
  window.EComposer.TEMPLATE_ID="6aa6af40fd0537cbd0068c66";
  window.EComposer.TEMPLATE = {"title":"NF Blog Novinky","type":"blog","slug":"ecom-nf-novinky","plan_id":4,"template_id":"6aa6af40fd0537cbd0068c66"};
  </script>
-<div class="ecom-builder" id="ecom-nf-novinky"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-ixi73ssdrx"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-fdmzbunktak"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-ixi73ssdrx" deep="2">{%- comment -%} ══ LIST S1 · series header, chapter tabs, search ══ {%- endcomment -%}
+<div class="ecom-builder" id="ecom-nf-novinky"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-0ojbbx7xx4ud"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-e4qgmy5mzo"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-0ojbbx7xx4ud" deep="2">{%- comment -%} ══ LIST S1 · series header, chapter tabs, search ══ {%- endcomment -%}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap&subset=latin,latin-ext,cyrillic" rel="stylesheet">
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
@@ -228,7 +228,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FEATURED = 'sk-top-10-kratkych-mestskych-tur-na-slovensku-pre-tych-co-potre,sk-northfinder-volbou-slovenskych-outdooristov-ziskali-sme-ocen,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-northfinder-draci-a-dracia-vasen-nova-oblubena-skrysa-pred-da,sk-nemali-by-ste-dychat-len-vy-ale-aj-vase-oblecenie,sk-jarna-kolekcia-northfinder-nalahko-neznamena-lahkovazne,sk-neda-sa-vidiet-neda-sa-kupit-priatelstvo-je-ta-najkrajsia-ve,sk-ako-sa-obliect-na-horsku-turistiku,sl-gabriel-baicus-obleka-mora-biti-partner-na-katerega-se-l' -%}
+{%- assign FEATURED = 'ako-vznikaju-topanky-northfinder,sk-top-10-kratkych-mestskych-tur-na-slovensku-pre-tych-co-potre,sk-northfinder-volbou-slovenskych-outdooristov-ziskali-sme-ocen,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-northfinder-draci-a-dracia-vasen-nova-oblubena-skrysa-pred-da,sk-nemali-by-ste-dychat-len-vy-ale-aj-vase-oblecenie,sk-jarna-kolekcia-northfinder-nalahko-neznamena-lahkovazne,sk-neda-sa-vidiet-neda-sa-kupit-priatelstvo-je-ta-najkrajsia-ve,sk-ako-sa-obliect-na-horsku-turistiku,sl-gabriel-baicus-obleka-mora-biti-partner-na-katerega-se-l' -%}
 {%- assign SHOW_READ_TIME = false -%}
 {%- comment -%}
  `blog` exists on a blog template. On the hub page it is nil, so the handle is read
@@ -300,6 +300,10 @@
 .nfb ._h1{font-size:clamp(28px,20px + 1.1vw,40px);font-weight:700;line-height:1.15;letter-spacing:0}
 .nfb ._h2{font-size:clamp(20px,17px + .35vw,24px);font-weight:700;line-height:1.25}
 .nfb ._body{font-size:16px;font-weight:500;line-height:1.6;max-width:70ch}
+/* A last line holding one short word reads as a mistake. `balance` evens out short
+ blocks — headings and standfirsts — and `pretty` keeps running text from ending on a
+ lone word. Both are progressive: a browser without them simply wraps as before. */
+.nfb ._h1,.nfb ._h2,.nfb ._eyebrow{text-wrap:balance}
 .nfb ._small{font-size:13px;font-weight:500;line-height:1.5}
 @media(max-width:767px){.nfb ._eyebrow{font-size:12px}}
 /* buttons — 4px radius, no pills, flat. Primary rests on the derived red so the
@@ -325,7 +329,7 @@
 .nfb._ls1 ._h1{margin-top:0}
 .nfb._ls1 ._eyebrow{color:var(--ink-80)}
 .nfb._ls1 ._h1{margin-top:12px}
-.nfb._ls1 ._lead{margin-top:12px;max-width:62ch;font-size:16px;font-weight:500;line-height:1.6}
+.nfb._ls1 ._lead{margin-top:12px;max-width:62ch;font-size:16px;font-weight:500;line-height:1.6;text-wrap:balance}
 .nfb._ls1 ._bar{margin-top:var(--band-y);display:flex;align-items:flex-end;justify-content:space-between;gap:24px;border-bottom:1px solid var(--line)}
 .nfb._ls1 ._tabs{display:flex;gap:24px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
 .nfb._ls1 ._tabs::-webkit-scrollbar{display:none}
@@ -396,7 +400,7 @@
  </form>
  </div>
  </div>
-</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-a7evhkxtw36"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-01uv0poqb0o1"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-a7evhkxtw36" deep="2">{%- comment -%} ══ LIST S2 · the band at the top ══ {%- endcomment -%}
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-2ndco267zb7"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-orzpu9gf9u"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-2ndco267zb7" deep="2">{%- comment -%} ══ LIST S2 · the band at the top ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -602,7 +606,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FEATURED = 'sk-top-10-kratkych-mestskych-tur-na-slovensku-pre-tych-co-potre,sk-northfinder-volbou-slovenskych-outdooristov-ziskali-sme-ocen,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-northfinder-draci-a-dracia-vasen-nova-oblubena-skrysa-pred-da,sk-nemali-by-ste-dychat-len-vy-ale-aj-vase-oblecenie,sk-jarna-kolekcia-northfinder-nalahko-neznamena-lahkovazne,sk-neda-sa-vidiet-neda-sa-kupit-priatelstvo-je-ta-najkrajsia-ve,sk-ako-sa-obliect-na-horsku-turistiku,sl-gabriel-baicus-obleka-mora-biti-partner-na-katerega-se-l' -%}
+{%- assign FEATURED = 'ako-vznikaju-topanky-northfinder,sk-top-10-kratkych-mestskych-tur-na-slovensku-pre-tych-co-potre,sk-northfinder-volbou-slovenskych-outdooristov-ziskali-sme-ocen,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-northfinder-draci-a-dracia-vasen-nova-oblubena-skrysa-pred-da,sk-nemali-by-ste-dychat-len-vy-ale-aj-vase-oblecenie,sk-jarna-kolekcia-northfinder-nalahko-neznamena-lahkovazne,sk-neda-sa-vidiet-neda-sa-kupit-priatelstvo-je-ta-najkrajsia-ve,sk-ako-sa-obliect-na-horsku-turistiku,sl-gabriel-baicus-obleka-mora-biti-partner-na-katerega-se-l' -%}
 {%- assign SHOW_READ_TIME = false -%}
 {%- comment -%}
  `blog` exists on a blog template. On the hub page it is nil, so the handle is read
@@ -680,6 +684,10 @@
 .nfb ._h1{font-size:clamp(28px,20px + 1.1vw,40px);font-weight:700;line-height:1.15;letter-spacing:0}
 .nfb ._h2{font-size:clamp(20px,17px + .35vw,24px);font-weight:700;line-height:1.25}
 .nfb ._body{font-size:16px;font-weight:500;line-height:1.6;max-width:70ch}
+/* A last line holding one short word reads as a mistake. `balance` evens out short
+ blocks — headings and standfirsts — and `pretty` keeps running text from ending on a
+ lone word. Both are progressive: a browser without them simply wraps as before. */
+.nfb ._h1,.nfb ._h2,.nfb ._eyebrow{text-wrap:balance}
 .nfb ._small{font-size:13px;font-weight:500;line-height:1.5}
 @media(max-width:767px){.nfb ._eyebrow{font-size:12px}}
 /* buttons — 4px radius, no pills, flat. Primary rests on the derived red so the
@@ -732,9 +740,9 @@
 .nfb ._card ._ep{margin-top:16px;color:var(--ink-80)}
 .nfb ._card ._ep b{color:var(--ink)}
 .nfb ._card ._shot + ._h{margin-top:16px}
-.nfb ._card ._h{margin-top:8px;font-size:18px;font-weight:700;line-height:1.3;
+.nfb ._card ._h{margin-top:8px;font-size:18px;font-weight:700;line-height:1.3;text-wrap:balance;
  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.nfb ._card ._deck{margin-top:8px;font-size:16px;font-weight:500;line-height:1.6;
+.nfb ._card ._deck{margin-top:8px;font-size:16px;font-weight:500;line-height:1.6;text-wrap:pretty;
  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .nfb ._card ._foot{margin-top:auto;padding-top:16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .nfb ._card:hover ._shot img{transform:scale(1.03)}
@@ -751,8 +759,8 @@
 .nfb._ls2 ._list{display:flex;flex-direction:column}
 .nfb._ls2 ._row{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:16px;align-items:center;padding:20px 0;border-top:1px solid var(--line)}
 .nfb._ls2 ._list ._row:first-child{padding-top:0;border-top:0}
-.nfb._ls2 ._row ._rh{margin-top:8px;font-size:17px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.nfb._ls2 ._row ._rd{margin-top:6px;font-size:14px;font-weight:500;line-height:1.5;color:var(--ink-80);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nfb._ls2 ._row ._rh{margin-top:8px;font-size:17px;font-weight:700;line-height:1.3;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nfb._ls2 ._row ._rd{margin-top:6px;font-size:14px;font-weight:500;line-height:1.5;text-wrap:pretty;color:var(--ink-80);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .nfb._ls2 ._row ._thumb{position:relative;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;background:var(--line)}
 .nfb._ls2 ._row ._thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
 .nfb._ls2 ._row ._thumb ._ph{position:absolute;inset:0}
@@ -1024,7 +1032,7 @@
  parse time — before the section paints — and there is no flash.
 {%- endcomment -%}
 <script>if(/[?&]page=(?!1(&|$))\d+/.test(location.search)){var e=document.currentScript.previousElementSibling;if(e)e.hidden=true;}</script>
-{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-kkbumvjyghs"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-5ot07vhpm3b"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-kkbumvjyghs" deep="2">{%- comment -%} ══ LIST S3 · topic filter, counter, grid, pagination ══ {%- endcomment -%}
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-o97cxkm153"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-wkmcu0otpug"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-o97cxkm153" deep="2">{%- comment -%} ══ LIST S3 · topic filter, counter, grid, pagination ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -1230,7 +1238,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FEATURED = 'sk-top-10-kratkych-mestskych-tur-na-slovensku-pre-tych-co-potre,sk-northfinder-volbou-slovenskych-outdooristov-ziskali-sme-ocen,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-northfinder-draci-a-dracia-vasen-nova-oblubena-skrysa-pred-da,sk-nemali-by-ste-dychat-len-vy-ale-aj-vase-oblecenie,sk-jarna-kolekcia-northfinder-nalahko-neznamena-lahkovazne,sk-neda-sa-vidiet-neda-sa-kupit-priatelstvo-je-ta-najkrajsia-ve,sk-ako-sa-obliect-na-horsku-turistiku,sl-gabriel-baicus-obleka-mora-biti-partner-na-katerega-se-l' -%}
+{%- assign FEATURED = 'ako-vznikaju-topanky-northfinder,sk-top-10-kratkych-mestskych-tur-na-slovensku-pre-tych-co-potre,sk-northfinder-volbou-slovenskych-outdooristov-ziskali-sme-ocen,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-northfinder-draci-a-dracia-vasen-nova-oblubena-skrysa-pred-da,sk-nemali-by-ste-dychat-len-vy-ale-aj-vase-oblecenie,sk-jarna-kolekcia-northfinder-nalahko-neznamena-lahkovazne,sk-neda-sa-vidiet-neda-sa-kupit-priatelstvo-je-ta-najkrajsia-ve,sk-ako-sa-obliect-na-horsku-turistiku,sl-gabriel-baicus-obleka-mora-biti-partner-na-katerega-se-l' -%}
 {%- assign SHOW_READ_TIME = false -%}
 {%- comment -%}
  `blog` exists on a blog template. On the hub page it is nil, so the handle is read
@@ -1302,6 +1310,10 @@
 .nfb ._h1{font-size:clamp(28px,20px + 1.1vw,40px);font-weight:700;line-height:1.15;letter-spacing:0}
 .nfb ._h2{font-size:clamp(20px,17px + .35vw,24px);font-weight:700;line-height:1.25}
 .nfb ._body{font-size:16px;font-weight:500;line-height:1.6;max-width:70ch}
+/* A last line holding one short word reads as a mistake. `balance` evens out short
+ blocks — headings and standfirsts — and `pretty` keeps running text from ending on a
+ lone word. Both are progressive: a browser without them simply wraps as before. */
+.nfb ._h1,.nfb ._h2,.nfb ._eyebrow{text-wrap:balance}
 .nfb ._small{font-size:13px;font-weight:500;line-height:1.5}
 @media(max-width:767px){.nfb ._eyebrow{font-size:12px}}
 /* buttons — 4px radius, no pills, flat. Primary rests on the derived red so the
@@ -1354,9 +1366,9 @@
 .nfb ._card ._ep{margin-top:16px;color:var(--ink-80)}
 .nfb ._card ._ep b{color:var(--ink)}
 .nfb ._card ._shot + ._h{margin-top:16px}
-.nfb ._card ._h{margin-top:8px;font-size:18px;font-weight:700;line-height:1.3;
+.nfb ._card ._h{margin-top:8px;font-size:18px;font-weight:700;line-height:1.3;text-wrap:balance;
  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.nfb ._card ._deck{margin-top:8px;font-size:16px;font-weight:500;line-height:1.6;
+.nfb ._card ._deck{margin-top:8px;font-size:16px;font-weight:500;line-height:1.6;text-wrap:pretty;
  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .nfb ._card ._foot{margin-top:auto;padding-top:16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .nfb ._card:hover ._shot img{transform:scale(1.03)}
@@ -1733,7 +1745,7 @@
  {%- endif -%}
  </div>
  {%- endpaginate -%}
-</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-gqxq4l3pall"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-dmncx53pfis"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-gqxq4l3pall" deep="2">{%- comment -%}
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-cv50kvemb5c"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-o6ihvwesmwg"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-cv50kvemb5c" deep="2">{%- comment -%}
  ══ LIST S4 · runtime + structured data ══
  Same contract as the hub: the archive works without JavaScript — the filters are
  links, the pagination is links. This adds the sticky hairline and the card reveal.
@@ -1771,7 +1783,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FEATURED = 'sk-top-10-kratkych-mestskych-tur-na-slovensku-pre-tych-co-potre,sk-northfinder-volbou-slovenskych-outdooristov-ziskali-sme-ocen,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-northfinder-draci-a-dracia-vasen-nova-oblubena-skrysa-pred-da,sk-nemali-by-ste-dychat-len-vy-ale-aj-vase-oblecenie,sk-jarna-kolekcia-northfinder-nalahko-neznamena-lahkovazne,sk-neda-sa-vidiet-neda-sa-kupit-priatelstvo-je-ta-najkrajsia-ve,sk-ako-sa-obliect-na-horsku-turistiku,sl-gabriel-baicus-obleka-mora-biti-partner-na-katerega-se-l' -%}
+{%- assign FEATURED = 'ako-vznikaju-topanky-northfinder,sk-top-10-kratkych-mestskych-tur-na-slovensku-pre-tych-co-potre,sk-northfinder-volbou-slovenskych-outdooristov-ziskali-sme-ocen,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-northfinder-draci-a-dracia-vasen-nova-oblubena-skrysa-pred-da,sk-nemali-by-ste-dychat-len-vy-ale-aj-vase-oblecenie,sk-jarna-kolekcia-northfinder-nalahko-neznamena-lahkovazne,sk-neda-sa-vidiet-neda-sa-kupit-priatelstvo-je-ta-najkrajsia-ve,sk-ako-sa-obliect-na-horsku-turistiku,sl-gabriel-baicus-obleka-mora-biti-partner-na-katerega-se-l' -%}
 {%- assign SHOW_READ_TIME = false -%}
 {%- comment -%}
  `blog` exists on a blog template. On the hub page it is nil, so the handle is read
