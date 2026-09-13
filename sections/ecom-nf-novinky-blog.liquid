@@ -1,0 +1,1460 @@
+{% comment %}
+ EComposer (https://ecomposer.io)
+ You SHOULD NOT modify source code in this page because
+ It is automatically generated from EComposer
+ At 2026-09-13 14:12:16
+ {% endcomment %} 
+ 
+ {% assign ecom_root_url = routes.root_url %}
+ {% if ecom_root_url != '/'%}
+ {% assign ecom_root_url = routes.root_url | append: '/' %}
+ {% endif %}
+ {% assign translation = metaobjects['app--6509291--ecom_translation']['app--6509291--ecom-translation-hbmjg66m'].data.value %}
+ <link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript>
+{%capture section_id %}ecom-nf-novinky-blog{% endcapture%}{% if section and section_id == section.id and headless == true %}
+{{ content_for_header }}
+{% render 'ecom_header', ECOM_THEME: true %}{% endif %}
+{{'ecom-6aa6af40fd0537cbd0068c66.css' | asset_url | stylesheet_tag }}
+<script src="{{'ecom-6aa6af40fd0537cbd0068c66.js' | asset_url }}" defer="defer"></script>
+<script type="text/javascript" class="ecom-page-info">
+ window.EComposer = window.EComposer || {};
+ window.EComposer.TEMPLATE_ID="6aa6af40fd0537cbd0068c66";
+ window.EComposer.TEMPLATE = {"title":"NF Blog Novinky","type":"blog","slug":"ecom-nf-novinky","plan_id":4,"template_id":"6aa6af40fd0537cbd0068c66"};
+ </script>
+<div class="ecom-builder" id="ecom-nf-novinky"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-mbriaem0nyl"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-7hj14eckssh"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-mbriaem0nyl" deep="2">{%- comment -%} ══ LIST S1 · series header, chapter tabs, search ══ {%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap&subset=latin,latin-ext,cyrillic" rel="stylesheet">
+{%- comment -%}
+ UI labels for both Born in the Carpathians pages. Server-rendered from
+ request.locale, so there is no JS dictionary and the words are in the HTML for
+ search engines. A new market is one `when` branch; anything else falls back to EN.
+ Register is informal second person in every language (brand standard, tone of voice).
+{%- endcomment -%}
+{%- assign LOC = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign t_jump = 'Skip to episodes' -%}
+{%- assign t_search = 'Search articles' -%}
+{%- assign t_chapters = 'Chapters' -%}
+{%- assign t_topics = 'Topics' -%}
+{%- assign t_pagenav = 'Pagination' -%}
+{%- assign t_allcat = 'All' -%}
+{%- assign t_all = 'See all' -%}
+{%- assign t_latest = 'Latest' -%}
+{%- assign t_res = 'Results:' -%}
+{%- assign t_of = 'of' -%}
+{%- assign t_clear = 'Clear filter' -%}
+{%- assign t_read = 'min read' -%}
+{%- assign t_video = 'Video' -%}
+{%- assign t_watch = 'Watch the episode' -%}
+{%- assign t_episode = 'Episode' -%}
+{%- assign t_chapter = 'Chapter' -%}
+{%- assign t_soon = 'Coming soon' -%}
+{%- assign t_allep = 'All episodes' -%}
+{%- assign t_prev = 'Previous' -%}
+{%- assign t_next = 'Next' -%}
+{%- assign t_emptyh = 'Nothing here yet' -%}
+{%- assign t_emptyp = 'No article carries this topic yet. Pick another one, or browse everything.' -%}
+{%- assign t_emptyb = 'Show all articles' -%}
+{%- assign t_datefmt = '%b %-d, %Y' -%}
+{%- assign t_newsh = 'Don&#39;t miss the next episode' -%}
+{%- assign t_newsp = 'One email when a new chapter goes live. No noise, unsubscribe in one click.' -%}
+{%- assign t_newsph = 'Your email' -%}
+{%- assign t_newsb = 'Subscribe' -%}
+{%- assign t_newsfine = 'By subscribing you agree to our privacy policy.' -%}
+{%- assign t_newsok = 'Thanks — check your inbox.' -%}
+{%- assign t_lead = 'People, products and mountains. Films and stories about how our gear is made — and who it is made with.' -%}
+{%- assign t_hubintro = 'Born in the Carpathians is where we show the work: the people who test the gear, the products that come out of it, and the mountains that decide what actually holds. Every chapter is one film and three stories.' -%}
+{%- assign t_herocta = 'Start with Chapter 01' -%}
+{%- assign t_ch1sub = 'How we made shoes for the mountains' -%}
+{%- assign t_ch2sub = 'Peak Flow, from the first sketch to the first descent' -%}
+{%- assign t_ch3sub = 'A season on skis, above the treeline' -%}
+{%- assign t_ch4sub = 'What a pack has to carry — and what it must not weigh' -%}
+{%- assign t_archive = 'All articles' -%}
+{%- case LOC -%}
+{%- when 'sk' -%}
+ {%- assign t_jump = 'Preskočiť na epizódy' -%}{%- assign t_search = 'Hľadať v článkoch' -%}{%- assign t_chapters = 'Kapitoly' -%}
+ {%- assign t_topics = 'Témy' -%}{%- assign t_pagenav = 'Stránkovanie' -%}{%- assign t_allcat = 'Všetko' -%}
+ {%- assign t_all = 'Zobraziť všetko' -%}{%- assign t_latest = 'Najnovšie' -%}{%- assign t_res = 'Výsledky:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Zrušiť filter' -%}{%- assign t_read = 'min čítania' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Pozrieť epizódu' -%}{%- assign t_episode = 'Epizóda' -%}
+ {%- assign t_chapter = 'Kapitola' -%}{%- assign t_soon = 'Už čoskoro' -%}{%- assign t_allep = 'Všetky epizódy' -%}
+ {%- assign t_prev = 'Predchádzajúca' -%}{%- assign t_next = 'Ďalšia' -%}{%- assign t_emptyh = 'Tu zatiaľ nič nie je' -%}
+ {%- assign t_emptyp = 'Túto tému zatiaľ nemá žiadny článok. Vyber si inú alebo si prezri všetko.' -%}{%- assign t_emptyb = 'Zobraziť všetky články' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nezmeškaj ďalšiu epizódu' -%}{%- assign t_newsp = 'Jeden e-mail, keď vyjde nová kapitola. Žiadny spam, odhlásiš sa jedným klikom.' -%}{%- assign t_newsph = 'Tvoj e-mail' -%}
+ {%- assign t_newsb = 'Prihlásiť sa' -%}{%- assign t_newsfine = 'Prihlásením súhlasíš so zásadami ochrany osobných údajov.' -%}{%- assign t_newsok = 'Ďakujeme — skontroluj si e-mail.' -%}
+ {%- assign t_lead = 'Ľudia, produkty a hory. Filmy a príbehy o tom, ako vzniká naša výbava — a s kým.' -%}{%- assign t_hubintro = 'Born in the Carpathians je miesto, kde ukazujeme, ako to robíme: ľudí, ktorí výbavu testujú, produkty, ktoré z toho vzniknú, a hory, ktoré rozhodnú, čo naozaj drží. Každá kapitola je jeden film a tri príbehy.' -%}{%- assign t_herocta = 'Začni kapitolou 01' -%}
+ {%- assign t_ch1sub = 'Ako sme robili topánky do hôr' -%}{%- assign t_ch2sub = 'Peak Flow, od prvej skice po prvý zjazd' -%}{%- assign t_ch3sub = 'Sezóna na skialpoch, nad hranicou lesa' -%}
+ {%- assign t_ch4sub = 'Čo musí batoh uniesť — a čo už nesmie vážiť' -%}{%- assign t_archive = 'Všetky články' -%}
+{%- when 'cs' -%}
+ {%- assign t_jump = 'Přeskočit na epizody' -%}{%- assign t_search = 'Hledat v článcích' -%}{%- assign t_chapters = 'Kapitoly' -%}
+ {%- assign t_topics = 'Témata' -%}{%- assign t_pagenav = 'Stránkování' -%}{%- assign t_allcat = 'Vše' -%}
+ {%- assign t_all = 'Zobrazit vše' -%}{%- assign t_latest = 'Nejnovější' -%}{%- assign t_res = 'Výsledky:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Zrušit filtr' -%}{%- assign t_read = 'min čtení' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Přehrát epizodu' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Kapitola' -%}{%- assign t_soon = 'Už brzy' -%}{%- assign t_allep = 'Všechny epizody' -%}
+ {%- assign t_prev = 'Předchozí' -%}{%- assign t_next = 'Další' -%}{%- assign t_emptyh = 'Tady zatím nic není' -%}
+ {%- assign t_emptyp = 'Tohle téma zatím nemá žádný článek. Vyber si jiné nebo si prohlédni vše.' -%}{%- assign t_emptyb = 'Zobrazit všechny články' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nezmeškej další epizodu' -%}{%- assign t_newsp = 'Jeden e-mail, když vyjde nová kapitola. Žádný spam, odhlásíš se jedním klikem.' -%}{%- assign t_newsph = 'Tvůj e-mail' -%}
+ {%- assign t_newsb = 'Přihlásit se' -%}{%- assign t_newsfine = 'Přihlášením souhlasíš se zásadami ochrany osobních údajů.' -%}{%- assign t_newsok = 'Děkujeme — zkontroluj si e-mail.' -%}
+ {%- assign t_lead = 'Lidé, produkty a hory. Filmy a příběhy o tom, jak vzniká naše výbava — a s kým.' -%}{%- assign t_hubintro = 'Born in the Carpathians je místo, kde ukazujeme, jak to děláme: lidi, kteří výbavu testují, produkty, které z toho vzniknou, a hory, které rozhodnou, co opravdu drží. Každá kapitola je jeden film a tři příběhy.' -%}{%- assign t_herocta = 'Začni kapitolou 01' -%}
+ {%- assign t_ch1sub = 'Jak jsme dělali boty do hor' -%}{%- assign t_ch2sub = 'Peak Flow, od první skici po první sjezd' -%}{%- assign t_ch3sub = 'Sezona na skialpech, nad hranicí lesa' -%}
+ {%- assign t_ch4sub = 'Co musí batoh unést — a co už nesmí vážit' -%}{%- assign t_archive = 'Všechny články' -%}
+{%- when 'pl' -%}
+ {%- assign t_jump = 'Przejdź do odcinków' -%}{%- assign t_search = 'Szukaj w artykułach' -%}{%- assign t_chapters = 'Rozdziały' -%}
+ {%- assign t_topics = 'Tematy' -%}{%- assign t_pagenav = 'Paginacja' -%}{%- assign t_allcat = 'Wszystko' -%}
+ {%- assign t_all = 'Zobacz wszystko' -%}{%- assign t_latest = 'Najnowsze' -%}{%- assign t_res = 'Wyniki:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Wyczyść filtr' -%}{%- assign t_read = 'min czytania' -%}
+ {%- assign t_video = 'Wideo' -%}{%- assign t_watch = 'Obejrzyj odcinek' -%}{%- assign t_episode = 'Odcinek' -%}
+ {%- assign t_chapter = 'Rozdział' -%}{%- assign t_soon = 'Już wkrótce' -%}{%- assign t_allep = 'Wszystkie odcinki' -%}
+ {%- assign t_prev = 'Poprzednia' -%}{%- assign t_next = 'Następna' -%}{%- assign t_emptyh = 'Tu jeszcze nic nie ma' -%}
+ {%- assign t_emptyp = 'Żaden artykuł nie ma jeszcze tego tematu. Wybierz inny albo przejrzyj wszystkie.' -%}{%- assign t_emptyb = 'Pokaż wszystkie artykuły' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Nie przegap kolejnego odcinka' -%}{%- assign t_newsp = 'Jeden e-mail, gdy pojawi się nowy rozdział. Bez spamu, wypiszesz się jednym kliknięciem.' -%}{%- assign t_newsph = 'Twój e-mail' -%}
+ {%- assign t_newsb = 'Zapisz się' -%}{%- assign t_newsfine = 'Zapisując się, akceptujesz politykę prywatności.' -%}{%- assign t_newsok = 'Dziękujemy — sprawdź skrzynkę.' -%}
+ {%- assign t_lead = 'Ludzie, produkty i góry. Filmy i historie o tym, jak powstaje nasz sprzęt — i z kim.' -%}{%- assign t_hubintro = 'Born in the Carpathians to miejsce, w którym pokazujemy, jak to robimy: ludzi, którzy testują sprzęt, produkty, które z tego powstają, i góry, które decydują, co naprawdę się sprawdza. Każdy rozdział to jeden film i trzy historie.' -%}{%- assign t_herocta = 'Zacznij od rozdziału 01' -%}
+ {%- assign t_ch1sub = 'Jak zrobiliśmy buty w góry' -%}{%- assign t_ch2sub = 'Peak Flow, od pierwszego szkicu do pierwszego zjazdu' -%}{%- assign t_ch3sub = 'Sezon na skiturach, powyżej granicy lasu' -%}
+ {%- assign t_ch4sub = 'Co plecak musi unieść — i ile nie może ważyć' -%}{%- assign t_archive = 'Wszystkie artykuły' -%}
+{%- when 'de' -%}
+ {%- assign t_jump = 'Zu den Episoden springen' -%}{%- assign t_search = 'Artikel durchsuchen' -%}{%- assign t_chapters = 'Kapitel' -%}
+ {%- assign t_topics = 'Themen' -%}{%- assign t_pagenav = 'Seitennavigation' -%}{%- assign t_allcat = 'Alle' -%}
+ {%- assign t_all = 'Alle ansehen' -%}{%- assign t_latest = 'Neueste' -%}{%- assign t_res = 'Ergebnisse:' -%}
+ {%- assign t_of = 'von' -%}{%- assign t_clear = 'Filter löschen' -%}{%- assign t_read = 'Min. Lesezeit' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Episode ansehen' -%}{%- assign t_episode = 'Episode' -%}
+ {%- assign t_chapter = 'Kapitel' -%}{%- assign t_soon = 'Bald verfügbar' -%}{%- assign t_allep = 'Alle Episoden' -%}
+ {%- assign t_prev = 'Zurück' -%}{%- assign t_next = 'Weiter' -%}{%- assign t_emptyh = 'Hier ist noch nichts' -%}
+ {%- assign t_emptyp = 'Zu diesem Thema gibt es noch keinen Artikel. Wähl ein anderes oder sieh dir alles an.' -%}{%- assign t_emptyb = 'Alle Artikel ansehen' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Verpass die nächste Episode nicht' -%}{%- assign t_newsp = 'Eine E-Mail, wenn ein neues Kapitel erscheint. Kein Spam, Abmeldung mit einem Klick.' -%}{%- assign t_newsph = 'Deine E-Mail' -%}
+ {%- assign t_newsb = 'Abonnieren' -%}{%- assign t_newsfine = 'Mit der Anmeldung stimmst du unserer Datenschutzerklärung zu.' -%}{%- assign t_newsok = 'Danke — schau in dein Postfach.' -%}
+ {%- assign t_lead = 'Menschen, Produkte und Berge. Filme und Geschichten darüber, wie unsere Ausrüstung entsteht — und mit wem.' -%}{%- assign t_hubintro = 'Born in the Carpathians ist der Ort, an dem wir zeigen, wie wir arbeiten: die Menschen, die die Ausrüstung testen, die Produkte, die dabei entstehen, und die Berge, die entscheiden, was wirklich hält. Jedes Kapitel ist ein Film und drei Geschichten.' -%}{%- assign t_herocta = 'Starte mit Kapitel 01' -%}
+ {%- assign t_ch1sub = 'Wie wir Schuhe für die Berge gemacht haben' -%}{%- assign t_ch2sub = 'Peak Flow, von der ersten Skizze bis zur ersten Abfahrt' -%}{%- assign t_ch3sub = 'Eine Saison auf Tourenski, oberhalb der Baumgrenze' -%}
+ {%- assign t_ch4sub = 'Was ein Rucksack tragen muss — und was er nicht wiegen darf' -%}{%- assign t_archive = 'Alle Artikel' -%}
+{%- when 'hr' -%}
+ {%- assign t_jump = 'Preskoči na epizode' -%}{%- assign t_search = 'Traži u člancima' -%}{%- assign t_chapters = 'Poglavlja' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Straničenje' -%}{%- assign t_allcat = 'Sve' -%}
+ {%- assign t_all = 'Prikaži sve' -%}{%- assign t_latest = 'Najnovije' -%}{%- assign t_res = 'Rezultati:' -%}
+ {%- assign t_of = 'od' -%}{%- assign t_clear = 'Očisti filtar' -%}{%- assign t_read = 'min čitanja' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Pogledaj epizodu' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Poglavlje' -%}{%- assign t_soon = 'Uskoro' -%}{%- assign t_allep = 'Sve epizode' -%}
+ {%- assign t_prev = 'Prethodna' -%}{%- assign t_next = 'Sljedeća' -%}{%- assign t_emptyh = 'Ovdje još nema ničega' -%}
+ {%- assign t_emptyp = 'Nijedan članak još nema ovu temu. Odaberi drugu ili pregledaj sve.' -%}{%- assign t_emptyb = 'Prikaži sve članke' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Ne propusti sljedeću epizodu' -%}{%- assign t_newsp = 'Jedan e-mail kad izađe novo poglavlje. Bez spama, odjaviš se u jednom kliku.' -%}{%- assign t_newsph = 'Tvoj e-mail' -%}
+ {%- assign t_newsb = 'Pretplati se' -%}{%- assign t_newsfine = 'Pretplatom prihvaćaš pravila privatnosti.' -%}{%- assign t_newsok = 'Hvala — provjeri e-poštu.' -%}
+ {%- assign t_lead = 'Ljudi, proizvodi i planine. Filmovi i priče o tome kako nastaje naša oprema — i s kim.' -%}{%- assign t_hubintro = 'Born in the Carpathians mjesto je gdje pokazujemo kako radimo: ljude koji testiraju opremu, proizvode koji iz toga nastanu i planine koje odlučuju što stvarno drži. Svako poglavlje je jedan film i tri priče.' -%}{%- assign t_herocta = 'Počni s poglavljem 01' -%}
+ {%- assign t_ch1sub = 'Kako smo radili cipele za planine' -%}{%- assign t_ch2sub = 'Peak Flow, od prve skice do prvog spusta' -%}{%- assign t_ch3sub = 'Sezona na turnim skijama, iznad granice šume' -%}
+ {%- assign t_ch4sub = 'Što ruksak mora nositi — i koliko ne smije težiti' -%}{%- assign t_archive = 'Svi članci' -%}
+{%- when 'sl' -%}
+ {%- assign t_jump = 'Preskoči na epizode' -%}{%- assign t_search = 'Iskanje po člankih' -%}{%- assign t_chapters = 'Poglavja' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Strani' -%}{%- assign t_allcat = 'Vse' -%}
+ {%- assign t_all = 'Prikaži vse' -%}{%- assign t_latest = 'Najnovejše' -%}{%- assign t_res = 'Rezultati:' -%}
+ {%- assign t_of = 'od' -%}{%- assign t_clear = 'Počisti filter' -%}{%- assign t_read = 'min branja' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Poglej epizodo' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Poglavje' -%}{%- assign t_soon = 'Kmalu' -%}{%- assign t_allep = 'Vse epizode' -%}
+ {%- assign t_prev = 'Prejšnja' -%}{%- assign t_next = 'Naslednja' -%}{%- assign t_emptyh = 'Tukaj še ni ničesar' -%}
+ {%- assign t_emptyp = 'Ta tema še nima nobenega članka. Izberi drugo ali si oglej vse.' -%}{%- assign t_emptyb = 'Prikaži vse članke' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Ne zamudi naslednje epizode' -%}{%- assign t_newsp = 'En e-mail, ko izide novo poglavje. Brez spama, odjaviš se z enim klikom.' -%}{%- assign t_newsph = 'Tvoj e-naslov' -%}
+ {%- assign t_newsb = 'Naroči se' -%}{%- assign t_newsfine = 'Z naročilom sprejemaš politiko zasebnosti.' -%}{%- assign t_newsok = 'Hvala — preveri e-pošto.' -%}
+ {%- assign t_lead = 'Ljudje, izdelki in gore. Filmi in zgodbe o tem, kako nastaja naša oprema — in s kom.' -%}{%- assign t_hubintro = 'Born in the Carpathians je kraj, kjer pokažemo, kako delamo: ljudi, ki opremo testirajo, izdelke, ki iz tega nastanejo, in gore, ki odločijo, kaj zares drži. Vsako poglavje je en film in tri zgodbe.' -%}{%- assign t_herocta = 'Začni s poglavjem 01' -%}
+ {%- assign t_ch1sub = 'Kako smo delali čevlje za gore' -%}{%- assign t_ch2sub = 'Peak Flow, od prve skice do prvega spusta' -%}{%- assign t_ch3sub = 'Sezona na turnih smučeh, nad gozdno mejo' -%}
+ {%- assign t_ch4sub = 'Kaj mora nahrbtnik nositi — in koliko ne sme tehtati' -%}{%- assign t_archive = 'Vsi članki' -%}
+{%- when 'bg' -%}
+ {%- assign t_jump = 'Към епизодите' -%}{%- assign t_search = 'Търсене в статиите' -%}{%- assign t_chapters = 'Глави' -%}
+ {%- assign t_topics = 'Теми' -%}{%- assign t_pagenav = 'Страници' -%}{%- assign t_allcat = 'Всички' -%}
+ {%- assign t_all = 'Виж всички' -%}{%- assign t_latest = 'Най-нови' -%}{%- assign t_res = 'Резултати:' -%}
+ {%- assign t_of = 'от' -%}{%- assign t_clear = 'Изчисти филтъра' -%}{%- assign t_read = 'мин. четене' -%}
+ {%- assign t_video = 'Видео' -%}{%- assign t_watch = 'Гледай епизода' -%}{%- assign t_episode = 'Епизод' -%}
+ {%- assign t_chapter = 'Глава' -%}{%- assign t_soon = 'Очаквай скоро' -%}{%- assign t_allep = 'Всички епизоди' -%}
+ {%- assign t_prev = 'Назад' -%}{%- assign t_next = 'Напред' -%}{%- assign t_emptyh = 'Тук още няма нищо' -%}
+ {%- assign t_emptyp = 'Още няма статия по тази тема. Избери друга или разгледай всички.' -%}{%- assign t_emptyb = 'Виж всички статии' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Не пропускай следващия епизод' -%}{%- assign t_newsp = 'Един имейл, когато излезе нова глава. Без спам, отписваш се с един клик.' -%}{%- assign t_newsph = 'Твоят имейл' -%}
+ {%- assign t_newsb = 'Абонирай се' -%}{%- assign t_newsfine = 'С абонирането приемаш политиката за поверителност.' -%}{%- assign t_newsok = 'Благодарим — провери си имейла.' -%}
+ {%- assign t_lead = 'Хора, продукти и планини. Филми и истории за това как се създава екипировката ни — и с кого.' -%}{%- assign t_hubintro = 'Born in the Carpathians е мястото, където показваме как работим: хората, които тестват екипировката, продуктите, които се раждат от това, и планините, които решават кое наистина издържа. Всяка глава е един филм и три истории.' -%}{%- assign t_herocta = 'Започни с глава 01' -%}
+ {%- assign t_ch1sub = 'Как направихме обувки за планината' -%}{%- assign t_ch2sub = 'Peak Flow, от първата скица до първото спускане' -%}{%- assign t_ch3sub = 'Сезон на ски туринг, над горската граница' -%}
+ {%- assign t_ch4sub = 'Какво трябва да носи една раница — и колко не бива да тежи' -%}{%- assign t_archive = 'Всички статии' -%}
+{%- when 'ro' -%}
+ {%- assign t_jump = 'Sari la episoade' -%}{%- assign t_search = 'Caută în articole' -%}{%- assign t_chapters = 'Capitole' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Paginare' -%}{%- assign t_allcat = 'Toate' -%}
+ {%- assign t_all = 'Vezi tot' -%}{%- assign t_latest = 'Cele mai noi' -%}{%- assign t_res = 'Rezultate:' -%}
+ {%- assign t_of = 'din' -%}{%- assign t_clear = 'Șterge filtrul' -%}{%- assign t_read = 'min citire' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Vezi episodul' -%}{%- assign t_episode = 'Episod' -%}
+ {%- assign t_chapter = 'Capitol' -%}{%- assign t_soon = 'În curând' -%}{%- assign t_allep = 'Toate episoadele' -%}
+ {%- assign t_prev = 'Anterioara' -%}{%- assign t_next = 'Următoarea' -%}{%- assign t_emptyh = 'Aici nu e încă nimic' -%}
+ {%- assign t_emptyp = 'Niciun articol nu are încă această temă. Alege alta sau vezi tot.' -%}{%- assign t_emptyb = 'Vezi toate articolele' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Nu rata episodul următor' -%}{%- assign t_newsp = 'Un e-mail când apare un capitol nou. Fără spam, te dezabonezi cu un clic.' -%}{%- assign t_newsph = 'E-mailul tău' -%}
+ {%- assign t_newsb = 'Abonează-te' -%}{%- assign t_newsfine = 'Prin abonare accepți politica de confidențialitate.' -%}{%- assign t_newsok = 'Mulțumim — verifică-ți e-mailul.' -%}
+ {%- assign t_lead = 'Oameni, produse și munți. Filme și povești despre cum se naște echipamentul nostru — și cu cine.' -%}{%- assign t_hubintro = 'Born in the Carpathians este locul în care arătăm cum lucrăm: oamenii care testează echipamentul, produsele care ies din asta și munții care decid ce rezistă cu adevărat. Fiecare capitol înseamnă un film și trei povești.' -%}{%- assign t_herocta = 'Începe cu capitolul 01' -%}
+ {%- assign t_ch1sub = 'Cum am făcut pantofi pentru munte' -%}{%- assign t_ch2sub = 'Peak Flow, de la prima schiță la prima coborâre' -%}{%- assign t_ch3sub = 'Un sezon pe schiuri de tură, deasupra limitei pădurii' -%}
+ {%- assign t_ch4sub = 'Ce trebuie să ducă un rucsac — și cât nu are voie să cântărească' -%}{%- assign t_archive = 'Toate articolele' -%}
+{%- endcase -%}
+{%- comment -%}
+ ── Configuration ─────────────────────────────────────────────────────────────
+ BITC_BLOG handle of the blog that carries the series. Used when the page is not
+ a blog template (the hub is a normal page and has no `blog` object).
+ The live store's general blog is `novinky`; the series gets its own blog
+ because a Liquid loop over `blog.articles` stops at the newest 50, and
+ Novinky already holds ~25 material entries and keeps growing — chapter
+ articles would eventually fall out of the hub's reach.
+ BITC_SERIES series tag, used only when the series shares a blog with other content.
+ Leave empty when the series has its own blog (the recommended setup).
+ CH_TAGS chapter tags, in order. An article belongs to a chapter by carrying its
+ tag; a chapter with no published article renders as "coming soon".
+ CH_NAMES chapter names. Proper names and product lines stay in English in every
+ market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
+ PER cards per page in the archive grid.
+ ──────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+{%- assign BITC_BLOG = 'novinky' -%}
+{%- assign BITC_SERIES = '' -%}
+{%- assign BITC_HUB = '/pages/born-in-the-carpathians' -%}
+{%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
+{%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
+{%- assign PER = 12 -%}
+{%- comment -%}
+ `blog` exists on a blog template. On the hub page it is nil, so the handle is read
+ from the path — the segment after /blogs/, which survives a locale prefix like /de/ —
+ and only then does it fall back to BITC_BLOG.
+{%- endcomment -%}
+{%- assign bitc_blog = blog -%}
+{%- if bitc_blog == blank -%}
+ {%- assign bitc_bh = request.path | split: '/blogs/' | last | split: '/' | first -%}
+ {%- if blogs[bitc_bh] != blank -%}{%- assign bitc_blog = blogs[bitc_bh] -%}{%- endif -%}
+{%- endif -%}
+{%- if bitc_blog == blank -%}{%- assign bitc_blog = blogs[BITC_BLOG] -%}{%- endif -%}
+{%- comment -%}
+ Where the series shares a blog, the archive lives at the series tag URL and every
+ "all articles" link has to keep that filter on.
+{%- endcomment -%}
+{%- assign bitc_all_url = bitc_blog.url -%}
+{%- assign bitc_tag_prefix = bitc_blog.url | append: '/tagged/' -%}
+{%- if BITC_SERIES != blank -%}
+ {%- assign bitc_all_url = bitc_blog.url | append: '/tagged/' | append: BITC_SERIES -%}
+ {%- assign bitc_tag_prefix = bitc_all_url | append: '+' -%}
+{%- endif -%}
+{%- comment -%}
+ The series tag is the floor of this view, not a filter on it — so it never counts as
+ the active topic and never shows up as one of the pills.
+{%- endcomment -%}
+{%- assign bitc_tag = blank -%}
+{%- for tg in current_tags -%}
+ {%- assign tgh = tg | handle -%}
+ {%- if tgh != BITC_SERIES -%}{%- assign bitc_tag = tg -%}{%- break -%}{%- endif -%}
+{%- endfor -%}
+{%- assign bitc_tagh = bitc_tag | handle -%}
+<style>
+/* ── Northfinder design-manual tokens. Every value here is from the manual or
+ marked [derived]. No #000, no grey outside the Carbon tints, no pills,
+ no shadows, Montserrat in Medium 500 and Bold 700 only. ───────────────── */
+.nfb,.nfb *,.nfb *::before,.nfb *::after{box-sizing:border-box;margin:0;padding:0}
+.nfb{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;background:#FFFFFF;
+ --ink:#2B3C48; /* Carbon — all body and heading text */
+ --ink-60:#808A91; /* Carbon 60% — meta */
+ --line:#D5D8DA; /* Carbon 20% — 1px dividers, surfaces */
+ --red:#E3350E; /* Northfinder Red — large fills only */
+ --red-ink:#C72D0C; /* [derived] small red text and 14px button fills, 5.5:1 */
+ --red-hover:#AD270A; /* [derived] */
+ --red-20:#F9D7CF;
+ --r:4px;--r-sm:2px;--r-lg:8px;
+ --gutter:48px;--sec-y:96px;--block-y:32px;--wrap:1440px;
+ --ease:cubic-bezier(.2,.7,.2,1);
+ font-family:'Montserrat',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:500;font-size:16px;line-height:1.6;color:var(--ink);
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+@media(max-width:1199px){.nfb{--gutter:32px;--sec-y:72px}}
+@media(max-width:767px){.nfb{--gutter:20px;--sec-y:56px;--block-y:24px}}
+.nfb img{display:block;max-width:100%}
+.nfb a,.nfb a:visited,.nfb a:hover,.nfb a:active{color:inherit;text-decoration:none}
+.nfb button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+/* the UA maps <b> to `bolder`, which resolves to 900 inside a 700 parent — the manual
+ loads Medium and Bold only, so pin it */
+.nfb b,.nfb strong{font-weight:700}
+.nfb ._w{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
+/* type roles — manual's hierarchy, rebased for running text */
+.nfb ._eyebrow{font-size:13px;font-weight:700;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.nfb ._h1{font-size:clamp(28px,20px + 1.1vw,40px);font-weight:700;line-height:1.15;letter-spacing:0}
+.nfb ._h2{font-size:clamp(20px,17px + .35vw,24px);font-weight:700;line-height:1.25}
+.nfb ._body{font-size:16px;font-weight:500;line-height:1.6;max-width:70ch}
+.nfb ._small{font-size:13px;font-weight:500;line-height:1.5}
+@media(max-width:767px){.nfb ._eyebrow{font-size:12px}}
+/* buttons — 4px radius, no pills, flat. Primary rests on the derived red so the
+ 14px uppercase label clears 4.5:1. */
+.nfb ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;
+ border-radius:var(--r);font-size:14px;font-weight:700;line-height:1;letter-spacing:.06em;text-transform:uppercase;
+ transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease)}
+.nfb ._btn._pri{background:var(--red-ink);color:#FFFFFF}
+.nfb ._btn._pri:hover{background:var(--red-hover)}
+.nfb ._btn._sec{background:#FFFFFF;color:var(--ink);border:1px solid var(--ink)}
+.nfb ._btn._sec:hover{background:var(--ink);color:#FFFFFF}
+@media(max-width:767px){.nfb ._btn{height:52px;width:100%}}
+/* image placeholder — a post with no cover must not collapse the grid */
+.nfb ._ph{position:relative;background:var(--line);overflow:hidden}
+.nfb ._ph::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(43,60,72,.06) 0 10px,rgba(43,60,72,0) 10px 20px)}
+.nfb ._ph::after{content:attr(data-ph);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-60);white-space:nowrap}
+.nfb ._sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nfb a:focus-visible,.nfb button:focus-visible,.nfb input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.nfb *,.nfb *::before,.nfb *::after{transition:none!important;animation:none!important}}
+/* ── LIST S1 · series header, chapter tabs, search ──────────────────────────── */
+._ls1{padding:clamp(32px,3vw,56px) 0 0}
+._ls1 ._eyebrow{color:var(--ink-60)}
+._ls1 ._h1{margin-top:12px}
+._ls1 ._lead{margin-top:16px;max-width:62ch;font-size:16px;font-weight:500;line-height:1.6}
+._ls1 ._bar{margin-top:clamp(24px,2.4vw,40px);display:flex;align-items:flex-end;justify-content:space-between;gap:24px;border-bottom:1px solid var(--line)}
+._ls1 ._tabs{display:flex;gap:24px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+._ls1 ._tabs::-webkit-scrollbar{display:none}
+._ls1 ._tab{position:relative;padding:0 2px 12px;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+ line-height:1.2;color:var(--ink-60);white-space:nowrap;transition:color .18s var(--ease)}
+._ls1 ._tab::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .22s var(--ease)}
+._ls1 ._tab:hover{color:var(--ink)}
+._ls1 ._tab[aria-current="page"]{color:var(--ink)}
+._ls1 ._tab[aria-current="page"]::after{transform:scaleX(1)}
+._ls1 ._search{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:0 8px 0 12px;height:44px;min-width:240px;
+ border:1px solid var(--line);border-radius:var(--r);background:#FFFFFF;transition:border-color .18s var(--ease)}
+._ls1 ._search:focus-within{border-color:var(--ink)}
+._ls1 ._search svg{flex:0 0 auto;color:var(--ink-60)}
+._ls1 ._search input{flex:1 1 auto;min-width:0;height:100%;border:0;outline:0;background:none;font:inherit;font-size:14px;font-weight:500;color:var(--ink)}
+._ls1 ._search input::placeholder{color:var(--ink-60)}
+._ls1 ._search button{width:32px;height:32px;border-radius:var(--r);display:grid;place-items:center;
+ transition:background-color .18s var(--ease),color .18s var(--ease)}
+._ls1 ._search button:hover{background:var(--ink);color:#FFFFFF}
+@media(max-width:767px){
+ ._ls1 ._bar{flex-direction:column-reverse;align-items:stretch;gap:16px}
+ ._ls1 ._search{margin-bottom:0;width:100%;height:52px}
+ ._ls1 ._tabs{margin:0 calc(var(--gutter) * -1);padding:0 var(--gutter)}
+}
+</style>
+<section class="nfb _ls1" aria-labelledby="bitc-h1">
+ <div class="_w">
+ <a class="_sr" href="#bitc-results">{{ t_jump }}</a>
+ {%- comment -%}
+ While the hub page does not exist, the eyebrow is just the shop name. When the hub
+ is published, swap this line for the commented one below and it becomes the way back.
+ <p class="_eyebrow"><a href="{{ BITC_HUB }}">Born in the Carpathians</a></p>
+ {%- endcomment -%}
+ <p class="_eyebrow">{{ shop.name | default: 'Northfinder' }}</p>
+ <h1 class="_h1" id="bitc-h1">{{ bitc_blog.title | default: 'Born in the Carpathians' }}</h1>
+ <p class="_lead">{{ bitc_blog.metafields.custom.standfirst | default: t_lead }}</p>
+ <div class="_bar">
+ {%- comment -%}
+ Tabs are the chapter level of the navigation; the pills below the fold are the
+ topic level. A chapter appears here only once it has an article.
+ {%- endcomment -%}
+ <nav class="_tabs" aria-label="{{ t_chapters }}">
+ <a class="_tab" href="{{ bitc_all_url }}"{% if bitc_tag == blank %} aria-current="page"{% endif %}>{{ t_allcat }}</a>
+ {%- assign ch_tags = CH_TAGS | split: ',' -%}
+ {%- for ct in ch_tags -%}
+ {%- assign ctag = ct | strip -%}
+ {%- if forloop.index < 10 -%}{%- assign cnum = forloop.index | prepend: '0' -%}{%- else -%}{%- assign cnum = forloop.index -%}{%- endif -%}
+ {%- assign cn = 0 -%}
+ {%- for a in bitc_blog.articles limit: 50 -%}
+ {%- assign bitc_has = false -%}
+ {%- for tg in a.tags -%}
+ {%- assign tgh2 = tg | handle -%}
+ {%- if tgh2 == ctag -%}{%- assign bitc_has = true -%}{%- break -%}{%- endif -%}
+ {%- endfor -%}
+ {%- if bitc_has -%}{%- assign cn = cn | plus: 1 -%}{%- endif -%}
+ {%- endfor -%}
+ {%- if cn > 0 -%}
+ <a class="_tab" href="{{ bitc_tag_prefix }}{{ ctag }}"{% if bitc_tagh == ctag %} aria-current="page"{% endif %}>{{ t_chapter }} {{ cnum }}</a>
+ {%- endif -%}
+ {%- endfor -%}
+ </nav>
+ <form class="_search" action="{{ routes.search_url }}" method="get" role="search">
+ <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.2 3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+ <label class="_sr" for="bitc-q">{{ t_search }}</label>
+ <input id="bitc-q" type="search" name="q" placeholder="{{ t_search }}" autocomplete="off">
+ <input type="hidden" name="type" value="article">
+ <button type="submit" aria-label="{{ t_search }}">
+ <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7h9M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+ </button>
+ </form>
+ </div>
+ </div>
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-m89qx0g69i9"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-9ixfwxr2lbq"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-m89qx0g69i9" deep="2">{%- comment -%} ══ LIST S2 · latest band ══ {%- endcomment -%}
+{%- comment -%}
+ UI labels for both Born in the Carpathians pages. Server-rendered from
+ request.locale, so there is no JS dictionary and the words are in the HTML for
+ search engines. A new market is one `when` branch; anything else falls back to EN.
+ Register is informal second person in every language (brand standard, tone of voice).
+{%- endcomment -%}
+{%- assign LOC = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign t_jump = 'Skip to episodes' -%}
+{%- assign t_search = 'Search articles' -%}
+{%- assign t_chapters = 'Chapters' -%}
+{%- assign t_topics = 'Topics' -%}
+{%- assign t_pagenav = 'Pagination' -%}
+{%- assign t_allcat = 'All' -%}
+{%- assign t_all = 'See all' -%}
+{%- assign t_latest = 'Latest' -%}
+{%- assign t_res = 'Results:' -%}
+{%- assign t_of = 'of' -%}
+{%- assign t_clear = 'Clear filter' -%}
+{%- assign t_read = 'min read' -%}
+{%- assign t_video = 'Video' -%}
+{%- assign t_watch = 'Watch the episode' -%}
+{%- assign t_episode = 'Episode' -%}
+{%- assign t_chapter = 'Chapter' -%}
+{%- assign t_soon = 'Coming soon' -%}
+{%- assign t_allep = 'All episodes' -%}
+{%- assign t_prev = 'Previous' -%}
+{%- assign t_next = 'Next' -%}
+{%- assign t_emptyh = 'Nothing here yet' -%}
+{%- assign t_emptyp = 'No article carries this topic yet. Pick another one, or browse everything.' -%}
+{%- assign t_emptyb = 'Show all articles' -%}
+{%- assign t_datefmt = '%b %-d, %Y' -%}
+{%- assign t_newsh = 'Don&#39;t miss the next episode' -%}
+{%- assign t_newsp = 'One email when a new chapter goes live. No noise, unsubscribe in one click.' -%}
+{%- assign t_newsph = 'Your email' -%}
+{%- assign t_newsb = 'Subscribe' -%}
+{%- assign t_newsfine = 'By subscribing you agree to our privacy policy.' -%}
+{%- assign t_newsok = 'Thanks — check your inbox.' -%}
+{%- assign t_lead = 'People, products and mountains. Films and stories about how our gear is made — and who it is made with.' -%}
+{%- assign t_hubintro = 'Born in the Carpathians is where we show the work: the people who test the gear, the products that come out of it, and the mountains that decide what actually holds. Every chapter is one film and three stories.' -%}
+{%- assign t_herocta = 'Start with Chapter 01' -%}
+{%- assign t_ch1sub = 'How we made shoes for the mountains' -%}
+{%- assign t_ch2sub = 'Peak Flow, from the first sketch to the first descent' -%}
+{%- assign t_ch3sub = 'A season on skis, above the treeline' -%}
+{%- assign t_ch4sub = 'What a pack has to carry — and what it must not weigh' -%}
+{%- assign t_archive = 'All articles' -%}
+{%- case LOC -%}
+{%- when 'sk' -%}
+ {%- assign t_jump = 'Preskočiť na epizódy' -%}{%- assign t_search = 'Hľadať v článkoch' -%}{%- assign t_chapters = 'Kapitoly' -%}
+ {%- assign t_topics = 'Témy' -%}{%- assign t_pagenav = 'Stránkovanie' -%}{%- assign t_allcat = 'Všetko' -%}
+ {%- assign t_all = 'Zobraziť všetko' -%}{%- assign t_latest = 'Najnovšie' -%}{%- assign t_res = 'Výsledky:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Zrušiť filter' -%}{%- assign t_read = 'min čítania' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Pozrieť epizódu' -%}{%- assign t_episode = 'Epizóda' -%}
+ {%- assign t_chapter = 'Kapitola' -%}{%- assign t_soon = 'Už čoskoro' -%}{%- assign t_allep = 'Všetky epizódy' -%}
+ {%- assign t_prev = 'Predchádzajúca' -%}{%- assign t_next = 'Ďalšia' -%}{%- assign t_emptyh = 'Tu zatiaľ nič nie je' -%}
+ {%- assign t_emptyp = 'Túto tému zatiaľ nemá žiadny článok. Vyber si inú alebo si prezri všetko.' -%}{%- assign t_emptyb = 'Zobraziť všetky články' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nezmeškaj ďalšiu epizódu' -%}{%- assign t_newsp = 'Jeden e-mail, keď vyjde nová kapitola. Žiadny spam, odhlásiš sa jedným klikom.' -%}{%- assign t_newsph = 'Tvoj e-mail' -%}
+ {%- assign t_newsb = 'Prihlásiť sa' -%}{%- assign t_newsfine = 'Prihlásením súhlasíš so zásadami ochrany osobných údajov.' -%}{%- assign t_newsok = 'Ďakujeme — skontroluj si e-mail.' -%}
+ {%- assign t_lead = 'Ľudia, produkty a hory. Filmy a príbehy o tom, ako vzniká naša výbava — a s kým.' -%}{%- assign t_hubintro = 'Born in the Carpathians je miesto, kde ukazujeme, ako to robíme: ľudí, ktorí výbavu testujú, produkty, ktoré z toho vzniknú, a hory, ktoré rozhodnú, čo naozaj drží. Každá kapitola je jeden film a tri príbehy.' -%}{%- assign t_herocta = 'Začni kapitolou 01' -%}
+ {%- assign t_ch1sub = 'Ako sme robili topánky do hôr' -%}{%- assign t_ch2sub = 'Peak Flow, od prvej skice po prvý zjazd' -%}{%- assign t_ch3sub = 'Sezóna na skialpoch, nad hranicou lesa' -%}
+ {%- assign t_ch4sub = 'Čo musí batoh uniesť — a čo už nesmie vážiť' -%}{%- assign t_archive = 'Všetky články' -%}
+{%- when 'cs' -%}
+ {%- assign t_jump = 'Přeskočit na epizody' -%}{%- assign t_search = 'Hledat v článcích' -%}{%- assign t_chapters = 'Kapitoly' -%}
+ {%- assign t_topics = 'Témata' -%}{%- assign t_pagenav = 'Stránkování' -%}{%- assign t_allcat = 'Vše' -%}
+ {%- assign t_all = 'Zobrazit vše' -%}{%- assign t_latest = 'Nejnovější' -%}{%- assign t_res = 'Výsledky:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Zrušit filtr' -%}{%- assign t_read = 'min čtení' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Přehrát epizodu' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Kapitola' -%}{%- assign t_soon = 'Už brzy' -%}{%- assign t_allep = 'Všechny epizody' -%}
+ {%- assign t_prev = 'Předchozí' -%}{%- assign t_next = 'Další' -%}{%- assign t_emptyh = 'Tady zatím nic není' -%}
+ {%- assign t_emptyp = 'Tohle téma zatím nemá žádný článek. Vyber si jiné nebo si prohlédni vše.' -%}{%- assign t_emptyb = 'Zobrazit všechny články' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nezmeškej další epizodu' -%}{%- assign t_newsp = 'Jeden e-mail, když vyjde nová kapitola. Žádný spam, odhlásíš se jedním klikem.' -%}{%- assign t_newsph = 'Tvůj e-mail' -%}
+ {%- assign t_newsb = 'Přihlásit se' -%}{%- assign t_newsfine = 'Přihlášením souhlasíš se zásadami ochrany osobních údajů.' -%}{%- assign t_newsok = 'Děkujeme — zkontroluj si e-mail.' -%}
+ {%- assign t_lead = 'Lidé, produkty a hory. Filmy a příběhy o tom, jak vzniká naše výbava — a s kým.' -%}{%- assign t_hubintro = 'Born in the Carpathians je místo, kde ukazujeme, jak to děláme: lidi, kteří výbavu testují, produkty, které z toho vzniknou, a hory, které rozhodnou, co opravdu drží. Každá kapitola je jeden film a tři příběhy.' -%}{%- assign t_herocta = 'Začni kapitolou 01' -%}
+ {%- assign t_ch1sub = 'Jak jsme dělali boty do hor' -%}{%- assign t_ch2sub = 'Peak Flow, od první skici po první sjezd' -%}{%- assign t_ch3sub = 'Sezona na skialpech, nad hranicí lesa' -%}
+ {%- assign t_ch4sub = 'Co musí batoh unést — a co už nesmí vážit' -%}{%- assign t_archive = 'Všechny články' -%}
+{%- when 'pl' -%}
+ {%- assign t_jump = 'Przejdź do odcinków' -%}{%- assign t_search = 'Szukaj w artykułach' -%}{%- assign t_chapters = 'Rozdziały' -%}
+ {%- assign t_topics = 'Tematy' -%}{%- assign t_pagenav = 'Paginacja' -%}{%- assign t_allcat = 'Wszystko' -%}
+ {%- assign t_all = 'Zobacz wszystko' -%}{%- assign t_latest = 'Najnowsze' -%}{%- assign t_res = 'Wyniki:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Wyczyść filtr' -%}{%- assign t_read = 'min czytania' -%}
+ {%- assign t_video = 'Wideo' -%}{%- assign t_watch = 'Obejrzyj odcinek' -%}{%- assign t_episode = 'Odcinek' -%}
+ {%- assign t_chapter = 'Rozdział' -%}{%- assign t_soon = 'Już wkrótce' -%}{%- assign t_allep = 'Wszystkie odcinki' -%}
+ {%- assign t_prev = 'Poprzednia' -%}{%- assign t_next = 'Następna' -%}{%- assign t_emptyh = 'Tu jeszcze nic nie ma' -%}
+ {%- assign t_emptyp = 'Żaden artykuł nie ma jeszcze tego tematu. Wybierz inny albo przejrzyj wszystkie.' -%}{%- assign t_emptyb = 'Pokaż wszystkie artykuły' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Nie przegap kolejnego odcinka' -%}{%- assign t_newsp = 'Jeden e-mail, gdy pojawi się nowy rozdział. Bez spamu, wypiszesz się jednym kliknięciem.' -%}{%- assign t_newsph = 'Twój e-mail' -%}
+ {%- assign t_newsb = 'Zapisz się' -%}{%- assign t_newsfine = 'Zapisując się, akceptujesz politykę prywatności.' -%}{%- assign t_newsok = 'Dziękujemy — sprawdź skrzynkę.' -%}
+ {%- assign t_lead = 'Ludzie, produkty i góry. Filmy i historie o tym, jak powstaje nasz sprzęt — i z kim.' -%}{%- assign t_hubintro = 'Born in the Carpathians to miejsce, w którym pokazujemy, jak to robimy: ludzi, którzy testują sprzęt, produkty, które z tego powstają, i góry, które decydują, co naprawdę się sprawdza. Każdy rozdział to jeden film i trzy historie.' -%}{%- assign t_herocta = 'Zacznij od rozdziału 01' -%}
+ {%- assign t_ch1sub = 'Jak zrobiliśmy buty w góry' -%}{%- assign t_ch2sub = 'Peak Flow, od pierwszego szkicu do pierwszego zjazdu' -%}{%- assign t_ch3sub = 'Sezon na skiturach, powyżej granicy lasu' -%}
+ {%- assign t_ch4sub = 'Co plecak musi unieść — i ile nie może ważyć' -%}{%- assign t_archive = 'Wszystkie artykuły' -%}
+{%- when 'de' -%}
+ {%- assign t_jump = 'Zu den Episoden springen' -%}{%- assign t_search = 'Artikel durchsuchen' -%}{%- assign t_chapters = 'Kapitel' -%}
+ {%- assign t_topics = 'Themen' -%}{%- assign t_pagenav = 'Seitennavigation' -%}{%- assign t_allcat = 'Alle' -%}
+ {%- assign t_all = 'Alle ansehen' -%}{%- assign t_latest = 'Neueste' -%}{%- assign t_res = 'Ergebnisse:' -%}
+ {%- assign t_of = 'von' -%}{%- assign t_clear = 'Filter löschen' -%}{%- assign t_read = 'Min. Lesezeit' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Episode ansehen' -%}{%- assign t_episode = 'Episode' -%}
+ {%- assign t_chapter = 'Kapitel' -%}{%- assign t_soon = 'Bald verfügbar' -%}{%- assign t_allep = 'Alle Episoden' -%}
+ {%- assign t_prev = 'Zurück' -%}{%- assign t_next = 'Weiter' -%}{%- assign t_emptyh = 'Hier ist noch nichts' -%}
+ {%- assign t_emptyp = 'Zu diesem Thema gibt es noch keinen Artikel. Wähl ein anderes oder sieh dir alles an.' -%}{%- assign t_emptyb = 'Alle Artikel ansehen' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Verpass die nächste Episode nicht' -%}{%- assign t_newsp = 'Eine E-Mail, wenn ein neues Kapitel erscheint. Kein Spam, Abmeldung mit einem Klick.' -%}{%- assign t_newsph = 'Deine E-Mail' -%}
+ {%- assign t_newsb = 'Abonnieren' -%}{%- assign t_newsfine = 'Mit der Anmeldung stimmst du unserer Datenschutzerklärung zu.' -%}{%- assign t_newsok = 'Danke — schau in dein Postfach.' -%}
+ {%- assign t_lead = 'Menschen, Produkte und Berge. Filme und Geschichten darüber, wie unsere Ausrüstung entsteht — und mit wem.' -%}{%- assign t_hubintro = 'Born in the Carpathians ist der Ort, an dem wir zeigen, wie wir arbeiten: die Menschen, die die Ausrüstung testen, die Produkte, die dabei entstehen, und die Berge, die entscheiden, was wirklich hält. Jedes Kapitel ist ein Film und drei Geschichten.' -%}{%- assign t_herocta = 'Starte mit Kapitel 01' -%}
+ {%- assign t_ch1sub = 'Wie wir Schuhe für die Berge gemacht haben' -%}{%- assign t_ch2sub = 'Peak Flow, von der ersten Skizze bis zur ersten Abfahrt' -%}{%- assign t_ch3sub = 'Eine Saison auf Tourenski, oberhalb der Baumgrenze' -%}
+ {%- assign t_ch4sub = 'Was ein Rucksack tragen muss — und was er nicht wiegen darf' -%}{%- assign t_archive = 'Alle Artikel' -%}
+{%- when 'hr' -%}
+ {%- assign t_jump = 'Preskoči na epizode' -%}{%- assign t_search = 'Traži u člancima' -%}{%- assign t_chapters = 'Poglavlja' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Straničenje' -%}{%- assign t_allcat = 'Sve' -%}
+ {%- assign t_all = 'Prikaži sve' -%}{%- assign t_latest = 'Najnovije' -%}{%- assign t_res = 'Rezultati:' -%}
+ {%- assign t_of = 'od' -%}{%- assign t_clear = 'Očisti filtar' -%}{%- assign t_read = 'min čitanja' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Pogledaj epizodu' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Poglavlje' -%}{%- assign t_soon = 'Uskoro' -%}{%- assign t_allep = 'Sve epizode' -%}
+ {%- assign t_prev = 'Prethodna' -%}{%- assign t_next = 'Sljedeća' -%}{%- assign t_emptyh = 'Ovdje još nema ničega' -%}
+ {%- assign t_emptyp = 'Nijedan članak još nema ovu temu. Odaberi drugu ili pregledaj sve.' -%}{%- assign t_emptyb = 'Prikaži sve članke' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Ne propusti sljedeću epizodu' -%}{%- assign t_newsp = 'Jedan e-mail kad izađe novo poglavlje. Bez spama, odjaviš se u jednom kliku.' -%}{%- assign t_newsph = 'Tvoj e-mail' -%}
+ {%- assign t_newsb = 'Pretplati se' -%}{%- assign t_newsfine = 'Pretplatom prihvaćaš pravila privatnosti.' -%}{%- assign t_newsok = 'Hvala — provjeri e-poštu.' -%}
+ {%- assign t_lead = 'Ljudi, proizvodi i planine. Filmovi i priče o tome kako nastaje naša oprema — i s kim.' -%}{%- assign t_hubintro = 'Born in the Carpathians mjesto je gdje pokazujemo kako radimo: ljude koji testiraju opremu, proizvode koji iz toga nastanu i planine koje odlučuju što stvarno drži. Svako poglavlje je jedan film i tri priče.' -%}{%- assign t_herocta = 'Počni s poglavljem 01' -%}
+ {%- assign t_ch1sub = 'Kako smo radili cipele za planine' -%}{%- assign t_ch2sub = 'Peak Flow, od prve skice do prvog spusta' -%}{%- assign t_ch3sub = 'Sezona na turnim skijama, iznad granice šume' -%}
+ {%- assign t_ch4sub = 'Što ruksak mora nositi — i koliko ne smije težiti' -%}{%- assign t_archive = 'Svi članci' -%}
+{%- when 'sl' -%}
+ {%- assign t_jump = 'Preskoči na epizode' -%}{%- assign t_search = 'Iskanje po člankih' -%}{%- assign t_chapters = 'Poglavja' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Strani' -%}{%- assign t_allcat = 'Vse' -%}
+ {%- assign t_all = 'Prikaži vse' -%}{%- assign t_latest = 'Najnovejše' -%}{%- assign t_res = 'Rezultati:' -%}
+ {%- assign t_of = 'od' -%}{%- assign t_clear = 'Počisti filter' -%}{%- assign t_read = 'min branja' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Poglej epizodo' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Poglavje' -%}{%- assign t_soon = 'Kmalu' -%}{%- assign t_allep = 'Vse epizode' -%}
+ {%- assign t_prev = 'Prejšnja' -%}{%- assign t_next = 'Naslednja' -%}{%- assign t_emptyh = 'Tukaj še ni ničesar' -%}
+ {%- assign t_emptyp = 'Ta tema še nima nobenega članka. Izberi drugo ali si oglej vse.' -%}{%- assign t_emptyb = 'Prikaži vse članke' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Ne zamudi naslednje epizode' -%}{%- assign t_newsp = 'En e-mail, ko izide novo poglavje. Brez spama, odjaviš se z enim klikom.' -%}{%- assign t_newsph = 'Tvoj e-naslov' -%}
+ {%- assign t_newsb = 'Naroči se' -%}{%- assign t_newsfine = 'Z naročilom sprejemaš politiko zasebnosti.' -%}{%- assign t_newsok = 'Hvala — preveri e-pošto.' -%}
+ {%- assign t_lead = 'Ljudje, izdelki in gore. Filmi in zgodbe o tem, kako nastaja naša oprema — in s kom.' -%}{%- assign t_hubintro = 'Born in the Carpathians je kraj, kjer pokažemo, kako delamo: ljudi, ki opremo testirajo, izdelke, ki iz tega nastanejo, in gore, ki odločijo, kaj zares drži. Vsako poglavje je en film in tri zgodbe.' -%}{%- assign t_herocta = 'Začni s poglavjem 01' -%}
+ {%- assign t_ch1sub = 'Kako smo delali čevlje za gore' -%}{%- assign t_ch2sub = 'Peak Flow, od prve skice do prvega spusta' -%}{%- assign t_ch3sub = 'Sezona na turnih smučeh, nad gozdno mejo' -%}
+ {%- assign t_ch4sub = 'Kaj mora nahrbtnik nositi — in koliko ne sme tehtati' -%}{%- assign t_archive = 'Vsi članki' -%}
+{%- when 'bg' -%}
+ {%- assign t_jump = 'Към епизодите' -%}{%- assign t_search = 'Търсене в статиите' -%}{%- assign t_chapters = 'Глави' -%}
+ {%- assign t_topics = 'Теми' -%}{%- assign t_pagenav = 'Страници' -%}{%- assign t_allcat = 'Всички' -%}
+ {%- assign t_all = 'Виж всички' -%}{%- assign t_latest = 'Най-нови' -%}{%- assign t_res = 'Резултати:' -%}
+ {%- assign t_of = 'от' -%}{%- assign t_clear = 'Изчисти филтъра' -%}{%- assign t_read = 'мин. четене' -%}
+ {%- assign t_video = 'Видео' -%}{%- assign t_watch = 'Гледай епизода' -%}{%- assign t_episode = 'Епизод' -%}
+ {%- assign t_chapter = 'Глава' -%}{%- assign t_soon = 'Очаквай скоро' -%}{%- assign t_allep = 'Всички епизоди' -%}
+ {%- assign t_prev = 'Назад' -%}{%- assign t_next = 'Напред' -%}{%- assign t_emptyh = 'Тук още няма нищо' -%}
+ {%- assign t_emptyp = 'Още няма статия по тази тема. Избери друга или разгледай всички.' -%}{%- assign t_emptyb = 'Виж всички статии' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Не пропускай следващия епизод' -%}{%- assign t_newsp = 'Един имейл, когато излезе нова глава. Без спам, отписваш се с един клик.' -%}{%- assign t_newsph = 'Твоят имейл' -%}
+ {%- assign t_newsb = 'Абонирай се' -%}{%- assign t_newsfine = 'С абонирането приемаш политиката за поверителност.' -%}{%- assign t_newsok = 'Благодарим — провери си имейла.' -%}
+ {%- assign t_lead = 'Хора, продукти и планини. Филми и истории за това как се създава екипировката ни — и с кого.' -%}{%- assign t_hubintro = 'Born in the Carpathians е мястото, където показваме как работим: хората, които тестват екипировката, продуктите, които се раждат от това, и планините, които решават кое наистина издържа. Всяка глава е един филм и три истории.' -%}{%- assign t_herocta = 'Започни с глава 01' -%}
+ {%- assign t_ch1sub = 'Как направихме обувки за планината' -%}{%- assign t_ch2sub = 'Peak Flow, от първата скица до първото спускане' -%}{%- assign t_ch3sub = 'Сезон на ски туринг, над горската граница' -%}
+ {%- assign t_ch4sub = 'Какво трябва да носи една раница — и колко не бива да тежи' -%}{%- assign t_archive = 'Всички статии' -%}
+{%- when 'ro' -%}
+ {%- assign t_jump = 'Sari la episoade' -%}{%- assign t_search = 'Caută în articole' -%}{%- assign t_chapters = 'Capitole' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Paginare' -%}{%- assign t_allcat = 'Toate' -%}
+ {%- assign t_all = 'Vezi tot' -%}{%- assign t_latest = 'Cele mai noi' -%}{%- assign t_res = 'Rezultate:' -%}
+ {%- assign t_of = 'din' -%}{%- assign t_clear = 'Șterge filtrul' -%}{%- assign t_read = 'min citire' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Vezi episodul' -%}{%- assign t_episode = 'Episod' -%}
+ {%- assign t_chapter = 'Capitol' -%}{%- assign t_soon = 'În curând' -%}{%- assign t_allep = 'Toate episoadele' -%}
+ {%- assign t_prev = 'Anterioara' -%}{%- assign t_next = 'Următoarea' -%}{%- assign t_emptyh = 'Aici nu e încă nimic' -%}
+ {%- assign t_emptyp = 'Niciun articol nu are încă această temă. Alege alta sau vezi tot.' -%}{%- assign t_emptyb = 'Vezi toate articolele' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Nu rata episodul următor' -%}{%- assign t_newsp = 'Un e-mail când apare un capitol nou. Fără spam, te dezabonezi cu un clic.' -%}{%- assign t_newsph = 'E-mailul tău' -%}
+ {%- assign t_newsb = 'Abonează-te' -%}{%- assign t_newsfine = 'Prin abonare accepți politica de confidențialitate.' -%}{%- assign t_newsok = 'Mulțumim — verifică-ți e-mailul.' -%}
+ {%- assign t_lead = 'Oameni, produse și munți. Filme și povești despre cum se naște echipamentul nostru — și cu cine.' -%}{%- assign t_hubintro = 'Born in the Carpathians este locul în care arătăm cum lucrăm: oamenii care testează echipamentul, produsele care ies din asta și munții care decid ce rezistă cu adevărat. Fiecare capitol înseamnă un film și trei povești.' -%}{%- assign t_herocta = 'Începe cu capitolul 01' -%}
+ {%- assign t_ch1sub = 'Cum am făcut pantofi pentru munte' -%}{%- assign t_ch2sub = 'Peak Flow, de la prima schiță la prima coborâre' -%}{%- assign t_ch3sub = 'Un sezon pe schiuri de tură, deasupra limitei pădurii' -%}
+ {%- assign t_ch4sub = 'Ce trebuie să ducă un rucsac — și cât nu are voie să cântărească' -%}{%- assign t_archive = 'Toate articolele' -%}
+{%- endcase -%}
+{%- comment -%}
+ ── Configuration ─────────────────────────────────────────────────────────────
+ BITC_BLOG handle of the blog that carries the series. Used when the page is not
+ a blog template (the hub is a normal page and has no `blog` object).
+ The live store's general blog is `novinky`; the series gets its own blog
+ because a Liquid loop over `blog.articles` stops at the newest 50, and
+ Novinky already holds ~25 material entries and keeps growing — chapter
+ articles would eventually fall out of the hub's reach.
+ BITC_SERIES series tag, used only when the series shares a blog with other content.
+ Leave empty when the series has its own blog (the recommended setup).
+ CH_TAGS chapter tags, in order. An article belongs to a chapter by carrying its
+ tag; a chapter with no published article renders as "coming soon".
+ CH_NAMES chapter names. Proper names and product lines stay in English in every
+ market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
+ PER cards per page in the archive grid.
+ ──────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+{%- assign BITC_BLOG = 'novinky' -%}
+{%- assign BITC_SERIES = '' -%}
+{%- assign BITC_HUB = '/pages/born-in-the-carpathians' -%}
+{%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
+{%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
+{%- assign PER = 12 -%}
+{%- comment -%}
+ `blog` exists on a blog template. On the hub page it is nil, so the handle is read
+ from the path — the segment after /blogs/, which survives a locale prefix like /de/ —
+ and only then does it fall back to BITC_BLOG.
+{%- endcomment -%}
+{%- assign bitc_blog = blog -%}
+{%- if bitc_blog == blank -%}
+ {%- assign bitc_bh = request.path | split: '/blogs/' | last | split: '/' | first -%}
+ {%- if blogs[bitc_bh] != blank -%}{%- assign bitc_blog = blogs[bitc_bh] -%}{%- endif -%}
+{%- endif -%}
+{%- if bitc_blog == blank -%}{%- assign bitc_blog = blogs[BITC_BLOG] -%}{%- endif -%}
+{%- comment -%}
+ Where the series shares a blog, the archive lives at the series tag URL and every
+ "all articles" link has to keep that filter on.
+{%- endcomment -%}
+{%- assign bitc_all_url = bitc_blog.url -%}
+{%- assign bitc_tag_prefix = bitc_blog.url | append: '/tagged/' -%}
+{%- if BITC_SERIES != blank -%}
+ {%- assign bitc_all_url = bitc_blog.url | append: '/tagged/' | append: BITC_SERIES -%}
+ {%- assign bitc_tag_prefix = bitc_all_url | append: '+' -%}
+{%- endif -%}
+{%- comment -%}
+ The series tag is the floor of this view, not a filter on it — so it never counts as
+ the active topic and never shows up as one of the pills.
+{%- endcomment -%}
+{%- assign bitc_tag = blank -%}
+{%- for tg in current_tags -%}
+ {%- assign tgh = tg | handle -%}
+ {%- if tgh != BITC_SERIES -%}{%- assign bitc_tag = tg -%}{%- break -%}{%- endif -%}
+{%- endfor -%}
+{%- assign bitc_tagh = bitc_tag | handle -%}
+{%- comment -%}
+ Hidden when a chapter or topic filter is on: a filtered view should be one honest
+ list, not a fixed band of newest posts with a filtered grid under it.
+{%- endcomment -%}
+{%- assign bitc_n = bitc_blog.articles_count | default: 0 -%}
+{%- if bitc_tag == blank and bitc_n > 1 -%}
+<style>
+/* ── Northfinder design-manual tokens. Every value here is from the manual or
+ marked [derived]. No #000, no grey outside the Carbon tints, no pills,
+ no shadows, Montserrat in Medium 500 and Bold 700 only. ───────────────── */
+.nfb,.nfb *,.nfb *::before,.nfb *::after{box-sizing:border-box;margin:0;padding:0}
+.nfb{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;background:#FFFFFF;
+ --ink:#2B3C48; /* Carbon — all body and heading text */
+ --ink-60:#808A91; /* Carbon 60% — meta */
+ --line:#D5D8DA; /* Carbon 20% — 1px dividers, surfaces */
+ --red:#E3350E; /* Northfinder Red — large fills only */
+ --red-ink:#C72D0C; /* [derived] small red text and 14px button fills, 5.5:1 */
+ --red-hover:#AD270A; /* [derived] */
+ --red-20:#F9D7CF;
+ --r:4px;--r-sm:2px;--r-lg:8px;
+ --gutter:48px;--sec-y:96px;--block-y:32px;--wrap:1440px;
+ --ease:cubic-bezier(.2,.7,.2,1);
+ font-family:'Montserrat',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:500;font-size:16px;line-height:1.6;color:var(--ink);
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+@media(max-width:1199px){.nfb{--gutter:32px;--sec-y:72px}}
+@media(max-width:767px){.nfb{--gutter:20px;--sec-y:56px;--block-y:24px}}
+.nfb img{display:block;max-width:100%}
+.nfb a,.nfb a:visited,.nfb a:hover,.nfb a:active{color:inherit;text-decoration:none}
+.nfb button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+/* the UA maps <b> to `bolder`, which resolves to 900 inside a 700 parent — the manual
+ loads Medium and Bold only, so pin it */
+.nfb b,.nfb strong{font-weight:700}
+.nfb ._w{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
+/* type roles — manual's hierarchy, rebased for running text */
+.nfb ._eyebrow{font-size:13px;font-weight:700;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.nfb ._h1{font-size:clamp(28px,20px + 1.1vw,40px);font-weight:700;line-height:1.15;letter-spacing:0}
+.nfb ._h2{font-size:clamp(20px,17px + .35vw,24px);font-weight:700;line-height:1.25}
+.nfb ._body{font-size:16px;font-weight:500;line-height:1.6;max-width:70ch}
+.nfb ._small{font-size:13px;font-weight:500;line-height:1.5}
+@media(max-width:767px){.nfb ._eyebrow{font-size:12px}}
+/* buttons — 4px radius, no pills, flat. Primary rests on the derived red so the
+ 14px uppercase label clears 4.5:1. */
+.nfb ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;
+ border-radius:var(--r);font-size:14px;font-weight:700;line-height:1;letter-spacing:.06em;text-transform:uppercase;
+ transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease)}
+.nfb ._btn._pri{background:var(--red-ink);color:#FFFFFF}
+.nfb ._btn._pri:hover{background:var(--red-hover)}
+.nfb ._btn._sec{background:#FFFFFF;color:var(--ink);border:1px solid var(--ink)}
+.nfb ._btn._sec:hover{background:var(--ink);color:#FFFFFF}
+@media(max-width:767px){.nfb ._btn{height:52px;width:100%}}
+/* image placeholder — a post with no cover must not collapse the grid */
+.nfb ._ph{position:relative;background:var(--line);overflow:hidden}
+.nfb ._ph::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(43,60,72,.06) 0 10px,rgba(43,60,72,0) 10px 20px)}
+.nfb ._ph::after{content:attr(data-ph);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-60);white-space:nowrap}
+.nfb ._sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nfb a:focus-visible,.nfb button:focus-visible,.nfb input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.nfb *,.nfb *::before,.nfb *::after{transition:none!important;animation:none!important}}
+/* ── shared card atoms (episode card, compact row, filter control) ───────────── */
+._chip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border:1px solid var(--line);
+ border-radius:var(--r-sm);background:#FFFFFF;font-size:12px;font-weight:700;letter-spacing:.08em;
+ text-transform:uppercase;color:var(--ink);white-space:nowrap}
+._chip._on{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+._meta{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--ink-60)}
+._meta ._bar{width:1px;height:12px;background:var(--line);flex:0 0 auto}
+/* square, never circular — the manual allows no circular badges but the symbol lockup */
+._arw{width:40px;height:40px;flex:0 0 auto;border:1px solid var(--line);border-radius:var(--r);display:grid;place-items:center;
+ color:var(--ink);transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease)}
+._play{position:absolute;left:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;
+ border-radius:var(--r);background:var(--red);color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+._card{display:flex;flex-direction:column;height:100%}
+._card ._shot{position:relative;overflow:hidden;border-radius:var(--r);background:var(--line)}
+._card ._shot img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+._card ._shot ._ph{position:absolute;inset:0}
+._card ._shot ._chip{position:absolute;left:16px;top:16px}
+._card ._ep{margin-top:16px;color:var(--ink-60)}
+._card ._ep b{color:var(--ink)}
+._card ._shot + ._h{margin-top:16px}
+._card ._h{margin-top:8px;font-size:18px;font-weight:700;line-height:1.3;
+ display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+._card ._deck{margin-top:8px;font-size:16px;font-weight:500;line-height:1.6;
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+._card ._foot{margin-top:auto;padding-top:16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+._card:hover ._shot img{transform:scale(1.03)}
+._card:hover ._arw{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+._card:hover ._h{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+._lk{display:block;height:100%}
+@media(max-width:767px){._card ._h{font-size:17px}}
+/* ── LIST S2 · latest band: the newest episode large, the next three compact ─── */
+._ls2{padding:var(--block-y) 0 var(--sec-y)}
+._ls2 ._head{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:var(--block-y)}
+._ls2 ._all{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:1px solid var(--ink);border-radius:var(--r);
+ font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:background-color .18s var(--ease),color .18s var(--ease)}
+._ls2 ._all:hover{background:var(--ink);color:#FFFFFF}
+._ls2 ._grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px}
+._ls2 ._lead ._shot{aspect-ratio:16/10}
+._ls2 ._lead ._h{font-size:clamp(20px,17px + .4vw,26px);-webkit-line-clamp:2}
+._ls2 ._lead ._deck{-webkit-line-clamp:3}
+._ls2 ._list{display:flex;flex-direction:column}
+._ls2 ._row{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:16px;align-items:center;padding:20px 0;border-top:1px solid var(--line)}
+._ls2 ._list ._row:first-child{padding-top:0;border-top:0}
+._ls2 ._row ._rh{margin-top:8px;font-size:17px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+._ls2 ._row ._rd{margin-top:6px;font-size:14px;font-weight:500;line-height:1.5;color:var(--ink-60);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+._ls2 ._row ._thumb{position:relative;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;background:var(--line)}
+._ls2 ._row ._thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+._ls2 ._row ._thumb ._ph{position:absolute;inset:0}
+._ls2 ._row:hover ._rh{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+._ls2 ._row:hover ._thumb img{transform:scale(1.04)}
+@media(max-width:1199px){._ls2 ._grid{grid-template-columns:minmax(0,1fr);gap:32px}._ls2 ._list ._row:first-child{padding-top:20px;border-top:1px solid var(--line)}}
+@media(max-width:767px){._ls2 ._head{flex-direction:column;align-items:stretch}._ls2 ._all{width:100%;justify-content:center;height:48px}._ls2 ._row{grid-template-columns:minmax(0,1fr) 96px}}
+</style>
+<section class="nfb _ls2" aria-labelledby="bitc-h2-latest">
+ <div class="_w">
+ <div class="_head">
+ <h2 class="_h2" id="bitc-h2-latest">{{ t_latest }}</h2>
+ <a class="_all" href="#bitc-results">{{ t_all }}
+ <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h8.5M7 3l3.5 3.5L7 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+ </a>
+ </div>
+ <div class="_grid">
+ {%- for a in bitc_blog.articles limit: 4 -%}
+ {%- assign ep_idx = forloop.index -%}
+ {%- comment -%} reading time, HERO video, episode number {%- endcomment -%}
+ {%- assign ep_wc = a.content | strip_html | split: ' ' | size -%}
+ {%- assign ep_rt = ep_wc | divided_by: 200 -%}
+ {%- if ep_rt < 1 -%}{%- assign ep_rt = 1 -%}{%- endif -%}
+ {%- assign ep_vid = a.metafields.custom.video_url -%}
+ {%- assign ep_no = '' -%}
+ {%- assign ep_inch = false -%}
+ {%- for tg in a.tags -%}
+ {%- assign tl = tg | handle -%}
+ {%- assign tp = tl | slice: 0, 2 -%}
+ {%- assign tlen = tl | size -%}
+ {%- if tp == 'ep' and tlen == 4 -%}{%- assign ep_no = tl | remove_first: 'ep' -%}{%- endif -%}
+ {%- assign tp8 = tl | slice: 0, 8 -%}
+ {%- if tp8 == 'chapter-' -%}{%- assign ep_inch = true -%}{%- endif -%}
+ {%- endfor -%}
+ {%- comment -%}
+ An article outside every chapter is not an episode: no number is invented for it
+ and the episode line is left off the card entirely.
+ {%- endcomment -%}
+ {%- if ep_no == blank and ep_inch -%}
+ {%- if ep_idx < 10 -%}{%- assign ep_no = ep_idx | prepend: '0' -%}{%- else -%}{%- assign ep_no = ep_idx -%}{%- endif -%}
+ {%- endif -%}
+ {%- if forloop.first -%}
+ <article class="_lead">
+ <a class="_lk _card" href="{{ a.url }}">
+ <div class="_shot">
+ {%- if a.image -%}
+ <img src="{{ a.image | image_url: width: 1200 }}"
+ srcset="{{ a.image | image_url: width: 640 }} 640w, {{ a.image | image_url: width: 1000 }} 1000w, {{ a.image | image_url: width: 1600 }} 1600w"
+ sizes="(max-width:1199px) 100vw, 52vw"
+ width="1200" height="750" loading="eager" fetchpriority="high"
+ alt="{{ a.image.alt | default: a.title | escape }}">
+ {%- else -%}
+ <div class="_ph" data-ph="{{ bitc_blog.title | escape }}"></div>
+ {%- endif -%}
+ {%- assign ep_cat = a.tags | first -%}
+ {%- if ep_cat != blank -%}<span class="_chip">{{ ep_cat }}</span>{%- endif -%}
+ {%- if ep_vid != blank -%}
+ <span class="_play"><svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg> {{ t_video }}</span>
+ {%- endif -%}
+ </div>
+ {%- if ep_no != blank -%}<p class="_ep _eyebrow"><b>{{ t_episode }} {{ ep_no }}</b></p>{%- endif -%}
+ <h3 class="_h">{{ a.title }}</h3>
+ {%- if a.excerpt_or_content != blank -%}
+ <p class="_deck">{{ a.excerpt_or_content | strip_html | truncate: 185 }}</p>
+ {%- endif -%}
+ <div class="_foot">
+ <span class="_meta">
+ <time datetime="{{ a.published_at | date: '%Y-%m-%d' }}">{{ a.published_at | date: t_datefmt }}</time>
+ <i class="_bar"></i><span>{{ ep_rt }} {{ t_read }}</span>
+ </span>
+ <span class="_arw" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+ </div>
+ </a>
+ </article>
+ <div class="_list">
+ {%- else -%}
+ <a class="_row _lk" href="{{ a.url }}">
+ <div>
+ {%- if ep_no != blank or ep_vid != blank -%}
+ <p class="_eyebrow" style="color:var(--ink-60)">{% if ep_no != blank %}{{ t_episode }} {{ ep_no }}{% endif %}{% if ep_no != blank and ep_vid != blank %} · {% endif %}{% if ep_vid != blank %}{{ t_video }}{% endif %}</p>
+ {%- endif -%}
+ <h3 class="_rh">{{ a.title }}</h3>
+ {%- if a.excerpt_or_content != blank -%}
+ <p class="_rd">{{ a.excerpt_or_content | strip_html | truncate: 110 }}</p>
+ {%- endif -%}
+ </div>
+ <div class="_thumb">
+ {%- if a.image -%}
+ <img src="{{ a.image | image_url: width: 320 }}" width="320" height="240" loading="lazy" decoding="async"
+ alt="{{ a.image.alt | default: a.title | escape }}">
+ {%- else -%}
+ <div class="_ph" data-ph="NF"></div>
+ {%- endif -%}
+ </div>
+ </a>
+ {%- if forloop.last -%}</div>{%- endif -%}
+ {%- endif -%}
+ {%- endfor -%}
+ </div>
+ </div>
+</section>
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-gq3noc84h6p"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-fjhbjngdb7o"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-gq3noc84h6p" deep="2">{%- comment -%} ══ LIST S3 · topic filter, counter, grid, pagination ══ {%- endcomment -%}
+{%- comment -%}
+ UI labels for both Born in the Carpathians pages. Server-rendered from
+ request.locale, so there is no JS dictionary and the words are in the HTML for
+ search engines. A new market is one `when` branch; anything else falls back to EN.
+ Register is informal second person in every language (brand standard, tone of voice).
+{%- endcomment -%}
+{%- assign LOC = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign t_jump = 'Skip to episodes' -%}
+{%- assign t_search = 'Search articles' -%}
+{%- assign t_chapters = 'Chapters' -%}
+{%- assign t_topics = 'Topics' -%}
+{%- assign t_pagenav = 'Pagination' -%}
+{%- assign t_allcat = 'All' -%}
+{%- assign t_all = 'See all' -%}
+{%- assign t_latest = 'Latest' -%}
+{%- assign t_res = 'Results:' -%}
+{%- assign t_of = 'of' -%}
+{%- assign t_clear = 'Clear filter' -%}
+{%- assign t_read = 'min read' -%}
+{%- assign t_video = 'Video' -%}
+{%- assign t_watch = 'Watch the episode' -%}
+{%- assign t_episode = 'Episode' -%}
+{%- assign t_chapter = 'Chapter' -%}
+{%- assign t_soon = 'Coming soon' -%}
+{%- assign t_allep = 'All episodes' -%}
+{%- assign t_prev = 'Previous' -%}
+{%- assign t_next = 'Next' -%}
+{%- assign t_emptyh = 'Nothing here yet' -%}
+{%- assign t_emptyp = 'No article carries this topic yet. Pick another one, or browse everything.' -%}
+{%- assign t_emptyb = 'Show all articles' -%}
+{%- assign t_datefmt = '%b %-d, %Y' -%}
+{%- assign t_newsh = 'Don&#39;t miss the next episode' -%}
+{%- assign t_newsp = 'One email when a new chapter goes live. No noise, unsubscribe in one click.' -%}
+{%- assign t_newsph = 'Your email' -%}
+{%- assign t_newsb = 'Subscribe' -%}
+{%- assign t_newsfine = 'By subscribing you agree to our privacy policy.' -%}
+{%- assign t_newsok = 'Thanks — check your inbox.' -%}
+{%- assign t_lead = 'People, products and mountains. Films and stories about how our gear is made — and who it is made with.' -%}
+{%- assign t_hubintro = 'Born in the Carpathians is where we show the work: the people who test the gear, the products that come out of it, and the mountains that decide what actually holds. Every chapter is one film and three stories.' -%}
+{%- assign t_herocta = 'Start with Chapter 01' -%}
+{%- assign t_ch1sub = 'How we made shoes for the mountains' -%}
+{%- assign t_ch2sub = 'Peak Flow, from the first sketch to the first descent' -%}
+{%- assign t_ch3sub = 'A season on skis, above the treeline' -%}
+{%- assign t_ch4sub = 'What a pack has to carry — and what it must not weigh' -%}
+{%- assign t_archive = 'All articles' -%}
+{%- case LOC -%}
+{%- when 'sk' -%}
+ {%- assign t_jump = 'Preskočiť na epizódy' -%}{%- assign t_search = 'Hľadať v článkoch' -%}{%- assign t_chapters = 'Kapitoly' -%}
+ {%- assign t_topics = 'Témy' -%}{%- assign t_pagenav = 'Stránkovanie' -%}{%- assign t_allcat = 'Všetko' -%}
+ {%- assign t_all = 'Zobraziť všetko' -%}{%- assign t_latest = 'Najnovšie' -%}{%- assign t_res = 'Výsledky:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Zrušiť filter' -%}{%- assign t_read = 'min čítania' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Pozrieť epizódu' -%}{%- assign t_episode = 'Epizóda' -%}
+ {%- assign t_chapter = 'Kapitola' -%}{%- assign t_soon = 'Už čoskoro' -%}{%- assign t_allep = 'Všetky epizódy' -%}
+ {%- assign t_prev = 'Predchádzajúca' -%}{%- assign t_next = 'Ďalšia' -%}{%- assign t_emptyh = 'Tu zatiaľ nič nie je' -%}
+ {%- assign t_emptyp = 'Túto tému zatiaľ nemá žiadny článok. Vyber si inú alebo si prezri všetko.' -%}{%- assign t_emptyb = 'Zobraziť všetky články' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nezmeškaj ďalšiu epizódu' -%}{%- assign t_newsp = 'Jeden e-mail, keď vyjde nová kapitola. Žiadny spam, odhlásiš sa jedným klikom.' -%}{%- assign t_newsph = 'Tvoj e-mail' -%}
+ {%- assign t_newsb = 'Prihlásiť sa' -%}{%- assign t_newsfine = 'Prihlásením súhlasíš so zásadami ochrany osobných údajov.' -%}{%- assign t_newsok = 'Ďakujeme — skontroluj si e-mail.' -%}
+ {%- assign t_lead = 'Ľudia, produkty a hory. Filmy a príbehy o tom, ako vzniká naša výbava — a s kým.' -%}{%- assign t_hubintro = 'Born in the Carpathians je miesto, kde ukazujeme, ako to robíme: ľudí, ktorí výbavu testujú, produkty, ktoré z toho vzniknú, a hory, ktoré rozhodnú, čo naozaj drží. Každá kapitola je jeden film a tri príbehy.' -%}{%- assign t_herocta = 'Začni kapitolou 01' -%}
+ {%- assign t_ch1sub = 'Ako sme robili topánky do hôr' -%}{%- assign t_ch2sub = 'Peak Flow, od prvej skice po prvý zjazd' -%}{%- assign t_ch3sub = 'Sezóna na skialpoch, nad hranicou lesa' -%}
+ {%- assign t_ch4sub = 'Čo musí batoh uniesť — a čo už nesmie vážiť' -%}{%- assign t_archive = 'Všetky články' -%}
+{%- when 'cs' -%}
+ {%- assign t_jump = 'Přeskočit na epizody' -%}{%- assign t_search = 'Hledat v článcích' -%}{%- assign t_chapters = 'Kapitoly' -%}
+ {%- assign t_topics = 'Témata' -%}{%- assign t_pagenav = 'Stránkování' -%}{%- assign t_allcat = 'Vše' -%}
+ {%- assign t_all = 'Zobrazit vše' -%}{%- assign t_latest = 'Nejnovější' -%}{%- assign t_res = 'Výsledky:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Zrušit filtr' -%}{%- assign t_read = 'min čtení' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Přehrát epizodu' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Kapitola' -%}{%- assign t_soon = 'Už brzy' -%}{%- assign t_allep = 'Všechny epizody' -%}
+ {%- assign t_prev = 'Předchozí' -%}{%- assign t_next = 'Další' -%}{%- assign t_emptyh = 'Tady zatím nic není' -%}
+ {%- assign t_emptyp = 'Tohle téma zatím nemá žádný článek. Vyber si jiné nebo si prohlédni vše.' -%}{%- assign t_emptyb = 'Zobrazit všechny články' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nezmeškej další epizodu' -%}{%- assign t_newsp = 'Jeden e-mail, když vyjde nová kapitola. Žádný spam, odhlásíš se jedním klikem.' -%}{%- assign t_newsph = 'Tvůj e-mail' -%}
+ {%- assign t_newsb = 'Přihlásit se' -%}{%- assign t_newsfine = 'Přihlášením souhlasíš se zásadami ochrany osobních údajů.' -%}{%- assign t_newsok = 'Děkujeme — zkontroluj si e-mail.' -%}
+ {%- assign t_lead = 'Lidé, produkty a hory. Filmy a příběhy o tom, jak vzniká naše výbava — a s kým.' -%}{%- assign t_hubintro = 'Born in the Carpathians je místo, kde ukazujeme, jak to děláme: lidi, kteří výbavu testují, produkty, které z toho vzniknou, a hory, které rozhodnou, co opravdu drží. Každá kapitola je jeden film a tři příběhy.' -%}{%- assign t_herocta = 'Začni kapitolou 01' -%}
+ {%- assign t_ch1sub = 'Jak jsme dělali boty do hor' -%}{%- assign t_ch2sub = 'Peak Flow, od první skici po první sjezd' -%}{%- assign t_ch3sub = 'Sezona na skialpech, nad hranicí lesa' -%}
+ {%- assign t_ch4sub = 'Co musí batoh unést — a co už nesmí vážit' -%}{%- assign t_archive = 'Všechny články' -%}
+{%- when 'pl' -%}
+ {%- assign t_jump = 'Przejdź do odcinków' -%}{%- assign t_search = 'Szukaj w artykułach' -%}{%- assign t_chapters = 'Rozdziały' -%}
+ {%- assign t_topics = 'Tematy' -%}{%- assign t_pagenav = 'Paginacja' -%}{%- assign t_allcat = 'Wszystko' -%}
+ {%- assign t_all = 'Zobacz wszystko' -%}{%- assign t_latest = 'Najnowsze' -%}{%- assign t_res = 'Wyniki:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Wyczyść filtr' -%}{%- assign t_read = 'min czytania' -%}
+ {%- assign t_video = 'Wideo' -%}{%- assign t_watch = 'Obejrzyj odcinek' -%}{%- assign t_episode = 'Odcinek' -%}
+ {%- assign t_chapter = 'Rozdział' -%}{%- assign t_soon = 'Już wkrótce' -%}{%- assign t_allep = 'Wszystkie odcinki' -%}
+ {%- assign t_prev = 'Poprzednia' -%}{%- assign t_next = 'Następna' -%}{%- assign t_emptyh = 'Tu jeszcze nic nie ma' -%}
+ {%- assign t_emptyp = 'Żaden artykuł nie ma jeszcze tego tematu. Wybierz inny albo przejrzyj wszystkie.' -%}{%- assign t_emptyb = 'Pokaż wszystkie artykuły' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Nie przegap kolejnego odcinka' -%}{%- assign t_newsp = 'Jeden e-mail, gdy pojawi się nowy rozdział. Bez spamu, wypiszesz się jednym kliknięciem.' -%}{%- assign t_newsph = 'Twój e-mail' -%}
+ {%- assign t_newsb = 'Zapisz się' -%}{%- assign t_newsfine = 'Zapisując się, akceptujesz politykę prywatności.' -%}{%- assign t_newsok = 'Dziękujemy — sprawdź skrzynkę.' -%}
+ {%- assign t_lead = 'Ludzie, produkty i góry. Filmy i historie o tym, jak powstaje nasz sprzęt — i z kim.' -%}{%- assign t_hubintro = 'Born in the Carpathians to miejsce, w którym pokazujemy, jak to robimy: ludzi, którzy testują sprzęt, produkty, które z tego powstają, i góry, które decydują, co naprawdę się sprawdza. Każdy rozdział to jeden film i trzy historie.' -%}{%- assign t_herocta = 'Zacznij od rozdziału 01' -%}
+ {%- assign t_ch1sub = 'Jak zrobiliśmy buty w góry' -%}{%- assign t_ch2sub = 'Peak Flow, od pierwszego szkicu do pierwszego zjazdu' -%}{%- assign t_ch3sub = 'Sezon na skiturach, powyżej granicy lasu' -%}
+ {%- assign t_ch4sub = 'Co plecak musi unieść — i ile nie może ważyć' -%}{%- assign t_archive = 'Wszystkie artykuły' -%}
+{%- when 'de' -%}
+ {%- assign t_jump = 'Zu den Episoden springen' -%}{%- assign t_search = 'Artikel durchsuchen' -%}{%- assign t_chapters = 'Kapitel' -%}
+ {%- assign t_topics = 'Themen' -%}{%- assign t_pagenav = 'Seitennavigation' -%}{%- assign t_allcat = 'Alle' -%}
+ {%- assign t_all = 'Alle ansehen' -%}{%- assign t_latest = 'Neueste' -%}{%- assign t_res = 'Ergebnisse:' -%}
+ {%- assign t_of = 'von' -%}{%- assign t_clear = 'Filter löschen' -%}{%- assign t_read = 'Min. Lesezeit' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Episode ansehen' -%}{%- assign t_episode = 'Episode' -%}
+ {%- assign t_chapter = 'Kapitel' -%}{%- assign t_soon = 'Bald verfügbar' -%}{%- assign t_allep = 'Alle Episoden' -%}
+ {%- assign t_prev = 'Zurück' -%}{%- assign t_next = 'Weiter' -%}{%- assign t_emptyh = 'Hier ist noch nichts' -%}
+ {%- assign t_emptyp = 'Zu diesem Thema gibt es noch keinen Artikel. Wähl ein anderes oder sieh dir alles an.' -%}{%- assign t_emptyb = 'Alle Artikel ansehen' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Verpass die nächste Episode nicht' -%}{%- assign t_newsp = 'Eine E-Mail, wenn ein neues Kapitel erscheint. Kein Spam, Abmeldung mit einem Klick.' -%}{%- assign t_newsph = 'Deine E-Mail' -%}
+ {%- assign t_newsb = 'Abonnieren' -%}{%- assign t_newsfine = 'Mit der Anmeldung stimmst du unserer Datenschutzerklärung zu.' -%}{%- assign t_newsok = 'Danke — schau in dein Postfach.' -%}
+ {%- assign t_lead = 'Menschen, Produkte und Berge. Filme und Geschichten darüber, wie unsere Ausrüstung entsteht — und mit wem.' -%}{%- assign t_hubintro = 'Born in the Carpathians ist der Ort, an dem wir zeigen, wie wir arbeiten: die Menschen, die die Ausrüstung testen, die Produkte, die dabei entstehen, und die Berge, die entscheiden, was wirklich hält. Jedes Kapitel ist ein Film und drei Geschichten.' -%}{%- assign t_herocta = 'Starte mit Kapitel 01' -%}
+ {%- assign t_ch1sub = 'Wie wir Schuhe für die Berge gemacht haben' -%}{%- assign t_ch2sub = 'Peak Flow, von der ersten Skizze bis zur ersten Abfahrt' -%}{%- assign t_ch3sub = 'Eine Saison auf Tourenski, oberhalb der Baumgrenze' -%}
+ {%- assign t_ch4sub = 'Was ein Rucksack tragen muss — und was er nicht wiegen darf' -%}{%- assign t_archive = 'Alle Artikel' -%}
+{%- when 'hr' -%}
+ {%- assign t_jump = 'Preskoči na epizode' -%}{%- assign t_search = 'Traži u člancima' -%}{%- assign t_chapters = 'Poglavlja' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Straničenje' -%}{%- assign t_allcat = 'Sve' -%}
+ {%- assign t_all = 'Prikaži sve' -%}{%- assign t_latest = 'Najnovije' -%}{%- assign t_res = 'Rezultati:' -%}
+ {%- assign t_of = 'od' -%}{%- assign t_clear = 'Očisti filtar' -%}{%- assign t_read = 'min čitanja' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Pogledaj epizodu' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Poglavlje' -%}{%- assign t_soon = 'Uskoro' -%}{%- assign t_allep = 'Sve epizode' -%}
+ {%- assign t_prev = 'Prethodna' -%}{%- assign t_next = 'Sljedeća' -%}{%- assign t_emptyh = 'Ovdje još nema ničega' -%}
+ {%- assign t_emptyp = 'Nijedan članak još nema ovu temu. Odaberi drugu ili pregledaj sve.' -%}{%- assign t_emptyb = 'Prikaži sve članke' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Ne propusti sljedeću epizodu' -%}{%- assign t_newsp = 'Jedan e-mail kad izađe novo poglavlje. Bez spama, odjaviš se u jednom kliku.' -%}{%- assign t_newsph = 'Tvoj e-mail' -%}
+ {%- assign t_newsb = 'Pretplati se' -%}{%- assign t_newsfine = 'Pretplatom prihvaćaš pravila privatnosti.' -%}{%- assign t_newsok = 'Hvala — provjeri e-poštu.' -%}
+ {%- assign t_lead = 'Ljudi, proizvodi i planine. Filmovi i priče o tome kako nastaje naša oprema — i s kim.' -%}{%- assign t_hubintro = 'Born in the Carpathians mjesto je gdje pokazujemo kako radimo: ljude koji testiraju opremu, proizvode koji iz toga nastanu i planine koje odlučuju što stvarno drži. Svako poglavlje je jedan film i tri priče.' -%}{%- assign t_herocta = 'Počni s poglavljem 01' -%}
+ {%- assign t_ch1sub = 'Kako smo radili cipele za planine' -%}{%- assign t_ch2sub = 'Peak Flow, od prve skice do prvog spusta' -%}{%- assign t_ch3sub = 'Sezona na turnim skijama, iznad granice šume' -%}
+ {%- assign t_ch4sub = 'Što ruksak mora nositi — i koliko ne smije težiti' -%}{%- assign t_archive = 'Svi članci' -%}
+{%- when 'sl' -%}
+ {%- assign t_jump = 'Preskoči na epizode' -%}{%- assign t_search = 'Iskanje po člankih' -%}{%- assign t_chapters = 'Poglavja' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Strani' -%}{%- assign t_allcat = 'Vse' -%}
+ {%- assign t_all = 'Prikaži vse' -%}{%- assign t_latest = 'Najnovejše' -%}{%- assign t_res = 'Rezultati:' -%}
+ {%- assign t_of = 'od' -%}{%- assign t_clear = 'Počisti filter' -%}{%- assign t_read = 'min branja' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Poglej epizodo' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Poglavje' -%}{%- assign t_soon = 'Kmalu' -%}{%- assign t_allep = 'Vse epizode' -%}
+ {%- assign t_prev = 'Prejšnja' -%}{%- assign t_next = 'Naslednja' -%}{%- assign t_emptyh = 'Tukaj še ni ničesar' -%}
+ {%- assign t_emptyp = 'Ta tema še nima nobenega članka. Izberi drugo ali si oglej vse.' -%}{%- assign t_emptyb = 'Prikaži vse članke' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Ne zamudi naslednje epizode' -%}{%- assign t_newsp = 'En e-mail, ko izide novo poglavje. Brez spama, odjaviš se z enim klikom.' -%}{%- assign t_newsph = 'Tvoj e-naslov' -%}
+ {%- assign t_newsb = 'Naroči se' -%}{%- assign t_newsfine = 'Z naročilom sprejemaš politiko zasebnosti.' -%}{%- assign t_newsok = 'Hvala — preveri e-pošto.' -%}
+ {%- assign t_lead = 'Ljudje, izdelki in gore. Filmi in zgodbe o tem, kako nastaja naša oprema — in s kom.' -%}{%- assign t_hubintro = 'Born in the Carpathians je kraj, kjer pokažemo, kako delamo: ljudi, ki opremo testirajo, izdelke, ki iz tega nastanejo, in gore, ki odločijo, kaj zares drži. Vsako poglavje je en film in tri zgodbe.' -%}{%- assign t_herocta = 'Začni s poglavjem 01' -%}
+ {%- assign t_ch1sub = 'Kako smo delali čevlje za gore' -%}{%- assign t_ch2sub = 'Peak Flow, od prve skice do prvega spusta' -%}{%- assign t_ch3sub = 'Sezona na turnih smučeh, nad gozdno mejo' -%}
+ {%- assign t_ch4sub = 'Kaj mora nahrbtnik nositi — in koliko ne sme tehtati' -%}{%- assign t_archive = 'Vsi članki' -%}
+{%- when 'bg' -%}
+ {%- assign t_jump = 'Към епизодите' -%}{%- assign t_search = 'Търсене в статиите' -%}{%- assign t_chapters = 'Глави' -%}
+ {%- assign t_topics = 'Теми' -%}{%- assign t_pagenav = 'Страници' -%}{%- assign t_allcat = 'Всички' -%}
+ {%- assign t_all = 'Виж всички' -%}{%- assign t_latest = 'Най-нови' -%}{%- assign t_res = 'Резултати:' -%}
+ {%- assign t_of = 'от' -%}{%- assign t_clear = 'Изчисти филтъра' -%}{%- assign t_read = 'мин. четене' -%}
+ {%- assign t_video = 'Видео' -%}{%- assign t_watch = 'Гледай епизода' -%}{%- assign t_episode = 'Епизод' -%}
+ {%- assign t_chapter = 'Глава' -%}{%- assign t_soon = 'Очаквай скоро' -%}{%- assign t_allep = 'Всички епизоди' -%}
+ {%- assign t_prev = 'Назад' -%}{%- assign t_next = 'Напред' -%}{%- assign t_emptyh = 'Тук още няма нищо' -%}
+ {%- assign t_emptyp = 'Още няма статия по тази тема. Избери друга или разгледай всички.' -%}{%- assign t_emptyb = 'Виж всички статии' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Не пропускай следващия епизод' -%}{%- assign t_newsp = 'Един имейл, когато излезе нова глава. Без спам, отписваш се с един клик.' -%}{%- assign t_newsph = 'Твоят имейл' -%}
+ {%- assign t_newsb = 'Абонирай се' -%}{%- assign t_newsfine = 'С абонирането приемаш политиката за поверителност.' -%}{%- assign t_newsok = 'Благодарим — провери си имейла.' -%}
+ {%- assign t_lead = 'Хора, продукти и планини. Филми и истории за това как се създава екипировката ни — и с кого.' -%}{%- assign t_hubintro = 'Born in the Carpathians е мястото, където показваме как работим: хората, които тестват екипировката, продуктите, които се раждат от това, и планините, които решават кое наистина издържа. Всяка глава е един филм и три истории.' -%}{%- assign t_herocta = 'Започни с глава 01' -%}
+ {%- assign t_ch1sub = 'Как направихме обувки за планината' -%}{%- assign t_ch2sub = 'Peak Flow, от първата скица до първото спускане' -%}{%- assign t_ch3sub = 'Сезон на ски туринг, над горската граница' -%}
+ {%- assign t_ch4sub = 'Какво трябва да носи една раница — и колко не бива да тежи' -%}{%- assign t_archive = 'Всички статии' -%}
+{%- when 'ro' -%}
+ {%- assign t_jump = 'Sari la episoade' -%}{%- assign t_search = 'Caută în articole' -%}{%- assign t_chapters = 'Capitole' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Paginare' -%}{%- assign t_allcat = 'Toate' -%}
+ {%- assign t_all = 'Vezi tot' -%}{%- assign t_latest = 'Cele mai noi' -%}{%- assign t_res = 'Rezultate:' -%}
+ {%- assign t_of = 'din' -%}{%- assign t_clear = 'Șterge filtrul' -%}{%- assign t_read = 'min citire' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Vezi episodul' -%}{%- assign t_episode = 'Episod' -%}
+ {%- assign t_chapter = 'Capitol' -%}{%- assign t_soon = 'În curând' -%}{%- assign t_allep = 'Toate episoadele' -%}
+ {%- assign t_prev = 'Anterioara' -%}{%- assign t_next = 'Următoarea' -%}{%- assign t_emptyh = 'Aici nu e încă nimic' -%}
+ {%- assign t_emptyp = 'Niciun articol nu are încă această temă. Alege alta sau vezi tot.' -%}{%- assign t_emptyb = 'Vezi toate articolele' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Nu rata episodul următor' -%}{%- assign t_newsp = 'Un e-mail când apare un capitol nou. Fără spam, te dezabonezi cu un clic.' -%}{%- assign t_newsph = 'E-mailul tău' -%}
+ {%- assign t_newsb = 'Abonează-te' -%}{%- assign t_newsfine = 'Prin abonare accepți politica de confidențialitate.' -%}{%- assign t_newsok = 'Mulțumim — verifică-ți e-mailul.' -%}
+ {%- assign t_lead = 'Oameni, produse și munți. Filme și povești despre cum se naște echipamentul nostru — și cu cine.' -%}{%- assign t_hubintro = 'Born in the Carpathians este locul în care arătăm cum lucrăm: oamenii care testează echipamentul, produsele care ies din asta și munții care decid ce rezistă cu adevărat. Fiecare capitol înseamnă un film și trei povești.' -%}{%- assign t_herocta = 'Începe cu capitolul 01' -%}
+ {%- assign t_ch1sub = 'Cum am făcut pantofi pentru munte' -%}{%- assign t_ch2sub = 'Peak Flow, de la prima schiță la prima coborâre' -%}{%- assign t_ch3sub = 'Un sezon pe schiuri de tură, deasupra limitei pădurii' -%}
+ {%- assign t_ch4sub = 'Ce trebuie să ducă un rucsac — și cât nu are voie să cântărească' -%}{%- assign t_archive = 'Toate articolele' -%}
+{%- endcase -%}
+{%- comment -%}
+ ── Configuration ─────────────────────────────────────────────────────────────
+ BITC_BLOG handle of the blog that carries the series. Used when the page is not
+ a blog template (the hub is a normal page and has no `blog` object).
+ The live store's general blog is `novinky`; the series gets its own blog
+ because a Liquid loop over `blog.articles` stops at the newest 50, and
+ Novinky already holds ~25 material entries and keeps growing — chapter
+ articles would eventually fall out of the hub's reach.
+ BITC_SERIES series tag, used only when the series shares a blog with other content.
+ Leave empty when the series has its own blog (the recommended setup).
+ CH_TAGS chapter tags, in order. An article belongs to a chapter by carrying its
+ tag; a chapter with no published article renders as "coming soon".
+ CH_NAMES chapter names. Proper names and product lines stay in English in every
+ market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
+ PER cards per page in the archive grid.
+ ──────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+{%- assign BITC_BLOG = 'novinky' -%}
+{%- assign BITC_SERIES = '' -%}
+{%- assign BITC_HUB = '/pages/born-in-the-carpathians' -%}
+{%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
+{%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
+{%- assign PER = 12 -%}
+{%- comment -%}
+ `blog` exists on a blog template. On the hub page it is nil, so the handle is read
+ from the path — the segment after /blogs/, which survives a locale prefix like /de/ —
+ and only then does it fall back to BITC_BLOG.
+{%- endcomment -%}
+{%- assign bitc_blog = blog -%}
+{%- if bitc_blog == blank -%}
+ {%- assign bitc_bh = request.path | split: '/blogs/' | last | split: '/' | first -%}
+ {%- if blogs[bitc_bh] != blank -%}{%- assign bitc_blog = blogs[bitc_bh] -%}{%- endif -%}
+{%- endif -%}
+{%- if bitc_blog == blank -%}{%- assign bitc_blog = blogs[BITC_BLOG] -%}{%- endif -%}
+{%- comment -%}
+ Where the series shares a blog, the archive lives at the series tag URL and every
+ "all articles" link has to keep that filter on.
+{%- endcomment -%}
+{%- assign bitc_all_url = bitc_blog.url -%}
+{%- assign bitc_tag_prefix = bitc_blog.url | append: '/tagged/' -%}
+{%- if BITC_SERIES != blank -%}
+ {%- assign bitc_all_url = bitc_blog.url | append: '/tagged/' | append: BITC_SERIES -%}
+ {%- assign bitc_tag_prefix = bitc_all_url | append: '+' -%}
+{%- endif -%}
+{%- comment -%}
+ The series tag is the floor of this view, not a filter on it — so it never counts as
+ the active topic and never shows up as one of the pills.
+{%- endcomment -%}
+{%- assign bitc_tag = blank -%}
+{%- for tg in current_tags -%}
+ {%- assign tgh = tg | handle -%}
+ {%- if tgh != BITC_SERIES -%}{%- assign bitc_tag = tg -%}{%- break -%}{%- endif -%}
+{%- endfor -%}
+{%- assign bitc_tagh = bitc_tag | handle -%}
+<style>
+/* ── Northfinder design-manual tokens. Every value here is from the manual or
+ marked [derived]. No #000, no grey outside the Carbon tints, no pills,
+ no shadows, Montserrat in Medium 500 and Bold 700 only. ───────────────── */
+.nfb,.nfb *,.nfb *::before,.nfb *::after{box-sizing:border-box;margin:0;padding:0}
+.nfb{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;background:#FFFFFF;
+ --ink:#2B3C48; /* Carbon — all body and heading text */
+ --ink-60:#808A91; /* Carbon 60% — meta */
+ --line:#D5D8DA; /* Carbon 20% — 1px dividers, surfaces */
+ --red:#E3350E; /* Northfinder Red — large fills only */
+ --red-ink:#C72D0C; /* [derived] small red text and 14px button fills, 5.5:1 */
+ --red-hover:#AD270A; /* [derived] */
+ --red-20:#F9D7CF;
+ --r:4px;--r-sm:2px;--r-lg:8px;
+ --gutter:48px;--sec-y:96px;--block-y:32px;--wrap:1440px;
+ --ease:cubic-bezier(.2,.7,.2,1);
+ font-family:'Montserrat',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:500;font-size:16px;line-height:1.6;color:var(--ink);
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+@media(max-width:1199px){.nfb{--gutter:32px;--sec-y:72px}}
+@media(max-width:767px){.nfb{--gutter:20px;--sec-y:56px;--block-y:24px}}
+.nfb img{display:block;max-width:100%}
+.nfb a,.nfb a:visited,.nfb a:hover,.nfb a:active{color:inherit;text-decoration:none}
+.nfb button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+/* the UA maps <b> to `bolder`, which resolves to 900 inside a 700 parent — the manual
+ loads Medium and Bold only, so pin it */
+.nfb b,.nfb strong{font-weight:700}
+.nfb ._w{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
+/* type roles — manual's hierarchy, rebased for running text */
+.nfb ._eyebrow{font-size:13px;font-weight:700;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.nfb ._h1{font-size:clamp(28px,20px + 1.1vw,40px);font-weight:700;line-height:1.15;letter-spacing:0}
+.nfb ._h2{font-size:clamp(20px,17px + .35vw,24px);font-weight:700;line-height:1.25}
+.nfb ._body{font-size:16px;font-weight:500;line-height:1.6;max-width:70ch}
+.nfb ._small{font-size:13px;font-weight:500;line-height:1.5}
+@media(max-width:767px){.nfb ._eyebrow{font-size:12px}}
+/* buttons — 4px radius, no pills, flat. Primary rests on the derived red so the
+ 14px uppercase label clears 4.5:1. */
+.nfb ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;
+ border-radius:var(--r);font-size:14px;font-weight:700;line-height:1;letter-spacing:.06em;text-transform:uppercase;
+ transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease)}
+.nfb ._btn._pri{background:var(--red-ink);color:#FFFFFF}
+.nfb ._btn._pri:hover{background:var(--red-hover)}
+.nfb ._btn._sec{background:#FFFFFF;color:var(--ink);border:1px solid var(--ink)}
+.nfb ._btn._sec:hover{background:var(--ink);color:#FFFFFF}
+@media(max-width:767px){.nfb ._btn{height:52px;width:100%}}
+/* image placeholder — a post with no cover must not collapse the grid */
+.nfb ._ph{position:relative;background:var(--line);overflow:hidden}
+.nfb ._ph::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(43,60,72,.06) 0 10px,rgba(43,60,72,0) 10px 20px)}
+.nfb ._ph::after{content:attr(data-ph);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-60);white-space:nowrap}
+.nfb ._sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nfb a:focus-visible,.nfb button:focus-visible,.nfb input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.nfb *,.nfb *::before,.nfb *::after{transition:none!important;animation:none!important}}
+/* ── shared card atoms (episode card, compact row, filter control) ───────────── */
+._chip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border:1px solid var(--line);
+ border-radius:var(--r-sm);background:#FFFFFF;font-size:12px;font-weight:700;letter-spacing:.08em;
+ text-transform:uppercase;color:var(--ink);white-space:nowrap}
+._chip._on{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+._meta{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--ink-60)}
+._meta ._bar{width:1px;height:12px;background:var(--line);flex:0 0 auto}
+/* square, never circular — the manual allows no circular badges but the symbol lockup */
+._arw{width:40px;height:40px;flex:0 0 auto;border:1px solid var(--line);border-radius:var(--r);display:grid;place-items:center;
+ color:var(--ink);transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease)}
+._play{position:absolute;left:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;
+ border-radius:var(--r);background:var(--red);color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+._card{display:flex;flex-direction:column;height:100%}
+._card ._shot{position:relative;overflow:hidden;border-radius:var(--r);background:var(--line)}
+._card ._shot img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+._card ._shot ._ph{position:absolute;inset:0}
+._card ._shot ._chip{position:absolute;left:16px;top:16px}
+._card ._ep{margin-top:16px;color:var(--ink-60)}
+._card ._ep b{color:var(--ink)}
+._card ._shot + ._h{margin-top:16px}
+._card ._h{margin-top:8px;font-size:18px;font-weight:700;line-height:1.3;
+ display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+._card ._deck{margin-top:8px;font-size:16px;font-weight:500;line-height:1.6;
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+._card ._foot{margin-top:auto;padding-top:16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+._card:hover ._shot img{transform:scale(1.03)}
+._card:hover ._arw{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+._card:hover ._h{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+._lk{display:block;height:100%}
+@media(max-width:767px){._card ._h{font-size:17px}}
+/* ── LIST S3 · topic filter, counter, grid, pagination ──────────────────────── */
+._ls3{padding:0 0 var(--sec-y);scroll-margin-top:0}
+/* the only permitted shadow is the functional 1px separator for a floating layer */
+._ls3 ._sticky{position:sticky;top:0;z-index:6;background:#FFFFFF;border-bottom:1px solid transparent;transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+._ls3 ._sticky._stuck{border-bottom-color:var(--line);box-shadow:0 1px 0 var(--line)}
+._ls3 ._filters{display:flex;align-items:center;gap:16px;padding:12px 0}
+._ls3 ._pillwrap{position:relative;flex:1 1 auto;min-width:0}
+._ls3 ._pills{display:flex;gap:8px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;padding:2px 0}
+._ls3 ._pills::-webkit-scrollbar{display:none}
+._ls3 ._pill{display:inline-flex;align-items:center;height:40px;padding:0 16px;border:1px solid var(--line);border-radius:var(--r);
+ background:#FFFFFF;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);white-space:nowrap;
+ transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease)}
+._ls3 ._pill:hover{border-color:var(--ink)}
+._ls3 ._pill[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+._ls3 ._fade{position:absolute;top:0;bottom:0;width:40px;pointer-events:none;opacity:0;transition:opacity .2s var(--ease)}
+._ls3 ._fade._l{left:0;background:linear-gradient(90deg,#FFFFFF,rgba(255,255,255,0))}
+._ls3 ._fade._r{right:0;background:linear-gradient(270deg,#FFFFFF,rgba(255,255,255,0))}
+._ls3 ._pillwrap._ovl ._fade._l,._ls3 ._pillwrap._ovr ._fade._r{opacity:1}
+._ls3 ._count{flex:0 0 auto;font-size:13px;font-weight:500;color:var(--ink-60);white-space:nowrap}
+._ls3 ._count b{color:var(--ink);font-weight:700}
+._ls3 ._clear{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;border-radius:var(--r);
+ font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--red-ink);
+ transition:background-color .18s var(--ease)}
+._ls3 ._clear:hover{background:var(--red-20)}
+._ls3 ._grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 24px;padding-top:var(--block-y)}
+._ls3 ._grid ._shot{aspect-ratio:16/10}
+._ls3 ._rv{opacity:0;transform:translateY(12px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+._ls3 ._rv._in{opacity:1;transform:none}
+._ls3 ._empty{margin-top:var(--block-y);padding:clamp(48px,6vw,96px) 0;text-align:center;border-top:1px solid var(--line)}
+._ls3 ._empty ._ep2{margin:12px auto 24px;max-width:52ch;font-size:16px;font-weight:500;line-height:1.6;color:var(--ink-60)}
+._ls3 ._pager{margin-top:clamp(32px,3vw,48px);padding-top:24px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+._ls3 ._pg{min-width:40px;height:40px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);
+ border-radius:var(--r);background:#FFFFFF;font-size:14px;font-weight:700;color:var(--ink);
+ transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease)}
+._ls3 ._pg:hover{border-color:var(--ink)}
+._ls3 ._pg[aria-current="page"]{background:var(--ink);border-color:var(--ink);color:#FFFFFF}
+._ls3 ._pg._gap{border-color:transparent;color:var(--ink-60);pointer-events:none}
+._ls3 ._pg._nav{padding:0 16px;gap:8px;letter-spacing:.06em;text-transform:uppercase}
+._ls3 ._pg._off{color:var(--ink-60);border-color:var(--line);pointer-events:none}
+@media(max-width:1199px){._ls3 ._grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:767px){
+ ._ls3 ._filters{flex-wrap:wrap;gap:8px}
+ ._ls3 ._pillwrap{flex:1 0 100%;margin:0 calc(var(--gutter) * -1);padding:0 var(--gutter)}
+ ._ls3 ._grid{grid-template-columns:minmax(0,1fr);gap:32px}
+ ._ls3 ._pg._nav ._lbl{display:none}
+}
+</style>
+<section class="nfb _ls3" id="bitc-results" aria-labelledby="bitc-h2-all">
+ {%- paginate bitc_blog.articles by PER -%}
+ {%- comment -%}
+ On page one the four newest articles are already the band above, so the grid starts
+ at the fifth — nothing appears twice on one screen. The skip is dropped when the
+ blog is small (≤6) or a filter is on, because then the band is not rendered.
+ {%- endcomment -%}
+ {%- assign skip = 0 -%}
+ {%- if paginate.current_page == 1 and bitc_tag == blank and paginate.items > 6 -%}
+ {%- assign skip = 4 -%}
+ {%- endif -%}
+ {%- assign onpage = paginate.items | minus: paginate.current_offset -%}
+ {%- if onpage > paginate.page_size -%}{%- assign onpage = paginate.page_size -%}{%- endif -%}
+ {%- assign r_from = paginate.current_offset | plus: skip | plus: 1 -%}
+ {%- assign r_to = paginate.current_offset | plus: onpage -%}
+ {%- assign shown_n = onpage | minus: skip -%}
+ <div class="_sticky" data-bitc-sticky>
+ <div class="_w">
+ <div class="_filters">
+ <h2 class="_sr" id="bitc-h2-all">{{ bitc_blog.title }} — {{ t_allcat }}</h2>
+ {%- assign all_tags = bitc_blog.all_tags -%}
+ {%- if all_tags.size > 1 -%}
+ <div class="_pillwrap" data-bitc-pillwrap>
+ <div class="_fade _l"></div>
+ <div class="_pills" data-bitc-pills role="list" aria-label="{{ t_topics }}">
+ <a class="_pill" role="listitem" href="{{ bitc_all_url }}"{% if bitc_tag == blank %} aria-current="true"{% endif %}>{{ t_allcat }}</a>
+ {%- comment -%}
+ Chapter and episode tags are navigation, not topics: the chapters are the
+ tabs above and EP01 is the number on the card. Only real topics become pills.
+ An `ep` tag is skipped when it is exactly four characters (ep01…ep99).
+ {%- endcomment -%}
+ {%- for tg in all_tags -%}
+ {%- assign tgh = tg | handle -%}
+ {%- if tgh == BITC_SERIES -%}{%- continue -%}{%- endif -%}
+ {%- assign tg_pre2 = tgh | slice: 0, 2 -%}
+ {%- assign tg_len = tgh | size -%}
+ {%- if tg_pre2 == 'ep' and tg_len == 4 -%}{%- continue -%}{%- endif -%}
+ {%- assign tg_pre8 = tgh | slice: 0, 8 -%}
+ {%- if tg_pre8 == 'chapter-' -%}{%- continue -%}{%- endif -%}
+ <a class="_pill" role="listitem" href="{{ bitc_tag_prefix }}{{ tgh }}"{% if bitc_tagh == tgh %} aria-current="true"{% endif %}>{{ tg }}</a>
+ {%- endfor -%}
+ </div>
+ <div class="_fade _r"></div>
+ </div>
+ {%- else -%}<span style="flex:1 1 auto"></span>{%- endif -%}
+ {%- comment -%}
+ The counter is the feedback that a filter did something. It reports the real
+ range on this page against the real total, so it stays true on page 7 too.
+ {%- endcomment -%}
+ {%- if paginate.items > 0 -%}
+ <p class="_count" aria-live="polite">{{ t_res }} <b>{% if shown_n > 1 %}{{ r_from }}–{{ r_to }}{% else %}{{ r_from }}{% endif %}</b> {{ t_of }} <b>{{ paginate.items }}</b></p>
+ {%- endif -%}
+ {%- if bitc_tag != blank -%}
+ <a class="_clear" href="{{ bitc_all_url }}">
+ <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+ {{ t_clear }}
+ </a>
+ {%- endif -%}
+ </div>
+ </div>
+ </div>
+ <div class="_w">
+ {%- if shown_n > 0 -%}
+ <div class="_grid">
+ {%- assign gi = 0 -%}
+ {%- for a in bitc_blog.articles -%}
+ {%- if forloop.index <= skip -%}{%- continue -%}{%- endif -%}
+ {%- assign gi = gi | plus: 1 -%}
+ {%- assign ep_idx = gi -%}
+ {%- comment -%} reading time, HERO video, episode number {%- endcomment -%}
+ {%- assign ep_wc = a.content | strip_html | split: ' ' | size -%}
+ {%- assign ep_rt = ep_wc | divided_by: 200 -%}
+ {%- if ep_rt < 1 -%}{%- assign ep_rt = 1 -%}{%- endif -%}
+ {%- assign ep_vid = a.metafields.custom.video_url -%}
+ {%- assign ep_no = '' -%}
+ {%- assign ep_inch = false -%}
+ {%- for tg in a.tags -%}
+ {%- assign tl = tg | handle -%}
+ {%- assign tp = tl | slice: 0, 2 -%}
+ {%- assign tlen = tl | size -%}
+ {%- if tp == 'ep' and tlen == 4 -%}{%- assign ep_no = tl | remove_first: 'ep' -%}{%- endif -%}
+ {%- assign tp8 = tl | slice: 0, 8 -%}
+ {%- if tp8 == 'chapter-' -%}{%- assign ep_inch = true -%}{%- endif -%}
+ {%- endfor -%}
+ {%- comment -%}
+ An article outside every chapter is not an episode: no number is invented for it
+ and the episode line is left off the card entirely.
+ {%- endcomment -%}
+ {%- if ep_no == blank and ep_inch -%}
+ {%- if ep_idx < 10 -%}{%- assign ep_no = ep_idx | prepend: '0' -%}{%- else -%}{%- assign ep_no = ep_idx -%}{%- endif -%}
+ {%- endif -%}
+ {%- assign ep_delay = gi | modulo: 6 | times: 60 -%}
+ <article class="_rv" style="transition-delay:{{ ep_delay }}ms">
+ <a class="_lk _card" href="{{ a.url }}">
+ <div class="_shot">
+ {%- if a.image -%}
+ <img src="{{ a.image | image_url: width: 800 }}"
+ srcset="{{ a.image | image_url: width: 480 }} 480w, {{ a.image | image_url: width: 800 }} 800w, {{ a.image | image_url: width: 1200 }} 1200w"
+ sizes="(max-width:767px) 100vw, (max-width:1199px) 46vw, 30vw"
+ width="800" height="500" loading="lazy" decoding="async"
+ alt="{{ a.image.alt | default: a.title | escape }}">
+ {%- else -%}
+ <div class="_ph" data-ph="{{ bitc_blog.title | escape }}"></div>
+ {%- endif -%}
+ {%- assign ep_cat = a.tags | first -%}
+ {%- if ep_cat != blank -%}<span class="_chip">{{ ep_cat }}</span>{%- endif -%}
+ {%- if ep_vid != blank -%}
+ <span class="_play"><svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor" aria-hidden="true"><path d="M0 0l10 6-10 6z"/></svg> {{ t_video }}</span>
+ {%- endif -%}
+ </div>
+ {%- if ep_no != blank -%}<p class="_ep _eyebrow"><b>{{ t_episode }} {{ ep_no }}</b></p>{%- endif -%}
+ <h3 class="_h">{{ a.title }}</h3>
+ {%- if a.excerpt_or_content != blank -%}
+ <p class="_deck">{{ a.excerpt_or_content | strip_html | truncate: 140 }}</p>
+ {%- endif -%}
+ <div class="_foot">
+ <span class="_meta">
+ <time datetime="{{ a.published_at | date: '%Y-%m-%d' }}">{{ a.published_at | date: t_datefmt }}</time>
+ <i class="_bar"></i><span>{{ ep_rt }} {{ t_read }}</span>
+ </span>
+ <span class="_arw" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+ </div>
+ </a>
+ </article>
+ {%- endfor -%}
+ </div>
+ {%- else -%}
+ {%- comment -%} A filter that returns nothing is where people are lost — offer the way out. {%- endcomment -%}
+ <div class="_empty">
+ <p class="_h2">{{ t_emptyh }}</p>
+ <p class="_ep2">{{ t_emptyp }}</p>
+ <a class="_btn _pri" href="{{ bitc_all_url }}">{{ t_emptyb }}</a>
+ </div>
+ {%- endif -%}
+ {%- if paginate.pages > 1 -%}
+ <nav class="_pager" aria-label="{{ t_pagenav }}">
+ {%- if paginate.previous.is_link -%}
+ <a class="_pg _nav" href="{{ paginate.previous.url }}#bitc-results" rel="prev">
+ <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M11 6.5H2.5M6 3L2.5 6.5 6 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+ <span class="_lbl">{{ t_prev }}</span></a>
+ {%- else -%}
+ <span class="_pg _nav _off" aria-hidden="true">
+ <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M11 6.5H2.5M6 3L2.5 6.5 6 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+ <span class="_lbl">{{ t_prev }}</span></span>
+ {%- endif -%}
+ {%- for part in paginate.parts -%}
+ {%- if part.is_link -%}
+ <a class="_pg" href="{{ part.url }}#bitc-results">{{ part.title }}</a>
+ {%- elsif part.title == '&hellip;' -%}
+ <span class="_pg _gap">…</span>
+ {%- else -%}
+ <span class="_pg" aria-current="page">{{ part.title }}</span>
+ {%- endif -%}
+ {%- endfor -%}
+ {%- if paginate.next.is_link -%}
+ <a class="_pg _nav" href="{{ paginate.next.url }}#bitc-results" rel="next"><span class="_lbl">{{ t_next }}</span>
+ <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h8.5M7 3l3.5 3.5L7 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+ </a>
+ {%- else -%}
+ <span class="_pg _nav _off" aria-hidden="true"><span class="_lbl">{{ t_next }}</span>
+ <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h8.5M7 3l3.5 3.5L7 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+ </span>
+ {%- endif -%}
+ </nav>
+ {%- endif -%}
+ </div>
+ {%- endpaginate -%}
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-m6q0soqhjg"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-x3llolfc49"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-m6q0soqhjg" deep="2">{%- comment -%}
+ ══ LIST S4 · runtime + structured data ══
+ Same contract as the hub: the archive works without JavaScript — the filters are
+ links, the pagination is links. This adds the sticky hairline and the card reveal.
+{%- endcomment -%}
+{%- comment -%}
+ ── Configuration ─────────────────────────────────────────────────────────────
+ BITC_BLOG handle of the blog that carries the series. Used when the page is not
+ a blog template (the hub is a normal page and has no `blog` object).
+ The live store's general blog is `novinky`; the series gets its own blog
+ because a Liquid loop over `blog.articles` stops at the newest 50, and
+ Novinky already holds ~25 material entries and keeps growing — chapter
+ articles would eventually fall out of the hub's reach.
+ BITC_SERIES series tag, used only when the series shares a blog with other content.
+ Leave empty when the series has its own blog (the recommended setup).
+ CH_TAGS chapter tags, in order. An article belongs to a chapter by carrying its
+ tag; a chapter with no published article renders as "coming soon".
+ CH_NAMES chapter names. Proper names and product lines stay in English in every
+ market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
+ PER cards per page in the archive grid.
+ ──────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+{%- assign BITC_BLOG = 'novinky' -%}
+{%- assign BITC_SERIES = '' -%}
+{%- assign BITC_HUB = '/pages/born-in-the-carpathians' -%}
+{%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
+{%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
+{%- assign PER = 12 -%}
+{%- comment -%}
+ `blog` exists on a blog template. On the hub page it is nil, so the handle is read
+ from the path — the segment after /blogs/, which survives a locale prefix like /de/ —
+ and only then does it fall back to BITC_BLOG.
+{%- endcomment -%}
+{%- assign bitc_blog = blog -%}
+{%- if bitc_blog == blank -%}
+ {%- assign bitc_bh = request.path | split: '/blogs/' | last | split: '/' | first -%}
+ {%- if blogs[bitc_bh] != blank -%}{%- assign bitc_blog = blogs[bitc_bh] -%}{%- endif -%}
+{%- endif -%}
+{%- if bitc_blog == blank -%}{%- assign bitc_blog = blogs[BITC_BLOG] -%}{%- endif -%}
+{%- comment -%}
+ Where the series shares a blog, the archive lives at the series tag URL and every
+ "all articles" link has to keep that filter on.
+{%- endcomment -%}
+{%- assign bitc_all_url = bitc_blog.url -%}
+{%- assign bitc_tag_prefix = bitc_blog.url | append: '/tagged/' -%}
+{%- if BITC_SERIES != blank -%}
+ {%- assign bitc_all_url = bitc_blog.url | append: '/tagged/' | append: BITC_SERIES -%}
+ {%- assign bitc_tag_prefix = bitc_all_url | append: '+' -%}
+{%- endif -%}
+{%- comment -%}
+ The series tag is the floor of this view, not a filter on it — so it never counts as
+ the active topic and never shows up as one of the pills.
+{%- endcomment -%}
+{%- assign bitc_tag = blank -%}
+{%- for tg in current_tags -%}
+ {%- assign tgh = tg | handle -%}
+ {%- if tgh != BITC_SERIES -%}{%- assign bitc_tag = tg -%}{%- break -%}{%- endif -%}
+{%- endfor -%}
+{%- assign bitc_tagh = bitc_tag | handle -%}
+<script>
+(function(){
+ if (window.__bitcInit) return; window.__bitcInit = true;
+ var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function ready(fn){
+ if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn, {once:true});
+ else fn();
+ }
+ ready(function(){
+ /* 1 — the filter bar earns its hairline only once it is actually stuck */
+ var bar = document.querySelector('[data-bitc-sticky]');
+ if (bar && 'IntersectionObserver' in window){
+ var probe = document.createElement('div');
+ probe.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none';
+ bar.parentNode.insertBefore(probe, bar);
+ new IntersectionObserver(function(e){
+ bar.classList.toggle('_stuck', !e[0].isIntersecting);
+ }, {threshold:[1]}).observe(probe);
+ }
+ /* 2 — topic row: edge fades that say there is more, and arrow-key paging */
+ var wrap = document.querySelector('[data-bitc-pillwrap]');
+ var pills = wrap && wrap.querySelector('[data-bitc-pills]');
+ if (pills){
+ var edges = function(){
+ var over = pills.scrollWidth - pills.clientWidth;
+ wrap.classList.toggle('_ovl', pills.scrollLeft > 4);
+ wrap.classList.toggle('_ovr', over > 4 && pills.scrollLeft < over - 4);
+ };
+ edges();
+ requestAnimationFrame(edges);
+ if (document.fonts && document.fonts.ready) document.fonts.ready.then(edges);
+ pills.addEventListener('scroll', edges, {passive:true});
+ window.addEventListener('resize', edges);
+ var on = pills.querySelector('[aria-current="true"]');
+ if (on && on.offsetLeft > pills.clientWidth - on.offsetWidth) pills.scrollLeft = on.offsetLeft - 16;
+ var items = [].slice.call(pills.querySelectorAll('._pill'));
+ pills.addEventListener('keydown', function(ev){
+ var i = items.indexOf(document.activeElement);
+ if (i < 0) return;
+ var j = ev.key === 'ArrowRight' ? i+1 : ev.key === 'ArrowLeft' ? i-1 : -1;
+ if (j < 0 || j >= items.length) return;
+ ev.preventDefault(); items[j].focus();
+ });
+ }
+ /* 3 — cards fade up in reading order, and never stay hidden without JS */
+ var cards = [].slice.call(document.querySelectorAll('._rv'));
+ if (!cards.length) return;
+ if (RM || !('IntersectionObserver' in window)){
+ cards.forEach(function(c){ c.style.transitionDelay = '0ms'; c.classList.add('_in'); });
+ return;
+ }
+ var io = new IntersectionObserver(function(entries){
+ entries.forEach(function(e){
+ if (!e.isIntersecting) return;
+ e.target.classList.add('_in'); io.unobserve(e.target);
+ });
+ }, {rootMargin:'0px 0px -8% 0px', threshold:0.05});
+ cards.forEach(function(c){ io.observe(c); });
+ setTimeout(function(){
+ cards.forEach(function(c){ if (c.getBoundingClientRect().top < innerHeight) c.classList.add('_in'); });
+ }, 60);
+ });
+})();
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Blog",
+ "name": {{ bitc_blog.title | default: 'Born in the Carpathians' | json }},
+ "url": {{ shop.url | append: bitc_blog.url | json }},
+ "publisher": { "@type": "Organization", "name": {{ shop.name | json }}, "url": {{ shop.url | json }} },
+ "blogPost": [
+ {%- for a in bitc_blog.articles limit: 12 -%}
+ {
+ "@type": "BlogPosting",
+ "headline": {{ a.title | json }},
+ "url": {{ shop.url | append: a.url | json }},
+ "datePublished": {{ a.published_at | date: '%Y-%m-%d' | json }}
+ {%- if a.image %},"image": {{ a.image | image_url: width: 1200 | prepend: 'https:' | json }}{%- endif -%}
+ {%- if a.author != blank %},"author": { "@type": "Person", "name": {{ a.author | json }} }{%- endif -%}
+ {%- if a.metafields.custom.video_url != blank %},"video": { "@type": "VideoObject", "name": {{ a.title | json }}, "contentUrl": {{ a.metafields.custom.video_url | json }} }{%- endif -%}
+ }{%- unless forloop.last -%},{%- endunless -%}
+ {%- endfor -%}
+ ]
+}
+</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
+</div></div>
+{% schema %}
+{
+ "name": "NF Blog Novinky",
+ "settings": [
+ {
+ "type": "header",
+ "content": "The section was generated by [Ecomposer](https:\/\/ecomposer.io).",
+ "info": "\n EComposer is a Visual Page Builder app on Shopify AppStore.\n It provides 100+ pre-built templates in library,\n so you can build unlimited pages that you can imagine with it.\n Please don't add Shopify sections to EComposer's page in the theme customize. If you do this, Shopify sections will be deleted when you republish your page in EComposer\n "
+ },
+ {
+ "type": "header",
+ "content": "[EDIT WITH EComposer APP \u2192](https:\/\/admin.shopify.com\/store\/sportfinder-international\/apps\/ecomposer?open_builder=1&page=blog&id=6aa6af40fd0537cbd0068c66&utm_source=theme-customize)",
+ "info": "(*You must install the app to start editing this section [Learn more](https:\/\/help.ecomposer.io\/docs\/getting-started\/installation\/))"
+ }
+ ]
+}
+{% endschema %}
