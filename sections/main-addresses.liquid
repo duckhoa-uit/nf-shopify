@@ -363,117 +363,46 @@
                     <div class="form-row mb-0">
                       <div class="form-group mb-1">
                         {% capture first_name_id %}EditAddress_{{ default_address.id }}_FirstName{% endcapture %}
-                        {%
-                          render 'form-field',
-                          type: 'text',
-                          id: first_name_id,
-                          name: 'address[first_name]',
-                          value: default_address.first_name,
-                          label: 'customer.addresses.first_name' | t,
-                          required: true,
-                          min_length: '2',
-                          title: 'customer.addresses.first_name_min_length' | t | default: 'First name should contain at least 2 characters'
-                        %}
+                        {% render 'form-field', type: 'text', id: first_name_id, name: 'address[first_name]', value: default_address.first_name, label: 'customer.addresses.first_name', required: true, min_length: '2', title: 'customer.addresses.first_name_min_length', default: 'First name should contain at least 2 characters' %}
                       </div>
 
                       <div class="form-group mb-1">
                         {% capture last_name_id %}EditAddress_{{ default_address.id }}_LastName{% endcapture %}
-                        {%
-                          render 'form-field',
-                          type: 'text',
-                          id: last_name_id,
-                          name: 'address[last_name]',
-                          value: default_address.last_name,
-                          label: 'customer.addresses.last_name' | t,
-                          required: true,
-                          min_length: '2',
-                          title: 'customer.addresses.last_name_min_length' | t | default: 'Last name should contain at least 2 characters'
-                        %}
+                        {% render 'form-field', type: 'text', id: last_name_id, name: 'address[last_name]', value: default_address.last_name, label: 'customer.addresses.last_name', required: true, min_length: '2', title: 'customer.addresses.last_name_min_length', default: 'Last name should contain at least 2 characters' %}
                       </div>
                     </div>
 
                     <div class="form-row">
                       <div class="form-group pt-7">
                         {% capture company_id %}EditAddress_{{ default_address.id }}_Company{% endcapture %}
-                        {%
-                          render 'form-field',
-                          type: 'text',
-                          id: company_id,
-                          name: 'address[company]',
-                          value: default_address.company,
-                          label: 'customer.addresses.company' | t
-                        %}
+                        {% render 'form-field', type: 'text', id: company_id, name: 'address[company]', value: default_address.company, label: 'customer.addresses.company' %}
                       </div>
 
                       <div class="form-group">
                         {% capture phone_id %}EditAddress_{{ default_address.id }}_Phone{% endcapture %}
-                        {%
-                          render 'phone-field',
-                          id: phone_id,
-                          name: 'address[phone]',
-                          value: default_address.phone,
-                          label: 'customer.addresses.phone' | t,
-                          required: true
-                        %}
+                        {% render 'phone-field', id: phone_id, name: 'address[phone]', value: default_address.phone, label: 'customer.addresses.phone', required: true %}
                       </div>
                     </div>
 
                     <div class="form-group">
                       {% capture address1_id %}EditAddress_{{ default_address.id }}_Address1{% endcapture %}
-                      {%
-                        render 'form-field',
-                        type: 'text',
-                        id: address1_id,
-                        name: 'address[address1]',
-                        value: default_address.address1,
-                        label: 'customer.addresses.address1' | t,
-                        required: true,
-                        min_length: '5',
-                        title: 'customer.addresses.address_min_length' | t | default: 'Address should be at least 5 characters long'
-                      %}
+                      {% render 'form-field', type: 'text', id: address1_id, name: 'address[address1]', value: default_address.address1, label: 'customer.addresses.address1', required: true, min_length: '5', title: 'customer.addresses.address_min_length', default: 'Address should be at least 5 characters long' %}
                     </div>
 
                     <div class="form-group">
                       {% capture address2_id %}EditAddress_{{ default_address.id }}_Address2{% endcapture %}
-                      {%
-                        render 'form-field',
-                        type: 'text',
-                        id: address2_id,
-                        name: 'address[address2]',
-                        value: default_address.address2,
-                        label: 'customer.addresses.address2' | t
-                      %}
+                      {% render 'form-field', type: 'text', id: address2_id, name: 'address[address2]', value: default_address.address2, label: 'customer.addresses.address2' %}
                     </div>
 
                     <div class="form-row">
                       <div class="form-group">
                         {% capture city_id %}EditAddress_{{ default_address.id }}_City{% endcapture %}
-                        {%
-                          render 'form-field',
-                          type: 'text',
-                          id: city_id,
-                          name: 'address[city]',
-                          value: default_address.city,
-                          label: 'customer.addresses.city' | t,
-                          required: true,
-                          min_length: '2',
-                          title: 'customer.addresses.city_min_length' | t | default: 'City name should contain at least 2 characters'
-                        %}
+                        {% render 'form-field', type: 'text', id: city_id, name: 'address[city]', value: default_address.city, label: 'customer.addresses.city', required: true, min_length: '2', title: 'customer.addresses.city_min_length', default: 'City name should contain at least 2 characters' %}
                       </div>
 
                       <div class="form-group">
                         {% capture zip_id %}EditAddress_{{ default_address.id }}_Zip{% endcapture %}
-                        {%
-                          render 'form-field',
-                          type: 'text',
-                          id: zip_id,
-                          name: 'address[zip]',
-                          value: default_address.zip,
-                          label: 'customer.addresses.zip' | t,
-                          required: true,
-                          pattern: '[0-9A-Za-z\s\-]{3,10}',
-                          title: 'customer.addresses.zip_min_length' | t | default: 'Postal/ZIP code should be 3-10 characters'
-                        %}
+                        {% render 'form-field', type: 'text', id: zip_id, name: 'address[zip]', value: default_address.zip, label: 'customer.addresses.zip', required: true, pattern: '[0-9A-Za-z\s\-]{3,10}', title: 'customer.addresses.zip_min_length', default: 'Postal/ZIP code should be 3-10 characters' %}
                       </div>
                     </div>
 
@@ -661,117 +590,46 @@
                       <div class="form-row mb-0">
                         <div class="form-group mb-1">
                           {% capture first_name_id %}EditAddress_{{ address.id }}_FirstName{% endcapture %}
-                          {%
-                            render 'form-field',
-                            type: 'text',
-                            id: first_name_id,
-                            name: 'address[first_name]',
-                            value: address.first_name,
-                            label: 'customer.addresses.first_name' | t,
-                            required: true,
-                            min_length: '2',
-                            title: 'customer.addresses.first_name_min_length' | t | default: 'First name should contain at least 2 characters'
-                          %}
+                          {% render 'form-field', type: 'text', id: first_name_id, name: 'address[first_name]', value: address.first_name, label: 'customer.addresses.first_name', required: true, min_length: '2', title: 'customer.addresses.first_name_min_length', default: 'First name should contain at least 2 characters' %}
                         </div>
 
                         <div class="form-group mb-1">
                           {% capture last_name_id %}EditAddress_{{ address.id }}_LastName{% endcapture %}
-                          {%
-                            render 'form-field',
-                            type: 'text',
-                            id: last_name_id,
-                            name: 'address[last_name]',
-                            value: address.last_name,
-                            label: 'customer.addresses.last_name' | t,
-                            required: true,
-                            min_length: '2',
-                            title: 'customer.addresses.last_name_min_length' | t | default: 'Last name should contain at least 2 characters'
-                          %}
+                          {% render 'form-field', type: 'text', id: last_name_id, name: 'address[last_name]', value: address.last_name, label: 'customer.addresses.last_name', required: true, min_length: '2', title: 'customer.addresses.last_name_min_length', default: 'Last name should contain at least 2 characters' %}
                         </div>
                       </div>
 
                       <div class="form-row mb-0">
                         <div class="form-group pt-7">
                           {% capture company_id %}EditAddress_{{ address.id }}_Company{% endcapture %}
-                          {%
-                            render 'form-field',
-                            type: 'text',
-                            id: company_id,
-                            name: 'address[company]',
-                            value: address.company,
-                            label: 'customer.addresses.company' | t
-                          %}
+                          {% render 'form-field', type: 'text', id: company_id, name: 'address[company]', value: address.company, label: 'customer.addresses.company' %}
                         </div>
 
                         <div class="form-group">
                           {% capture phone_id %}EditAddress_{{ address.id }}_Phone{% endcapture %}
-                          {%
-                            render 'phone-field',
-                            id: phone_id,
-                            name: 'address[phone]',
-                            value: address.phone,
-                            label: 'customer.addresses.phone' | t,
-                            required: true
-                          %}
+                          {% render 'phone-field', id: phone_id, name: 'address[phone]', value: address.phone, label: 'customer.addresses.phone', required: true %}
                         </div>
                       </div>
 
                       <div class="form-group">
                         {% capture address1_id %}EditAddress_{{ address.id }}_Address1{% endcapture %}
-                        {%
-                          render 'form-field',
-                          type: 'text',
-                          id: address1_id,
-                          name: 'address[address1]',
-                          value: address.address1,
-                          label: 'customer.addresses.address1' | t,
-                          required: true,
-                          min_length: '5',
-                          title: 'customer.addresses.address_min_length' | t | default: 'Address should be at least 5 characters long'
-                        %}
+                        {% render 'form-field', type: 'text', id: address1_id, name: 'address[address1]', value: address.address1, label: 'customer.addresses.address1', required: true, min_length: '5', title: 'customer.addresses.address_min_length', default: 'Address should be at least 5 characters long' %}
                       </div>
 
                       <div class="form-group">
                         {% capture address2_id %}EditAddress_{{ address.id }}_Address2{% endcapture %}
-                        {%
-                          render 'form-field',
-                          type: 'text',
-                          id: address2_id,
-                          name: 'address[address2]',
-                          value: address.address2,
-                          label: 'customer.addresses.address2' | t
-                        %}
+                        {% render 'form-field', type: 'text', id: address2_id, name: 'address[address2]', value: address.address2, label: 'customer.addresses.address2' %}
                       </div>
 
                       <div class="form-row mb-0">
                         <div class="form-group">
                           {% capture city_id %}EditAddress_{{ address.id }}_City{% endcapture %}
-                          {%
-                            render 'form-field',
-                            type: 'text',
-                            id: city_id,
-                            name: 'address[city]',
-                            value: address.city,
-                            label: 'customer.addresses.city' | t,
-                            required: true,
-                            min_length: '2',
-                            title: 'customer.addresses.city_min_length' | t | default: 'City name should contain at least 2 characters'
-                          %}
+                          {% render 'form-field', type: 'text', id: city_id, name: 'address[city]', value: address.city, label: 'customer.addresses.city', required: true, min_length: '2', title: 'customer.addresses.city_min_length', default: 'City name should contain at least 2 characters' %}
                         </div>
 
                         <div class="form-group">
                           {% capture zip_id %}EditAddress_{{ address.id }}_Zip{% endcapture %}
-                          {%
-                            render 'form-field',
-                            type: 'text',
-                            id: zip_id,
-                            name: 'address[zip]',
-                            value: address.zip,
-                            label: 'customer.addresses.zip' | t,
-                            required: true,
-                            pattern: '[0-9A-Za-z\s\-]{3,10}',
-                            title: 'customer.addresses.zip_min_length' | t | default: 'Postal/ZIP code should be 3-10 characters'
-                          %}
+                          {% render 'form-field', type: 'text', id: zip_id, name: 'address[zip]', value: address.zip, label: 'customer.addresses.zip', required: true, pattern: '[0-9A-Za-z\s\-]{3,10}', title: 'customer.addresses.zip_min_length', default: 'Postal/ZIP code should be 3-10 characters' %}
                         </div>
                       </div>
 
@@ -806,13 +664,7 @@
 
                       {% if address != customer.default_address %}
                         <div class="form-group">
-                          {%
-                            render 'checkbox-field',
-                            id: 'address_default_address_' | append: address.id,
-                            name: 'address[default]',
-                            value: '1',
-                            label: 'customer.addresses.set_default' | t
-                          %}
+                          {% render 'checkbox-field', id: 'address_default_address_', append: address.id, name: 'address[default]', value: '1', label: 'customer.addresses.set_default' %}
                         </div>
                       {% endif %}
 
@@ -839,110 +691,39 @@
               {% form 'customer_address', customer.new_address, class: 'address-form' %}
                 <div class="form-row mb-0">
                   <div class="form-group mb-1">
-                    {%
-                      render 'form-field',
-                      type: 'text',
-                      id: 'AddressFirstName_new',
-                      name: 'address[first_name]',
-                      value: '',
-                      label: 'customer.addresses.first_name' | t,
-                      required: true,
-                      min_length: '2',
-                      title: 'customer.addresses.first_name_min_length' | t | default: 'First name should contain at least 2 characters'
-                    %}
+                    {% render 'form-field', type: 'text', id: 'AddressFirstName_new', name: 'address[first_name]', value: '', label: 'customer.addresses.first_name', required: true, min_length: '2', title: 'customer.addresses.first_name_min_length', default: 'First name should contain at least 2 characters' %}
                   </div>
 
                   <div class="form-group mb-1">
-                    {%
-                      render 'form-field',
-                      type: 'text',
-                      id: 'AddressLastName_new',
-                      name: 'address[last_name]',
-                      value: '',
-                      label: 'customer.addresses.last_name' | t,
-                      required: true,
-                      min_length: '2',
-                      title: 'customer.addresses.last_name_min_length' | t | default: 'Last name should contain at least 2 characters'
-                    %}
+                    {% render 'form-field', type: 'text', id: 'AddressLastName_new', name: 'address[last_name]', value: '', label: 'customer.addresses.last_name', required: true, min_length: '2', title: 'customer.addresses.last_name_min_length', default: 'Last name should contain at least 2 characters' %}
                   </div>
                 </div>
 
                 <div class="form-row mb-0">
                   <div class="form-group pt-7">
-                    {%
-                      render 'form-field',
-                      type: 'text',
-                      id: 'AddressCompany_new',
-                      name: 'address[company]',
-                      value: '',
-                      label: 'customer.addresses.company' | t
-                    %}
+                    {% render 'form-field', type: 'text', id: 'AddressCompany_new', name: 'address[company]', value: '', label: 'customer.addresses.company' %}
                   </div>
 
                   <div class="form-group">
-                    {%
-                      render 'phone-field',
-                      id: 'AddressPhone_new',
-                      name: 'address[phone]',
-                      value: '',
-                      label: 'customer.addresses.phone' | t,
-                      required: true
-                    %}
+                    {% render 'phone-field', id: 'AddressPhone_new', name: 'address[phone]', value: '', label: 'customer.addresses.phone', required: true %}
                   </div>
                 </div>
 
                 <div class="form-group">
-                  {%
-                    render 'form-field',
-                    type: 'text',
-                    id: 'AddressAddress1_new',
-                    name: 'address[address1]',
-                    value: '',
-                    label: 'customer.addresses.address1' | t,
-                    required: true,
-                    min_length: '5',
-                    title: 'customer.addresses.address_min_length' | t | default: 'Address should be at least 5 characters long'
-                  %}
+                  {% render 'form-field', type: 'text', id: 'AddressAddress1_new', name: 'address[address1]', value: '', label: 'customer.addresses.address1', required: true, min_length: '5', title: 'customer.addresses.address_min_length', default: 'Address should be at least 5 characters long' %}
                 </div>
 
                 <div class="form-group">
-                  {%
-                    render 'form-field',
-                    type: 'text',
-                    id: 'AddressAddress2_new',
-                    name: 'address[address2]',
-                    value: '',
-                    label: 'customer.addresses.address2' | t
-                  %}
+                  {% render 'form-field', type: 'text', id: 'AddressAddress2_new', name: 'address[address2]', value: '', label: 'customer.addresses.address2' %}
                 </div>
 
                 <div class="form-row mb-0">
                   <div class="form-group">
-                    {%
-                      render 'form-field',
-                      type: 'text',
-                      id: 'AddressCity_new',
-                      name: 'address[city]',
-                      value: '',
-                      label: 'customer.addresses.city' | t,
-                      required: true,
-                      min_length: '2',
-                      title: 'customer.addresses.city_min_length' | t | default: 'City name should contain at least 2 characters'
-                    %}
+                    {% render 'form-field', type: 'text', id: 'AddressCity_new', name: 'address[city]', value: '', label: 'customer.addresses.city', required: true, min_length: '2', title: 'customer.addresses.city_min_length', default: 'City name should contain at least 2 characters' %}
                   </div>
 
                   <div class="form-group">
-                    {%
-                      render 'form-field',
-                      type: 'text',
-                      id: 'AddressZip_new',
-                      name: 'address[zip]',
-                      value: '',
-                      label: 'customer.addresses.zip' | t,
-                      required: true,
-                      pattern: '[0-9A-Za-z\s\-]{3,10}',
-                      title: 'customer.addresses.zip_min_length' | t | default: 'Postal/ZIP code should be 3-10 characters'
-                    %}
+                    {% render 'form-field', type: 'text', id: 'AddressZip_new', name: 'address[zip]', value: '', label: 'customer.addresses.zip', required: true, pattern: '[0-9A-Za-z\s\-]{3,10}', title: 'customer.addresses.zip_min_length', default: 'Postal/ZIP code should be 3-10 characters' %}
                   </div>
                 </div>
 
@@ -976,13 +757,7 @@
                 </div>
 
                 <div class="form-group">
-                  {%
-                    render 'checkbox-field',
-                    id: 'address_default_address_new',
-                    name: 'address[default]',
-                    value: '1',
-                    label: 'customer.addresses.set_default' | t
-                  %}
+                  {% render 'checkbox-field', id: 'address_default_address_new', name: 'address[default]', value: '1', label: 'customer.addresses.set_default' %}
                 </div>
 
                 <div class="form-actions">
@@ -1039,3 +814,396 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%
+                              render 'form-field',
+                              type: 'text',
+                              id: first_name_id,
+                              name: 'address[first_name]',
+                              value: default_address.first_name,
+                              label: 'customer.addresses.first_name' | t,
+                              required: true,
+                              min_length: '2',
+                              title: 'customer.addresses.first_name_min_length' | t | default: 'First name should contain at least 2 characters'
+                            %}
+  to: "{% render 'form-field', type: 'text', id: first_name_id, name: 'address[first_name]',
+    value: default_address.first_name, label: 'customer.addresses.first_name', required:
+    true, min_length: '2', title: 'customer.addresses.first_name_min_length', default:
+    'First name should contain at least 2 characters' %}"
+  position: 15590..15896
+- from: |-
+    {%
+                              render 'form-field',
+                              type: 'text',
+                              id: last_name_id,
+                              name: 'address[last_name]',
+                              value: default_address.last_name,
+                              label: 'customer.addresses.last_name' | t,
+                              required: true,
+                              min_length: '2',
+                              title: 'customer.addresses.last_name_min_length' | t | default: 'Last name should contain at least 2 characters'
+                            %}
+  to: "{% render 'form-field', type: 'text', id: last_name_id, name: 'address[last_name]',
+    value: default_address.last_name, label: 'customer.addresses.last_name', required:
+    true, min_length: '2', title: 'customer.addresses.last_name_min_length', default:
+    'Last name should contain at least 2 characters' %}"
+  position: 16115..16415
+- from: |-
+    {%
+                              render 'form-field',
+                              type: 'text',
+                              id: company_id,
+                              name: 'address[company]',
+                              value: default_address.company,
+                              label: 'customer.addresses.company' | t
+                            %}
+  to: "{% render 'form-field', type: 'text', id: company_id, name: 'address[company]',
+    value: default_address.company, label: 'customer.addresses.company' %}"
+  position: 16701..16851
+- from: |-
+    {%
+                              render 'phone-field',
+                              id: phone_id,
+                              name: 'address[phone]',
+                              value: default_address.phone,
+                              label: 'customer.addresses.phone' | t,
+                              required: true
+                            %}
+  to: "{% render 'phone-field', id: phone_id, name: 'address[phone]', value: default_address.phone,
+    label: 'customer.addresses.phone', required: true %}"
+  position: 17058..17203
+- from: |-
+    {%
+                            render 'form-field',
+                            type: 'text',
+                            id: address1_id,
+                            name: 'address[address1]',
+                            value: default_address.address1,
+                            label: 'customer.addresses.address1' | t,
+                            required: true,
+                            min_length: '5',
+                            title: 'customer.addresses.address_min_length' | t | default: 'Address should be at least 5 characters long'
+                          %}
+  to: "{% render 'form-field', type: 'text', id: address1_id, name: 'address[address1]',
+    value: default_address.address1, label: 'customer.addresses.address1', required:
+    true, min_length: '5', title: 'customer.addresses.address_min_length', default:
+    'Address should be at least 5 characters long' %}"
+  position: 17437..17729
+- from: |-
+    {%
+                            render 'form-field',
+                            type: 'text',
+                            id: address2_id,
+                            name: 'address[address2]',
+                            value: default_address.address2,
+                            label: 'customer.addresses.address2' | t
+                          %}
+  to: "{% render 'form-field', type: 'text', id: address2_id, name: 'address[address2]',
+    value: default_address.address2, label: 'customer.addresses.address2' %}"
+  position: 17934..18088
+- from: |-
+    {%
+                              render 'form-field',
+                              type: 'text',
+                              id: city_id,
+                              name: 'address[city]',
+                              value: default_address.city,
+                              label: 'customer.addresses.city' | t,
+                              required: true,
+                              min_length: '2',
+                              title: 'customer.addresses.city_min_length' | t | default: 'City name should contain at least 2 characters'
+                            %}
+  to: "{% render 'form-field', type: 'text', id: city_id, name: 'address[city]', value:
+    default_address.city, label: 'customer.addresses.city', required: true, min_length:
+    '2', title: 'customer.addresses.city_min_length', default: 'City name should contain
+    at least 2 characters' %}"
+  position: 18334..18609
+- from: |-
+    {%
+                              render 'form-field',
+                              type: 'text',
+                              id: zip_id,
+                              name: 'address[zip]',
+                              value: default_address.zip,
+                              label: 'customer.addresses.zip' | t,
+                              required: true,
+                              pattern: '[0-9A-Za-z\s\-]{3,10}',
+                              title: 'customer.addresses.zip_min_length' | t | default: 'Postal/ZIP code should be 3-10 characters'
+                            %}
+  to: "{% render 'form-field', type: 'text', id: zip_id, name: 'address[zip]', value:
+    default_address.zip, label: 'customer.addresses.zip', required: true, pattern:
+    '[0-9A-Za-z\\s\\-]{3,10}', title: 'customer.addresses.zip_min_length', default:
+    'Postal/ZIP code should be 3-10 characters' %}"
+  position: 18812..19094
+- from: |-
+    {%
+                                render 'form-field',
+                                type: 'text',
+                                id: first_name_id,
+                                name: 'address[first_name]',
+                                value: address.first_name,
+                                label: 'customer.addresses.first_name' | t,
+                                required: true,
+                                min_length: '2',
+                                title: 'customer.addresses.first_name_min_length' | t | default: 'First name should contain at least 2 characters'
+                              %}
+  to: "{% render 'form-field', type: 'text', id: first_name_id, name: 'address[first_name]',
+    value: address.first_name, label: 'customer.addresses.first_name', required: true,
+    min_length: '2', title: 'customer.addresses.first_name_min_length', default: 'First
+    name should contain at least 2 characters' %}"
+  position: 27935..28233
+- from: |-
+    {%
+                                render 'form-field',
+                                type: 'text',
+                                id: last_name_id,
+                                name: 'address[last_name]',
+                                value: address.last_name,
+                                label: 'customer.addresses.last_name' | t,
+                                required: true,
+                                min_length: '2',
+                                title: 'customer.addresses.last_name_min_length' | t | default: 'Last name should contain at least 2 characters'
+                              %}
+  to: "{% render 'form-field', type: 'text', id: last_name_id, name: 'address[last_name]',
+    value: address.last_name, label: 'customer.addresses.last_name', required: true,
+    min_length: '2', title: 'customer.addresses.last_name_min_length', default: 'Last
+    name should contain at least 2 characters' %}"
+  position: 28452..28744
+- from: |-
+    {%
+                                render 'form-field',
+                                type: 'text',
+                                id: company_id,
+                                name: 'address[company]',
+                                value: address.company,
+                                label: 'customer.addresses.company' | t
+                              %}
+  to: "{% render 'form-field', type: 'text', id: company_id, name: 'address[company]',
+    value: address.company, label: 'customer.addresses.company' %}"
+  position: 29039..29181
+- from: |-
+    {%
+                                render 'phone-field',
+                                id: phone_id,
+                                name: 'address[phone]',
+                                value: address.phone,
+                                label: 'customer.addresses.phone' | t,
+                                required: true
+                              %}
+  to: "{% render 'phone-field', id: phone_id, name: 'address[phone]', value: address.phone,
+    label: 'customer.addresses.phone', required: true %}"
+  position: 29388..29525
+- from: |-
+    {%
+                              render 'form-field',
+                              type: 'text',
+                              id: address1_id,
+                              name: 'address[address1]',
+                              value: address.address1,
+                              label: 'customer.addresses.address1' | t,
+                              required: true,
+                              min_length: '5',
+                              title: 'customer.addresses.address_min_length' | t | default: 'Address should be at least 5 characters long'
+                            %}
+  to: "{% render 'form-field', type: 'text', id: address1_id, name: 'address[address1]',
+    value: address.address1, label: 'customer.addresses.address1', required: true,
+    min_length: '5', title: 'customer.addresses.address_min_length', default: 'Address
+    should be at least 5 characters long' %}"
+  position: 29761..30045
+- from: |-
+    {%
+                              render 'form-field',
+                              type: 'text',
+                              id: address2_id,
+                              name: 'address[address2]',
+                              value: address.address2,
+                              label: 'customer.addresses.address2' | t
+                            %}
+  to: "{% render 'form-field', type: 'text', id: address2_id, name: 'address[address2]',
+    value: address.address2, label: 'customer.addresses.address2' %}"
+  position: 30250..30396
+- from: |-
+    {%
+                                render 'form-field',
+                                type: 'text',
+                                id: city_id,
+                                name: 'address[city]',
+                                value: address.city,
+                                label: 'customer.addresses.city' | t,
+                                required: true,
+                                min_length: '2',
+                                title: 'customer.addresses.city_min_length' | t | default: 'City name should contain at least 2 characters'
+                              %}
+  to: "{% render 'form-field', type: 'text', id: city_id, name: 'address[city]', value:
+    address.city, label: 'customer.addresses.city', required: true, min_length: '2',
+    title: 'customer.addresses.city_min_length', default: 'City name should contain
+    at least 2 characters' %}"
+  position: 30649..30916
+- from: |-
+    {%
+                                render 'form-field',
+                                type: 'text',
+                                id: zip_id,
+                                name: 'address[zip]',
+                                value: address.zip,
+                                label: 'customer.addresses.zip' | t,
+                                required: true,
+                                pattern: '[0-9A-Za-z\s\-]{3,10}',
+                                title: 'customer.addresses.zip_min_length' | t | default: 'Postal/ZIP code should be 3-10 characters'
+                              %}
+  to: "{% render 'form-field', type: 'text', id: zip_id, name: 'address[zip]', value:
+    address.zip, label: 'customer.addresses.zip', required: true, pattern: '[0-9A-Za-z\\s\\-]{3,10}',
+    title: 'customer.addresses.zip_min_length', default: 'Postal/ZIP code should be
+    3-10 characters' %}"
+  position: 31119..31393
+- from: |-
+    {%
+                                render 'checkbox-field',
+                                id: 'address_default_address_' | append: address.id,
+                                name: 'address[default]',
+                                value: '1',
+                                label: 'customer.addresses.set_default' | t
+                              %}
+  to: "{% render 'checkbox-field', id: 'address_default_address_', append: address.id,
+    name: 'address[default]', value: '1', label: 'customer.addresses.set_default'
+    %}"
+  position: 33093..33253
+- from: |-
+    {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'AddressFirstName_new',
+                          name: 'address[first_name]',
+                          value: '',
+                          label: 'customer.addresses.first_name' | t,
+                          required: true,
+                          min_length: '2',
+                          title: 'customer.addresses.first_name_min_length' | t | default: 'First name should contain at least 2 characters'
+                        %}
+  to: "{% render 'form-field', type: 'text', id: 'AddressFirstName_new', name: 'address[first_name]',
+    value: '', label: 'customer.addresses.first_name', required: true, min_length:
+    '2', title: 'customer.addresses.first_name_min_length', default: 'First name should
+    contain at least 2 characters' %}"
+  position: 34365..34656
+- from: |-
+    {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'AddressLastName_new',
+                          name: 'address[last_name]',
+                          value: '',
+                          label: 'customer.addresses.last_name' | t,
+                          required: true,
+                          min_length: '2',
+                          title: 'customer.addresses.last_name_min_length' | t | default: 'Last name should contain at least 2 characters'
+                        %}
+  to: "{% render 'form-field', type: 'text', id: 'AddressLastName_new', name: 'address[last_name]',
+    value: '', label: 'customer.addresses.last_name', required: true, min_length:
+    '2', title: 'customer.addresses.last_name_min_length', default: 'Last name should
+    contain at least 2 characters' %}"
+  position: 34751..35037
+- from: |-
+    {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'AddressCompany_new',
+                          name: 'address[company]',
+                          value: '',
+                          label: 'customer.addresses.company' | t
+                        %}
+  to: "{% render 'form-field', type: 'text', id: 'AddressCompany_new', name: 'address[company]',
+    value: '', label: 'customer.addresses.company' %}"
+  position: 35199..35338
+- from: |-
+    {%
+                          render 'phone-field',
+                          id: 'AddressPhone_new',
+                          name: 'address[phone]',
+                          value: '',
+                          label: 'customer.addresses.phone' | t,
+                          required: true
+                        %}
+  to: "{% render 'phone-field', id: 'AddressPhone_new', name: 'address[phone]', value:
+    '', label: 'customer.addresses.phone', required: true %}"
+  position: 35428..35564
+- from: |-
+    {%
+                        render 'form-field',
+                        type: 'text',
+                        id: 'AddressAddress1_new',
+                        name: 'address[address1]',
+                        value: '',
+                        label: 'customer.addresses.address1' | t,
+                        required: true,
+                        min_length: '5',
+                        title: 'customer.addresses.address_min_length' | t | default: 'Address should be at least 5 characters long'
+                      %}
+  to: "{% render 'form-field', type: 'text', id: 'AddressAddress1_new', name: 'address[address1]',
+    value: '', label: 'customer.addresses.address1', required: true, min_length: '5',
+    title: 'customer.addresses.address_min_length', default: 'Address should be at
+    least 5 characters long' %}"
+  position: 35673..35953
+- from: |-
+    {%
+                        render 'form-field',
+                        type: 'text',
+                        id: 'AddressAddress2_new',
+                        name: 'address[address2]',
+                        value: '',
+                        label: 'customer.addresses.address2' | t
+                      %}
+  to: "{% render 'form-field', type: 'text', id: 'AddressAddress2_new', name: 'address[address2]',
+    value: '', label: 'customer.addresses.address2' %}"
+  position: 36037..36179
+- from: |-
+    {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'AddressCity_new',
+                          name: 'address[city]',
+                          value: '',
+                          label: 'customer.addresses.city' | t,
+                          required: true,
+                          min_length: '2',
+                          title: 'customer.addresses.city_min_length' | t | default: 'City name should contain at least 2 characters'
+                        %}
+  to: "{% render 'form-field', type: 'text', id: 'AddressCity_new', name: 'address[city]',
+    value: '', label: 'customer.addresses.city', required: true, min_length: '2',
+    title: 'customer.addresses.city_min_length', default: 'City name should contain
+    at least 2 characters' %}"
+  position: 36311..36578
+- from: |-
+    {%
+                          render 'form-field',
+                          type: 'text',
+                          id: 'AddressZip_new',
+                          name: 'address[zip]',
+                          value: '',
+                          label: 'customer.addresses.zip' | t,
+                          required: true,
+                          pattern: '[0-9A-Za-z\s\-]{3,10}',
+                          title: 'customer.addresses.zip_min_length' | t | default: 'Postal/ZIP code should be 3-10 characters'
+                        %}
+  to: "{% render 'form-field', type: 'text', id: 'AddressZip_new', name: 'address[zip]',
+    value: '', label: 'customer.addresses.zip', required: true, pattern: '[0-9A-Za-z\\s\\-]{3,10}',
+    title: 'customer.addresses.zip_min_length', default: 'Postal/ZIP code should be
+    3-10 characters' %}"
+  position: 36668..36943
+- from: |-
+    {%
+                        render 'checkbox-field',
+                        id: 'address_default_address_new',
+                        name: 'address[default]',
+                        value: '1',
+                        label: 'customer.addresses.set_default' | t
+                      %}
+  to: "{% render 'checkbox-field', id: 'address_default_address_new', name: 'address[default]',
+    value: '1', label: 'customer.addresses.set_default' %}"
+  position: 38260..38403
+{% endcomment %}

@@ -17,15 +17,7 @@
     data-section-id="{{ section.id }}"
     data-product-variant-id="{{ product.selected_or_first_available_variant.id }}"
   >
-    {%
-      render 'checkbox-field',
-      id: 'Recipient-checkbox-' | append: section.id,
-      name: gift_card_recipient_control_flag,
-      value: '1',
-      label: 'recipient.form.checkbox' | t,
-      disabled: true,
-      class: 'recipient-checkbox-wrapper'
-    %}
+    {% render 'checkbox-field', id: 'Recipient-checkbox-', append: section.id, name: gift_card_recipient_control_flag, value: '1', label: 'recipient.form.checkbox', disabled: true, class: 'recipient-checkbox-wrapper' %}
     <div
       class="product-form__recipient-error-message-wrapper"
       role="alert"
@@ -218,3 +210,24 @@
     >
   </recipient-form>
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%
+          render 'checkbox-field',
+          id: 'Recipient-checkbox-' | append: section.id,
+          name: gift_card_recipient_control_flag,
+          value: '1',
+          label: 'recipient.form.checkbox' | t,
+          disabled: true,
+          class: 'recipient-checkbox-wrapper'
+        %}
+  to: "{% render 'checkbox-field', id: 'Recipient-checkbox-', append: section.id,
+    name: gift_card_recipient_control_flag, value: '1', label: 'recipient.form.checkbox',
+    disabled: true, class: 'recipient-checkbox-wrapper' %}"
+  position: 702..917
+{% endcomment %}

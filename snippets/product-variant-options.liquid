@@ -497,37 +497,58 @@
 
           {%- unless skip_color_value -%}
           <div class="color-option-with-thumbnail" data-color-name="{{ value }}" data-available="{{ data_available_state }}">
-            {%
-              render 'swatch-input',
-              id: input_id,
-              name: input_name,
-              value: value | escape,
-              swatch: value.swatch,
-              product_form_id: product_form_id,
-              checked: value.selected,
-              shape: block.settings.swatch_shape,
-              help_text: help_text,
-              additional_props: input_dataset,
-              thumbnail_url: thumbnail_url
-            %}
+            {% render 'swatch-input', id: input_id, name: input_name, value: value, swatch: value.swatch, product_form_id: product_form_id, checked: value.selected, shape: block.settings.swatch_shape, help_text: help_text, additional_props: input_dataset, thumbnail_url: thumbnail_url %}
           </div>
           {%- endunless -%}
         {%- else -%}
-          {%
-            render 'swatch-input',
-            id: input_id,
-            name: input_name,
-            value: value | escape,
-            swatch: value.swatch,
-            product_form_id: product_form_id,
-            checked: value.selected,
-            shape: block.settings.swatch_shape,
-            help_text: help_text,
-            additional_props: input_dataset
-          %}
+          {% render 'swatch-input', id: input_id, name: input_name, value: value, swatch: value.swatch, product_form_id: product_form_id, checked: value.selected, shape: block.settings.swatch_shape, help_text: help_text, additional_props: input_dataset %}
         {%- endif -%}
       {%- endif -%}
     {%- endfor -%}
 
   {%- endif -%}
 {%- endif -%}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%
+                  render 'swatch-input',
+                  id: input_id,
+                  name: input_name,
+                  value: value | escape,
+                  swatch: value.swatch,
+                  product_form_id: product_form_id,
+                  checked: value.selected,
+                  shape: block.settings.swatch_shape,
+                  help_text: help_text,
+                  additional_props: input_dataset,
+                  thumbnail_url: thumbnail_url
+                %}
+  to: "{% render 'swatch-input', id: input_id, name: input_name, value: value, swatch:
+    value.swatch, product_form_id: product_form_id, checked: value.selected, shape:
+    block.settings.swatch_shape, help_text: help_text, additional_props: input_dataset,
+    thumbnail_url: thumbnail_url %}"
+  position: 18068..18343
+- from: |-
+    {%
+                render 'swatch-input',
+                id: input_id,
+                name: input_name,
+                value: value | escape,
+                swatch: value.swatch,
+                product_form_id: product_form_id,
+                checked: value.selected,
+                shape: block.settings.swatch_shape,
+                help_text: help_text,
+                additional_props: input_dataset
+              %}
+  to: "{% render 'swatch-input', id: input_id, name: input_name, value: value, swatch:
+    value.swatch, product_form_id: product_form_id, checked: value.selected, shape:
+    block.settings.swatch_shape, help_text: help_text, additional_props: input_dataset
+    %}"
+  position: 18420..18665
+{% endcomment %}

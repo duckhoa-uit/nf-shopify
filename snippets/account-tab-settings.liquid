@@ -161,69 +161,27 @@
 
       <div class="form-row mb-0">
         <div class="form-group md:mb-1">
-          {%
-            render 'form-field',
-            type: 'text',
-            id: 'CustomerFirstName',
-            name: 'customer[first_name]',
-            value: customer.first_name,
-            label: 'customer.account.first_name' | t,
-            required: true,
-          %}
+          {% render 'form-field', type: 'text', id: 'CustomerFirstName', name: 'customer[first_name]', value: customer.first_name, label: 'customer.account.first_name', required: true %}
         </div>
 
         <div class="form-group mb-1">
-          {%
-            render 'form-field',
-            type: 'text',
-            id: 'CustomerLastName',
-            name: 'customer[last_name]',
-            value: customer.last_name,
-            label: 'customer.account.last_name' | t,
-            required: true,
-          %}
+          {% render 'form-field', type: 'text', id: 'CustomerLastName', name: 'customer[last_name]', value: customer.last_name, label: 'customer.account.last_name', required: true %}
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group pt-7">
-          {%
-            render 'form-field',
-            type: 'email',
-            id: 'CustomerEmail',
-            name: 'customer[email]',
-            value: customer.email,
-            label: 'customer.account.email' | t,
-            required: true,
-            readonly: true,
-            class: 'email-field'
-          %}
+          {% render 'form-field', type: 'email', id: 'CustomerEmail', name: 'customer[email]', value: customer.email, label: 'customer.account.email', required: true, readonly: true, class: 'email-field' %}
         </div>
 
         <div class="form-group">
-          {%
-            render 'phone-field',
-            id: 'CustomerPhone',
-            name: 'customer[phone]',
-            value: customer.phone,
-            label: 'customer.account.phone' | t,
-            required: true
-          %}
+          {% render 'phone-field', id: 'CustomerPhone', name: 'customer[phone]', value: customer.phone, label: 'customer.account.phone', required: true %}
         </div>
       </div>
 
       <div class="form-group birthdate-field">
         {%- assign birth_date = customer.metafields.facts.birth_date | default: '' -%}
-        {%
-          render 'form-field',
-          type: 'text',
-          id: 'CustomerBirthdate',
-          name: 'birthdate',
-          value: birth_date,
-          label: 'customer.account.birthdate' | t,
-          placeholder: 'DD.MM.YYYY',
-          class: 'flatpickr-input'
-        %}
+        {% render 'form-field', type: 'text', id: 'CustomerBirthdate', name: 'birthdate', value: birth_date, label: 'customer.account.birthdate', placeholder: 'DD.MM.YYYY', class: 'flatpickr-input' %}
         <div class="date-picker-icon" id="birthdateCalendarIcon">
           {{- 'icon-calendar.svg' | inline_asset_content -}}
         </div>
@@ -240,3 +198,81 @@
     {%- endform -%}
   </div>
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%
+                render 'form-field',
+                type: 'text',
+                id: 'CustomerFirstName',
+                name: 'customer[first_name]',
+                value: customer.first_name,
+                label: 'customer.account.first_name' | t,
+                required: true,
+              %}
+  to: "{% render 'form-field', type: 'text', id: 'CustomerFirstName', name: 'customer[first_name]',
+    value: customer.first_name, label: 'customer.account.first_name', required: true
+    %}"
+  position: 6432..6608
+- from: |-
+    {%
+                render 'form-field',
+                type: 'text',
+                id: 'CustomerLastName',
+                name: 'customer[last_name]',
+                value: customer.last_name,
+                label: 'customer.account.last_name' | t,
+                required: true,
+              %}
+  to: "{% render 'form-field', type: 'text', id: 'CustomerLastName', name: 'customer[last_name]',
+    value: customer.last_name, label: 'customer.account.last_name', required: true
+    %}"
+  position: 6673..6845
+- from: |-
+    {%
+                render 'form-field',
+                type: 'email',
+                id: 'CustomerEmail',
+                name: 'customer[email]',
+                value: customer.email,
+                label: 'customer.account.email' | t,
+                required: true,
+                readonly: true,
+                class: 'email-field'
+              %}
+  to: "{% render 'form-field', type: 'email', id: 'CustomerEmail', name: 'customer[email]',
+    value: customer.email, label: 'customer.account.email', required: true, readonly:
+    true, class: 'email-field' %}"
+  position: 6952..7148
+- from: |-
+    {%
+                render 'phone-field',
+                id: 'CustomerPhone',
+                name: 'customer[phone]',
+                value: customer.phone,
+                label: 'customer.account.phone' | t,
+                required: true
+              %}
+  to: "{% render 'phone-field', id: 'CustomerPhone', name: 'customer[phone]', value:
+    customer.phone, label: 'customer.account.phone', required: true %}"
+  position: 7208..7352
+- from: |-
+    {%
+              render 'form-field',
+              type: 'text',
+              id: 'CustomerBirthdate',
+              name: 'birthdate',
+              value: birth_date,
+              label: 'customer.account.birthdate' | t,
+              placeholder: 'DD.MM.YYYY',
+              class: 'flatpickr-input'
+            %}
+  to: "{% render 'form-field', type: 'text', id: 'CustomerBirthdate', name: 'birthdate',
+    value: birth_date, label: 'customer.account.birthdate', placeholder: 'DD.MM.YYYY',
+    class: 'flatpickr-input' %}"
+  position: 7524..7716
+{% endcomment %}

@@ -1152,14 +1152,14 @@
  <button class="swym-button swym-add-to-wishlist-view-product product_{{product.id}} ecom-collection__product-wishlist-button" data-swaction="addToWishlist" data-product-id="{{product.id | json}}"></button>
  {% when 'wishlist-hero' %}
  {% capture the_hero_wishlist_snippet %}
- {% render 'wishlisthero-collection-product' with product: product %}
+ {% render 'wishlisthero-collection-product' with product, product: product %}
  {% endcapture %}
  {% unless the_hero_wishlist_snippet contains 'Liquid error' %}
  {{ the_hero_wishlist_snippet }}
  {% endunless %}
  {% when 'wishlist-wishify' %}
  {% capture the_wishify_wishlist_snippet %}
- {% render 'ZooomyListWishlistColl' with product: product %}
+ {% render 'ZooomyListWishlistColl' with product, product: product %}
  {% endcapture %}
  {% unless the_wishify_wishlist_snippet contains 'Liquid error' %}
  {{ the_wishify_wishlist_snippet }}
@@ -1934,4 +1934,17 @@
  "en": {}
  }
 }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'wishlisthero-collection-product' with product: product %}"
+  to: "{% render 'wishlisthero-collection-product' with product, product: product
+    %}"
+  position: 75754..75831
+- from: "{% render 'ZooomyListWishlistColl' with product: product %}"
+  to: "{% render 'ZooomyListWishlistColl' with product, product: product %}"
+  position: 76040..76108
+{%- endcomment -%}

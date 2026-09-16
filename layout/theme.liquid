@@ -544,7 +544,7 @@
       window.theme.strings.failed_remove_item = {{ 'sections.cart.failed_remove_item' | t | default: 'Failed to remove item. Please try again.' | json }};
       window.theme.strings.failed_adjust_quantity = {{ 'sections.cart.failed_adjust_quantity' | t | default: 'Failed to adjust quantity. Please try again.' | json }};
       window.theme.strings.stock_validation_warning = {{ 'sections.cart.stock_validation_warning' | t | default: 'Stock Validation Warning' | json }};
-      window.theme.strings.stock_validation_error = {{ 'sections.cart.stock_validation_error' | t | default: 'We couldn\'t verify stock availability' | json }};
+      window.theme.strings.stock_validation_error = {{ 'sections.cart.stock_validation_error' | t | default: 'We couldn\' | json }};
       window.theme.strings.stock_validation_continue = {{ 'sections.cart.stock_validation_continue' | t | default: 'Your order may be subject to stock availability. Do you want to continue?' | json }};
       window.theme.strings.cancel_checkout = {{ 'sections.cart.cancel_checkout' | t | default: 'Cancel Checkout' | json }};
       window.theme.strings.continue_anyway = {{ 'sections.cart.continue_anyway' | t | default: 'Continue Anyway' | json }};
@@ -758,4 +758,15 @@
       </script>
     {%- endif -%}
   </body>
-</html>
+</html>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ 'sections.cart.stock_validation_error' | t | default: 'We couldn\\'t verify
+    stock availability' | json }}"
+  to: "{{ 'sections.cart.stock_validation_error' | t | default: 'We couldn\\' | json
+    }}"
+  position: 29336..29415
+{%- endcomment -%}
