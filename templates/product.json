@@ -116,6 +116,16 @@
         "padding_bottom": 12
       }
     },
+    "custom_liquid_WkGebq": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "{% render 'nf-parfums-pdp-content' %}",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "inspiration_banner": {
       "type": "inspiration-banner",
       "settings": {
@@ -185,9 +195,14 @@
         "faq_item_MKXJWT"
       ],
       "settings": {
-        "heading": "FAQs",
-        "faq_entries": ["faq-1", "faq-2", "faq-3", "faq-4"],
+        "faq_entries": [
+          "faq-1",
+          "faq-2",
+          "faq-3",
+          "faq-4"
+        ],
         "max_items": 4,
+        "heading": "FAQs",
         "open_first_item": false,
         "view_all_link": "shopify://pages/faq-old",
         "color_scheme": "",
@@ -210,11 +225,11 @@
         "padding_bottom": 52
       }
     },
-    "custom_liquid_WkGebq": {
+    "custom_liquid_hxeg6z": {
       "type": "custom-liquid",
       "name": "t:sections.custom-liquid.presets.name",
       "settings": {
-        "custom_liquid": "{% render 'nf-parfums-pdp-content' %}",
+        "custom_liquid": "{%- liquid\n  assign nf_id = ''\n  assign nf_title = ''\n  if product.tags contains 'nf-video-barefoot'\n    assign nf_id = 'gWiUQ-hf6pw'\n    assign nf_title = 'Barefoot do hôr?'\n  elsif product.tags contains 'nf-video-hiking'\n    assign nf_id = 'VXDwjqlKohM'\n    assign nf_title = 'Ktorá podrážka podľa teba drží v horách lepšie?'\n  elsif product.tags contains 'nf-video-multisport'\n    assign nf_id = 'TkiJubK8q58'\n    assign nf_title = 'Prečo musia hikingové topánky vyzerať všetky rovnako?'\n  endif\n-%}\n{%- if nf_id != blank and request.locale.iso_code == 'sk' -%}\n<div class=\"nf-pdp-video\">\n  <h2 class=\"nf-pdp-video__title\">{{ nf_title }}</h2>\n  <div class=\"nf-pdp-video__frame\">\n    <iframe src=\"https://www.youtube-nocookie.com/embed/{{ nf_id }}?rel=0\"\n            title=\"{{ nf_title | escape }}\" loading=\"lazy\" allowfullscreen\n            allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\"></iframe>\n  </div>\n</div>\n<style>\n.nf-pdp-video{max-width:1440px;margin:0 auto;padding:56px 20px}\n.nf-pdp-video__title{font-family:Montserrat,sans-serif;font-weight:700;font-size:20px;line-height:1.25;color:#2B3C48;margin:0 0 16px}\n.nf-pdp-video__frame{position:relative;padding-top:56.25%;border-radius:4px;overflow:hidden;background:#D5D8DA}\n.nf-pdp-video__frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}\n@media(min-width:1200px){.nf-pdp-video{padding:96px 48px}.nf-pdp-video__title{font-size:24px}}\n</style>\n{%- endif -%}",
         "color_scheme": "",
         "padding_top": 40,
         "padding_bottom": 52
@@ -230,6 +245,7 @@
     "related-products",
     "recent-products",
     "faq_section_Hnngqe",
-    "newsletter_section"
+    "newsletter_section",
+    "custom_liquid_hxeg6z"
   ]
 }
