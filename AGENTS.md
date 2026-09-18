@@ -441,3 +441,17 @@ class MyClass {
 // This is a utility that is scoped to this module.  It does not require access to the instance to work
 const someUtilityFunction = (num1, num2) => num1 + num2;
 ```
+
+## Cursor Cloud specific instructions
+
+The Cloud Agent environment (`.cursor/environment.json`) uses the default base image with Node 22 and Corepack. Dependencies are installed via the pinned pnpm (`corepack enable && corepack prepare pnpm@11.20.0 --activate && pnpm install --frozen-lockfile`), and a `Tailwind watch` terminal runs `pnpm watch` to rebuild `assets/application.css` on change.
+
+These run fully offline (no store credentials required):
+
+- `pnpm test:ci` — Vitest unit tests
+- `pnpm lint:theme` — Shopify Theme Check (bundled `@shopify/cli`, lints Liquid locally)
+- `pnpm lint:format` — Prettier check on changed files
+- `pnpm watch` / `pnpm exec tailwindcss -i ./assets/tailwind.css -o ./assets/application.css` — Tailwind asset build
+- `pnpm check` — runs all of the above (`lint` + `validate`)
+
+The live storefront preview (`pnpm start` → `shopify theme dev`) requires authentication and cannot use interactive login in the cloud. Provide a Theme Access token as the `SHOPIFY_CLI_THEME_TOKEN` secret (created via the Shopify "Theme Access" app for the target store), then run `pnpm exec shopify theme dev -e international`. The dev server is served on port `9292`.
