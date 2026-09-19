@@ -455,3 +455,15 @@ These run fully offline (no store credentials required):
 - `pnpm check` — runs all of the above (`lint` + `validate`)
 
 The live storefront preview (`pnpm start` → `shopify theme dev`) requires authentication and cannot use interactive login in the cloud. Provide a Theme Access token as the `SHOPIFY_CLI_THEME_TOKEN` secret (created via the Shopify "Theme Access" app for the target store), then run `pnpm exec shopify theme dev -e international`. The dev server is served on port `9292`.
+
+### Previewing when the local `theme dev` proxy loops
+
+The target stores have a **primary domain redirect** (e.g. `sportfinder-international.myshopify.com` → `shop.northfinder.com`). The local `theme dev` proxy at `http://127.0.0.1:9292` follows that redirect and ends up in an infinite loop (`ERR_TOO_MANY_REDIRECTS`), so the local hot-reload preview is unusable on these stores. This is a Shopify CLI + primary-domain interaction, not an environment problem. Note: the storefront is **not** password-protected — the redirect is to the primary domain.
+
+Workaround — preview the synced development theme on the primary domain instead of `127.0.0.1:9292`:
+
+1. Keep `shopify theme dev` running so it continuously uploads local edits to its development theme, and note the `preview_theme_id` it prints.
+2. Open `https://shop.northfinder.com/?preview_theme_id=<dev_theme_id>` (use the **primary domain**, not `.myshopify.com`).
+3. The bare `?preview_theme_id=` link only renders when the browser has an admin session for that store, or when using a **Share preview** link that carries a `preview_key` (`shopify theme share -e international`, or Admin → Themes → ⋯ → Share preview).
+
+Caveats of this workaround: no hot-reload (refresh manually after edits sync), and local-only `replace_templates` overrides for unsaved JSON template/settings changes are not reflected — only files actually uploaded to the development theme appear. Liquid/CSS/JS edits sync fine. The live theme itself is public at `https://shop.northfinder.com/` (no param needed).
