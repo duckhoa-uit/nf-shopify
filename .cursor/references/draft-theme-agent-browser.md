@@ -37,4 +37,10 @@ Shop Pay / wallet iframes use their own fonts. Ignore them.
 
 Learned 2026-08-25 on international draft `204302844236`: myshopify preview redirected to `https://shop.northfinder.com/` with an empty search string; `Shopify.theme` was still the draft. Re-opening `https://shop.northfinder.com/?preview_theme_id=204302844236` is the verify entry point.
 
+Learned 2026-09-22 (Trello #18): `sportfinder-international.myshopify.com/sl/...` can redirect to a market primary (`northfinder.sk`) and load the **main** theme. Prefer opening the intended primary (e.g. `shop.northfinder.com/sl/...?preview_theme_id=<id>`) and confirm `Shopify.theme.id` / `role === 'unpublished'` before measuring.
+
+## Collection banner "Read More" (Trello #18)
+
+`sections/main-collection-banner.liquid` must gate `.read-more-link` on `collection.description != blank` (same as the truncated teaser). Do not render `#collection-description-full` in `main-collection-product-grid.liquid` when the description is blank. Otherwise the link scrolls to an empty block above the footer on collections that have no description (common across markets).
+
 Full settings push (ignore dropped once, then restored) made `--font-heading-family` / `--font-body-family` `Archivo`. EComposer still sets `body { font-family: Poppins }` — do not fight that with `!important` on `body`. Apparel PDP text that would inherit must set `font-family: var(--font-body-family)` itself (`.current-price`, `.view-all-link`, `.northfinder-product-page`).
