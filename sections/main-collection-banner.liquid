@@ -17,12 +17,10 @@
         {{- collection.title | escape -}}
       </h1>
 
-      {%- if section.settings.show_collection_description -%}
-        {%- if collection.description != blank -%}
-          <div class="collection-hero__description rte truncate max-w-[500px]">
-            <span>/ </span>{{ collection.description | strip_html }}
-          </div>
-        {%- endif -%}
+      {%- if section.settings.show_collection_description and collection.description != blank -%}
+        <div class="collection-hero__description rte truncate max-w-[500px]">
+          <span>/ </span>{{ collection.description | strip_html }}
+        </div>
         <a
           href="#collection-description-full"
           class="read-more-link items-center text-[#0f0f0f] text-sm leading-4 underline lg:text-base lg:leading-5 hidden lg:inline-flex"
