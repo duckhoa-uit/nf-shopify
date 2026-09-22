@@ -31,6 +31,18 @@ Shopify.theme.id === <id> && Shopify.theme.role === 'unpublished'
 
 Do not treat a missing query param as "live theme" without checking `Shopify.theme`. Do not treat a present query param as success without that check.
 
+## Headless / curl without an admin session
+
+Bare `?preview_theme_id=` does **not** switch themes for anonymous `curl` or headless Chrome. Both keep serving the live (`role: main`) theme, so HTML diffs against the draft are false negatives.
+
+When you cannot open a Share preview / admin session:
+
+1. `shopify theme push -e <env> --unpublished --theme "Draft - ..." --json` and note `theme.id`.
+2. `shopify theme pull -e <env> --theme <id> --only templates/<file>.json --path /tmp/draft-pull -n` (copy `shopify.theme.toml` into that path first).
+3. Compare the pulled template to live (or to git). For section presence, assert the section key is absent from both `sections` and `order`.
+
+Learned 2026-09-22 on international draft `206248214860` (Trello #19 / Inspiration banner hide): curl and headless Chrome both returned `Shopify.theme.id === 190888247628` (main) despite `preview_theme_id`; draft `theme pull` of `templates/product.json` proved `inspiration_banner` removed.
+
 `settings_data.json` is ignored on push by default. Unpublished drafts then use schema defaults (e.g. Dawn Assistant), not merchant Archivo. To verify brand fonts on a draft, temporarily drop `ignore` for that env in `shopify.theme.toml`, push to the **unpublished theme id only**, then restore `ignore` immediately. Never leave ignore off — `pnpm push:*` is `--allow-live`.
 
 Shop Pay / wallet iframes use their own fonts. Ignore them.
