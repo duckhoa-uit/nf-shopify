@@ -37,4 +37,6 @@ Shop Pay / wallet iframes use their own fonts. Ignore them.
 
 Learned 2026-08-25 on international draft `204302844236`: myshopify preview redirected to `https://shop.northfinder.com/` with an empty search string; `Shopify.theme` was still the draft. Re-opening `https://shop.northfinder.com/?preview_theme_id=204302844236` is the verify entry point.
 
+Learned 2026-09-23 on draft `206305919308`: the first response is a 302 that strips `preview_theme_id` and returns an empty body. `server-timing` on that 302 already names the draft theme. Keep the `Set-Cookie` from the 302 and request the `Location` URL. The next 200 renders the draft (`Shopify.theme.role` is `unpublished`) even though the address has no `preview_theme_id`. Dropping the cookie loads the live theme.
+
 Full settings push (ignore dropped once, then restored) made `--font-heading-family` / `--font-body-family` `Archivo`. EComposer still sets `body { font-family: Poppins }` — do not fight that with `!important` on `body`. Apparel PDP text that would inherit must set `font-family: var(--font-body-family)` itself (`.current-price`, `.view-all-link`, `.northfinder-product-page`).
