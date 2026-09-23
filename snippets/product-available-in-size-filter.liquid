@@ -1,0 +1,104 @@
+{% doc %}
+  Decides whether a product stays in a size-filtered grid.
+
+  `filter.p.m.custom.size` matches the product metafield, so a sold-out size
+  still returns the product. Echoes `true` when that filter is inactive, or
+  when an available variant carries one of the selected sizes.
+
+  @param product - {Object} Product to test (required)
+  @param filters - {Array} `collection.filters` or `search.filters` (required)
+{% enddoc %}
+
+{%- liquid
+  assign show_product = true
+  assign size_names = ''
+
+  if filters != blank
+    for filter in filters
+      if filter.param_name != 'filter.p.m.custom.size'
+        continue
+      endif
+
+      for active_value in filter.active_values
+        assign label = active_value.label | strip
+        if label != blank
+          assign size_names = size_names | append: label | append: '|||'
+        endif
+
+        assign filter_gid = active_value.value
+        assign filter_id = filter_gid | split: '/' | last
+        if product.metafields.custom.size.value != blank
+          for size_meta in product.metafields.custom.size.value
+            assign meta_gid = size_meta.system.id
+            assign meta_id = meta_gid | split: '/' | last
+            if meta_gid == filter_gid or meta_id == filter_id
+              assign canonical = size_meta.value | strip
+              if canonical != blank
+                assign size_names = size_names | append: canonical | append: '|||'
+              endif
+              break
+            endif
+          endfor
+        endif
+      endfor
+    endfor
+  endif
+
+  if size_names != blank
+    assign show_product = false
+    assign wanted_sizes = size_names | split: '|||'
+    assign size_option_index = -1
+
+    for option in product.options_with_values
+      capture is_size_option
+        render 'is-size-option', option: option, product: product
+      endcapture
+      assign is_size_option = is_size_option | strip
+      if is_size_option == 'true'
+        assign size_option_index = forloop.index0
+        break
+      endif
+    endfor
+
+    for variant in product.variants
+      unless variant.available
+        continue
+      endunless
+
+      if size_option_index >= 0
+        assign option_norm = variant.options[size_option_index] | downcase | strip
+        for wanted_name in wanted_sizes
+          assign wanted_norm = wanted_name | downcase | strip
+          if wanted_norm != blank and option_norm == wanted_norm
+            assign show_product = true
+            break
+          endif
+        endfor
+      else
+        for option_value in variant.options
+          assign option_norm = option_value | downcase | strip
+          for wanted_name in wanted_sizes
+            assign wanted_norm = wanted_name | downcase | strip
+            if wanted_norm != blank and option_norm == wanted_norm
+              assign show_product = true
+              break
+            endif
+          endfor
+          if show_product
+            break
+          endif
+        endfor
+      endif
+
+      if show_product
+        break
+      endif
+    endfor
+  endif
+
+  if show_product
+    echo 'true'
+  else
+    echo 'false'
+  endif
+-%}

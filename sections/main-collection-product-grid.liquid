@@ -432,9 +432,18 @@
                   class="dawn-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop"
                 >
                   {% assign skip_card_product_styles = false %}
+                  {%- assign visible_products = 0 -%}
                   {%- for product in collection.products -%}
+                    {%- capture size_available -%}
+                      {%- render 'product-available-in-size-filter', product: product, filters: collection.filters -%}
+                    {%- endcapture -%}
+                    {%- assign size_available = size_available | strip -%}
+                    {%- if size_available == 'false' -%}
+                      {%- continue -%}
+                    {%- endif -%}
+                    {%- assign visible_products = visible_products | plus: 1 -%}
                     {% assign lazy_load = false %}
-                    {%- if forloop.index > 2 -%}
+                    {%- if visible_products > 2 -%}
                       {%- assign lazy_load = true -%}
                     {%- endif -%}
                     <li
@@ -461,25 +470,48 @@
                   {%- endfor -%}
                 </ul>
 
+                {%- if visible_products == 0 -%}
+                  <div class="title-wrapper center">
+                    <h2 class="title title--primary">
+                      {{ 'sections.collection_template.empty' | t -}}
+                      <br>
+                      {{
+                        'sections.collection_template.use_fewer_filters_html'
+                        | t: link: collection.url, class: 'underlined-link link'
+                      }}
+                    </h2>
+                  </div>
+                {%- endif -%}
+
+                {%- liquid
+                  assign reported_total = paginate.items
+                  assign viewed_items = paginate.current_page | times: products_per_page
+                  if paginate.pages == 1
+                    assign reported_total = visible_products
+                    assign viewed_items = visible_products
+                  endif
+                  if viewed_items > reported_total
+                    assign viewed_items = reported_total
+                  endif
+                  assign progress_width = 0
+                  if reported_total > 0
+                    assign progress_width = viewed_items | times: 100.0 | divided_by: reported_total
+                  endif
+                -%}
                 <div
                   class="product-count"
                   id="ProductCount"
-                  data-total-count="{{ paginate.items }}"
+                  data-total-count="{{ reported_total }}"
                   data-current-page="{{ paginate.current_page }}"
                   data-default-per-page="{{ products_per_page }}"
                 >
                   <p class="product-count-text">
-                    <!-- Initial calculation will be updated by JavaScript -->
-                    {% assign viewed_items = paginate.current_page | times: products_per_page %}
-                    {% if viewed_items > paginate.items %}
-                      {% assign viewed_items = paginate.items %}
-                    {% endif %}
-                    {{ 'products.facets.product_count' | t: viewed: viewed_items, total: paginate.items }}
+                    {{ 'products.facets.product_count' | t: viewed: viewed_items, total: reported_total }}
                   </p>
                   <div class="product-count-progress">
                     <div
                       class="product-count-progress-bar"
-                      style="width: {{ viewed_items | times: 100.0 | divided_by: paginate.items }}%"
+                      style="width: {{ progress_width }}%"
                     ></div>
                   </div>
                 </div>

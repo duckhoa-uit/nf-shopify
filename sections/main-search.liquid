@@ -254,13 +254,24 @@
             >
               <div class="loading-overlay gradient"></div>
               <ul
-                class="grid product-grid  grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop"
+                class="product-grid grid  grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop"
                 role="list"
               >
                 {%- assign skip_card_product_styles = false -%}
+                {%- assign visible_results = 0 -%}
                 {%- for item in search.results -%}
+                  {%- if item.object_type == 'product' -%}
+                    {%- capture size_available -%}
+                      {%- render 'product-available-in-size-filter', product: item, filters: search.filters -%}
+                    {%- endcapture -%}
+                    {%- assign size_available = size_available | strip -%}
+                    {%- if size_available == 'false' -%}
+                      {%- continue -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                  {%- assign visible_results = visible_results | plus: 1 -%}
                   {% assign lazy_load = false %}
-                  {%- if forloop.index > 2 -%}
+                  {%- if visible_results > 2 -%}
                     {%- assign lazy_load = true -%}
                   {%- endif -%}
 
@@ -321,6 +332,18 @@
                   </li>
                 {%- endfor -%}
               </ul>
+              {%- if visible_results == 0 -%}
+                <div class="title-wrapper center">
+                  <h2 class="title title--primary">
+                    {{ 'sections.collection_template.empty' | t -}}
+                    <br>
+                    {{
+                      'sections.collection_template.use_fewer_filters_html'
+                      | t: link: search_url, class: 'underlined-link link'
+                    }}
+                  </h2>
+                </div>
+              {%- endif -%}
               {%- if paginate.pages > 1 -%}
                 {% render 'pagination', paginate: paginate %}
               {%- endif -%}
