@@ -86,6 +86,52 @@ describe("resolveProductMediaSequence", () => {
     expect(resolved.slice(1).map((item) => item.mediaId)).toEqual(["main", "video", "detail", "other-color"]);
   });
 
+  test("keeps the square video second and sends the vertical cut to the reel", () => {
+    const square = video("square", "coat--NF-no-5009snw-darkblue-H.jpg", {
+      preview_image: { src: "https://cdn.shopify.com/square.jpg", width: 1080, height: 1080 },
+      sources: [{ url: "https://cdn.shopify.com/square.mp4", mime_type: "video/mp4", width: 1080, height: 1080 }],
+    });
+    const vertical = video("vertical", "coat--NF-no-5009snw-darkblue-M_1.jpg", {
+      preview_image: { src: "https://cdn.shopify.com/vertical.jpg", width: 1080, height: 1920 },
+      sources: [{ url: "https://cdn.shopify.com/vertical.mp4", mime_type: "video/mp4", width: 1080, height: 1920 }],
+    });
+    const media = [
+      image("main", "coat--NF-no-5009snw-darkblue-H.jpg"),
+      vertical,
+      image("model", "coat--NF-no-5009snw-darkblue-M_1.jpg"),
+      square,
+    ];
+
+    const resolved = resolveProductMediaSequence({ media });
+
+    expect(resolved.map((item) => item.mediaId)).toEqual(["main", "square", "model"]);
+    expect(resolved[1].reel.sources.map((source) => source.url)).toEqual(["https://cdn.shopify.com/vertical.mp4"]);
+    expect(resolved.some((item) => item.mediaId === "vertical")).toBe(false);
+  });
+
+  test("does not promote a video into the first gallery slot", () => {
+    const resolved = resolveProductMediaSequence({
+      media: baseMedia,
+      initialMediaId: "video",
+    });
+
+    expect(resolved[0].mediaId).toBe("main");
+    expect(resolved[1].mediaId).toBe("video");
+  });
+
+  test("keeps a lone portrait video in the gallery and opens that same file", () => {
+    const vertical = video("vertical", "coat--NF-no-5009snw-darkblue-H.jpg", {
+      preview_image: { src: "https://cdn.shopify.com/vertical.jpg", width: 1080, height: 1920 },
+      sources: [{ url: "https://cdn.shopify.com/vertical.mp4", mime_type: "video/mp4", width: 720, height: 1280 }],
+    });
+    const resolved = resolveProductMediaSequence({
+      media: [image("main", "coat--NF-no-5009snw-darkblue-H.jpg"), vertical],
+    });
+
+    expect(resolved.map((item) => item.mediaId)).toEqual(["main", "vertical"]);
+    expect(resolved[1].reel.sources[0].url).toBe("https://cdn.shopify.com/vertical.mp4");
+  });
+
   test("does not pin a back-type featured image ahead of the front-first sequence", () => {
     const media = [
       image("hero", "shirt--NF-TR-3549SKP-811-H.jpg"),

@@ -1,6 +1,44 @@
 import { filterMediaByColor, parseImageUrl, sortImagesByDisplayRules } from "./product-utils.module.js";
 
 const VISIBLE_MEDIA_COUNT = 6;
+const SQUARE_ASPECT_MIN = 0.85;
+
+const videoAspect = (media) => {
+  const preview = media?.preview_image;
+  if (preview?.width && preview?.height) return preview.width / preview.height;
+
+  const source = (media?.sources || []).find((item) => item?.width && item?.height);
+  if (source) return source.width / source.height;
+
+  if (typeof media?.aspect_ratio === "number" && media.aspect_ratio > 0) return media.aspect_ratio;
+  return null;
+};
+
+const videoRole = (media) => {
+  if (media?.media_type !== "video") return null;
+
+  const aspect = videoAspect(media);
+  if (aspect !== null && aspect < SQUARE_ASPECT_MIN) return "vertical";
+  return "gallery";
+};
+
+const reelPayload = (media) => {
+  if (!media) return null;
+
+  const sources = (media.sources || [])
+    .filter((source) => source?.url)
+    .map((source) => ({
+      url: source.url,
+      mime_type: source.mime_type || "",
+    }));
+
+  if (!sources.length) return null;
+
+  return {
+    sources,
+    poster: media.preview_image?.src || "",
+  };
+};
 
 const mediaSource = (media) => {
   if (!media) return "";
@@ -32,6 +70,17 @@ const findMediaForSource = (media, source) => {
   });
 };
 
+const reelForGalleryVideo = (media, galleryVideoMedia, verticalMedia) => {
+  if (media?.media_type !== "video") return null;
+  if (videoRole(media) === "vertical" || !verticalMedia.length) return reelPayload(media);
+
+  const index = Math.max(
+    0,
+    galleryVideoMedia.findIndex((item) => item.id === media.id),
+  );
+  return reelPayload(verticalMedia[Math.min(index, verticalMedia.length - 1)]);
+};
+
 const reorderVideos = (items) => {
   const videoItems = items.filter((item) => item.media?.media_type === "video");
   const imageItems = items.filter((item) => item.media?.media_type !== "video");
@@ -56,13 +105,21 @@ export function resolveProductMediaSequence({
   visibleCount = VISIBLE_MEDIA_COUNT,
 } = {}) {
   const allMedia = Array.isArray(media) ? media : [];
+  const verticalMedia = allMedia.filter((item) => videoRole(item) === "vertical");
+  const galleryVideoMedia = allMedia.filter((item) => videoRole(item) === "gallery");
+  const visibleVideoMedia = galleryVideoMedia.length ? galleryVideoMedia : verticalMedia.slice(0, 1);
+  const hiddenVideoSources = new Set(
+    allMedia
+      .filter((item) => item.media_type === "video" && !visibleVideoMedia.includes(item))
+      .map(mediaSource)
+      .filter(Boolean),
+  );
   const allSources = uniqueSources(allMedia);
-  let filteredSources = filterMediaByColor(allSources, activeColor, colorMappings);
+  let filteredSources = filterMediaByColor(allSources, activeColor, colorMappings).filter(
+    (source) => !hiddenVideoSources.has(source),
+  );
 
-  const videoSources = allMedia
-    .filter((item) => item.media_type === "video")
-    .map(mediaSource)
-    .filter(Boolean);
+  const videoSources = visibleVideoMedia.map(mediaSource).filter(Boolean);
   filteredSources = [...new Set([...filteredSources, ...videoSources])];
 
   let sorted = sortImagesByDisplayRules(filteredSources, colorMappings);
@@ -84,7 +141,10 @@ export function resolveProductMediaSequence({
     })
     .filter(Boolean);
 
-  sequence = reorderVideos(sequence);
+  sequence = reorderVideos(sequence).map((item) => ({
+    ...item,
+    reel: reelForGalleryVideo(item.media, galleryVideoMedia, verticalMedia),
+  }));
 
   if (!sequence.length) {
     sequence = allMedia
@@ -97,6 +157,7 @@ export function resolveProductMediaSequence({
           mediaId: item.id,
           mediaType: item.media_type || "image",
           source,
+          reel: null,
           hidden: false,
         };
       })
@@ -105,7 +166,7 @@ export function resolveProductMediaSequence({
 
   if (initialMediaId !== null && initialMediaId !== undefined && sequence.length > 1) {
     const initialIndex = sequence.findIndex((item) => String(item.mediaId) === String(initialMediaId));
-    if (initialIndex > 0) {
+    if (initialIndex > 0 && sequence[initialIndex].mediaType !== "video") {
       const parsed = parseImageUrl(sequence[initialIndex].source);
       const isBackType = parsed.image_type === "back_variant" || parsed.image_type === "back_main";
 
