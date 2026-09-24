@@ -53,6 +53,7 @@
       this.sequence = [];
       this.hasHydrated = false;
       this.reelDialog = null;
+      this.finishReel = null;
 
       this.handleDocumentChange = this.handleDocumentChange.bind(this);
       this.handleVariantChange = this.handleVariantChange.bind(this);
@@ -596,6 +597,19 @@
         muteButton.setAttribute("aria-label", label);
       };
 
+      const finish = () => {
+        if (!dialog.isConnected) return;
+
+        video.pause();
+        if (dialog.open) dialog.close();
+        dialog.remove();
+        if (this.reelDialog === dialog) this.reelDialog = null;
+        this.finishReel = null;
+        this.resumeGalleryVideos();
+        if (!this.isDestroyed && typeof opener?.focus === "function") opener.focus();
+      };
+
+      this.finishReel = finish;
       pauseButton.addEventListener("click", (event) => {
         event.stopPropagation();
         setPaused(!video.paused);
@@ -605,7 +619,15 @@
         setMuted(!video.muted);
       });
       video.addEventListener("click", () => setPaused(!video.paused));
-      closeButton.addEventListener("click", () => dialog.close());
+      closeButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        finish();
+      });
+      dialog.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        finish();
+      });
 
       controls.appendChild(pauseButton);
       controls.appendChild(muteButton);
@@ -613,18 +635,6 @@
       frame.appendChild(closeButton);
       frame.appendChild(controls);
       dialog.appendChild(frame);
-
-      dialog.addEventListener("close", () => {
-        video.pause();
-        dialog.remove();
-        if (this.reelDialog === dialog) this.reelDialog = null;
-        this.resumeGalleryVideos();
-        if (!this.isDestroyed && typeof opener?.focus === "function") opener.focus();
-      });
-      dialog.addEventListener("cancel", (event) => {
-        event.preventDefault();
-        dialog.close();
-      });
 
       document.body.appendChild(dialog);
       this.reelDialog = dialog;
@@ -634,7 +644,7 @@
     }
 
     closeReel() {
-      if (this.reelDialog?.open) this.reelDialog.close();
+      this.finishReel?.();
     }
 
     pauseGalleryVideos() {
