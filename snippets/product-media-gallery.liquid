@@ -606,6 +606,19 @@
   if initial_media == null
     assign initial_media = first_variant.featured_media | default: product.featured_media | default: product.media.first
   endif
+
+  if initial_media.media_type == 'video'
+    assign initial_photo = null
+    for media in product.media
+      if initial_photo == null and media.media_type != 'video'
+        assign initial_photo = media
+      endif
+    endfor
+    if initial_photo
+      assign initial_media = initial_photo
+    endif
+  endif
+
   assign initial_image = initial_media.preview_image | default: initial_media
   assign initial_media_id = initial_media.id | default: ''
   assign initial_media_ratio = initial_image.aspect_ratio | default: 1
@@ -785,7 +798,12 @@
       "colorValueToReferenceId": {{ color_value_to_ref_json }},
       "productTitle": {{ product.title | json }},
       "moreImagesText": {{ 'sections.main_product.more_images' | t | json }},
-      "lessImagesText": {{ 'sections.main_product.less_images' | t | json }}
+      "lessImagesText": {{ 'sections.main_product.less_images' | t | json }},
+      "playVideoText": {{ 'products.product.media.play_video' | t | json }},
+      "pauseVideoText": {{ 'products.product.media.pause_video' | t | json }},
+      "unmuteVideoText": {{ 'products.product.media.unmute_video' | t | json }},
+      "muteVideoText": {{ 'products.product.media.mute_video' | t | json }},
+      "closeVideoText": {{ 'accessibility.close' | t | json }}
     }
   </script>
 </media-gallery>

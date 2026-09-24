@@ -52,6 +52,7 @@
       this.isExpanded = false;
       this.sequence = [];
       this.hasHydrated = false;
+      this.reelDialog = null;
 
       this.handleDocumentChange = this.handleDocumentChange.bind(this);
       this.handleVariantChange = this.handleVariantChange.bind(this);
@@ -99,6 +100,7 @@
 
       if (this.swiper?.destroy) this.swiper.destroy(true, true);
       this.swiper = null;
+      this.closeReel();
     }
 
     bindListeners() {
@@ -189,6 +191,7 @@
           initialMediaId,
           visibleCount: CONFIG.visibleCount,
         });
+        this.closeReel();
         this.renderImages(this.sequence);
         this.hasHydrated = true;
       });
@@ -278,16 +281,15 @@
       const wrapper = item.querySelector(".product__media") || item.firstElementChild;
       const content = wrapper?.firstElementChild;
       if (!wrapper || !content) return;
+      if (media?.media_type === "video") {
+        wrapper.style.cssText = "--ratio: 1; --preview-ratio: 1; aspect-ratio: 1; padding-bottom: 100%;";
+        this.setContent(content, this.createVideo(media, sequenceItem.reel));
+        return;
+      }
+
       const image = media?.media_type === "image" ? media : media?.preview_image;
       const ratio = image?.width && image?.height ? image.width / image.height : 1;
       wrapper.style.cssText = `--ratio: ${ratio}; --preview-ratio: ${ratio}; aspect-ratio: ${ratio}; padding-bottom: ${100 / ratio}%;`;
-
-      if (media?.media_type === "video") {
-        if (!content.querySelector("video")) {
-          this.setContent(content, this.createVideo(media));
-        }
-        return;
-      }
 
       if (media?.media_type === "model") {
         this.setContent(content, this.createModel(media));
@@ -375,18 +377,26 @@
       return frame;
     }
 
-    createVideo(media) {
+    createVideo(media, reel) {
       const container = document.createElement("div");
       container.className = "video-container relative w-full h-full";
+      container.setAttribute("role", "button");
+      container.tabIndex = 0;
+      container.setAttribute("aria-label", this.data.options.playVideoText || "Play video");
+
       const video = document.createElement("video");
       video.className = "w-full h-full object-cover";
       video.muted = true;
+      video.defaultMuted = true;
       video.loop = true;
       video.autoplay = true;
       video.playsInline = true;
+      video.controls = false;
       video.setAttribute("playsinline", "");
       video.setAttribute("muted", "");
+      video.setAttribute("loop", "");
       video.setAttribute("autoplay", "");
+      video.setAttribute("disablepictureinpicture", "");
       if (media.preview_image?.src) video.poster = media.preview_image.src;
 
       for (const source of media.sources || []) {
@@ -396,14 +406,36 @@
         video.appendChild(sourceElement);
       }
 
+      const playIcon = document.createElement("span");
+      playIcon.className = "video-container__play";
+      playIcon.setAttribute("aria-hidden", "true");
+      playIcon.innerHTML =
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 14" fill="currentColor"><path fill-rule="evenodd" d="M1.482.815A1 1 0 0 0 0 1.69v10.517a1 1 0 0 0 1.525.851L10.54 7.5a1 1 0 0 0-.043-1.728z" clip-rule="evenodd"></path></svg>';
+
       video.addEventListener("error", () => {
         video.hidden = true;
       });
       container.appendChild(video);
-      container.addEventListener("click", (event) => {
+      container.appendChild(playIcon);
+
+      const openReel = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        this.openVideoLightbox(media.sources || [], media.preview_image?.src);
+        const playback = reel?.sources?.length
+          ? reel
+          : {
+              sources: (media.sources || []).map((source) => ({
+                url: source.url,
+                mime_type: source.mime_type || "",
+              })),
+              poster: media.preview_image?.src || "",
+            };
+        this.openReel(playback, container);
+      };
+
+      container.addEventListener("click", openReel);
+      container.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") openReel(event);
       });
       return container;
     }
@@ -491,32 +523,127 @@
       });
     }
 
-    openVideoLightbox(sources, poster) {
-      if (!sources.length) return;
+    openReel(playback, opener) {
+      const sources = (playback?.sources || []).filter((source) => source?.url);
+      if (!sources.length || this.isDestroyed) return;
 
-      this.loadFancybox().then(() => {
-        if (this.isDestroyed || !window.Fancybox) return;
+      this.closeReel();
+      this.pauseGalleryVideos();
 
-        const sourceTags = sources
-          .filter((source) => source?.url)
-          .map((source) => `<source src="${source.url}" type="${source.mime_type || ""}">`)
-          .join("");
-        const posterAttribute = poster ? ` poster="${poster}"` : "";
+      const labels = this.data.options;
+      const dialog = document.createElement("dialog");
+      dialog.className = "product-video-reel";
 
-        window.Fancybox.show(
-          [
-            {
-              src: `<video controls autoplay playsinline${posterAttribute}>${sourceTags}</video>`,
-              type: "html",
-            },
-          ],
-          {
-            dragToClose: false,
-            Toolbar: false,
-            Caption: false,
-          },
-        );
+      const frame = document.createElement("div");
+      frame.className = "product-video-lightbox";
+
+      const video = document.createElement("video");
+      video.className = "product-video-lightbox__player";
+      video.autoplay = true;
+      video.loop = true;
+      video.playsInline = true;
+      video.muted = true;
+      video.defaultMuted = true;
+      video.controls = false;
+      video.setAttribute("playsinline", "");
+      video.setAttribute("muted", "");
+      video.setAttribute("autoplay", "");
+      if (playback.poster) video.poster = playback.poster;
+
+      for (const source of sources) {
+        const sourceElement = document.createElement("source");
+        sourceElement.src = source.url;
+        if (source.mime_type) sourceElement.type = source.mime_type;
+        video.appendChild(sourceElement);
+      }
+
+      const closeButton = document.createElement("button");
+      closeButton.type = "button";
+      closeButton.className = "product-video-lightbox__close";
+      closeButton.setAttribute("aria-label", labels.closeVideoText || "Close");
+      closeButton.innerHTML =
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>';
+
+      const controls = document.createElement("div");
+      controls.className = "product-video-lightbox__controls";
+
+      const pauseButton = document.createElement("button");
+      pauseButton.type = "button";
+      pauseButton.className = "product-video-lightbox__control";
+      pauseButton.textContent = labels.pauseVideoText || "Pause";
+      pauseButton.setAttribute("aria-label", labels.pauseVideoText || "Pause");
+
+      const muteButton = document.createElement("button");
+      muteButton.type = "button";
+      muteButton.className = "product-video-lightbox__control";
+      muteButton.setAttribute("aria-pressed", "true");
+      muteButton.textContent = labels.unmuteVideoText || "Unmute";
+      muteButton.setAttribute("aria-label", labels.unmuteVideoText || "Unmute");
+
+      const setPaused = (paused) => {
+        if (paused) video.pause();
+        else video.play().catch(() => {});
+        const label = paused ? labels.playVideoText || "Play video" : labels.pauseVideoText || "Pause";
+        pauseButton.textContent = label;
+        pauseButton.setAttribute("aria-label", label);
+      };
+
+      const setMuted = (muted) => {
+        video.muted = muted;
+        muteButton.setAttribute("aria-pressed", muted ? "true" : "false");
+        const label = muted ? labels.unmuteVideoText || "Unmute" : labels.muteVideoText || "Mute";
+        muteButton.textContent = label;
+        muteButton.setAttribute("aria-label", label);
+      };
+
+      pauseButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setPaused(!video.paused);
       });
+      muteButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setMuted(!video.muted);
+      });
+      video.addEventListener("click", () => setPaused(!video.paused));
+      closeButton.addEventListener("click", () => dialog.close());
+
+      controls.appendChild(pauseButton);
+      controls.appendChild(muteButton);
+      frame.appendChild(video);
+      frame.appendChild(closeButton);
+      frame.appendChild(controls);
+      dialog.appendChild(frame);
+
+      dialog.addEventListener("close", () => {
+        video.pause();
+        dialog.remove();
+        if (this.reelDialog === dialog) this.reelDialog = null;
+        this.resumeGalleryVideos();
+        if (!this.isDestroyed && typeof opener?.focus === "function") opener.focus();
+      });
+      dialog.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        dialog.close();
+      });
+
+      document.body.appendChild(dialog);
+      this.reelDialog = dialog;
+      dialog.showModal();
+      setMuted(true);
+      video.play().catch(() => setPaused(true));
+    }
+
+    closeReel() {
+      if (this.reelDialog?.open) this.reelDialog.close();
+    }
+
+    pauseGalleryVideos() {
+      for (const video of this.root.querySelectorAll(".product__media video")) video.pause();
+    }
+
+    resumeGalleryVideos() {
+      if (this.isDestroyed) return;
+      this.ensureVideosAutoplay();
     }
 
     loadFancybox() {
