@@ -17,22 +17,36 @@
         {{- collection.title | escape -}}
       </h1>
 
-      {%- if section.settings.show_collection_description -%}
-        {%- if collection.description != blank -%}
-          <div class="collection-hero__description rte truncate max-w-[500px]">
-            <span>/ </span>{{ collection.description | strip_html }}
+      {%- if section.settings.show_collection_description and collection.description != blank -%}
+        <collection-description-toggle class="collection-hero__description-toggle">
+          <div class="collection-hero__description-preview" data-collection-description-preview>
+            {{ collection.description | strip_html }}
           </div>
-        {%- endif -%}
-        <a
-          href="#collection-description-full"
-          class="read-more-link items-center text-[#0f0f0f] text-sm leading-4 underline lg:text-base lg:leading-5 hidden lg:inline-flex"
-          aria-label="Read full description for {{ collection.title | escape }} collection"
-        >
-          {{ 'blogs.article.read_more' | t }}
-          <span class="rotate-90 ml-2">
-            {{- 'icon-chevron.svg' | inline_asset_content -}}
-          </span>
-        </a>
+          <div
+            id="CollectionDescriptionPanel-{{ section.id }}"
+            class="collection-hero__description-panel rte"
+            data-collection-description-panel
+            hidden
+          >
+            {{ collection.description }}
+          </div>
+          <button
+            type="button"
+            class="read-more-link collection-hero__read-more-button inline-flex items-center text-sm leading-4 text-[#0f0f0f] underline lg:text-base lg:leading-5"
+            data-collection-read-more
+            aria-expanded="false"
+            aria-controls="CollectionDescriptionPanel-{{ section.id }}"
+          >
+            <span class="collection-hero__read-labels">
+              <span class="collection-hero__read-more">{{ 'blogs.article.read_more' | t }}</span>
+              <span class="collection-hero__read-less">{{ 'general.text_truncation.read_less' | t }}</span>
+            </span>
+            <span class="collection-hero__read-icon">
+              {{- 'icon-chevron.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </collection-description-toggle>
+        <script src="{{ 'collection-description-toggle.js' | asset_url }}" defer="defer"></script>
       {%- endif -%}
     </div>
 

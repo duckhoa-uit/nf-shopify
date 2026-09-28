@@ -1,0 +1,38 @@
+# Collection Read more
+
+On a collection with a description, the shopper reads a two-line excerpt under the title and opens the full description in that same stack. The button stays under the visible text. The page does not scroll.
+
+## Sub-features
+
+- `read-more-present` shows the excerpt and the Read more button when the collection has a description.
+- `read-more-expand` opens the full description under the title without changing the URL hash or scroll position.
+- `read-more-collapse` hides that description and shows the excerpt again.
+- `read-more-absent` renders no Read more button when the collection description is blank.
+
+## How to get to it (user POV)
+
+- Open a collection that has a description, such as Pánske oblečenie - Bundy.
+- Read the two-line excerpt under the collection title, then use the Read more control on the line below that excerpt.
+- A collection with no description has no control. The empty footer anchor is absent.
+
+## Driving it with agent-browser
+
+Preconditions:
+
+- `doctor.sh` passed for this `THEME_ID` on an unpublished international draft.
+- Viewport is 1400x900.
+- The page is `https://northfinder.sk/collections/panske-oblecenie-bundy` with `preview_theme_id` restored.
+
+- **Open the collection.** Run `agent-browser --session verify-storefront open "https://northfinder.sk/collections/panske-oblecenie-bundy?preview_theme_id=$THEME_ID"`, then `agent-browser --session verify-storefront wait --load load`, then `bash .cursor/skills/verify-storefront/scripts/restore-preview.sh "$THEME_ID"` and `bash .cursor/skills/verify-storefront/scripts/doctor.sh "$THEME_ID"`. The heading contains the collection title and `[data-collection-read-more]` is visible.
+- **Record the closed state.** Run `bash .cursor/skills/verify-storefront/scripts/capture-state.sh /opt/cursor/artifacts/verify-storefront/read-more-before.json`. `ariaExpanded` is `false` and `panelHidden` is true. Plain `agent-browser eval` wraps the value in a quoted string. Use `capture-state.sh`, which calls `eval --json`.
+- **Expand.** Run `agent-browser --session verify-storefront click "[data-collection-read-more]"`. Save the measurement with `bash .cursor/skills/verify-storefront/scripts/capture-state.sh /opt/cursor/artifacts/verify-storefront/read-more-after-open.json /opt/cursor/artifacts/verify-storefront/read-more-before.json` and `agent-browser --session verify-storefront screenshot /opt/cursor/artifacts/verify-storefront/read-more-open.png`. The second argument adds `scrollDelta`. Hash is empty, `scrollDelta` is 0, `ariaExpanded` is `true`, the preview is hidden, and the panel is visible under the title.
+- **Collapse.** Click `[data-collection-read-more]` again. Save `read-more-after-close.json` with `capture-state.sh`. `ariaExpanded` is `false`, the panel is hidden, and the preview is visible.
+- **Blank description.** Open `https://northfinder.sk/collections/panske-oblecenie?preview_theme_id=$THEME_ID`, restore the param, and run doctor. `[data-collection-read-more]` is absent and `#collection-description-full` is absent.
+
+## Gotchas
+
+- The stack is the same at 390px and 1600px: title, then the text, then the button. The button stays under the visible text. Opening the paragraph moves the button down with the copy.
+- The description is not repeated after the product grid.
+- The primary domain redirect removes `preview_theme_id`, including after `restore-preview.sh` re-opens the collection URL. `location.href` can omit the param while `Shopify.theme.role` is still `unpublished`. Run `doctor.sh` before measuring.
+- The Slovak label is `blogs.article.read_more` ("Čítať viac"). The English label is "Read more".
+- Wait for `--load load`. Analytics never reaches `networkidle`.
