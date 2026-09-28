@@ -36,4 +36,5 @@ Each feature file starts with an H1 and one paragraph, then exactly four H2 sect
 - [Collection filters](./collection-filters.md) shows the desktop filter column on a collection.
 - [Header search](./header-search.md) types a query into the header search field.
 - [Product add to cart](./product-add-to-cart.md) reaches a product and the add-to-cart button.
+- [Product gallery video](./product-gallery-video.md) places a square clip second and opens the 9:16 reel fullscreen.
 - [Cart drawer](./cart-drawer.md) opens the cart from the header icon.
