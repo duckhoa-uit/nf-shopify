@@ -52,6 +52,7 @@
       this.isExpanded = false;
       this.sequence = [];
       this.hasHydrated = false;
+      this.videoViewerModule = null;
 
       this.handleDocumentChange = this.handleDocumentChange.bind(this);
       this.handleVariantChange = this.handleVariantChange.bind(this);
@@ -97,6 +98,7 @@
       }
       this.subscriptions = [];
 
+      this.videoViewerModule?.closeProductVideoViewer();
       if (this.swiper?.destroy) this.swiper.destroy(true, true);
       this.swiper = null;
     }
@@ -278,14 +280,16 @@
       const wrapper = item.querySelector(".product__media") || item.firstElementChild;
       const content = wrapper?.firstElementChild;
       if (!wrapper || !content) return;
-      const image = media?.media_type === "image" ? media : media?.preview_image;
-      const ratio = image?.width && image?.height ? image.width / image.height : 1;
-      wrapper.style.cssText = `--ratio: ${ratio}; --preview-ratio: ${ratio}; aspect-ratio: ${ratio}; padding-bottom: ${100 / ratio}%;`;
+      const tileRatio = this.getGalleryTileRatio(media, sequenceItem);
+      wrapper.style.cssText = `--ratio: ${tileRatio}; --preview-ratio: ${tileRatio}; aspect-ratio: ${tileRatio}; padding-bottom: ${100 / tileRatio}%;`;
 
       if (media?.media_type === "video") {
-        if (!content.querySelector("video")) {
-          this.setContent(content, this.createVideo(media));
+        let container = content.querySelector(".video-container");
+        if (!container) {
+          this.setContent(content, this.createVideo(media, sequenceItem));
+          container = content.querySelector(".video-container");
         }
+        this.bindGalleryVideo(container, sequenceItem);
         return;
       }
 
@@ -299,6 +303,7 @@
         return;
       }
 
+      const image = media?.media_type === "image" ? media : media?.preview_image;
       if (!image?.src) {
         this.setContent(content, this.createPlaceholder());
         return;
@@ -375,7 +380,19 @@
       return frame;
     }
 
-    createVideo(media) {
+    getGalleryTileRatio(media, sequenceItem) {
+      if (sequenceItem?.mediaType === "video" || media?.media_type === "video") {
+        const hero = this.sequence.find((item) => item.mediaType === "image");
+        const heroImage = hero?.media?.media_type === "image" ? hero.media : hero?.media?.preview_image;
+        if (heroImage?.width && heroImage?.height) return heroImage.width / heroImage.height;
+        return 1;
+      }
+
+      const image = media?.media_type === "image" ? media : media?.preview_image;
+      return image?.width && image?.height ? image.width / image.height : 1;
+    }
+
+    createVideo(media, sequenceItem) {
       const container = document.createElement("div");
       container.className = "video-container relative w-full h-full";
       const video = document.createElement("video");
@@ -390,22 +407,53 @@
       if (media.preview_image?.src) video.poster = media.preview_image.src;
 
       for (const source of media.sources || []) {
+        if (!source?.url) continue;
         const sourceElement = document.createElement("source");
         sourceElement.src = source.url;
-        sourceElement.type = source.mime_type;
+        if (source.mime_type) sourceElement.type = source.mime_type;
         video.appendChild(sourceElement);
       }
 
       video.addEventListener("error", () => {
         video.hidden = true;
       });
-      container.appendChild(video);
-      container.addEventListener("click", (event) => {
+
+      const playBadge = document.createElement("span");
+      playBadge.className = "video-container__play";
+      playBadge.setAttribute("aria-hidden", "true");
+      playBadge.innerHTML =
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 14" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M1.482.815A1 1 0 0 0 0 1.69v10.517a1 1 0 0 0 1.525.851L10.54 7.5a1 1 0 0 0-.043-1.728z" clip-rule="evenodd"/></svg>';
+
+      container.append(video, playBadge);
+      this.bindGalleryVideo(container, sequenceItem);
+      return container;
+    }
+
+    bindGalleryVideo(container, sequenceItem) {
+      if (!container) return;
+
+      const media = sequenceItem?.media;
+      const fullscreenMedia = sequenceItem?.fullscreenMedia || media;
+      const playLabel = this.data.options.playVideoText || media?.alt || "Play video";
+      const sources = fullscreenMedia?.sources || media?.sources || [];
+      const poster = fullscreenMedia?.preview_image?.src || media?.preview_image?.src || "";
+
+      container.dataset.videoSources = JSON.stringify(sources);
+      if (poster) container.dataset.videoPoster = poster;
+      container.setAttribute("role", "button");
+      container.setAttribute("tabindex", "0");
+      container.setAttribute("aria-label", playLabel);
+
+      const openViewer = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        this.openVideoLightbox(media.sources || [], media.preview_image?.src);
-      });
-      return container;
+        this.openVideoLightbox(sources, poster, container);
+      };
+
+      container.onclick = openViewer;
+      container.onkeydown = (event) => {
+        if (event.key === "Enter" || event.key === " ") openViewer(event);
+      };
     }
 
     updateToggle(images) {
@@ -491,31 +539,24 @@
       });
     }
 
-    openVideoLightbox(sources, poster) {
-      if (!sources.length) return;
+    openVideoLightbox(sources, poster, trigger) {
+      if (!Array.isArray(sources) || !sources.length) return;
 
-      this.loadFancybox().then(() => {
-        if (this.isDestroyed || !window.Fancybox) return;
+      import("./product-media-gallery-video.js").then((module) => {
+        if (this.isDestroyed) return;
 
-        const sourceTags = sources
-          .filter((source) => source?.url)
-          .map((source) => `<source src="${source.url}" type="${source.mime_type || ""}">`)
-          .join("");
-        const posterAttribute = poster ? ` poster="${poster}"` : "";
+        this.videoViewerModule = module;
+        for (const video of this.root.querySelectorAll(".product__media video")) {
+          video.pause();
+        }
 
-        window.Fancybox.show(
-          [
-            {
-              src: `<video controls autoplay playsinline${posterAttribute}>${sourceTags}</video>`,
-              type: "html",
-            },
-          ],
-          {
-            dragToClose: false,
-            Toolbar: false,
-            Caption: false,
-          },
-        );
+        module.openProductVideoViewer({
+          sources,
+          poster,
+          labels: this.data.options,
+          returnFocusTo: trigger,
+          onClose: () => this.ensureVideosAutoplay(),
+        });
       });
     }
 
