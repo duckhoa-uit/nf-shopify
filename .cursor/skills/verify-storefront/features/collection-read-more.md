@@ -12,7 +12,7 @@ On a collection with a description, the shopper reads a one-line excerpt beside 
 ## How to get to it (user POV)
 
 - Open a collection that has a description, such as Pánske oblečenie - Bundy.
-- On desktop, use the underlined Read more control in the collection title row.
+- Use the underlined Read more control in the collection title row. It is on the page at mobile and desktop widths.
 - A collection with no description has no control. The empty footer anchor is absent.
 
 ## Driving it with agent-browser
@@ -31,7 +31,8 @@ Preconditions:
 
 ## Gotchas
 
-- The button has the class `hidden` below 990px. A narrow viewport makes a present control look missing.
+- The open panel must start below the title at 1600px, not only at 1400px. `max-width` on the flex item lets the panel share the title row once the row is wider than the title plus that cap.
+- The button is an `inline-flex` control at every width, including 390px.
 - The primary domain redirect removes `preview_theme_id`, including after `restore-preview.sh` re-opens the collection URL. `location.href` can omit the param while `Shopify.theme.role` is still `unpublished`. Run `doctor.sh` before measuring.
 - The full description still exists after the product grid when the description is not blank. That block is not the click target.
 - The Slovak label is `blogs.article.read_more` ("Čítať viac"). The English label is "Read more".

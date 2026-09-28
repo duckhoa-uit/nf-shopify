@@ -24,7 +24,7 @@
           </div>
           <button
             type="button"
-            class="read-more-link collection-hero__read-more-button hidden items-center text-sm leading-4 text-[#0f0f0f] underline lg:inline-flex lg:text-base lg:leading-5"
+            class="read-more-link collection-hero__read-more-button inline-flex items-center text-sm leading-4 text-[#0f0f0f] underline lg:text-base lg:leading-5"
             data-collection-read-more
             aria-expanded="false"
             aria-controls="CollectionDescriptionPanel-{{ section.id }}"
@@ -41,7 +41,9 @@
             data-collection-description-panel
             hidden
           >
-            {{ collection.description }}
+            <div class="collection-hero__description-body">
+              {{ collection.description }}
+            </div>
           </div>
         </collection-description-toggle>
         <script src="{{ 'collection-description-toggle.js' | asset_url }}" defer="defer"></script>

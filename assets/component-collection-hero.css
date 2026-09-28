@@ -64,10 +64,15 @@
 }
 
 .collection-hero__description-panel {
-  flex-basis: 100%;
+  /* 100% basis with no shrink. A max-width on this flex item lets it sit beside the title once the row is wider than the title plus that cap (seen from about 1474px). */
+  flex: 0 0 100%;
   width: 100%;
-  max-width: 50rem;
+  max-width: 100%;
   margin-top: 0.75rem;
+}
+
+.collection-hero__description-body {
+  max-width: 50rem;
 }
 
 .collection-hero__description-panel[hidden] {
