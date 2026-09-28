@@ -32,7 +32,7 @@ Preconditions:
 ## Gotchas
 
 - The open panel must start below the title at 1600px, not only at 1400px. `max-width` on the flex item lets the panel share the title row once the row is wider than the title plus that cap.
-- The button is an `inline-flex` control at every width, including 390px.
+- The button is an `inline-flex` control at every width, including 390px. On viewports below 750px the excerpt and the button share one row under the title. Hiding the excerpt must not move the button onto another line.
 - The primary domain redirect removes `preview_theme_id`, including after `restore-preview.sh` re-opens the collection URL. `location.href` can omit the param while `Shopify.theme.role` is still `unpublished`. Run `doctor.sh` before measuring.
 - The full description still exists after the product grid when the description is not blank. That block is not the click target.
 - The Slovak label is `blogs.article.read_more` ("Čítať viac"). The English label is "Read more".
