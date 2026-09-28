@@ -28,3 +28,8 @@ Preconditions:
 - Mobile uses `.mobile-facets__open` instead of the desktop wrapper.
 - Filter clicks fetch new grid HTML. Restore `preview_theme_id` if the URL changes.
 - An empty collection can show filters with no product cards.
+- Do not hide a Shopify filter by `filter.label`. Search & Discovery translates that string (`Sale` becomes `Výpredaj` / `Разпродажба`). Skip `filter.p.m.custom.sale_off` by `param_name` so the Yes/No group stays off in every locale. Leave the price-group `discount-filter-checkbox` alone. It posts the same param with `value="true"` and still needs the Search & Discovery filter enabled.
+
+## Sale Yes/No group
+
+`#Details-filter.p.m.custom.sale_off-{{ section.id }}` must not exist on desktop or in `#FacetsWrapperMobile`. `#discount-filter-checkbox` must still exist inside the price group.
