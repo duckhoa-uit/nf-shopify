@@ -496,11 +496,13 @@
               </div>
             {%- endif -%}
           </div>
-          <div class="mt-12 mb-8 max-w-[800px]" id="collection-description-full">
-            <div class="text-sm leading-5 text-balance text-[#3d3d3d] lg:text-base lg:leading-6">
-              {{ collection.description }}
+          {%- if collection.description != blank -%}
+            <div class="mt-12 mb-8 max-w-[800px]" id="collection-description-full">
+              <div class="text-sm leading-5 text-balance text-[#3d3d3d] lg:text-base lg:leading-6">
+                {{ collection.description }}
+              </div>
             </div>
-          </div>
+          {%- endif -%}
         </div>
       </div>
     </div>
