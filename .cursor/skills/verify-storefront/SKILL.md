@@ -34,7 +34,7 @@ agent-browser --session "$AGENT_BROWSER_SESSION" wait --load load
 bash .cursor/skills/verify-storefront/scripts/restore-preview.sh "$THEME_ID"
 ```
 
-The Read more control is visible at every width. Check it at 390x844 and at 1600x900. A 1400px-wide window can hide the row bug: from about 1474px the open panel used to sit beside the title.
+The Read more control is visible at every width. Check it at 390x844 and at 1600x900. The stack is title, text, then the button at both widths.
 
 ## Doctor
 

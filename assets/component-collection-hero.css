@@ -22,19 +22,50 @@
 .collection-hero__text-wrapper {
   flex-basis: 100%;
   display: flex;
-  align-items: flex-end;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
   margin-top: 1.5rem;
 }
 
 .collection-hero__description-toggle {
-  display: contents;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 50rem;
+  margin-top: 0.75rem;
+}
+
+.collection-hero__description-preview {
+  display: -webkit-box;
+  width: 100%;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  color: var(--color-gray-800); /* #4d4d4d */
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.collection-hero__description-panel {
+  width: 100%;
+  color: var(--color-gray-850); /* #3d3d3d */
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.collection-hero__description-panel[hidden] {
+  display: none;
 }
 
 .collection-hero__read-more-button {
+  --touch-target-size: 44px;
   background: transparent;
   border: 0;
-  padding: 0;
+  min-height: var(--touch-target-size);
+  padding: 0.625rem 0;
   color: inherit;
   font: inherit;
   cursor: pointer;
@@ -72,51 +103,11 @@
   transform: rotate(-90deg);
 }
 
-.collection-hero__description-panel {
-  /* 100% basis with no shrink. A max-width on this flex item lets it sit beside the title once the row is wider than the title plus that cap (seen from about 1474px). */
-  flex: 0 0 100%;
-  width: 100%;
-  max-width: 100%;
-  margin-top: 0.75rem;
-}
-
-.collection-hero__description-body {
-  max-width: 50rem;
-}
-
-.collection-hero__description-panel[hidden] {
-  display: none;
-}
-
-@media screen and (max-width: 749px) {
-  .collection-hero__title {
-    flex: 0 0 100%;
-  }
-
-  .collection-hero__description-toggle {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    flex: 0 0 100%;
-    min-width: 0;
-    max-width: 100%;
-    row-gap: 0.5rem;
-  }
-
-  .collection-hero__read-more-button {
-    order: -1;
-    margin-left: 0;
-  }
-
-  .collection-hero__description[data-collection-description-preview] {
-    width: 100%;
-    min-width: 0;
-    font-size: 0.875rem;
-    line-height: 1rem;
-  }
-
+@media screen and (min-width: 750px) {
+  .collection-hero__description-preview,
   .collection-hero__description-panel {
-    margin-top: 0;
+    font-size: 1rem;
+    line-height: 1.5rem;
   }
 }
 
@@ -138,27 +129,6 @@
   line-height: 1.875rem;
   text-transform: uppercase;
   color: var(--color-gray-950); /* #0f0f0f */
-  margin-right: 0.5rem;
-}
-
-.collection-hero__title + .collection-hero__description {
-  font-size: 1rem;
-  color: var(--color-gray-800); /* #4d4d4d */
-  line-height: 1.3125rem;
-}
-
-@media screen and (min-width: 750px) {
-  /* .collection-hero__title + .collection-hero__description {
-    font-size: 1.8rem;
-  } */
-
-  .collection-hero__description {
-    max-width: 66.67%;
-  }
-
-  .collection-hero--with-image .collection-hero__description {
-    max-width: 100%;
-  }
 }
 
 .collection-hero--with-image .collection-hero__title {

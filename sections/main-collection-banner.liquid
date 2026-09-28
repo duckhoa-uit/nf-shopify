@@ -19,8 +19,16 @@
 
       {%- if section.settings.show_collection_description and collection.description != blank -%}
         <collection-description-toggle class="collection-hero__description-toggle">
-          <div class="collection-hero__description rte max-w-[500px] truncate" data-collection-description-preview>
-            <span aria-hidden="true">/ </span>{{ collection.description | strip_html }}
+          <div class="collection-hero__description-preview" data-collection-description-preview>
+            {{ collection.description | strip_html }}
+          </div>
+          <div
+            id="CollectionDescriptionPanel-{{ section.id }}"
+            class="collection-hero__description-panel rte"
+            data-collection-description-panel
+            hidden
+          >
+            {{ collection.description }}
           </div>
           <button
             type="button"
@@ -37,16 +45,6 @@
               {{- 'icon-chevron.svg' | inline_asset_content -}}
             </span>
           </button>
-          <div
-            id="CollectionDescriptionPanel-{{ section.id }}"
-            class="collection-hero__description-panel rte text-sm leading-5 text-[#3d3d3d] lg:text-base lg:leading-6"
-            data-collection-description-panel
-            hidden
-          >
-            <div class="collection-hero__description-body">
-              {{ collection.description }}
-            </div>
-          </div>
         </collection-description-toggle>
         <script src="{{ 'collection-description-toggle.js' | asset_url }}" defer="defer"></script>
       {%- endif -%}

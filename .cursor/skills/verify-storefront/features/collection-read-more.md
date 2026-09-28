@@ -1,6 +1,6 @@
 # Collection Read more
 
-On a collection with a description, the shopper reads a one-line excerpt beside the title and opens the full description under that title. The page stays put.
+On a collection with a description, the shopper reads a two-line excerpt under the title and opens the full description in that same stack. The button stays under the visible text. The page does not scroll.
 
 ## Sub-features
 
@@ -12,7 +12,7 @@ On a collection with a description, the shopper reads a one-line excerpt beside 
 ## How to get to it (user POV)
 
 - Open a collection that has a description, such as Pánske oblečenie - Bundy.
-- Use the underlined Read more control in the collection title row. It is on the page at mobile and desktop widths.
+- Read the two-line excerpt under the collection title, then use the Read more control on the line below that excerpt.
 - A collection with no description has no control. The empty footer anchor is absent.
 
 ## Driving it with agent-browser
@@ -31,9 +31,8 @@ Preconditions:
 
 ## Gotchas
 
-- The open panel must start below the title at 1600px, not only at 1400px. `max-width` on the flex item lets the panel share the title row once the row is wider than the title plus that cap.
-- Below 750px the button is its own row under the title, and the excerpt or the open paragraph sits under that button. It does not share a line with the title or the excerpt. The button's box is the same in both states.
+- The stack is the same at 390px and 1600px: title, then the text, then the button. The button stays under the visible text. Opening the paragraph moves the button down with the copy.
+- The description is not repeated after the product grid.
 - The primary domain redirect removes `preview_theme_id`, including after `restore-preview.sh` re-opens the collection URL. `location.href` can omit the param while `Shopify.theme.role` is still `unpublished`. Run `doctor.sh` before measuring.
-- The full description still exists after the product grid when the description is not blank. That block is not the click target.
 - The Slovak label is `blogs.article.read_more` ("Čítať viac"). The English label is "Read more".
 - Wait for `--load load`. Analytics never reaches `networkidle`.
