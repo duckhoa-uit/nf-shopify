@@ -29,8 +29,10 @@
             aria-expanded="false"
             aria-controls="CollectionDescriptionPanel-{{ section.id }}"
           >
-            <span class="collection-hero__read-more">{{ 'blogs.article.read_more' | t }}</span>
-            <span class="collection-hero__read-less">{{ 'general.text_truncation.read_less' | t }}</span>
+            <span class="collection-hero__read-labels">
+              <span class="collection-hero__read-more">{{ 'blogs.article.read_more' | t }}</span>
+              <span class="collection-hero__read-less">{{ 'general.text_truncation.read_less' | t }}</span>
+            </span>
             <span class="collection-hero__read-icon">
               {{- 'icon-chevron.svg' | inline_asset_content -}}
             </span>

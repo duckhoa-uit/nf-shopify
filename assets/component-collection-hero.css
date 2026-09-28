@@ -41,16 +41,25 @@
   text-align: start;
 }
 
+.collection-hero__read-labels {
+  display: inline-grid;
+}
+
+.collection-hero__read-more,
 .collection-hero__read-less {
-  display: none;
+  grid-area: 1 / 1;
+}
+
+.collection-hero__read-less {
+  visibility: hidden;
 }
 
 .collection-hero__read-more-button[aria-expanded="true"] .collection-hero__read-more {
-  display: none;
+  visibility: hidden;
 }
 
 .collection-hero__read-more-button[aria-expanded="true"] .collection-hero__read-less {
-  display: inline;
+  visibility: visible;
 }
 
 .collection-hero__read-icon {
@@ -87,6 +96,8 @@
   .collection-hero__description-toggle {
     display: flex;
     flex: 0 0 100%;
+    min-width: 0;
+    max-width: 100%;
     flex-wrap: wrap;
     align-items: center;
     column-gap: 0.75rem;
