@@ -34,3 +34,4 @@ The theme classifies clips from the actual source width/height (`sources[].width
 - Do not start the reel unmuted; autoplay with sound is blocked and the ticket requires mute-on.
 - Fancybox is still used for photo lightbox only. Video HTML-in-Fancybox was dropped because it used native controls, started with sound, and could not swap in a second file.
 - `product.media | json` already includes `sources` and `aspect_ratio` for Shopify-hosted videos. No extra Liquid dump is required.
+- As of 2026-09-28 the international catalog had no product videos (1,191 products scanned). Until merchandisers upload a 1:1 + 9:16 pair, PDP checks can only prove the no-video path.
