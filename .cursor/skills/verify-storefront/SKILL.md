@@ -19,6 +19,8 @@ bash .cursor/skills/verify-storefront/scripts/push-draft.sh "Draft - collection 
 
 Ready when the script prints `THEME_ID=<id>` and writes `/opt/cursor/artifacts/verify-storefront/theme-id.txt`. The script uploads every theme file, including `config/settings_data.json`, then restores `ignore` in `shopify.theme.toml` before it exits. A failed push still restores that file.
 
+`--unpublished` creates a new theme id on every run. To refresh a draft a shopper already has open, push that id with `--theme <id>` and no `--unpublished` or `--publish`. The role must stay `unpublished`.
+
 Then open the draft. `agent-browser` is the CLI at `$HOME/.local/node_modules/.bin` after `npm install --prefix "$HOME/.local" agent-browser@0.38.1` and `agent-browser install`.
 
 ```bash
