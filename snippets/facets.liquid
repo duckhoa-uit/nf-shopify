@@ -66,7 +66,6 @@
                 {% assign filter_active_values = filter.active_values.size %}
                 {% assign total_active_values = total_active_values | plus: filter_active_values %}
 
-                {% comment %} Count price filter if it's active {% endcomment %}
                 {% if filter.type == 'price_range' %}
                   {% assign min = filter.min_value.value %}
                   {% assign max = filter.max_value.value %}
