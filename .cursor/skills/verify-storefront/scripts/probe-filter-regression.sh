@@ -145,7 +145,7 @@ EOF
 sleep 0.4
 
 echo "STEP click-size $TARGET_ID"
-agent-browser --session "$SESSION" click "#${TARGET_ID}"
+agent-browser --session "$SESSION" click "[id=\"${TARGET_ID}\"]"
 wait_settled
 echo "STEP after-size"
 eval_json after-size

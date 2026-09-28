@@ -23,6 +23,7 @@ Preconditions:
 - **Reach filters.** Open `https://shop.northfinder.com/collections/all-clothing?preview_theme_id=$THEME_ID`, wait `--load load`, restore the preview param, and run doctor. `#FacetsWrapperDesktop` is present.
 - **Proof.** Run `agent-browser --session verify-storefront screenshot /opt/cursor/artifacts/verify-storefront/filters.png`. The filter column is in the shot.
 - **Locales.** `bash .cursor/skills/verify-storefront/scripts/probe-sale-filter-locales.sh "$THEME_ID"` opens SK, BG, EN, DE, HR, and SL on the unpublished draft. PASS is `Shopify.theme.role` unpublished, `saleAccordionCount` 0, and `#discount-filter-checkbox` present. The script writes `/opt/cursor/artifacts/verify-storefront/locales/matrix.json`.
+- **Regression.** `bash .cursor/skills/verify-storefront/scripts/probe-filter-regression.sh "$THEME_ID"` clicks a size value, then `#discount-filter-checkbox`, then `a.clear-all-filters` on English all-clothing. PASS is a changed `data-total-count`, `sale_off=true` after the checkbox, both params gone after clear, and no Sale Yes/No accordion throughout. The script writes `/opt/cursor/artifacts/verify-storefront/filter-regression/matrix.json`.
 
 ## Gotchas
 
