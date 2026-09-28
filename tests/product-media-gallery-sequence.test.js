@@ -14,14 +14,27 @@ const image = (id, filename, overrides = {}) => ({
 const video = (id, filename, overrides = {}) => ({
   id,
   media_type: "video",
+  aspect_ratio: 1,
   preview_image: {
     src: `https://cdn.shopify.com/${filename}`,
     width: 1200,
     height: 1200,
   },
-  sources: [{ url: `https://cdn.shopify.com/${id}.mp4`, mime_type: "video/mp4" }],
+  sources: [{ url: `https://cdn.shopify.com/${id}.mp4`, mime_type: "video/mp4", width: 1200, height: 1200 }],
   ...overrides,
 });
+
+const verticalVideo = (id, filename, overrides = {}) =>
+  video(id, filename, {
+    aspect_ratio: 9 / 16,
+    preview_image: {
+      src: `https://cdn.shopify.com/${filename}`,
+      width: 1080,
+      height: 1920,
+    },
+    sources: [{ url: `https://cdn.shopify.com/${id}.mp4`, mime_type: "video/mp4", width: 1080, height: 1920 }],
+    ...overrides,
+  });
 
 const baseMedia = [
   image("main", "coat--NF-no-5009snw-darkblue-H.jpg"),
@@ -84,6 +97,41 @@ describe("resolveProductMediaSequence", () => {
 
     expect(resolved[0].mediaId).toBe("model");
     expect(resolved.slice(1).map((item) => item.mediaId)).toEqual(["main", "video", "detail", "other-color"]);
+  });
+
+  test("does not pin a gallery video ahead of the first photo", () => {
+    const resolved = resolveProductMediaSequence({
+      media: baseMedia,
+      initialMediaId: "video",
+    });
+
+    expect(resolved[0].mediaId).toBe("main");
+    expect(resolved[1].mediaId).toBe("video");
+  });
+
+  test("keeps the square clip in the gallery and opens the vertical clip fullscreen", () => {
+    const media = [
+      image("main", "coat--NF-no-5009snw-darkblue-H.jpg"),
+      image("model", "coat--NF-no-5009snw-darkblue-M_1.jpg"),
+      video("square", "coat--NF-no-5009snw-darkblue-square.jpg"),
+      verticalVideo("vertical", "coat--NF-no-5009snw-darkblue-vertical.jpg"),
+    ];
+    const resolved = resolveProductMediaSequence({ media });
+
+    expect(resolved.map((item) => item.mediaId)).toEqual(["main", "square", "model"]);
+    expect(resolved[1].fullscreenMedia.id).toBe("vertical");
+  });
+
+  test("crops a lone vertical clip into the gallery and reuses it fullscreen", () => {
+    const media = [
+      image("main", "coat--NF-no-5009snw-darkblue-H.jpg"),
+      verticalVideo("vertical", "coat--NF-no-5009snw-darkblue-vertical.jpg"),
+      image("model", "coat--NF-no-5009snw-darkblue-M_1.jpg"),
+    ];
+    const resolved = resolveProductMediaSequence({ media });
+
+    expect(resolved.map((item) => item.mediaId)).toEqual(["main", "vertical", "model"]);
+    expect(resolved[1].fullscreenMedia.id).toBe("vertical");
   });
 
   test("does not pin a back-type featured image ahead of the front-first sequence", () => {

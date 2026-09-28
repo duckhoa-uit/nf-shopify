@@ -272,52 +272,144 @@
   user-select: none;
 }
 
-/* 9:16 portrait video lightbox shown via Fancybox */
+.video-container:focus-visible {
+  outline: 3px solid #0056b3;
+  outline-offset: 2px;
+}
+
+.video-container__play {
+  --video-container-play-size: 36px;
+  --video-container-play-bg: rgb(15 15 15 / 0.75);
+  --video-container-play-fg: #ffffff;
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 1;
+  width: var(--video-container-play-size);
+  height: var(--video-container-play-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--video-container-play-bg);
+  color: var(--video-container-play-fg);
+  pointer-events: none;
+}
+
+.video-container__play svg {
+  width: 12px;
+  height: 14px;
+  margin-inline-start: 2px;
+}
+
+/* Fullscreen 9:16 product video viewer */
 .product-video-lightbox {
+  --product-video-lightbox-bg: #000000;
+  --product-video-lightbox-fg: #ffffff;
+  --product-video-lightbox-control-size: 44px;
+  --product-video-lightbox-control-bg: rgb(15 15 15 / 0.72);
+  box-sizing: border-box;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--product-video-lightbox-bg);
+  color: var(--product-video-lightbox-fg);
+}
+
+.product-video-lightbox::backdrop {
+  background: var(--product-video-lightbox-bg);
+}
+
+.product-video-lightbox__stage {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(90vw, calc(90vh * 9 / 16));
-  max-width: 100%;
-  aspect-ratio: 9 / 16;
-  background: #000;
+  width: 100%;
+  height: 100%;
 }
 
 .product-video-lightbox__player {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 9 / 16;
   object-fit: contain;
-  background: #000;
-  display: block;
+  background: var(--product-video-lightbox-bg);
 }
 
-.product-video-lightbox__close {
+.product-video-lightbox__close,
+.product-video-lightbox__mute {
   position: absolute;
-  top: 12px;
-  right: 12px;
   z-index: 2;
-  width: 40px;
-  height: 40px;
+  width: var(--product-video-lightbox-control-size);
+  height: var(--product-video-lightbox-control-size);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.6);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
   padding: 0;
-  transition: background-color 0.2s ease;
+  border: 0;
+  border-radius: 50%;
+  background: var(--product-video-lightbox-control-bg);
+  color: var(--product-video-lightbox-fg);
+  cursor: pointer;
 }
 
-.product-video-lightbox__close:hover {
-  background: rgba(0, 0, 0, 0.85);
+.product-video-lightbox__close {
+  top: 16px;
+  right: 16px;
 }
 
-.product-video-lightbox__close svg {
+.product-video-lightbox__mute {
+  right: 16px;
+  bottom: 16px;
+}
+
+.product-video-lightbox__close:hover,
+.product-video-lightbox__mute:hover {
+  background: rgb(15 15 15 / 0.9);
+}
+
+.product-video-lightbox__close:focus-visible,
+.product-video-lightbox__mute:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.product-video-lightbox__close svg,
+.product-video-lightbox__mute svg,
+.product-video-lightbox__paused svg {
   width: 20px;
   height: 20px;
-  fill: #ffffff;
+  fill: currentColor;
+}
+
+.product-video-lightbox__paused {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--product-video-lightbox-control-bg);
+  color: var(--product-video-lightbox-fg);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+.product-video-lightbox.is-paused .product-video-lightbox__paused {
+  opacity: 1;
 }
 
 /* Hide all video controls completely */

@@ -100,6 +100,19 @@ describe("product media gallery runtime", () => {
     expect(runtime).not.toContain("if (!preserveFirstImage) imageElement.src = image.src;");
   });
 
+  test("opens product videos in a muted fullscreen viewer instead of Fancybox", () => {
+    expect(runtime).toContain("video-container__play");
+    expect(runtime).toContain("openProductVideoViewer");
+    expect(runtime).toContain("product-media-gallery-video.js");
+    expect(runtime).not.toContain("<video controls autoplay playsinline");
+    expect(sequence).toContain("partitionProductVideos");
+    expect(sequence).toContain("resolveFullscreenMedia");
+    expect(snippet).toContain("playVideoText");
+    expect(snippet).toContain("pauseVideoText");
+    expect(snippet).toContain("muteVideoText");
+    expect(snippet).toContain("unmuteVideoText");
+  });
+
   test("lazy-loads Fancybox on first lightbox open instead of page load", () => {
     expect(runtime).toContain("loadFancybox()");
     expect(runtime).toContain("let fancyboxPromise = null");
