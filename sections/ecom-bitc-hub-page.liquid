@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-09-30 09:06:24
+ At 2026-09-30 09:15:46
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -21,7 +21,7 @@
  window.EComposer.TEMPLATE_ID="6abbb9ba710c0af2c108e432";
  window.EComposer.PAGE = {"title":"Born in the Carpathians","type":"page","slug":"ecom-bitc-hub","plan_id":4,"template_id":"6abbb9ba710c0af2c108e432"};
  </script>
-<div class="ecom-builder" id="ecom-bitc-hub"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-jm9lobvbfqk"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-4477o3gt6hl"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-jm9lobvbfqk" deep="2">{%- comment -%} ══ HUB S1 · hero ══ {%- endcomment -%}
+<div class="ecom-builder" id="ecom-bitc-hub"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-koz097ol2ei"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-q44xti5mlzl"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-koz097ol2ei" deep="2">{%- comment -%} ══ HUB S1 · hero ══ {%- endcomment -%}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap&subset=latin,latin-ext,cyrillic" rel="stylesheet">
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
@@ -466,7 +466,470 @@
  </div>
  </div>
  </div>
-</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-42fw0fkh8pw"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-79rl91hsuxl"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-42fw0fkh8pw" deep="2">{%- comment -%} ══ HUB · the three HERO films ══ {%- endcomment -%}
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-o4ioi2cgtfj"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-mkx52iz0o0q"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-o4ioi2cgtfj" deep="2">{%- comment -%} ══ HUB · the shoes from the films, and the reading behind them ══ {%- endcomment -%}
+{%- comment -%}
+ UI labels for both Born in the Carpathians pages. Server-rendered from
+ request.locale, so there is no JS dictionary and the words are in the HTML for
+ search engines. A new market is one `when` branch; anything else falls back to EN.
+ Register is informal second person in every language (brand standard, tone of voice).
+{%- endcomment -%}
+{%- assign LOC = request.locale.iso_code | slice: 0, 2 | downcase -%}
+{%- assign t_jump = 'Skip to content' -%}
+{%- assign t_search = 'Search articles' -%}
+{%- assign t_chapters = 'Chapters' -%}
+{%- assign t_topics = 'Topics' -%}
+{%- assign t_pagenav = 'Pagination' -%}
+{%- assign t_allcat = 'All' -%}
+{%- assign t_all = 'See all' -%}
+{%- assign t_latest = 'Latest' -%}
+{%- assign t_res = 'Results:' -%}
+{%- assign t_of = 'of' -%}
+{%- assign t_clear = 'Clear filter' -%}
+{%- assign t_read = 'min read' -%}
+{%- assign t_video = 'Video' -%}
+{%- assign t_watch = 'Watch the episode' -%}
+{%- assign t_episode = 'Episode' -%}
+{%- assign t_chapter = 'Chapter' -%}
+{%- assign t_soon = 'Coming soon' -%}
+{%- assign t_allep = 'All episodes' -%}
+{%- assign t_prev = 'Previous' -%}
+{%- assign t_next = 'Next' -%}
+{%- assign t_emptyh = 'Nothing here yet' -%}
+{%- assign t_emptyp = 'No article carries this topic yet. Pick another one, or browse all of them.' -%}
+{%- assign t_emptyb = 'Show all articles' -%}
+{%- assign t_datefmt = '%b %-d, %Y' -%}
+{%- assign t_newsh = 'New episode? We&#39;ll tell you.' -%}
+{%- assign t_newsp = 'Leave your email and we&#39;ll let you know.' -%}
+{%- assign t_newsph = 'Your email' -%}
+{%- assign t_newsb = 'Subscribe' -%}
+{%- assign t_newsfine = 'By subscribing you agree to our privacy policy.' -%}
+{%- assign t_newsok = 'Done — thank you!' -%}
+{%- assign t_lead = 'Films and articles about how our gear is made and who puts it through the mountains.' -%}
+{%- assign t_hubintro = 'Behind every piece of gear there is a story. The people who made it, the road from the first idea to the finished product, and the Carpathians, where it becomes clear what really lasts. Every chapter = one video, three stories.' -%}
+{%- assign t_herocta = 'Watch the videos' -%}
+{%- assign t_ch1sub = 'How we made shoes for the mountains' -%}
+{%- assign t_ch2sub = 'Peak Flow, from the first sketch to the first descent' -%}
+{%- assign t_ch3sub = 'A season on skis, above the treeline' -%}
+{%- assign t_ch4sub = 'What a pack has to carry — and how little it must weigh' -%}
+{%- assign t_archive = 'All articles' -%}
+{%- assign t_page = 'Page' -%}
+{%- assign t_catv = 'Materials|Maintenance|Posts|Northkit|Vlog' -%}
+{%- assign t_readmore = 'Read more' -%}
+{%- assign t_featured = 'Featured' -%}
+{%- assign t_films = 'Videos' -%}
+{%- assign t_shorts = 'Shorts' -%}
+{%- assign t_fullfilm = 'Watch the full interview' -%}
+{%- assign t_shopline = 'Shoes' -%}
+{%- assign t_shop = 'The whole collection' -%}
+{%- assign t_arts = 'From the blog' -%}
+{%- assign t_catcta = 'Find the shoes that hold in the mountains' -%}
+{%- assign t_catbtn = 'See the whole collection' -%}
+{%- case LOC -%}
+{%- when 'sk' -%}
+ {%- assign t_jump = 'Preskočiť na obsah' -%}{%- assign t_search = 'Hľadať v článkoch' -%}{%- assign t_chapters = 'Kapitoly' -%}
+ {%- assign t_topics = 'Témy' -%}{%- assign t_pagenav = 'Stránkovanie' -%}{%- assign t_allcat = 'Všetko' -%}
+ {%- assign t_all = 'Zobraziť všetko' -%}{%- assign t_latest = 'Najnovšie' -%}{%- assign t_res = 'Výsledky:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Zrušiť filter' -%}{%- assign t_read = 'min čítania' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Pozrieť epizódu' -%}{%- assign t_episode = 'Epizóda' -%}
+ {%- assign t_chapter = 'Kapitola' -%}{%- assign t_soon = 'Už čoskoro' -%}{%- assign t_allep = 'Všetky epizódy' -%}
+ {%- assign t_prev = 'Predchádzajúca' -%}{%- assign t_next = 'Ďalšia' -%}{%- assign t_emptyh = 'Tu zatiaľ nič nie je' -%}
+ {%- assign t_emptyp = 'K tejto téme zatiaľ nemáme článok. Vyber si inú alebo si prezri všetky.' -%}{%- assign t_emptyb = 'Zobraziť všetky články' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nová epizóda? Ozveme sa.' -%}{%- assign t_newsp = 'Nechaj nám e-mail a dáme ti vedieť.' -%}{%- assign t_newsph = 'Tvoj e-mail' -%}
+ {%- assign t_newsb = 'Prihlásiť sa' -%}{%- assign t_newsfine = 'Prihlásením súhlasíš so zásadami ochrany osobných údajov.' -%}{%- assign t_newsok = 'Hotovo — ďakujeme!' -%}
+ {%- assign t_lead = 'Filmy a články o tom, ako vzniká naša výbava a kto ju skúša v horách.' -%}{%- assign t_hubintro = 'Za každým kúskom výbavy je príbeh. Ľudia, ktorí ho vytvorili, cesta od prvého nápadu až po finálny produkt a Karpaty, kde sa ukáže, čo naozaj vydrží. Každá kapitola = jedno video, tri príbehy.' -%}{%- assign t_herocta = 'Pozrieť si videá' -%}
+ {%- assign t_ch1sub = 'Ako sme robili topánky do hôr' -%}{%- assign t_ch2sub = 'Peak Flow, od prvej skice po prvý zjazd' -%}{%- assign t_ch3sub = 'Sezóna na skialpoch, nad hranicou lesa' -%}
+ {%- assign t_ch4sub = 'Čo musí batoh uniesť — a koľko nesmie vážiť' -%}{%- assign t_archive = 'Všetky články' -%}{%- assign t_page = 'Strana' -%}
+ {%- assign t_catv = 'Materiály|Údržba|Príspevky|Northkit|Vlog' -%}{%- assign t_readmore = 'Čítať viac' -%}{%- assign t_featured = 'Vybrané' -%}
+ {%- assign t_films = 'Videá' -%}{%- assign t_shorts = 'Shorty' -%}{%- assign t_fullfilm = 'Pozrieť si celý rozhovor' -%}
+ {%- assign t_shopline = 'Topánky' -%}{%- assign t_shop = 'Celá kolekcia' -%}{%- assign t_arts = 'Z blogu' -%}
+ {%- assign t_catcta = 'Vyber si topánky, ktoré v horách vydržia' -%}{%- assign t_catbtn = 'Pozrieť celú kolekciu' -%}
+{%- when 'cs' -%}
+ {%- assign t_jump = 'Přeskočit na obsah' -%}{%- assign t_search = 'Hledat v článcích' -%}{%- assign t_chapters = 'Kapitoly' -%}
+ {%- assign t_topics = 'Témata' -%}{%- assign t_pagenav = 'Stránkování' -%}{%- assign t_allcat = 'Vše' -%}
+ {%- assign t_all = 'Zobrazit vše' -%}{%- assign t_latest = 'Nejnovější' -%}{%- assign t_res = 'Výsledky:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Zrušit filtr' -%}{%- assign t_read = 'min čtení' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Přehrát epizodu' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Kapitola' -%}{%- assign t_soon = 'Už brzy' -%}{%- assign t_allep = 'Všechny epizody' -%}
+ {%- assign t_prev = 'Předchozí' -%}{%- assign t_next = 'Další' -%}{%- assign t_emptyh = 'Tady zatím nic není' -%}
+ {%- assign t_emptyp = 'K tomuto tématu zatím nemáme článek. Vyber si jiné nebo si prohlédni všechny.' -%}{%- assign t_emptyb = 'Zobrazit všechny články' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nová epizoda? Ozveme se.' -%}{%- assign t_newsp = 'Nech nám e-mail a dáme ti vědět.' -%}{%- assign t_newsph = 'Tvůj e-mail' -%}
+ {%- assign t_newsb = 'Přihlásit se' -%}{%- assign t_newsfine = 'Přihlášením souhlasíš se zásadami ochrany osobních údajů.' -%}{%- assign t_newsok = 'Hotovo — děkujeme!' -%}
+ {%- assign t_lead = 'Filmy a články o tom, jak vzniká naše výbava a kdo ji zkouší v horách.' -%}{%- assign t_hubintro = 'Za každým kouskem výbavy je příběh. Lidé, kteří ho vytvořili, cesta od prvního nápadu až po finální produkt a Karpaty, kde se ukáže, co opravdu vydrží. Každá kapitola = jedno video, tři příběhy.' -%}{%- assign t_herocta = 'Podívat se na videa' -%}
+ {%- assign t_ch1sub = 'Jak jsme dělali boty do hor' -%}{%- assign t_ch2sub = 'Peak Flow, od první skici po první sjezd' -%}{%- assign t_ch3sub = 'Sezona na skialpech, nad hranicí lesa' -%}
+ {%- assign t_ch4sub = 'Co musí batoh unést — a kolik nesmí vážit' -%}{%- assign t_archive = 'Všechny články' -%}{%- assign t_page = 'Strana' -%}
+ {%- assign t_catv = 'Materiály|Údržba|Příspěvky|Northkit|Vlog' -%}{%- assign t_readmore = 'Číst více' -%}{%- assign t_featured = 'Vybrané' -%}
+ {%- assign t_films = 'Videa' -%}{%- assign t_shorts = 'Shorty' -%}{%- assign t_fullfilm = 'Přehrát celý rozhovor' -%}
+ {%- assign t_shopline = 'Boty' -%}{%- assign t_shop = 'Celá kolekce' -%}{%- assign t_arts = 'Z blogu' -%}
+ {%- assign t_catcta = 'Vyber si boty, které v horách vydrží' -%}{%- assign t_catbtn = 'Prohlédnout celou kolekci' -%}
+{%- when 'pl' -%}
+ {%- assign t_jump = 'Przejdź do treści' -%}{%- assign t_search = 'Szukaj w artykułach' -%}{%- assign t_chapters = 'Rozdziały' -%}
+ {%- assign t_topics = 'Tematy' -%}{%- assign t_pagenav = 'Paginacja' -%}{%- assign t_allcat = 'Wszystko' -%}
+ {%- assign t_all = 'Zobacz wszystko' -%}{%- assign t_latest = 'Najnowsze' -%}{%- assign t_res = 'Wyniki:' -%}
+ {%- assign t_of = 'z' -%}{%- assign t_clear = 'Wyczyść filtr' -%}{%- assign t_read = 'min czytania' -%}
+ {%- assign t_video = 'Wideo' -%}{%- assign t_watch = 'Obejrzyj odcinek' -%}{%- assign t_episode = 'Odcinek' -%}
+ {%- assign t_chapter = 'Rozdział' -%}{%- assign t_soon = 'Już wkrótce' -%}{%- assign t_allep = 'Wszystkie odcinki' -%}
+ {%- assign t_prev = 'Poprzednia' -%}{%- assign t_next = 'Następna' -%}{%- assign t_emptyh = 'Tu jeszcze nic nie ma' -%}
+ {%- assign t_emptyp = 'Do tego tematu nie mamy jeszcze artykułu. Wybierz inny albo przejrzyj wszystkie.' -%}{%- assign t_emptyb = 'Pokaż wszystkie artykuły' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Nowy odcinek? Damy znać.' -%}{%- assign t_newsp = 'Zostaw e-mail, a odezwiemy się.' -%}{%- assign t_newsph = 'Twój e-mail' -%}
+ {%- assign t_newsb = 'Zapisz się' -%}{%- assign t_newsfine = 'Zapisując się, akceptujesz politykę prywatności.' -%}{%- assign t_newsok = 'Gotowe — dziękujemy!' -%}
+ {%- assign t_lead = 'Filmy i artykuły o tym, jak powstaje nasz sprzęt i kto sprawdza go w górach.' -%}{%- assign t_hubintro = 'Za każdym elementem sprzętu stoi historia. Ludzie, którzy go stworzyli, droga od pierwszego pomysłu do gotowego produktu i Karpaty, gdzie okazuje się, co naprawdę wytrzyma. Każdy rozdział = jedno wideo, trzy historie.' -%}{%- assign t_herocta = 'Zobacz filmy' -%}
+ {%- assign t_ch1sub = 'Jak zrobiliśmy buty w góry' -%}{%- assign t_ch2sub = 'Peak Flow, od pierwszego szkicu do pierwszego zjazdu' -%}{%- assign t_ch3sub = 'Sezon na skiturach, powyżej granicy lasu' -%}
+ {%- assign t_ch4sub = 'Co plecak musi unieść — i ile nie może ważyć' -%}{%- assign t_archive = 'Wszystkie artykuły' -%}{%- assign t_page = 'Strona' -%}
+ {%- assign t_catv = 'Materiały|Konserwacja|Wpisy|Northkit|Vlog' -%}{%- assign t_readmore = 'Czytaj więcej' -%}{%- assign t_featured = 'Wybrane' -%}
+ {%- assign t_films = 'Wideo' -%}{%- assign t_shorts = 'Shorty' -%}{%- assign t_fullfilm = 'Obejrzyj całą rozmowę' -%}
+ {%- assign t_shopline = 'Buty' -%}{%- assign t_shop = 'Cała kolekcja' -%}{%- assign t_arts = 'Z bloga' -%}
+ {%- assign t_catcta = 'Wybierz buty, które wytrzymają w górach' -%}{%- assign t_catbtn = 'Zobacz całą kolekcję' -%}
+{%- when 'de' -%}
+ {%- assign t_jump = 'Zum Inhalt springen' -%}{%- assign t_search = 'Artikel durchsuchen' -%}{%- assign t_chapters = 'Kapitel' -%}
+ {%- assign t_topics = 'Themen' -%}{%- assign t_pagenav = 'Seitennavigation' -%}{%- assign t_allcat = 'Alle' -%}
+ {%- assign t_all = 'Alle ansehen' -%}{%- assign t_latest = 'Neueste' -%}{%- assign t_res = 'Ergebnisse:' -%}
+ {%- assign t_of = 'von' -%}{%- assign t_clear = 'Filter löschen' -%}{%- assign t_read = 'Min. Lesezeit' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Episode ansehen' -%}{%- assign t_episode = 'Episode' -%}
+ {%- assign t_chapter = 'Kapitel' -%}{%- assign t_soon = 'Bald verfügbar' -%}{%- assign t_allep = 'Alle Episoden' -%}
+ {%- assign t_prev = 'Zurück' -%}{%- assign t_next = 'Weiter' -%}{%- assign t_emptyh = 'Hier ist noch nichts' -%}
+ {%- assign t_emptyp = 'Zu diesem Thema haben wir noch keinen Artikel. Wähl ein anderes oder sieh dir alle an.' -%}{%- assign t_emptyb = 'Alle Artikel ansehen' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Neue Episode? Wir melden uns.' -%}{%- assign t_newsp = 'Lass uns deine E-Mail da, wir sagen dir Bescheid.' -%}{%- assign t_newsph = 'Deine E-Mail' -%}
+ {%- assign t_newsb = 'Abonnieren' -%}{%- assign t_newsfine = 'Mit der Anmeldung stimmst du unserer Datenschutzerklärung zu.' -%}{%- assign t_newsok = 'Erledigt — danke!' -%}
+ {%- assign t_lead = 'Filme und Artikel darüber, wie unsere Ausrüstung entsteht und wer sie in den Bergen auf die Probe stellt.' -%}{%- assign t_hubintro = 'Hinter jedem Ausrüstungsstück steckt eine Geschichte. Die Menschen, die es gemacht haben, der Weg von der ersten Idee bis zum fertigen Produkt und die Karpaten, wo sich zeigt, was wirklich hält. Jedes Kapitel = ein Video, drei Geschichten.' -%}{%- assign t_herocta = 'Videos ansehen' -%}
+ {%- assign t_ch1sub = 'Wie wir Schuhe für die Berge gemacht haben' -%}{%- assign t_ch2sub = 'Peak Flow, von der ersten Skizze bis zur ersten Abfahrt' -%}{%- assign t_ch3sub = 'Eine Saison auf Tourenski, oberhalb der Baumgrenze' -%}
+ {%- assign t_ch4sub = 'Was ein Rucksack tragen muss — und wie wenig er wiegen darf' -%}{%- assign t_archive = 'Alle Artikel' -%}{%- assign t_page = 'Seite' -%}
+ {%- assign t_catv = 'Materialien|Pflege|Beiträge|Northkit|Vlog' -%}{%- assign t_readmore = 'Weiterlesen' -%}{%- assign t_featured = 'Empfohlen' -%}
+ {%- assign t_films = 'Videos' -%}{%- assign t_shorts = 'Shorts' -%}{%- assign t_fullfilm = 'Das ganze Gespräch ansehen' -%}
+ {%- assign t_shopline = 'Schuhe' -%}{%- assign t_shop = 'Ganze Kollektion' -%}{%- assign t_arts = 'Aus dem Blog' -%}
+ {%- assign t_catcta = 'Finde die Schuhe, die am Berg halten' -%}{%- assign t_catbtn = 'Ganze Kollektion ansehen' -%}
+{%- when 'hr' -%}
+ {%- assign t_jump = 'Preskoči na sadržaj' -%}{%- assign t_search = 'Traži u člancima' -%}{%- assign t_chapters = 'Poglavlja' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Straničenje' -%}{%- assign t_allcat = 'Sve' -%}
+ {%- assign t_all = 'Prikaži sve' -%}{%- assign t_latest = 'Najnovije' -%}{%- assign t_res = 'Rezultati:' -%}
+ {%- assign t_of = 'od' -%}{%- assign t_clear = 'Očisti filtar' -%}{%- assign t_read = 'min čitanja' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Pogledaj epizodu' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Poglavlje' -%}{%- assign t_soon = 'Uskoro' -%}{%- assign t_allep = 'Sve epizode' -%}
+ {%- assign t_prev = 'Prethodna' -%}{%- assign t_next = 'Sljedeća' -%}{%- assign t_emptyh = 'Ovdje još nema ničega' -%}
+ {%- assign t_emptyp = 'Za ovu temu još nemamo članak. Odaberi drugu ili pregledaj sve.' -%}{%- assign t_emptyb = 'Prikaži sve članke' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nova epizoda? Javimo ti.' -%}{%- assign t_newsp = 'Ostavi nam e-mail i javit ćemo ti.' -%}{%- assign t_newsph = 'Tvoj e-mail' -%}
+ {%- assign t_newsb = 'Pretplati se' -%}{%- assign t_newsfine = 'Pretplatom prihvaćaš pravila privatnosti.' -%}{%- assign t_newsok = 'Gotovo — hvala!' -%}
+ {%- assign t_lead = 'Filmovi i članci o tome kako nastaje naša oprema i tko je isprobava u planinama.' -%}{%- assign t_hubintro = 'Iza svakog komada opreme stoji priča. Ljudi koji su je stvorili, put od prve ideje do gotovog proizvoda i Karpati, gdje se pokaže što stvarno izdrži. Svako poglavlje = jedan video, tri priče.' -%}{%- assign t_herocta = 'Pogledaj videa' -%}
+ {%- assign t_ch1sub = 'Kako smo radili cipele za planine' -%}{%- assign t_ch2sub = 'Peak Flow, od prve skice do prvog spusta' -%}{%- assign t_ch3sub = 'Sezona na turnim skijama, iznad granice šume' -%}
+ {%- assign t_ch4sub = 'Što ruksak mora nositi — i koliko ne smije težiti' -%}{%- assign t_archive = 'Svi članci' -%}{%- assign t_page = 'Stranica' -%}
+ {%- assign t_catv = 'Materijali|Održavanje|Objave|Northkit|Vlog' -%}{%- assign t_readmore = 'Pročitaj više' -%}{%- assign t_featured = 'Izdvojeno' -%}
+ {%- assign t_films = 'Videa' -%}{%- assign t_shorts = 'Shorts' -%}{%- assign t_fullfilm = 'Pogledaj cijeli razgovor' -%}
+ {%- assign t_shopline = 'Obuća' -%}{%- assign t_shop = 'Cijela kolekcija' -%}{%- assign t_arts = 'S bloga' -%}
+ {%- assign t_catcta = 'Odaberi obuću koja izdrži u planinama' -%}{%- assign t_catbtn = 'Pogledaj cijelu kolekciju' -%}
+{%- when 'sl' -%}
+ {%- assign t_jump = 'Preskoči na vsebino' -%}{%- assign t_search = 'Iskanje po člankih' -%}{%- assign t_chapters = 'Poglavja' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Strani' -%}{%- assign t_allcat = 'Vse' -%}
+ {%- assign t_all = 'Prikaži vse' -%}{%- assign t_latest = 'Najnovejše' -%}{%- assign t_res = 'Rezultati:' -%}
+ {%- assign t_of = 'od' -%}{%- assign t_clear = 'Počisti filter' -%}{%- assign t_read = 'min branja' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Poglej epizodo' -%}{%- assign t_episode = 'Epizoda' -%}
+ {%- assign t_chapter = 'Poglavje' -%}{%- assign t_soon = 'Kmalu' -%}{%- assign t_allep = 'Vse epizode' -%}
+ {%- assign t_prev = 'Prejšnja' -%}{%- assign t_next = 'Naslednja' -%}{%- assign t_emptyh = 'Tukaj še ni ničesar' -%}
+ {%- assign t_emptyp = 'Za to temo še nimamo članka. Izberi drugo ali si oglej vse.' -%}{%- assign t_emptyb = 'Prikaži vse članke' -%}{%- assign t_datefmt = '%-d. %-m. %Y' -%}
+ {%- assign t_newsh = 'Nova epizoda? Javimo ti.' -%}{%- assign t_newsp = 'Pusti nam e-naslov in ti sporočimo.' -%}{%- assign t_newsph = 'Tvoj e-naslov' -%}
+ {%- assign t_newsb = 'Naroči se' -%}{%- assign t_newsfine = 'Z naročilom sprejemaš politiko zasebnosti.' -%}{%- assign t_newsok = 'Opravljeno — hvala!' -%}
+ {%- assign t_lead = 'Filmi in članki o tem, kako nastaja naša oprema in kdo jo preizkuša v gorah.' -%}{%- assign t_hubintro = 'Za vsakim kosom opreme je zgodba. Ljudje, ki so jo ustvarili, pot od prve ideje do končnega izdelka in Karpati, kjer se pokaže, kaj zares zdrži. Vsako poglavje = en video, tri zgodbe.' -%}{%- assign t_herocta = 'Poglej videe' -%}
+ {%- assign t_ch1sub = 'Kako smo delali čevlje za gore' -%}{%- assign t_ch2sub = 'Peak Flow, od prve skice do prvega spusta' -%}{%- assign t_ch3sub = 'Sezona na turnih smučeh, nad gozdno mejo' -%}
+ {%- assign t_ch4sub = 'Kaj mora nahrbtnik nositi — in koliko ne sme tehtati' -%}{%- assign t_archive = 'Vsi članki' -%}{%- assign t_page = 'Stran' -%}
+ {%- assign t_catv = 'Materiali|Vzdrževanje|Prispevki|Northkit|Vlog' -%}{%- assign t_readmore = 'Preberi več' -%}{%- assign t_featured = 'Izbrano' -%}
+ {%- assign t_films = 'Videi' -%}{%- assign t_shorts = 'Shorts' -%}{%- assign t_fullfilm = 'Oglej si celoten pogovor' -%}
+ {%- assign t_shopline = 'Čevlji' -%}{%- assign t_shop = 'Celotna kolekcija' -%}{%- assign t_arts = 'Z bloga' -%}
+ {%- assign t_catcta = 'Izberi čevlje, ki v gorah zdržijo' -%}{%- assign t_catbtn = 'Poglej celotno kolekcijo' -%}
+{%- when 'bg' -%}
+ {%- assign t_jump = 'Към съдържанието' -%}{%- assign t_search = 'Търсене в статиите' -%}{%- assign t_chapters = 'Глави' -%}
+ {%- assign t_topics = 'Теми' -%}{%- assign t_pagenav = 'Страници' -%}{%- assign t_allcat = 'Всички' -%}
+ {%- assign t_all = 'Виж всички' -%}{%- assign t_latest = 'Най-нови' -%}{%- assign t_res = 'Резултати:' -%}
+ {%- assign t_of = 'от' -%}{%- assign t_clear = 'Изчисти филтъра' -%}{%- assign t_read = 'мин. четене' -%}
+ {%- assign t_video = 'Видео' -%}{%- assign t_watch = 'Гледай епизода' -%}{%- assign t_episode = 'Епизод' -%}
+ {%- assign t_chapter = 'Глава' -%}{%- assign t_soon = 'Очаквай скоро' -%}{%- assign t_allep = 'Всички епизоди' -%}
+ {%- assign t_prev = 'Назад' -%}{%- assign t_next = 'Напред' -%}{%- assign t_emptyh = 'Тук още няма нищо' -%}
+ {%- assign t_emptyp = 'За тази тема още нямаме статия. Избери друга или разгледай всички.' -%}{%- assign t_emptyb = 'Виж всички статии' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Нов епизод? Ще ти кажем.' -%}{%- assign t_newsp = 'Остави ни имейл и ще ти пишем.' -%}{%- assign t_newsph = 'Твоят имейл' -%}
+ {%- assign t_newsb = 'Абонирай се' -%}{%- assign t_newsfine = 'С абонирането приемаш политиката за поверителност.' -%}{%- assign t_newsok = 'Готово — благодарим!' -%}
+ {%- assign t_lead = 'Филми и статии за това как се създава екипировката ни и кой я изпитва в планината.' -%}{%- assign t_hubintro = 'Зад всяка част от екипировката стои история. Хората, които я създадоха, пътят от първата идея до готовия продукт и Карпатите, където се вижда кое наистина издържа. Всяка глава = едно видео, три истории.' -%}{%- assign t_herocta = 'Гледай видеата' -%}
+ {%- assign t_ch1sub = 'Как направихме обувки за планината' -%}{%- assign t_ch2sub = 'Peak Flow, от първата скица до първото спускане' -%}{%- assign t_ch3sub = 'Сезон на ски туринг, над горската граница' -%}
+ {%- assign t_ch4sub = 'Какво трябва да носи една раница — и колко не бива да тежи' -%}{%- assign t_archive = 'Всички статии' -%}{%- assign t_page = 'Страница' -%}
+ {%- assign t_catv = 'Материали|Поддръжка|Публикации|Northkit|Vlog' -%}{%- assign t_readmore = 'Прочети повече' -%}{%- assign t_featured = 'Избрано' -%}
+ {%- assign t_films = 'Видеа' -%}{%- assign t_shorts = 'Shorts' -%}{%- assign t_fullfilm = 'Гледай целия разговор' -%}
+ {%- assign t_shopline = 'Обувки' -%}{%- assign t_shop = 'Цялата колекция' -%}{%- assign t_arts = 'От блога' -%}
+ {%- assign t_catcta = 'Избери обувките, които издържат в планината' -%}{%- assign t_catbtn = 'Виж цялата колекция' -%}
+{%- when 'ro' -%}
+ {%- assign t_jump = 'Sari la conținut' -%}{%- assign t_search = 'Caută în articole' -%}{%- assign t_chapters = 'Capitole' -%}
+ {%- assign t_topics = 'Teme' -%}{%- assign t_pagenav = 'Paginare' -%}{%- assign t_allcat = 'Toate' -%}
+ {%- assign t_all = 'Vezi tot' -%}{%- assign t_latest = 'Cele mai noi' -%}{%- assign t_res = 'Rezultate:' -%}
+ {%- assign t_of = 'din' -%}{%- assign t_clear = 'Șterge filtrul' -%}{%- assign t_read = 'min citire' -%}
+ {%- assign t_video = 'Video' -%}{%- assign t_watch = 'Vezi episodul' -%}{%- assign t_episode = 'Episod' -%}
+ {%- assign t_chapter = 'Capitol' -%}{%- assign t_soon = 'În curând' -%}{%- assign t_allep = 'Toate episoadele' -%}
+ {%- assign t_prev = 'Anterioara' -%}{%- assign t_next = 'Următoarea' -%}{%- assign t_emptyh = 'Aici nu e încă nimic' -%}
+ {%- assign t_emptyp = 'Pentru această temă încă nu avem un articol. Alege alta sau vezi-le pe toate.' -%}{%- assign t_emptyb = 'Vezi toate articolele' -%}{%- assign t_datefmt = '%-d.%-m.%Y' -%}
+ {%- assign t_newsh = 'Episod nou? Îți spunem.' -%}{%- assign t_newsp = 'Lasă-ne e-mailul și îți dăm de veste.' -%}{%- assign t_newsph = 'E-mailul tău' -%}
+ {%- assign t_newsb = 'Abonează-te' -%}{%- assign t_newsfine = 'Prin abonare accepți politica de confidențialitate.' -%}{%- assign t_newsok = 'Gata — mulțumim!' -%}
+ {%- assign t_lead = 'Filme și articole despre cum se naște echipamentul nostru și cine îl încearcă pe munte.' -%}{%- assign t_hubintro = 'În spatele fiecărei piese de echipament stă o poveste. Oamenii care au creat-o, drumul de la prima idee până la produsul finit și Carpații, unde se vede ce rezistă cu adevărat. Fiecare capitol = un video, trei povești.' -%}{%- assign t_herocta = 'Vezi videoclipurile' -%}
+ {%- assign t_ch1sub = 'Cum am făcut pantofi pentru munte' -%}{%- assign t_ch2sub = 'Peak Flow, de la prima schiță la prima coborâre' -%}{%- assign t_ch3sub = 'Un sezon pe schiuri de tură, deasupra limitei pădurii' -%}
+ {%- assign t_ch4sub = 'Ce trebuie să ducă un rucsac — și cât nu are voie să cântărească' -%}{%- assign t_archive = 'Toate articolele' -%}{%- assign t_page = 'Pagina' -%}
+ {%- assign t_catv = 'Materiale|Întreținere|Articole|Northkit|Vlog' -%}{%- assign t_readmore = 'Citește mai mult' -%}{%- assign t_featured = 'Recomandate' -%}
+ {%- assign t_films = 'Videoclipuri' -%}{%- assign t_shorts = 'Shorts' -%}{%- assign t_fullfilm = 'Vezi tot interviul' -%}
+ {%- assign t_shopline = 'Încălțăminte' -%}{%- assign t_shop = 'Toată colecția' -%}{%- assign t_arts = 'De pe blog' -%}
+ {%- assign t_catcta = 'Alege încălțămintea care rezistă pe munte' -%}{%- assign t_catbtn = 'Vezi toată colecția' -%}
+{%- endcase -%}
+{%- assign CATK = 'materials,maintenance,posts,northkit,vlog' -%}
+{%- comment -%}
+ ── Configuration ─────────────────────────────────────────────────────────────
+ BITC_BLOG handle of the blog that carries the series. Used when the page is not
+ a blog template (the hub is a normal page and has no `blog` object).
+ The live store's general blog is `novinky`; the series gets its own blog
+ because a Liquid loop over `blog.articles` stops at the newest 50, and
+ Novinky already holds ~25 material entries and keeps growing — chapter
+ articles would eventually fall out of the hub's reach.
+ BITC_SERIES series tag, used only when the series shares a blog with other content.
+ Leave empty when the series has its own blog (the recommended setup).
+ CH_TAGS chapter tags, in order. An article belongs to a chapter by carrying its
+ tag; a chapter with no published article renders as "coming soon".
+ CH_NAMES chapter names. Proper names and product lines stay in English in every
+ market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
+ PER cards per page in the archive grid.
+ FILMS the HERO episodes: `YouTubeID|Title|Duration|Blurb`, films separated by `;;`
+ because a blurb may contain a comma. The page
+ shows the YouTube thumbnail and only loads the player after a click, so an
+ unwatched film costs the visitor nothing. Empty list → empty slots, which is
+ what the page should say while the films are still being cut.
+ SHORTS YouTube Shorts IDs, comma separated. Same click-to-play rule.
+ AV_MARKETS markets that get the films and shorts, comma separated. Empty means every
+ market: the films are spoken in Slovak, but YouTube offers the viewer
+ auto-translated captions in the player, so a German or Bulgarian visitor can
+ follow them. Fill it in (e.g. 'sk') to narrow the blocks to one market.
+ FULL_FILM YouTube id of the full cut — all three episodes in one — linked under them.
+ HERO_VIDEO looping background film for the hero. Empty → grey placeholder.
+ SHOP_URL where the shoes live — the button under the product row.
+ SHOP_COLLECTION handle of the collection the product rows are pulled from.
+ SHOP_COUNT how many products to show — 8 fills two rows of four.
+ HUB_ARTICLES article handles shown under the films, in this order. A handle that
+ does not resolve is skipped, so a renamed article cannot break the page.
+ FEATURED article handles, in the order they should appear at the top. Shopify orders
+ a blog by publish date only, so an import buried the editorial writing under
+ eighty material entries. This list is read by handle, so it reaches an
+ article at any depth — a tag would only reach the newest fifty — and the
+ order is exactly the order written here. The first four fill the band; the
+ rest open the grid on page one. An unknown handle is skipped in silence.
+ SHOW_READ_TIME off while most articles keep their text in an EComposer template
+ rather than in `article.content` — the number would be missing on some
+ cards and present on others. Turn it on once the bodies or the
+ `read_time` metafields are filled in.
+ ──────────────────────────────────────────────────────────────────────────────
+{%- endcomment -%}
+{%- assign BITC_BLOG = 'novinky' -%}
+{%- assign BITC_SERIES = '' -%}
+{%- assign BITC_HUB = '/pages/born-in-carpathians' -%}
+{%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
+{%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
+{%- assign PER = 12 -%}
+{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|Príbeh Nandy a Joyful meets Performance;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|Grip, Vibram a spor o vysoký verzus nízky strih;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|Dolomity, barefoot a tri prototypy' -%}
+{%- assign SHORTS = '' -%} {%- comment -%} 'O97Q8KoBIOU,qINvYuyaRQk,pqdlXt-wFYU,4C1h3p40q0U' — the row is built; paste the ids back to show it {%- endcomment -%}
+{%- assign FULL_FILM = 'tLtDv6WSP3E' -%}
+{%- assign HERO_VIDEO = 'https://cdn.shopify.com/videos/c/o/v/2e6ad3e3182145b1b37d56371da0423c.mp4' -%}
+{%- assign SHOP_URL = '/collections/vybavenie-obuv' -%}
+{%- assign SHOP_COLLECTION = 'vybavenie-obuv' -%}
+{%- assign SHOP_COUNT = 8 -%}
+{%- assign HUB_ARTICLES = 'ako-vznikaju-topanky-northfinder,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-turisticke-topanky-northfinder-spolahlive-topanky-pre-nespol-ps139' -%}
+{%- assign AV_MARKETS = '' -%}
+{%- assign FEATURED = 'ako-vznikaju-topanky-northfinder,sk-top-10-kratkych-mestskych-tur-na-slovensku-pre-tych-co-potre,sk-northfinder-volbou-slovenskych-outdooristov-ziskali-sme-ocen,sk-meru-a-makalu-topanky-ktore-presli-svet,sk-northfinder-draci-a-dracia-vasen-nova-oblubena-skrysa-pred-da,sk-nemali-by-ste-dychat-len-vy-ale-aj-vase-oblecenie,sk-jarna-kolekcia-northfinder-nalahko-neznamena-lahkovazne,sk-neda-sa-vidiet-neda-sa-kupit-priatelstvo-je-ta-najkrajsia-ve,sk-ako-sa-obliect-na-horsku-turistiku,sl-gabriel-baicus-obleka-mora-biti-partner-na-katerega-se-l' -%}
+{%- assign SHOW_READ_TIME = false -%}
+{%- comment -%}
+ `blog` exists on a blog template. On the hub page it is nil, so the handle is read
+ from the path — the segment after /blogs/, which survives a locale prefix like /de/ —
+ and only then does it fall back to BITC_BLOG.
+{%- endcomment -%}
+{%- assign bitc_blog = blog -%}
+{%- if bitc_blog == blank -%}
+ {%- assign bitc_bh = request.path | split: '/blogs/' | last | split: '/' | first -%}
+ {%- if blogs[bitc_bh] != blank -%}{%- assign bitc_blog = blogs[bitc_bh] -%}{%- endif -%}
+{%- endif -%}
+{%- if bitc_blog == blank -%}{%- assign bitc_blog = blogs[BITC_BLOG] -%}{%- endif -%}
+{%- comment -%}
+ Where the series shares a blog, the archive lives at the series tag URL and every
+ "all articles" link has to keep that filter on.
+{%- endcomment -%}
+{%- assign bitc_all_url = bitc_blog.url -%}
+{%- assign bitc_tag_prefix = bitc_blog.url | append: '/tagged/' -%}
+{%- if BITC_SERIES != blank -%}
+ {%- assign bitc_all_url = bitc_blog.url | append: '/tagged/' | append: BITC_SERIES -%}
+ {%- assign bitc_tag_prefix = bitc_all_url | append: '+' -%}
+{%- endif -%}
+{%- comment -%}
+ The series tag is the floor of this view, not a filter on it — so it never counts as
+ the active topic and never shows up as one of the pills.
+{%- endcomment -%}
+{%- assign feat_h = FEATURED | split: ',' -%}
+{%- assign FEATURED_C = ',' | append: FEATURED | append: ',' -%}
+{%- assign bitc_tag = blank -%}
+{%- for tg in current_tags -%}
+ {%- assign tgh = tg | handle -%}
+ {%- if tgh != BITC_SERIES -%}{%- assign bitc_tag = tg -%}{%- break -%}{%- endif -%}
+{%- endfor -%}
+{%- assign bitc_tagh = bitc_tag | handle -%}
+<style>
+/* ── Northfinder design-manual tokens. Every value here is from the manual or
+ marked [derived]. No #000, no grey outside the Carbon tints, no pills,
+ no shadows, Montserrat in Medium 500 and Bold 700 only. ───────────────── */
+.nfb,.nfb *,.nfb *::before,.nfb *::after{box-sizing:border-box;margin:0;padding:0}
+.nfb{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:clip;background:#FFFFFF;
+ --ink:#2B3C48; /* Carbon — all body and heading text */
+ --ink-80:#556370; /* [derived] Carbon 80% — meta TEXT. Carbon 60% measures 2.9:1
+ on white and fails WCAG AA for normal text, so text never
+ uses it; this tint measures 6.1:1. */
+ --ink-60:#808A91; /* Carbon 60% — lines, icons, disabled chrome. Never text. */
+ --line:#D5D8DA; /* Carbon 20% — 1px dividers, surfaces */
+ --red:#E3350E; /* Northfinder Red — large fills only */
+ --red-ink:#C72D0C; /* [derived] small red text and 14px button fills, 5.5:1 */
+ --red-hover:#AD270A; /* [derived] */
+ --red-20:#F9D7CF;
+ --r:4px;--r-sm:2px;--r-lg:8px;
+ --gutter:48px;--sec-y:96px;--band-y:56px;--block-y:32px;--wrap:1440px;
+ --ease:cubic-bezier(.2,.7,.2,1);
+ font-family:'Montserrat',system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:500;font-size:16px;line-height:1.6;color:var(--ink);
+ -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+@media(max-width:1199px){.nfb{--gutter:32px;--sec-y:72px;--band-y:48px}}
+@media(max-width:767px){.nfb{--gutter:20px;--sec-y:56px;--band-y:36px;--block-y:24px}}
+.nfb[hidden]{display:none}
+.nfb img{display:block;max-width:100%}
+.nfb a,.nfb a:visited,.nfb a:hover,.nfb a:active{color:inherit;text-decoration:none}
+.nfb button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+/* the UA maps <b> to `bolder`, which resolves to 900 inside a 700 parent — the manual
+ loads Medium and Bold only, so pin it */
+.nfb b,.nfb strong{font-weight:700}
+.nfb ._w{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
+/* type roles — manual's hierarchy, rebased for running text */
+/* Type taken from the Best of NF page — big, tight, and capped — but at weight 700:
+ that page runs 800, and the manual loads Montserrat in Medium and Bold only. At 44px
+ the difference between 700 and 800 is presence, not legibility. */
+.nfb ._eyebrow{font-size:11px;font-weight:700;line-height:1.2;letter-spacing:.14em;text-transform:uppercase}
+.nfb ._h1{font-size:clamp(36px,26px + 2.6vw,76px);font-weight:700;line-height:.96;letter-spacing:-.03em}
+.nfb ._h2{font-size:clamp(26px,20px + 1.5vw,44px);font-weight:700;line-height:1;letter-spacing:-.02em}
+/* Caps only on headings of three words or fewer — the manual's rule: a long headline
+ is never set in caps. `_up` marks the short ones. */
+.nfb ._h2._up{text-transform:uppercase}
+.nfb ._body{font-size:16px;font-weight:500;line-height:1.6;max-width:70ch}
+/* A last line holding one short word reads as a mistake. `balance` evens out short
+ blocks — headings and standfirsts — and `pretty` keeps running text from ending on a
+ lone word. Both are progressive: a browser without them simply wraps as before. */
+.nfb ._h1,.nfb ._h2,.nfb ._eyebrow{text-wrap:balance}
+.nfb ._small{font-size:13px;font-weight:500;line-height:1.5}
+/* Phone sizes come straight from the manual's hierarchy table — hero 28px, section
+ heading 20px — which is a good deal smaller than the desktop scale. On a phone the
+ headline has to make room for what it introduces. */
+@media(max-width:767px){
+ .nfb ._eyebrow{font-size:10.5px}
+ .nfb ._h1{font-size:28px;line-height:1.05}
+ .nfb ._h2{font-size:21px;letter-spacing:-.01em}
+}
+/* buttons — 4px radius, no pills, flat. Primary rests on the derived red so the
+ 14px uppercase label clears 4.5:1. */
+.nfb ._btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;
+ border-radius:var(--r);font-size:14px;font-weight:700;line-height:1;letter-spacing:.06em;text-transform:uppercase;
+ transition:background-color .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease)}
+.nfb ._btn._pri{background:var(--red-ink);color:#FFFFFF}
+.nfb ._btn._pri:hover{background:var(--red-hover)}
+.nfb ._btn._sec{background:#FFFFFF;color:var(--ink);border:1px solid var(--ink)}
+.nfb ._btn._sec:hover{background:var(--ink);color:#FFFFFF}
+@media(max-width:767px){.nfb ._btn{height:52px;width:100%}}
+/* image placeholder — a post with no cover must not collapse the grid */
+.nfb ._ph{position:relative;background:var(--line);overflow:hidden}
+.nfb ._ph::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(43,60,72,.06) 0 10px,rgba(43,60,72,0) 10px 20px)}
+.nfb ._sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nfb a:focus-visible,.nfb button:focus-visible,.nfb input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.nfb *,.nfb *::before,.nfb *::after{transition:none!important;animation:none!important}}
+/* ── HUB · products and reading ─────────────────────────────────────────────── */
+.nfb._hs4{padding:var(--sec-y) 0 0}
+.nfb._hs4._arts{padding-top:var(--band-y)}
+.nfb._hs4 ._head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:var(--block-y)}
+.nfb._hs4 ._all{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+ letter-spacing:.06em;text-transform:uppercase;color:var(--red-ink);
+ border-bottom:1px solid var(--red-ink);padding-bottom:2px;white-space:nowrap}
+.nfb._hs4 ._all svg{transition:transform .18s var(--ease)}
+.nfb._hs4 ._all:hover svg{transform:translateX(3px)}
+/* product row */
+.nfb._hs4 ._prods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.nfb._hs4 ._pimg{position:relative;aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line);
+ border-radius:var(--r);background:#FFFFFF}
+.nfb._hs4 ._pimg img{width:100%;height:100%;object-fit:contain;padding:6%;transition:transform .5s var(--ease)}
+.nfb._hs4 ._pimg ._ph{position:absolute;inset:0}
+.nfb._hs4 ._prod:hover ._pimg img{transform:scale(1.04)}
+.nfb._hs4 ._prod:hover ._pt{text-decoration:underline;text-underline-offset:3px}
+.nfb._hs4 ._sale{position:absolute;left:12px;top:12px;height:24px;padding:0 8px;display:inline-flex;align-items:center;
+ border-radius:var(--r-sm);background:var(--red);color:#FFFFFF;font-size:12px;font-weight:700;letter-spacing:.06em}
+.nfb._hs4 ._pt{margin-top:14px;font-size:13px;font-weight:700;line-height:1.3;letter-spacing:.02em;
+ text-transform:uppercase;text-wrap:balance;
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nfb._hs4 ._pp{margin-top:6px;display:flex;align-items:baseline;gap:7px;font-size:13px;font-weight:700}
+.nfb._hs4 ._pp s{font-size:11.5px;font-weight:500;color:var(--ink-80)}
+/* reading row */
+.nfb._hs4 ._artgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+.nfb._hs4 ._ashot{position:relative;aspect-ratio:16/10;overflow:hidden;border:1px solid var(--line);
+ border-radius:var(--r);background:var(--line)}
+.nfb._hs4 ._ashot img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.nfb._hs4 ._ashot._fit{background:#FFFFFF}
+.nfb._hs4 ._ashot._fit img{object-fit:contain;padding:6% 8%}
+.nfb._hs4 ._ashot ._ph{position:absolute;inset:0}
+.nfb._hs4 ._art:hover ._ashot img{transform:scale(1.03)}
+.nfb._hs4 ._art:hover ._ashot._fit img{transform:none}
+.nfb._hs4 ._art:hover ._at{text-decoration:underline;text-underline-offset:3px}
+.nfb._hs4 ._at{margin-top:14px;font-size:16px;font-weight:700;line-height:1.3;text-wrap:balance;
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nfb._hs4 ._ax{margin-top:6px;font-size:12.5px;font-weight:500;line-height:1.5;color:var(--ink-80);text-wrap:pretty;
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:1199px){.nfb._hs4 ._prods,.nfb._hs4 ._artgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:767px){
+ .nfb._hs4 ._head{flex-direction:column;align-items:flex-start;gap:12px}
+ .nfb._hs4 ._prods,.nfb._hs4 ._artgrid{gap:24px 14px}
+ /* two article cards side by side on a phone leaves ~150px for a headline that runs to
+ eight words — the row becomes one card per line and the titles stop shattering */
+ .nfb._hs4 ._artgrid{grid-template-columns:minmax(0,1fr)}
+ .nfb._hs4 ._art{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:center}
+ .nfb._hs4 ._art ._ashot{aspect-ratio:1/1}
+ .nfb._hs4 ._at{margin-top:0;-webkit-line-clamp:3;font-size:15px}
+ .nfb._hs4 ._ax{display:none}
+ .nfb._hs4 ._pt{font-size:12px}
+}
+</style>
+{%- comment -%}
+ A lone button asking people to "see the shoes" gives them nothing to want. The row shows
+ the actual products — photograph, name, price — so the visitor who just watched a film
+ about a boot can see that boot.
+{%- endcomment -%}
+{%- assign shop_col = collections[SHOP_COLLECTION] -%}
+{%- if shop_col != blank and shop_col.products_count > 0 -%}
+<section class="nfb _hs4" id="bitc-shop" aria-labelledby="bitc-h2-shop">
+ <div class="_w">
+ <div class="_head">
+ <h2 class="_h2 _up" id="bitc-h2-shop">{{ t_shopline }}</h2>
+ <a class="_all" href="{{ SHOP_URL | default: shop_col.url }}">{{ t_shop }}
+ <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h8.5M7 3l3.5 3.5L7 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+ </a>
+ </div>
+ <div class="_prods">
+ {%- for p in shop_col.products limit: SHOP_COUNT -%}
+ <a class="_prod" href="{{ p.url }}">
+ <div class="_pimg">
+ {%- if p.featured_image -%}
+ <img src="{{ p.featured_image | image_url: width: 600 }}"
+ srcset="{{ p.featured_image | image_url: width: 400 }} 400w, {{ p.featured_image | image_url: width: 800 }} 800w"
+ sizes="(max-width:767px) 45vw, 22vw" width="600" height="750"
+ loading="lazy" decoding="async" alt="{{ p.featured_image.alt | default: p.title | escape }}">
+ {%- else -%}
+ <div class="_ph"></div>
+ {%- endif -%}
+ {%- if p.compare_at_price > p.price -%}<span class="_sale">-{{ p.compare_at_price | minus: p.price | times: 100 | divided_by: p.compare_at_price }}%</span>{%- endif -%}
+ </div>
+ <p class="_pt">{{ p.title }}</p>
+ <p class="_pp">
+ <b>{{ p.price | money }}</b>
+ {%- if p.compare_at_price > p.price -%}<s>{{ p.compare_at_price | money }}</s>{%- endif -%}
+ </p>
+ </a>
+ {%- endfor -%}
+ </div>
+ </div>
+</section>
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-mqhpevkds6k"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-zboz6oqdfna"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-mqhpevkds6k" deep="2">{%- comment -%} ══ HUB · the three HERO films ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -983,7 +1446,7 @@
  </div>
  </div>
 </section>
-{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-ug8u3mte4f"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-m9wizwjhzt"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-ug8u3mte4f" deep="2">{%- comment -%} ══ HUB · the shoes from the films, and the reading behind them ══ {%- endcomment -%}
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-cn56nzos4bv"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-t6xfuqbfy6"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-cn56nzos4bv" deep="2">{%- comment -%} ══ HUB · the reading behind the films ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -1408,46 +1871,6 @@
 }
 </style>
 {%- comment -%}
- A lone button asking people to "see the shoes" gives them nothing to want. The row shows
- the actual products — photograph, name, price — so the visitor who just watched a film
- about a boot can see that boot.
-{%- endcomment -%}
-{%- assign shop_col = collections[SHOP_COLLECTION] -%}
-{%- if shop_col != blank and shop_col.products_count > 0 -%}
-<section class="nfb _hs4" id="bitc-shop" aria-labelledby="bitc-h2-shop">
- <div class="_w">
- <div class="_head">
- <h2 class="_h2 _up" id="bitc-h2-shop">{{ t_shopline }}</h2>
- <a class="_all" href="{{ SHOP_URL | default: shop_col.url }}">{{ t_shop }}
- <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M2 6.5h8.5M7 3l3.5 3.5L7 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
- </a>
- </div>
- <div class="_prods">
- {%- for p in shop_col.products limit: SHOP_COUNT -%}
- <a class="_prod" href="{{ p.url }}">
- <div class="_pimg">
- {%- if p.featured_image -%}
- <img src="{{ p.featured_image | image_url: width: 600 }}"
- srcset="{{ p.featured_image | image_url: width: 400 }} 400w, {{ p.featured_image | image_url: width: 800 }} 800w"
- sizes="(max-width:767px) 45vw, 22vw" width="600" height="750"
- loading="lazy" decoding="async" alt="{{ p.featured_image.alt | default: p.title | escape }}">
- {%- else -%}
- <div class="_ph"></div>
- {%- endif -%}
- {%- if p.compare_at_price > p.price -%}<span class="_sale">-{{ p.compare_at_price | minus: p.price | times: 100 | divided_by: p.compare_at_price }}%</span>{%- endif -%}
- </div>
- <p class="_pt">{{ p.title }}</p>
- <p class="_pp">
- <b>{{ p.price | money }}</b>
- {%- if p.compare_at_price > p.price -%}<s>{{ p.compare_at_price | money }}</s>{%- endif -%}
- </p>
- </a>
- {%- endfor -%}
- </div>
- </div>
-</section>
-{%- endif -%}
-{%- comment -%}
  The films are the entry, the writing is the depth. Articles are read by handle, so an
  article that has been renamed or unpublished is skipped rather than rendering a dead card.
 {%- endcomment -%}
@@ -1495,7 +1918,7 @@
  </div>
 </section>
 {%- endif -%}
-{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-bn0zdb4opwf"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-t0ww5bptse"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-bn0zdb4opwf" deep="2">{%- comment -%} ══ HUB · the one closing ask: the whole category ══ {%- endcomment -%}
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-8jatrv119oh"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-2xffmdcp7xv"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-8jatrv119oh" deep="2">{%- comment -%} ══ HUB · the one closing ask: the whole category ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -1888,7 +2311,7 @@
  </div>
  </div>
 </section>
-{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-8m2ey7h2d7o"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-t3xs1dvlo5l"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-8m2ey7h2d7o" deep="2">{%- comment -%}
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-u7js2ynfaxg"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-n197wvi8pm"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-u7js2ynfaxg" deep="2">{%- comment -%}
  ══ HUB S3 · runtime + structured data ══
  Progressive: with JavaScript off the hub is a complete server-rendered page — every
  card is a link, every chapter is in the HTML. This only adds the reveal.
