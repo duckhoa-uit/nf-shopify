@@ -621,7 +621,11 @@
   "platform_customizations": {
     "custom_css": [
       ".card {border-radius: 30px;}",
-      " /* SI: telefónne linky vypnuté od 1. 9. 2026 */@layer utilities {html[lang=\"sl\"] .footer-block__brand-info a[href^=\"tel:\"], html[lang=\"sl\"] .contact-info__item:has(a[href^=\"tel:\"]) {display: none !important; }}"
+      "/* SI: telefónne linky vypnuté od 1. 9. 2026 */@layer utilities {html[lang=\"sl\"] .footer-block__brand-info a[href^=\"tel:\"], html[lang=\"sl\"] .contact-info__item:has(a[href^=\"tel:\"]) {display: none !important; }}",
+      "#HeaderMenu-deals-winter-launch .mega-menu__card-img--placeholder,a[href*=\"winter-launch\"] .menu-drawer__tile-img--placeholder{background:url(\"https://cdn.shopify.com/s/files/1/1009/2838/9452/files/winter_launch.png?v=1791039634\") center/cover no-repeat transparent!important}",
+      "a[href*=\"winter-launch\"] .menu-drawer__tile-img--placeholder{display:block!important;width:100%;aspect-ratio:1/1;border-radius:0!important}",
+      "#HeaderMenu-deals-best-of-nf .mega-menu__card-img--placeholder,a[href*=\"best-of-nf\"] .menu-drawer__tile-img--placeholder{background:url(\"https://cdn.shopify.com/s/files/1/1009/2838/9452/files/best_of_nf.png?v=1791198875\") center/cover no-repeat transparent!important}",
+      "a[href*=\"best-of-nf\"] .menu-drawer__tile-img--placeholder{display:block!important;width:100%;aspect-ratio:1/1;border-radius:0!important}"
     ]
   }
 }
