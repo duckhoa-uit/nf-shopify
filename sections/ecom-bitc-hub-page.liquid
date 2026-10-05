@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-09-30 09:15:46
+ At 2026-10-05 11:33:20
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -21,7 +21,7 @@
  window.EComposer.TEMPLATE_ID="6abbb9ba710c0af2c108e432";
  window.EComposer.PAGE = {"title":"Born in the Carpathians","type":"page","slug":"ecom-bitc-hub","plan_id":4,"template_id":"6abbb9ba710c0af2c108e432"};
  </script>
-<div class="ecom-builder" id="ecom-bitc-hub"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-koz097ol2ei"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-q44xti5mlzl"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-koz097ol2ei" deep="2">{%- comment -%} ══ HUB S1 · hero ══ {%- endcomment -%}
+<div class="ecom-builder" id="ecom-bitc-hub"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-chq7ba2ffjh"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-jzaafcse47j"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-chq7ba2ffjh" deep="2">{%- comment -%} ══ HUB S1 · hero ══ {%- endcomment -%}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap&subset=latin,latin-ext,cyrillic" rel="stylesheet">
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
@@ -242,8 +242,9 @@
  CH_NAMES chapter names. Proper names and product lines stay in English in every
  market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
  PER cards per page in the archive grid.
- FILMS the HERO episodes: `YouTubeID|Title|Duration|Blurb`, films separated by `;;`
- because a blurb may contain a comma. The page
+ FILMS the HERO episodes: `YouTubeID|Title|Duration|ThumbnailURL`, films separated
+ by `;;`. Leave the thumbnail empty to fall back to YouTube's own frame.
+ The page
  shows the YouTube thumbnail and only loads the player after a click, so an
  unwatched film costs the visitor nothing. Empty list → empty slots, which is
  what the page should say while the films are still being cut.
@@ -277,7 +278,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|Príbeh Nandy a Joyful meets Performance;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|Grip, Vibram a spor o vysoký verzus nízky strih;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|Dolomity, barefoot a tri prototypy' -%}
+{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_1.jpg?v=1791199301;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_2.jpg?v=1791199301;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_3.jpg?v=1791199301' -%}
 {%- assign SHORTS = '' -%} {%- comment -%} 'O97Q8KoBIOU,qINvYuyaRQk,pqdlXt-wFYU,4C1h3p40q0U' — the row is built; paste the ids back to show it {%- endcomment -%}
 {%- assign FULL_FILM = 'tLtDv6WSP3E' -%}
 {%- assign HERO_VIDEO = 'https://cdn.shopify.com/videos/c/o/v/2e6ad3e3182145b1b37d56371da0423c.mp4' -%}
@@ -401,32 +402,38 @@
 .nfb._hs1 ._hero{background:var(--ink)}
 /* a moving background is a preference, not a given */
 @media(prefers-reduced-motion:reduce){.nfb._hs1 ._vid{display:none}}
-/* A film changes frame to frame, so the scrim cannot be tuned to one photograph: it
- ramps earlier and lands darker than a still would need, which keeps the white copy
- above 4.5:1 even on the brightest frame. Carbon only — the manual forbids a red wash. */
-.nfb._hs1 ._scrim{position:absolute;inset:0;background:linear-gradient(180deg,
- rgba(43,60,72,0) 16%,rgba(43,60,72,.40) 46%,rgba(43,60,72,.80) 72%,rgba(43,60,72,.95) 100%)}
+/* Carbon is a blue-grey, so at the opacity the copy needed it cast the whole frame grey.
+ Neutral black darkens without tinting, so the footage keeps its own colour and far
+ less of it is covered: clear at the top and on the right, dark only in the corner the
+ text occupies. Measured worst case — a blown-out white frame behind the copy — leaves
+ 13% of the image showing, which still puts white text at 5.8:1.
+ [derived] The manual's "never #000" governs text and surfaces; a scrim over moving
+ footage is neither, and Carbon at this strength defeats the purpose of the film. */
+.nfb._hs1 ._scrim{position:absolute;inset:0;background:
+ linear-gradient(90deg,rgba(0,0,0,.40) 0%,rgba(0,0,0,.24) 28%,rgba(0,0,0,.06) 48%,rgba(0,0,0,0) 62%),
+ linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.22) 62%,rgba(0,0,0,.55) 84%,rgba(0,0,0,.78) 100%)}
 .nfb._hs1 ._copy{position:absolute;left:0;right:0;bottom:clamp(32px,4vw,64px);color:#FFFFFF}
 .nfb._hs1 ._copy ._w{display:flex;flex-direction:column;align-items:flex-start}
 .nfb._hs1 ._eyebrow{color:#FFFFFF;opacity:.85}
-.nfb._hs1 ._h1{margin-top:12px;color:#FFFFFF;max-width:18ch}
+.nfb._hs1 ._h1{margin-top:0;color:#FFFFFF;max-width:18ch}
 .nfb._hs1 ._intro{margin-top:20px;max-width:62ch;font-size:16px;font-weight:500;line-height:1.6;color:#FFFFFF;text-wrap:pretty}
 .nfb._hs1 ._btn{margin-top:24px}
 @media(max-width:767px){
- /* On a phone the copy needs most of the screen, which leaves the film as a dark strip
- behind text — both suffer. So the two stop competing: the film plays in a 4:5 block
- at the top, the copy sits under it on solid Carbon. The film is actually watchable and
- the text measures 11.4:1 instead of whatever the frame happens to be. */
- .nfb._hs1 ._hero{aspect-ratio:auto;min-height:0;display:block}
- .nfb._hs1 ._hero ._vid,.nfb._hs1 ._hero img,.nfb._hs1 ._hero ._ph{position:relative;inset:auto;
- width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
- .nfb._hs1 ._scrim{display:none}
- .nfb._hs1 ._copy{position:relative;inset:auto;bottom:auto;background:var(--ink);padding:24px 0 32px}
- .nfb._hs1 ._h1{margin-top:0;max-width:none}
- .nfb._hs1 ._intro{font-size:14.5px;line-height:1.5;max-width:none}
- .nfb._hs1 ._copy{padding:20px 0 28px}
+ /* Phone hero. The stacked version — film on top, dark slab of copy under it — read as
+ two boxes glued together. So the film gets a tall 3:4 frame and only the title and
+ the button sit on it, at the bottom, where the scrim is at its darkest. The intro
+ paragraph is hidden here: nobody reads three sentences above the fold on a phone, and
+ it stays in the HTML for search engines. */
+ .nfb._hs1 ._hero{aspect-ratio:3/4;min-height:0;display:block}
+ .nfb._hs1 ._hero ._vid,.nfb._hs1 ._hero img,.nfb._hs1 ._hero ._ph{position:absolute;inset:0;
+ width:100%;height:100%;aspect-ratio:auto;object-fit:cover}
+ .nfb._hs1 ._scrim{display:block;background:linear-gradient(180deg,
+ rgba(0,0,0,0) 34%,rgba(0,0,0,.20) 56%,rgba(0,0,0,.62) 80%,rgba(0,0,0,.85) 100%)}
+ .nfb._hs1 ._copy{position:absolute;left:0;right:0;bottom:0;background:none;padding:0 0 24px}
  .nfb._hs1 ._copy ._w{align-items:stretch}
- .nfb._hs1 ._btn{margin-top:20px}
+ .nfb._hs1 ._intro{display:none}
+ .nfb._hs1 ._h1{margin-top:0;max-width:none}
+ .nfb._hs1 ._btn{margin-top:18px}
 }
 </style>
 <section class="nfb _hs1" aria-labelledby="bitc-h1">
@@ -466,7 +473,7 @@
  </div>
  </div>
  </div>
-</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-o4ioi2cgtfj"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-mkx52iz0o0q"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-o4ioi2cgtfj" deep="2">{%- comment -%} ══ HUB · the shoes from the films, and the reading behind them ══ {%- endcomment -%}
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-eewz75hdhh6"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-ms17mlwame"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-eewz75hdhh6" deep="2">{%- comment -%} ══ HUB · the shoes from the films, and the reading behind them ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -686,8 +693,9 @@
  CH_NAMES chapter names. Proper names and product lines stay in English in every
  market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
  PER cards per page in the archive grid.
- FILMS the HERO episodes: `YouTubeID|Title|Duration|Blurb`, films separated by `;;`
- because a blurb may contain a comma. The page
+ FILMS the HERO episodes: `YouTubeID|Title|Duration|ThumbnailURL`, films separated
+ by `;;`. Leave the thumbnail empty to fall back to YouTube's own frame.
+ The page
  shows the YouTube thumbnail and only loads the player after a click, so an
  unwatched film costs the visitor nothing. Empty list → empty slots, which is
  what the page should say while the films are still being cut.
@@ -721,7 +729,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|Príbeh Nandy a Joyful meets Performance;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|Grip, Vibram a spor o vysoký verzus nízky strih;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|Dolomity, barefoot a tri prototypy' -%}
+{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_1.jpg?v=1791199301;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_2.jpg?v=1791199301;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_3.jpg?v=1791199301' -%}
 {%- assign SHORTS = '' -%} {%- comment -%} 'O97Q8KoBIOU,qINvYuyaRQk,pqdlXt-wFYU,4C1h3p40q0U' — the row is built; paste the ids back to show it {%- endcomment -%}
 {%- assign FULL_FILM = 'tLtDv6WSP3E' -%}
 {%- assign HERO_VIDEO = 'https://cdn.shopify.com/videos/c/o/v/2e6ad3e3182145b1b37d56371da0423c.mp4' -%}
@@ -929,7 +937,7 @@
  </div>
  </div>
 </section>
-{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-mqhpevkds6k"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-zboz6oqdfna"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-mqhpevkds6k" deep="2">{%- comment -%} ══ HUB · the three HERO films ══ {%- endcomment -%}
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-s20k840hx6"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-puf8tz42id"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-s20k840hx6" deep="2">{%- comment -%} ══ HUB · the three HERO films ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -1149,8 +1157,9 @@
  CH_NAMES chapter names. Proper names and product lines stay in English in every
  market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
  PER cards per page in the archive grid.
- FILMS the HERO episodes: `YouTubeID|Title|Duration|Blurb`, films separated by `;;`
- because a blurb may contain a comma. The page
+ FILMS the HERO episodes: `YouTubeID|Title|Duration|ThumbnailURL`, films separated
+ by `;;`. Leave the thumbnail empty to fall back to YouTube's own frame.
+ The page
  shows the YouTube thumbnail and only loads the player after a click, so an
  unwatched film costs the visitor nothing. Empty list → empty slots, which is
  what the page should say while the films are still being cut.
@@ -1184,7 +1193,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|Príbeh Nandy a Joyful meets Performance;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|Grip, Vibram a spor o vysoký verzus nízky strih;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|Dolomity, barefoot a tri prototypy' -%}
+{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_1.jpg?v=1791199301;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_2.jpg?v=1791199301;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_3.jpg?v=1791199301' -%}
 {%- assign SHORTS = '' -%} {%- comment -%} 'O97Q8KoBIOU,qINvYuyaRQk,pqdlXt-wFYU,4C1h3p40q0U' — the row is built; paste the ids back to show it {%- endcomment -%}
 {%- assign FULL_FILM = 'tLtDv6WSP3E' -%}
 {%- assign HERO_VIDEO = 'https://cdn.shopify.com/videos/c/o/v/2e6ad3e3182145b1b37d56371da0423c.mp4' -%}
@@ -1392,14 +1401,22 @@
  {%- assign fid = fp[0] | strip -%}
  {%- assign fname = fp[1] | strip -%}
  {%- assign flen = fp[2] | strip -%}
- {%- assign fblurb = fp[3] | strip -%}
+ {%- assign fthumb = fp[3] | strip -%}
  {%- if forloop.index < 10 -%}{%- assign fnum = forloop.index | prepend: '0' -%}{%- else -%}{%- assign fnum = forloop.index -%}{%- endif -%}
  {%- if forloop.first -%}{%- assign fcls = '_film _lead' -%}{%- else -%}{%- assign fcls = '_film _side' -%}{%- endif -%}
  <article class="{{ fcls }}">
  <button class="_frame" type="button" data-yt="{{ fid }}"
  aria-label="{{ t_watch }}{% if fname != blank %} — {{ fname | escape }}{% endif %}">
+ {%- comment -%}
+ A custom cover when there is one, YouTube's own frame when there is not —
+ three stills from the same set all look alike, which is what the covers fix.
+ {%- endcomment -%}
+ {%- if fthumb != blank -%}
+ <img src="{{ fthumb }}" width="1280" height="720" loading="lazy" decoding="async" alt="">
+ {%- else -%}
  <img src="https://i.ytimg.com/vi/{{ fid }}/maxresdefault.jpg" width="1280" height="720"
  loading="lazy" decoding="async" alt="">
+ {%- endif -%}
  <span class="_pl" aria-hidden="true">
  <svg width="20" height="24" viewBox="0 0 20 24" fill="currentColor"><path d="M0 0l20 12L0 24z"/></svg>
  </span>
@@ -1446,7 +1463,7 @@
  </div>
  </div>
 </section>
-{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-cn56nzos4bv"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-t6xfuqbfy6"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-cn56nzos4bv" deep="2">{%- comment -%} ══ HUB · the reading behind the films ══ {%- endcomment -%}
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-3deerpzl29u"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-j5n53zypg3"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-3deerpzl29u" deep="2">{%- comment -%} ══ HUB · the reading behind the films ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -1666,8 +1683,9 @@
  CH_NAMES chapter names. Proper names and product lines stay in English in every
  market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
  PER cards per page in the archive grid.
- FILMS the HERO episodes: `YouTubeID|Title|Duration|Blurb`, films separated by `;;`
- because a blurb may contain a comma. The page
+ FILMS the HERO episodes: `YouTubeID|Title|Duration|ThumbnailURL`, films separated
+ by `;;`. Leave the thumbnail empty to fall back to YouTube's own frame.
+ The page
  shows the YouTube thumbnail and only loads the player after a click, so an
  unwatched film costs the visitor nothing. Empty list → empty slots, which is
  what the page should say while the films are still being cut.
@@ -1701,7 +1719,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|Príbeh Nandy a Joyful meets Performance;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|Grip, Vibram a spor o vysoký verzus nízky strih;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|Dolomity, barefoot a tri prototypy' -%}
+{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_1.jpg?v=1791199301;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_2.jpg?v=1791199301;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_3.jpg?v=1791199301' -%}
 {%- assign SHORTS = '' -%} {%- comment -%} 'O97Q8KoBIOU,qINvYuyaRQk,pqdlXt-wFYU,4C1h3p40q0U' — the row is built; paste the ids back to show it {%- endcomment -%}
 {%- assign FULL_FILM = 'tLtDv6WSP3E' -%}
 {%- assign HERO_VIDEO = 'https://cdn.shopify.com/videos/c/o/v/2e6ad3e3182145b1b37d56371da0423c.mp4' -%}
@@ -1918,7 +1936,7 @@
  </div>
 </section>
 {%- endif -%}
-{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-8jatrv119oh"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-2xffmdcp7xv"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-8jatrv119oh" deep="2">{%- comment -%} ══ HUB · the one closing ask: the whole category ══ {%- endcomment -%}
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-sm3z8hfeha"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-gs043jfws9c"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-sm3z8hfeha" deep="2">{%- comment -%} ══ HUB · the one closing ask: the whole category ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -2138,8 +2156,9 @@
  CH_NAMES chapter names. Proper names and product lines stay in English in every
  market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
  PER cards per page in the archive grid.
- FILMS the HERO episodes: `YouTubeID|Title|Duration|Blurb`, films separated by `;;`
- because a blurb may contain a comma. The page
+ FILMS the HERO episodes: `YouTubeID|Title|Duration|ThumbnailURL`, films separated
+ by `;;`. Leave the thumbnail empty to fall back to YouTube's own frame.
+ The page
  shows the YouTube thumbnail and only loads the player after a click, so an
  unwatched film costs the visitor nothing. Empty list → empty slots, which is
  what the page should say while the films are still being cut.
@@ -2173,7 +2192,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|Príbeh Nandy a Joyful meets Performance;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|Grip, Vibram a spor o vysoký verzus nízky strih;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|Dolomity, barefoot a tri prototypy' -%}
+{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_1.jpg?v=1791199301;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_2.jpg?v=1791199301;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_3.jpg?v=1791199301' -%}
 {%- assign SHORTS = '' -%} {%- comment -%} 'O97Q8KoBIOU,qINvYuyaRQk,pqdlXt-wFYU,4C1h3p40q0U' — the row is built; paste the ids back to show it {%- endcomment -%}
 {%- assign FULL_FILM = 'tLtDv6WSP3E' -%}
 {%- assign HERO_VIDEO = 'https://cdn.shopify.com/videos/c/o/v/2e6ad3e3182145b1b37d56371da0423c.mp4' -%}
@@ -2311,7 +2330,7 @@
  </div>
  </div>
 </section>
-{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-u7js2ynfaxg"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-n197wvi8pm"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-u7js2ynfaxg" deep="2">{%- comment -%}
+{%- endif -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-zg7tld4vlxn"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-1i7bord4758"><div data-v-6a92e952="" class="ecom__element ecom-element element__code exporting" section_id="ecom-zg7tld4vlxn" deep="2">{%- comment -%}
  ══ HUB S3 · runtime + structured data ══
  Progressive: with JavaScript off the hub is a complete server-rendered page — every
  card is a link, every chapter is in the HTML. This only adds the reveal.
@@ -2536,8 +2555,9 @@
  CH_NAMES chapter names. Proper names and product lines stay in English in every
  market (Katka, Peak Flow); only the subtitles are translated (t_chNsub).
  PER cards per page in the archive grid.
- FILMS the HERO episodes: `YouTubeID|Title|Duration|Blurb`, films separated by `;;`
- because a blurb may contain a comma. The page
+ FILMS the HERO episodes: `YouTubeID|Title|Duration|ThumbnailURL`, films separated
+ by `;;`. Leave the thumbnail empty to fall back to YouTube's own frame.
+ The page
  shows the YouTube thumbnail and only loads the player after a click, so an
  unwatched film costs the visitor nothing. Empty list → empty slots, which is
  what the page should say while the films are still being cut.
@@ -2571,7 +2591,7 @@
 {%- assign CH_TAGS = 'chapter-01,chapter-02,chapter-03,chapter-04' -%}
 {%- assign CH_NAMES = 'Katka & Shoes|David & Peak Flow|Skialp|Backpacks' -%}
 {%- assign PER = 12 -%}
-{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|Príbeh Nandy a Joyful meets Performance;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|Grip, Vibram a spor o vysoký verzus nízky strih;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|Dolomity, barefoot a tri prototypy' -%}
+{%- assign FILMS = 'TkiJubK8q58|Prečo musia hikingové topánky vyzerať všetky rovnako?|5:49|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_1.jpg?v=1791199301;;VXDwjqlKohM|Ktorá podrážka podľa teba drží v horách lepšie?|7:09|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_2.jpg?v=1791199301;;gWiUQ-hf6pw|Barefoot do hôr?|13:41|https://cdn.shopify.com/s/files/1/1009/2838/9452/files/THMBNL_3.jpg?v=1791199301' -%}
 {%- assign SHORTS = '' -%} {%- comment -%} 'O97Q8KoBIOU,qINvYuyaRQk,pqdlXt-wFYU,4C1h3p40q0U' — the row is built; paste the ids back to show it {%- endcomment -%}
 {%- assign FULL_FILM = 'tLtDv6WSP3E' -%}
 {%- assign HERO_VIDEO = 'https://cdn.shopify.com/videos/c/o/v/2e6ad3e3182145b1b37d56371da0423c.mp4' -%}
