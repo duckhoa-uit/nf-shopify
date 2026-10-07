@@ -493,6 +493,51 @@
                     }
                   {% endstyle %}
                 {%- endif -%}
+              {%- when 'discount_banner' -%}
+                {%- if block.settings.collection != blank and product.collections contains block.settings.collection -%}
+                  <div class="nf-pdp-discount-banner" {{ block.shopify_attributes }}>
+                    {%- if block.settings.headline != blank -%}
+                      <p class="nf-pdp-discount-banner__heading">{{ block.settings.headline }}</p>
+                    {%- endif -%}
+                    {%- if block.settings.subtext != blank -%}
+                      <p class="nf-pdp-discount-banner__text">{{ block.settings.subtext }}</p>
+                    {%- endif -%}
+                  </div>
+                  {% style %}
+                    .nf-pdp-discount-banner {
+                      --nf-ink: #2B3C48;
+                      --nf-line: #D5D8DA;
+                      --nf-radius: 4px;
+
+                      display: flex;
+                      flex-direction: column;
+                      gap: 4px;
+                      padding: 16px;
+                      margin: 16px 0;
+                      background: #FFFFFF;
+                      border: 1px solid var(--nf-line);
+                      border-radius: var(--nf-radius);
+                      box-shadow: none;
+                    }
+
+                    .nf-pdp-discount-banner__heading {
+                      margin: 0;
+                      font-family: inherit;
+                      font-size: 16px;
+                      font-weight: 700;
+                      color: var(--nf-ink);
+                    }
+
+                    .nf-pdp-discount-banner__text {
+                      margin: 0;
+                      font-family: inherit;
+                      font-size: 14px;
+                      font-weight: 400;
+                      line-height: 1.4;
+                      color: var(--nf-ink);
+                    }
+                  {% endstyle %}
+                {%- endif -%}
               {%- when 'share' -%}
                 {% liquid
                   assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin
@@ -1187,6 +1232,35 @@
           "id": "loggedin_text",
           "label": "Podnadpis",
           "default": "Zľava pre registrovaných zákazníkov je aktivovaná."
+        }
+      ]
+    },
+    {
+      "type": "discount_banner",
+      "name": "NF · Discount banner",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Jednoduchý informačný box bez tlačidla, zobrazí sa iba na produktoch vo vybranej kolekcii. Napr. na komunikáciu automatickej zľavy v košíku."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Zobraziť pri kolekcii",
+          "info": "Bez výberu sa blok nezobrazí na žiadnom produkte."
+        },
+        {
+          "type": "text",
+          "id": "headline",
+          "label": "Nadpis",
+          "default": "-15% ZĽAVA"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Podnadpis",
+          "default": "Vložte do košíka a zľava sa uplatní automaticky."
         }
       ]
     },
