@@ -17,22 +17,26 @@ describe("canonical product badge rendering", () => {
     }
   });
 
-  test("fuses compare-at or sale with promotion names on one chip", () => {
+  test("paints a red percent or SALE chip and one outline chip per promotion name", () => {
     const source = readProjectFile("snippets/product-badge-row.liquid");
 
     expect(source).toContain("assign sale_prefix");
-    expect(source).toContain("assign fused_names");
-    expect(source).toContain("assign fused_label");
+    expect(source).toContain("assign painted_names");
+    expect(source).toContain("assign selected_name");
     expect(source).toContain("metafields.custom_features.promotion.value");
     expect(source).toContain("filter.p.m.custom_features.promotion");
     expect(source).toContain("collection.filters");
     expect(source).toContain("search.filters");
     expect(source).toContain("product-badge-row__badge--discount");
+    expect(source).toContain("product-badge-row__badge--promotion");
+    expect(source).toContain("selected_needle");
+    expect(source).not.toContain("assign fused_names");
+    expect(source).not.toContain("assign fused_label");
     expect(source).not.toContain("render 'discount-badge'");
     expect(source).not.toContain("render 'automatic-discount-preview'");
-    expect(source).not.toContain("product-badge-row__badge--promotion");
     expect(source).not.toContain("metafields.custom_features.extra.value");
     expect(source).not.toContain("promotion_count < maximum_promotions");
+    expect(source).not.toContain("assign maximum_promotions");
   });
 
   test("preserves the promotion metafield reference order", () => {
@@ -58,16 +62,18 @@ describe("canonical product badge rendering", () => {
     expect(card).not.toContain("overflow-x-auto");
   });
 
-  test("uses discount tokens for the fused chip", () => {
+  test("uses discount tokens for the red chip and outline tokens for names", () => {
     const source = readProjectFile("snippets/product-badge-row.liquid");
 
     expect(source).toContain("product-badge-row__badge--discount");
-    expect(source).not.toContain("product-badge-row__badge--promotion");
+    expect(source).toContain("product-badge-row__badge--promotion");
     expect(source).not.toContain("product-badge-row__promotion--primary");
     expect(source).not.toContain("product-badge-row__promotion--secondary");
     expect(source).toContain("--product-badge-background-color");
     expect(source).toContain("--product-badge-border-color");
     expect(source).toContain("--product-badge-text-color");
+    expect(source).toContain("flex-shrink: 0");
+    expect(source).toContain("transparent");
   });
 
   test("refreshes leftover discount-badge markup after deferred pubsub initialization", () => {

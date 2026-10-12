@@ -34,13 +34,16 @@ The main storefront paths are standardized around these components:
 - `sections/main-product.liquid`
 - `sections/main-product-parfums.liquid`
 
-On those canonical paths, the row paints one fused chip:
+On those canonical paths, the row paints Presta-style split chips:
 
-1. A compare-at `-N%` prefix when savings are at least 15%, or the localized
-   SALE string when compare-at is lower than that.
-2. Every nonblank `custom_features.promotion` name, in metafield order, with
-   the selected `filter.p.m.custom_features.promotion` name pinned if the
-   product has it.
+1. A red compare-at `-N%` chip when savings are at least 15%, or the localized
+   SALE chip when compare-at is lower than that. Campaign names never join
+   that red chip.
+2. One outline chip per nonblank `custom_features.promotion` name, in
+   metafield order. There is no cap of 2.
+3. The selected `filter.p.m.custom_features.promotion` GID name is pinned as
+   its own outline chip when the product has it and it is missing from the
+   painted names.
 
 The automatic-discount-preview badge is not rendered in this row. Extra is
 not read. Price presentations of the preview snippet stay on cards and PDPs.
@@ -48,7 +51,7 @@ not read. Price presentations of the preview snippet stay on cards and PDPs.
 However, the implementation is not fully consistent across the entire theme:
 
 - Canonical cards and maintained PDPs share the same renderer, single-line
-  overflow behavior, and fused chip.
+  overflow behavior, and split chips.
 - Canonical compare-at badges are calculated at product level, while PDP and
   card price displays are based on a selected variant.
 - The Featured Product section still uses Dawn's textual `Sale` and
@@ -122,16 +125,17 @@ canonical cards.
 ### Shared card and PDP order
 
 `snippets/product-badge-row.liquid` is the canonical renderer for cards,
-standard/Northkit PDPs, and maintained parfum PDPs. It renders one red chip
-whose text is the compare-at prefix plus every nonblank promotion name.
+standard/Northkit PDPs, and maintained parfum PDPs. It renders a red
+compare-at percent or SALE chip, then one outline chip per promotion name.
 
 The renderer preserves the reference order stored on the Product metafield. It
 does not sort, reverse, or parse percents out of promotion names. Blank names
-are skipped. If a Promotion filter is active, the matching name is appended
-when it is on the product and missing from that string.
+are skipped. There is no promotion count cap. If a Promotion filter is active,
+the matching GID name is painted as its own outline chip when it is on the
+product and missing from the metafield-order list. Membership uses pipe-wrapped
+names so `Sale` does not match `Outdoor Sale`.
 
-`custom_features.extra` is not rendered. This prevents Extra values from
-joining the fused chip.
+`custom_features.extra` is not rendered. Extra values never become chips.
 
 ### Overflow behavior
 
@@ -142,7 +146,9 @@ The canonical row does not scroll and does not display a scrollbar. It uses:
 - `min-width: 0`, `white-space: nowrap`, and `text-overflow: ellipsis` so long
   promotion labels shrink and truncate instead of wrapping or creating a
   horizontal scrollbar.
-- The fused chip uses discount color tokens and can shrink with ellipsis.
+- The red percent/SALE chip uses discount color tokens and does not shrink
+  (`flex-shrink: 0`).
+- Each outline name uses transparent fill and a medium border token.
 - Shared base badge dimensions. Colors map to the theme's existing design
   tokens.
 
@@ -151,12 +157,13 @@ resize observer were removed.
 
 ### Practical precedence
 
-Canonical precedence is now one fused chip. Compare-at text comes first when
-it exists. Promotion names follow in metafield order. The selected Promotion
-filter name is pinned if it would otherwise be missing.
+Canonical precedence is red percent or SALE first, then one outline chip per
+promotion name in metafield order. The selected Promotion filter name is
+pinned as its own outline chip if the product has it and it would otherwise
+be missing.
 
 The row does not render an automatic-discount-preview badge, so a second red
-percent cannot sit beside the fused chip.
+percent cannot sit beside the compare-at chip.
 
 ## Sale badge derived from compare-at price
 
@@ -227,8 +234,8 @@ Examples:
 - Four products in the 2026-08-12 Admin snapshot have a mixture of discounted
   and non-discounted variants. Because the badge is product-level, it can be
   less precise than the selected-variant price display.
-- The fused chip uses product aggregate prices unless a caller passes
-  `variant`. Canonical callers do not pass `variant`.
+- The red compare-at chip uses product aggregate prices unless a caller
+  passes `variant`. Canonical callers do not pass `variant`.
 
 ## Automatic discount preview
 
@@ -653,9 +660,9 @@ The 2026-08-12 International snapshot has no definition and no values for
 
 | Surface                                                | Sale source                                            | Sale text                         | Promotion source                                        | Limit/order                                            | Standardized?             |
 | ------------------------------------------------------ | ------------------------------------------------------ | --------------------------------- | ------------------------------------------------------- | ------------------------------------------------------ | ------------------------- |
-| Collection/search/related/recent/feature/collage cards | Product-level compare-at price                         | `-N%` at 15%+, otherwise `SALE`   | `custom_features.promotion`                             | Discount first, then first 2 promotions                | Yes, canonical shared row |
-| Standard/Northkit PDP                                  | Product-level compare-at badge; selected-variant price | Same shared badge                 | `custom_features.promotion`                             | Same order, limit, and single-line truncation as cards | Yes, canonical shared row |
-| Maintained parfum PDP                                  | Same as standard PDP                                   | Same shared badge                 | `custom_features.promotion`                             | Same order, limit, and single-line truncation as cards | Yes, canonical shared row |
+| Collection/search/related/recent/feature/collage cards | Product-level compare-at price                         | `-N%` at 15%+, otherwise `SALE`   | `custom_features.promotion`                             | Red chip first, then every promotion name, selected GID pinned | Yes, canonical shared row |
+| Standard/Northkit PDP                                  | Product-level compare-at badge; selected-variant price | Same shared badge                 | `custom_features.promotion`                             | Same split chips and single-line truncation as cards           | Yes, canonical shared row |
+| Maintained parfum PDP                                  | Same as standard PDP                                   | Same shared badge                 | `custom_features.promotion`                             | Same split chips and single-line truncation as cards           | Yes, canonical shared row |
 | Featured Product                                       | Dawn price state                                       | Localized `Sale`/`Sold out`       | None                                                    | Dawn behavior                                          | No                        |
 | NF Flow Parameters                                     | None                                                   | NF Flow name                      | `custom_features.nf_flow_series`                        | All references, Parameters-gated                       | Separate PDP-only feature |
 | Outdoor Sale EComposer cards                           | Generated compare-at logic                             | Textual sale plus monetary saving | Exact `product.tags` allowlist                          | Generated order                                        | No                        |

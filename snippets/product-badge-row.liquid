@@ -1,7 +1,8 @@
 {% doc %}
-  Renders one fused sale chip: compare-at percent or SALE plus promotion names.
+  Renders the canonical single-line product badge row: a red compare-at
+  percent or SALE chip, then one outline chip per promotion name.
 
-  @param {product} product - Product whose sale prefix and promotion names are rendered.
+  @param {product} product - Product whose sale and promotion badges are rendered.
   @param {variant} [variant] - Variant used for discount calculations.
   @param {string} [context] - `card` or `pdp`; defaults to `card`.
 
@@ -13,8 +14,8 @@
   assign badge_context = context | default: 'card'
   assign minimum_discount = 15
   assign sale_prefix = ''
-  assign fused_names = ''
-  assign fused_label = ''
+  assign painted_names = '|'
+  assign selected_name = ''
   assign promotion_filter_param = 'filter.p.m.custom_features.promotion'
   assign promotion_filters = null
 
@@ -41,22 +42,6 @@
     endif
   endif
 
-  if product.metafields.custom_features.promotion.value != blank
-    for promotion in product.metafields.custom_features.promotion.value
-      capture promotion_name
-        echo promotion.name
-      endcapture
-      assign promotion_name = promotion_name | strip
-      if promotion_name != blank
-        if fused_names != blank
-          assign fused_names = fused_names | append: ' ' | append: promotion_name
-        else
-          assign fused_names = promotion_name
-        endif
-      endif
-    endfor
-  endif
-
   if collection.filters != blank
     assign promotion_filters = collection.filters
   elsif search.filters != blank
@@ -68,7 +53,6 @@
       if filter.param_name == promotion_filter_param
         for value in filter.values
           if value.active
-            assign selected_name = ''
             for promotion in product.metafields.custom_features.promotion.value
               capture promotion_name
                 echo promotion.name
@@ -81,38 +65,46 @@
                 break
               endif
             endfor
-            if selected_name != blank
-              assign padded_names = ' ' | append: fused_names | append: ' '
-              assign selected_needle = ' ' | append: selected_name | append: ' '
-              unless padded_names contains selected_needle
-                if fused_names != blank
-                  assign fused_names = fused_names | append: ' ' | append: selected_name
-                else
-                  assign fused_names = selected_name
-                endif
-              endunless
-            endif
           endif
         endfor
       endif
     endfor
   endif
-
-  assign fused_label = sale_prefix
-  if fused_names != blank
-    if fused_label != blank
-      assign fused_label = fused_label | append: ' ' | append: fused_names
-    else
-      assign fused_label = fused_names
-    endif
-  endif
 -%}
 
 <div class="product-badge-row product-badge-row--{{ badge_context }}">
-  {%- if fused_label != blank -%}
-    <span class="{{ discount_badge_class }}" title="{{ fused_label | escape }}">
-      <span class="product-badge-row__label">{{ fused_label }}</span>
+  {%- if sale_prefix != blank -%}
+    <span class="{{ discount_badge_class }}" title="{{ sale_prefix | escape }}">
+      <span class="product-badge-row__label">{{ sale_prefix }}</span>
     </span>
+  {%- endif -%}
+
+  {%- if product.metafields.custom_features.promotion.value != blank -%}
+    {%- for promotion in product.metafields.custom_features.promotion.value -%}
+      {%- capture promotion_name -%}{{ promotion.name }}{%- endcapture -%}
+      {%- assign promotion_name = promotion_name | strip -%}
+      {%- if promotion_name != blank -%}
+        <span
+          class="product-badge-row__badge product-badge-row__badge--promotion"
+          title="{{ promotion_name | escape }}"
+        >
+          <span class="product-badge-row__label">{{ promotion_name }}</span>
+        </span>
+        {%- assign painted_names = painted_names | append: promotion_name | append: '|' -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if selected_name != blank -%}
+    {%- assign selected_needle = '|' | append: selected_name | append: '|' -%}
+    {%- unless painted_names contains selected_needle -%}
+      <span
+        class="product-badge-row__badge product-badge-row__badge--promotion"
+        title="{{ selected_name | escape }}"
+      >
+        <span class="product-badge-row__label">{{ selected_name }}</span>
+      </span>
+    {%- endunless -%}
   {%- endif -%}
 </div>
 
@@ -162,7 +154,18 @@
     --product-badge-border-color: var(--color-accent);
     --product-badge-text-color: var(--color-white);
 
+    flex-shrink: 0;
     font-size: 0.9375rem;
     font-weight: 700;
+  }
+
+  .product-badge-row__badge--promotion {
+    --product-badge-background-color: transparent;
+    --product-badge-border-color: var(--color-border-medium);
+    --product-badge-text-color: var(--color-gray-800);
+
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
   }
 {% endstylesheet %}
