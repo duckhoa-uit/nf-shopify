@@ -17,12 +17,22 @@ describe("canonical product badge rendering", () => {
     }
   });
 
-  test("renders promotions but never extra metadata in the canonical row", () => {
+  test("fuses compare-at or sale with promotion names on one chip", () => {
     const source = readProjectFile("snippets/product-badge-row.liquid");
 
+    expect(source).toContain("assign sale_prefix");
+    expect(source).toContain("assign fused_names");
+    expect(source).toContain("assign fused_label");
     expect(source).toContain("metafields.custom_features.promotion.value");
-    expect(source).toContain("promotion_count < maximum_promotions");
+    expect(source).toContain("filter.p.m.custom_features.promotion");
+    expect(source).toContain("collection.filters");
+    expect(source).toContain("search.filters");
+    expect(source).toContain("product-badge-row__badge--discount");
+    expect(source).not.toContain("render 'discount-badge'");
+    expect(source).not.toContain("render 'automatic-discount-preview'");
+    expect(source).not.toContain("product-badge-row__badge--promotion");
     expect(source).not.toContain("metafields.custom_features.extra.value");
+    expect(source).not.toContain("promotion_count < maximum_promotions");
   });
 
   test("preserves the promotion metafield reference order", () => {
@@ -48,11 +58,11 @@ describe("canonical product badge rendering", () => {
     expect(card).not.toContain("overflow-x-auto");
   });
 
-  test("uses semantic badge variants instead of styling promotions by position", () => {
+  test("uses discount tokens for the fused chip", () => {
     const source = readProjectFile("snippets/product-badge-row.liquid");
 
     expect(source).toContain("product-badge-row__badge--discount");
-    expect(source).toContain("product-badge-row__badge--promotion");
+    expect(source).not.toContain("product-badge-row__badge--promotion");
     expect(source).not.toContain("product-badge-row__promotion--primary");
     expect(source).not.toContain("product-badge-row__promotion--secondary");
     expect(source).toContain("--product-badge-background-color");
@@ -60,7 +70,7 @@ describe("canonical product badge rendering", () => {
     expect(source).toContain("--product-badge-text-color");
   });
 
-  test("refreshes PDP discounts after deferred pubsub initialization with lifecycle cleanup", () => {
+  test("refreshes leftover discount-badge markup after deferred pubsub initialization", () => {
     const badge = readProjectFile("snippets/discount-badge.liquid");
     const runtime = readProjectFile("assets/automatic-discount-badge.js");
 
