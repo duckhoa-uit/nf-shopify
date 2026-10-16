@@ -1,0 +1,368 @@
+{% comment %}
+ EComposer (https://ecomposer.io)
+ You SHOULD NOT modify source code in this page because
+ It is automatically generated from EComposer
+ At 2026-10-16 16:21:06
+ {% endcomment %} 
+ 
+ {% assign ecom_root_url = routes.root_url %}
+ {% if ecom_root_url != '/'%}
+ {% assign ecom_root_url = routes.root_url | append: '/' %}
+ {% endif %}
+ {% assign translation = metaobjects['app--6509291--ecom_translation']['app--6509291--ecom-translation-gqzisun8'].data.value %}
+ <link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /><noscript><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=2.1" /></noscript>
+{%capture section_id %}ecom-6ad24e7e64bbb36c1400a12b-page{% endcapture%}{% if section and section_id == section.id and headless == true %}
+{{ content_for_header }}
+{% render 'ecom_header', ECOM_THEME: true %}{% endif %}
+{{'ecom-6ad24e7e64bbb36c1400a12b.css' | asset_url | stylesheet_tag }}
+<script src="{{'ecom-6ad24e7e64bbb36c1400a12b.js' | asset_url }}" defer="defer"></script>
+<script type="text/javascript" class="ecom-page-info">
+ window.EComposer = window.EComposer || {};
+ window.EComposer.TEMPLATE_ID="6ad24e7e64bbb36c1400a12b";
+ window.EComposer.PAGE = {"title":"Untitled (duplicate)","type":"page","slug":"ecom-6ad24e7e64bbb36c1400a12b","plan_id":4,"template_id":"6ad24e7e64bbb36c1400a12b"};
+ </script>
+<div class="ecom-builder" id="ecom-6ad24e7e64bbb36c1400a12b"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-d8ria1xm04u"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-ikdlu6yqik"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-d8ria1xm04u" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.nfbf,.nfbf *,.nfbf *::before,.nfbf *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.nfbf{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden;background:#fff;color:#141414}
+.nfbf img{display:block;max-width:100%}
+.nfbf a,.nfbf a:visited,.nfbf a:hover,.nfbf a:active{text-decoration:none!important;color:inherit}
+.nfbf :where(h1,h2,h3,h4,h5,h6,p,span,b,em,i,li,strong,small){color:inherit;font-family:inherit}
+.nfbf button{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}
+.nfbf :focus-visible{outline:2px solid #141414;outline-offset:2px}
+.nfbf ._wrap{padding:0 32px}
+@media(max-width:1023px){.nfbf ._wrap{padding:0 24px}}
+@media(max-width:767px){.nfbf ._wrap{padding:0 20px}}
+@media(prefers-reduced-motion:reduce){.nfbf *{transition:none!important;animation:none!important}}
+.nfbf ._btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;min-height:48px;background:#C4151B;color:#fff!important;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;transition:background .2s ease}
+@media(hover:hover){.nfbf ._btn:hover{background:#9e1115}}
+@media(max-width:767px){.nfbf ._btn{width:100%}}
+.nfbf ._btn._ghost{background:transparent;color:#141414!important;border:1px solid #141414}
+@media(hover:hover){.nfbf ._btn._ghost:hover{background:#141414;color:#fff!important}}
+.nfbf ._link{display:inline-block;font-size:13.5px;font-weight:700;text-decoration:underline!important;color:#141414}
+._s1 ._hero{position:relative;width:100%;aspect-ratio:1440/760;min-height:460px;overflow:hidden;display:flex;align-items:flex-end}
+._s1 ._hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+._s1 ._scrim{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.3) 48%,rgba(0,0,0,.05) 75%)}
+._s1 ._copy{position:relative;z-index:2;width:100%;padding:0 32px 44px}
+._s1 ._tag{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#ff5b57}
+._s1 ._t{margin-top:10px;font-size:clamp(36px,7vw,88px);font-weight:800;line-height:.95;letter-spacing:-.02em;text-transform:uppercase;color:#fff}
+._s1 ._sub{margin-top:10px;font-size:15px;font-weight:500;color:rgba(255,255,255,.82);max-width:50ch}
+._s1 ._row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:24px}
+._s1 ._cdwrap{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+._s1 ._cdlbl{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+._s1 ._cd{display:flex;gap:6px}
+._s1 ._cd ._u{background:rgba(255,255,255,.14);border-radius:2px;padding:6px 10px;text-align:center;min-width:44px}
+._s1 ._cd ._u b{display:block;font-size:18px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+._s1 ._cd ._u b.pop{animation:nfbfpop .3s ease}
+._s1 ._cd ._u span{display:block;font-size:8px;color:rgba(255,255,255,.65);text-transform:uppercase}
+@keyframes nfbfpop{0%{transform:translateY(-40%);opacity:0}100%{transform:translateY(0);opacity:1}}
+@media(max-width:767px){
+._s1 ._hero{aspect-ratio:4/5;min-height:520px}
+._s1 ._t{font-size:clamp(30px,11vw,48px)}
+._s1 ._row{flex-direction:column;align-items:stretch;gap:10px}
+._s1 ._cdwrap{margin-left:0;align-items:stretch}
+}
+</style>
+<div class="nfbf _s1">
+<section class="_hero" aria-labelledby="nfbf-h1">
+ <img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/NF_26-27_Kikinder_full_0141_1.webp?width=1600" alt="" loading="eager">
+ <div class="_scrim"></div>
+ <div class="_copy">
+ <div class="_tag" data-t="tag">Early Access — NF+ members only</div>
+ <h1 class="_t" id="nfbf-h1" data-t="h1">You're in. Shop first.</h1>
+ <p class="_sub" data-t="sub">Peak Flow™ Series and E-shop Exclusivity — member prices are live now.</p>
+ <div class="_row">
+ <a class="_btn" href="#nfbfSkialp" data-t="cta1">Shop Peak Flow™</a>
+ <a class="_btn" href="{{ecom_root_url}}account/register" data-t="cta2" style="background:transparent;color:#fff!important;border:1px solid rgba(255,255,255,.6)">Not a member yet? Join</a>
+ <div class="_cdwrap">
+ <span class="_cdlbl" data-t="cd_lbl">Public sale starts in</span>
+ <div class="_cd" id="nfbfCd1" aria-label="Countdown">
+ <div class="_u"><b class="d">00</b><span>D</span></div>
+ <div class="_u"><b class="h">00</b><span>H</span></div>
+ <div class="_u"><b class="m">00</b><span>M</span></div>
+ <div class="_u"><b class="s">00</b><span>S</span></div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+</div>
+<script>
+window.NFBF_T = {"sk": {"tag": "Early Access — len pre členov NF+", "h1": "Si v tom. Nakupuj prvý.", "sub": "Peak Flow™ Series a E-shop Exclusivity — členské ceny platia už teraz.", "cta1": "Nakúpiť Peak Flow™", "cta2": "Ešte nie si člen? Registruj sa", "cd_lbl": "Verejný štart o", "stat1_v": "300 000+", "stat1_l": "členov komunity", "stat2_v": "30 rokov", "stat2_l": "skúsenosti v teréne", "stat3_v": "823 647", "stat3_l": "návštev vlani", "reg_h": "Ešte nie si člen NF+?", "reg_p": "Pridaj sa zadarmo a odomkni členské kupóny na Peak Flow™ Series skôr, než vypredáme veľkosti.", "reg_cta": "Vytvoriť účet zdarma", "cat_skialp_t": "Peak Flow™ Series", "all": "Všetko", "men": "Muži", "women": "Ženy", "view_all": "Zobraziť všetko →", "coupon_tag": "s kupónom v košíku", "members_tag": "cena pre členov NF+", "extra_cart": "extra v košíku", "members_badge": "pre členov", "close_h": "Early Access.", "close_h2": "Len pre teba.", "faq1_q": "Dokedy trvá Early Access?", "faq1_a": "Do 9. 11., 23:59. Potom je sortiment aj pre verejnosť, no bez členských kupónov.", "faq2_q": "Prečo nevidím priame ceny?", "faq2_a": "Priame precenenie celého sortimentu pribúda až v Main fáze 10. 11. Teraz platia len členské kupóny.", "faq3_q": "Čo je Peak Flow™ Series?", "faq3_a": "Naša skialpová a hybridná kolekcia — teraz s členskými kupónmi až do −50 %.", "nl_h": "Odoberať novinky", "nl_cta": "Prihlásiť", "nl_ph": "E-mail"}};
+(function(){
+ var loc = (window.Shopify && window.Shopify.locale) || 'en';
+ var dict = (window.NFBF_T && window.NFBF_T[loc]) || {};
+ document.querySelectorAll('.nfbf._s1 [data-t]').forEach(function(el){
+ var k = el.getAttribute('data-t');
+ if(dict[k]) el.textContent = dict[k];
+ });
+ var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ var target = new Date('2026-11-10T00:00:00');
+ function setDigit(el, val){
+ var text = String(val).padStart(2,'0');
+ if(el.textContent !== text){ el.textContent = text; if(!reduce){ el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); } }
+ }
+ function tick(){
+ var diff = Math.max(0, target - new Date());
+ var dd = Math.floor(diff/86400000), hh = Math.floor(diff%86400000/3600000), mm = Math.floor(diff%3600000/60000), ss = Math.floor(diff%60000/1000);
+ document.querySelectorAll('#nfbfCd1 .d').forEach(function(e){ setDigit(e,dd); });
+ document.querySelectorAll('#nfbfCd1 .h').forEach(function(e){ setDigit(e,hh); });
+ document.querySelectorAll('#nfbfCd1 .m').forEach(function(e){ setDigit(e,mm); });
+ document.querySelectorAll('#nfbfCd1 .s').forEach(function(e){ setDigit(e,ss); });
+ }
+ tick(); setInterval(tick, 1000);
+})();
+</script>
+</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-8ywu5a3fgr9"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-h52lyp9so5h"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-8ywu5a3fgr9" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.nfbf,.nfbf *,.nfbf *::before,.nfbf *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.nfbf{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden;background:#fff;color:#141414}
+.nfbf img{display:block;max-width:100%}
+.nfbf a,.nfbf a:visited,.nfbf a:hover,.nfbf a:active{text-decoration:none!important;color:inherit}
+.nfbf :where(h1,h2,h3,h4,h5,h6,p,span,b,em,i,li,strong,small){color:inherit;font-family:inherit}
+.nfbf button{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}
+.nfbf :focus-visible{outline:2px solid #141414;outline-offset:2px}
+.nfbf ._wrap{padding:0 32px}
+@media(max-width:1023px){.nfbf ._wrap{padding:0 24px}}
+@media(max-width:767px){.nfbf ._wrap{padding:0 20px}}
+@media(prefers-reduced-motion:reduce){.nfbf *{transition:none!important;animation:none!important}}
+.nfbf ._btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;min-height:48px;background:#C4151B;color:#fff!important;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;transition:background .2s ease}
+@media(hover:hover){.nfbf ._btn:hover{background:#9e1115}}
+@media(max-width:767px){.nfbf ._btn{width:100%}}
+.nfbf ._btn._ghost{background:transparent;color:#141414!important;border:1px solid #141414}
+@media(hover:hover){.nfbf ._btn._ghost:hover{background:#141414;color:#fff!important}}
+.nfbf ._link{display:inline-block;font-size:13.5px;font-weight:700;text-decoration:underline!important;color:#141414}
+.nfbf ._trust{padding:44px 0}
+.nfbf ._stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #e5e5e5;padding-top:28px}
+.nfbf ._st{padding:0 24px;border-left:1px solid #e5e5e5}
+.nfbf ._st:first-child{border-left:0;padding-left:0}
+.nfbf ._sv{font-size:clamp(26px,3.6vw,44px);font-weight:800;color:#EC1C24;line-height:1}
+.nfbf ._sl{margin-top:8px;font-size:12.5px;color:#595959}
+@media(max-width:767px){.nfbf ._stats{grid-template-columns:1fr;gap:20px;padding-top:20px}.nfbf ._st{padding:0;border-left:0}}
+.nfbf ._reg{padding:8px 0 48px;text-align:center;border-bottom:1px solid #e5e5e5}
+.nfbf ._reg ._h2{font-size:clamp(22px,3vw,30px);font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
+.nfbf ._reg p{margin-top:10px;font-size:14.5px;color:#595959;max-width:54ch;margin-left:auto;margin-right:auto}
+.nfbf ._reg ._btn{margin-top:20px}
+</style>
+<div class="nfbf">
+<div class="_wrap _trust">
+ <div class="_stats">
+ <div class="_st"><div class="_sv" data-t="stat1_v">300,000+</div><div class="_sl" data-t="stat1_l">community members</div></div>
+ <div class="_st"><div class="_sv" data-t="stat3_v">823,647</div><div class="_sl" data-t="stat3_l">visits last Black Friday</div></div>
+ <div class="_st"><div class="_sv" data-t="stat2_v">30 years</div><div class="_sl" data-t="stat2_l">on the mountain</div></div>
+ </div>
+</div>
+<div class="_wrap _reg">
+ <h2 class="_h2" data-t="reg_h">Not an NF+ member yet?</h2>
+ <p data-t="reg_p">Join free and unlock Peak Flow™ Series member coupons before sizes sell out.</p>
+ <a class="_btn" href="{{ecom_root_url}}account/register" data-t="reg_cta">Create free account</a>
+</div>
+</div>
+<script>
+window.NFBF_T = {"sk": {"tag": "Early Access — len pre členov NF+", "h1": "Si v tom. Nakupuj prvý.", "sub": "Peak Flow™ Series a E-shop Exclusivity — členské ceny platia už teraz.", "cta1": "Nakúpiť Peak Flow™", "cta2": "Ešte nie si člen? Registruj sa", "cd_lbl": "Verejný štart o", "stat1_v": "300 000+", "stat1_l": "členov komunity", "stat2_v": "30 rokov", "stat2_l": "skúsenosti v teréne", "stat3_v": "823 647", "stat3_l": "návštev vlani", "reg_h": "Ešte nie si člen NF+?", "reg_p": "Pridaj sa zadarmo a odomkni členské kupóny na Peak Flow™ Series skôr, než vypredáme veľkosti.", "reg_cta": "Vytvoriť účet zdarma", "cat_skialp_t": "Peak Flow™ Series", "all": "Všetko", "men": "Muži", "women": "Ženy", "view_all": "Zobraziť všetko →", "coupon_tag": "s kupónom v košíku", "members_tag": "cena pre členov NF+", "extra_cart": "extra v košíku", "members_badge": "pre členov", "close_h": "Early Access.", "close_h2": "Len pre teba.", "faq1_q": "Dokedy trvá Early Access?", "faq1_a": "Do 9. 11., 23:59. Potom je sortiment aj pre verejnosť, no bez členských kupónov.", "faq2_q": "Prečo nevidím priame ceny?", "faq2_a": "Priame precenenie celého sortimentu pribúda až v Main fáze 10. 11. Teraz platia len členské kupóny.", "faq3_q": "Čo je Peak Flow™ Series?", "faq3_a": "Naša skialpová a hybridná kolekcia — teraz s členskými kupónmi až do −50 %.", "nl_h": "Odoberať novinky", "nl_cta": "Prihlásiť", "nl_ph": "E-mail"}};
+(function(){
+ var loc = (window.Shopify && window.Shopify.locale) || 'en';
+ var dict = (window.NFBF_T && window.NFBF_T[loc]) || {};
+ document.querySelectorAll('.nfbf [data-t]').forEach(function(el){
+ var k = el.getAttribute('data-t');
+ if(dict[k]) el.textContent = dict[k];
+ });
+})();
+</script>
+</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-x2u9q6hrd5g"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-e1nkkh4lzs9"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-x2u9q6hrd5g" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.nfbf,.nfbf *,.nfbf *::before,.nfbf *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.nfbf{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden;background:#fff;color:#141414}
+.nfbf img{display:block;max-width:100%}
+.nfbf a,.nfbf a:visited,.nfbf a:hover,.nfbf a:active{text-decoration:none!important;color:inherit}
+.nfbf :where(h1,h2,h3,h4,h5,h6,p,span,b,em,i,li,strong,small){color:inherit;font-family:inherit}
+.nfbf button{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}
+.nfbf :focus-visible{outline:2px solid #141414;outline-offset:2px}
+.nfbf ._wrap{padding:0 32px}
+@media(max-width:1023px){.nfbf ._wrap{padding:0 24px}}
+@media(max-width:767px){.nfbf ._wrap{padding:0 20px}}
+@media(prefers-reduced-motion:reduce){.nfbf *{transition:none!important;animation:none!important}}
+.nfbf ._btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;min-height:48px;background:#C4151B;color:#fff!important;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;transition:background .2s ease}
+@media(hover:hover){.nfbf ._btn:hover{background:#9e1115}}
+@media(max-width:767px){.nfbf ._btn{width:100%}}
+.nfbf ._btn._ghost{background:transparent;color:#141414!important;border:1px solid #141414}
+@media(hover:hover){.nfbf ._btn._ghost:hover{background:#141414;color:#fff!important}}
+.nfbf ._link{display:inline-block;font-size:13.5px;font-weight:700;text-decoration:underline!important;color:#141414}
+.nfbf-cat{padding:48px 0 8px}
+.nfbf-cat ._banner{width:100%;aspect-ratio:1440/420;overflow:hidden;margin-bottom:32px;position:relative}
+.nfbf-cat ._banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.nfbf-cat ._banner ._sc{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 60%)}
+.nfbf-cat ._banner h2{position:absolute;left:32px;bottom:20px;z-index:2;color:#fff;font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
+@media(max-width:767px){.nfbf-cat ._banner{aspect-ratio:4/5}.nfbf-cat ._banner h2{left:20px;bottom:16px}}
+.nfbf-cat ._tabs{display:flex;justify-content:center;gap:clamp(18px,5vw,32px);margin:0 auto 0!important;position:relative;max-width:360px;padding:0 20px}
+.nfbf-cat ._tabs::after{content:"";position:absolute;left:20px;right:20px;bottom:0;height:1px;background:#e5e5e5}
+.nfbf-cat ._tab{padding:10px 2px 14px;min-height:44px;font-size:15px;color:#666;border-bottom:2px solid transparent;position:relative;z-index:1;transition:color .2s ease,border-color .2s ease}
+.nfbf-cat ._tab._on{color:#141414;font-weight:700;border-color:#141414}
+.nfbf-cat ._sizerow{display:none;border:1px dashed #ccc;border-radius:4px;padding:12px;margin:18px 20px 0;flex-wrap:wrap;align-items:center;gap:10px}
+.nfbf-cat ._sizerow.show{display:flex}
+.nfbf-cat ._sizerow ._slbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#777;width:100%}
+.nfbf-cat ._sizerow button{border:1px solid #ccc;background:#fff;color:#141414;border-radius:4px;padding:8px 14px;min-height:44px;min-width:44px;font-size:12.5px;font-weight:700;transition:background .15s,border-color .15s,color .15s}
+.nfbf-cat ._sizerow button[data-active="true"]{background:#141414;border-color:#141414;color:#fff}
+.nfbf-cat ._row{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:32px;padding:28px 32px 10px;scrollbar-width:none;-ms-overflow-style:none}
+.nfbf-cat ._row::-webkit-scrollbar{display:none}
+.nfbf-cat ._card{scroll-snap-align:start;flex:0 0 240px;display:flex;flex-direction:column}
+.nfbf-cat ._card[hidden]{display:none}
+@media(max-width:767px){
+.nfbf-cat ._tabs{gap:22px;padding:0 20px}
+.nfbf-cat ._tabs::after{left:20px;right:20px}
+.nfbf-cat ._sizerow{margin:16px 20px 0;padding:10px;gap:8px}
+.nfbf-cat ._sizerow button{padding:8px 12px;font-size:12px}
+.nfbf-cat ._row{padding:24px 20px 10px;gap:14px;scroll-padding-left:20px}
+}
+@media(max-width:480px){.nfbf-cat ._card{flex-basis:68vw}}
+.nfbf-cat ._im{position:relative;display:block;border-radius:4px;aspect-ratio:3/4;background:#F0EEED;overflow:hidden}
+.nfbf-cat ._im img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+@media(hover:hover){.nfbf-cat ._card:hover ._im img{transform:scale(1.04)}}
+.nfbf-cat ._rk{position:absolute;left:10px;top:10px;z-index:2;display:inline-flex;align-items:center;padding:5px 9px;border-radius:4px;font-size:10px;font-weight:800;letter-spacing:.02em;color:#fff;background:#EC1C24}
+.nfbf-cat ._rk.coupon{background:#595959}
+.nfbf-cat ._rk.members{background:#141414}
+.nfbf-cat ._ct{margin-top:14px;font-size:14px;font-weight:700}
+.nfbf-cat ._cd{margin-top:2px;font-size:12.5px;color:#595959;line-height:1.35}
+.nfbf-cat ._cf{margin-top:8px;display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 8px}
+.nfbf-cat ._old{font-size:12px;color:#707070;text-decoration:line-through}
+.nfbf-cat ._pr{font-size:15px;font-weight:800;color:#141414}
+.nfbf-cat ._pr.sale{color:#C4151B}
+.nfbf-cat ._tagline{font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#C4151B;width:100%;margin-top:2px}
+.nfbf-cat ._foot{text-align:center;padding:28px 20px 8px}
+.nfbf-cat ._foot a{font-size:13.5px;font-weight:700;text-decoration:underline!important;color:#141414}
+</style>
+<section class="nfbf nfbf-cat" id="nfbfSkialp">
+<div class="_banner"><img src="https://cdn.shopify.com/s/files/1/1009/2838/9452/files/bu-5111skp-men-s-windprotect-ski-touring-jacket-primaloft-gold-ohniste-NF-BU-5111SKP-170-M_4.jpg?width=1400" alt="" loading="lazy"><div class="_sc"></div><h2 data-t="cat_skialp_t">Peak Flow™ Series</h2></div>
+<div class="_tabs" role="group" aria-label="Gender">
+ <button class="_tab _on" data-g="all" data-t="all">All</button>
+ <button class="_tab" data-g="muž" data-t="men">Men</button>
+ <button class="_tab" data-g="žena" data-t="women">Women</button>
+</div>
+<div class="_row" id="nfbfRowSkialp"></div>
+<div class="_foot"><a href="{{ecom_root_url}}collections/skialp" data-t="view_all">Shop all →</a></div>
+</section>
+<script>
+window.NFBF_T = {"sk": {"tag": "Early Access — len pre členov NF+", "h1": "Si v tom. Nakupuj prvý.", "sub": "Peak Flow™ Series a E-shop Exclusivity — členské ceny platia už teraz.", "cta1": "Nakúpiť Peak Flow™", "cta2": "Ešte nie si člen? Registruj sa", "cd_lbl": "Verejný štart o", "stat1_v": "300 000+", "stat1_l": "členov komunity", "stat2_v": "30 rokov", "stat2_l": "skúsenosti v teréne", "stat3_v": "823 647", "stat3_l": "návštev vlani", "reg_h": "Ešte nie si člen NF+?", "reg_p": "Pridaj sa zadarmo a odomkni členské kupóny na Peak Flow™ Series skôr, než vypredáme veľkosti.", "reg_cta": "Vytvoriť účet zdarma", "cat_skialp_t": "Peak Flow™ Series", "all": "Všetko", "men": "Muži", "women": "Ženy", "view_all": "Zobraziť všetko →", "coupon_tag": "s kupónom v košíku", "members_tag": "cena pre členov NF+", "extra_cart": "extra v košíku", "members_badge": "pre členov", "close_h": "Early Access.", "close_h2": "Len pre teba.", "faq1_q": "Dokedy trvá Early Access?", "faq1_a": "Do 9. 11., 23:59. Potom je sortiment aj pre verejnosť, no bez členských kupónov.", "faq2_q": "Prečo nevidím priame ceny?", "faq2_a": "Priame precenenie celého sortimentu pribúda až v Main fáze 10. 11. Teraz platia len členské kupóny.", "faq3_q": "Čo je Peak Flow™ Series?", "faq3_a": "Naša skialpová a hybridná kolekcia — teraz s členskými kupónmi až do −50 %.", "nl_h": "Odoberať novinky", "nl_cta": "Prihlásiť", "nl_ph": "E-mail"}};
+function euro(n){ return n.toFixed(2).replace('.',',') + '&nbsp;€'; }
+function badge(mode, pct, L){
+ if(mode==='direct') return '<span class="_rk">&minus;'+pct+'%</span>';
+ if(mode==='coupon-all') return '<span class="_rk coupon">&minus;'+pct+'% '+L.extra_cart+'</span>';
+ return '<span class="_rk members">&minus;'+pct+'% '+L.members_badge+'</span>';
+}
+function priceBlock(mode, mpd, final, L){
+ var tag = mode==='coupon-all' ? L.coupon_tag : (mode==='coupon-members' ? L.members_tag : '');
+ return '<div class="_cf"><span class="_old">'+euro(mpd)+'</span><span class="_pr sale">'+euro(final)+'</span>'+(tag?'<span class="_tagline">'+tag+'</span>':'')+'</div>';
+}
+function renderCard(row, L){
+ var model=row[1], desc=row[2], gender=row[3], img=row[4], handle=row[5], mpd=row[6], final=row[7], pct=row[8], mode=row[9];
+ return '<article class="_card" data-g="'+gender+'"><a class="_im" href="{{ecom_root_url}}products/"+handle+'">'+badge(mode,pct,L)+
+ '<img src="'+img+'" alt="'+model+'" loading="lazy" width="600" height="800"></a>'+
+ '<h3 class="_ct">'+model+'</h3><p class="_cd">'+desc+'</p>'+priceBlock(mode, mpd, final, L)+'</article>';
+}
+(function(){
+ var loc = (window.Shopify && window.Shopify.locale) || 'en';
+ var dict = (window.NFBF_T && window.NFBF_T[loc]) || {};
+ document.querySelectorAll('#nfbfSkialp [data-t]').forEach(function(el){
+ var k = el.getAttribute('data-t');
+ if(dict[k]) el.textContent = dict[k];
+ });
+ var L = { extra_cart: (dict.extra_cart||'extra in cart'), members_badge: (dict.members_badge||'members'),
+ coupon_tag: (dict.coupon_tag||'with coupon'), members_tag: (dict.members_tag||'member price') };
+ var DATA = [["MI-3625SKP", "BUKOVEC", "P\u00e1nska r\u00fdchloschn\u00faca skialpov\u00e1 mikina", "mu\u017e", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/mi-3625skp-men-s-sweatshirt-ski-touring-active-sport-bukovec-NF-MI-3625SKP-363-M_4.jpg?width=800", "mens-skialp-sweatshirt-quick-drying-dri-release-bukovec", 54.9, 41.18, 25, "coupon-members"], ["NO-3855SKP", "KOTLISKA", "P\u00e1nske softshellov\u00e9 nohavice Alpine Series", "mu\u017e", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/no-3855skp-men-s-hybrid-softshell-active-full-zip-pants-kotliska-NF-NO-3855SKP-346-M_5.jpg?width=800", "mens-hybrid-softshell-ski-touring-pants-kotliska", 139.9, 83.94, 40, "coupon-members"], ["NO-46611SKP", "JAVORINKA 1", "D\u00e1mske hybridn\u00e9 nohavice Alpine Series Primaloft\u00ae", "\u017eena", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/no-46611skp-women-s-trousers-ski-touring-active-thermal-primaloft-javorinka-NF-NO-46611SKP-278-M_3_2.jpg?width=800", "womens-ski-touring-insulated-pants-primaloft-javorinka-1", 139.9, 97.93, 30, "coupon-members"], ["NO-36612SKP", "RYSY 2", "P\u00e1nske hybridn\u00e9 nohavice Blizzard\u00ae", "mu\u017e", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/no-36612skp-men-s-ski-touring-pants-active-sport-warm-fleece-rysy-2-NF-NO-36612SKP-383-M_7.jpg?width=800", "mens-hybrid-trousers-blizzard-thermal-comfort-rysy-2", 159.9, 119.93, 25, "coupon-members"], ["VE-32802SKP", "VHAN 2", "P\u00e1nska skialpov\u00e1 hybridn\u00e1 vesta Polartec\u00ae Alpha\u00ae", "mu\u017e", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/ve-32802skp-men-s-ski-touring-vest-allseasons-padded-polartec-alpha-direct-2l-vhan-2-NF-VE-32802SKP-383-H.jpg?width=800", "mens-ski-touring-hybrid-vest-polartec-alpha-vhan-2", 159.9, 111.93, 30, "coupon-members"], ["SU-4600SKP", "PODKOVA", "D\u00e1mska zateplovacia suk\u0148a Primaloft\u00ae Gold Alpine Series", "\u017eena", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/su-4600skp-women-s-ski-touring-skirt-active-sport-full-zip-padded-primaloft-gold-podkova-NF-SU-4600SKP-577-M_3.jpg?width=800", "womens-insulating-ski-touring-skirt-primaloft-podkova", 84.9, 50.94, 40, "coupon-members"], ["MI-3651SKP", "SULOV", "P\u00e1nska r\u00fdchloschn\u00faca stre\u010dov\u00e1 skialpov\u00e1 mikina", "mu\u017e", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/mi-3651skp-men-s-sweatshirt-ski-touring-active-sulov-NF-MI-3651SKP-269-H.jpg?width=800", "mens-quick-drying-stretch-ski-touring-sweatshirt-sulov", 79.9, 51.94, 35, "coupon-members"], ["MI-46251SKP", "ZLIECHOVA 1", "D\u00e1mska r\u00fdchloschn\u00faca mikina Dri-release\u00ae Alpine Series", "\u017eena", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/women-s-quick-drying-sweatshirt-zliechova-1-NF-MI-46251SKP-279-M_6.jpg?width=800", "womens-quick-drying-sweatshirt-zliechova-1", 69.9, 55.92, 20, "coupon-members"], ["NO-3856SKP", "CHOPEC", "P\u00e1nske hybridn\u00e9 nohavice Polartec\u00ae Alpha\u00ae Direct", "mu\u017e", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/no-3856skp-men-s-hybrid-trousers-with-full-length-side-zip-chopec-NF-NO-3856SKP-269-M_6.jpg?width=800", "mens-hybrid-full-zip-ski-touring-pants-polartec-chopec", 179.9, 89.95, 50, "coupon-members"], ["BU-5110SKP", "CHABENEC", "P\u00e1nska \u013eahk\u00e1 hardshellov\u00e1 skialpov\u00e1 bunda Dermizax\u2122", "mu\u017e", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/bu-5110skp-men-s-lightweight-hardshell-dermizax-collapsible-jacket-chabenec-NF-BU-5110SKP-281-M_8.jpg?width=800", "mens-lightweight-packable-protective-hardshell-ski-touring-jacket-dermizax-chabenec", 209.9, 157.43, 25, "coupon-members"], ["NO-4850SKP", "VETERNE", "D\u00e1mske hybridn\u00e9 nohavice s bo\u010dn\u00fdm zipsom Polartec\u00ae Alpha\u00ae", "\u017eena", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/no-4850skp-women-s-ski-touring-hybrid-active-lightweight-full-zip-pants-with-polartec-alpha-direct-veterne-NF-NO-4850SKP-510-M_4.jpg?width=800", "womens-hybrid-trousers-with-full-length-side-zip-veterne-no-4850skp", 169.9, 84.95, 50, "coupon-members"], ["NO-46632SKP", "ZDIARSKA 2", "D\u00e1mske elastick\u00e9 skialpov\u00e9 nohavice Blizzard\u00ae", "\u017eena", "https://cdn.shopify.com/s/files/1/1009/2838/9452/files/no-46632skp-women-s-elastic-insulating-trousers-zdiarska-NF-NO-46632SKP-480-M_3.jpg?width=800", "womens-elastic-ski-touring-pants-blizzard-zdiarska-2", 84.9, 50.94, 40, "coupon-members"]];
+ document.getElementById('nfbfRowSkialp').innerHTML = DATA.map(function(row){ return renderCard(row, L); }).join('');
+ var sec = document.getElementById('nfbfSkialp');
+ var tabs = sec.querySelectorAll('._tab');
+ tabs.forEach(function(tab){
+ tab.addEventListener('click', function(){
+ tabs.forEach(function(t){ t.classList.remove('_on'); });
+ tab.classList.add('_on');
+ var g = tab.getAttribute('data-g');
+ sec.querySelectorAll('._card').forEach(function(c){ c.hidden = !(g === 'all' || c.getAttribute('data-g') === g); });
+ });
+ });
+})();
+</script>
+</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-trrmyac44d"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-narcyfso97"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-trrmyac44d" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.nfbf,.nfbf *,.nfbf *::before,.nfbf *::after{box-sizing:border-box;margin:0;padding:0;font-family:'Montserrat',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.nfbf{width:100vw;position:relative;left:50%;transform:translateX(-50%);overflow-x:hidden;background:#fff;color:#141414}
+.nfbf img{display:block;max-width:100%}
+.nfbf a,.nfbf a:visited,.nfbf a:hover,.nfbf a:active{text-decoration:none!important;color:inherit}
+.nfbf :where(h1,h2,h3,h4,h5,h6,p,span,b,em,i,li,strong,small){color:inherit;font-family:inherit}
+.nfbf button{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}
+.nfbf :focus-visible{outline:2px solid #141414;outline-offset:2px}
+.nfbf ._wrap{padding:0 32px}
+@media(max-width:1023px){.nfbf ._wrap{padding:0 24px}}
+@media(max-width:767px){.nfbf ._wrap{padding:0 20px}}
+@media(prefers-reduced-motion:reduce){.nfbf *{transition:none!important;animation:none!important}}
+.nfbf ._btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;min-height:48px;background:#C4151B;color:#fff!important;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;transition:background .2s ease}
+@media(hover:hover){.nfbf ._btn:hover{background:#9e1115}}
+@media(max-width:767px){.nfbf ._btn{width:100%}}
+.nfbf ._btn._ghost{background:transparent;color:#141414!important;border:1px solid #141414}
+@media(hover:hover){.nfbf ._btn._ghost:hover{background:#141414;color:#fff!important}}
+.nfbf ._link{display:inline-block;font-size:13.5px;font-weight:700;text-decoration:underline!important;color:#141414}
+.nfbf ._close{padding:56px 0 40px;border-top:1px solid #e5e5e5}
+.nfbf ._rule{height:3px;background:#EC1C24;margin-bottom:24px;width:64px}
+.nfbf ._ch{color:#141414;font-weight:800;line-height:1.05;letter-spacing:-.02em;font-size:clamp(28px,5vw,52px);text-transform:uppercase}
+.nfbf ._nl{position:relative;border-radius:4px;overflow:hidden;background-size:cover;background-position:center 30%;min-height:300px;display:flex;align-items:center;justify-content:center;text-align:center;margin:36px 0}
+.nfbf ._nl::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.nfbf ._nlc{position:relative;z-index:2;color:#fff;max-width:400px;padding:20px}
+.nfbf ._nlc h2{font-size:clamp(20px,2.4vw,26px);font-weight:800;text-transform:uppercase}
+.nfbf ._nlf{display:flex;gap:10px;margin-top:16px}
+.nfbf ._nlf input{flex:1;border:1px solid rgba(255,255,255,.5);border-radius:4px;padding:0 16px;height:46px;font-family:inherit;font-size:13px;background:rgba(255,255,255,.14);color:#fff}
+.nfbf ._nlf input::placeholder{color:rgba(255,255,255,.75)}
+.nfbf ._nlf button{border-radius:4px;background:#fff;color:#141414;border:none;height:46px;padding:0 22px;font-weight:700;font-size:12.5px;text-transform:uppercase}
+.nfbf ._faq{max-width:680px}
+.nfbf ._faq h2{font-size:22px;font-weight:800;text-transform:uppercase;margin-bottom:16px}
+.nfbf details{border-bottom:1px solid #e5e5e5;padding:16px 0}
+.nfbf details summary{font-size:14.5px;font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;min-height:24px}
+.nfbf details summary::-webkit-details-marker{display:none}
+.nfbf details summary::after{content:"+";color:#C4151B;font-size:18px}
+.nfbf details[open] summary::after{content:"\2212"}
+.nfbf details p{margin-top:10px;font-size:13.5px;color:#595959;line-height:1.5}
+.nfbf ._cfoot{border-top:1px solid #e5e5e5;margin-top:44px;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11.5px;color:#8a8a8a}
+</style>
+<div class="nfbf">
+<div class="_wrap _close">
+ <div class="_rule"></div>
+ <h2 class="_ch" data-t="close_h">Early Access.</h2>
+ <h2 class="_ch" data-t="close_h2">Just for you.</h2>
+ 
+ <div class="_faq">
+ <h2 data-t="faq_h">FAQ</h2>
+ <details open><summary data-t="faq1_q">How long does Early Access run?</summary><p data-t="faq1_a">Until Nov 9, 23:59. After that everyone can shop, but member coupons end.</p></details>
+<details><summary data-t="faq2_q">Why don't I see direct sale prices?</summary><p data-t="faq2_a">Store-wide direct repricing starts with the Main phase on Nov 10. Right now only member coupons apply.</p></details>
+<details><summary data-t="faq3_q">What is Peak Flow™ Series?</summary><p data-t="faq3_a">Our ski-touring and hybrid collection — now with member coupons up to −50%.</p></details>
+ </div>
+ <div class="_cfoot"><span>&copy; 2026 Northfinder</span><span>VISA &middot; MC &middot; PayPal</span></div>
+</div>
+</div>
+<script>
+window.NFBF05_T2 = {"sk": {"tag": "Early Access — len pre členov NF+", "h1": "Si v tom. Nakupuj prvý.", "sub": "Peak Flow™ Series a E-shop Exclusivity — členské ceny platia už teraz.", "cta1": "Nakúpiť Peak Flow™", "cta2": "Ešte nie si člen? Registruj sa", "cd_lbl": "Verejný štart o", "stat1_v": "300 000+", "stat1_l": "členov komunity", "stat2_v": "30 rokov", "stat2_l": "skúsenosti v teréne", "stat3_v": "823 647", "stat3_l": "návštev vlani", "reg_h": "Ešte nie si člen NF+?", "reg_p": "Pridaj sa zadarmo a odomkni členské kupóny na Peak Flow™ Series skôr, než vypredáme veľkosti.", "reg_cta": "Vytvoriť účet zdarma", "cat_skialp_t": "Peak Flow™ Series", "all": "Všetko", "men": "Muži", "women": "Ženy", "view_all": "Zobraziť všetko →", "coupon_tag": "s kupónom v košíku", "members_tag": "cena pre členov NF+", "extra_cart": "extra v košíku", "members_badge": "pre členov", "close_h": "Early Access.", "close_h2": "Len pre teba.", "faq1_q": "Dokedy trvá Early Access?", "faq1_a": "Do 9. 11., 23:59. Potom je sortiment aj pre verejnosť, no bez členských kupónov.", "faq2_q": "Prečo nevidím priame ceny?", "faq2_a": "Priame precenenie celého sortimentu pribúda až v Main fáze 10. 11. Teraz platia len členské kupóny.", "faq3_q": "Čo je Peak Flow™ Series?", "faq3_a": "Naša skialpová a hybridná kolekcia — teraz s členskými kupónmi až do −50 %.", "nl_h": "Odoberať novinky", "nl_cta": "Prihlásiť", "nl_ph": "E-mail"}};
+(function(){
+ var loc = (window.Shopify && window.Shopify.locale) || 'en';
+ var dict = window.NFBF05_T2[loc];
+ if(!dict) return;
+ document.querySelectorAll('.nfbf ._close [data-t]').forEach(function(el){ var k = el.getAttribute('data-t'); if(dict[k]) el.textContent = dict[k]; });
+ document.querySelectorAll('.nfbf ._close [data-t-ph]').forEach(function(el){ var k = el.getAttribute('data-t-ph'); if(dict[k]) el.setAttribute('placeholder', dict[k]); });
+})();
+</script>
+</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
+</div></div>
+{% schema %}
+{
+ "name": "Untitled (duplicate)",
+ "settings": [
+ {
+ "type": "header",
+ "content": "The section was generated by [Ecomposer](https:\/\/ecomposer.io).",
+ "info": "\n EComposer is a Visual Page Builder app on Shopify AppStore.\n It provides 100+ pre-built templates in library,\n so you can build unlimited pages that you can imagine with it.\n Please don't add Shopify sections to EComposer's page in the theme customize. If you do this, Shopify sections will be deleted when you republish your page in EComposer\n "
+ },
+ {
+ "type": "header",
+ "content": "[EDIT WITH EComposer APP \u2192](https:\/\/admin.shopify.com\/store\/sportfinder-international\/apps\/ecomposer?open_builder=1&page=page&id=6ad24e7e64bbb36c1400a12b&utm_source=theme-customize)",
+ "info": "(*You must install the app to start editing this section [Learn more](https:\/\/help.ecomposer.io\/docs\/getting-started\/installation\/))"
+ }
+ ]
+}
+{% endschema %}
