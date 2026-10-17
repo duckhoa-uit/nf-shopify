@@ -34,19 +34,24 @@ The main storefront paths are standardized around these components:
 - `sections/main-product.liquid`
 - `sections/main-product-parfums.liquid`
 
-On those canonical paths, the rendering order is:
+On those canonical paths, the row paints Presta-style split chips:
 
-1. Automatic discount preview badge, if a valid preview payload exists.
-2. Compare-at-price sale badge, if `compare_at_price > price`.
-3. Up to two nonblank entries from `custom_features.promotion`.
+1. A red compare-at `-N%` chip when savings are at least 15%, or the localized
+   SALE chip when compare-at is lower than that. Campaign names never join
+   that red chip.
+2. One outline chip per nonblank `custom_features.promotion` name, in
+   metafield order. There is no cap of 2.
+3. The selected `filter.p.m.custom_features.promotion` GID name is pinned as
+   its own outline chip when the product has it and it is missing from the
+   painted names.
 
-`custom_features.extra` is intentionally not rendered in the canonical badge
-row. It remains product metadata, but cannot displace campaign promotions.
+The automatic-discount-preview badge is not rendered in this row. Extra is
+not read. Price presentations of the preview snippet stay on cards and PDPs.
 
 However, the implementation is not fully consistent across the entire theme:
 
-- Canonical cards and maintained PDPs share the same renderer, promotion limit,
-  single-line overflow behavior, and badge priority.
+- Canonical cards and maintained PDPs share the same renderer, single-line
+  overflow behavior, and split chips.
 - Canonical compare-at badges are calculated at product level, while PDP and
   card price displays are based on a selected variant.
 - The Featured Product section still uses Dawn's textual `Sale` and
@@ -120,22 +125,17 @@ canonical cards.
 ### Shared card and PDP order
 
 `snippets/product-badge-row.liquid` is the canonical renderer for cards,
-standard/Northkit PDPs, and maintained parfum PDPs. It renders:
-
-1. Shared automatic-preview and compare-at-price badges.
-2. The first two nonblank `custom_features.promotion` entries.
-
-The highest-priority promotion must therefore be the first reference in
-`custom_features.promotion`.
+standard/Northkit PDPs, and maintained parfum PDPs. It renders a red
+compare-at percent or SALE chip, then one outline chip per promotion name.
 
 The renderer preserves the reference order stored on the Product metafield. It
-does not sort, reverse, group, or reprioritize promotions by name, style, or
-campaign type. Blank names are skipped without changing the relative order of
-the remaining entries, and the first two nonblank references are rendered.
+does not sort, reverse, or parse percents out of promotion names. Blank names
+are skipped. There is no promotion count cap. If a Promotion filter is active,
+the matching GID name is painted as its own outline chip when it is on the
+product and missing from the metafield-order list. Membership uses pipe-wrapped
+names so `Sale` does not match `Outdoor Sale`.
 
-`custom_features.extra` is not rendered. This prevents category-like,
-internal, durable, or legacy Extra values from displacing active campaign
-labels.
+`custom_features.extra` is not rendered. Extra values never become chips.
 
 ### Overflow behavior
 
@@ -146,33 +146,24 @@ The canonical row does not scroll and does not display a scrollbar. It uses:
 - `min-width: 0`, `white-space: nowrap`, and `text-overflow: ellipsis` so long
   promotion labels shrink and truncate instead of wrapping or creating a
   horizontal scrollbar.
-- A non-shrinking discount badge so pricing information keeps priority while
-  promotion labels use the remaining width.
-- The same maximum of two promotion labels on cards and maintained PDPs.
-- One neutral outline style for all promotions, matching the earlier canonical
-  card and PDP presentation.
-- Shared base badge dimensions with semantic `discount` and `promotion`
-  variants. Each variant maps its background, border, and text colors to the
-  theme's existing design tokens.
+- The red percent/SALE chip uses discount color tokens and does not shrink
+  (`flex-shrink: 0`).
+- Each outline name uses transparent fill and a medium border token.
+- Shared base badge dimensions. Colors map to the theme's existing design
+  tokens.
 
 The old card-only horizontal scroller, gradient shadows, scroll listeners, and
 resize observer were removed.
 
 ### Practical precedence
 
-Canonical precedence is now:
+Canonical precedence is red percent or SALE first, then one outline chip per
+promotion name in metafield order. The selected Promotion filter name is
+pinned as its own outline chip if the product has it and it would otherwise
+be missing.
 
-```text
-automatic/price discount badges > primary promotion > secondary promotion
-```
-
-Here, primary and secondary describe data priority only. Promotion order still
-determines which labels are retained by the two-item limit, but it no longer
-changes their visual styling.
-
-If both an automatic preview badge and a compare-at badge are valid, the shared
-discount renderer can still output both before promotions. That separate
-pricing-precedence issue is documented below.
+The row does not render an automatic-discount-preview badge, so a second red
+percent cannot sit beside the compare-at chip.
 
 ## Sale badge derived from compare-at price
 
@@ -243,9 +234,8 @@ Examples:
 - Four products in the 2026-08-12 Admin snapshot have a mixture of discounted
   and non-discounted variants. Because the badge is product-level, it can be
   less precise than the selected-variant price display.
-- A PDP variant refresh updates the badge container, but the ordinary
-  compare-at badge is still rendered from product aggregate prices because the
-  PDP does not pass the selected variant into `discount-badge`.
+- The red compare-at chip uses product aggregate prices unless a caller
+  passes `variant`. Canonical callers do not pass `variant`.
 
 ## Automatic discount preview
 
@@ -390,8 +380,9 @@ Customers with the exact `VIP` customer tag:
 - A fixed amount equal to the variant price is rejected.
 - A `CUSTOMER_TAG` value must exactly match a logged-in customer's tag.
 - If two rules are eligible at the same time, no preview is rendered.
-- A valid automatic preview does not suppress the compare-at sale badge. If
-  compare-at pricing is also active, two discount badges can be shown.
+- A valid automatic preview still changes card and PDP prices. The badge
+  presentation is folded out of `product-badge-row`, so it cannot appear as a
+  second red chip.
 - The calculated price is only a preview. Shopify cart and checkout discount
   allocations remain authoritative.
 
@@ -420,7 +411,6 @@ referenced metaobject. The theme does not:
 - Automatically uppercase the stored text before rendering. CSS applies
   uppercase presentation on canonical surfaces.
 - Deduplicate duplicate references or names.
-- Filter blank names.
 - Activate or expire a promotion based on dates.
 - Validate that the product has a real discount.
 - Connect the label to a Shopify discount object.
@@ -670,9 +660,9 @@ The 2026-08-12 International snapshot has no definition and no values for
 
 | Surface                                                | Sale source                                            | Sale text                         | Promotion source                                        | Limit/order                                            | Standardized?             |
 | ------------------------------------------------------ | ------------------------------------------------------ | --------------------------------- | ------------------------------------------------------- | ------------------------------------------------------ | ------------------------- |
-| Collection/search/related/recent/feature/collage cards | Product-level compare-at price                         | `-N%` at 15%+, otherwise `SALE`   | `custom_features.promotion`                             | Discount first, then first 2 promotions                | Yes, canonical shared row |
-| Standard/Northkit PDP                                  | Product-level compare-at badge; selected-variant price | Same shared badge                 | `custom_features.promotion`                             | Same order, limit, and single-line truncation as cards | Yes, canonical shared row |
-| Maintained parfum PDP                                  | Same as standard PDP                                   | Same shared badge                 | `custom_features.promotion`                             | Same order, limit, and single-line truncation as cards | Yes, canonical shared row |
+| Collection/search/related/recent/feature/collage cards | Product-level compare-at price                         | `-N%` at 15%+, otherwise `SALE`   | `custom_features.promotion`                             | Red chip first, then every promotion name, selected GID pinned | Yes, canonical shared row |
+| Standard/Northkit PDP                                  | Product-level compare-at badge; selected-variant price | Same shared badge                 | `custom_features.promotion`                             | Same split chips and single-line truncation as cards           | Yes, canonical shared row |
+| Maintained parfum PDP                                  | Same as standard PDP                                   | Same shared badge                 | `custom_features.promotion`                             | Same split chips and single-line truncation as cards           | Yes, canonical shared row |
 | Featured Product                                       | Dawn price state                                       | Localized `Sale`/`Sold out`       | None                                                    | Dawn behavior                                          | No                        |
 | NF Flow Parameters                                     | None                                                   | NF Flow name                      | `custom_features.nf_flow_series`                        | All references, Parameters-gated                       | Separate PDP-only feature |
 | Outdoor Sale EComposer cards                           | Generated compare-at logic                             | Textual sale plus monetary saving | Exact `product.tags` allowlist                          | Generated order                                        | No                        |
@@ -811,8 +801,8 @@ The main candidates for future standardization are:
 
 1. Pass the selected/current variant into the canonical discount badge so PDP
    sale percentages match the selected variant.
-2. Define a clear precedence rule when automatic preview and compare-at pricing
-   are both present, instead of showing two discount badges.
+2. Decide whether card and PDP preview prices should also follow compare-at
+   when both exist. The badge row already hides the preview chip.
 3. Guard against duplicate metaobject names. Blank promotion names are already
    skipped by the shared canonical renderer.
 4. Move NF Flow rendering outside the unrelated Parameters-entry gate.

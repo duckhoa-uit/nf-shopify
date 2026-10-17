@@ -1,45 +1,110 @@
 {% doc %}
-  Renders the canonical single-line product badge row.
+  Renders the canonical single-line product badge row: a red compare-at
+  percent or SALE chip, then one outline chip per promotion name.
 
-  @param {product} product - Product whose discount and promotion badges are rendered.
+  @param {product} product - Product whose sale and promotion badges are rendered.
   @param {variant} [variant] - Variant used for discount calculations.
   @param {string} [context] - `card` or `pdp`; defaults to `card`.
-  @param {number} [promotion_limit] - Maximum promotion labels; defaults to 2.
 
   @example
-  {% render 'product-badge-row', product: product, context: 'pdp', promotion_limit: 2 %}
+  {% render 'product-badge-row', product: product, context: 'pdp' %}
 {% enddoc %}
 
 {%- liquid
   assign badge_context = context | default: 'card'
-  assign maximum_promotions = promotion_limit | default: 2
-  assign promotion_count = 0
+  assign minimum_discount = 15
+  assign sale_prefix = ''
+  assign painted_names = '|'
+  assign selected_name = ''
+  assign promotion_filter_param = 'filter.p.m.custom_features.promotion'
+  assign promotion_filters = null
 
   if badge_context == 'pdp'
     assign discount_badge_class = 'product-discount-badge product-badge-row__badge product-badge-row__badge--discount'
   else
     assign discount_badge_class = 'product-badge-row__badge product-badge-row__badge--discount'
   endif
+
+  if variant != blank
+    assign compare_price = variant.compare_at_price
+    assign current_price = variant.price
+  else
+    assign compare_price = product.compare_at_price
+    assign current_price = product.price
+  endif
+
+  if compare_price > current_price
+    assign savings = compare_price | minus: current_price | times: 100.0 | divided_by: compare_price | round
+    if savings >= minimum_discount
+      assign sale_prefix = '-' | append: savings | append: '%'
+    else
+      assign sale_prefix = 'products.product.sale_badge' | t | default: 'SALE'
+    endif
+  endif
+
+  if collection.filters != blank
+    assign promotion_filters = collection.filters
+  elsif search.filters != blank
+    assign promotion_filters = search.filters
+  endif
+
+  if promotion_filters != blank and product.metafields.custom_features.promotion.value != blank
+    for filter in promotion_filters
+      if filter.param_name == promotion_filter_param
+        for value in filter.values
+          if value.active
+            for promotion in product.metafields.custom_features.promotion.value
+              capture promotion_name
+                echo promotion.name
+              endcapture
+              assign promotion_name = promotion_name | strip
+              assign promotion_gid = promotion.id | append: ''
+              assign promotion_system_gid = 'gid://shopify/Metaobject/' | append: promotion.system.id
+              if value.value == promotion_gid or value.value == promotion_system_gid or value.label == promotion_name
+                assign selected_name = promotion_name
+                break
+              endif
+            endfor
+          endif
+        endfor
+      endif
+    endfor
+  endif
 -%}
 
 <div class="product-badge-row product-badge-row--{{ badge_context }}">
-  {% render 'discount-badge', product: product, variant: variant, badge_class: discount_badge_class %}
+  {%- if sale_prefix != blank -%}
+    <span class="{{ discount_badge_class }}" title="{{ sale_prefix | escape }}">
+      <span class="product-badge-row__label">{{ sale_prefix }}</span>
+    </span>
+  {%- endif -%}
 
   {%- if product.metafields.custom_features.promotion.value != blank -%}
     {%- for promotion in product.metafields.custom_features.promotion.value -%}
       {%- capture promotion_name -%}{{ promotion.name }}{%- endcapture -%}
       {%- assign promotion_name = promotion_name | strip -%}
-
-      {%- if promotion_count < maximum_promotions and promotion_name != blank -%}
+      {%- if promotion_name != blank -%}
         <span
           class="product-badge-row__badge product-badge-row__badge--promotion"
           title="{{ promotion_name | escape }}"
         >
           <span class="product-badge-row__label">{{ promotion_name }}</span>
         </span>
-        {%- assign promotion_count = promotion_count | plus: 1 -%}
+        {%- assign painted_names = painted_names | append: promotion_name | append: '|' -%}
       {%- endif -%}
     {%- endfor -%}
+  {%- endif -%}
+
+  {%- if selected_name != blank -%}
+    {%- assign selected_needle = '|' | append: selected_name | append: '|' -%}
+    {%- unless painted_names contains selected_needle -%}
+      <span
+        class="product-badge-row__badge product-badge-row__badge--promotion"
+        title="{{ selected_name | escape }}"
+      >
+        <span class="product-badge-row__label">{{ selected_name }}</span>
+      </span>
+    {%- endunless -%}
   {%- endif -%}
 </div>
 
