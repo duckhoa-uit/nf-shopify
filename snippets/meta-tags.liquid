@@ -83,12 +83,9 @@
 <meta name="twitter:title" content="{{ og_title | escape }}">
 <meta name="twitter:description" content="{{ og_description | escape }}">
 
-{%- comment -%} SEO meta tags - Allow search engine indexing {%- endcomment -%}
-{%- if settings.seo_noindex_enabled or settings.password_page_enabled -%}
-<meta name="robots" content="noindex, nofollow">
-{%- else -%}
-<meta name="robots" content="index, follow">
-{%- endif -%}
+{%- comment -%} STAGING ONLY (staging/nf-development): never indexable, regardless of settings. {%- endcomment -%}
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
 {%- if request.page_type == 'product' -%}
   <meta name="product:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
   <meta name="product:price:currency" content="{{ cart.currency.iso_code }}">
