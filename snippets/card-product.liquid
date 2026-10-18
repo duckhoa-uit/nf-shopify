@@ -578,6 +578,25 @@
 
         {%- assign display_variant = card_variant | default: card_product.selected_or_first_available_variant -%}
         {% render 'automatic-discount-preview', product: card_product, variant: display_variant, presentation: 'card' %}
+
+        {%- liquid
+          assign nf_card_discount = 0
+          for nf_discount_collection in card_product.collections
+            assign nf_collection_discount = nf_discount_collection.metafields.custom.discount.value | plus: 0
+            if nf_collection_discount > 0
+              assign nf_card_discount = nf_collection_discount
+              break
+            endif
+          endfor
+        -%}
+        {%- if nf_card_discount > 0 and nf_card_discount < 100 -%}
+          {%- assign nf_discount_factor = 100 | minus: nf_card_discount -%}
+          {%- assign nf_discounted_price = card_product.price_min | times: nf_discount_factor | divided_by: 100 -%}
+          <div class="collection-discount-price">
+            <span class="collection-discount-price__amount">{{ nf_discounted_price | money }}</span>
+            <span class="collection-discount-price__label">s kupónom</span>
+          </div>
+        {%- endif -%}
       </div>
     </div>
   </div>
