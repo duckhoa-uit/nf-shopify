@@ -1,7 +1,7 @@
 {% doc %}
   Renders the canonical single-line product badge row.
 
-  @param {product} product - Product whose discount and promotion badges are rendered.
+  @param {product} product - Product whose discount and public promotion badges are rendered.
   @param {variant} [variant] - Variant used for discount calculations.
   @param {string} [context] - `card` or `pdp`; defaults to `card`.
   @param {number} [promotion_limit] - Maximum promotion labels; defaults to 2.
@@ -25,8 +25,8 @@
 <div class="product-badge-row product-badge-row--{{ badge_context }}">
   {% render 'discount-badge', product: product, variant: variant, badge_class: discount_badge_class %}
 
-  {%- if product.metafields.custom_features.promotion.value != blank -%}
-    {%- for promotion in product.metafields.custom_features.promotion.value -%}
+  {%- if product.metafields.custom_features.promotion_storefront.value != blank -%}
+    {%- for promotion in product.metafields.custom_features.promotion_storefront.value -%}
       {%- capture promotion_name -%}{{ promotion.name }}{%- endcapture -%}
       {%- assign promotion_name = promotion_name | strip -%}
 
