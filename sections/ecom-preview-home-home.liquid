@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-10-23 11:13:27
+ At 2026-10-23 11:32:41
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -20,7 +20,7 @@
  window.EComposer.TEMPLATE_ID="preview-template-home";
  window.EComposer.PAGE = {"title":"Peak Flow","type":"home","slug":"ecom-preview-home","plan_id":4,"template_id":"preview-template-home"};
  </script>
-<div class="ecom-builder" id="ecom-preview-home"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-lqnhil6mggi"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-imp6jelvts"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-lqnhil6mggi" deep="2">
+<div class="ecom-builder" id="ecom-preview-home"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-k4sszftc7qc"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-fid1jvjp1dj"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-k4sszftc7qc" deep="2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
@@ -245,8 +245,8 @@
 #pf-page .pf-o__list small{display:block;font-size:12px;color:rgba(255,255,255,.58)}
 #pf-page .pf-o__list b{display:block;font-size:16px;font-weight:600}
 #pf-page .pf-o__list i{font-style:normal;font-size:15px;font-weight:500;color:rgba(255,255,255,.78);white-space:nowrap}
-#pf-page .pf-o__thumbs{display:grid;grid-template-columns:repeat(6,72px);gap:12px;max-width:100%}#pf-page .pf-o__thumbs::-webkit-scrollbar{display:none;width:0;height:0}
-#pf-page .pf-o__thumb{flex:none;width:72px;height:90px;padding:0;border:1px solid rgba(255,255,255,.1);border-radius:4px;overflow:hidden;background:#000;cursor:pointer;opacity:.6}
+#pf-page .pf-o__thumbs{display:grid;grid-template-columns:repeat(12,minmax(0,88px));gap:clamp(6px,0.8vw,12px);max-width:100%}#pf-page .pf-o__thumbs::-webkit-scrollbar{display:none;width:0;height:0}
+#pf-page .pf-o__thumb{flex:none;width:100%;height:auto;aspect-ratio:4/5;padding:0;border:1px solid rgba(255,255,255,.1);border-radius:4px;overflow:hidden;background:#000;cursor:pointer;opacity:.6}
 #pf-page .pf-o__thumb[aria-pressed="true"]{border:2px solid var(--pf-sky);opacity:1}
 #pf-page .pf-o__thumb img{width:100%;height:100%;object-fit:cover}
 /* OUTFITY mobil */
@@ -478,6 +478,8 @@
 #pf-outfits-panel .pf-p__opt{min-width:38px;height:32px;padding:0 8px;border-radius:4px;border:1px solid rgba(10,13,16,.25);background:#fff;color:var(--pf-ink);font-size:12px;font-weight:600;line-height:1;cursor:pointer}
 @media (max-width:749px){#pf-outfits-panel .pf-p__opt{height:38px}}
 #pf-outfits-panel .pf-p__opt[aria-pressed="true"]{background:var(--pf-ink);border-color:var(--pf-ink);color:#fff}
+#pf-outfits-panel .pf-p__opt.is-out{color:rgba(10,13,16,.35);border-color:rgba(10,13,16,.12);text-decoration:line-through}
+#pf-outfits-panel .pf-p__opt.is-out[aria-pressed="true"]{background:#fdf1ee;border-color:#b3261e;color:#b3261e}
 #pf-outfits-panel .pf-p__opt:disabled{color:rgba(10,13,16,.3);border-color:rgba(10,13,16,.1);text-decoration:line-through;cursor:not-allowed}
 #pf-outfits-panel .pf-p__optlbl{font-size:11px;color:rgba(10,13,16,.6)}
 #pf-outfits-panel .pf-p__sold{display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:4px;background:#fdf1ee}
@@ -645,25 +647,42 @@
  "label": "Mikina",
  "x": 52.72,
  "y": 23.06,
- "alt": "panske-rychloschnuce-elasticke-lyziarske-mikina-sulov-1"
+ "color": "zelená linka",
+ "alts": [
+ "panske-rychloschnuce-elasticke-lyziarske-mikina-sulov-1",
+ "panska-mikina-polartec-power-grid-javornik"
+ ]
  },
  {
  "handle": "skialp-batoh-light-18l-ferret",
  "label": "Batoh",
  "x": 61.9,
- "y": 26.25
+ "y": 26.25,
+ "color": "červenooranžová",
+ "alts": [
+ "skialpinisticky-technicky-batoh-30l-silvretta-2"
+ ]
  },
  {
  "handle": "panska-skialpova-hybridna-bunda-polartec®-alpha®-solisko-3",
  "label": "Bunda",
  "x": 53.12,
- "y": 36.77
+ "y": 36.77,
+ "color": "tmavomodrá čierna",
+ "alts": [
+ "panska-hybridna-skialpova-bunda-polartec®-sokolec-1",
+ "panske-lahka-zateplena-lyziarska-bunda-primaloft®-ohniste-1"
+ ]
  },
  {
  "handle": "panske-hybridne-elasticke-nohavice-derese-2",
  "label": "Nohavice",
  "x": 57.11,
- "y": 52.15
+ "y": 52.15,
+ "color": "blue",
+ "alts": [
+ "panske-hybridne-nohavice-blizzard®-thermal-comfort-rysy-3"
+ ]
  }
  ],
  "g": "m"
@@ -680,25 +699,44 @@
  "handle": "damska-mikina-rychloschnuca-zliechova-2",
  "label": "Mikina",
  "x": 37.05,
- "y": 27.45
+ "y": 27.45,
+ "color": "splashprint",
+ "alts": [
+ "damska-skialpova-grid-mikina-na-zips-pre-aktivne-sporty-zmrzla",
+ "mi-46271skp-damsky-skialpovy-sveter-grid-active-sport-celozips-zmrzla1"
+ ]
  },
  {
  "handle": "skialp-batoh-light-18l-ferret",
  "label": "Batoh",
  "x": 45.03,
- "y": 25.32
+ "y": 25.32,
+ "color": "azúrová modrá",
+ "alts": [
+ "skialpinisticky-technicky-batoh-30l-silvretta-2"
+ ]
  },
  {
  "handle": "womens-hybrid-ski-touring-jacket-polartec®-krizna-2",
  "label": "Bunda",
  "x": 57.21,
- "y": 33.77
+ "y": 33.77,
+ "color": "splashprint",
+ "alts": [
+ "damska-skialpova-zateplena-bunda-primaloft®-gold-opalena-1",
+ "damska-skialpova-zateplena-izolacna-bunda-primaloft®-rohace-3"
+ ]
  },
  {
  "handle": "womens-ski-touring-insulated-pants-primaloft®-javorinka-2",
  "label": "Nohavice",
  "x": 58.61,
- "y": 55.68
+ "y": 55.68,
+ "color": "modrá čierna",
+ "alts": [
+ "damske-skialpove-zateplene-nohavice-primaloft-javorinka-1",
+ "damske-skialp-active-polartec®-power-stretch-pro-nohavice-kamenista-1"
+ ]
  }
  ],
  "g": "z"
@@ -716,25 +754,42 @@
  "label": "Mikina",
  "x": 52.22,
  "y": 24.85,
- "alt": "panske-rychloschnuce-elasticke-lyziarske-mikina-sulov-1"
+ "color": "červená potlač",
+ "alts": [
+ "panske-rychloschnuce-elasticke-lyziarske-mikina-sulov-1",
+ "panska-mikina-polartec-power-grid-javornik"
+ ]
  },
  {
  "handle": "skialpinisticky-technicky-batoh-30l-silvretta-2",
  "label": "Batoh",
  "x": 43.94,
- "y": 27.32
+ "y": 27.32,
+ "color": "black",
+ "alts": [
+ "skialp-batoh-light-18l-ferret"
+ ]
  },
  {
  "handle": "panske-lahka-zateplena-lyziarska-bunda-primaloft®-ohniste-1",
  "label": "Bunda",
  "x": 49.73,
- "y": 39.17
+ "y": 39.17,
+ "color": "tmavomodročierna",
+ "alts": [
+ "panska-skialpova-hybridna-bunda-polartec®-alpha®-solisko-3",
+ "panska-hybridna-skialpova-bunda-polartec®-sokolec-1"
+ ]
  },
  {
  "handle": "panske-hybridne-elasticke-nohavice-derese-2",
  "label": "Nohavice",
  "x": 57.51,
- "y": 57.21
+ "y": 57.21,
+ "color": "blue",
+ "alts": [
+ "panske-hybridne-nohavice-blizzard®-thermal-comfort-rysy-3"
+ ]
  }
  ],
  "g": "m"
@@ -751,26 +806,44 @@
  "handle": "damska-skialpova-grid-mikina-na-zips-pre-aktivne-sporty-zmrzla",
  "label": "Mikina",
  "x": 56.51,
- "y": 22.06
+ "y": 22.06,
+ "color": "raspberry",
+ "alts": [
+ "damska-mikina-rychloschnuca-zliechova-2",
+ "mi-46271skp-damsky-skialpovy-sveter-grid-active-sport-celozips-zmrzla1"
+ ]
  },
  {
  "handle": "skialp-batoh-light-18l-ferret",
  "label": "Batoh",
  "x": 40.84,
- "y": 34.84
+ "y": 34.84,
+ "color": "azúrová modrá",
+ "alts": [
+ "skialpinisticky-technicky-batoh-30l-silvretta-2"
+ ]
  },
  {
  "handle": "damska-skialpova-zateplena-bunda-primaloft®-gold-opalena-1",
  "label": "Bunda",
  "x": 55.01,
- "y": 41.5
+ "y": 41.5,
+ "color": "čierna čerešňa",
+ "alts": [
+ "womens-hybrid-ski-touring-jacket-polartec®-krizna-2",
+ "damska-skialpova-zateplena-izolacna-bunda-primaloft®-rohace-3"
+ ]
  },
  {
  "handle": "damske-skialpove-zateplene-nohavice-primaloft-javorinka-1",
  "label": "Nohavice",
  "x": 50.72,
  "y": 52.62,
- "alt": "womens-ski-touring-insulated-pants-primaloft®-javorinka-2"
+ "color": "rose",
+ "alts": [
+ "womens-ski-touring-insulated-pants-primaloft®-javorinka-2",
+ "damske-skialp-active-polartec®-power-stretch-pro-nohavice-kamenista-1"
+ ]
  }
  ],
  "g": "z"
@@ -787,25 +860,43 @@
  "handle": "panske-rychloschnuce-elasticke-lyziarske-mikina-sulov-1",
  "label": "Mikina",
  "x": 49.73,
- "y": 27.25
+ "y": 27.25,
+ "color": "tmavomodrá",
+ "alts": [
+ "panska-lyziarska-mikina-rychloschnuca-dri-release®-bukovec-1",
+ "panska-mikina-polartec-power-grid-javornik"
+ ]
  },
  {
  "handle": "skialpinisticky-technicky-batoh-30l-silvretta-2",
  "label": "Batoh",
  "x": 40.14,
- "y": 30.11
+ "y": 30.11,
+ "color": "blue",
+ "alts": [
+ "skialp-batoh-light-18l-ferret"
+ ]
  },
  {
  "handle": "panska-hybridna-skialpova-bunda-polartec®-sokolec-1",
  "label": "Bunda",
  "x": 55.11,
- "y": 41.16
+ "y": 41.16,
+ "color": "zelenáčierna",
+ "alts": [
+ "panska-skialpova-hybridna-bunda-polartec®-alpha®-solisko-3",
+ "panske-lahka-zateplena-lyziarska-bunda-primaloft®-ohniste-1"
+ ]
  },
  {
  "handle": "panske-hybridne-nohavice-blizzard®-thermal-comfort-rysy-3",
  "label": "Nohavice",
  "x": 60.7,
- "y": 57.34
+ "y": 57.34,
+ "color": "tmavomodročierna",
+ "alts": [
+ "panske-hybridne-elasticke-nohavice-derese-2"
+ ]
  }
  ],
  "g": "m"
@@ -822,31 +913,54 @@
  "handle": "damska-mikina-rychloschnuca-zliechova-2",
  "label": "Mikina",
  "x": 56.71,
- "y": 23.85
+ "y": 23.85,
+ "color": "raspberryprint",
+ "alts": [
+ "damska-skialpova-grid-mikina-na-zips-pre-aktivne-sporty-zmrzla",
+ "mi-46271skp-damsky-skialpovy-sveter-grid-active-sport-celozips-zmrzla1"
+ ]
  },
  {
  "handle": "damska-skialpova-zateplena-bunda-primaloft®-gold-opalena-1",
  "label": "Bunda",
  "x": 56.31,
- "y": 33.31
+ "y": 33.31,
+ "color": "modrá čierna",
+ "alts": [
+ "womens-hybrid-ski-touring-jacket-polartec®-krizna-2",
+ "damska-skialpova-zateplena-izolacna-bunda-primaloft®-rohace-3"
+ ]
  },
  {
  "handle": "skialpinisticky-technicky-batoh-30l-silvretta-2",
  "label": "Batoh",
  "x": 35.55,
- "y": 27.72
+ "y": 27.72,
+ "color": "wine",
+ "alts": [
+ "skialp-batoh-light-18l-ferret"
+ ]
  },
  {
  "handle": "damska-zateplena-lyziarska-sukna-primaloft®-podkova-1",
  "label": "Sukňa",
  "x": 52.42,
- "y": 52.22
+ "y": 52.22,
+ "color": "black",
+ "alts": [
+ "damska-lyziarska-zateplena-sukna-polartec®-alpha®-jaraba-4"
+ ]
  },
  {
  "handle": "damske-lyziarske-turisticke-nohavice-s-gumou-blizzard®-zdiarska-3",
  "label": "Nohavice",
  "x": 51.02,
- "y": 68.53
+ "y": 68.53,
+ "color": "viacfarebná potlač",
+ "alts": [
+ "damske-skialp-active-polartec®-power-stretch-pro-nohavice-kamenista-1",
+ "womens-ski-touring-insulated-pants-primaloft®-javorinka-2"
+ ]
  }
  ],
  "g": "z"
@@ -863,19 +977,32 @@
  "handle": "8731-bu-5345snw-panska-lyziarska-bunda-premium-dermizaxev-tikhomir",
  "label": "Bunda",
  "x": 47.93,
- "y": 33.84
+ "y": 33.84,
+ "color": "blue",
+ "alts": [
+ "8734-bu-37901snw-panska-lyziarska-bunda-premium-dermizaxev-tohnis1",
+ "8848-bu-5346snw-panska-lyziarska-premium-bunda-dermizaxev-vasilli",
+ "bu-53451snw-panske-lyziarske-premium-bundy-dermizax™ev-tikhomir1",
+ "bu-53461snw-panske-lyziarske-premium-bundy-dermizax™ev-vasilli1"
+ ]
  },
  {
  "handle": "damske-lyziarske-rukavice-zateplene-primaloft®-yangra",
  "label": "Rukavice",
  "x": 30.76,
- "y": 25.12
+ "y": 25.12,
+ "color": "black",
+ "alts": []
  },
  {
  "handle": "8849-no-5045snw-panske-lyziarske-nohavice-premium-dermizaxev-tomasz",
  "label": "Nohavice",
  "x": 55.01,
- "y": 56.21
+ "y": 56.21,
+ "color": "black",
+ "alts": [
+ "8805-bez-36501snw-panske-lyziarske-nohavice-premium-dermizaxev-kready1"
+ ]
  }
  ],
  "g": "m"
@@ -892,31 +1019,54 @@
  "handle": "damska-mikina-rychloschnuca-zliechova-2",
  "label": "Mikina",
  "x": 38.95,
- "y": 23.19
+ "y": 23.19,
+ "color": "malinová čierna",
+ "alts": [
+ "damska-skialpova-grid-mikina-na-zips-pre-aktivne-sporty-zmrzla",
+ "mi-46271skp-damsky-skialpovy-sveter-grid-active-sport-celozips-zmrzla1"
+ ]
  },
  {
  "handle": "skialp-batoh-light-18l-ferret",
  "label": "Batoh",
  "x": 42.84,
- "y": 28.18
+ "y": 28.18,
+ "color": "azúrová modrá",
+ "alts": [
+ "skialpinisticky-technicky-batoh-30l-silvretta-2"
+ ]
  },
  {
  "handle": "damska-izolacna-skialpova-vesta-primaloft®-javorova-1",
  "label": "Vesta",
  "x": 53.72,
- "y": 35.77
+ "y": 35.77,
+ "color": "čierna čerešňa",
+ "alts": [
+ "damska-skialpova-zateplena-izolacna-bunda-primaloft®-rohace-3",
+ "damska-skialpova-zateplena-bunda-primaloft®-gold-opalena-1"
+ ]
  },
  {
  "handle": "damska-zateplena-lyziarska-sukna-primaloft®-podkova-1",
  "label": "Sukňa",
  "x": 54.32,
- "y": 50.42
+ "y": 50.42,
+ "color": "black",
+ "alts": [
+ "damska-lyziarska-zateplena-sukna-polartec®-alpha®-jaraba-4"
+ ]
  },
  {
  "handle": "damske-lyziarske-turisticke-nohavice-s-gumou-blizzard®-zdiarska-3",
  "label": "Nohavice",
  "x": 47.93,
- "y": 62.67
+ "y": 62.67,
+ "color": "viacfarebná potlač",
+ "alts": [
+ "damske-skialp-active-polartec®-power-stretch-pro-nohavice-kamenista-1",
+ "womens-ski-touring-insulated-pants-primaloft®-javorinka-2"
+ ]
  }
  ],
  "g": "z"
@@ -933,19 +1083,32 @@
  "handle": "damske-lyziarske-rukavice-zateplene-primaloft®-yangra",
  "label": "Rukavice",
  "x": 31.56,
- "y": 25.12
+ "y": 25.12,
+ "color": "black",
+ "alts": []
  },
  {
  "handle": "8734-bu-37901snw-panska-lyziarska-bunda-premium-dermizaxev-tohnis1",
  "label": "Bunda",
  "x": 49.03,
- "y": 36.97
+ "y": 36.97,
+ "color": "darkgreen",
+ "alts": [
+ "8731-bu-5345snw-panska-lyziarska-bunda-premium-dermizaxev-tikhomir",
+ "8848-bu-5346snw-panska-lyziarska-premium-bunda-dermizaxev-vasilli",
+ "bu-53451snw-panske-lyziarske-premium-bundy-dermizax™ev-tikhomir1",
+ "bu-53461snw-panske-lyziarske-premium-bundy-dermizax™ev-vasilli1"
+ ]
  },
  {
  "handle": "8805-bez-36501snw-panske-lyziarske-nohavice-premium-dermizaxev-kready1",
  "label": "Nohavice",
  "x": 57.61,
- "y": 58.01
+ "y": 58.01,
+ "color": "black",
+ "alts": [
+ "8849-no-5045snw-panske-lyziarske-nohavice-premium-dermizaxev-tomasz"
+ ]
  }
  ],
  "g": "m"
@@ -962,19 +1125,32 @@
  "handle": "damske-lyziarske-rukavice-zateplene-primaloft®-yangra",
  "label": "Rukavice",
  "x": 37.95,
- "y": 17.2
+ "y": 17.2,
+ "color": "black",
+ "alts": []
  },
  {
  "handle": "8779-bu-6343snw-damska-lyziarska-bunda-premium-dermizaxev-kaley",
  "label": "Bunda",
  "x": 56.81,
- "y": 34.51
+ "y": 34.51,
+ "color": "čiernásivázelená",
+ "alts": [
+ "damska-lyziarska-bunda-dermizax™ev-meribel",
+ "bu-63431snw-damska-lyziarska-bunda-premium-dermizax™ev-kaley1",
+ "bu-6420snw-damska-lyziarska-bunda-premium-dermizax™ev-kensley",
+ "damska-nepremokava-lyziarska-bunda-tohnisela-bu-4790snw"
+ ]
  },
  {
  "handle": "8773-damske-lyziarske-nohavice-premium-dermizaxev",
  "label": "Nohavice",
  "x": 60,
- "y": 53.75
+ "y": 53.75,
+ "color": "darkgreen",
+ "alts": [
+ "no-6097snw-damske-lyziarske-premium-nohavice-dermizax™ev-adley"
+ ]
  }
  ],
  "g": "z"
@@ -991,25 +1167,43 @@
  "handle": "damske-lyziarske-rukavice-zateplene-primaloft®-yangra",
  "label": "Rukavice",
  "x": 30.76,
- "y": 21.39
+ "y": 21.39,
+ "color": "black",
+ "alts": []
  },
  {
  "handle": "panske-rychloschnuce-elasticke-lyziarske-mikina-sulov-1",
  "label": "Mikina",
  "x": 52.72,
- "y": 23.39
+ "y": 23.39,
+ "color": "tmavomodrá",
+ "alts": [
+ "panska-lyziarska-mikina-rychloschnuca-dri-release®-bukovec-1",
+ "panska-mikina-polartec-power-grid-javornik"
+ ]
  },
  {
  "handle": "8848-bu-5346snw-panska-lyziarska-premium-bunda-dermizaxev-vasilli",
  "label": "Bunda",
  "x": 47.13,
- "y": 35.97
+ "y": 35.97,
+ "color": "čiernásivázelená",
+ "alts": [
+ "8731-bu-5345snw-panska-lyziarska-bunda-premium-dermizaxev-tikhomir",
+ "8734-bu-37901snw-panska-lyziarska-bunda-premium-dermizaxev-tohnis1",
+ "bu-53451snw-panske-lyziarske-premium-bundy-dermizax™ev-tikhomir1",
+ "bu-53461snw-panske-lyziarske-premium-bundy-dermizax™ev-vasilli1"
+ ]
  },
  {
- "handle": "8849-no-5045snw-panske-lyziarske-nohavice-premium-dermizaxev-tomasz",
+ "handle": "8805-bez-36501snw-panske-lyziarske-nohavice-premium-dermizaxev-kready1",
  "label": "Nohavice",
  "x": 55.51,
- "y": 56.21
+ "y": 56.21,
+ "color": "darkgreen",
+ "alts": [
+ "8849-no-5045snw-panske-lyziarske-nohavice-premium-dermizaxev-tomasz"
+ ]
  }
  ],
  "g": "m"
@@ -1026,13 +1220,24 @@
  "handle": "damska-lyziarska-bunda-dermizax™ev-meribel",
  "label": "Bunda",
  "x": 54.92,
- "y": 39.3
+ "y": 39.3,
+ "color": "raspberry",
+ "alts": [
+ "8779-bu-6343snw-damska-lyziarska-bunda-premium-dermizaxev-kaley",
+ "bu-63431snw-damska-lyziarska-bunda-premium-dermizax™ev-kaley1",
+ "bu-6420snw-damska-lyziarska-bunda-premium-dermizax™ev-kensley",
+ "damska-nepremokava-lyziarska-bunda-tohnisela-bu-4790snw"
+ ]
  },
  {
  "handle": "8773-damske-lyziarske-nohavice-premium-dermizaxev",
  "label": "Nohavice",
  "x": 46.93,
- "y": 58.14
+ "y": 58.14,
+ "color": "raspberry",
+ "alts": [
+ "no-6097snw-damske-lyziarske-premium-nohavice-dermizax™ev-adley"
+ ]
  }
  ],
  "g": "z"
@@ -1554,39 +1759,56 @@
  else if (S && S.prev) { de.style.overflow = S.prev[0]; b.style.overflow = S.prev[1]; }
  }
  function optIndex(p, re) { for (var i = 0; i < (p.options || []).length; i++) { var n = typeof p.options[i] === 'string' ? p.options[i] : p.options[i].name; if (re.test(n)) return i; } return -1; }
- function anyAvail(p) { return !!(p && p.variants.some(function (v) { return v.available; })); }
+ var RE_C = /farba|color|colour|barva|kolor|szín|farbe/i, RE_S = /veľkosť|velkost|velikost|size|rozmiar|méret|größe/i;
+ var FAM = [['black', /čiern|crn|black|schwarz/], ['blue', /modr|blue|azúr|atrament|navy|plav/], ['red', /červen|oranž|red|orange|rdeč|crven/], ['pink', /malin|raspberr|čereš|cherry|rose|ruž|wine|pink|bordó/], ['green', /zelen|green|olive|khaki/], ['grey', /siv|grey|gray|šed/], ['white', /biel|white|bijel/], ['print', /potlač|print|tlač/]];
+ function fam(c) { c = String(c || '').toLowerCase(); var best = null, bi = 1e9; FAM.forEach(function (f) { var m = c.search(f[1]); if (m > -1 && m < bi) { bi = m; best = f[0]; } }); return best; }
+ function colorsOf(p, ci) { var seen = {}, out = []; if (ci < 0) return out; p.variants.forEach(function (v) { var c = v.options[ci]; if (!seen[c]) { seen[c] = 1; out.push(c); } }); return out; }
+ function hasSize(p, ci, si, color, size) { return p.variants.some(function (v) { return v.available && (ci < 0 || v.options[ci] === color) && (si < 0 || size == null || v.options[si] === size); }); }
+ function availCount(p, ci, c) { return p.variants.filter(function (v) { return v.available && (ci < 0 || v.options[ci] === c); }).length; }
  function prod(r) { return r.swapped ? r.alt : r.p; }
- function blocked(r) { return !r.swapped && (!r.p || !anyAvail(r.p)); }
- function colorAvail(r, c) { return prod(r).variants.some(function (v) { return v.available && v.options[r.ci] === c; }); }
  function sizesFor(r) {
  var p = prod(r); if (!p || r.si < 0) return [];
  var seen = {}, out = [];
  p.variants.forEach(function (v) {
- if (r.ci > -1 && r.color && v.options[r.ci] !== r.color) return;
+ if (r.ci > -1 && v.options[r.ci] !== r.color) return;
  var s = v.options[r.si]; if (seen[s]) { if (v.available) seen[s].a = true; return; }
  seen[s] = { v: s, a: v.available }; out.push(seen[s]);
  });
+ var ORD = ['3XS', 'XXS', '2XS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '2XL', 'XXXL', '3XL', '4XL', '5XL'];
+ var rank = function (s) { var u = String(s).toUpperCase().trim(), i = ORD.indexOf(u); if (i > -1) return i; var n = parseFloat(u); return isNaN(n) ? 100 : 200 + n; };
+ out.sort(function (x, y) { return rank(x.v) - rank(y.v); });
  return out;
  }
- function initRow(r) {
- var p = prod(r); if (!p) return;
- r.ci = optIndex(p, /farba|color|colour|barva|kolor|szín/i);
- r.si = optIndex(p, /veľkosť|velkost|velikost|size|rozmiar|méret|größe/i);
- r.colors = [];
- if (r.ci > -1) { var seen = {}; p.variants.forEach(function (v) { var c = v.options[r.ci]; if (!seen[c]) { seen[c] = 1; r.colors.push(c); } }); }
- var avC = r.colors.filter(function (c) { return colorAvail(r, c); });
- var want = r.swapped ? r.it.altColor : r.it.color;
- r.fixed = !!(want && avC.indexOf(want) > -1);
- r.color = r.fixed ? want : (avC.length === 1 ? avC[0] : null);
+ function setProduct(r, p, want) {
+ r.ci = optIndex(p, RE_C); r.si = optIndex(p, RE_S);
+ var cols = colorsOf(p, r.ci);
+ if (r.ci < 0) r.color = null;
+ else if (want && cols.indexOf(want) > -1) r.color = want;
+ else { r.color = cols.slice().sort(function (a, b) { return availCount(p, r.ci, b) - availCount(p, r.ci, a); })[0]; }
  r.size = null;
- var sz = sizesFor(r); if (sz.length === 1 && sz[0].a && (r.ci < 0 || r.color)) r.size = sz[0].v;
+ var sz = sizesFor(r); if (sz.length === 1 && sz[0].a) r.size = sz[0].v;
+ }
+ function soldOut(r) { var p = prod(r); return !p || !hasSize(p, r.ci, r.si, r.color, null); }
+ /* ladiaca náhrada: iný produkt z rovnakej kategórie, rovnaká alebo podobná farba, so zvolenou veľkosťou na sklade */
+ function findAlt(r, size) {
+ var base = fam(r.it.color || r.color), out = null;
+ (r.alts || []).some(function (p) {
+ var ci = optIndex(p, RE_C), si = optIndex(p, RE_S), cols = colorsOf(p, ci);
+ if (ci < 0) cols = [null];
+ var ok = function (c) { return hasSize(p, ci, si, c, size); };
+ var pick = cols.filter(function (c) { return c === r.color && ok(c); })[0] ||
+ cols.filter(function (c) { return base && fam(c) === base && ok(c); })[0] ||
+ cols.filter(ok)[0];
+ if (pick !== undefined) { out = { p: p, color: pick }; return true; }
+ return false;
+ });
+ return out;
  }
  function variantOf(r) {
  var p = prod(r); if (!p) return null;
- if (p.variants.length === 1) return p.variants[0].available ? p.variants[0] : null;
- return p.variants.filter(function (v) { return (r.ci < 0 || v.options[r.ci] === r.color) && (r.si < 0 || v.options[r.si] === r.size) && v.available; })[0] || null;
+ return p.variants.filter(function (v) { return v.available && (r.ci < 0 || v.options[r.ci] === r.color) && (r.si < 0 || r.size == null && p.variants.length === 1 || v.options[r.si] === r.size); })[0] || null;
  }
- function needs(r) { var p = prod(r); if (!p || p.variants.length === 1) return false; return (r.ci > -1 && !r.color) || (r.si > -1 && !r.size); }
+ function needs(r) { return !variantOf(r); }
  function openPanel(i) {
  var L = LOOKS[i]; if (!L) return;
  S = { look: L, rows: [], added: 0, busy: false, err: '' };
@@ -1596,12 +1818,16 @@
  lastFocus = document.activeElement; panel.hidden = false; lock(true);
  setTimeout(function () { var x = panel.querySelector('.pf-p__x'); if (x) x.focus(); }, 30);
  dl('select_promotion', { ecommerce: { promotion_id: L.id, promotion_name: 'Outfit: ' + L.title, creative_slot: 'NAKÚPIŤ OUTFIT' } });
- Promise.all(L.items.map(function (it) { return Promise.all([getProduct(it.handle), getProduct(it.alt)]); })).then(function (res) {
+ Promise.all(L.items.map(function (it) { return Promise.all([getProduct(it.handle), Promise.all((it.alts || []).map(getProduct))]); })).then(function (res) {
  if (!S || S.look !== L) return;
  S.rows = res.map(function (pr, k) {
- return { it: L.items[k], p: pr[0], alt: pr[1] && anyAvail(pr[1]) ? pr[1] : null, swapped: false, on: true };
- }).filter(function (r) { return r.p || r.alt; });
- S.rows.forEach(function (r) { if (!r.p) r.swapped = true; initRow(r); });
+ var r = { it: L.items[k], p: pr[0], alts: pr[1].filter(function (x) { return x && x.variants.some(function (v) { return v.available; }); }), swapped: false, on: true };
+ if (r.p) setProduct(r, r.p, r.it.color);
+ return r;
+ }).filter(function (r) { return r.p || r.alts.length; });
+ S.rows.forEach(function (r) {
+ if (!r.p || soldOut(r)) { var a = findAlt(r, null); if (a) { r.swapped = true; r.alt = a.p; setProduct(r, a.p, a.color); r.auto = true; } }
+ });
  render();
  });
  }
@@ -1609,29 +1835,28 @@
  if (!S) return;
  var html = '';
  S.rows.forEach(function (r, k) {
- var b = blocked(r), p = prod(r) || r.p, on = r.on && !b;
+ var p = prod(r) || r.p, dead = soldOut(r), on = r.on && !dead;
  var v = variantOf(r), img = p.featured_image ? imgW(p.featured_image, 120) : '';
- html += '<div class="pf-p__row' + (on || b ? '' : ' is-off') + '">';
- html += b ? '<span class="pf-p__cb-sp"></span>' : '<button type="button" class="pf-p__cb" data-k="' + k + '" data-a="cb" aria-pressed="' + on + '" aria-label="Zahrnúť do košíka: ' + esc(p.title) + '">' + (on ? '✓' : '') + '</button>';
+ if (r.ci > -1) { var cv = p.variants.filter(function (x) { return x.options[r.ci] === r.color && x.featured_image; })[0]; if (cv) img = imgW(cv.featured_image.src, 120); }
+ html += '<div class="pf-p__row' + (on || dead ? '' : ' is-off') + '">';
+ html += dead ? '<span class="pf-p__cb-sp"></span>' : '<button type="button" class="pf-p__cb" data-k="' + k + '" data-a="cb" aria-pressed="' + on + '" aria-label="Zahrnúť do košíka: ' + esc(p.title) + '">' + (on ? '✓' : '') + '</button>';
  html += '<span class="pf-p__img">' + (img ? '<img src="' + esc(img) + '" alt="">' : '') + '</span><div class="pf-p__body">';
- html += '<div class="pf-p__top"><span><small>' + esc(r.it.label) + (r.fixed && r.colors.length > 1 ? ' · ' + esc(r.color) : '') + '</small><a href="' + pUrl(p.handle) + '" target="_blank" rel="noopener">' + esc(shortName(p.title)) + '</a></span><span class="pf-p__price">' + money((v || p).price) + '</span></div>';
- if (b) {
- html += '<div class="pf-p__sold"><b>VYPREDANÉ</b>' + (r.alt ? '<button type="button" class="pf-p__link" data-k="' + k + '" data-a="swap">Nahradiť za ' + esc(shortName(r.alt.title)) + ' · ' + money(r.alt.price) + ' →</button>' : '<span class="pf-p__note">Momentálne bez náhrady.</span>') + '</div>';
+ html += '<div class="pf-p__top"><span><small>' + esc(r.it.label) + (r.color ? ' · ' + esc(r.color) : '') + '</small><a href="' + pUrl(p.handle) + '" target="_blank" rel="noopener">' + esc(shortName(p.title)) + '</a></span><span class="pf-p__price">' + money((v || p).price) + '</span></div>';
+ if (r.swapped && r.p) html += '<span class="pf-p__note">Ladiaca náhrada za ' + esc(shortName(r.p.title)) + (r.auto ? ' (vypredané)' : '') + (r.auto ? '' : ' · <button type="button" data-k="' + k + '" data-a="unswap">vrátiť pôvodný</button>') + '</span>';
+ if (dead) {
+ html += '<div class="pf-p__sold"><b>VYPREDANÉ</b><span class="pf-p__note">Momentálne bez náhrady.</span></div>';
  } else {
- if (r.swapped && r.p) html += '<span class="pf-p__note">Náhrada za vypredaný ' + esc(shortName(r.p.title)) + ' · <button type="button" data-k="' + k + '" data-a="unswap">vrátiť</button></span>';
- if (r.ci > -1 && r.colors.length > 1 && !r.fixed) {
- html += '<span class="pf-p__optlbl">Farba</span><div class="pf-p__opts" role="group" aria-label="Farba">';
- r.colors.forEach(function (c) { if (colorAvail(r, c)) html += '<button type="button" class="pf-p__opt" data-k="' + k + '" data-a="color" data-v="' + esc(c) + '" aria-pressed="' + (r.color === c) + '">' + esc(c) + '</button>'; });
- html += '</div>';
- }
- if (r.ci > -1 && !r.color) html += '<span class="pf-p__note">Najprv vyber farbu, potom veľkosť.</span>';
- else {
  var sz = sizesFor(r);
  if (r.si > -1 && sz.length > 1) {
  html += '<div class="pf-p__opts" role="group" aria-label="Veľkosť">';
- sz.forEach(function (s) { html += '<button type="button" class="pf-p__opt" data-k="' + k + '" data-a="size" data-v="' + esc(s.v) + '" aria-pressed="' + (r.size === s.v) + '"' + (s.a ? ' aria-label="Veľkosť ' + esc(s.v) + '"' : ' disabled aria-label="Vypredané: ' + esc(s.v) + '"') + '>' + esc(s.v) + '</button>'; });
+ sz.forEach(function (s) { html += '<button type="button" class="pf-p__opt' + (s.a ? '' : ' is-out') + '" data-k="' + k + '" data-a="size" data-v="' + esc(s.v) + '" aria-pressed="' + (r.size === s.v) + '" aria-label="' + (s.a ? 'Veľkosť ' : 'Nie je skladom: ') + esc(s.v) + '">' + esc(s.v) + '</button>'; });
  html += '</div>';
  } else html += '<span class="pf-p__note">' + (sz.length === 1 && !/uni|oso/i.test(sz[0].v) ? 'Veľkosť ' + esc(sz[0].v) : 'Univerzálna veľkosť') + '</span>';
+ if (r.size && !v) {
+ var a = findAlt(r, r.size);
+ html += '<div class="pf-p__sold"><b>VEĽKOSŤ ' + esc(r.size) + ' NIE JE SKLADOM</b>' + (a ?
+ '<button type="button" class="pf-p__link" data-k="' + k + '" data-a="swap">Vybrať ladiacu náhradu: ' + esc(shortName(a.p.title)) + (a.color ? ' (' + esc(a.color) + ')' : '') + ' · ' + esc(r.size) + ' · ' + money(a.p.price) + ' →</button>' :
+ '<span class="pf-p__note">Vyber prosím inú veľkosť.</span>') + '</div>';
  }
  }
  html += '</div></div>';
@@ -1640,13 +1865,13 @@
  renderFoot();
  }
  function state() {
- var cnt = 0, total = 0, miss = [], noColor = false;
+ var cnt = 0, total = 0, miss = [];
  S.rows.forEach(function (r) {
- if (!r.on || blocked(r)) return;
- cnt++; if (needs(r)) { miss.push(r.it.label.toLowerCase()); if (r.ci > -1 && !r.color) noColor = true; }
+ if (!r.on || soldOut(r)) return;
+ cnt++; if (needs(r)) miss.push(r.it.label.toLowerCase());
  total += (variantOf(r) || prod(r)).price;
  });
- return { cnt: cnt, total: total, miss: miss, noColor: noColor, ready: cnt > 0 && !miss.length };
+ return { cnt: cnt, total: total, miss: miss, ready: cnt > 0 && !miss.length };
  }
  function renderFoot() {
  if (S.added) {
@@ -1655,7 +1880,7 @@
  }
  var st = state();
  pfoot.innerHTML = '<div class="pf-p__sum"><span>Spolu · ' + st.cnt + ' ' + kWord(st.cnt) + '</span><b>' + money(st.total) + '</b></div>' +
- (st.ready ? '' : '<span class="pf-p__hint">' + (st.cnt ? (st.noColor ? 'Vyber farbu a veľkosť: ' : 'Vyber veľkosť: ') + esc(st.miss.join(', ')) + '.' : 'Vyber aspoň jeden kúsok.') + '</span>') +
+ (st.ready ? '' : '<span class="pf-p__hint">' + (st.cnt ? 'Vyber dostupnú veľkosť: ' + esc(st.miss.join(', ')) + '.' : 'Vyber aspoň jeden kúsok.') + '</span>') +
  (S.err ? '<span class="pf-p__err">' + esc(S.err) + '</span>' : '') +
  '<button type="button" class="pf-p__add" data-a="add"' + (st.ready && !S.busy ? '' : ' disabled') + '>' + (S.busy ? 'PRIDÁVAM…' : st.ready ? 'PRIDAŤ ' + st.cnt + ' ' + kWord(st.cnt).toUpperCase() + ' DO KOŠÍKA' : 'VYBER VEĽKOSTI (' + (st.cnt - st.miss.length) + '/' + st.cnt + ')') + '</button>' +
  '<a class="pf-p__guide" href="' + esc(CFG.sizeGuideUrl || (ROOT + 'pages/velkostna-tabulka')) + '" target="_blank" rel="noopener">TABUĽKA VEĽKOSTÍ →</a>';
@@ -1664,7 +1889,7 @@
  var st = state(); if (!st.ready || S.busy) return;
  var L = S.look, items = [], ga = [], list = 'Outfit: ' + L.title;
  S.rows.forEach(function (r) {
- if (!r.on || blocked(r)) return;
+ if (!r.on || soldOut(r)) return;
  var v = variantOf(r); if (!v) return;
  items.push({ id: v.id, quantity: 1, properties: { _outfit: (CFG.pageName ? CFG.pageName + ' · ' : '') + L.title } });
  ga.push(gaItem(prod(r), v, list));
@@ -1695,9 +1920,8 @@
  var r = S.rows[+t.getAttribute('data-k')]; if (!r) return;
  if (a === 'cb') r.on = !r.on;
  else if (a === 'size') r.size = t.getAttribute('data-v');
- else if (a === 'color') { r.color = t.getAttribute('data-v'); r.size = null; var s1 = sizesFor(r); if (s1.length === 1 && s1[0].a) r.size = s1[0].v; }
- else if (a === 'swap') { r.swapped = true; r.on = true; initRow(r); }
- else if (a === 'unswap') { r.swapped = false; initRow(r); }
+ else if (a === 'swap') { var sz0 = r.size, al = findAlt(r, sz0); if (al) { r.swapped = true; r.auto = false; r.on = true; r.alt = al.p; setProduct(r, al.p, al.color); var ok = sizesFor(r).some(function (s) { return s.v === sz0 && s.a; }); if (ok) r.size = sz0; } }
+ else if (a === 'unswap') { r.swapped = false; r.auto = false; setProduct(r, r.p, r.it.color); }
  S.added = 0;
  var y = plist.scrollTop; render(); plist.scrollTop = y;
  });
