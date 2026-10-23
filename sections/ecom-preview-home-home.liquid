@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-10-23 11:45:12
+ At 2026-10-23 11:58:07
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -20,7 +20,7 @@
  window.EComposer.TEMPLATE_ID="preview-template-home";
  window.EComposer.PAGE = {"title":"Peak Flow","type":"home","slug":"ecom-preview-home","plan_id":4,"template_id":"preview-template-home"};
  </script>
-<div class="ecom-builder" id="ecom-preview-home"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-thghaav7hn"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-f01ccok0wfv"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-thghaav7hn" deep="2">
+<div class="ecom-builder" id="ecom-preview-home"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-mv7aj6hzm5i"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-lrlnyfv8qv"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-mv7aj6hzm5i" deep="2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
@@ -682,7 +682,7 @@
  "label": "Nohavice",
  "x": 57.11,
  "y": 52.15,
- "color": "blue",
+ "color": "grey",
  "alts": [
  "panske-hybridne-nohavice-blizzard®-thermal-comfort-rysy-3"
  ]
@@ -1782,6 +1782,18 @@
  function hasSize(p, ci, si, color, size) { return p.variants.some(function (v) { return v.available && (ci < 0 || v.options[ci] === color) && (si < 0 || size == null || v.options[si] === size); }); }
  function availCount(p, ci, c) { return p.variants.filter(function (v) { return v.available && (ci < 0 || v.options[ci] === c); }).length; }
  function prod(r) { return r.swapped ? r.alt : r.p; }
+ /* fotka produktu v danej farbe: kód farby zo SKU (napr. 108394-300-102) -> súbor ...-300-H / -D (predný pohľad) */
+ function colorImg(p, ci, color) {
+ var v = p.variants.filter(function (x) { return ci < 0 || x.options[ci] === color; })[0] || p.variants[0];
+ var m = String(v && v.sku || '').match(/-(\d{2,4})-/), code = m && m[1], imgs = p.images || [];
+ if (code) {
+ var ord = ['-D.', '-D_', '-H.', '-H_', '-M_1.', '-BV', '-'];
+ for (var i = 0; i < ord.length; i++) {
+ for (var j = 0; j < imgs.length; j++) { var f = String(imgs[j]).split('?')[0].split('/').pop(); if (f.indexOf('-' + code + ord[i]) > -1) return imgs[j]; }
+ }
+ }
+ return (v && v.featured_image && v.featured_image.src) || p.featured_image || '';
+ }
  function sizesFor(r) {
  var p = prod(r); if (!p || r.si < 0) return [];
  var seen = {}, out = [];
@@ -1853,7 +1865,7 @@
  S.rows.forEach(function (r, k) {
  var p = prod(r) || r.p, dead = soldOut(r), on = r.on && !dead;
  var v = variantOf(r), img = p.featured_image ? imgW(p.featured_image, 120) : '';
- if (r.ci > -1) { var cv = p.variants.filter(function (x) { return x.options[r.ci] === r.color && x.featured_image; })[0]; if (cv) img = imgW(cv.featured_image.src, 120); }
+ var ci0 = colorImg(p, r.ci, r.color); if (ci0) img = imgW(ci0, 120);
  html += '<div class="pf-p__row' + (on || dead ? '' : ' is-off') + '">';
  html += dead ? '<span class="pf-p__cb-sp"></span>' : '<button type="button" class="pf-p__cb" data-k="' + k + '" data-a="cb" aria-pressed="' + on + '" aria-label="Zahrnúť do košíka: ' + esc(p.title) + '">' + (on ? '✓' : '') + '</button>';
  html += '<span class="pf-p__img">' + (img ? '<img src="' + esc(img) + '" alt="">' : '') + '</span><div class="pf-p__body">';
