@@ -1,5 +1,4 @@
-/* Publish by EComposer at 2026-10-23 10:47:48*/
-
+/* Publish by EComposer at 2026-10-23 10:57:36*/
                 if(window.location.search.indexOf("ecom-token=") < 0)
                 {
                     document.querySelector(".ecom-builder").innerHTML = '<h3 style="width:100%;display:block;text-align:center">This template for preview purposes only</h3>';
