@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-10-29 07:19:56
+ At 2026-10-29 07:58:32
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -21,7 +21,7 @@
  window.EComposer.TEMPLATE_ID="6ae2f39a4f9e42ec630ed57b";
  window.EComposer.PAGE = {"title":"BF code-opt test \u2013 early access","type":"page","slug":"ecom-bf-code-opt-test-early-access","plan_id":4,"template_id":"6ae2f39a4f9e42ec630ed57b"};
  </script>
-<div class="ecom-builder" id="ecom-bf-code-opt-test-early-access"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-z8r1d5v6d4k"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-qsm6cc6oxum"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-z8r1d5v6d4k" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<div class="ecom-builder" id="ecom-bf-code-opt-test-early-access"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-0wed2s1hn7ia"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-oiwpki4cl4m"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-0wed2s1hn7ia" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :where(.nfbf,.nfbf *,.nfbf *::before,.nfbf *::after){box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
 .nfbf [hidden]{display:none!important}
@@ -102,8 +102,11 @@ window.__bfCollCache['black-friday-early-access'] = Promise.resolve({"products":
 {%- for product in bf_coll.products -%}
 {%- assign bf_front = product.featured_image -%}
 {%- for bf_img in product.images -%}{%- assign bf_base = bf_img.src | split: '?' | first | downcase -%}{%- if bf_base contains '_1.jpg' or bf_base contains '_1.jpeg' or bf_base contains '_1.png' or bf_base contains '_1.webp' -%}{%- assign bf_front = bf_img -%}{%- break -%}{%- endif -%}{%- endfor -%}
+{%- assign bf_sizes = '' -%}
+{%- for o in product.options_with_values -%}{%- assign bf_oname = o.name | downcase -%}{%- if bf_oname == 'size' -%}{%- assign bf_pos = o.position -%}{%- for v in product.variants -%}{%- if v.available -%}{%- if bf_pos == 1 -%}{%- assign bf_val = v.option1 -%}{%- elsif bf_pos == 2 -%}{%- assign bf_val = v.option2 -%}{%- else -%}{%- assign bf_val = v.option3 -%}{%- endif -%}{%- assign bf_sizes = bf_sizes | append: bf_val | append: '|' -%}{%- endif -%}{%- endfor -%}{%- endif -%}{%- endfor -%}
 {%- unless forloop.first -%},{%- endunless -%}
-{"handle":{{ product.handle | json }},"images":[{%- if bf_front -%}{"src":{{ bf_front | image_url: width: 600 | json }}}{%- endif -%}],"options":[{%- for o in product.options_with_values -%}{%- unless forloop.first -%},{%- endunless -%}{"name":{{ o.name | json }},"position":{{ o.position }}}{%- endfor -%}],"variants":[{%- assign bf_first = true -%}{%- for v in product.variants -%}{%- if v.available -%}{%- unless bf_first -%},{%- endunless -%}{%- assign bf_first = false -%}{"available":true,"option1":{{ v.option1 | json }},"option2":{{ v.option2 | json }},"option3":{{ v.option3 | json }}}{%- endif -%}{%- endfor -%}]}
+{"handle":{{ product.handle | json }},"images":[{%- if bf_front -%}{"src":{{ bf_front | image_url: width: 600 | json }}}{%- endif -%}]{%- if bf_pos -%},"sizes":{{ bf_sizes | split: '|' | uniq | json }}{%- endif -%}}
+{%- assign bf_pos = nil -%}
 {%- endfor -%}
 ]});
 {%- endpaginate -%}
@@ -236,7 +239,7 @@ window.nfwlReveal = function(){
 };
 window.nfwlReveal();
 </script>
-</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-rzm6ddg0ofl"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-pmkkw89y9ir"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-rzm6ddg0ofl" deep="2">
+</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-fqe0a9u5dui"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-n8wulqve13"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-fqe0a9u5dui" deep="2">
 <style>
 .nfbf ._h2{font-family:'Archivo',Helvetica,Arial,sans-serif;font-size:clamp(24px,3.2vw,38px);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;margin-bottom:6px}
 .nfbf ._sub{color:#5B6472;font-size:14px;margin-bottom:22px;max-width:60ch}
@@ -425,7 +428,7 @@ window.nfwlReveal();
  <div class="_st"><div class="_sv"><span data-t="stats.years_value">30 rokov</span></div><div class="_sl"><span data-t="stats.years_label">skúseností na horách</span></div></div>
  </div>
 </div>
-</div><script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-d6e4p6r61zm"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-x916yklsyda"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-d6e4p6r61zm" deep="2">
+</div><script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-ulghlo7v8ij"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-vh4jwi0971"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-ulghlo7v8ij" deep="2">
 <div class="nfbf">
 <script>
 /* Real-customer probe: if EComposer renders Liquid inside this custom-code block,
@@ -490,7 +493,7 @@ window.nfwlShopifyCustomer = {% if customer %}true{% else %}false{% endif %};
  refreshState();
 })();
 </script>
-</div><script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-vkoky2nagpo"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-l26iy04l0hd"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-vkoky2nagpo" deep="2">
+</div><script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-63oa7wsmiu8"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-w9x6iq5rfr"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-63oa7wsmiu8" deep="2">
 <div class="nfbf">
 <div class="_wrap _prod _reveal">
  <h2 class="_h2"><span data-t="filters.f2.heading">Early Access katalóg</span></h2>
@@ -687,6 +690,7 @@ window.BF_PRODUCTS = [{"sku": "BU-5003OR", "name": "MARQUIS", "series": "Outdoor
  var front = imgs.find(function(im){ return FRONT_RE.test(im.src); });
  var img = (front || imgs[0]) && (front || imgs[0]).src;
  if(img) LIVE_IMAGES[prod.handle] = img;
+ if(prod.sizes){ LIVE_SIZES[prod.handle] = new Set(prod.sizes); return; }
  var sizeOpt = (prod.options||[]).find(function(o){ return (o.name||'').toLowerCase()==='size'; });
  if(sizeOpt){
  var idx = sizeOpt.position; // 1-based option1/2/3
@@ -889,7 +893,7 @@ window.BF_PRODUCTS = [{"sku": "BU-5003OR", "name": "MARQUIS", "series": "Outdoor
  }
 })();
 </script>
-<script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-txslwwirk9"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-s7lhx3xnorq"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-txslwwirk9" deep="2">
+<script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-1ms0u1lg641"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-m8drvuvll9f"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-1ms0u1lg641" deep="2">
 <div class="nfbf">
 <div class="_wrap _recentwrap _reveal" id="bfRecentWrap" hidden>
  <h2 class="_h2" id="bfRecentHeading" data-t="recent.heading_suggested">Mohlo by sa vám páčiť</h2>
@@ -1006,7 +1010,7 @@ window.BF_PRODUCTS = [{"sku": "BU-5003OR", "name": "MARQUIS", "series": "Outdoor
  });
 })();
 </script>
-<script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-zn2q9hzm26i"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-881vg7jctwj"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-zn2q9hzm26i" deep="2">
+<script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-zxvd0xstyo"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-nypkvwvc8ml"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-zxvd0xstyo" deep="2">
 <div class="nfbf"><div class="_wrap _reveal _faqsec"><div class="_faqwrap" id="bfFaq"><h2><span data-t="faq.heading">Časté otázky</span></h2><div class="_faqrow">
  <button class="_faqq"><span data-t="faq.f2.q1">Kto môže nakupovať počas Early Access?</span><span class="_faqx">+</span></button>
  <div class="_faqpanel"><p><span data-t="faq.f2.a1">Len členovia NF Flowline — registrácia je však okamžitá a zadarmo, takže sa môžeš pridať hneď teraz a nakupovať ihneď.</span></p></div>
