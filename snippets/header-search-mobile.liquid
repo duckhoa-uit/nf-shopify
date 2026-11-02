@@ -11,7 +11,7 @@
 <details-modal class="header__search">
   <details>
     <summary
-      class="header__icon header__icon--search header__icon--summary link focus-inset modal__toggle lg:hidden"
+      class="header__icon header__icon--search header__icon--summary link focus-inset modal__toggle xl:hidden"
       aria-haspopup="dialog"
       aria-label="{{ 'general.search.search' | t }}"
     >
@@ -43,7 +43,7 @@
         <form action="{{ routes.search_url }}" method="get" role="search" class="search search-modal__form">
           <div class="relative flex">
             <input
-              class="w-full pl-3 pr-[4.25rem] py-2 text-sm leading-4 bg-[#F0F0F0] rounded-3 border-none focus-visible:outline-none focus-visible:shadow-none outline-none"
+              class="rounded-3 w-full border-none bg-[#F0F0F0] py-2 pr-[4.25rem] pl-3 text-sm leading-4 outline-none focus-visible:shadow-none focus-visible:outline-none"
               id="{{ input_id }}"
               type="search"
               name="q"
@@ -65,14 +65,18 @@
             <input type="hidden" name="options[prefix]" value="last">
             <button
               type="reset"
-              class="field__button{% if search.terms == blank %} hidden{% endif %} h-8 w-6 right-9"
+              class="field__button{% if search.terms == blank %} hidden{% endif %} right-9 h-8 w-6"
               aria-label="{{ 'general.search.reset' | t }}"
             >
               <span class="svg-wrapper size-2">
                 {{- 'icon-reset.svg' | inline_asset_content -}}
               </span>
             </button>
-            <button type="button" class="field__button top-1/2 -translate-y-1/2 h-8" aria-label="{{ 'general.search.search' | t }}">
+            <button
+              type="button"
+              class="field__button top-1/2 h-8 -translate-y-1/2"
+              aria-label="{{ 'general.search.search' | t }}"
+            >
               <span class="svg-wrapper size-4">
                 {{- 'icon-search.svg' | inline_asset_content -}}
               </span>
@@ -94,7 +98,7 @@
         {%- endif -%}
         <button
           type="button"
-          class="search-modal__close-button modal__close-button link link--text focus-inset text-sm leading-4 underline text-foreground px-4"
+          class="search-modal__close-button modal__close-button link link--text focus-inset text-foreground px-4 text-sm leading-4 underline"
           aria-label="{{ 'accessibility.close' | t }}"
         >
           {{ 'general.search.cancel' | t }}
