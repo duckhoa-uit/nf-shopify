@@ -9,7 +9,7 @@
 {% endcomment %}
 
 <div
-  class="search-modal__content pl-0 pr-5 hidden lg:flex"
+  class="search-modal__content hidden pr-5 pl-0 xl:flex"
   tabindex="-1"
 >
   {%- if settings.predictive_search_enabled -%}
@@ -17,7 +17,7 @@
       <form action="{{ routes.search_url }}" method="get" role="search" class="search search-modal__form">
         <div class="relative flex xl:min-w-[300px]">
           <input
-            class="w-full pl-3 pr-16 py-2 text-base leading-5 bg-[#F0F0F0] rounded-3 border-none focus-visible:outline-none focus-visible:shadow-none"
+            class="rounded-3 w-full border-none bg-[#F0F0F0] py-2 pr-16 pl-3 text-base leading-5 focus-visible:shadow-none focus-visible:outline-none"
             id="{{ input_id }}"
             type="search"
             name="q"
@@ -35,10 +35,10 @@
             spellcheck="false"
           >
           <input type="hidden" name="options[prefix]" value="last">
-          <div class="absolute right-3 top-0 h-full flex flex-row items-center gap-4">
+          <div class="absolute top-0 right-3 flex h-full flex-row items-center gap-4">
             <button
               type="reset"
-              class="cursor-pointer flex items-center justify-center {% if search.terms == blank %} hidden{% endif %}"
+              class="flex cursor-pointer items-center justify-center {% if search.terms == blank %} hidden{% endif %}"
               aria-label="{{ 'general.search.reset' | t }}"
             >
               <span class="svg-wrapper size-3">
@@ -47,7 +47,7 @@
             </button>
             <button
               type="button"
-              class="cursor-pointer flex flex-col items-center justify-center"
+              class="flex cursor-pointer flex-col items-center justify-center"
               aria-label="{{ 'general.search.search' | t }}"
             >
               <span class="svg-wrapper">

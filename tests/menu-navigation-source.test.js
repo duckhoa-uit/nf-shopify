@@ -2,17 +2,39 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
-const readSnippet = (name) =>
-  readFileSync(
-    fileURLToPath(new URL(`../snippets/${name}`, import.meta.url)),
-    "utf8",
+const readSnippet = (name) => readFileSync(fileURLToPath(new URL(`../snippets/${name}`, import.meta.url)), "utf8");
+
+const readAsset = (name) => readFileSync(fileURLToPath(new URL(`../assets/${name}`, import.meta.url)), "utf8");
+
+describe("responsive header navigation", () => {
+  test.each(["header-mega-menu.liquid", "header-dropdown-menu.liquid"])(
+    "%s keeps both top-level link types on one line without changing submenu wrapping",
+    (name) => {
+      const source = readSnippet(name);
+      const nowrapClasses = source.match(/class="[^"]*whitespace-nowrap[^"]*"/g);
+
+      expect(nowrapClasses).toHaveLength(2);
+
+      for (const classes of nowrapClasses) {
+        expect(classes).toContain("header__menu-item");
+        expect(classes).not.toContain("caption-large");
+        expect(classes).not.toContain("mega-menu__card-title");
+      }
+    },
   );
 
-const readAsset = (name) =>
-  readFileSync(
-    fileURLToPath(new URL(`../assets/${name}`, import.meta.url)),
-    "utf8",
-  );
+  test("search switches from modal trigger to inline field at the same wide-desktop breakpoint", () => {
+    const inlineSearch = readSnippet("header-search.liquid");
+    const modalSearch = readSnippet("header-search-mobile.liquid");
+
+    expect(inlineSearch).toMatch(/class="[^"]*\bhidden\b[^"]*\bxl:flex\b/);
+    expect(inlineSearch).not.toContain("lg:flex");
+    expect(modalSearch).toContain("modal__toggle xl:hidden");
+    expect(modalSearch).not.toContain("modal__toggle lg:hidden");
+    expect(modalSearch).toContain('role="dialog"');
+    expect(modalSearch).toContain("routes.search_url");
+  });
+});
 
 describe("merchant-authored navigation links", () => {
   test("desktop renders nested links even when they share the parent URL", () => {
@@ -45,9 +67,7 @@ describe("merchant-authored navigation links", () => {
 
     expect(source).not.toContain("childlink.url == link.url");
     expect(source).not.toContain("grandchild.url == childlink.url");
-    expect(source).toContain(
-      "assign authored_all_link = link.links | where: 'url', link.url | first",
-    );
+    expect(source).toContain("assign authored_all_link = link.links | where: 'url', link.url | first");
     expect(source).toContain(
       "assign authored_grandchild_all_link = childlink.links | where: 'url', childlink.url | first",
     );
