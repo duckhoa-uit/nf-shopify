@@ -54,7 +54,15 @@
               assign mega_layout = 'image'
             endif
 
-            assign all_link = link.links | where: 'url', link.url | first
+            # A child with the parent's URL is the "All" link (bottom CTA), unless it is a
+            # menu.subtitle promo: campaign promos usually point at the same landing page.
+            assign all_link = blank
+            for childlink in link.links
+              if childlink.url == link.url and childlink.object.metafields.menu.subtitle.value == blank
+                assign all_link = childlink
+                break
+              endif
+            endfor
 
             # Column count = child links minus the "All" link (rendered as CTA, not a column).
             assign mega_col_count = link.links.size
@@ -120,7 +128,11 @@
                       style="--mega-menu-cols: {{ mega_col_count }};"
                     >
                       {%- for childlink in link.links -%}
-                        {%- if childlink.url == link.url -%}{%- continue -%}{%- endif -%}
+                        {%- if childlink.url == link.url
+                          and childlink.object.metafields.menu.subtitle.value == blank
+                        -%}
+                          {%- continue -%}
+                        {%- endif -%}
                         <li class="mega-menu__col">
                           {%- comment -%}
                             Promo column: a column backed by a page/collection with a
