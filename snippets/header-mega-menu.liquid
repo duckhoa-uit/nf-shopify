@@ -122,27 +122,51 @@
                       {%- for childlink in link.links -%}
                         {%- if childlink.url == link.url -%}{%- continue -%}{%- endif -%}
                         <li class="mega-menu__col">
-                          {%- if childlink.url != blank -%}
+                          {%- comment -%}
+                            Promo column: a column backed by a page/collection with a
+                            `menu.subtitle` metafield renders as a tinted callout (title +
+                            subtitle) instead of the usual heading + link list. Used for
+                            campaign call-outs (e.g. Black Friday) inside an otherwise
+                            ordinary text mega-menu. No metafield set anywhere else on the
+                            site -> every other column renders exactly as before.
+                          {%- endcomment -%}
+                          {%- if childlink.object.metafields.menu.subtitle.value != blank -%}
                             <a
                               id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                               href="{{ childlink.url }}"
-                              class="mega-menu__heading mega-menu__heading--link"
+                              class="mega-menu__promo"
                               {% if childlink.current %}
                                 aria-current="page"
                               {% endif %}
                             >
-                              {{ childlink.title | escape }}
+                              <span class="mega-menu__promo-title">{{ childlink.title | escape }}</span>
+                              <span class="mega-menu__promo-subtitle">
+                                {{- childlink.object.metafields.menu.subtitle.value | escape -}}
+                              </span>
                             </a>
                           {%- else -%}
-                            <span
-                              id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
-                              class="mega-menu__heading"
-                              {% if childlink.current %}
-                                aria-current="page"
-                              {% endif %}
-                            >
-                              {{ childlink.title | escape }}
-                            </span>
+                            {%- if childlink.url != blank -%}
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                                href="{{ childlink.url }}"
+                                class="mega-menu__heading mega-menu__heading--link"
+                                {% if childlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ childlink.title | escape }}
+                              </a>
+                            {%- else -%}
+                              <span
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                                class="mega-menu__heading"
+                                {% if childlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ childlink.title | escape }}
+                              </span>
+                            {%- endif -%}
                           {%- endif -%}
                           {%- if childlink.links != blank -%}
                             <ul class="mega-menu__sublist" role="list">

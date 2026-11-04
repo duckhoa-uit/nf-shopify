@@ -17,7 +17,7 @@
   @param {object} link - Liquid link object with non-empty `links` array.
 
   @example
-    {% render 'menu-drawer-panel', link: link %}
+  {% render 'menu-drawer-panel', link: link %}
 {% enddoc %}
 
 <div
@@ -46,12 +46,34 @@
 
     <div class="menu-drawer__grid">
       {%- for childlink in link.links -%}
-        {%- if childlink.links == blank -%}
+        {%- comment -%}
+          Promo tile: same `menu.subtitle` metafield convention as the desktop
+          mega-menu (see header-mega-menu.liquid) — renders a full-width tinted
+          callout instead of a square image tile. No metafield set elsewhere ->
+          every other tile is unaffected.
+        {%- endcomment -%}
+        {%- if childlink.object.metafields.menu.subtitle.value != blank -%}
+          <a
+            id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+            href="{{ childlink.url }}"
+            class="menu-drawer__tile menu-drawer__tile--promo"
+            {% if childlink.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span class="menu-drawer__tile-label">{{ childlink.title | escape }}</span>
+            <span class="menu-drawer__tile-sublabel">
+              {{- childlink.object.metafields.menu.subtitle.value | escape -}}
+            </span>
+          </a>
+        {%- elsif childlink.links == blank -%}
           <a
             id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
             href="{{ childlink.url }}"
             class="menu-drawer__tile{% if childlink.current %} menu-drawer__tile--active{% endif %}"
-            {% if childlink.current %}aria-current="page"{% endif %}
+            {% if childlink.current %}
+              aria-current="page"
+            {% endif %}
           >
             {% render 'menu-link-image', link: childlink %}
             <span class="menu-drawer__tile-label">{{ childlink.title | escape }}</span>
@@ -96,7 +118,9 @@
                       id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchild.handle }}"
                       href="{{ grandchild.url }}"
                       class="menu-drawer__tile{% if grandchild.current %} menu-drawer__tile--active{% endif %}"
-                      {% if grandchild.current %}aria-current="page"{% endif %}
+                      {% if grandchild.current %}
+                        aria-current="page"
+                      {% endif %}
                     >
                       {% render 'menu-link-image', link: grandchild %}
                       <span class="menu-drawer__tile-label">{{ grandchild.title | escape }}</span>
