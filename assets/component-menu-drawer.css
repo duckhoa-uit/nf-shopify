@@ -381,28 +381,32 @@ details[open].menu-opening > .menu-drawer__submenu {
 }
 
 /* Promo tile — full-width callout, see menu-drawer-panel.liquid */
+/* Inverted scheme to match the desktop promo block. */
 .menu-drawer__tile--promo {
   grid-column: 1 / -1;
+  align-items: center;
   gap: 0.25rem;
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   border-radius: var(--style-border-radius-buttons, 0.25rem);
-  background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  background-color: rgb(var(--color-base-foreground));
+  text-align: center;
 }
 
 .menu-drawer__tile--promo .menu-drawer__tile-label,
 .menu-drawer__grid .menu-drawer__tile--promo .menu-drawer__tile-label {
-  justify-content: flex-start;
-  text-align: left;
+  justify-content: center;
+  text-align: center;
   font-size: 1.125rem;
   font-weight: 700;
+  color: rgb(var(--color-base-background));
 }
 
 .menu-drawer__tile-sublabel {
   font-weight: 400;
   font-size: 0.875rem;
   line-height: 1.4;
-  color: rgba(var(--color-base-foreground), 0.7);
-  text-align: left;
+  color: rgba(var(--color-base-background), 0.7);
+  text-align: center;
 }
 
 .menu-drawer__divider {
