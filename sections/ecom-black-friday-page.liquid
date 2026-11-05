@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-11-05 23:19:06
+ At 2026-11-05 23:48:06
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -21,7 +21,7 @@
  window.EComposer.TEMPLATE_ID="6ac8dd01321d10a2690df660";
  window.EComposer.PAGE = {"title":"Black Friday 2026","type":"page","slug":"ecom-black-friday","plan_id":4,"template_id":"6ac8dd01321d10a2690df660"};
  </script>
-<div class="ecom-builder" id="ecom-black-friday"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-3ayr7ut3swp"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-6lb62jdk43x"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-3ayr7ut3swp" deep="2"><link rel="preconnect" href="https://cdn.shopify.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500..900&family=Montserrat:wght@400..800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500..900&family=Montserrat:wght@400..800&display=swap"></noscript>
+<div class="ecom-builder" id="ecom-black-friday"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-czh66166iwg"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-9mvp8wv7sya"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-czh66166iwg" deep="2"><link rel="preconnect" href="https://cdn.shopify.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500..900&family=Montserrat:wght@400..800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500..900&family=Montserrat:wght@400..800&display=swap"></noscript>
 <style>
 :where(.nfbf,.nfbf *,.nfbf *::before,.nfbf *::after){box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
 .nfbf [hidden]{display:none!important}
@@ -301,7 +301,7 @@ window.nfwlReveal = function(){
 };
 window.nfwlReveal();
 </script>
-</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-qf55ubmvt6"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-zkaacu33z6"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-qf55ubmvt6" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-4mv2zkm50x"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-uat7fjoa7m"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-4mv2zkm50x" deep="2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
 :where(.nfbf,.nfbf *,.nfbf *::before,.nfbf *::after){box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
 .nfbf [hidden]{display:none!important}
@@ -493,6 +493,12 @@ window.nfwlReveal();
 .nfbf ._lcbadge{position:absolute;top:10px;right:10px;z-index:1;display:inline-flex;align-items:center;padding:5px 9px;border-radius:2px;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:#15181C}
 .nfbf ._ct{margin-top:14px;font-size:13px;font-weight:800;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;min-height:2.6em}
 .nfbf ._swatches{display:flex;flex-wrap:nowrap;justify-content:flex-start;gap:2px;margin-top:8px;align-items:start;min-height:44px}
+/* The 44px row is reserved even when a product has no colours, so prices stay
+ on one line across a row. When NOTHING in the current selection has colours
+ (Perfumes, Shoes) there is no neighbour to align against, so the grid gets
+ ._nosw from applyFilter() and the dead band collapses. display:none rather
+ than min-height:0 so the 8px margin goes with it. */
+.nfbf #bfGrid._nosw ._swatches:empty{display:none}
 .nfbf ._swatch{width:36px;height:44px;border-radius:4px;border:1px solid #D5D8DA;border-bottom:2px solid transparent;background-size:cover;background-position:center 15%;cursor:pointer;flex:none;transition:border-color .15s ease;padding:0;-webkit-appearance:none;appearance:none;font:inherit}.nfbf ._swatch[data-image=""]{cursor:default}
 .nfbf ._swatch:focus-visible{outline:2px solid #15181C;outline-offset:2px}
 .nfbf ._swatchmore{display:inline-flex;align-items:center;justify-content:center;width:36px;height:44px;border-radius:4px;border:1px solid #D5D8DA;background:#F2F3F4;color:#2B3C48;font-size:12px;font-weight:700;text-decoration:none!important;flex:none}
@@ -572,7 +578,7 @@ window.nfwlReveal();
  <div class="_st"><div class="_sv"><span data-t="stats.years_value">30 rokov</span></div><div class="_sl"><span data-t="stats.years_label">skúseností na horách</span></div></div>
  </div>
 </div>
-</div><script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-vqd247jkszs"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-ixe3y61scd"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-vqd247jkszs" deep="2"><div class="nfbf">
+</div><script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-2kjmomnvnzd"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-j1n1qd7dkiq"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-2kjmomnvnzd" deep="2"><div class="nfbf">
 <script>
 /* Real-customer probe: if EComposer renders Liquid inside this custom-code block,
  this resolves to an actual true/false from Shopify's {{ customer }} object.
@@ -648,7 +654,7 @@ window.nfwlShopifyCustomer = {% if customer %}true{% else %}false{% endif %};
  refreshState();
 })();
 </script>
-</div><script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-mh33i85fmlq"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-ngqomy8gjw"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-mh33i85fmlq" deep="2">
+</div><script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-h8dhqdniwm"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-ik9lq5oq9ag"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-h8dhqdniwm" deep="2">
 <div class="nfbf">
 <div class="_wrap _prod _reveal">
  <h2 class="_h2"><span data-t="filters.f2.heading">Objav svoje Black Friday favority</span></h2>
@@ -1579,21 +1585,68 @@ function renderCards(){
  if(bOrd !== undefined) return 1;
  return (a.rank||999)-(b.rank||999);
  });
- grid.innerHTML = list.map(cardHTML).join('');
+ // ---- two-pass render ------------------------------------------------
+ // Building all ~737 cards at once costs ~2.2MB of markup and ~45ms of
+ // parsing on desktop (several times that on a mid-range phone) before the
+ // shopper sees anything. So the first screenful is rendered immediately
+ // and the remainder is appended once the browser goes idle.
+ // Deliberately NOT virtualisation: the full DOM still exists afterwards,
+ // so every function that scans the grid behaves exactly as before. The
+ // size filter in particular is built by scanning all 385 "Posledné kusy"
+ // cards, none of which are in the first screenful — under real
+ // virtualisation it would silently come up empty (see HANDOFF 6.64).
+ function bindCardHandlers(){
  grid.querySelectorAll('[data-lock="1"]').forEach(function(el){
+ if(el.dataset.lockBound) return;
+ el.dataset.lockBound = '1';
  el.addEventListener('click', function(){
  document.getElementById('bfLoginBtn') && document.getElementById('bfLoginBtn').scrollIntoView({behavior:'smooth', block:'center'});
  });
  });
  grid.querySelectorAll('._learnmore[data-nourl], ._im[data-nourl]').forEach(function(a){
+ if(a.dataset.nourlBound) return;
+ a.dataset.nourlBound = '1';
  a.addEventListener('click', function(e){ e.preventDefault(); });
  });
+ }
+ // Two screenfuls up front, so the first "Load more" also needs no wait.
+ var firstChunk = Math.max(getPageSize() * 2, 24);
+ // While the tail is pending the grid is deliberately incomplete, so a
+ // filter tapped in that window can legitimately match nothing yet. Flag
+ // it so applyFilter() does not flash "no products" at the shopper.
+ state.tailPending = list.length > firstChunk;
+ grid.innerHTML = list.slice(0, firstChunk).map(cardHTML).join('');
+ bindCardHandlers();
  state.visible = getPageSize();
  applyFilter();
  syncCategoryPills();
  applyLocalHandles();
  applyLiveImages();
  applySwatches();
+ if(list.length > firstChunk){
+ var renderRest = function(){
+ grid.insertAdjacentHTML('beforeend', list.slice(firstChunk).map(cardHTML).join(''));
+ state.tailPending = false;
+ bindCardHandlers();
+ // The shopper may have changed sort while the tail was pending. Only
+ // re-sort when they actually picked one: 'rec' is the collection's own
+ // order, which `list` is already in and which data-rank does NOT
+ // reproduce, so sorting here would quietly scramble the default view.
+ if(state.sort && state.sort !== 'rec') applySort();
+ applyFilter();
+ syncCategoryPills();
+ applyLocalHandles();
+ applyLiveImages();
+ applySwatches();
+ resolveMissingImages();
+ // The collection fetch may have completed while only the first chunk
+ // existed; these late cards need the same passes it would have given
+ // them, the size chips above all.
+ if(sizesReady) populateSizeOptions();
+ };
+ if(window.requestIdleCallback) window.requestIdleCallback(renderRest, {timeout: 400});
+ else setTimeout(renderRest, 50);
+ }
  }
  // ---- catalogue loader -------------------------------------------------
  // The product feed lives in the theme (assets/bf-products.json) because it
@@ -1868,6 +1921,21 @@ function renderCards(){
  if(okS && okG && okD && okL && okZ){ matched.push(card); } else { card.style.display='none'; }
  });
  matched.forEach(function(card,i){ card.style.display = i < state.visible ? '' : 'none'; });
+ // Collapse the reserved swatch row only when NOT ONE card in this
+ // selection has a colour. Then nothing can fall out of line, so the empty
+ // band is pure waste. In a mixed selection the row must stay: dropping it
+ // there shifts a card's price ~52px against its neighbours (measured on
+ // BG, 2026-11-06 — the card keeps the row's height either way, so the
+ // space does not disappear, it just moves). Gated on sizesReady because
+ // before the collection lands no card has swatches yet and everything
+ // would collapse, then jump back when the colours arrive.
+ var anySwatch = false;
+ if(sizesReady){
+ for(var si = 0; si < matched.length; si++){
+ if(matched[si].querySelector('._swatch')){ anySwatch = true; break; }
+ }
+ }
+ grid.classList.toggle('_nosw', !!(sizesReady && matched.length && !anySwatch));
  // 2026-11-05: the photo fallback only ever runs for cards that are
  // actually on screen, and it used to be triggered only after the
  // collection fetch, on resize and on "Load more" - never after a filter
@@ -1878,7 +1946,7 @@ function renderCards(){
  resolveMissingImages();
  if(loadMoreBtn) loadMoreBtn.hidden = matched.length <= state.visible;
  var emptyState = document.getElementById('bfEmptyState');
- if(emptyState) emptyState.hidden = matched.length > 0;
+ if(emptyState) emptyState.hidden = matched.length > 0 || !!state.tailPending;
  updateFilterBadge();
  var countEl = document.getElementById('bfResultCount');
  if(countEl) countEl.textContent = tr('filters.showing', {shown: Math.min(state.visible, matched.length), total: matched.length});
@@ -1896,7 +1964,7 @@ function renderCards(){
  }
 })();
 </script>
-<script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-2y0yg16qpxa"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-6xgtlnunmso"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-2y0yg16qpxa" deep="2">
+<script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-gxo5yq07e3"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-fv8xz62n6c"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-gxo5yq07e3" deep="2">
 <div class="nfbf">
 <div class="_wrap _recentwrap _reveal" id="bfRecentWrap">
  <h2 class="_h2" id="bfRecentHeading" data-t="recent.heading_suggested">Mohlo by sa vám páčiť</h2>
@@ -2371,7 +2439,7 @@ function renderCards(){
  });
 })();
 </script>
-<script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-odnc4azry28"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-7zbu4e10zn4"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-odnc4azry28" deep="2"><div class="nfbf"><div class="_wrap _reveal _faqsec"><div class="_faqwrap" id="bfFaq"><h2><span data-t="faq.heading">Časté otázky</span></h2><div class="_faqrow">
+<script>window.nfwlApplyLocale && window.nfwlApplyLocale(); window.nfwlReveal && window.nfwlReveal();</script></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-1rhn42mqgg7"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-vn4q5zfflx8"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-1rhn42mqgg7" deep="2"><div class="nfbf"><div class="_wrap _reveal _faqsec"><div class="_faqwrap" id="bfFaq"><h2><span data-t="faq.heading">Časté otázky</span></h2><div class="_faqrow">
  <button class="_faqq" aria-expanded="false" aria-controls="bfFaq-panel-0"><span class="_faqqt"><span data-t="faq.f2.q1">Kto môže nakupovať ako prvý?</span></span><span class="_faqic"></span></button>
  <div class="_faqb" id="bfFaq-panel-0"><div class="_faqbin"><p><span data-t="faq.f2.a1">Skorší prístup k zľavám majú členovia vernostného programu NF Flowline. Zaregistruj sa zadarmo, prihlás sa do svojho účtu a nakupuj za výhodné ceny už teraz!</span></p></div></div>
  </div><div class="_faqrow">
