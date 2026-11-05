@@ -64,6 +64,11 @@
   endcase
 -%}
 
+<style>
+  .simple_infobox a:hover { opacity: 0.85; }
+  .simple_infobox a { cursor: pointer; }
+</style>
+
 <div class="simple_infobox py-2 md:py-3 mb-1.5" style="background-color:#000;">
   <a
     href="{{ info_box_button_url }}"
@@ -82,7 +87,7 @@
       class="button_text inline-flex items-center px-4 py-[10px] rounded-3 text-sm font-medium leading-[0.875rem] uppercase transition-colors"
       style="background-color:#CC0000;color:#fff;"
     >
-      {{ info_box_button_text }}
+      {{ info_box_button_text }} →
     </span>
   </a>
 </div>
