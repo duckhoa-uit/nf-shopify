@@ -54,7 +54,19 @@
               assign mega_layout = 'image'
             endif
 
-            assign all_link = link.links | where: 'url', link.url | first
+            # A child with the parent's URL is the "All" link (bottom CTA), unless it is a
+            # promo: campaign promos usually point at the same landing page.
+            # Promo = childless item whose page/collection has menu.subtitle (see below).
+            assign all_link = blank
+            for childlink in link.links
+              if childlink.url == link.url
+                if childlink.links == blank and childlink.object.metafields.menu.subtitle.value != blank
+                  continue
+                endif
+                assign all_link = childlink
+                break
+              endif
+            endfor
 
             # Column count = child links minus the "All" link (rendered as CTA, not a column).
             assign mega_col_count = link.links.size
@@ -120,29 +132,57 @@
                       style="--mega-menu-cols: {{ mega_col_count }};"
                     >
                       {%- for childlink in link.links -%}
-                        {%- if childlink.url == link.url -%}{%- continue -%}{%- endif -%}
+                        {%- liquid
+                          # Promo block (e.g. Black Friday banner): a childless item whose
+                          # page/collection has a menu.subtitle metafield. Items with their
+                          # own children stay normal columns even if they link to the same
+                          # page/collection, so setting the metafield never hides a column.
+                          assign is_promo = false
+                          if childlink.links == blank and childlink.object.metafields.menu.subtitle.value != blank
+                            assign is_promo = true
+                          endif
+                        -%}
+                        {%- if childlink.url == link.url and is_promo == false -%}
+                          {%- continue -%}
+                        {%- endif -%}
                         <li class="mega-menu__col">
-                          {%- if childlink.url != blank -%}
+                          {%- if is_promo -%}
                             <a
                               id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                               href="{{ childlink.url }}"
-                              class="mega-menu__heading mega-menu__heading--link"
+                              class="mega-menu__promo"
                               {% if childlink.current %}
                                 aria-current="page"
                               {% endif %}
                             >
-                              {{ childlink.title | escape }}
+                              <span class="mega-menu__promo-title">{{ childlink.title | escape }}</span>
+                              <span class="mega-menu__promo-subtitle">
+                                {{- childlink.object.metafields.menu.subtitle.value | escape -}}
+                              </span>
                             </a>
                           {%- else -%}
-                            <span
-                              id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
-                              class="mega-menu__heading"
-                              {% if childlink.current %}
-                                aria-current="page"
-                              {% endif %}
-                            >
-                              {{ childlink.title | escape }}
-                            </span>
+                            {%- if childlink.url != blank -%}
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                                href="{{ childlink.url }}"
+                                class="mega-menu__heading mega-menu__heading--link"
+                                {% if childlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ childlink.title | escape }}
+                              </a>
+                            {%- else -%}
+                              <span
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                                class="mega-menu__heading"
+                                {% if childlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ childlink.title | escape }}
+                              </span>
+                            {%- endif -%}
                           {%- endif -%}
                           {%- if childlink.links != blank -%}
                             <ul class="mega-menu__sublist" role="list">
