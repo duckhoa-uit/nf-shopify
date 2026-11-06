@@ -48,23 +48,46 @@
   if info_box_button_text == blank
     assign info_box_button_text = 'sections.info_box.button_text' | t
   endif
+
+  assign info_box_button_url = section.settings.button_url
+  case request.locale.iso_code
+    when 'bg'
+      assign info_box_button_url = 'https://northfinder.bg/pages/black-friday'
+    when 'de'
+      assign info_box_button_url = 'https://shop.northfinder.com/de/pages/black-friday'
+    when 'hr'
+      assign info_box_button_url = 'https://shop.northfinder.com/hr/pages/black-friday'
+    when 'sk'
+      assign info_box_button_url = 'https://northfinder.sk/pages/black-friday'
+    when 'sl'
+      assign info_box_button_url = 'https://shop.northfinder.com/sl/pages/black-friday'
+  endcase
 -%}
 
-<div class="simple_infobox bg-[#F5F5F5] py-3 mb-1.5">
-  <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+<style>
+  .simple_infobox a:hover { opacity: 0.85; }
+  .simple_infobox a { cursor: pointer; }
+</style>
+
+<div class="simple_infobox py-2 md:py-3 mb-1.5" style="background-color:#000;">
+  <a
+    href="{{ info_box_button_url }}"
+    aria-label="{{ info_box_button_text }}"
+    class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-2 md:gap-4"
+  >
     <div class="flex flex-col items-center text-center flex-1">
-      <h2 class="font-archivo font-medium text-[15px] leading-[1.067em] text-black mb-1">
+      <h2 class="font-archivo font-medium text-[15px] leading-[1.067em] mb-1" style="color:#fff;">
         {{ info_box_title }}
       </h2>
-      <p class="infobox_subtitle font-archivo text-[13px] leading-[1.077em] text-[#4D4D4D]">
+      <p class="infobox_subtitle hidden md:block font-archivo text-[13px] leading-[1.077em]" style="color:#CCCCCC;">
         {{ info_box_subtitle }}
       </p>
     </div>
-    <a
-      href="{{ section.settings.button_url }}"
-      class="button_text inline-flex items-center px-4 py-[10px] border border-[#CCCCCC] rounded-3 text-sm font-medium leading-[0.875rem] uppercase text-[#000] transition-colors hover:border-[#000]"
+    <span
+      class="button_text inline-flex items-center px-4 py-[10px] rounded-3 text-sm font-medium leading-[0.875rem] uppercase transition-colors"
+      style="background-color:#CC0000;color:#fff;"
     >
-      {{ info_box_button_text }}
-    </a>
-  </div>
+      {{ info_box_button_text }} →
+    </span>
+  </a>
 </div>

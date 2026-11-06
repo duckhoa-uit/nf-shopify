@@ -1,7 +1,7 @@
 {% doc %}
-  Renders the canonical single-line product badge row.
+  Renders canonical discount, public Extra, and public Promotion badges.
 
-  @param {product} product - Product whose discount and public promotion badges are rendered.
+  @param {product} product - Product whose discount and public badges are rendered.
   @param {variant} [variant] - Variant used for discount calculations.
   @param {string} [context] - `card` or `pdp`; defaults to `card`.
   @param {number} [promotion_limit] - Maximum promotion labels; defaults to 2.
@@ -25,6 +25,20 @@
 <div class="product-badge-row product-badge-row--{{ badge_context }}">
   {% render 'discount-badge', product: product, variant: variant, badge_class: discount_badge_class %}
 
+  {%- for extra in product.metafields.custom_features.extra_storefront.value -%}
+    {%- capture extra_name -%}{{ extra.name }}{%- endcapture -%}
+    {%- assign extra_name = extra_name | strip -%}
+
+    {%- if extra_name != blank -%}
+      <span
+        class="product-badge-row__badge product-badge-row__badge--extra"
+        title="{{ extra_name | escape }}"
+      >
+        <span class="product-badge-row__label">{{ extra_name | escape }}</span>
+      </span>
+    {%- endif -%}
+  {%- endfor -%}
+
   {%- if product.metafields.custom_features.promotion_storefront.value != blank -%}
     {%- for promotion in product.metafields.custom_features.promotion_storefront.value -%}
       {%- capture promotion_name -%}{{ promotion.name }}{%- endcapture -%}
@@ -35,7 +49,7 @@
           class="product-badge-row__badge product-badge-row__badge--promotion"
           title="{{ promotion_name | escape }}"
         >
-          <span class="product-badge-row__label">{{ promotion_name }}</span>
+          <span class="product-badge-row__label">{{ promotion_name | escape }}</span>
         </span>
         {%- assign promotion_count = promotion_count | plus: 1 -%}
       {%- endif -%}
@@ -46,13 +60,12 @@
 {% stylesheet %}
   .product-badge-row {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    overflow: hidden;
   }
 
   .product-badge-row--card {
@@ -62,7 +75,7 @@
 
   .product-badge-row__badge {
     display: inline-flex;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     align-items: center;
     max-width: 100%;
     min-width: 0;
@@ -94,6 +107,7 @@
     font-weight: 700;
   }
 
+  .product-badge-row__badge--extra,
   .product-badge-row__badge--promotion {
     --product-badge-background-color: transparent;
     --product-badge-border-color: var(--color-border-medium);

@@ -17,29 +17,34 @@ describe("canonical product badge rendering", () => {
     }
   });
 
-  test("renders promotions but never extra metadata in the canonical row", () => {
+  test("renders public Extra and Promotion fields without exposing internal metadata", () => {
     const source = readProjectFile("snippets/product-badge-row.liquid");
 
-    expect(source).toContain("metafields.custom_features.promotion.value");
+    expect(source).toContain("metafields.custom_features.extra_storefront.value");
+    expect(source).toContain("metafields.custom_features.promotion_storefront.value");
     expect(source).toContain("promotion_count < maximum_promotions");
     expect(source).not.toContain("metafields.custom_features.extra.value");
+    expect(source).not.toContain("metafields.custom_features.promotion.value");
   });
 
   test("preserves the promotion metafield reference order", () => {
     const source = readProjectFile("snippets/product-badge-row.liquid");
 
-    expect(source).toContain("for promotion in product.metafields.custom_features.promotion.value");
-    expect(source).not.toMatch(/custom_features\.promotion\.value\s*\|\s*(sort|sort_natural|reverse)/);
+    expect(source).toContain("for promotion in product.metafields.custom_features.promotion_storefront.value");
+    expect(source).not.toMatch(
+      /custom_features\.(promotion|extra)_storefront\.value\s*\|\s*(sort|sort_natural|reverse)/,
+    );
     expect(source).not.toMatch(/assign\s+\w*promotions?\s*=.*\|\s*(sort|sort_natural|reverse)/);
     expect(source).not.toContain("promotion.name contains");
   });
 
-  test("keeps badges on one clipped row without a horizontal scroller", () => {
+  test("wraps whole badges instead of shrinking them out of view or scrolling", () => {
     const sharedRow = readProjectFile("snippets/product-badge-row.liquid");
     const card = readProjectFile("snippets/card-product.liquid");
 
-    expect(sharedRow).toContain("flex-wrap: nowrap");
-    expect(sharedRow).toContain("overflow: hidden");
+    expect(sharedRow).toMatch(/\.product-badge-row\s*\{[^}]*flex-wrap:\s*wrap/s);
+    expect(sharedRow).not.toMatch(/\.product-badge-row\s*\{[^}]*overflow:\s*hidden/s);
+    expect(sharedRow).toMatch(/\.product-badge-row__badge\s*\{[^}]*flex:\s*0 0 auto/s);
     expect(sharedRow).toContain("product-badge-row__label");
     expect(sharedRow).toContain("text-overflow: ellipsis");
     expect(sharedRow).toContain("white-space: nowrap");
@@ -52,6 +57,7 @@ describe("canonical product badge rendering", () => {
     const source = readProjectFile("snippets/product-badge-row.liquid");
 
     expect(source).toContain("product-badge-row__badge--discount");
+    expect(source).toContain("product-badge-row__badge--extra");
     expect(source).toContain("product-badge-row__badge--promotion");
     expect(source).not.toContain("product-badge-row__promotion--primary");
     expect(source).not.toContain("product-badge-row__promotion--secondary");

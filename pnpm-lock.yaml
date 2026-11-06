@@ -22,6 +22,9 @@ importers:
       exceljs:
         specifier: ^4.4.0
         version: 4.4.0
+      liquidjs:
+        specifier: 10.30.1
+        version: 10.30.1
       prettier:
         specifier: ^3.9.6
         version: 3.9.6
@@ -831,6 +834,11 @@ packages:
     resolution:
       { integrity: sha512-75kWfWt6MEKNC8xYXIdRpDehRYY/tNSgwKaJq+dbbDcxORuVrrQ+SEHoWsniVn9XPYfP4gmdWIeDk/4YNp1rNQ== }
 
+  commander@10.0.1:
+    resolution:
+      { integrity: sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug== }
+    engines: { node: ">=14" }
+
   compare-versions@6.1.1:
     resolution:
       { integrity: sha512-4hm4VPpIecmlg59CHXnRDnqGplJFrbLG4aFEl5vl6cK1u76ws3LLvX7ikFnTDl5vo39sjWD6AaDPYodJp/NNHg== }
@@ -1267,6 +1275,12 @@ packages:
   line-column@1.0.2:
     resolution:
       { integrity: sha512-Ktrjk5noGYlHsVnYWh62FLVs4hTb8A3e+vucNZMgPeAOITdshMSgv4cCZQeRDjm7+goqmo6+liZwTXo+U3sVww== }
+
+  liquidjs@10.30.1:
+    resolution:
+      { integrity: sha512-P1Iz14WUHZdfbOYwHOIhtl/iAWIOYk1ks5l9rPZlDM6vZo+6BLeYIuWHAPkIz+U8Mm8HKZKITIrjX7DQJO2fqA== }
+    engines: { node: ">=16" }
+    hasBin: true
 
   listenercount@1.0.1:
     resolution:
@@ -2289,6 +2303,8 @@ snapshots:
     dependencies:
       traverse: 0.3.9
 
+  commander@10.0.1: {}
+
   compare-versions@6.1.1: {}
 
   compress-commons@4.1.2:
@@ -2611,6 +2627,10 @@ snapshots:
     dependencies:
       isarray: 1.0.0
       isobject: 2.1.0
+
+  liquidjs@10.30.1:
+    dependencies:
+      commander: 10.0.1
 
   listenercount@1.0.1: {}
 
