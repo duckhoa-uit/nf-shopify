@@ -47,12 +47,11 @@
     <div class="menu-drawer__grid">
       {%- for childlink in link.links -%}
         {%- comment -%}
-          Promo tile: same `menu.subtitle` metafield convention as the desktop
-          mega-menu (see header-mega-menu.liquid) — renders a full-width tinted
-          callout instead of a square image tile. No metafield set elsewhere ->
-          every other tile is unaffected.
+          Promo tile: same rule as the desktop mega-menu (see header-mega-menu.liquid).
+          Only a childless item whose page/collection has menu.subtitle becomes a
+          full-width promo block; items with children keep their submenu.
         {%- endcomment -%}
-        {%- if childlink.object.metafields.menu.subtitle.value != blank -%}
+        {%- if childlink.links == blank and childlink.object.metafields.menu.subtitle.value != blank -%}
           <a
             id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
             href="{{ childlink.url }}"

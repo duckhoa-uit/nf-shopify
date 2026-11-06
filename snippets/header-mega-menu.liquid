@@ -55,10 +55,14 @@
             endif
 
             # A child with the parent's URL is the "All" link (bottom CTA), unless it is a
-            # menu.subtitle promo: campaign promos usually point at the same landing page.
+            # promo: campaign promos usually point at the same landing page.
+            # Promo = childless item whose page/collection has menu.subtitle (see below).
             assign all_link = blank
             for childlink in link.links
-              if childlink.url == link.url and childlink.object.metafields.menu.subtitle.value == blank
+              if childlink.url == link.url
+                if childlink.links == blank and childlink.object.metafields.menu.subtitle.value != blank
+                  continue
+                endif
                 assign all_link = childlink
                 break
               endif
@@ -128,21 +132,21 @@
                       style="--mega-menu-cols: {{ mega_col_count }};"
                     >
                       {%- for childlink in link.links -%}
-                        {%- if childlink.url == link.url
-                          and childlink.object.metafields.menu.subtitle.value == blank
+                        {%- liquid
+                          # Promo block (e.g. Black Friday banner): a childless item whose
+                          # page/collection has a menu.subtitle metafield. Items with their
+                          # own children stay normal columns even if they link to the same
+                          # page/collection, so setting the metafield never hides a column.
+                          assign is_promo = false
+                          if childlink.links == blank and childlink.object.metafields.menu.subtitle.value != blank
+                            assign is_promo = true
+                          endif
                         -%}
+                        {%- if childlink.url == link.url and is_promo == false -%}
                           {%- continue -%}
                         {%- endif -%}
                         <li class="mega-menu__col">
-                          {%- comment -%}
-                            Promo column: a column backed by a page/collection with a
-                            `menu.subtitle` metafield renders as a tinted callout (title +
-                            subtitle) instead of the usual heading + link list. Used for
-                            campaign call-outs (e.g. Black Friday) inside an otherwise
-                            ordinary text mega-menu. No metafield set anywhere else on the
-                            site -> every other column renders exactly as before.
-                          {%- endcomment -%}
-                          {%- if childlink.object.metafields.menu.subtitle.value != blank -%}
+                          {%- if is_promo -%}
                             <a
                               id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                               href="{{ childlink.url }}"
