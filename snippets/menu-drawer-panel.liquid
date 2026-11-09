@@ -8,6 +8,10 @@
       * If the child has its own children, the tile is a <details>/<summary>
         and embeds a nested panel (one more level deep).
       * Otherwise it's a direct <a> tile.
+    - Campaign panels (any child is a menu.subtitle promo block, e.g. Black
+      Friday) render flat instead: each child with sub-items becomes a section
+      heading followed by its sub-item tiles, so shoppers see the
+      subcategories without a second tap.
     - Footer "All <title>" CTA pointing to the parent link's URL when
       the merchant hasn't already added an equivalent menu item.
 
@@ -25,7 +29,17 @@
   class="menu-drawer__submenu has-submenu gradient motion-reduce"
   tabindex="-1"
 >
-  {%- assign authored_all_link = link.links | where: 'url', link.url | first -%}
+  {%- liquid
+    assign authored_all_link = link.links | where: 'url', link.url | first
+
+    assign is_flat = false
+    for childlink in link.links
+      if childlink.links == blank and childlink.object.metafields.menu.subtitle.value != blank
+        assign is_flat = true
+        break
+      endif
+    endfor
+  -%}
   <div class="menu-drawer__inner-submenu">
     <div class="menu-drawer__title-bar">
       <button
@@ -65,6 +79,27 @@
               {{- childlink.object.metafields.menu.subtitle.value | escape -}}
             </span>
           </a>
+        {%- elsif is_flat and childlink.links != blank -%}
+          <a
+            id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+            href="{{ childlink.url }}"
+            class="menu-drawer__group-title"
+          >
+            {{- childlink.title | escape -}}
+          </a>
+          {%- for grandchild in childlink.links -%}
+            <a
+              id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchild.handle }}"
+              href="{{ grandchild.url }}"
+              class="menu-drawer__tile{% if grandchild.current %} menu-drawer__tile--active{% endif %}"
+              {% if grandchild.current %}
+                aria-current="page"
+              {% endif %}
+            >
+              {% render 'menu-link-image', link: grandchild %}
+              <span class="menu-drawer__tile-label">{{ grandchild.title | escape }}</span>
+            </a>
+          {%- endfor -%}
         {%- elsif childlink.links == blank -%}
           <a
             id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
