@@ -96,7 +96,10 @@
     function next() {
       if (i >= rows.length) return Promise.resolve();
       var row = rows[i++];
-      return getJSON(root() + 'products/' + encodeURIComponent(row.handle) + '.js')
+      // No locale prefix: the feed holds primary-language handles, and under
+      // /de/ /hr/ /sl/ the .js endpoint 404s on those instead of redirecting
+      // to the translated handle. Those markets share the root's prices.
+      return getJSON('/products/' + encodeURIComponent(row.handle) + '.js')
         .then(function (d) {
           if (d) reprice(row, { price: d.price_max / 100, compare: (d.compare_at_price_max || 0) / 100 });
         })
