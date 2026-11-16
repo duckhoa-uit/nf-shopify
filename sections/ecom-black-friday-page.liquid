@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-11-13 15:37:33
+ At 2026-11-16 09:27:13
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -707,6 +707,7 @@ window.nfwlReveal();
  </div>
 </div>
 </div>
+<script src="{{ 'bf-live-pricing.js' | asset_url }}"></script>
 <script>
 window.BF_PRODUCTS = [];
 // The campaign catalogue (965 products) no longer fits inside this section:
@@ -1753,7 +1754,7 @@ function renderCards(){
  var lm = document.getElementById('bfLoadMore'); if(lm) lm.hidden = true;
  var rc = document.getElementById('bfResultCount'); if(rc) rc.textContent = '';
  }
- bfFetchFeed().then(function(data){
+ bfFetchFeed().then(function(d){ return d && window.nfbfLivePrices ? window.nfbfLivePrices(d) : d; }).then(function(data){
  if(!data){ bfFeedFailed(); return; }
  window.BF_PRODUCTS = data;
  renderCards();
@@ -2143,7 +2144,7 @@ function renderCards(){
  return ((window.Shopify && Shopify.routes && Shopify.routes.root) || '/') + u.replace(/^\//,'');
  }
  function cardHTML(item){
- var info = CAMPAIGN_INFO[item.handle];
+ var info = window.nfbfLiveInfo ? window.nfbfLiveInfo(item.handle, CAMPAIGN_INFO[item.handle], item) : CAMPAIGN_INFO[item.handle];
  var pr = priceHTML(info, item.price, item.strike);
  var img = item.image || (item.handle && LIVE_IMAGES[item.handle]) || '';
  return '<div class="_card _recentcard" data-handle="'+(item.handle||'')+'" data-sku="'+(item.sku||'')+'" data-price="'+(item.price != null ? item.price : '')+'">' +
