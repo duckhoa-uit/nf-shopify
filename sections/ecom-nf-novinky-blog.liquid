@@ -2,7 +2,7 @@
  EComposer (https://ecomposer.io)
  You SHOULD NOT modify source code in this page because
  It is automatically generated from EComposer
- At 2026-11-17 10:04:07
+ At 2026-11-17 10:23:59
  {% endcomment %} 
  
  {% assign ecom_root_url = routes.root_url %}
@@ -21,7 +21,7 @@
  window.EComposer.TEMPLATE_ID="6aa6af40fd0537cbd0068c66";
  window.EComposer.TEMPLATE = {"title":"NF Blog Novinky","type":"blog","slug":"ecom-nf-novinky","plan_id":4,"template_id":"6aa6af40fd0537cbd0068c66"};
  </script>
-<div class="ecom-builder" id="ecom-nf-novinky"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-9cnk4npxuoa"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-5uwh8211625"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-9cnk4npxuoa" deep="2">{%- comment -%} ══ LIST S1 · series header, chapter tabs, search ══ {%- endcomment -%}
+<div class="ecom-builder" id="ecom-nf-novinky"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-3bfmyizfyot"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-6dxkgiq8mx8"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-3bfmyizfyot" deep="2">{%- comment -%} ══ LIST S1 · series header, chapter tabs, search ══ {%- endcomment -%}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap&subset=latin,latin-ext,cyrillic" rel="stylesheet">
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
@@ -400,7 +400,7 @@
  </form>
  </div>
  </div>
-</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-ja18hepy0y9"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-pu0ak65jx7j"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-ja18hepy0y9" deep="2">{%- comment -%} ══ LIST S2 · the band at the top ══ {%- endcomment -%}
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-7yvre04pxfd"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-t5b9dj7n76q"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-7yvre04pxfd" deep="2">{%- comment -%} ══ LIST S2 · the band at the top ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -1034,7 +1034,7 @@
 {%- endcomment -%}
 <script>if(/[?&]page=(?!1(&|$))\d+/.test(location.search)){var e=document.currentScript.previousElementSibling;if(e)e.hidden=true;}</script>
 {%- endif -%}
-{%- endpaginate -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-es9pdjst0r5"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-8n015x9ywmb"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-es9pdjst0r5" deep="2">{%- comment -%} ══ LIST S3 · topic filter, counter, grid, pagination ══ {%- endcomment -%}
+{%- endpaginate -%}</div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-r0mwx0exwu8"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-4almrnva9xh"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-r0mwx0exwu8" deep="2">{%- comment -%} ══ LIST S3 · topic filter, counter, grid, pagination ══ {%- endcomment -%}
 {%- comment -%}
  UI labels for both Born in the Carpathians pages. Server-rendered from
  request.locale, so there is no JS dictionary and the words are in the HTML for
@@ -1626,10 +1626,18 @@
  comma-wrapped `contains` could miss (and the reason picked articles were
  still turning up a second time on their own chronological page).
  {%- endcomment -%}
+ {%- comment -%}
+ The real cause: this article is translated (Translate [&] Adapt), so
+ `a.handle` is its English base handle (e.g. en-draci-and-dracia-...),
+ not the SK-market alias FEATURED is written in. The last segment of
+ `a.url` is the handle Shopify actually resolved for this storefront
+ and market, so that is what has to be compared.
+ {%- endcomment -%}
+ {%- assign a_url_handle = a.url | split: '/' | last -%}
  {%- assign bitc_is_featured = false -%}
  {%- for fh in feat_h -%}
  {%- assign fh_clean = fh | strip -%}
- {%- if fh_clean == a.handle -%}{%- assign bitc_is_featured = true -%}{%- break -%}{%- endif -%}
+ {%- if fh_clean == a_url_handle or fh_clean == a.handle -%}{%- assign bitc_is_featured = true -%}{%- break -%}{%- endif -%}
  {%- endfor -%}
  {%- if bitc_is_featured -%}{%- continue -%}{%- endif -%}
  {%- endif -%}
@@ -1765,7 +1773,7 @@
  {%- endif -%}
  </div>
  {%- endpaginate -%}
-</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-9q7dxaho0u"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-8knadr5kusl"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-9q7dxaho0u" deep="2">{%- comment -%}
+</section></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ec-flex-wp ecom-row ecom-core ecom-section ecom-80gwt54g5is"><div class="ecom-inner"><div class="ecom-block ecom-core core__block ecom-width-desktop ecom-width-mb elmspace ecom-x7rjfypm0od"><div data-v-cdc7f2ab="" class="ecom__element ecom-element element__code exporting" section_id="ecom-80gwt54g5is" deep="2">{%- comment -%}
  ══ LIST S4 · runtime + structured data ══
  Same contract as the hub: the archive works without JavaScript — the filters are
  links, the pagination is links. This adds the sticky hairline and the card reveal.
