@@ -83,10 +83,16 @@
       {{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}
       <div class="collection-header-controls mt-6 md:mb-12">
         {%- liquid
+          assign pills_source = section.settings.header_pills_filter | default: 'activities'
           assign activities_filter = null
 
           for filter in collection.filters
-            if filter.param_name == 'filter.p.m.custom_features.activities'
+            if pills_source == 'size'
+              if filter.param_name == 'filter.p.m.custom_features.custom_size'
+                assign activities_filter = filter
+                break
+              endif
+            elsif filter.param_name == 'filter.p.m.custom_features.activities'
               assign activities_filter = filter
               break
             elsif filter.param_name == 'filter.p.m.features.activities'
@@ -96,12 +102,19 @@
           endfor
         -%}
 
-        <div class="collection-header-left" id="ActivityFilterChips">
+        <div
+          class="collection-header-left"
+          id="ActivityFilterChips"
+          data-header-pills="{{ pills_source }}"
+        >
           {%- if activities_filter and activities_filter.values.size > 0 -%}
             {%- liquid
               assign activity_values = activities_filter.values
 
-              if activities_filter.operator == 'AND'
+              comment
+                Size pills keep the filter's own order (XS, S, M...). Activities put active values first under AND.
+              endcomment
+              if activities_filter.operator == 'AND' and pills_source != 'size'
                 assign active_activity_values = activities_filter.values | where: 'active', true
                 assign inactive_activity_values = activities_filter.values | where: 'active', false
                 assign activity_values = active_activity_values | concat: inactive_activity_values
@@ -112,6 +125,9 @@
               <div class="child-collections-scroll">
                 <div class="child-collections-list">
                   {%- for value in activity_values -%}
+                    {%- if pills_source == 'size' and value.count == 0 and value.active == false -%}
+                      {%- continue -%}
+                    {%- endif -%}
                     {%- if value.count == 0 and value.active == false -%}
                       <span class="child-collection-link disabled" aria-disabled="true">
                         <span class="child-collection-title">{{- value.label | escape -}}</span>
@@ -1456,6 +1472,23 @@
       "id": "enable_sorting",
       "default": true,
       "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+    },
+    {
+      "type": "select",
+      "id": "header_pills_filter",
+      "label": "Pills above the product grid",
+      "info": "Size shows the size filter values that still have products. Use it on the Last Chance template.",
+      "options": [
+        {
+          "value": "activities",
+          "label": "Activities"
+        },
+        {
+          "value": "size",
+          "label": "Size"
+        }
+      ],
+      "default": "activities"
     },
     {
       "type": "header",
