@@ -1,0 +1,20 @@
+{%- comment -%}
+  Maps theme ES modules that are imported by relative path ("./x.js") to their
+  versioned asset_url. A relative import drops Shopify's ?v= cache key, so the
+  CDN kept serving months-old copies to shoppers. Must render before any
+  module script in <head>.
+{%- endcomment -%}
+{%- liquid
+  assign module_assets = 'product-utils.module.js,product-media-gallery-sequence.js,product-media-gallery-video.js' | split: ','
+-%}
+<script type="importmap">
+  {
+    "imports": {
+      {%- for module_asset in module_assets -%}
+        {%- assign versioned_url = module_asset | asset_url -%}
+        {{ versioned_url | split: '?' | first | json }}: {{ versioned_url | json }}
+        {%- unless forloop.last %},{% endunless -%}
+      {%- endfor -%}
+    }
+  }
+</script>
