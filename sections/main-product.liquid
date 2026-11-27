@@ -409,7 +409,11 @@
                   {%- else -%}
                     {%- assign nf_heading = block.settings.loggedout_heading -%}
                     {%- assign nf_text = block.settings.loggedout_text -%}
-                    {%- assign nf_button_url = block.settings.loggedout_button_url | default: routes.account_login_url -%}
+                    {%- comment -%}
+                      Each store domain keeps its own login session.
+                      storefront_login_url signs in on this domain and returns to this page.
+                    {%- endcomment -%}
+                    {%- assign nf_button_url = block.settings.loggedout_button_url | default: routes.storefront_login_url -%}
                   {%- endif -%}
                   <div class="nf-pdp-reg-discount" {{ block.shopify_attributes }}>
                     {%- if nf_heading != blank -%}
