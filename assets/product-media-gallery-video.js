@@ -261,6 +261,11 @@ export function openProductVideoViewer({ sources = [], poster = "", labels = {},
     event.stopPropagation();
     togglePlayback();
   });
+  // Never stretch the clip past one video pixel per CSS pixel: on a tall
+  // screen a 1080p clip stays 1080px tall instead of upscaling and blurring.
+  video.addEventListener("loadedmetadata", () => {
+    if (video.videoHeight) video.style.setProperty("--product-video-native-height", `${video.videoHeight}px`);
+  });
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) closeProductVideoViewer();
   });

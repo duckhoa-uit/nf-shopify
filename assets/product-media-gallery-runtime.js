@@ -197,7 +197,7 @@
     }
 
     async loadSequenceResolver() {
-      const module = await import("./product-media-gallery-sequence.js");
+      const module = await import(this.data.options.sequenceModuleUrl || "./product-media-gallery-sequence.js");
       return module.resolveProductMediaSequence;
     }
 
@@ -542,7 +542,7 @@
     openVideoLightbox(sources, poster, trigger) {
       if (!Array.isArray(sources) || !sources.length) return;
 
-      import("./product-media-gallery-video.js").then((module) => {
+      import(this.data.options.videoModuleUrl || "./product-media-gallery-video.js").then((module) => {
         if (this.isDestroyed) return;
 
         this.videoViewerModule = module;
