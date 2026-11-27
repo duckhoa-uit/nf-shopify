@@ -92,6 +92,28 @@ export function resolveFullscreenMedia(galleryVideo, allMedia = []) {
 }
 
 /**
+ * Shopify lists the 480p rendition first, and a <video> plays the first
+ * source it can, so the viewer would upscale a 480p clip. Put first the
+ * smallest MP4 that is at least `targetHeight` device pixels tall (else the
+ * tallest), then the other MP4s tallest first, then the rest (HLS) last.
+ *
+ * @param {Array<{ url?: string, mime_type?: string, format?: string, height?: number }>} sources
+ * @param {number} targetHeight
+ * @returns {Array<object>}
+ */
+export function orderFullscreenSources(sources = [], targetHeight = 0) {
+  const isSizedMp4 = (source) =>
+    (source?.format === "mp4" || source?.mime_type === "video/mp4") && Number(source?.height) > 0;
+  const mp4s = sources.filter(isSizedMp4).sort((a, b) => b.height - a.height);
+  const rest = sources.filter((source) => !isSizedMp4(source));
+  if (!mp4s.length) return [...sources];
+
+  const fitting = mp4s.filter((source) => source.height >= targetHeight);
+  const best = fitting.length ? fitting[fitting.length - 1] : mp4s[0];
+  return [best, ...mp4s.filter((source) => source !== best), ...rest];
+}
+
+/**
  * @param {object[]} sources
  * @param {HTMLVideoElement} video
  */
@@ -181,7 +203,8 @@ export function openProductVideoViewer({ sources = [], poster = "", labels = {},
   video.setAttribute("controlslist", "nodownload nofullscreen noremoteplayback noplaybackrate");
   video.disablePictureInPicture = true;
   if (poster) video.poster = poster;
-  appendVideoSources(usableSources, video);
+  const targetHeight = Math.round(window.innerHeight * (window.devicePixelRatio || 1));
+  appendVideoSources(orderFullscreenSources(usableSources, targetHeight), video);
 
   const closeButton = createControlButton({
     label: resolvedLabels.close,
@@ -237,6 +260,11 @@ export function openProductVideoViewer({ sources = [], poster = "", labels = {},
     event.preventDefault();
     event.stopPropagation();
     togglePlayback();
+  });
+  // Never stretch the clip past one video pixel per CSS pixel: on a tall
+  // screen a 1080p clip stays 1080px tall instead of upscaling and blurring.
+  video.addEventListener("loadedmetadata", () => {
+    if (video.videoHeight) video.style.setProperty("--product-video-native-height", `${video.videoHeight}px`);
   });
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) closeProductVideoViewer();

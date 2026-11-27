@@ -10,6 +10,14 @@ describe("product media gallery runtime", () => {
   const mediaGallery = readProjectFile("assets/media-gallery.js");
   const snippet = readProjectFile("snippets/product-media-gallery.liquid");
 
+  test("lazy-loads gallery modules from versioned asset URLs so deploys bust the CDN cache", () => {
+    // A bare relative import() resolves without ?v=, and Shopify's CDN caches that URL for a year.
+    expect(snippet).toContain("\"videoModuleUrl\": {{ 'product-media-gallery-video.js' | asset_url | json }}");
+    expect(snippet).toContain("\"sequenceModuleUrl\": {{ 'product-media-gallery-sequence.js' | asset_url | json }}");
+    expect(runtime).toContain("import(this.data.options.videoModuleUrl ||");
+    expect(runtime).toContain("import(this.data.options.sequenceModuleUrl ||");
+  });
+
   test("uses one external, section-scoped implementation without global config collisions", () => {
     expect(snippet).toContain("product-media-gallery-runtime.js");
     expect(snippet).not.toContain("const GALLERY_CONFIG");
