@@ -410,19 +410,10 @@
                     {%- assign nf_heading = block.settings.loggedout_heading -%}
                     {%- assign nf_text = block.settings.loggedout_text -%}
                     {%- comment -%}
-                      Sign in on this domain and come back to this product.
                       Each store domain keeps its own login session.
+                      storefront_login_url signs in on this domain and returns to this page.
                     {%- endcomment -%}
-                    {%- assign nf_return_to = request.path
-                      | append: '?variant='
-                      | append: product.selected_or_first_available_variant.id
-                      | url_encode
-                    -%}
-                    {%- assign nf_login_url = routes.storefront_login_url
-                      | append: '?return_to='
-                      | append: nf_return_to
-                    -%}
-                    {%- assign nf_button_url = block.settings.loggedout_button_url | default: nf_login_url -%}
+                    {%- assign nf_button_url = block.settings.loggedout_button_url | default: routes.storefront_login_url -%}
                   {%- endif -%}
                   <div class="nf-pdp-reg-discount" {{ block.shopify_attributes }}>
                     {%- if nf_heading != blank -%}
